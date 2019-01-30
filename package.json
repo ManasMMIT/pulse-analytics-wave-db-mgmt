@@ -1,0 +1,9 @@
+{
+  "name": "wave-db-mgmt",
+  "version": "1.0.0",
+  "description": "A repository for managing data into Pulse databases.",
+  "main": "index.js",
+  "repository": "https://github.com/pulse-data/wave-db-mgmt.git",
+  "author": "Jon Lin <jon.cp.lin@gmail.com>",
+  "license": "MIT"
+}
