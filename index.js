@@ -8,7 +8,7 @@ const args = require('yargs')
 
 const filepath = args.filepath
 
-function fileExists(filePath) {
+const fileExists = filePath => {
   try {
     return fs.statSync(filePath).isFile()
   } catch (err) {
