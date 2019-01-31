@@ -11,12 +11,12 @@ To connect to MongoDB via the script, please pull down the `dot-env` file from `
 Any JSON file that's meant to be uploaded to the `listsConfig` collection must follow the following naming convention:
 
 ```
-listsConfig_${ dashboard }_${ tool }
+listsConfig_${ dashboard }_${ tool }.json
 ```
 
 An example would be:
 ```
-listsConfig_provider_immuno-oncology
+listsConfig_provider_immuno-oncology.json
 ```
 
 Please note that the tool name can contain any letters but only the special character `-`, which should be used between words when a tool name comprises multiple words.
