@@ -4,7 +4,9 @@ This repo is meant to eventually become Pulse's primary internal database manage
 
 ## Before you do anything else
 
-To connect to MongoDB via the script, please pull down the `dot-env` file from `/Dropbox/Tech-Group/pulse-analytics/env-variables/dot-env` and save it as `.env` in this directory.
+When you first clone this repo and `cd` into the root directory in your terminal, run `yarn` to install the packages required for this script.
+
+In order for the script to connect to MongoDB, you'll also need to pull down the `dot-env` file from `/Dropbox/Tech-Group/pulse-analytics/env-variables/dot-env` and save it as `.env` in this directory.
 
 ##  Naming Convention for listsConfig JSON files
 
