@@ -32,7 +32,7 @@ node index.js --filepath [string]
 
 Example of the command if the file has been copied to your Desktop:
 ```
-node index.js --filepath "/Users/jonlin/Desktop/listsConfig_provider_immuno-oncology.json"
+node index.js --filepath /Users/jonlin/Desktop/listsConfig_provider_immuno-oncology.json
 ```
 
 Running the script will update a raw collection corresponding one-to-one to the JSON file and also update the master `listsConfig` collection, which is what our frontend application uses.
