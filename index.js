@@ -1,5 +1,5 @@
 const fs = require('fs')
-const importListsConfig = require('./import-lists-config')
+const importListsConfig = require('./importListsConfig')
 
 const args = require('yargs')
   .usage('Usage: $0 --filepath [string]')
