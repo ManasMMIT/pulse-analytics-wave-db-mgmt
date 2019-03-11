@@ -1,25 +1,25 @@
-const {
-  validateFileName,
-  addDashboardToolAndTimestampToData
-} = require('./utils')
-const parseJson = require('../parse-json')
-const connectToMongoDb = require('../connect-to-mongodb')
-const updateRawListsConfigCollection = require('./update-raw-collection')
-const updateMasterListsConfig = require('./update-master-listsConfig')
+const fs = require('fs')
+const importListsConfig = require('./importListsConfig.js')
 
-const importListsConfig = async filePath => {
-  const dashboardTool = validateFileName(filePath)
+const args = require('yargs')
+  .usage('Usage: $0 --filepath [string]')
+  .demandOption(['filepath'])
+  .argv
 
-  let data = parseJson(filePath)
-  data = addDashboardToolAndTimestampToData(data, dashboardTool)
+const filepath = args.filepath
 
-  const db = await connectToMongoDb()
+const fileExists = filePath => {
+  try {
+    return fs.statSync(filePath).isFile()
+  } catch (err) {
+    return false
+  }
+}
 
-  await updateRawListsConfigCollection(db, dashboardTool, data)
-  await updateMasterListsConfig(db, dashboardTool, data)
-
-  console.log('Data finished uploading.')
+// If file doesn't exist, terminate the script
+if (!fileExists(filepath)) {
+  console.log('File does not exist.')
   process.exit()
 }
 
-module.exports = importListsConfig
+importListsConfig(filepath)
