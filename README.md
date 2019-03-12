@@ -39,6 +39,11 @@ Example of the command if the file has been copied to your Desktop:
 node ./importListsConfig --filepath /Users/jonlin/Desktop/listsConfig_provider_immuno-oncology.json
 ```
 
+Example of the command if the file is in Egynte Connect on your computer:
+```
+node ./importListsConfig --filepath "/Volumes/maxine.presto@dedhamgroup.com/Shared/Pulse Analytics/Data/Provider/listsConfig_provider_key-accounts.json"
+```
+
 Running the script will update a raw collection corresponding one-to-one to the JSON file and also update the master `listsConfig` collection, which is what our frontend application uses.
 
 ##  Technical Background
