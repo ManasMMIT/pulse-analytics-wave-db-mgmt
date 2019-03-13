@@ -14,6 +14,7 @@ module.exports = [
   }, {
     '$project': {
       'dashboard': '$type',
+      'order': '$order',
       'page': {
         'type': '$items.type',
         '_id': '$items._id'
@@ -24,18 +25,23 @@ module.exports = [
     '$group': {
       '_id': {
         'user': '$user',
-        'dashboard': '$dashboard'
+        'dashboard': '$dashboard',
+        'order': '$order'
       },
       'pages': {
         '$push': '$page'
       }
     }
   }, {
+    '$sort': {
+      '_id.order': 1
+    }
+  }, {
     '$group': {
       '_id': '$_id.user',
       'dashboards': {
         '$push': {
-          'tool': '$_id.dashboard',
+          'dashboard': '$_id.dashboard',
           'pages': '$pages'
         }
       }
