@@ -130,3 +130,68 @@ Here's an example of the output:
   ]
 }
 ```
+
+# BEING EDITED -- WIP
+# wave-csv-loaders
+
+This repo houses the CSV loaders for historical data.
+
+* Version 2 refers to a script that will import historical data from a project-based CSV file for a given project, month, year and collection.
+* Version 1 refers to a script that will import historical data from a CSV file that contains data across all projects for a given month, year and collection.
+
+**NOTE:** Both scripts skip the second and third rows of the CSV file upon import, which consist of the header row that consultants use and a type validation row that isn't being used for payer historical data.
+
+```
+Usage: node index.js --filepath [string]
+
+Options:
+  --help      Show help                                                [boolean]
+  --version   Show version number                                      [boolean]
+  --filepath[absolute path to CSV file]                                [required]
+  --ignoreProjects                                                     [optional]
+
+```
+
+## Before you do anything else
+
+To connect to MongoDB via the script, please pull down the `dot-env` file from `/Dropbox/Tech-Group/pulse-analytics/env-variables/dot-env` and save it as `.env` in this directory.
+
+## How To Run the Scripts
+
+The `index.js` script oversees whether to run the Version 1 script or the Version 2 script.
+
+If you're importing a project-based workbook, then run the following in your terminal after replacing the filepath with the filepath to the appropriate CSV file on your own computer:
+```
+node index.js --filepath "/Users/jonlin/Desktop/Egnyte/Shared/Pulse Analytics/Data/Payer/Payer Historical Data/Project-Based/MerckAntiemetics/6-2018/MerckAntiemetics-QualityAccess-6-2018.csv"
+```
+
+If you're importing `payerHistoricalStateLives`, `payerHistoricalDrgNationalLives`, or old historical data that isn't
+project-based, then run the same command but include the `--ignoreProjects` flag:
+
+```
+node index.js --filepath "/Users/jonlin/Desktop/payerHistoricalPolicyLinks-5-2018.csv" --ignoreProjects
+```
+
+## CSV File Naming Convention for Version 2 Import Script
+
+Example of how the CSV file should be named: `MerckAntiemetics-QualityAccess-6-2018.csv`
+
+The project name (`MerckAntiemetics`) and collection name (`QualityAccess`) must be UpperCamelCased without hyphens or any punctuation. Note that the collection name doesn't need to be preceded with `payerHistorical`; the code will automatically tack that onto the abbreviated collection name.
+
+Month and year must be integers. All four parts of the string should then be concatenated with a `-` delimiter.
+
+This script would update documents in the collection `payerHistoricalQualityAccess` that are associated with project `Merck Antiemetics`, month `6`, and year `2018`.
+
+## CSV File Naming Convention for Version 1 Import Script
+
+Example of how the CSV file should be named: `payerHistoricalQualityOfAcess-1-2018.csv`
+
+This script would update the collection `payerHistoricalQualityOfAccess` for month `1` and year `2018`. Note that the full name of the collection must be stated in the file name.
+
+## Syncing Medical Lives between DRG and MMIT lives data set
+
+The `sync-drg-mmit-medical-lives.js` script will:
+1. append the medical lives with the latest month and year from the DRG data to the existing mongoDB documents with the latest month and year in the MMIT data set
+2. insert mongoDB documents with the latest month and year from the DRG data set for states that don't exist for organizations in the MMIT data set
+
+To run the script, simply execute `node sync-drg-mmit-medical-lives`
