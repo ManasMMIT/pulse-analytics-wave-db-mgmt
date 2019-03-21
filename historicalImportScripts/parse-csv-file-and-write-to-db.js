@@ -6,7 +6,7 @@ const fs = require('fs')
 const {
   sanitizeKeysAndTrimData,
   isEmptyRow
-} = require('../../utils')
+} = require('../utils')
 
 const parseCsvFileAndWriteToDb = ({
   db,
@@ -76,6 +76,8 @@ const parseCsvFileAndWriteToDb = ({
       // skip processing the row if it's empty or it's the first two rows
       if (!isEmptyLine && rowParseCount > 1) {
         const resultData = sanitizeKeysAndTrimData(results.data[0])
+        resultData.month = parseInt(resultData.month)
+        resultData.year = parseInt(resultData.year)
 
         // error out if input month/year doesn't match csv file month/year
         if (resultData.month !== fileMonth || resultData.year !== fileYear) {
