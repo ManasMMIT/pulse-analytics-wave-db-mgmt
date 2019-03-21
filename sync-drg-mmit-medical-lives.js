@@ -41,7 +41,7 @@ const matchBySlugsQuery = slugs => ([{
 
 const synchronizeLives = async () => {
   const mongoConnection = await connectToMongoDb()
-  const scriptTerminator = getScriptTerminator(mongoConnection)
+  const terminateScript = getScriptTerminator(mongoConnection)
   const pulseDevDb = await mongoConnection.db('pulse-dev')
 
   console.log('-----------DRG MMIT Medical Lives Synchronization-----------')
@@ -144,7 +144,7 @@ const synchronizeLives = async () => {
     }
   }, async err => {
     console.log('Script finished executing')
-    await scriptTerminator(err)
+    await terminateScript(err)
   })
 }
 

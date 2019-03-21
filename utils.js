@@ -27,15 +27,15 @@ const getScriptTerminator = mongoConnection => async (...errMessages) => {
 }
 
 const verifyCollectionExists = async (collectionName, db, mongoConnection) => {
-  const scriptTerminator = getScriptTerminator(mongoConnection)
+  const terminateScript = getScriptTerminator(mongoConnection)
 
   const numOfCollections = await db.listCollections({ name: collectionName }).toArray()
     .catch(async err => {
-      await scriptTerminator('Error checking if collection exists', err)
+      await terminateScript('Error checking if collection exists', err)
     })
 
   if (numOfCollections.length === 0) {
-    await scriptTerminator(`Collection '${collectionName}' does not exist. Data could not be updated.`)
+    await terminateScript(`Collection '${collectionName}' does not exist. Data could not be updated.`)
   }
 }
 
