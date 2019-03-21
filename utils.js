@@ -5,9 +5,11 @@ function sanitizeKeysAndTrimData(obj) {
   const newObj = {}
 
   Object.keys(obj).forEach(item => {
-    newObj[_.camelCase(item.trim())] = typeof obj[item] === 'string'
-      ? obj[item].trim()
-      : obj[item]
+    if (obj[item] !== "") {
+      newObj[_.camelCase(item.trim())] = typeof obj[item] === 'string'
+        ? obj[item].trim()
+        : obj[item]
+    }
   })
 
   return newObj
@@ -15,9 +17,10 @@ function sanitizeKeysAndTrimData(obj) {
 
 function isEmptyRow(obj) {
   for (const key in obj) {
-    if (obj[key] != "") return false;
+    if (obj[key] !== "") return false
   }
-  return true;
+
+  return true
 }
 
 const getScriptTerminator = mongoConnection => async (...errMessages) => {
