@@ -11,19 +11,21 @@ const historicalDataLoaderV1 = async filepath => {
   const filenameWithExtension =   filePathArr[filePathArr.length - 1]
   const regEx = /(.+?)(\.[^.]*$|$)/g
   const capturedFilename = regEx.exec(filenameWithExtension)
-  const [filename, fileMonth, fileYear] = capturedFilename[1].split('-')
+  let [collectionName, fileMonth, fileYear] = capturedFilename[1].split('-')
+  fileMonth = parseInt(fileMonth)
+  fileYear = parseInt(fileYear)
 
   const mongoConnection = await connectToMongoDb()
   const terminateScript = getScriptTerminator(mongoConnection)
-  const db = await mongoConnection.db('pulse-dev')
+  const db = await mongoConnection.db('test')
 
   console.log('----------Historical Data Loader-----------')
   console.log('Running loader...')
 
-  await verifyCollectionExists(filename, db, mongoConnection)
+  await verifyCollectionExists(collectionName, db, mongoConnection)
 
   // Remove rows before appending
-  await db.collection(filename)
+  await db.collection(collectionName)
     .deleteMany({
       $and: [
         { $or: [{ month: Number(fileMonth) }, { month: fileMonth }] },
@@ -37,7 +39,7 @@ const historicalDataLoaderV1 = async filepath => {
   parseCsvFileAndWriteToDb({
     db,
     filepath,
-    filename,
+    collectionName,
     fileMonth,
     fileYear,
     terminateScript

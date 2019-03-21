@@ -1,3 +1,4 @@
+const _ = require('lodash')
 const ProgressBar = require('progress');
 const Papa = require('papaparse')
 const fs = require('fs')
@@ -10,7 +11,8 @@ const {
 const parseCsvFileAndWriteToDb = ({
   db,
   filepath,
-  filename,
+  projectName,
+  collectionName,
   fileMonth,
   fileYear,
   terminateScript
@@ -28,12 +30,19 @@ const parseCsvFileAndWriteToDb = ({
     delimiter: ',',
     skipEmptyLines: true, // TODO: if this is on, do we need to check for it in #step?
     complete: function () {
-      data.forEach(({ month, year, ...resultData }) => {
+      if (_.isEmpty(data)) {
+        terminateScript('No data made it through parsing stream')
+      }
+
+      const projectObj = projectName ? { project: projectName } : {}
+
+      data.forEach(resultData => {
         const newData = {
           ...resultData,
           createdOn: new Date(),
-          month: parseInt(month),
-          year: parseInt(year)
+          month: fileMonth,
+          year: fileYear,
+          ...projectObj
         }
 
         if (data.length !== 0) {
@@ -45,10 +54,10 @@ const parseCsvFileAndWriteToDb = ({
           })
 
           // Write to MongoDB
-          db.collection(filename)
+          db.collection(collectionName)
             .insertOne(
               newData,
-              (err, result) => {
+              err => {
                 if (err) {
                   console.error(err)
                 } else {
@@ -69,7 +78,7 @@ const parseCsvFileAndWriteToDb = ({
         const resultData = sanitizeKeysAndTrimData(results.data[0])
 
         // error out if input month/year doesn't match csv file month/year
-        if (resultData.month != fileMonth || resultData.year != fileYear) {
+        if (resultData.month !== fileMonth || resultData.year !== fileYear) {
           await terminateScript('At least this row doesn\'t match file name\'s month and year', resultData)
         }
 
