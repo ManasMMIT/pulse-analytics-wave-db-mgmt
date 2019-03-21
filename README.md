@@ -130,6 +130,25 @@ Here's an example of the output:
   ]
 }
 ```
+#  Instructions for importAdminProviderIndRegCombos Script
+
+Export the master list sheet from the Excel workbook as a CSV file.
+
+Edit the CSV file so it looks like the below.
+
+The column headers should be "indication" and "regimen," all lowercased.
+
+| indication | regimen |
+|---|---|---|
+| AML | cytarabine+daunomycin+cladribine |
+| Breast Cancer | Abraxane |
+
+Run the following command in your terminal after navigating to this repository's root directory.
+```
+node ./importAdminProviderIndRegCombos --filepath ~/Desktop/provider_ind_reg_master.csv
+```
+
+
 
 # BEING EDITED -- WIP
 # wave-csv-loaders
