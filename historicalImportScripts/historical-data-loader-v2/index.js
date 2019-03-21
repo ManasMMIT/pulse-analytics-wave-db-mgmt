@@ -12,9 +12,15 @@ const {
   getCollectionDoesNotExistError
 } = require('./utils')
 
-const parseCsvFileAndWriteToDb = (
-  db, filepath, projectName, collectionName, fileMonth, fileYear
-) => {
+const parseCsvFileAndWriteToDb = ({
+  db,
+  filepath,
+  projectName,
+  collectionName,
+  fileMonth,
+  fileYear,
+  terminateScript
+}) => {
   const stream = fs.createReadStream(filepath)
   // used to skip the two rows after the header row
   // TODO: consider using the validation row instead of disregarding it
@@ -86,7 +92,7 @@ const parseCsvFileAndWriteToDb = (
   })
 }
 
-const historicalDataLoaderV2 = filepath => {
+const historicalDataLoaderV2 = async filepath => {
   // Extract project, filename, month, year based on filepath
   const filePathArr = filepath.split('/')
   const filenameWithExtension = filePathArr[filePathArr.length - 1]
@@ -99,48 +105,34 @@ const historicalDataLoaderV2 = filepath => {
   projectName = _.startCase(projectName)
   const collectionName = _.camelCase(`payerHistorical ${ filename }`)
 
-  MongoClient.connect(LOADER_URI, function(err, dbs) {
-    console.log('----------Historical Data Loader-----------')
+  const mongoConnection = await connectToMongoDb()
+  const terminateScript = getScriptTerminator(mongoConnection)
+  const db = await mongoConnection.db('test')
 
-    if (err) {
-      console.log('Error connecting to DB')
-      console.log(err)
-      process.exit()
-    }
+  console.log('----------Historical Data Loader-----------')
+  console.log('Running loader...')
 
-    console.log('Running loader...')
+  await verifyCollectionExists(filename, db, mongoConnection)
 
-    const db = dbs.db('pulse-dev')
-
-    db.listCollections({ name: collectionName }).toArray(function(err, items) {
-      if (items.length === 0) {
-        console.log(getCollectionDoesNotExistError(collectionName))
-        process.exit()
-      }
-
-      // Remove rows before appending
-      db.collection(collectionName)
-        .deleteMany(
-          {
-            month: fileMonth,
-            year: fileYear,
-            project: projectName
-          },
-          (err, result) => {
-            if (err) {
-              console.log(err)
-              process.exit()
-            }
-
-            // if deletion is successful, parse the CSV file and write to db
-            console.log(`Deleted Rows for Month: ${fileMonth} Year: ${fileYear} for Project: ${ projectName }`)
-
-            parseCsvFileAndWriteToDb(
-              db, filepath, projectName, collectionName, fileMonth, fileYear
-            )
-          }
-        )
+  // Remove rows before appending
+  await db.collection(collectionName)
+    .deleteMany({
+      month: fileMonth,
+      year: fileYear,
+      project: projectName
     })
+    .catch(async err => await terminateScript(err))
+
+  console.log(`Deleted Rows for Month: ${fileMonth} Year: ${fileYear} for Project: ${projectName}`)
+
+  parseCsvFileAndWriteToDb({
+    db,
+    filepath,
+    projectName,
+    collectionName,
+    fileMonth,
+    fileYear,
+    terminateScript
   })
 }
 
