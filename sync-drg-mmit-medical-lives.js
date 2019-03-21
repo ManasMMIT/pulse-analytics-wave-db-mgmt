@@ -1,6 +1,9 @@
 const d3 = require('d3-collection')
 const connectToMongoDb = require('./connect-to-mongodb')
-const { verifyCollectionExists } = require('./utils')
+const {
+  getScriptTerminator,
+  verifyCollectionExists
+} = require('./utils')
 
 const MMIT_COLLECTION = 'payerHistoricalMmitStateLives'
 const DRG_COLLECTION = 'payerHistoricalDrgStateLives'
@@ -38,6 +41,7 @@ const matchBySlugsQuery = slugs => ([{
 
 const synchronizeLives = async () => {
   const mongoConnection = await connectToMongoDb()
+  const scriptTerminator = getScriptTerminator(mongoConnection)
   const pulseDevDb = await mongoConnection.db('pulse-dev')
 
   console.log('-----------DRG MMIT Medical Lives Synchronization-----------')
@@ -46,7 +50,7 @@ const synchronizeLives = async () => {
 
   await verifyCollectionExists(MMIT_COLLECTION, pulseDevDb, mongoConnection)
 
-  const latestMmitData = await db.collection(MMIT_COLLECTION)
+  const latestMmitData = await pulseDevDb.collection(MMIT_COLLECTION)
     .aggregate(latestMonthYearDataQuery)
     .toArray()
 
@@ -76,12 +80,12 @@ const synchronizeLives = async () => {
     ...latestMonthYearDataQuery
   ]
 
-  const latestDrgData = await db.collection(DRG_COLLECTION)
+  const latestDrgData = await pulseDevDb.collection(DRG_COLLECTION)
     .aggregate(latestMonthsAndSlugMatchQuery)
 
-  const mmitCollection = db.collection(MMIT_COLLECTION)
+  const mmitCollection = pulseDevDb.collection(MMIT_COLLECTION)
 
-  latestDrgData.forEach(async (drgRow) => {
+  latestDrgData.forEach(async drgRow => {
     const {
       parentSlug,
       slug,
@@ -111,7 +115,7 @@ const synchronizeLives = async () => {
 
     const mmitRowId = groupMmitBySlugAndId[slug][state]
 
-    // If Id is found in hash map, update the existing document,
+    // If _id is found in hash map, update the existing document,
     // otherwise insert the new document with the corrresponding
     // medical lives
     if (mmitRowId) {
@@ -120,7 +124,6 @@ const synchronizeLives = async () => {
         { $set: medicalLivesFields }
       ).then(result => {
         console.log(`Updated the following id: ${mmitRowId}`)
-        console.log(result)
       })
     } else {
       const newStateData = {
@@ -139,10 +142,9 @@ const synchronizeLives = async () => {
           console.log(`Inserted the following id: ${result._id}`)
         })
     }
-  }, (err) => {
-    if (err) console.log(err)
-    console.log('Finished Syncing')
-    process.exit()
+  }, async err => {
+    console.log('Script finished executing')
+    await scriptTerminator(err)
   })
 }
 
