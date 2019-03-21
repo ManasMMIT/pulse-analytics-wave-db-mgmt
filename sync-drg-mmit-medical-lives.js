@@ -1,7 +1,6 @@
+const d3 = require('d3-collection')
 const connectToMongoDb = require('./connect-to-mongodb')
 const { verifyCollectionExists } = require('./utils')
-
-const d3 = require('d3-collection')
 
 const MMIT_COLLECTION = 'payerHistoricalMmitStateLives'
 const DRG_COLLECTION = 'payerHistoricalDrgStateLives'
