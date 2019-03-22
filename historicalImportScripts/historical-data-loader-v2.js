@@ -21,7 +21,7 @@ const historicalDataLoaderV2 = async filepath => {
 
   const mongoConnection = await connectToMongoDb()
   const terminateScript = getScriptTerminator(mongoConnection)
-  const db = await mongoConnection.db('test')
+  const db = await mongoConnection.db('pulse-dev')
 
   console.log('----------Historical Data Loader-----------')
   console.log('Running loader...')
