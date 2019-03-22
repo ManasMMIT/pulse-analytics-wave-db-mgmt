@@ -16,7 +16,7 @@ const matchBySlugsQuery = slugs => ([{
 const synchronizeLives = async () => {
   const mongoConnection = await connectToMongoDb()
   const terminateScript = getScriptTerminator(mongoConnection)
-  const pulseDevDb = await mongoConnection.db('test')
+  const pulseDevDb = await mongoConnection.db('pulse-dev')
 
   console.log('-----------DRG MMIT Medical Lives Synchronization-----------')
 
@@ -59,7 +59,7 @@ const synchronizeLives = async () => {
 
   const mmitCollection = pulseDevDb.collection(MMIT_COLLECTION)
 
-  latestDrgData.forEach(async drgRow => {
+  latestDrgData.forEach(drgRow => {
     const {
       parentSlug,
       slug,
@@ -73,7 +73,7 @@ const synchronizeLives = async () => {
       managedMedicaidMedical,
       ffsMedicaidMedical,
       tricareMedical,
-      vaMedical
+      vaMedical,
     } = drgRow
 
     const timestamp = new Date()
@@ -86,8 +86,7 @@ const synchronizeLives = async () => {
       managedMedicaidMedical,
       ffsMedicaidMedical,
       tricareMedical,
-      vaMedical,
-      updatedOn: timestamp
+      vaMedical
     }
 
     const mmitRowId = groupMmitBySlugAndId[slug][state]
@@ -98,13 +97,16 @@ const synchronizeLives = async () => {
     if (mmitRowId) {
       mmitCollection.updateOne(
         { _id: mmitRowId },
-        { $set: medicalLivesFields }
+        { $set: {
+            ...medicalLivesFields,
+            updatedOn: timestamp,
+          }
+        }
       ).then(result => {
         console.log(`Updated the following id: ${mmitRowId}`)
       })
     } else {
       const newStateData = {
-        createdOn: timestamp,
         parentSlug,
         month: latestMmitMonth,
         year: latestMmitYear,
@@ -112,12 +114,13 @@ const synchronizeLives = async () => {
         state,
         stateLong,
         slug,
-        ...medicalLivesFields
+        ...medicalLivesFields,
+        createdOn: timestamp,
       }
 
       mmitCollection.insertOne(newStateData)
         .then(result => {
-          console.log(`Inserted the following id: ${result._id}`)
+          console.log(`Inserted the following id: ${result.insertedId}`)
         })
     }
   }, async err => {
