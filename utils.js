@@ -1,5 +1,4 @@
 const _ = require('lodash')
-require('dotenv').load()
 
 function sanitizeKeysAndTrimData(obj) {
   const newObj = {}
