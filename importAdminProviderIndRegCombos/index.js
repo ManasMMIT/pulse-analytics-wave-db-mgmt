@@ -2,6 +2,10 @@ const fs = require('fs')
 const _ = require('lodash')
 const Papa = require('papaparse')
 const connectToMongoDb = require('../connect-to-mongodb')
+const {
+  sanitizeKeysAndTrimData,
+  getScriptTerminator
+} = require('../utils')
 
 const args = require('yargs')
   .usage('Usage: $0 --filepath [string]')
@@ -24,15 +28,11 @@ if (!fileExists(filepath)) {
   process.exit()
 }
 
-const sanitizeKeysAndValues = obj => (
-  _.reduce(obj, (acc, v, k) => {
-    acc[k.trim()] = v.trim()
-    return acc
-  }, {})
-)
+const COLLECTION_NAME = 'adminHubProviderIndRegCombos'
 
 const connectToMongoAndWriteCsvToDb = async () => {
   const mongoConnection = await connectToMongoDb()
+  const terminateScript = getScriptTerminator(mongoConnection)
   const pulseDevDb = await mongoConnection.db('pulse-dev')
 
   const stream = fs.createReadStream(filepath)
@@ -45,11 +45,10 @@ const connectToMongoAndWriteCsvToDb = async () => {
     skipEmptyLines: true,
     complete: async () => {
       if (_.isEmpty(data)) {
-        console.log('No data made it through parsing stream')
-        process.exit()
+        await terminateScript('No data made it through parsing stream')
       }
 
-      data = data.map(sanitizeKeysAndValues)
+      data = data.map(sanitizeKeysAndTrimData)
 
       data = _.groupBy(data, 'indication')
 
@@ -61,28 +60,23 @@ const connectToMongoAndWriteCsvToDb = async () => {
         }
       })
 
-      await pulseDevDb.collection('adminHubProviderIndRegCombos').deleteMany()
+      await pulseDevDb.collection(COLLECTION_NAME).deleteMany()
         .catch(async err => {
-          console.error('Error removing existing data', err)
-          await mongoConnection.close()
-          process.exit()
+          await terminateScript('Error removing existing data', err)
         })
 
-      await pulseDevDb.collection('adminHubProviderIndRegCombos').insertMany(data)
+      await pulseDevDb.collection(COLLECTION_NAME).insertMany(data)
         .catch(console.error)
         .finally(async () => {
           console.log('Script finished executing.')
-          await mongoConnection.close()
-          process.exit()
+          await terminateScript()
         })
     },
     step: function (results, parser) {
       data.push(results.data[0])
     },
-    error: async (err, file, inputElem, reason) => {
-      console.error(`Error from Papa parse operation: ${err}`)
-      await mongoConnection.close()
-      process.exit()
+    error: async err => {
+      await terminateScript('Error from Papa parse operation', err)
     }
   })
 }
