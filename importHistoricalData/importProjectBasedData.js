@@ -6,7 +6,7 @@ const {
   verifyCollectionExists
 } = require('../utils')
 
-const historicalDataLoaderV2 = async filepath => {
+const importProjectBasedData = async filepath => {
   // Extract project, filename, month, year based on filepath
   const filePathArr = filepath.split('/')
   const filenameWithExtension = filePathArr[filePathArr.length - 1]
@@ -50,4 +50,4 @@ const historicalDataLoaderV2 = async filepath => {
   })
 }
 
-module.exports = historicalDataLoaderV2
+module.exports = importProjectBasedData

@@ -1,5 +1,5 @@
-const historicalDataLoaderV1 = require('./historical-data-loader-v1')
-const historicalDataLoaderV2 = require('./historical-data-loader-v2')
+const importNonProjectBasedData = require('./importNonProjectBasedData')
+const importProjectBasedData = require('./importProjectBasedData')
 
 const fs = require('fs')
 
@@ -25,7 +25,7 @@ if (!fileExists(filepath)) {
 }
 
 if (args.ignoreProjects) {
-  historicalDataLoaderV1(filepath)
+  importNonProjectBasedData(filepath)
 } else {
-  historicalDataLoaderV2(filepath)
+  importProjectBasedData(filepath)
 }
