@@ -1,9 +1,10 @@
-const connectToMongoDb = require('../../connect-to-mongodb')
+const _ = require('lodash')
+const connectToMongoDb = require('../connect-to-mongodb')
 const parseCsvFileAndWriteToDb = require('./parse-csv-file-and-write-to-db')
 const {
   getScriptTerminator,
   verifyCollectionExists
-} = require('../../utils')
+} = require('../utils')
 
 const historicalDataLoaderV2 = async filepath => {
   // Extract project, filename, month, year based on filepath
@@ -25,7 +26,7 @@ const historicalDataLoaderV2 = async filepath => {
   console.log('----------Historical Data Loader-----------')
   console.log('Running loader...')
 
-  await verifyCollectionExists(filename, db, mongoConnection)
+  await verifyCollectionExists(collectionName, db, mongoConnection)
 
   // Remove rows before appending
   await db.collection(collectionName)
