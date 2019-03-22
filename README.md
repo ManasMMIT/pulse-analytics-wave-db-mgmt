@@ -1,16 +1,56 @@
 # wave-db-mgmt
 
-This repo is meant to eventually become Pulse's primary internal database management tool for importing and updating data in our database. For now, it contains just two scripts:
-- Script for uploading listsConfig JSONs
-- Script for merging dashboard permissions data from pulse-core and pushing that to pulse-dev
+This repo is meant to eventually become Pulse's primary internal database management tool for importing and updating data in our database. It currently contains five scripts for the following purposes:
+1. Uploading CSV historical data to pulse-dev
+2. Uploading listsConfig JSONs to pulse-dev
+3. Uploading a CSV of provider indication/regimen combos for admin hub to source from
+4. Synchronizing DRG medical lives data with MMIT lives data
+5. Merging dashboard permissions data from pulse-core and pushing that to pulse-dev
 
-## Before you do anything else
+# Before you do anything else
 
 When you first clone this repo and `cd` into the root directory in your terminal, run `yarn` to install the packages required for this script.
 
 In order for the script to connect to MongoDB, you'll also need to pull down the `dot-env` file from `/Dropbox/Tech-Group/pulse-analytics/env-variables/dot-env` and save it as `.env` in this directory.
 
-#  Instructions for listsConfig Script
+#  1. Uploading Historical Data
+
+## File Naming Convention for Project-Based Data
+
+Example of how the CSV file should be named: `MerckAntiemetics-QualityAccess-6-2018.csv`
+
+The project name (`MerckAntiemetics`) and collection name (`QualityAccess`) must be UpperCamelCased without hyphens or any punctuation. Note that the collection name doesn't need to be preceded with `payerHistorical`; the code will automatically tack that onto the abbreviated collection name.
+
+Month and year must be integers. All four parts of the string should then be concatenated with a `-` delimiter.
+
+This script would update documents in the collection `payerHistoricalQualityAccess` that are associated with project `Merck Antiemetics`, month `6`, and year `2018`.
+
+## File Naming Convention for Non-Project-Based Data
+
+Example of how the CSV file should be named: `payerHistoricalQualityOfAcess-1-2018.csv`
+
+This script would update the collection `payerHistoricalQualityOfAccess` for month `1` and year `2018`. Note that the full name of the collection must be stated in the file name.
+
+## How to Run the Script
+
+**NOTE:** The script keys the data using the first row of headers, and then skips the second and third rows before it begins to parse the data.
+
+If you're importing a **project-based workbook**, then run the following in your terminal after you export the target sheet to a CSV file.
+
+Replace the filepath with the filepath to the appropriate CSV file on your own computer.
+
+```
+node ./importHistoricalData --filepath "/Users/jonlin/Desktop/Egnyte/Shared/Pulse Analytics/Data/Payer/Payer Historical Data/Project-Based/MerckAntiemetics/6-2018/MerckAntiemetics-QualityAccess-6-2018.csv"
+```
+
+If you're importing data such as `payerHistoricalMmitStateLives`, `payerHistoricalDrgNationalLives`, or other historical data that isn't
+project-based, then run the same command but include the `--ignoreProjects` flag:
+
+```
+node ./importHistoricalData --filepath ~/Desktop/payerHistoricalMmitStateLives-9-2018.csv --ignoreProjects
+```
+
+#  2. Uploading listsConfig JSONs
 
 ##  Naming Convention for listsConfig JSON files
 
@@ -55,9 +95,37 @@ The listsConfig script does the following when it's executed:
 4. Replaces an existing (or creates a new) collection that corresponds one-to-one to the JSON (a raw data collection). This is done by dropping the existing collection if it exists and creating a new collection with the same name with the new data
 5. Updates the master `listsConfig` collection in the database by replacing the old subset of data affiliated with the given `dashboardTool` with the new data
 
-The purpose of keeping raw collections alongside the master `listsConfig` collection is we're trying to move using a `pulse-raw` DB that's separate from the DB that our application uses. Having this separation would be beneficial because the way data is optimally structured for the business/product side is different from the way it'd be optimally structured for our application. Eventually, we'd want to move the raw collections created by this import script to a `pulse-raw` DB.
+#  3. Uploading Provider Ind/Reg Combos for Admin Hub
 
-#  Instructions for pushPermissionsFromCoreToDev Script
+Export the master list sheet from the Excel workbook as a CSV file.
+
+Edit the CSV file so it looks like the below (no empty rows between the headers and the data).
+
+The column headers should be "indication" and "regimen," all lowercased.
+
+| indication | regimen |
+|---|---|---|
+| AML | cytarabine+daunomycin+cladribine |
+| Breast Cancer | Abraxane |
+
+Run the following command in your terminal.
+```
+node ./importAdminProviderIndRegCombos --filepath ~/Desktop/providerIndRegCombos.csv
+```
+
+#  4. Synchronizing DRG/MMIT Medical Lives
+
+The `syncDrgMmitMedicalLives` script will:
+1. append the medical lives with the latest month and year from the DRG data to the existing mongoDB documents with the latest month and year in the MMIT data set
+2. insert mongoDB documents with the latest month and year from the DRG data set for states that don't exist for organizations in the MMIT data set
+
+To run the script, run the following command:
+```
+node ./syncDrgMmitMedicalLives
+```
+
+
+#  5. Updating Dashboards Permissions Prototype on Dev
 
 Run the following command in your terminal after navigating to this repository's root directory.
 ```
@@ -76,34 +144,13 @@ The pushPermissionsFromCoreToDev script does the following when it's executed:
 2. Writes the output from that aggregation pipeline to a collection called `users.dashboards` in `pulse-dev` DB. Will drop and replace that collection if needed.
 
 Here's an example of the output:
-```javascript
+```json
 {
-  "_id": "5c82d0878096663d0aebabd4",
+  "_id": "5c8949bfd4b1e206ee6afeec",
   "username": "eli-lilly-prv-demo",
   "dashboards": [
     {
-      "tool": "Accounts",
-      "pages": [
-        {
-          "type": "Business Model & Capabilities",
-          "_id": "5c819d3ea6e48daca81aa3a9"
-        },
-        {
-          "type": "Clinical Sophistication",
-          "_id": "5c819d3ea6e48daca81aa3aa"
-        },
-        {
-          "type": "Value Based Care",
-          "_id": "5c819d3ea6e48daca81aa3ab"
-        },
-        {
-          "type": "Manufacturer Engagement",
-          "_id": "5c819d3ea6e48daca81aa3ac"
-        }
-      ]
-    },
-    {
-      "tool": "Management",
+      "dashboard": "Management",
       "pages": [
         {
           "type": "Regional Footprint",
@@ -126,91 +173,28 @@ Here's an example of the output:
           "_id": "5c819cc05def33ac7de9452e"
         }
       ]
+    },
+    {
+      "dashboard": "Accounts",
+      "pages": [
+        {
+          "type": "Business Model & Capabilities",
+          "_id": "5c819d3ea6e48daca81aa3a9"
+        },
+        {
+          "type": "Clinical Sophistication",
+          "_id": "5c819d3ea6e48daca81aa3aa"
+        },
+        {
+          "type": "Value Based Care",
+          "_id": "5c819d3ea6e48daca81aa3ab"
+        },
+        {
+          "type": "Manufacturer Engagement",
+          "_id": "5c819d3ea6e48daca81aa3ac"
+        }
+      ]
     }
   ]
 }
 ```
-#  Instructions for importAdminProviderIndRegCombos Script
-
-Export the master list sheet from the Excel workbook as a CSV file.
-
-Edit the CSV file so it looks like the below.
-
-The column headers should be "indication" and "regimen," all lowercased.
-
-| indication | regimen |
-|---|---|---|
-| AML | cytarabine+daunomycin+cladribine |
-| Breast Cancer | Abraxane |
-
-Run the following command in your terminal after navigating to this repository's root directory.
-```
-node ./importAdminProviderIndRegCombos --filepath ~/Desktop/provider_ind_reg_master.csv
-```
-
-
-
-# BEING EDITED -- WIP
-# wave-csv-loaders
-
-This repo houses the CSV loaders for historical data.
-
-* Version 2 refers to a script that will import historical data from a project-based CSV file for a given project, month, year and collection.
-* Version 1 refers to a script that will import historical data from a CSV file that contains data across all projects for a given month, year and collection.
-
-**NOTE:** Both scripts skip the second and third rows of the CSV file upon import, which consist of the header row that consultants use and a type validation row that isn't being used for payer historical data.
-
-```
-Usage: node index.js --filepath [string]
-
-Options:
-  --help      Show help                                                [boolean]
-  --version   Show version number                                      [boolean]
-  --filepath[absolute path to CSV file]                                [required]
-  --ignoreProjects                                                     [optional]
-
-```
-
-## Before you do anything else
-
-To connect to MongoDB via the script, please pull down the `dot-env` file from `/Dropbox/Tech-Group/pulse-analytics/env-variables/dot-env` and save it as `.env` in this directory.
-
-## How To Run the Scripts
-
-The `index.js` script oversees whether to run the Version 1 script or the Version 2 script.
-
-If you're importing a project-based workbook, then run the following in your terminal after replacing the filepath with the filepath to the appropriate CSV file on your own computer:
-```
-node index.js --filepath "/Users/jonlin/Desktop/Egnyte/Shared/Pulse Analytics/Data/Payer/Payer Historical Data/Project-Based/MerckAntiemetics/6-2018/MerckAntiemetics-QualityAccess-6-2018.csv"
-```
-
-If you're importing `payerHistoricalStateLives`, `payerHistoricalDrgNationalLives`, or old historical data that isn't
-project-based, then run the same command but include the `--ignoreProjects` flag:
-
-```
-node index.js --filepath "/Users/jonlin/Desktop/payerHistoricalPolicyLinks-5-2018.csv" --ignoreProjects
-```
-
-## CSV File Naming Convention for Version 2 Import Script
-
-Example of how the CSV file should be named: `MerckAntiemetics-QualityAccess-6-2018.csv`
-
-The project name (`MerckAntiemetics`) and collection name (`QualityAccess`) must be UpperCamelCased without hyphens or any punctuation. Note that the collection name doesn't need to be preceded with `payerHistorical`; the code will automatically tack that onto the abbreviated collection name.
-
-Month and year must be integers. All four parts of the string should then be concatenated with a `-` delimiter.
-
-This script would update documents in the collection `payerHistoricalQualityAccess` that are associated with project `Merck Antiemetics`, month `6`, and year `2018`.
-
-## CSV File Naming Convention for Version 1 Import Script
-
-Example of how the CSV file should be named: `payerHistoricalQualityOfAcess-1-2018.csv`
-
-This script would update the collection `payerHistoricalQualityOfAccess` for month `1` and year `2018`. Note that the full name of the collection must be stated in the file name.
-
-## Syncing Medical Lives between DRG and MMIT lives data set
-
-The `sync-drg-mmit-medical-lives.js` script will:
-1. append the medical lives with the latest month and year from the DRG data to the existing mongoDB documents with the latest month and year in the MMIT data set
-2. insert mongoDB documents with the latest month and year from the DRG data set for states that don't exist for organizations in the MMIT data set
-
-To run the script, simply execute `node sync-drg-mmit-medical-lives`
