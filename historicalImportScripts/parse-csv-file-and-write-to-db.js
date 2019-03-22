@@ -19,19 +19,25 @@ const parseCsvFileAndWriteToDb = ({
 }) => {
   const stream = fs.createReadStream(filepath)
   // used to skip the two rows after the header row
-  // TODO: consider using the validation row instead of disregarding it
   let rowParseCount = 0
 
-  let rowInsertionCount = 0 // used for insertion progress bar
-  let data = []
+  // used for insertion progress bar
+  let rowInsertionCount = 0
+
+  // toggled and used if parsing is interrupted to terminate script
+  let wasParserAborted = false
+
+  const data = []
 
   Papa.parse(stream, {
     header: true,
     delimiter: ',',
-    skipEmptyLines: true, // TODO: if this is on, do we need to check for it in #step?
-    complete: function () {
-      if (_.isEmpty(data)) {
-        terminateScript('No data made it through parsing stream')
+    skipEmptyLines: true, // TODO: investigate why we need this if we're already checking for isEmptyRow
+    complete: async () => {
+      if (wasParserAborted) {
+        await terminateScript('CSV parsing was aborted mid-stream')
+      } else if (_.isEmpty(data)) {
+        await terminateScript('No data made it through parsing stream')
       }
 
       const projectObj = projectName ? { project: projectName } : {}
@@ -70,7 +76,7 @@ const parseCsvFileAndWriteToDb = ({
         }
       })
     },
-    step: async results => {
+    step: (results, parser) => {
       const isEmptyLine = isEmptyRow(results.data[0])
 
       // skip processing the row if it's empty or it's the first two rows
@@ -81,7 +87,10 @@ const parseCsvFileAndWriteToDb = ({
 
         // error out if input month/year doesn't match csv file month/year
         if (resultData.month !== fileMonth || resultData.year !== fileYear) {
-          await terminateScript('At least this row doesn\'t match file name\'s month and year', resultData)
+          wasParserAborted = true
+          console.error('At least this row doesn\'t match file name\'s month and year', resultData)
+          parser.abort()
+          return
         }
 
         data.push(resultData)
@@ -89,7 +98,9 @@ const parseCsvFileAndWriteToDb = ({
 
       rowParseCount++
     },
-    error: async err => { await terminateScript('Error from Papa parse operation:', err) }
+    error: async err => {
+      await terminateScript('Error from Papa parse operation:', err)
+    }
   })
 }
 
