@@ -1,11 +1,11 @@
 # wave-db-mgmt
 
 This repo is meant to eventually become Pulse's primary internal database management tool for importing and updating data in our database. It currently contains five scripts for the following purposes:
-1. Uploading CSV historical data to pulse-dev
-2. Uploading listsConfig JSONs to pulse-dev
-3. Uploading a CSV of provider indication/regimen combos for admin hub to source from
-4. Synchronizing DRG medical lives data with MMIT lives data
-5. Merging dashboard permissions data from pulse-core and pushing that to pulse-dev
+1. [Uploading CSV historical data to pulse-dev](#1-uploading-historical-data)
+2. [Uploading listsConfig JSONs to pulse-dev](#2-uploading-listsconfig-jsons)
+3. [Uploading a CSV of provider indication/regimen combos for admin hub to source from](#3-uploading-provider-ind/reg-combos-for-admin-hub)
+4. [Synchronizing DRG medical lives data with MMIT lives data](#4-synchronizing-drg/mmit-medical-lives)
+5. [Updating Dashboards Permissions Prototype Collection on Dev](#5-updating-dashboards-permissions-prototype-on-dev)
 
 # Before you do anything else
 
