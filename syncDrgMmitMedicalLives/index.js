@@ -1,39 +1,13 @@
 const d3 = require('d3-collection')
-const connectToMongoDb = require('./connect-to-mongodb')
+const connectToMongoDb = require('../connect-to-mongodb')
+const latestMonthYearDataQuery = require('./aggregation-pipeline')
 const {
   getScriptTerminator,
   verifyCollectionExists
-} = require('./utils')
+} = require('../utils')
 
 const MMIT_COLLECTION = 'payerHistoricalMmitStateLives'
 const DRG_COLLECTION = 'payerHistoricalDrgStateLives'
-
-const latestMonthYearDataQuery = [
-  {
-    $group: {
-      _id: {
-        year: '$year',
-        month: '$month',
-      },
-      data: { $push: '$$ROOT' }
-    }
-  },
-  {
-    $sort: {
-      '_id.year': -1,
-      '_id.month': -1
-    }
-  },
-  {
-    $limit: 1
-  },
-  {
-    $unwind: '$data'
-  },
-  {
-    $replaceRoot: { newRoot: '$data' }
-  }
-]
 
 const matchBySlugsQuery = slugs => ([{
   $match: { slug: { $in: slugs } }
@@ -42,7 +16,7 @@ const matchBySlugsQuery = slugs => ([{
 const synchronizeLives = async () => {
   const mongoConnection = await connectToMongoDb()
   const terminateScript = getScriptTerminator(mongoConnection)
-  const pulseDevDb = await mongoConnection.db('pulse-dev')
+  const pulseDevDb = await mongoConnection.db('test')
 
   console.log('-----------DRG MMIT Medical Lives Synchronization-----------')
 
@@ -102,6 +76,8 @@ const synchronizeLives = async () => {
       vaMedical
     } = drgRow
 
+    const timestamp = new Date()
+
     const medicalLivesFields = {
       totalMedical,
       commercialMedical,
@@ -110,7 +86,8 @@ const synchronizeLives = async () => {
       managedMedicaidMedical,
       ffsMedicaidMedical,
       tricareMedical,
-      vaMedical
+      vaMedical,
+      updatedOn: timestamp
     }
 
     const mmitRowId = groupMmitBySlugAndId[slug][state]
@@ -119,7 +96,7 @@ const synchronizeLives = async () => {
     // otherwise insert the new document with the corrresponding
     // medical lives
     if (mmitRowId) {
-      mmitCollection.update(
+      mmitCollection.updateOne(
         { _id: mmitRowId },
         { $set: medicalLivesFields }
       ).then(result => {
@@ -127,6 +104,7 @@ const synchronizeLives = async () => {
       })
     } else {
       const newStateData = {
+        createdOn: timestamp,
         parentSlug,
         month: latestMmitMonth,
         year: latestMmitYear,
@@ -137,7 +115,7 @@ const synchronizeLives = async () => {
         ...medicalLivesFields
       }
 
-      mmitCollection.insert(newStateData)
+      mmitCollection.insertOne(newStateData)
         .then(result => {
           console.log(`Inserted the following id: ${result._id}`)
         })
