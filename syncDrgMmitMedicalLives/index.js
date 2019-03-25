@@ -1,9 +1,9 @@
 const d3 = require('d3-collection')
 const connectToMongoDb = require('../connect-to-mongodb')
-const latestMonthYearDataQuery = require('./aggregation-pipeline')
 const {
   getScriptTerminator,
-  verifyCollectionExists
+  verifyCollectionExists,
+  latestMonthYearPipeline
 } = require('../utils')
 
 const MMIT_COLLECTION = 'payerHistoricalMmitStateLives'
@@ -25,7 +25,7 @@ const synchronizeLives = async () => {
   await verifyCollectionExists(MMIT_COLLECTION, pulseDevDb, mongoConnection)
 
   const latestMmitData = await pulseDevDb.collection(MMIT_COLLECTION)
-    .aggregate(latestMonthYearDataQuery)
+    .aggregate(latestMonthYearPipeline)
     .toArray()
 
   /* Prepare configuration _id map in the shape of:
@@ -51,7 +51,7 @@ const synchronizeLives = async () => {
 
   const latestMonthsAndSlugMatchQuery = [
     ...matchBySlugsQuery(mmitSlugs),
-    ...latestMonthYearDataQuery
+    ...latestMonthYearPipeline
   ]
 
   const latestDrgData = await pulseDevDb.collection(DRG_COLLECTION)

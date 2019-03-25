@@ -15,8 +15,7 @@ const parseCsvFileAndWriteToDb = ({
   collectionName,
   fileMonth,
   fileYear,
-  terminateScript
-}) => {
+}) => new Promise((resolve, reject) => {
   const stream = fs.createReadStream(filepath)
   // used to skip the two rows after the header row
   let rowParseCount = 0
@@ -33,11 +32,13 @@ const parseCsvFileAndWriteToDb = ({
     header: true,
     delimiter: ',',
     skipEmptyLines: true, // TODO: investigate why we need this if we're already checking for isEmptyRow
-    complete: async () => {
+    complete: () => {
       if (wasParserAborted) {
-        await terminateScript('CSV parsing was aborted mid-stream')
+        reject('CSV parsing was aborted mid-stream')
+        return
       } else if (_.isEmpty(data)) {
-        await terminateScript('No data made it through parsing stream')
+        reject('No data made it through parsing stream')
+        return
       }
 
       const projectObj = projectName ? { project: projectName } : {}
@@ -65,11 +66,11 @@ const parseCsvFileAndWriteToDb = ({
               newData,
               err => {
                 if (err) {
-                  console.error(err)
+                  reject(err)
                 } else {
                   rowInsertionCount++
                   bar.tick(rowInsertionCount)
-                  if (rowInsertionCount === data.length) process.exit()
+                  if (rowInsertionCount === data.length) resolve(data)
                 }
               }
             )
@@ -100,10 +101,8 @@ const parseCsvFileAndWriteToDb = ({
 
       data.push(row)
     },
-    error: async err => {
-      await terminateScript('Error from Papa parse operation:', err)
-    }
+    error: reject
   })
-}
+})
 
 module.exports = parseCsvFileAndWriteToDb

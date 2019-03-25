@@ -1,9 +1,10 @@
-const connectToMongoDb = require('../connect-to-mongodb')
-const parseCsvFileAndWriteToDb = require('./parse-csv-file-and-write-to-db')
+const connectToMongoDb = require('../../connect-to-mongodb')
+const parseCsvFileAndWriteToDb = require('../parse-csv-file-and-write-to-db')
+const pushToDev = require('./pushToDev')
 const {
   getScriptTerminator,
   verifyCollectionExists
-} = require('../utils')
+} = require('../../utils')
 
 const importNonProjectBasedData = async filepath => {
   // Extract filename, month, year based on filepath
@@ -17,15 +18,16 @@ const importNonProjectBasedData = async filepath => {
 
   const mongoConnection = await connectToMongoDb()
   const terminateScript = getScriptTerminator(mongoConnection)
-  const db = await mongoConnection.db('pulse-dev')
+  const pulseDevDb = await mongoConnection.db('pulse-dev')
+  const pulseCoreDb = await mongoConnection.db('pulse-core')
 
   console.log('----------Historical Data Loader-----------')
   console.log('Running loader...')
 
-  await verifyCollectionExists(collectionName, db, mongoConnection)
+  await verifyCollectionExists(collectionName, pulseCoreDb, mongoConnection)
 
   // Remove rows before appending
-  await db.collection(collectionName)
+  await pulseCoreDb.collection(collectionName)
     .deleteMany({
       $and: [
         { $or: [{ month: Number(fileMonth) }, { month: fileMonth }] },
@@ -34,14 +36,24 @@ const importNonProjectBasedData = async filepath => {
     })
     .catch(async err => await terminateScript(err))
 
-  console.log(`Deleted Rows for Month:${fileMonth} Year:${fileYear}`)
+  const monthYear = `Month:${fileMonth} Year:${fileYear}`
 
-  parseCsvFileAndWriteToDb({
-    db,
+  console.log(`Deleted Rows for ${monthYear} from pulse-core`)
+
+  await parseCsvFileAndWriteToDb({
+    db: pulseCoreDb,
     filepath,
     collectionName,
     fileMonth,
-    fileYear,
+    fileYear
+  }).catch(async err => await terminateScript(err))
+
+  console.log(`New data for ${monthYear} inserted into pulse-core`)
+
+  pushToDev({
+    collectionName,
+    pulseCoreDb,
+    pulseDevDb,
     terminateScript
   })
 }
