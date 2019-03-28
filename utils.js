@@ -1,17 +1,15 @@
 const _ = require('lodash')
 
 function sanitizeKeysAndTrimData(obj) {
-  const newObj = {}
+  const result = _.reduce(obj, (acc, value, key) => {
+    const trimmedKey = key.trim() // in case the key has weird zero width unicode chars
+    if (!trimmedKey || value === '') return acc
 
-  Object.keys(obj).forEach(item => {
-    if (obj[item] !== "") {
-      newObj[_.camelCase(item.trim())] = typeof obj[item] === 'string'
-        ? obj[item].trim()
-        : obj[item]
-    }
-  })
+    acc[_.camelCase(trimmedKey)] = typeof value === 'string' ? value.trim() : value
+    return acc
+  }, {})
 
-  return newObj
+  return result
 }
 
 function isEmptyRow(obj) {
