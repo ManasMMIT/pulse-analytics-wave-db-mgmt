@@ -35,19 +35,19 @@ const pushToDev = async ({
     getLatestMonthYearProjectPipeline(6), { allowDiskUse: true }
   ).toArray()
 
-  // const latestMonthYearDataPromise = coreCollection.aggregate(
-  //   getLatestMonthYearProjectPipeline(1)
-  // ).toArray()
+  const latestMonthYearDataPromise = coreCollection.aggregate(
+    getLatestMonthYearProjectPipeline(1), { allowDiskUse: true }
+  ).toArray()
 
   try {
     const [
       adminHubPayerIndRegCombos,
       latestSixMonthsData,
-      // latestMonthYearData,
+      latestMonthYearData,
     ] = await Promise.all([
       adminHubPayerIndRegCombosPromise,
       latestSixMonthsDataPromise,
-      // latestMonthYearDataPromise,
+      latestMonthYearDataPromise,
     ])
 
     if (adminHubPayerIndRegCombos) {
@@ -56,15 +56,10 @@ const pushToDev = async ({
       console.log(`pulse-dev collection 'adminHubPayerIndRegCombos' updated`)
     }
 
-    // Eventually this pulse-dev collection will only hold the latest month/year but it'll temporarily
-    // hold the last six months, as historical trends page needs that for now.
     await pulseDevDb.collection(collectionName).deleteMany()
-    await pulseDevDb.collection(collectionName).insertMany(latestSixMonthsData)
+    await pulseDevDb.collection(collectionName).insertMany(latestMonthYearData)
     console.log(`pulse-dev collection '${collectionName}' updated`)
 
-    // Also insert latestSixMonths as separate historical trends collection.
-    // Plan is to switch historical trends onto this and then overwrite the original collections
-    // to only have the latest data.
     await pulseDevDb.collection(`${collectionName}Ht`).deleteMany()
     await pulseDevDb.collection(`${collectionName}Ht`).insertMany(latestSixMonthsData)
     console.log(`pulse-dev collection '${collectionName}Ht' updated`)
