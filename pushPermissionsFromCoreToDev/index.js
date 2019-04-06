@@ -1,59 +1,49 @@
 const connectToMongoDb = require('../connect-to-mongodb')
 const aggregationPipeline = require('./aggregation-pipeline')
+const {
+  getScriptTerminator,
+  verifyCollectionExists
+} = require('../utils')
 
 const pushPermissionsFromCoreToDev = async () => {
   const mongoConnection = await connectToMongoDb()
+  const terminateScript = getScriptTerminator(mongoConnection)
   const pulseCoreDb = await mongoConnection.db('pulse-core')
   const pulseDevDb = await mongoConnection.db('pulse-dev')
 
-  // manipulate permissions in pulse-core DB (entry point, dashboards)
-  const usersDashboards = await pulseCoreDb.collection('dashboards')
+  // Step 1: manipulate permissions in pulse-core DB (entry point, users)
+  const usersDashboards = await pulseCoreDb.collection('users')
     .aggregate(aggregationPipeline).toArray()
-    .catch(err => {
-      console.error('Error aggregating permissions data from pulse-core:', err)
-      process.exit()
+    .catch(async err => {
+      await terminateScript('Error aggregating permissions data from pulse-core:', err)
     })
 
-
-  // push formatted data to pulse-dev
+  // Step 2: push formatted data to pulse-dev
+  const TARGET_COLLECTION = 'users.dashboards'
+  await verifyCollectionExists(TARGET_COLLECTION, pulseDevDb, mongoConnection)
 
   // Drop outcome collection if it exists before importing new data.
-  const TARGET_COLLECTION = 'users.dashboards'
+  // Terminate the script if anything goes wrong with the drop
+  await pulseDevDb.collection(TARGET_COLLECTION).drop()
+    .then(res => {
+      if (res) console.log(`Successfully dropped existing collection '${TARGET_COLLECTION}'`)
+      return res
+    })
+    .catch(async err => {
+      await terminateScript('Error dropping existing collection, terminating import:', err)
+    })
 
-  const listCollectionsResult = await pulseDevDb
-    .listCollections({ name: TARGET_COLLECTION })
-    .toArray()
-
-  const doesCollectionExist = listCollectionsResult.length > 0
-
-  // Don't attempt to drop unless collection already exists
-  if (doesCollectionExist) {
-    // If drop is successful, #drop returns true
-    const didDrop = await pulseDevDb.collection(TARGET_COLLECTION).drop()
-      .then(res => {
-        if (res) console.log(`Successfully dropped existing collection '${TARGET_COLLECTION}'`)
-        return res
-      })
-      .catch(err => {
-        console.error('Error dropping existing collection, terminating import:', err)
-      })
-
-    // Exit the import process if the drop failed
-    if (!didDrop) return
-  }
-
+  // Insert the usersDashboards data into target collection
   await pulseDevDb.collection(TARGET_COLLECTION)
     .insertMany(usersDashboards)
-    .catch(err => {
-      console.error('Error pushing collection to pulse-dev:', err)
-      process.exit()
+    .catch(async err => {
+      await terminateScript('Error pushing collection to pulse-dev:', err)
     })
     .then(console.log)
-
-  console.log('Script finished.')
-
-  await mongoConnection.close()
-  process.exit()
+    .finally(async () => {
+      console.log('Script finished.')
+      await terminateScript()
+    })
 }
 
 pushPermissionsFromCoreToDev()

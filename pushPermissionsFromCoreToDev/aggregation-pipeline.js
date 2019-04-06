@@ -1,67 +1,171 @@
 module.exports = [
   {
-    '$unwind': {
-      'path': '$items'
-    }
-  }, {
-    '$unwind': {
-      'path': '$items.users'
-    }
-  }, {
-    '$sort': {
-      'items.order': 1
+    '$lookup': {
+      'from': 'roles',
+      'localField': 'role',
+      'foreignField': '_id',
+      'as': 'role'
     }
   }, {
     '$project': {
-      'dashboard': '$type',
-      'order': '$order',
-      'page': {
-        'type': '$items.type',
-        '_id': '$items._id'
+      'username': 1,
+      'role': {
+        '$let': {
+          'vars': {
+            'roleObj': {
+              '$arrayElemAt': [
+                '$role', 0
+              ]
+            }
+          },
+          'in': '$$roleObj.name'
+        }
       },
-      'user': '$items.users'
+      'permissions': {
+        '$arrayElemAt': [
+          '$role.permissions', 0
+        ]
+      }
     }
   }, {
-    '$group': {
-      '_id': {
-        'user': '$user',
-        'dashboard': '$dashboard',
-        'order': '$order'
-      },
-      'pages': {
-        '$push': '$page'
+    '$unwind': {
+      'path': '$permissions'
+    }
+  }, {
+    '$lookup': {
+      'from': 'pages',
+      'localField': 'permissions',
+      'foreignField': '_id',
+      'as': 'permissions'
+    }
+  }, {
+    '$project': {
+      'username': 1,
+      'role': 1,
+      'permissions': {
+        '$arrayElemAt': [
+          '$permissions', 0
+        ]
       }
     }
   }, {
     '$sort': {
-      '_id.order': 1
+      'permissions.order': 1
     }
   }, {
     '$group': {
-      '_id': '$_id.user',
-      'dashboards': {
-        '$push': {
-          'dashboard': '$_id.dashboard',
-          'pages': '$pages'
+      '_id': {
+        'usernameId': '$_id',
+        'username': '$username',
+        'dashboard': '$permissions.dashboard'
+      },
+      'permissions': {
+        '$push': '$$ROOT.permissions'
+      }
+    }
+  }, {
+    '$project': {
+      'permissions': 1,
+      'dashboardId': {
+        '$let': {
+          'vars': {
+            'permissionObj': {
+              '$arrayElemAt': [
+                '$permissions', 0
+              ]
+            }
+          },
+          'in': '$$permissionObj.dashboard'
         }
       }
     }
   }, {
     '$lookup': {
-      'from': 'users',
-      'localField': '_id',
+      'from': 'dashboards',
+      'localField': 'dashboardId',
       'foreignField': '_id',
-      'as': 'userObj'
+      'as': 'dashboard'
     }
   }, {
     '$project': {
-      '_id': 0,
-      'username': {
-        '$arrayElemAt': [
-          '$userObj.username', 0
-        ]
+      'permissions': {
+        '_id': 1,
+        'order': 1,
+        'type': 1,
+        'dashboard': {
+          '$let': {
+            'vars': {
+              'dashboardObj': {
+                '$arrayElemAt': [
+                  '$dashboard', 0
+                ]
+              }
+            },
+            'in': '$$dashboardObj.type'
+          }
+        }
       },
-      'dashboards': 1
+      'dashboardOrder': {
+        '$let': {
+          'vars': {
+            'dashboardObj': {
+              '$arrayElemAt': [
+                '$dashboard', 0
+              ]
+            }
+          },
+          'in': '$$dashboardObj.order'
+        }
+      }
+    }
+  }, {
+    '$sort': {
+      'dashboardOrder': 1
+    }
+  }, {
+    '$group': {
+      '_id': {
+        'usernameId': '$_id.usernameId',
+        'username': '$_id.username'
+      },
+      'dashboards': {
+        '$push': '$permissions'
+      }
+    }
+  }, {
+    '$project': {
+      '_id': '$_id.usernameId',
+      'username': '$_id.username',
+      'dashboards': {
+        '$map': {
+          'input': '$dashboards',
+          'as': 'dashboardArr',
+          'in': {
+            'dashboard': {
+              '$let': {
+                'vars': {
+                  'obj': {
+                    '$arrayElemAt': [
+                      '$$dashboardArr', 0
+                    ]
+                  }
+                },
+                'in': '$$obj.dashboard'
+              }
+            },
+            'pages': {
+              '$map': {
+                'input': '$$dashboardArr',
+                'as': 'dashboardObj',
+                'in': {
+                  '_id': '$$dashboardObj._id',
+                  'type': '$$dashboardObj.type'
+                }
+              }
+            }
+          }
+        }
+      }
     }
   }
 ]
