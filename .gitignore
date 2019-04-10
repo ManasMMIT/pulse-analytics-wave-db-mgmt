@@ -19,3 +19,5 @@ node_modules
 lib/
 dist/
 public/
+
+db.config.js
