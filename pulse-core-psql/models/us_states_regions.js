@@ -8,14 +8,6 @@ module.exports = function(sequelize, DataTypes) {
       primaryKey: true,
       autoIncrement: true,
     },
-    us_state_id: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
-    region_id: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    }
   }, {
     tableName: 'us_states_regions'
   });

@@ -12,13 +12,5 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.STRING,
       allowNull: true
     },
-    role_content_id: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
-    resource_id: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    }
   });
 };

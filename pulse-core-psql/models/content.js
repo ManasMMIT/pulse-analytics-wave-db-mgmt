@@ -12,13 +12,5 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.STRING,
       allowNull: true
     },
-    card_id: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
-    content_id: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    }
   });
 };

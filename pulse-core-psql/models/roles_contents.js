@@ -8,14 +8,6 @@ module.exports = function(sequelize, DataTypes) {
       primaryKey: true,
       autoIncrement: true,
     },
-    role_id: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
-    content_id: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    }
   }, {
     tableName: 'roles_contents'
   });
