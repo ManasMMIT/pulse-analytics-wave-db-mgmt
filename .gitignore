@@ -21,3 +21,4 @@ dist/
 public/
 
 db.config.js
+auth0_data*
