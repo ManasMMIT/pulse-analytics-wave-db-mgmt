@@ -100,27 +100,10 @@
                     type: 'card',
                     children: [
                       {
+                        id: 'fg78',
                         name: 'Regional Map',
                         type: 'content',
                         component: 'Map',
-                        resources: {
-                          regionalBreakdown: [
-                            {
-                              region: 'East',
-                              states: [
-                                'NJ',
-                                'NY'
-                              ]
-                            },
-                            {
-                              region: 'West',
-                              states: [
-                                'CA',
-                                'WA'
-                              ]
-                            }
-                          ],
-                        }
                       }
                     ]
                   }
