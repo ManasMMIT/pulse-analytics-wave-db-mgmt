@@ -305,56 +305,16 @@
                     type: 'card',
                     children: [
                       {
+                        id: 'ae3f',
                         name: 'Payer Nav Filter',
                         type: 'content',
                         component: 'PayerNavFilter',
-                        resources: {
-                          treatmentPlans: [
-                            {
-                              indication: 'NSCLC',
-                              regimen: 'Keytruda',
-                              line: '1L+',
-                              population: 'No Subtype Specified',
-                              livesType: 'medicalCommercial',
-                              book: 'Medical',
-                              coverage: 'Commercial',
-                            },
-                          ]
-                        }
                       },
                       {
+                        id: 'fg78',
                         name: 'Regional Map',
                         type: 'content',
                         component: 'Map',
-                        resources: {
-                          regionalBreakdown: [
-                            {
-                              region: 'East',
-                              states: [
-                                'NJ',
-                                'NY'
-                              ]
-                            },
-                            {
-                              region: 'West',
-                              states: [
-                                'CA',
-                                'WA'
-                              ]
-                            }
-                          ],
-                          treatmentPlans: [
-                            {
-                              indication: 'NSCLC',
-                              regimen: 'Keytruda',
-                              line: '1L+',
-                              population: 'No Subtype Specified',
-                              livesType: 'medicalCommercial',
-                              book: 'Medical',
-                              coverage: 'Commercial',
-                            },
-                          ]
-                        }
                       }
                     ]
                   }
