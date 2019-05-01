@@ -1,3 +1,4 @@
+require('dotenv').load()
 const Sequelize = require('sequelize')
 const _ = require('lodash')
 
