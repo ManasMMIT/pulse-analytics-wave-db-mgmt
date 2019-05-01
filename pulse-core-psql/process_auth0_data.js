@@ -25,6 +25,6 @@ module.exports = () => Promise.all([
   groups,
 ]) => {
   const formattedUsers = users.map(({ user_id: id, name: username }) => ({ id, username }))
-  const [roles, manufacturers] = _.partition(groups, groupObj => groupObj.name.includes('-'))
-  return { users: formattedUsers, roles, manufacturers }
+  const [roles, clients] = _.partition(groups, groupObj => groupObj.name.includes('-'))
+  return { users: formattedUsers, roles, clients }
 })
