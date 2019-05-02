@@ -98,6 +98,7 @@
                       {
                         name: "PulseSimpleTable",
                         type: 'content',
+                        component: "PulseSimpleTable",
                       }
                     ]
                   }
@@ -291,6 +292,30 @@
                         name: 'Coverage Dropdown',
                         type: 'content',
                         component: 'Dropdown',
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                name: "Regional Drilldown",
+                type: 'page',
+                children: [
+                  {
+                    name: 'Regional Quality of Access',
+                    type: 'card',
+                    children: [
+                      {
+                        id: 'ae3f',
+                        name: 'Payer Nav Filter',
+                        type: 'content',
+                        component: 'PayerNavFilter',
+                      },
+                      {
+                        id: 'fg78',
+                        name: 'Regional Map',
+                        type: 'content',
+                        component: 'Map',
                       }
                     ]
                   }
