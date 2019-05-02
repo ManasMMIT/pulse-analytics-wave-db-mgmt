@@ -1,6 +1,6 @@
 /* jshint indent: 2 */
 
-module.exports = function(sequelize, DataTypes) {
+module.exports = function (sequelize, DataTypes) {
   return sequelize.define('permission', {
     id: {
       type: DataTypes.INTEGER,
@@ -8,9 +8,25 @@ module.exports = function(sequelize, DataTypes) {
       primaryKey: true,
       autoIncrement: true,
     },
-    type: {
+    contentOrder: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    alias: {
       type: DataTypes.STRING,
-      allowNull: true
+      allowNull: false,
+    },
+    contentId: {
+      unique: 'compositeIndex',
+      allowNull: false,
+    },
+    resourceId: {
+      unique: 'compositeIndex',
+      allowNull: false,
+    },
+    roleId: {
+      unique: 'compositeIndex',
+      allowNull: false,
     },
   });
 };
