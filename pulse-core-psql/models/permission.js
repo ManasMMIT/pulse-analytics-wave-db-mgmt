@@ -14,7 +14,7 @@ module.exports = function (sequelize, DataTypes) {
     },
     alias: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     },
     contentId: {
       unique: 'compositeIndex',
