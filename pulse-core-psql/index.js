@@ -45,10 +45,10 @@ const executeDbOperations = async () => {
 
   await Page.sync({ force: true })
 
-  const ProviderMgmt = Dashboard.findByPk(3)
-  const ProviderAccts = Dashboard.findByPk(5)
-  const PayerMgmt = Dashboard.findByPk(4)
-  const PayerAccts = Dashboard.findByPk(6)
+  const ProviderMgmt = await Dashboard.findByPk(3)
+  const ProviderAccts = await Dashboard.findByPk(5)
+  const PayerMgmt = await Dashboard.findByPk(4)
+  const PayerAccts = await Dashboard.findByPk(6)
 
   const providerMgmtPages = [
     'Regional Footprint',
@@ -106,27 +106,8 @@ const executeDbOperations = async () => {
     await PayerAccts.addPage(createdPage)
   }
 
-  const test1 = await ProviderMgmt.getPages()
-  const test2 = await ProviderAccts.getPages()
-  const test3 = await PayerMgmt.getPages()
-  const test4 = await PayerAccts.getPages()
-  const asdf = await Page.findByPk(1)
-  const test5 = asdf.getDashboard()
-  debugger
-  const test6 = await Page.findByPk(1).getDashboard()
 
-  // const Content = sequelize.import('content', require('./models/content'))
-  // const Permission = sequelize.import('permission', require('./models/permission'))
-  // const Resource = sequelize.import('resource', require('./models/resource'))
 
-  // Role.hasMany(Permission, { onDelete: 'cascade' })
-  // Permission.belongsTo(Role)
-
-  // Content.hasMany(Permission, { onDelete: 'cascade' })
-  // Permission.belongsTo(Content)
-
-  // Resource.hasMany(Permission, { onDelete: 'cascade' })
-  // Permission.belongsTo(Resource)
 }
 
 executeDbOperations()
