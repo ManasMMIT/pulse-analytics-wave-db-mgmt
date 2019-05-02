@@ -27,6 +27,9 @@ const CARD_CONTENT_MAP = {
 
 const createContents = async (sequelize, Card, shouldSeed) => {
   const Content = await sequelize.import('content', require('./models/content'))
+  Content.belongsTo(Content)
+  Content.hasMany(Content, { onDelete: 'cascade' })
+
   Content.belongsTo(Card)
   Card.hasMany(Content, { onDelete: 'cascade' })
 
@@ -38,6 +41,14 @@ const createContents = async (sequelize, Card, shouldSeed) => {
       const CurrentCard = await Card.findByPk(i);
       await CurrentCard.addContent(CurrentContent)
     }
+
+    const subcontent = await Content.create({
+      name: 'Access Overview',
+      component: 'ColorLegend',
+    })
+
+    const qoaTopTabsContent = await Content.findByPk(10)
+    await qoaTopTabsContent.addContent(subcontent)
   }
 
   return Content
