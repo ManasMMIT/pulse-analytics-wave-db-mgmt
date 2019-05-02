@@ -7,6 +7,7 @@ const createUsersRolesClients = require('./create-users-roles-clients')
 const createDashboards = require('./create-dashboards')
 const createPages = require('./create-pages')
 const createCards = require('./create-cards')
+const createContents = require('./create-contents')
 
 const sslConfig = DB_PROD_LOADER_URI
   ? {
@@ -42,6 +43,7 @@ const executeDbOperations = async () => {
   const Dashboard = await createDashboards(sequelize, false)
   const Page = await createPages(sequelize, Dashboard, false)
   const Card = await createCards(sequelize, Page, false)
+  const Content = await createContents(sequelize, Card, false)
 }
 
 executeDbOperations()
