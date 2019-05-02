@@ -3,7 +3,7 @@ const createDashboards = async sequelize => {
   Dashboard.belongsTo(Dashboard)
   Dashboard.hasMany(Dashboard, { onDelete: 'cascade' })
 
-  await sequelize.sync({ force: true })
+  await Dashboard.sync({ force: true })
 
   await Dashboard.bulkCreate([
     { name: 'Provider Targeted Accounts' },
@@ -21,4 +21,4 @@ const createDashboards = async sequelize => {
   return Dashboard
 }
 
-export default createDashboards
+module.exports = createDashboards
