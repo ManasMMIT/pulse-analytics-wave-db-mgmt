@@ -6,7 +6,7 @@ const DB_PROD_LOADER_URI = process.env.DB_PROD_LOADER_URI
 const createUsersRolesClients = require('./create-users-roles-clients')
 const createDashboards = require('./create-dashboards')
 const createPages = require('./create-pages')
-// const createCards = require('./create-cards')
+const createCards = require('./create-cards')
 
 const sslConfig = DB_PROD_LOADER_URI
   ? {
@@ -41,20 +41,7 @@ const executeDbOperations = async () => {
   const { User, Role, Client } = await createUsersRolesClients(sequelize, false)
   const Dashboard = await createDashboards(sequelize, false)
   const Page = await createPages(sequelize, Dashboard, false)
-
-  const testUser = await User.findOne()
-  const testRoles = await testUser.getRoles()
-  const testRole = testRoles[0]
-  const testClient = await testRole.getClient()
-
-  const testDashboard = await Dashboard.findOne({ where: { name: 'Management' } })
-  const testPages = await testDashboard.getPages()
-  debugger
-  const testPage = testPages[0]
-  const testDashboard2 = await testPage.getDashboard()
-  debugger
-
-  // const Card = await createPages(sequelize, Page, false)
+  const Card = await createCards(sequelize, Page, false)
 }
 
 executeDbOperations()
