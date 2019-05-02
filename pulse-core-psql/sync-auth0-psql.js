@@ -1,7 +1,7 @@
 const _ = require('lodash')
 const getAuth0Data = require('./process_auth0_data')
 
-const syncAuth0WithDB = async sequelize => {
+const syncAuth0WithDB = async (sequelize, shouldSeed) => {
   const User = await sequelize.import('user', require('./models/user'))
   const Role = await sequelize.import('role', require('./models/role'))
   const UserRole = await sequelize.import('users_roles', require('./models/users_roles'))
@@ -13,42 +13,47 @@ const syncAuth0WithDB = async sequelize => {
   Client.hasMany(Role, { onDelete: 'cascade' })
   Role.belongsTo(Client)
 
-  await sequelize.sync({ force: true })
+  if (shouldSeed) {
+    await User.sync({ force: true })
+    await Role.sync({ force: true })
+    await UserRole.sync({ force: true })
+    await Client.sync({ force: true })
 
-  const { users, roles, clients } = await getAuth0Data()
+    const { users, roles, clients } = await getAuth0Data()
 
-  await User.bulkCreate(users)
+    await User.bulkCreate(users)
 
-  for (const role of roles) {
-    const CurrentRole = await Role.create({
-      id: role._id,
-      name: role.name,
-      description: role.description,
-    })
+    for (const role of roles) {
+      const CurrentRole = await Role.create({
+        id: role._id,
+        name: role.name,
+        description: role.description,
+      })
 
-    const { members } = role
+      const { members } = role
 
-    if (!_.isEmpty(members)) {
-      for (memberId of members) {
-        const TargetUser = await User.findByPk(memberId)
-        await CurrentRole.addUser(TargetUser)
+      if (!_.isEmpty(members)) {
+        for (memberId of members) {
+          const TargetUser = await User.findByPk(memberId)
+          await CurrentRole.addUser(TargetUser)
+        }
       }
     }
-  }
 
-  for (const client of clients) {
-    const CurrentClient = await Client.create({
-      id: client._id,
-      name: client.name,
-      description: client.description,
-    })
+    for (const client of clients) {
+      const CurrentClient = await Client.create({
+        id: client._id,
+        name: client.name,
+        description: client.description,
+      })
 
-    const { nested: roles } = client
+      const { nested: roles } = client
 
-    if (!_.isEmpty(roles)) {
-      for (const roleId of roles) {
-        const TargetRole = await Role.findByPk(roleId)
-        await CurrentClient.addRole(TargetRole)
+      if (!_.isEmpty(roles)) {
+        for (const roleId of roles) {
+          const TargetRole = await Role.findByPk(roleId)
+          await CurrentClient.addRole(TargetRole)
+        }
       }
     }
   }
