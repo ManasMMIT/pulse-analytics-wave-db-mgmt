@@ -3,7 +3,7 @@ const Sequelize = require('sequelize')
 
 const DB_LOCAL_LOADER_URI = require('./db.config.js')
 const DB_PROD_LOADER_URI = process.env.DB_PROD_LOADER_URI
-const syncAuth0WithDb = require('./sync-auth0-psql')
+const createUsersRolesClients = require('./create-users-roles-clients')
 const createDashboards = require('./create-dashboards')
 const createPages = require('./create-pages')
 // const createCards = require('./create-cards')
@@ -38,7 +38,7 @@ const executeDbOperations = async () => {
       console.error('Unable to connect to the database:', err)
     })
 
-  const { User, Role, Client } = await syncAuth0WithDb(sequelize, false)
+  const { User, Role, Client } = await createUsersRolesClients(sequelize, false)
   const Dashboard = await createDashboards(sequelize, false)
   const Page = await createPages(sequelize, Dashboard, false)
 
