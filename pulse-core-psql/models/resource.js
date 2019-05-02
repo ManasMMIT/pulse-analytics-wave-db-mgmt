@@ -12,5 +12,9 @@ module.exports = function (sequelize, DataTypes) {
       type: DataTypes.STRING,
       allowNull: true
     },
+    sourceId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
   });
 };
