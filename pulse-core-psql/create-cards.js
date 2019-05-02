@@ -34,9 +34,9 @@ const createCards = async (sequelize, Page, shouldSeed) => {
     await Card.sync({ force: true })
 
     for (let i = 1; i < 25; i += 1) {
-      const CurrentCard = await Card.create({ name: PAGE_CARD_MAP[i] })
-      const CurrentPage = await Page.findByPk(i);
-      await CurrentPage.addCard(CurrentCard)
+      const currentCard = await Card.create({ name: PAGE_CARD_MAP[i] })
+      const currentPage = await Page.findByPk(i);
+      await currentPage.addCard(currentCard)
     }
   }
 

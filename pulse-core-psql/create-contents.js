@@ -37,9 +37,9 @@ const createContents = async (sequelize, Card, shouldSeed) => {
     await Content.sync({ force: true })
 
     for (let i = 1; i < 25; i += 1) {
-      const CurrentContent = await Content.create({ name: CARD_CONTENT_MAP[i] })
-      const CurrentCard = await Card.findByPk(i);
-      await CurrentCard.addContent(CurrentContent)
+      const currentContent = await Content.create({ name: CARD_CONTENT_MAP[i] })
+      const currentCard = await Card.findByPk(i);
+      await currentCard.addContent(currentContent)
     }
 
     const subcontent = await Content.create({

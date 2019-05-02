@@ -24,7 +24,7 @@ const createUsersRolesClients = async (sequelize, shouldSeed) => {
     await User.bulkCreate(users)
 
     for (const role of roles) {
-      const CurrentRole = await Role.create({
+      const currentRole = await Role.create({
         id: role._id,
         name: role.name,
         description: role.description,
@@ -34,14 +34,14 @@ const createUsersRolesClients = async (sequelize, shouldSeed) => {
 
       if (!_.isEmpty(members)) {
         for (memberId of members) {
-          const TargetUser = await User.findByPk(memberId)
-          await CurrentRole.addUser(TargetUser)
+          const targetUser = await User.findByPk(memberId)
+          await currentRole.addUser(targetUser)
         }
       }
     }
 
     for (const client of clients) {
-      const CurrentClient = await Client.create({
+      const currentClient = await Client.create({
         id: client._id,
         name: client.name,
         description: client.description,
@@ -51,8 +51,8 @@ const createUsersRolesClients = async (sequelize, shouldSeed) => {
 
       if (!_.isEmpty(roles)) {
         for (const roleId of roles) {
-          const TargetRole = await Role.findByPk(roleId)
-          await CurrentClient.addRole(TargetRole)
+          const targetRole = await Role.findByPk(roleId)
+          await currentClient.addRole(targetRole)
         }
       }
     }
