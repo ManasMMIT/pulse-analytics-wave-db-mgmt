@@ -56,56 +56,16 @@ const executeDbOperations = async () => {
     shouldSeed: false
   })
 
-  // const adminUser = await User.findByPk('auth0|59e910a4c30a38053ab5452b')
-  // const adminRoles = await adminUser.getRoles()
-  // const adminRole = adminRoles[0]
+  // User.dashboards.dashboards.pages.cards.contents.contents
+  // Dashboard.belongsToMany(Role, { through: 'roles_dashboards ' })
+  // Pages.belongsToMany(Role, { through: 'roles_pages' })
 
-  const adminData = await User.findOne(
-    {
-      where: { id: 'auth0|59e910a4c30a38053ab5452b' },
-      include: [
-        {
-          model: Role,
-          include: [
-            {
-              model: Permission,
-              include: [
-                {
-                  model: Resource
-                },
-                {
-                  model: Content,
-                  include: [
-                    {
-                      model: Card,
-                      include: [
-                        {
-                          model: Page,
-                          include: [
-                            {
-                              model: Dashboard,
-                              include: [
-                                {
-                                  model: Dashboard
-                                }
-                              ]
-                            }
-                          ]
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    }
-  )
+  const adminData = await User.findOne({
+    where: { id: 'auth0|59e910a4c30a38053ab5452b' },
+    include: [{ all: true, nested: true }]
+  })
 
   debugger
-
 }
 
 executeDbOperations()
