@@ -94,12 +94,36 @@ const executeDbOperations = async () => {
   // )
   // debugger
 
-  // https://stackoverflow.com/questions/51965298/how-to-get-results-from-multiple-level-associations-in-sequelize
-  const masterSitemap = await Dashboard.findAll(
-    { include: [{ all: true, nested: true }] }
-  )
+  // // get masterSitemap
+  // let masterSitemap = await Dashboard.findAll(
+  //   {
+  //     include: [
+  //       {
+  //         model: Dashboard,
+  //         as: 'ChildDashboard',
+  //         include: [
+  //           {
+  //             model: Page,
+  //             include: [
+  //               {
+  //                 model: Card,
+  //                 include: [
+  //                   {
+  //                     model: Content,
+  //                   }
+  //                 ]
+  //               }
+  //             ]
+  //           }
+  //         ],
+  //       }
+  //     ]
+  //   }
+  // )
 
-  debugger
+  // // JSONify the nested sitemap
+  // let masterSitemap = masterSitemap.map(dashboard => dashboard.toJSON())
+  // debugger
 }
 
 executeDbOperations()
