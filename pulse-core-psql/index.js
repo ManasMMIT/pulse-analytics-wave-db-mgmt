@@ -56,16 +56,57 @@ const executeDbOperations = async () => {
     shouldSeed: false
   })
 
-  // User.dashboards.dashboards.pages.cards.contents.contents
-  // Dashboard.belongsToMany(Role, { through: 'roles_dashboards ' })
-  // Pages.belongsToMany(Role, { through: 'roles_pages' })
+  // User.dashboards.dashboards.pages.cards.contents.contents.resources
 
-  const adminData = await User.findOne({
-    where: { id: 'auth0|59e910a4c30a38053ab5452b' },
-    include: [{ all: true, nested: true }]
-  })
+  // Role.belongsToMany(Content, { through: RoleContent })
+  // Content.belongsToMany(Role, { through: RoleContent })
 
-  debugger
+  // Resource.belongsToMany(RoleContent, { through: Permission })
+  // RoleContent.belongsToMany(Resource, { through: Permission })
+
+  // role.content.rolecontent.resource
+
+  Role.belongsToMany(Content, { through: Permission })
+  Content.belongsToMany(Role, { through: Permission })
+
+  Content.belongsToMany(Resource, { through: Permission })
+  Resource.belongsToMany(Content, { through: Permission })
+
+  const adminData = await User.findOne(
+    {
+      where: { id: 'auth0|59e910a4c30a38053ab5452b' },
+      include: [
+        {
+          model: Role,
+          include: [
+            {
+              model: Content,
+              include: [
+                {
+                  model: Permission,
+                  where: {
+                    roleId: 'admin-nested-role'
+                  },
+                  include: [
+                    {
+                      model: Resource
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  )
+  // debugger
+
+  // const masterSitemap = await Dashboard.findAll(
+
+  // )
+
+  // debugger
 }
 
 executeDbOperations()
