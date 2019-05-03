@@ -58,55 +58,48 @@ const executeDbOperations = async () => {
 
   // User.dashboards.dashboards.pages.cards.contents.contents.resources
 
-  // Role.belongsToMany(Content, { through: RoleContent })
-  // Content.belongsToMany(Role, { through: RoleContent })
-
-  // Resource.belongsToMany(RoleContent, { through: Permission })
-  // RoleContent.belongsToMany(Resource, { through: Permission })
-
-  // role.content.rolecontent.resource
-
   Role.belongsToMany(Content, { through: Permission })
   Content.belongsToMany(Role, { through: Permission })
 
   Content.belongsToMany(Resource, { through: Permission })
   Resource.belongsToMany(Content, { through: Permission })
 
-  const adminData = await User.findOne(
-    {
-      where: { id: 'auth0|59e910a4c30a38053ab5452b' },
-      include: [
-        {
-          model: Role,
-          include: [
-            {
-              model: Content,
-              include: [
-                {
-                  model: Permission,
-                  where: {
-                    roleId: 'admin-nested-role'
-                  },
-                  include: [
-                    {
-                      model: Resource
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    }
-  )
-  // debugger
-
-  // const masterSitemap = await Dashboard.findAll(
-
+  // const adminData = await User.findOne(
+  //   {
+  //     where: { id: 'auth0|59e910a4c30a38053ab5452b' },
+  //     include: [
+  //       {
+  //         model: Role,
+  //         include: [
+  //           {
+  //             model: Content,
+  //             include: [
+  //               {
+  //                 model: Permission,
+  //                 where: {
+  //                   roleId: 'admin-nested-role'
+  //                 },
+  //                 include: [
+  //                   {
+  //                     model: Resource
+  //                   }
+  //                 ]
+  //               }
+  //             ]
+  //           }
+  //         ]
+  //       }
+  //     ]
+  //   }
   // )
-
   // debugger
+
+  // https://stackoverflow.com/questions/51965298/how-to-get-results-from-multiple-level-associations-in-sequelize
+  const masterSitemap = await Dashboard.findAll(
+    { include: [{ all: true, nested: true }] }
+  )
+
+  debugger
 }
 
 executeDbOperations()
