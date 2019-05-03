@@ -17,14 +17,17 @@ module.exports = function (sequelize, DataTypes) {
       allowNull: true,
     },
     contentId: {
+      type: DataTypes.INTEGER,
       unique: 'compositeIndex',
       allowNull: false,
     },
     resourceId: {
+      type: DataTypes.INTEGER,
       unique: 'compositeIndex',
       allowNull: false,
     },
     roleId: {
+      type: DataTypes.STRING,
       unique: 'compositeIndex',
       allowNull: false,
     },
