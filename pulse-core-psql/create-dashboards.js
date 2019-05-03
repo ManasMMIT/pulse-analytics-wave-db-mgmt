@@ -1,7 +1,7 @@
 const createDashboards = async (sequelize, shouldSeed) => {
   const Dashboard = await sequelize.import('dashboard', require('./models/dashboard'))
   Dashboard.belongsTo(Dashboard)
-  Dashboard.hasMany(Dashboard, { onDelete: 'cascade' })
+  Dashboard.hasMany(Dashboard, { onDelete: 'cascade', as: 'ChildDashboard' })
 
   if (shouldSeed) {
     await Dashboard.sync({ force: true })
