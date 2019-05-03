@@ -56,18 +56,62 @@ const executeDbOperations = async () => {
   Resource.hasMany(Permission, { onDelete: 'cascade' })
 
   // await Resource.sync({ force: true })
-  await Permission.sync({ force: true })
+  // await Permission.sync({ force: true })
 
   // const regionalBreakdownResource = await Resource.findByPk(1)
+  // const regionalBreakdownResource2 = await Resource.create({
+  //   type: 'regionalBreakdown',
+  //   sourceId: 2,
+  // })
   // const regionalMap1Content = await Content.findByPk(15)
   // const roleForMap1 = await Role.findByPk('5404d17a-d830-4e68-ba5a-623abf96ab74')
 
-  const firstPermission = await Permission.create({
+  // const firstPermission = await Permission.create({
+  //   contentOrder: 1,
+  //   resourceId: 1,
+  //   contentId: 15,
+  //   roleId: '5404d17a-d830-4e68-ba5a-623abf96ab74'
+  // })
+
+  // const secondPermission = await Permission.create({
+  //   contentOrder: 1,
+  //   resourceId: 1,
+  //   contentId: 14,
+  //   roleId: '5404d17a-d830-4e68-ba5a-623abf96ab74'
+  // })
+  // debugger
+
+  // const thirdPermission = await Permission.create({
+  //   contentOrder: 1,
+  //   resourceId: 2,
+  //   contentId: 15,
+  //   roleId: '5404d17a-d830-4e68-ba5a-623abf96ab74'
+  // })
+  // debugger
+
+  // const fourthPermission = await Permission.create({
+  //   contentOrder: 1,
+  //   resourceId: 1,
+  //   contentId: 15,
+  //   roleId: '31c5af56-e198-494e-bda9-d5f6195e5fa5'
+  // })
+  // debugger
+
+  const fifthPermission = await Permission.create({
+    contentOrder: 1,
+    resourceId: 1,
+    contentId: 19,
+    roleId: '55f7f764-4df2-4f83-9e06-7cf937c1031a'
+  })
+  debugger
+
+  const finalPermission = await Permission.create({
     contentOrder: 1,
     resourceId: 1,
     contentId: 15,
     roleId: '5404d17a-d830-4e68-ba5a-623abf96ab74'
   })
+  debugger
 
   // debugger
 
@@ -87,15 +131,14 @@ const executeDbOperations = async () => {
   // const testSave = await firstPermission.save()
   // debugger
 
-  const resourceCheck = await firstPermission.getResource()
-  const contentCheck = await firstPermission.getContent()
-  const roleCheck = await firstPermission.getRole()
-  debugger
+  // const resourceCheck = await firstPermission.getResource()
+  // const contentCheck = await firstPermission.getContent()
+  // const roleCheck = await firstPermission.getRole()
+  // debugger
 
-  const permission1Check = await resourceCheck.getPermissions()
-  const permission2Check = await contentCheck.getPermissions()
-  const permission3Check = await roleCheck.getPermissions()
-  debugger
+  // const permission1Check = await resourceCheck.getPermissions()
+  // const permission2Check = await contentCheck.getPermissions()
+  // const permission3Check = await roleCheck.getPermissions()
 }
 
 executeDbOperations()
