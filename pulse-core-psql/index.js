@@ -58,7 +58,54 @@ const executeDbOperations = async () => {
 
   // const adminUser = await User.findByPk('auth0|59e910a4c30a38053ab5452b')
   // const adminRoles = await adminUser.getRoles()
-  // debugger
+  // const adminRole = adminRoles[0]
+
+  const adminData = await User.findOne(
+    {
+      where: { id: 'auth0|59e910a4c30a38053ab5452b' },
+      include: [
+        {
+          model: Role,
+          include: [
+            {
+              model: Permission,
+              include: [
+                {
+                  model: Resource
+                },
+                {
+                  model: Content,
+                  include: [
+                    {
+                      model: Card,
+                      include: [
+                        {
+                          model: Page,
+                          include: [
+                            {
+                              model: Dashboard,
+                              include: [
+                                {
+                                  model: Dashboard
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  )
+
+  debugger
+
 }
 
 executeDbOperations()
