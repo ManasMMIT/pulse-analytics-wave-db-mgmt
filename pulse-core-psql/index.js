@@ -102,6 +102,7 @@ const executeDbOperations = async () => {
       include: [
         {
           model: Role,
+          through: { attributes: [] },
           include: [
             {
               model: Content,
