@@ -58,41 +58,91 @@ const executeDbOperations = async () => {
 
   // User.dashboards.dashboards.pages.cards.contents.contents.resources
 
+  // DON'T REMOVE
   Role.belongsToMany(Content, { through: Permission })
   Content.belongsToMany(Role, { through: Permission })
-
   Content.belongsToMany(Resource, { through: Permission })
   Resource.belongsToMany(Content, { through: Permission })
 
-  // const adminData = await User.findOne(
-  //   {
-  //     where: { id: 'auth0|59e910a4c30a38053ab5452b' },
-  //     include: [
-  //       {
-  //         model: Role,
-  //         include: [
-  //           {
-  //             model: Content,
-  //             include: [
-  //               {
-  //                 model: Permission,
-  //                 where: {
-  //                   roleId: 'admin-nested-role'
-  //                 },
-  //                 include: [
-  //                   {
-  //                     model: Resource
-  //                   }
-  //                 ]
-  //               }
-  //             ]
-  //           }
-  //         ]
-  //       }
-  //     ]
-  //   }
-  // )
+  // const RoleDashboard = await sequelize.import('roles_dashboards', require('./models/roles_dashboards'))
+  // const RolePage = await sequelize.import('roles_pages', require('./models/roles_pages'))
+  // const RoleCard = await sequelize.import('roles_cards', require('./models/roles_cards'))
+
+  // await RoleDashboard.sync({ force: true })
+  // await RolePage.sync({ force: true })
+  // await RoleCard.sync({ force: true })
+
+  // Role.belongsToMany(Dashboard, { through: RoleDashboard })
+  // Dashboard.belongsToMany(Role, { through: RoleDashboard })
+
+  // Role.belongsToMany(Page, { through: RolePage })
+  // Page.belongsToMany(Role, { through: RolePage })
+
+  // Role.belongsToMany(Card, { through: RoleCard })
+  // Card.belongsToMany(Role, { through: RoleCard })
+
+  // await Page.belongsToMany(Content, { through: Card, as: 'pages_contents' })
+
+  // Page.hasMany(Content, { through: Card })
+  // Dashboard.hasMany(Card, { through: Page })
+  // Dashboard.hasMany(Content, { through: Card })
+  // Role.hasMany(Card, { through: Content })
+  // Role.hasMany(Page, { through: Card })
+  // Role.hasMany(Dashboard, { through: Page })
+  // Role.hasMany(Dashboard, { through: Dashboard })
+
+  // const testPage = await Page.findOne()
   // debugger
+  // const testContents = await testPage.getContents()
+  // debugger
+
+  const adminData = await User.findOne(
+    {
+      where: { id: 'auth0|59e910a4c30a38053ab5452b' },
+      include: [
+        {
+          model: Role,
+          include: [
+            {
+              model: Content,
+              include: [
+                {
+                  model: Permission,
+                  where: {
+                    roleId: 'admin-nested-role'
+                  },
+                  include: [
+                    {
+                      model: Resource
+                    }
+                  ]
+                },
+                {
+                  model: Card,
+                  include: [
+                    {
+                      model: Page,
+                      include: [
+                        {
+                          model: Dashboard,
+                          include: [
+                            {
+                              model: Dashboard,
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                },
+              ]
+            },
+          ]
+        },
+      ]
+    }
+  )
+  debugger
 
   // // get masterSitemap
   // let masterSitemap = await Dashboard.findAll(
