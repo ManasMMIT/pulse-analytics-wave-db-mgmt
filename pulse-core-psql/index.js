@@ -1,5 +1,6 @@
 require('dotenv').load()
 const Sequelize = require('sequelize')
+const d3 = require('d3-collection')
 
 const DB_LOCAL_LOADER_URI = require('./db.config.js')
 const DB_PROD_LOADER_URI = process.env.DB_PROD_LOADER_URI
@@ -58,43 +59,10 @@ const executeDbOperations = async () => {
 
   // User.dashboards.dashboards.pages.cards.contents.contents.resources
 
-  // DON'T REMOVE
   Role.belongsToMany(Content, { through: Permission })
   Content.belongsToMany(Role, { through: Permission })
   Content.belongsToMany(Resource, { through: Permission })
   Resource.belongsToMany(Content, { through: Permission })
-
-  // const RoleDashboard = await sequelize.import('roles_dashboards', require('./models/roles_dashboards'))
-  // const RolePage = await sequelize.import('roles_pages', require('./models/roles_pages'))
-  // const RoleCard = await sequelize.import('roles_cards', require('./models/roles_cards'))
-
-  // await RoleDashboard.sync({ force: true })
-  // await RolePage.sync({ force: true })
-  // await RoleCard.sync({ force: true })
-
-  // Role.belongsToMany(Dashboard, { through: RoleDashboard })
-  // Dashboard.belongsToMany(Role, { through: RoleDashboard })
-
-  // Role.belongsToMany(Page, { through: RolePage })
-  // Page.belongsToMany(Role, { through: RolePage })
-
-  // Role.belongsToMany(Card, { through: RoleCard })
-  // Card.belongsToMany(Role, { through: RoleCard })
-
-  // await Page.belongsToMany(Content, { through: Card, as: 'pages_contents' })
-
-  // Page.hasMany(Content, { through: Card })
-  // Dashboard.hasMany(Card, { through: Page })
-  // Dashboard.hasMany(Content, { through: Card })
-  // Role.hasMany(Card, { through: Content })
-  // Role.hasMany(Page, { through: Card })
-  // Role.hasMany(Dashboard, { through: Page })
-  // Role.hasMany(Dashboard, { through: Dashboard })
-
-  // const testPage = await Page.findOne()
-  // debugger
-  // const testContents = await testPage.getContents()
-  // debugger
 
   const adminData = await User.findOne(
     {
