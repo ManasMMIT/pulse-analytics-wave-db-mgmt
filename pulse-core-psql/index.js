@@ -126,6 +126,17 @@ const executeDbOperations = async () => {
     },
   )
 
+  const sampleContents = UsersSitemaps.toJSON().roles[0].contents
+
+  const getIdAndName = obj => `${obj.id} ${obj.name}`
+
+  const testNest = d3.nest()
+    .key(d => getIdAndName(d.card.page.dashboard.dashboard))
+    .key(d => getIdAndName(d.card.page.dashboard))
+    .key(d => getIdAndName(d.card.page))
+    .key(d => getIdAndName(d.card))
+    .object(sampleContents)
+
   debugger
 
   // // get masterSitemap
