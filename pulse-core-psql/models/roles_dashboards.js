@@ -12,7 +12,7 @@ module.exports = function (sequelize, DataTypes) {
       type: DataTypes.STRING,
       allowNull: true,
     },
-    dashboardOrder: {
+    order: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
