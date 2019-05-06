@@ -8,7 +8,7 @@ module.exports = function (sequelize, DataTypes) {
       primaryKey: true,
       autoIncrement: true,
     },
-    contentOrder: {
+    order: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
