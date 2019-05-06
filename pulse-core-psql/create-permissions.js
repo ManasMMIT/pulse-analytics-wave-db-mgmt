@@ -17,20 +17,25 @@ const createPermissions = async ({
   if (shouldSeed) {
     await Permission.sync({ force: true })
 
-    await Permission.bulkCreate([
-      {
+    let providerAndPayerToolContents = []
+    for (let i = 1; i < 25; i += 1) {
+      providerAndPayerToolContents.push({
         contentOrder: 1,
         resourceId: 1,
-        contentId: 15,
+        contentId: i,
         roleId: 'admin-nested-role',
-      },
-      {
-        contentOrder: 1,
-        resourceId: 2,
-        contentId: 15,
-        roleId: '5404d17a-d830-4e68-ba5a-623abf96ab74',
-      }
-    ])
+      })
+    }
+
+    await Permission.bulkCreate(providerAndPayerToolContents)
+
+    // regeneron sanofi senior management
+    // {
+    //   contentOrder: 1,
+    //   resourceId: 2,
+    //   contentId: 15,
+    //   roleId: '5404d17a-d830-4e68-ba5a-623abf96ab74',
+    // }
   }
 
   return Permission
