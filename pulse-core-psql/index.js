@@ -12,6 +12,7 @@ const createCards = require('./create-cards')
 const createContents = require('./create-contents')
 const createResources = require('./create-resources')
 const createPermissions = require('./create-permissions')
+const createRolesDashboards = require('./create-roles_dashboards')
 
 const sslConfig = DB_PROD_LOADER_URI
   ? {
@@ -63,6 +64,13 @@ const executeDbOperations = async () => {
 
   Role.belongsToMany(Content, { through: Permission })
 
+  const RoleDashboard = await createRolesDashboards({
+    sequelize,
+    Role,
+    Dashboard,
+    shouldSeed: false,
+  })
+
   // get users.contents.resources in rawer form
   // const UsersContentsResources = await User.findOne(
   //   {
@@ -89,29 +97,59 @@ const executeDbOperations = async () => {
   //   },
   // )
 
+  const whereCondition = Sequelize.where(
+    Sequelize.col('roles.id'),
+    Sequelize.col('roles->contents->card->page->dashboard->dashboard->roles_dashboards.roleId'),
+  )
+
   // get users.sitemaps
   const UsersSitemaps = await User.findOne(
     {
       where: { id: 'auth0|59e910a4c30a38053ab5452b' },
+      // where: whereCondition,
+      duplicating: true,
+      required: true,
       include: [
         {
           model: Role,
+          duplicating: true,
+          required: true,
           through: { attributes: [] },
           include: [
             {
               model: Content,
+              duplicating: true,
+              required: true,
               include: [
                 {
                   model: Card,
+                  duplicating: true,
+                  required: true,
                   include: [
                     {
                       model: Page,
+                      duplicating: true,
+                      required: true,
                       include: [
                         {
                           model: Dashboard,
+                          duplicating: true,
+                          required: true,
                           include: [
                             {
-                              model: Dashboard
+                              model: Dashboard,
+                              duplicating: true,
+                              required: true,
+                              include: [
+                                {
+                                  model: RoleDashboard,
+                                  duplicating: true,
+                                  required: true,
+                                  where: whereCondition,
+                                  // needed to execute separate query, otherwise keys get weirdly abbreviated/go missing
+                                  // separate: true,
+                                }
+                              ]
                             }
                           ]
                         }
@@ -127,59 +165,61 @@ const executeDbOperations = async () => {
     },
   )
 
-  const sampleContents = UsersSitemaps.roles[0].contents
-
-  const getGroupByKey = obj => `${obj.id}!${obj.name}!${obj._modelOptions.name.singular}`
-
-  const testNestObject = d3.nest()
-    .key(d => getGroupByKey(d.card.page.dashboard.dashboard))
-    .key(d => getGroupByKey(d.card.page.dashboard))
-    .key(d => getGroupByKey(d.card.page))
-    .key(d => getGroupByKey(d.card))
-    .key(d => getGroupByKey(d))
-    .object(sampleContents)
-
-  // then merge the results of nesting across roles here
-
-  // _.merge([nested1, nested2])
-
-  // then format for actual usability on frontend
-
-  const formatSitemap = sitemapObj => {
-    // base case
-    const keys = Object.keys(sitemapObj)
-    const firstKey = keys[0]
-    const firstValue = sitemapObj[firstKey]
-
-    if (Array.isArray(firstValue)) {
-      const result = _.map(sitemapObj, value => {
-        const contentObj = value[0].toJSON()
-        const { name, component, id } = contentObj
-
-        return { name, component, id, type: 'content ' }
-      })
-
-      return result
-    }
-
-    // iterative step
-    const result = _.map(sitemapObj, (value, key) => {
-      const [id, name, type] = key.split('!')
-
-      return {
-        id: Number(id),
-        name,
-        type,
-        children: formatSitemap(value)
-      }
-    })
-
-    return result
-  }
-
-  const formattedSitemap = formatSitemap(testNestObject)
-
   debugger
+
+  // const sampleContents = UsersSitemaps.roles[0].contents
+
+  // const getGroupByKey = obj => `${obj.id}!${obj.name}!${obj._modelOptions.name.singular}`
+
+  // const testNestObject = d3.nest()
+  //   .key(d => getGroupByKey(d.card.page.dashboard.dashboard))
+  //   .key(d => getGroupByKey(d.card.page.dashboard))
+  //   .key(d => getGroupByKey(d.card.page))
+  //   .key(d => getGroupByKey(d.card))
+  //   .key(d => getGroupByKey(d))
+  //   .object(sampleContents)
+
+  // // then merge the results of nesting across roles here
+
+  // // _.merge([nested1, nested2])
+
+  // // then format for actual usability on frontend
+
+  // const formatSitemap = sitemapObj => {
+  //   // base case
+  //   const keys = Object.keys(sitemapObj)
+  //   const firstKey = keys[0]
+  //   const firstValue = sitemapObj[firstKey]
+
+  //   if (Array.isArray(firstValue)) {
+  //     const result = _.map(sitemapObj, value => {
+  //       const contentObj = value[0].toJSON()
+  //       const { name, component, id } = contentObj
+
+  //       return { name, component, id, type: 'content ' }
+  //     })
+
+  //     return result
+  //   }
+
+  //   // iterative step
+  //   const result = _.map(sitemapObj, (value, key) => {
+  //     const [id, name, type] = key.split('!')
+
+  //     return {
+  //       id: Number(id),
+  //       name,
+  //       type,
+  //       children: formatSitemap(value)
+  //     }
+  //   })
+
+  //   return result
+  // }
+
+  // const formattedSitemap = formatSitemap(testNestObject)
+
+  // debugger
 
   // // get masterSitemap
   // let masterSitemap = await Dashboard.findAll(
