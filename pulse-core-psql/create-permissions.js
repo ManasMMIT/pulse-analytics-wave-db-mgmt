@@ -20,7 +20,7 @@ const createPermissions = async ({
     let providerAndPayerToolContents = []
     for (let i = 1; i < 25; i += 1) {
       providerAndPayerToolContents.push({
-        contentOrder: 1,
+        order: 1,
         resourceId: 1,
         contentId: i,
         roleId: 'admin-nested-role',
