@@ -135,6 +135,7 @@ const executeDbOperations = async () => {
     .key(d => getIdAndName(d.card.page.dashboard))
     .key(d => getIdAndName(d.card.page))
     .key(d => getIdAndName(d.card))
+    .key(d => getIdAndName(d))
     .object(sampleContents)
 
   debugger
