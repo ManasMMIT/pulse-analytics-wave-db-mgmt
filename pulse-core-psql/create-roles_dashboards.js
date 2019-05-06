@@ -18,22 +18,26 @@ const createRolesDashboards = async ({
       {
         roleId: 'admin-nested-role',
         dashboardId: 1,
-        dashboardOrder: 2,
+        order: 2,
+        alias: 'setProviderSecond',
       },
       {
         roleId: 'admin-nested-role',
         dashboardId: 2,
-        dashboardOrder: 1,
+        order: 1,
+        alias: 'setPayerFirst',
       },
       {
         roleId: '5404d17a-d830-4e68-ba5a-623abf96ab74',
         dashboardId: 1,
-        dashboardOrder: 1,
+        order: 1,
+        alias: 'setProviderFirst',
       },
       {
         roleId: '5404d17a-d830-4e68-ba5a-623abf96ab74',
         dashboardId: 2,
-        dashboardOrder: 2,
+        order: 2,
+        alias: 'setPayerSecond',
       },
     ])
   }
