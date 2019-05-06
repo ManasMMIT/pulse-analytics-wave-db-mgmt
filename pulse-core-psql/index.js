@@ -60,34 +60,10 @@ const executeDbOperations = async () => {
   // is there a way to get the following?
   // User.dashboards.dashboards.pages.cards.contents.contents.resource
 
-  // get users.contents.resources in rawer form
-  const UsersContentsResources = await User.findOne(
-    {
-      where: { id: 'auth0|59e910a4c30a38053ab5452b' },
-      include: [
-        {
-          model: Role,
-          through: { attributes: [] },
-          include: [
-            {
-              model: Permission,
-              include: [
-                {
-                  model: Content,
-                },
-                {
-                  model: Resource,
-                },
-              ]
-            },
-          ],
-        },
-      ],
-    },
-  )
+  Role.belongsToMany(Content, { through: Permission })
 
-  // get users.sitemaps
-  // const UsersSitemaps = await User.findOne(
+  // get users.contents.resources in rawer form
+  // const UsersContentsResources = await User.findOne(
   //   {
   //     where: { id: 'auth0|59e910a4c30a38053ab5452b' },
   //     include: [
@@ -111,6 +87,46 @@ const executeDbOperations = async () => {
   //     ],
   //   },
   // )
+
+  // get users.sitemaps
+  const UsersSitemaps = await User.findOne(
+    {
+      where: { id: 'auth0|59e910a4c30a38053ab5452b' },
+      include: [
+        {
+          model: Role,
+          through: { attributes: [] },
+          include: [
+            {
+              model: Content,
+              include: [
+                {
+                  model: Card,
+                  include: [
+                    {
+                      model: Page,
+                      include: [
+                        {
+                          model: Dashboard,
+                          include: [
+                            {
+                              model: Dashboard
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+              ]
+            },
+          ],
+        },
+      ],
+    },
+  )
+
+  debugger
 
   // // get masterSitemap
   // let masterSitemap = await Dashboard.findAll(
