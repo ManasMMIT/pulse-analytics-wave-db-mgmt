@@ -57,14 +57,11 @@ const executeDbOperations = async () => {
     shouldSeed: false
   })
 
-  // User.dashboards.dashboards.pages.cards.contents.contents.resources
+  // is there a way to get the following?
+  // User.dashboards.dashboards.pages.cards.contents.contents.resource
 
-  Role.belongsToMany(Content, { through: Permission })
-  Content.belongsToMany(Role, { through: Permission })
-  Content.belongsToMany(Resource, { through: Permission })
-  Resource.belongsToMany(Content, { through: Permission })
-
-  const adminData = await User.findOne(
+  // get users.contents.resources in rawer form
+  const UsersContentsResources = await User.findOne(
     {
       where: { id: 'auth0|59e910a4c30a38053ab5452b' },
       include: [
@@ -73,45 +70,47 @@ const executeDbOperations = async () => {
           through: { attributes: [] },
           include: [
             {
-              model: Content,
+              model: Permission,
               include: [
                 {
-                  model: Permission,
-                  where: {
-                    roleId: 'admin-nested-role'
-                  },
-                  include: [
-                    {
-                      model: Resource
-                    }
-                  ]
+                  model: Content,
                 },
                 {
-                  model: Card,
-                  include: [
-                    {
-                      model: Page,
-                      include: [
-                        {
-                          model: Dashboard,
-                          include: [
-                            {
-                              model: Dashboard,
-                            }
-                          ]
-                        }
-                      ]
-                    }
-                  ],
+                  model: Resource,
                 },
               ]
             },
-          ]
+          ],
         },
-      ]
-    }
+      ],
+    },
   )
-  debugger
+
+  // get users.sitemaps
+  // const UsersSitemaps = await User.findOne(
+  //   {
+  //     where: { id: 'auth0|59e910a4c30a38053ab5452b' },
+  //     include: [
+  //       {
+  //         model: Role,
+  //         through: { attributes: [] },
+  //         include: [
+  //           {
+  //             model: Permission,
+  //             include: [
+  //               {
+  //                 model: Content,
+  //               },
+  //               {
+  //                 model: Resource,
+  //               },
+  //             ]
+  //           },
+  //         ],
+  //       },
+  //     ],
+  //   },
+  // )
 
   // // get masterSitemap
   // let masterSitemap = await Dashboard.findAll(
@@ -144,5 +143,10 @@ const executeDbOperations = async () => {
   // let masterSitemap = masterSitemap.map(dashboard => dashboard.toJSON())
   // debugger
 }
+
+// Good links:
+// https://stackoverflow.com/questions/38601223/sequelize-eager-loading-through-intermediate-model
+// https://stackoverflow.com/questions/42708811/has-many-through-association-in-sequelize
+// https://github.com/sequelize/sequelize/issues/7778
 
 executeDbOperations()
