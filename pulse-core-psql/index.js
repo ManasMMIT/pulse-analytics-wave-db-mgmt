@@ -218,7 +218,7 @@ const executeDbOperations = async () => {
     }
 
     // iterative step
-    const result = _.map(sitemapObj, (value, key) => {
+    let result = _.map(sitemapObj, (value, key) => {
       const [id, name, type, order] = key.split('!')
 
       return {
@@ -229,6 +229,8 @@ const executeDbOperations = async () => {
         children: formatSitemap(value)
       }
     })
+
+    result = _.sortBy(result, ['order'])
 
     return result
   }
