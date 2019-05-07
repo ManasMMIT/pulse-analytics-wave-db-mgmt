@@ -8,6 +8,7 @@ const createPermissions = require('./create-permissions')
 const createRolesDashboards = require('./create-roles_dashboards')
 const createRolesPages = require('./create-roles_pages')
 const createRolesCards = require('./create-roles_cards')
+const createRegionalTables = require('./create-regional-tables')
 
 module.exports = {
   createUsersRolesClients,
@@ -20,4 +21,5 @@ module.exports = {
   createRolesDashboards,
   createRolesPages,
   createRolesCards,
+  createRegionalTables,
 }
