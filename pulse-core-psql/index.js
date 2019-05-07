@@ -108,6 +108,12 @@ const executeDbOperations = async () => {
       where: { id: 'auth0|59e910a4c30a38053ab5452b' },
       duplicating: true,
       required: true,
+      order: [
+        [
+          Sequelize.col('roles->contents->card->page->dashboard->dashboard->roles_dashboards.order'),
+          'ASC'
+        ],
+      ],
       include: [
         {
           model: Role,
@@ -154,7 +160,7 @@ const executeDbOperations = async () => {
                     }
                   ]
                 },
-              ]
+              ],
             },
           ],
         },
@@ -218,7 +224,7 @@ const executeDbOperations = async () => {
     }
 
     // iterative step
-    let result = _.map(sitemapObj, (value, key) => {
+    const result = _.map(sitemapObj, (value, key) => {
       const [id, name, type, order] = key.split('!')
 
       return {
@@ -229,8 +235,6 @@ const executeDbOperations = async () => {
         children: formatSitemap(value)
       }
     })
-
-    result = _.sortBy(result, ['order'])
 
     return result
   }
@@ -275,5 +279,8 @@ const executeDbOperations = async () => {
 // https://stackoverflow.com/questions/38601223/sequelize-eager-loading-through-intermediate-model
 // https://stackoverflow.com/questions/42708811/has-many-through-association-in-sequelize
 // https://github.com/sequelize/sequelize/issues/7778
+// TURN OFF SUBQUERY: https://github.com/sequelize/sequelize/issues/1756
+// IDEAS ON ORDERING: https://github.com/sequelize/sequelize/issues/4553
+// NESTED WHERE CONDITION SYNTAX: https://github.com/sequelize/sequelize/issues/4414
 
 executeDbOperations()
