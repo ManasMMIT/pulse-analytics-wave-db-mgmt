@@ -13,9 +13,9 @@ const sslConfig = PSQL_PROD_LOADER_URI
   }
   : {}
 
-const sequelize = new Sequelize(PSQL_PROD_LOADER_URI || PSQL_LOCAL_LOADER_URI, sslConfig)
-
 const connectToPsql = async () => {
+  const sequelize = new Sequelize(PSQL_PROD_LOADER_URI || PSQL_LOCAL_LOADER_URI, sslConfig)
+
   await sequelize
     .authenticate()
     .then(() => {
