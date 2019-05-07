@@ -134,6 +134,10 @@ const executeDbOperations = async () => {
           Sequelize.col('roles->contents->card->page->dashboard->dashboard->roles_dashboards.order'),
           'ASC'
         ],
+        [
+          Sequelize.col('roles->contents->card->page->roles_pages.order'),
+          'ASC'
+        ],
       ],
       include: [
         {
