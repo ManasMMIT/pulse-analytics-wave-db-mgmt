@@ -13,6 +13,8 @@ const createContents = require('./create-contents')
 const createResources = require('./create-resources')
 const createPermissions = require('./create-permissions')
 const createRolesDashboards = require('./create-roles_dashboards')
+const createRolesPages = require('./create-roles_pages')
+// const createRolesCards = require('./create-roles_cards')
 
 const sslConfig = DB_PROD_LOADER_URI
   ? {
@@ -71,6 +73,20 @@ const executeDbOperations = async () => {
     shouldSeed: false,
   })
 
+  const RolePage = await createRolesPages({
+    sequelize,
+    Role,
+    Page,
+    shouldSeed: false,
+  })
+
+  // const RoleCard = await createRolesCards({
+  //   sequelize,
+  //   Role,
+  //   Card,
+  //   shouldSeed: true,
+  // })
+
   // get users.contents.resources in rawer form
   // const UsersContentsResources = await User.findOne(
   //   {
@@ -97,9 +113,14 @@ const executeDbOperations = async () => {
   //   },
   // )
 
-  const whereCondition = Sequelize.where(
+  const roleDashboardWhereCond = Sequelize.where(
     Sequelize.col('roles.id'),
     Sequelize.col('roles->contents->card->page->dashboard->dashboard->roles_dashboards.roleId'),
+  )
+
+  const rolePageWhereCond = Sequelize.where(
+    Sequelize.col('roles.id'),
+    Sequelize.col('roles->contents->card->page->roles_pages.roleId'),
   )
 
   // get users.sitemaps
@@ -137,6 +158,12 @@ const executeDbOperations = async () => {
                       required: true,
                       include: [
                         {
+                          model: RolePage,
+                          duplicating: true,
+                          required: true,
+                          where: rolePageWhereCond,
+                        },
+                        {
                           model: Dashboard,
                           duplicating: true,
                           required: true,
@@ -150,12 +177,12 @@ const executeDbOperations = async () => {
                                   model: RoleDashboard,
                                   duplicating: true,
                                   required: true,
-                                  where: whereCondition,
+                                  where: roleDashboardWhereCond,
                                 }
                               ]
                             }
                           ]
-                        }
+                        },
                       ]
                     }
                   ]
@@ -183,7 +210,7 @@ const executeDbOperations = async () => {
       if (obj[orderAndAliasTableName]) {
         let [orderAndAliasTableRow] = obj[orderAndAliasTableName]
         orderAndAliasTableRow = orderAndAliasTableRow.toJSON()
-        order = orderAndAliasTableRow.o
+        order = orderAndAliasTableRow.o || orderAndAliasTableRow.order
       }
     }
 
