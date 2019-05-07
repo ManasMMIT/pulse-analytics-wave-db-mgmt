@@ -137,9 +137,8 @@ const executeDbOperations = async () => {
   )
 
   // get users.sitemaps
-  const UsersSitemapsRaw = await User.findOne(
+  const UsersSitemapsRaw = await User.findAll(
     {
-      where: { id: 'auth0|59e910a4c30a38053ab5452b' },
       duplicating: true,
       required: true,
       order: [
