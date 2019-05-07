@@ -17,7 +17,7 @@ const createRolesCards = async ({
     const entriesToCreate = []
     for (let i = 1, j = 1; i < 25; i += 1) {
       entriesToCreate.push({
-        roleId: 'admin-nested-role',
+        roleId: 'e13031e3-9e3e-4dae-a879-51795babee56',
         cardId: i,
         order: j,
       })

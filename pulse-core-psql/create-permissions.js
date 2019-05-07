@@ -23,7 +23,7 @@ const createPermissions = async ({
         order: 1,
         resourceId: 1,
         contentId: i,
-        roleId: 'admin-nested-role',
+        roleId: 'e13031e3-9e3e-4dae-a879-51795babee56',
       })
     }
 

@@ -16,13 +16,13 @@ const createRolesDashboards = async ({
 
     await RoleDashboard.bulkCreate([
       {
-        roleId: 'admin-nested-role',
+        roleId: 'e13031e3-9e3e-4dae-a879-51795babee56',
         dashboardId: 1,
         order: 2,
         alias: 'setProviderSecond',
       },
       {
-        roleId: 'admin-nested-role',
+        roleId: 'e13031e3-9e3e-4dae-a879-51795babee56',
         dashboardId: 2,
         order: 1,
         alias: 'setPayerFirst',
@@ -40,25 +40,25 @@ const createRolesDashboards = async ({
         alias: 'setPayerSecond',
       },
       {
-        roleId: 'admin-nested-role',
+        roleId: 'e13031e3-9e3e-4dae-a879-51795babee56',
         dashboardId: 3,
         order: 1,
         alias: 'Provider Management',
       },
       {
-        roleId: 'admin-nested-role',
+        roleId: 'e13031e3-9e3e-4dae-a879-51795babee56',
         dashboardId: 4,
         order: 1,
         alias: 'Payer Management',
       },
       {
-        roleId: 'admin-nested-role',
+        roleId: 'e13031e3-9e3e-4dae-a879-51795babee56',
         dashboardId: 5,
         order: 2,
         alias: 'Provider Accounts',
       },
       {
-        roleId: 'admin-nested-role',
+        roleId: 'e13031e3-9e3e-4dae-a879-51795babee56',
         dashboardId: 6,
         order: 2,
         alias: 'Payer Accounts',
