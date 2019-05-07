@@ -1,6 +1,6 @@
 /* jshint indent: 2 */
 
-module.exports = function(sequelize, DataTypes) {
+module.exports = function (sequelize, DataTypes) {
   return sequelize.define('us_states_regions', {
     id: {
       type: DataTypes.INTEGER,
@@ -8,7 +8,17 @@ module.exports = function(sequelize, DataTypes) {
       primaryKey: true,
       autoIncrement: true,
     },
+    stateId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      unique: 'compositeIndex',
+    },
+    regionId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      unique: 'compositeIndex',
+    },
   }, {
-    tableName: 'us_states_regions'
-  });
+      tableName: 'us_states_regions'
+    });
 };
