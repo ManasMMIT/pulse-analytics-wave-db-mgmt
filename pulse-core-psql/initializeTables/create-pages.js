@@ -1,4 +1,4 @@
-const createPages = async (sequelize, Dashboard, shouldSeed) => {
+const createPages = async ({ sequelize, Dashboard, shouldSeed }) => {
   const Page = await sequelize.import('page', require('./models/page'))
   Page.belongsTo(Dashboard)
   Dashboard.hasMany(Page, { onDelete: 'cascade' })

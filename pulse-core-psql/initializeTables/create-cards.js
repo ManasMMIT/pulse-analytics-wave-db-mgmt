@@ -25,7 +25,7 @@ const PAGE_CARD_MAP = {
   24: null
 }
 
-const createCards = async (sequelize, Page, shouldSeed) => {
+const createCards = async ({ sequelize, Page, shouldSeed }) => {
   const Card = await sequelize.import('card', require('./models/card'))
   Card.belongsTo(Page)
   Page.hasMany(Card, { onDelete: 'cascade' })

@@ -49,13 +49,13 @@ const executeDbOperations = async () => {
       console.error('Unable to connect to the database:', err)
     })
 
-  const { User, Role, Client } = await createUsersRolesClients(sequelize, false)
-  const Dashboard = await createDashboards(sequelize, false)
-  const Page = await createPages(sequelize, Dashboard, false)
-  const Card = await createCards(sequelize, Page, false)
-  const Content = await createContents(sequelize, Card, false)
+  const { User, Role, Client } = await createUsersRolesClients({ sequelize, shouldSeed: false })
+  const Dashboard = await createDashboards({ sequelize, shouldSeed: false })
+  const Page = await createPages({ sequelize, Dashboard, shouldSeed: false })
+  const Card = await createCards({ sequelize, Page, shouldSeed: false })
+  const Content = await createContents({ sequelize, Card, shouldSeed: false })
 
-  const Resource = await createResources(sequelize, false)
+  const Resource = await createResources({ sequelize, shouldSeed: false })
   const Permission = await createPermissions({
     sequelize,
     Role,

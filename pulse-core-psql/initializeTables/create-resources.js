@@ -1,4 +1,4 @@
-const createResources = async (sequelize, shouldSeed) => {
+const createResources = async ({ sequelize, shouldSeed }) => {
   const Resource = await sequelize.import('resource', require('./models/resource'))
 
   if (shouldSeed) {

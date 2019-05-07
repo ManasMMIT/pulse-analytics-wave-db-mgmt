@@ -25,7 +25,7 @@ const CARD_CONTENT_MAP = {
   24: null,
 }
 
-const createContents = async (sequelize, Card, shouldSeed) => {
+const createContents = async ({ sequelize, Card, shouldSeed }) => {
   const Content = await sequelize.import('content', require('./models/content'))
   Content.belongsTo(Content)
   Content.hasMany(Content, { onDelete: 'cascade' })
