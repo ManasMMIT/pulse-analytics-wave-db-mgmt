@@ -1,4 +1,6 @@
 const connectToPsql = require('./connect-to-psql')
+const { getScriptTerminator } = require('../utils')
+
 
 const {
   createUsersRolesClients,
@@ -11,13 +13,17 @@ const {
   createRolesDashboards,
   createRolesPages,
   createRolesCards,
+  createRegionalTables,
 } = require('./initializeTables')
 
 // const processUsersContentsResourcesRaw = require('./process-users-contents-resources')
 // const processUsersSitemapsRaw = require('./process-users-sitemaps')
 
+let terminateScript
+
 const executeDbOperations = async () => {
   const sequelize = await connectToPsql()
+  terminateScript = getScriptTerminator(sequelize)
 
   const { User, Role, Client } = await createUsersRolesClients({ sequelize, shouldSeed: false })
   const Dashboard = await createDashboards({ sequelize, shouldSeed: false })
@@ -56,6 +62,11 @@ const executeDbOperations = async () => {
     Card,
     shouldSeed: false,
   })
+
+  const RegionalBreakdown = await createRegionalTables({ sequelize })
+  const test = await RegionalBreakdown.findOne()
+
+  debugger
 
   // is there a way to get the following?
   // User.dashboards.dashboards.pages.cards.contents.contents.resource
@@ -245,4 +256,7 @@ const executeDbOperations = async () => {
   // debugger
 }
 
-executeDbOperations()
+executeDbOperations().then(async () => {
+  console.log('Closing psql connection...')
+  await terminateScript()
+})
