@@ -12,10 +12,11 @@ const createDashboards = async (sequelize, shouldSeed) => {
     ])
 
     const parentDashes = await Dashboard.findAll()
-    for (childDash of ['Management', 'Accounts']) {
-      for (parentDash of parentDashes) {
+    for (const childDash of ['Management', 'Accounts']) {
+      for (const parentDash of parentDashes) {
         const createdChildDash = await Dashboard.create({ name: childDash })
-        await parentDash.addDashboard(createdChildDash)
+        debugger
+        await parentDash.addChildDashboard(createdChildDash)
       }
     }
   }
