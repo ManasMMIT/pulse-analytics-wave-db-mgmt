@@ -5,9 +5,7 @@ const csvToJson = require('./csv-to-json')
 const { getScriptTerminator } = require('../../../utils')
 const { STATES_MAP, STATE_CODE_MAP } = require('./states-util')
 
-args = args.usage('Usage: $0 --filepath [string]')
-  .demandOption(['filepath'])
-  .argv
+args = args.usage('Usage: $0 --filepath [string]').argv
 
 const filepath = args.filepath
 
@@ -33,7 +31,7 @@ if (filepath) {
     process.exit()
   }
 } else {
-  console.error('No filepath specified')
+  console.error('No filepath specified: ignore if not importing CSV')
 }
 
 async function createRegionalTables({ sequelize, shouldSeed }) {
@@ -103,7 +101,7 @@ async function createRegionalTables({ sequelize, shouldSeed }) {
         where: { name: user },
       }).then(arr => arr[0])
 
-      const currentBreakdownStateRegion = await BreakdownStateRegion.findOrCreate({
+      await BreakdownStateRegion.findOrCreate({
         where: {
           regional_breakdown_id: currentRegionalBreakdown.id,
           us_state_region_id: currentUsStateRegion.id,
@@ -112,7 +110,7 @@ async function createRegionalTables({ sequelize, shouldSeed }) {
     }
   }
 
-  return BreakdownStateRegion
+  return RegionalBreakdown
 }
 
 module.exports = createRegionalTables
