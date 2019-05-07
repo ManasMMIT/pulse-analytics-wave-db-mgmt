@@ -1,17 +1,21 @@
 /* jshint indent: 2 */
 
-module.exports = function(sequelize, DataTypes) {
+module.exports = function (sequelize, DataTypes) {
   return sequelize.define('us_state', {
     id: {
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true,
-      autoIncrement: true,
     },
-    name: {
+    state: {
       type: DataTypes.STRING,
-      allowNull: true,
+      allowNull: false,
       unique: true,
-    }
+    },
+    stateLong: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true,
+    },
   });
 };
