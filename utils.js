@@ -20,9 +20,9 @@ function isEmptyRow(obj) {
   return true
 }
 
-const getScriptTerminator = mongoConnection => async (...errMessages) => {
+const getScriptTerminator = dbConnection => async (...errMessages) => {
   if (_.compact(errMessages).length > 0) console.error(...errMessages)
-  await mongoConnection.close()
+  await dbConnection.close()
   process.exit()
 }
 
