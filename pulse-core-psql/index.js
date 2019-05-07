@@ -14,7 +14,7 @@ const createResources = require('./create-resources')
 const createPermissions = require('./create-permissions')
 const createRolesDashboards = require('./create-roles_dashboards')
 const createRolesPages = require('./create-roles_pages')
-// const createRolesCards = require('./create-roles_cards')
+const createRolesCards = require('./create-roles_cards')
 
 const sslConfig = DB_PROD_LOADER_URI
   ? {
@@ -80,12 +80,12 @@ const executeDbOperations = async () => {
     shouldSeed: false,
   })
 
-  // const RoleCard = await createRolesCards({
-  //   sequelize,
-  //   Role,
-  //   Card,
-  //   shouldSeed: true,
-  // })
+  const RoleCard = await createRolesCards({
+    sequelize,
+    Role,
+    Card,
+    shouldSeed: false,
+  })
 
   // get users.contents.resources in rawer form
   // const UsersContentsResources = await User.findOne(
@@ -128,6 +128,11 @@ const executeDbOperations = async () => {
     Sequelize.col('roles->contents->card->page->roles_pages.roleId'),
   )
 
+  const roleCardWhereCond = Sequelize.where(
+    Sequelize.col('roles.id'),
+    Sequelize.col('roles->contents->card->roles_cards.roleId'),
+  )
+
   // get users.sitemaps
   const UsersSitemaps = await User.findOne(
     {
@@ -145,6 +150,10 @@ const executeDbOperations = async () => {
         ],
         [
           Sequelize.col('roles->contents->card->page->roles_pages.order'),
+          'ASC'
+        ],
+        [
+          Sequelize.col('roles->contents->card->roles_cards.order'),
           'ASC'
         ],
       ],
@@ -203,7 +212,13 @@ const executeDbOperations = async () => {
                           ]
                         },
                       ]
-                    }
+                    },
+                    {
+                      model: RoleCard,
+                      duplicating: true,
+                      required: true,
+                      where: roleCardWhereCond,
+                    },
                   ]
                 },
               ],
