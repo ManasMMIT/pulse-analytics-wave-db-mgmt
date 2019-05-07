@@ -113,9 +113,14 @@ const executeDbOperations = async () => {
   //   },
   // )
 
-  const roleDashboardWhereCond = Sequelize.where(
+  const roleTopDashboardWhereCond = Sequelize.where(
     Sequelize.col('roles.id'),
     Sequelize.col('roles->contents->card->page->dashboard->dashboard->roles_dashboards.roleId'),
+  )
+
+  const roleLowerDashboardWhereCond = Sequelize.where(
+    Sequelize.col('roles.id'),
+    Sequelize.col('roles->contents->card->page->dashboard->roles_dashboards.roleId'),
   )
 
   const rolePageWhereCond = Sequelize.where(
@@ -132,6 +137,10 @@ const executeDbOperations = async () => {
       order: [
         [
           Sequelize.col('roles->contents->card->page->dashboard->dashboard->roles_dashboards.order'),
+          'ASC'
+        ],
+        [
+          Sequelize.col('roles->contents->card->page->dashboard->roles_dashboards.order'),
           'ASC'
         ],
         [
@@ -181,10 +190,16 @@ const executeDbOperations = async () => {
                                   model: RoleDashboard,
                                   duplicating: true,
                                   required: true,
-                                  where: roleDashboardWhereCond,
+                                  where: roleTopDashboardWhereCond,
                                 }
                               ]
-                            }
+                            },
+                            {
+                              model: RoleDashboard,
+                              duplicating: true,
+                              required: true,
+                              where: roleLowerDashboardWhereCond,
+                            },
                           ]
                         },
                       ]
