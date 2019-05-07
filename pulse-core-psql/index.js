@@ -1,7 +1,5 @@
 require('dotenv').load()
 const Sequelize = require('sequelize')
-const d3 = require('d3-collection')
-const _ = require('lodash')
 
 const DB_LOCAL_LOADER_URI = require('./db.config.js')
 const DB_PROD_LOADER_URI = process.env.DB_PROD_LOADER_URI
@@ -18,6 +16,8 @@ const {
   createRolesPages,
   createRolesCards,
 } = require('./initializeTables')
+
+const processUsersSitemapsRaw = require('./process-users-sitemaps')
 
 const sslConfig = DB_PROD_LOADER_URI
   ? {
@@ -64,9 +64,6 @@ const executeDbOperations = async () => {
     shouldSeed: false
   })
 
-  // is there a way to get the following?
-  // User.dashboards.dashboards.pages.cards.contents.contents.resource
-
   Role.belongsToMany(Content, { through: Permission })
 
   const RoleDashboard = await createRolesDashboards({
@@ -89,6 +86,9 @@ const executeDbOperations = async () => {
     Card,
     shouldSeed: false,
   })
+
+  // is there a way to get the following?
+  // User.dashboards.dashboards.pages.cards.contents.contents.resource
 
   // get users.contents.resources in rawer form
   // const UsersContentsResources = await User.findOne(
@@ -137,7 +137,7 @@ const executeDbOperations = async () => {
   )
 
   // get users.sitemaps
-  const UsersSitemaps = await User.findOne(
+  const UsersSitemapsRaw = await User.findOne(
     {
       where: { id: 'auth0|59e910a4c30a38053ab5452b' },
       duplicating: true,
@@ -236,78 +236,7 @@ const executeDbOperations = async () => {
     },
   )
 
-  const sampleContents = UsersSitemaps.roles[0].contents
-
-  const getGroupByKey = obj => {
-    const tableName = obj._modelOptions.name.plural
-
-    let order
-    if (tableName === 'contents') {
-      // TODO: content table doesn't actually need order in the key string
-      // because that can be extracted from the contentObj directly
-      order = obj.permission.toJSON().order
-    } else {
-      const orderAndAliasTableName = `roles_${tableName}`
-      if (obj[orderAndAliasTableName]) {
-        let [orderAndAliasTableRow] = obj[orderAndAliasTableName]
-        orderAndAliasTableRow = orderAndAliasTableRow.toJSON()
-        order = orderAndAliasTableRow.o || orderAndAliasTableRow.order
-      }
-    }
-
-    return (
-      `${obj.id}!${obj.name}!${obj._modelOptions.name.singular}!${order}`
-    )
-  }
-
-  const testNestObject = d3.nest()
-    .key(d => getGroupByKey(d.card.page.dashboard.dashboard))
-    .key(d => getGroupByKey(d.card.page.dashboard))
-    .key(d => getGroupByKey(d.card.page))
-    .key(d => getGroupByKey(d.card))
-    .key(d => getGroupByKey(d))
-    .object(sampleContents)
-
-  // then merge the results of nesting across roles here
-
-  // _.merge([nested1, nested2])
-
-  // then format for actual usability on frontend
-
-  const formatSitemap = sitemapObj => {
-    // base case
-    const keys = Object.keys(sitemapObj)
-    const firstKey = keys[0]
-    const firstValue = sitemapObj[firstKey]
-
-    if (Array.isArray(firstValue)) {
-      const result = _.map(sitemapObj, value => {
-        const contentObj = value[0].toJSON()
-        const { name, component, id, permission: { order } } = contentObj
-
-        return { name, component, id, order, type: 'content' }
-      })
-
-      return result
-    }
-
-    // iterative step
-    const result = _.map(sitemapObj, (value, key) => {
-      const [id, name, type, order] = key.split('!')
-
-      return {
-        id: Number(id),
-        name,
-        type,
-        order: Number(order),
-        children: formatSitemap(value)
-      }
-    })
-
-    return result
-  }
-
-  const formattedSitemap = formatSitemap(testNestObject)
+  const UsersSitemapsFormatted = processUsersSitemapsRaw(UsersSitemapsRaw)
 
   debugger
 
