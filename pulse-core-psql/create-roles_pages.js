@@ -14,20 +14,20 @@ const createRolesPages = async ({
   if (shouldSeed) {
     await RolePage.sync({ force: true })
 
-    const pagesToCreate = []
+    const entriesToCreate = []
     for (let i = 1, j = 1; i < 25; i += 1, j += 1) {
       if (i === 5) j = 1
       if (i === 9) j = 1
       if (i === 20) j = 1
 
-      pagesToCreate.push({
+      entriesToCreate.push({
         roleId: 'admin-nested-role',
         pageId: i,
         order: j,
       })
     }
 
-    await RolePage.bulkCreate(pagesToCreate)
+    await RolePage.bulkCreate(entriesToCreate)
   }
 
   return RolePage
