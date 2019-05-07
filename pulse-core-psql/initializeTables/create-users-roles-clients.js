@@ -1,5 +1,5 @@
 const _ = require('lodash')
-const getAuth0Data = require('./process_auth0_data')
+const getAuth0Data = require('../process_auth0_data')
 
 const createUsersRolesClients = async (sequelize, shouldSeed) => {
   const User = await sequelize.import('user', require('./models/user'))

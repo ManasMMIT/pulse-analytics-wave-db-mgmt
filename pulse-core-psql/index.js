@@ -5,16 +5,19 @@ const _ = require('lodash')
 
 const DB_LOCAL_LOADER_URI = require('./db.config.js')
 const DB_PROD_LOADER_URI = process.env.DB_PROD_LOADER_URI
-const createUsersRolesClients = require('./create-users-roles-clients')
-const createDashboards = require('./create-dashboards')
-const createPages = require('./create-pages')
-const createCards = require('./create-cards')
-const createContents = require('./create-contents')
-const createResources = require('./create-resources')
-const createPermissions = require('./create-permissions')
-const createRolesDashboards = require('./create-roles_dashboards')
-const createRolesPages = require('./create-roles_pages')
-const createRolesCards = require('./create-roles_cards')
+
+const {
+  createUsersRolesClients,
+  createDashboards,
+  createPages,
+  createCards,
+  createContents,
+  createResources,
+  createPermissions,
+  createRolesDashboards,
+  createRolesPages,
+  createRolesCards,
+} = require('./initializeTables')
 
 const sslConfig = DB_PROD_LOADER_URI
   ? {
