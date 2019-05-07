@@ -17,7 +17,7 @@ const authClient = new AuthorizationExtensionClient(
   { tokenIssuerConfig: { tokenIssuerUrl, clientId, clientSecret } }
 )
 
-module.exports = () => Promise.all([
+const getAuth0Data = () => Promise.all([
   authClient.getUsers(),
   authClient.getGroups(),
 ]).then(([
@@ -25,6 +25,13 @@ module.exports = () => Promise.all([
   groups,
 ]) => {
   const formattedUsers = users.map(({ user_id: id, name: username }) => ({ id, username }))
-  const [roles, clients] = _.partition(groups, groupObj => groupObj.name.includes('-'))
+  let [roles, clients] = _.partition(groups, groupObj => (
+    groupObj.name.includes('-')
+    || groupObj._id === "e13031e3-9e3e-4dae-a879-51795babee56" // exception for admin
+    || groupObj._id === "25903626-b6c1-49fe-8155-b06787ab0dbb" // exception for demo
+  ))
+
   return { users: formattedUsers, roles, clients }
 })
+
+module.exports = getAuth0Data
