@@ -21,11 +21,18 @@ const createPermissions = async ({
     for (let i = 1; i < 25; i += 1) {
       providerAndPayerToolContents.push({
         order: 1,
-        resourceId: 1,
+        resourceId: 2,
         contentId: i,
         roleId: 'e13031e3-9e3e-4dae-a879-51795babee56',
       })
     }
+
+    providerAndPayerToolContents.push({
+      order: 2,
+      resourceId: 3,
+      contentId: 15,
+      roleId: 'e13031e3-9e3e-4dae-a879-51795babee56',
+    })
 
     await Permission.bulkCreate(providerAndPayerToolContents)
 
