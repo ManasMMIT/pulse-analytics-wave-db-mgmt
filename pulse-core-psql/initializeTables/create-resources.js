@@ -1,5 +1,12 @@
-const createResources = async ({ sequelize, shouldSeed }) => {
+const createResources = async ({
+  sequelize,
+  RegionalBreakdown,
+  shouldSeed
+}) => {
   const Resource = await sequelize.import('resource', require('./models/resource'))
+
+  Resource.belongsTo(RegionalBreakdown, { foreignKey: 'sourceId' })
+  RegionalBreakdown.hasMany(Resource, { onDelete: 'cascade' })
 
   if (shouldSeed) {
     await Resource.sync({ force: true })
@@ -12,6 +19,10 @@ const createResources = async ({ sequelize, shouldSeed }) => {
       {
         type: 'regionalBreakdown',
         sourceId: 2,
+      },
+      {
+        type: 'treatmentPlans',
+        sourceId: 1,
       }
     ])
   }
