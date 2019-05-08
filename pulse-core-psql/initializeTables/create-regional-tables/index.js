@@ -37,12 +37,18 @@ if (filepath) {
 async function createRegionalTables({ sequelize, shouldSeed }) {
   const UsState = await sequelize.import('us_state', require('../models/us_state'))
   const Region = await sequelize.import('region', require('../models/region'))
-  const RegionalBreakdown = await sequelize.import('regional_breakdown', require('../models/regional_breakdown'))
+  const RegionalBreakdown = await sequelize.import(
+    'regional_breakdown',
+    require('../models/regional_breakdown')
+  )
 
   UsState.belongsToMany(Region, { through: 'us_states_regions', otherKey: 'stateId' })
   Region.belongsToMany(UsState, { through: 'us_states_regions' })
 
-  const UsStateRegion = await sequelize.import('us_states_regions', require('../models/us_states_regions'))
+  const UsStateRegion = await sequelize.import(
+    'us_states_regions',
+    require('../models/us_states_regions'),
+  )
 
   UsStateRegion.belongsToMany(
     RegionalBreakdown,
@@ -59,7 +65,6 @@ async function createRegionalTables({ sequelize, shouldSeed }) {
       through: 'regional_breakdowns_us_states_regions',
       foreignKey: 'regional_breakdown_id',
       otherKey: 'us_state_region_id',
-      as: 'statesRegions',
     },
   )
 
