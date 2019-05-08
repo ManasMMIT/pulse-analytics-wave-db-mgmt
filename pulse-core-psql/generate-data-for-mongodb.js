@@ -1,6 +1,5 @@
 const _ = require('lodash')
 const connectToPsql = require('./connect-to-psql')
-const { getScriptTerminator } = require('../utils')
 
 const {
   createUsersRolesClients,
@@ -19,11 +18,8 @@ const {
 const processRawUsersContentsResources = require('./process-users-contents-resources')
 const processRawUsersSitemaps = require('./process-users-sitemaps')
 
-let terminateScript
-
-const executeDbOperations = async () => {
+const generateDataForMongoDb = async () => {
   const sequelize = await connectToPsql()
-  terminateScript = getScriptTerminator(sequelize)
 
   const { User, Role, Client } = await createUsersRolesClients({ sequelize, shouldSeed: false })
   const Dashboard = await createDashboards({ sequelize, shouldSeed: false })
@@ -260,11 +256,7 @@ const executeDbOperations = async () => {
   }
 }
 
-executeDbOperations().then(async () => {
-  console.log('Closing psql connection...')
-  await terminateScript()
-})
-
+module.exports = generateDataForMongoDb
 
 // // get masterSitemap
 // let masterSitemap = await Dashboard.findAll(
