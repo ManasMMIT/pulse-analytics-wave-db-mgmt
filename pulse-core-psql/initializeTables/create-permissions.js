@@ -17,33 +17,31 @@ const createPermissions = async ({
   if (shouldSeed) {
     await Permission.sync({ force: true })
 
-    let providerAndPayerToolContents = []
-    for (let i = 1; i < 25; i += 1) {
-      providerAndPayerToolContents.push({
+    const adminPermissions = []
+    for (let i = 1; i < 26; i += 1) {
+      adminPermissions.push({
         order: 1,
-        resourceId: 2,
+        resourceId: i === 15 ? 2 : null,
         contentId: i,
         roleId: 'e13031e3-9e3e-4dae-a879-51795babee56',
       })
     }
 
-    // // for non regional breakdown permission
-    // providerAndPayerToolContents.push({
-    //   order: 2,
-    //   resourceId: 3,
-    //   contentId: 15,
-    //   roleId: 'e13031e3-9e3e-4dae-a879-51795babee56',
-    // })
+    const regeneronPermissions = []
+    const contentIds = [9, 10, 11, 13, 15, 18, 19, 20, 21, 22, 23, 24]
+    contentIds.forEach(contentId => {
+      regeneronPermissions.push({
+        order: 1,
+        resourceId: contentId === 15 ? 1 : null,
+        contentId,
+        roleId: 'c04bfb71-9314-4a51-be72-480c3d7c82cf',
+      })
+    })
 
-    await Permission.bulkCreate(providerAndPayerToolContents)
-
-    // regeneron sanofi senior management
-    // {
-    //   contentOrder: 1,
-    //   resourceId: 2,
-    //   contentId: 15,
-    //   roleId: '5404d17a-d830-4e68-ba5a-623abf96ab74',
-    // }
+    await Permission.bulkCreate([
+      ...adminPermissions,
+      ...regeneronPermissions
+    ])
   }
 
   return Permission
