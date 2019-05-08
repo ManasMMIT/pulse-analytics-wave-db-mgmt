@@ -23,7 +23,7 @@ const createRolesCards = async ({
       })
     }
 
-    const cardIds = [9, 10, 11, 13, 15, 18, 19]
+    const cardIds = [9, 10, 11, 13, 15, 18, 19, 20, 21, 22, 23, 24]
     const regeneronEntriesToCreate = []
     cardIds.forEach(cardId => {
       regeneronEntriesToCreate.push({

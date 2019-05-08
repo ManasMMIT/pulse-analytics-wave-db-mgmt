@@ -28,7 +28,7 @@ const createRolesPages = async ({
     }
 
     const regeneronEntriesToCreate = []
-    const pageIds = [9, 10, 11, 13, 15, 18, 19]
+    const pageIds = [9, 10, 11, 13, 15, 18, 19, 20, 21, 22, 23, 24]
     pageIds.forEach((pageId, i) => {
       regeneronEntriesToCreate.push({
         roleId: 'c04bfb71-9314-4a51-be72-480c3d7c82cf',
