@@ -14,16 +14,29 @@ const createRolesCards = async ({
   if (shouldSeed) {
     await RoleCard.sync({ force: true })
 
-    const entriesToCreate = []
+    const adminEntriesToCreate = []
     for (let i = 1, j = 1; i < 25; i += 1) {
-      entriesToCreate.push({
+      adminEntriesToCreate.push({
         roleId: 'e13031e3-9e3e-4dae-a879-51795babee56',
         cardId: i,
         order: j,
       })
     }
 
-    await RoleCard.bulkCreate(entriesToCreate)
+    const cardIds = [9, 10, 11, 13, 15, 18, 19]
+    const regeneronEntriesToCreate = []
+    cardIds.forEach(cardId => {
+      regeneronEntriesToCreate.push({
+        roleId: 'c04bfb71-9314-4a51-be72-480c3d7c82cf',
+        cardId,
+        order: 1,
+      })
+    })
+
+    await RoleCard.bulkCreate([
+      ...adminEntriesToCreate,
+      ...regeneronEntriesToCreate,
+    ])
   }
 
   return RoleCard

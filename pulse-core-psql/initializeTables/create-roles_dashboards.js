@@ -14,7 +14,7 @@ const createRolesDashboards = async ({
   if (shouldSeed) {
     await RoleDashboard.sync({ force: true })
 
-    await RoleDashboard.bulkCreate([
+    const adminEntriesToCreate = [
       {
         roleId: 'e13031e3-9e3e-4dae-a879-51795babee56',
         dashboardId: 1,
@@ -26,18 +26,6 @@ const createRolesDashboards = async ({
         dashboardId: 2,
         order: 1,
         alias: 'setPayerFirst',
-      },
-      {
-        roleId: '5404d17a-d830-4e68-ba5a-623abf96ab74',
-        dashboardId: 1,
-        order: 1,
-        alias: 'setProviderFirst',
-      },
-      {
-        roleId: '5404d17a-d830-4e68-ba5a-623abf96ab74',
-        dashboardId: 2,
-        order: 2,
-        alias: 'setPayerSecond',
       },
       {
         roleId: 'e13031e3-9e3e-4dae-a879-51795babee56',
@@ -63,6 +51,32 @@ const createRolesDashboards = async ({
         order: 2,
         alias: 'Payer Accounts',
       },
+    ]
+
+    const regeneronEntriesToCreate = [
+      {
+        roleId: 'c04bfb71-9314-4a51-be72-480c3d7c82cf',
+        dashboardId: 2,
+        order: 1,
+        alias: 'setPayerFirst',
+      },
+      {
+        roleId: 'c04bfb71-9314-4a51-be72-480c3d7c82cf',
+        dashboardId: 4,
+        order: 1,
+        alias: 'Payer Management',
+      },
+      {
+        roleId: 'c04bfb71-9314-4a51-be72-480c3d7c82cf',
+        dashboardId: 6,
+        order: 2,
+        alias: 'Payer Accounts',
+      },
+    ]
+
+    await RoleDashboard.bulkCreate([
+      ...adminEntriesToCreate,
+      ...regeneronEntriesToCreate,
     ])
   }
 

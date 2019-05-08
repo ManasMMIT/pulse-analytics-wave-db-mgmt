@@ -14,20 +14,33 @@ const createRolesPages = async ({
   if (shouldSeed) {
     await RolePage.sync({ force: true })
 
-    const entriesToCreate = []
+    const adminEntriesToCreate = []
     for (let i = 1, j = 1; i < 25; i += 1, j += 1) {
       if (i === 5) j = 1
       if (i === 9) j = 1
       if (i === 20) j = 1
 
-      entriesToCreate.push({
+      adminEntriesToCreate.push({
         roleId: 'e13031e3-9e3e-4dae-a879-51795babee56',
         pageId: i,
         order: j,
       })
     }
 
-    await RolePage.bulkCreate(entriesToCreate)
+    const regeneronEntriesToCreate = []
+    const pageIds = [9, 10, 11, 13, 15, 18, 19]
+    pageIds.forEach((pageId, i) => {
+      regeneronEntriesToCreate.push({
+        roleId: 'c04bfb71-9314-4a51-be72-480c3d7c82cf',
+        pageId,
+        order: i + 1,
+      })
+    })
+
+    await RolePage.bulkCreate([
+      ...adminEntriesToCreate,
+      ...regeneronEntriesToCreate,
+    ])
   }
 
   return RolePage
