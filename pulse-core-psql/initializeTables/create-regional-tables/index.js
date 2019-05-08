@@ -56,6 +56,7 @@ async function createRegionalTables({ sequelize, shouldSeed }) {
       through: 'regional_breakdowns_us_states_regions',
       foreignKey: 'us_state_region_id',
       otherKey: 'regional_breakdown_id',
+      as: 'bsr',
     },
   )
 
@@ -65,6 +66,7 @@ async function createRegionalTables({ sequelize, shouldSeed }) {
       through: 'regional_breakdowns_us_states_regions',
       foreignKey: 'regional_breakdown_id',
       otherKey: 'us_state_region_id',
+      as: 'bsr',
     },
   )
 
