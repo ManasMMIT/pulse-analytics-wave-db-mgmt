@@ -133,162 +133,157 @@ const executeDbOperations = async () => {
     regionsByKey,
   })
 
-  // // get users.sitemaps
-  // const roleTopDashboardWhereCond = sequelize.where(
-  //   sequelize.col('roles.id'),
-  //   sequelize.col('roles->contents->card->page->dashboard->dashboard->roles_dashboards.roleId'),
-  // )
+  // get users.sitemaps
+  const roleTopDashboardWhereCond = sequelize.where(
+    sequelize.col('roles.id'),
+    sequelize.col('roles->contents->card->page->dashboard->dashboard->roles_dashboards.roleId'),
+  )
 
-  // const roleLowerDashboardWhereCond = sequelize.where(
-  //   sequelize.col('roles.id'),
-  //   sequelize.col('roles->contents->card->page->dashboard->roles_dashboards.roleId'),
-  // )
+  const roleLowerDashboardWhereCond = sequelize.where(
+    sequelize.col('roles.id'),
+    sequelize.col('roles->contents->card->page->dashboard->roles_dashboards.roleId'),
+  )
 
-  // const rolePageWhereCond = sequelize.where(
-  //   sequelize.col('roles.id'),
-  //   sequelize.col('roles->contents->card->page->roles_pages.roleId'),
-  // )
+  const rolePageWhereCond = sequelize.where(
+    sequelize.col('roles.id'),
+    sequelize.col('roles->contents->card->page->roles_pages.roleId'),
+  )
 
-  // const roleCardWhereCond = sequelize.where(
-  //   sequelize.col('roles.id'),
-  //   sequelize.col('roles->contents->card->roles_cards.roleId'),
-  // )
+  const roleCardWhereCond = sequelize.where(
+    sequelize.col('roles.id'),
+    sequelize.col('roles->contents->card->roles_cards.roleId'),
+  )
 
-  // const UsersSitemapsRaw = await User.findAll(
-  //   {
-  //     duplicating: true,
-  //     required: true,
-  //     order: [
-  //       [
-  //         sequelize.col('roles->contents->card->page->dashboard->dashboard->roles_dashboards.order'),
-  //         'ASC',
-  //       ],
-  //       [
-  //         sequelize.col('roles->contents->card->page->dashboard->roles_dashboards.order'),
-  //         'ASC',
-  //       ],
-  //       [
-  //         sequelize.col('roles->contents->card->page->roles_pages.order'),
-  //         'ASC',
-  //       ],
-  //       [
-  //         sequelize.col('roles->contents->card->roles_cards.order'),
-  //         'ASC',
-  //       ],
-  //       [
-  //         sequelize.col('roles->contents->permission.order'),
-  //         'ASC',
-  //       ],
-  //     ],
-  //     include: [
-  //       {
-  //         model: Role,
-  //         duplicating: true,
-  //         required: true,
-  //         through: { attributes: [] },
-  //         include: [
-  //           {
-  //             model: Content,
-  //             duplicating: true,
-  //             required: true,
-  //             include: [
-  //               {
-  //                 model: Card,
-  //                 duplicating: true,
-  //                 required: true,
-  //                 include: [
-  //                   {
-  //                     model: Page,
-  //                     duplicating: true,
-  //                     required: true,
-  //                     include: [
-  //                       {
-  //                         model: RolePage,
-  //                         duplicating: true,
-  //                         required: true,
-  //                         where: rolePageWhereCond,
-  //                       },
-  //                       {
-  //                         model: Dashboard,
-  //                         duplicating: true,
-  //                         required: true,
-  //                         include: [
-  //                           {
-  //                             model: Dashboard,
-  //                             duplicating: true,
-  //                             required: true,
-  //                             include: [
-  //                               {
-  //                                 model: RoleDashboard,
-  //                                 duplicating: true,
-  //                                 required: true,
-  //                                 where: roleTopDashboardWhereCond,
-  //                               }
-  //                             ]
-  //                           },
-  //                           {
-  //                             model: RoleDashboard,
-  //                             duplicating: true,
-  //                             required: true,
-  //                             where: roleLowerDashboardWhereCond,
-  //                           },
-  //                         ]
-  //                       },
-  //                     ]
-  //                   },
-  //                   {
-  //                     model: RoleCard,
-  //                     duplicating: true,
-  //                     required: true,
-  //                     where: roleCardWhereCond,
-  //                   },
-  //                 ]
-  //               },
-  //             ],
-  //           },
-  //         ],
-  //       },
-  //     ],
-  //   },
-  // )
+  const UsersSitemapsRaw = await User.findAll(
+    {
+      duplicating: true,
+      required: true,
+      order: [
+        [
+          sequelize.col('roles->contents->card->page->dashboard->dashboard->roles_dashboards.order'),
+          'ASC',
+        ],
+        [
+          sequelize.col('roles->contents->card->page->dashboard->roles_dashboards.order'),
+          'ASC',
+        ],
+        [
+          sequelize.col('roles->contents->card->page->roles_pages.order'),
+          'ASC',
+        ],
+        [
+          sequelize.col('roles->contents->card->roles_cards.order'),
+          'ASC',
+        ],
+        [
+          sequelize.col('roles->contents->permission.order'),
+          'ASC',
+        ],
+      ],
+      include: [
+        {
+          model: Role,
+          duplicating: true,
+          required: true,
+          through: { attributes: [] },
+          include: [
+            {
+              model: Content,
+              duplicating: true,
+              required: true,
+              include: [
+                {
+                  model: Card,
+                  duplicating: true,
+                  required: true,
+                  include: [
+                    {
+                      model: Page,
+                      duplicating: true,
+                      required: true,
+                      include: [
+                        {
+                          model: RolePage,
+                          duplicating: true,
+                          required: true,
+                          where: rolePageWhereCond,
+                        },
+                        {
+                          model: Dashboard,
+                          duplicating: true,
+                          required: true,
+                          include: [
+                            {
+                              model: Dashboard,
+                              duplicating: true,
+                              required: true,
+                              include: [
+                                {
+                                  model: RoleDashboard,
+                                  duplicating: true,
+                                  required: true,
+                                  where: roleTopDashboardWhereCond,
+                                }
+                              ]
+                            },
+                            {
+                              model: RoleDashboard,
+                              duplicating: true,
+                              required: true,
+                              where: roleLowerDashboardWhereCond,
+                            },
+                          ]
+                        },
+                      ]
+                    },
+                    {
+                      model: RoleCard,
+                      duplicating: true,
+                      required: true,
+                      where: roleCardWhereCond,
+                    },
+                  ]
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    },
+  )
 
-  // const UsersSitemapsFormatted = processUsersSitemapsRaw(UsersSitemapsRaw)
-
-  // debugger
-
-  // // get masterSitemap
-  // let masterSitemap = await Dashboard.findAll(
-  //   {
-  //     include: [
-  //       {
-  //         model: Dashboard,
-  //         as: 'ChildDashboard',
-  //         include: [
-  //           {
-  //             model: Page,
-  //             include: [
-  //               {
-  //                 model: Card,
-  //                 include: [
-  //                   {
-  //                     model: Content,
-  //                   }
-  //                 ]
-  //               }
-  //             ]
-  //           }
-  //         ],
-  //       }
-  //     ]
-  //   }
-  // )
-
-  // // JSONify the nested sitemap
-  // let masterSitemap = masterSitemap.map(dashboard => dashboard.toJSON())
-  // debugger
+  const UsersSitemapsFormatted = processUsersSitemapsRaw(UsersSitemapsRaw)
 }
 
 executeDbOperations().then(async () => {
   console.log('Closing psql connection...')
   await terminateScript()
 })
+
+
+// // get masterSitemap
+// let masterSitemap = await Dashboard.findAll(
+//   {
+//     include: [
+//       {
+//         model: Dashboard,
+//         as: 'ChildDashboard',
+//         include: [
+//           {
+//             model: Page,
+//             include: [
+//               {
+//                 model: Card,
+//                 include: [
+//                   {
+//                     model: Content,
+//                   }
+//                 ]
+//               }
+//             ]
+//           }
+//         ],
+//       }
+//     ]
+//   }
+// )
