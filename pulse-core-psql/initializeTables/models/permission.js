@@ -24,7 +24,7 @@ module.exports = function (sequelize, DataTypes) {
     resourceId: {
       type: DataTypes.INTEGER,
       unique: 'compositeIndex',
-      allowNull: false,
+      allowNull: true,
     },
     roleId: {
       type: DataTypes.STRING,
