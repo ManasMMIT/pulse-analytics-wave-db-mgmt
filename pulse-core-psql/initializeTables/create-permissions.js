@@ -27,12 +27,13 @@ const createPermissions = async ({
       })
     }
 
-    providerAndPayerToolContents.push({
-      order: 2,
-      resourceId: 3,
-      contentId: 15,
-      roleId: 'e13031e3-9e3e-4dae-a879-51795babee56',
-    })
+    // // for non regional breakdown permission
+    // providerAndPayerToolContents.push({
+    //   order: 2,
+    //   resourceId: 3,
+    //   contentId: 15,
+    //   roleId: 'e13031e3-9e3e-4dae-a879-51795babee56',
+    // })
 
     await Permission.bulkCreate(providerAndPayerToolContents)
 
