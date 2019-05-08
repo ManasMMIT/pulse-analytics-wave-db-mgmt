@@ -6,3 +6,4 @@
 - IDEAS ON ORDERING: https://github.com/sequelize/sequelize/issues/4553
 - NESTED WHERE CONDITION SYNTAX: https://github.com/sequelize/sequelize/issues/4414
 - grouping in sequelize is difficult: https://github.com/sequelize/sequelize/issues/3256
+- applying scope in Model: https://sequelize.readthedocs.io/en/latest/api/model/#scopeoptions-model
