@@ -5,8 +5,24 @@ const createResources = async ({
 }) => {
   const Resource = await sequelize.import('resource', require('./models/resource'))
 
-  Resource.belongsTo(RegionalBreakdown, { foreignKey: 'sourceId' })
-  RegionalBreakdown.hasMany(Resource, { onDelete: 'cascade' })
+  Resource.belongsTo(
+    RegionalBreakdown,
+    {
+      as: 'regionalBreakdown',
+      foreignKey: 'sourceId',
+      // scoping doesn't appear possible on belongsTo: https://github.com/sequelize/sequelize/issues/3476
+      // scope: { type: 'regionalBreakdown' },
+    }
+  )
+
+  RegionalBreakdown.hasMany(
+    Resource,
+    {
+      foreignKey: 'sourceId',
+      onDelete: 'cascade',
+      scope: { type: 'regionalBreakdown' }
+    }
+  )
 
   if (shouldSeed) {
     await Resource.sync({ force: true })
@@ -20,10 +36,10 @@ const createResources = async ({
         type: 'regionalBreakdown',
         sourceId: 2,
       },
-      // {
-      //   type: 'treatmentPlans',
-      //   sourceId: 1,
-      // }
+      {
+        type: 'treatmentPlans',
+        sourceId: 1,
+      }
     ])
   }
 
