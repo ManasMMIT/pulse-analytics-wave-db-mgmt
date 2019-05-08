@@ -1,6 +1,7 @@
+const d3 = require('d3-collection')
+const _ = require('lodash')
 const connectToPsql = require('./connect-to-psql')
 const { getScriptTerminator } = require('../utils')
-
 
 const {
   createUsersRolesClients,
@@ -31,13 +32,21 @@ const executeDbOperations = async () => {
   const Card = await createCards({ sequelize, Page, shouldSeed: false })
   const Content = await createContents({ sequelize, Card, shouldSeed: false })
 
-  const Resource = await createResources({ sequelize, shouldSeed: false })
+  // regional breakdown can only be seeded by uploading CSV
+  const RegionalBreakdown = await createRegionalTables({ sequelize })
+
+  const Resource = await createResources({
+    sequelize,
+    RegionalBreakdown,
+    shouldSeed: false,
+  })
+
   const Permission = await createPermissions({
     sequelize,
     Role,
     Content,
     Resource,
-    shouldSeed: false
+    shouldSeed: false,
   })
 
   Role.belongsToMany(Content, { through: Permission })
@@ -63,30 +72,51 @@ const executeDbOperations = async () => {
     shouldSeed: false,
   })
 
-  const RegionalBreakdown = await createRegionalTables({ sequelize })
-  const test = await RegionalBreakdown.findOne()
-
-  debugger
-
   // is there a way to get the following?
   // User.dashboards.dashboards.pages.cards.contents.contents.resource
 
   // get users.contents.resources in rawer form
-  const UsersContentsResourcesRaw = await User.findAll(
+  const UsersContentsResourcesRaw = await User.findOne(
     {
+      where: { id: 'auth0|59e910a4c30a38053ab5452b' },
+      duplicating: true,
+      required: true,
       include: [
         {
           model: Role,
           through: { attributes: [] },
+          duplicating: true,
+          required: true,
           include: [
             {
               model: Permission,
+              duplicating: true,
+              required: true,
               include: [
                 {
                   model: Content,
+                  duplicating: true,
+                  required: true,
                 },
                 {
                   model: Resource,
+                  duplicating: true,
+                  required: true,
+                  // include: [
+                  //   {
+                  //     model: RegionalBreakdown,
+                  //     duplicating: true,
+                  //     required: true,
+                  //     include: [
+                  //       {
+                  //         model: sequelize.models.us_states_regions,
+                  //         // duplicating: true,
+                  //         required: true,
+                  //         as: 'statesRegions',
+                  //       }
+                  //     ]
+                  //   }
+                  // ]
                 },
               ]
             },
@@ -96,7 +126,58 @@ const executeDbOperations = async () => {
     },
   )
 
+  const samplePermissions = UsersContentsResourcesRaw.roles[0].permissions
+  const uniquePermByResource = _.uniqBy(samplePermissions, ({ resource }) => resource.id)
+
+  const resources = await Promise.all(
+    uniquePermByResource.map(perm => perm.resource.getRegional_breakdown())
+  )
+
+  const usStateRegions = await Promise.all(
+    resources.map(resource => resource.getUs_states_regions())
+  )
+
+  const allStates = await sequelize.models.us_state.findAll()
+  const statesByKey = _.keyBy(allStates, 'id')
+  const allRegions = await sequelize.models.region.findAll()
+  const regionsByKey = _.keyBy(allRegions, 'id')
+
+  const testResult = usStateRegions.map(arr => (
+    arr.map(({ stateId, regionId }) => {
+      const state = statesByKey[stateId].toJSON()
+      const region = regionsByKey[regionId].toJSON()
+      return { state, region }
+    })
+  ))
+
   debugger
+
+  // const sampleNestPermissions = d3.nest()
+  //   .key(d => d.contentId)
+  //   .key(d => d.resourceId)
+  //   .rollup(arr => {
+  //     const resourceRefs = arr.map(({ resource }) => ({ resource }))
+
+  //     const getResources = async () => {
+  //       const result = []
+  //       for (const resourceRef of resourceRefs) {
+  //         if (resourceRef.type === 'regionalBreakdown') {
+  //           const breakdown = await resourceRef.getRegionalBreakdown()
+  //           result.push(breakdown)
+  //         }
+  //       }
+  //       return result
+  //     }
+
+  //     const result = await getResources()
+  //     return result
+  //   })
+  //   .object(samplePermissions)
+
+  // merge the resources
+  // _.merge({}, ...nestPermissions)
+
+  // debugger
 
   // const UsersContentsResourcesFormatted = processUsersContentsResourcesRaw(UsersContentsResourcesRaw)
   // debugger
