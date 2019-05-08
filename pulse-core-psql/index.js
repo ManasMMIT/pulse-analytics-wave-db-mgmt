@@ -16,8 +16,8 @@ const {
   createRegionalTables,
 } = require('./initializeTables')
 
-// const processUsersContentsResourcesRaw = require('./process-users-contents-resources')
-// const processUsersSitemapsRaw = require('./process-users-sitemaps')
+const processUsersContentsResourcesRaw = require('./process-users-contents-resources')
+const processUsersSitemapsRaw = require('./process-users-sitemaps')
 
 let terminateScript
 
@@ -97,6 +97,22 @@ const executeDbOperations = async () => {
                   model: Resource,
                   duplicating: true,
                   required: true,
+                  include: [
+                    {
+                      model: RegionalBreakdown,
+                      as: 'regionalBreakdown',
+                      duplicating: true,
+                      required: true,
+                      include: [
+                        {
+                          model: sequelize.models.us_states_regions,
+                          duplicating: true,
+                          required: true,
+                          as: 'bsr',
+                        }
+                      ]
+                    }
+                  ]
                 },
               ]
             },
@@ -111,14 +127,13 @@ const executeDbOperations = async () => {
   const statesByKey = _.keyBy(allStates, 'id')
   const regionsByKey = _.keyBy(allRegions, 'id')
 
-  // const UsersContentsResourcesFormatted = processUsersContentsResourcesRaw({
-  //   UsersContentsResourcesRaw,
-  //   statesByKey,
-  //   regionsByKey,
-  // })
+  const UsersContentsResourcesFormatted = processUsersContentsResourcesRaw({
+    UsersContentsResourcesRaw,
+    statesByKey,
+    regionsByKey,
+  })
 
-  debugger
-
+  // // get users.sitemaps
   // const roleTopDashboardWhereCond = sequelize.where(
   //   sequelize.col('roles.id'),
   //   sequelize.col('roles->contents->card->page->dashboard->dashboard->roles_dashboards.roleId'),
@@ -139,7 +154,6 @@ const executeDbOperations = async () => {
   //   sequelize.col('roles->contents->card->roles_cards.roleId'),
   // )
 
-  // // get users.sitemaps
   // const UsersSitemapsRaw = await User.findAll(
   //   {
   //     duplicating: true,
