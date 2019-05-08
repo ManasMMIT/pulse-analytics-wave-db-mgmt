@@ -36,10 +36,10 @@ const createResources = async ({
         type: 'regionalBreakdown',
         sourceId: 2,
       },
-      {
-        type: 'treatmentPlans',
-        sourceId: 1,
-      }
+      // {
+      //   type: 'treatmentPlans',
+      //   sourceId: 1,
+      // },
     ])
   }
 
