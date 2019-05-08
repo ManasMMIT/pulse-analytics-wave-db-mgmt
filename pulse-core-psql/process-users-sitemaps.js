@@ -74,9 +74,9 @@ const formatSitemap = sitemapObj => {
   return result
 }
 
-const processSingleUserSitemap = UserSitemapRaw => {
-  const { dataValues: { id: _id, username } } = UserSitemapRaw
-  const rolesSitemaps = nestEachRoleSitemap(UserSitemapRaw)
+const processSingleUserSitemaps = rawUserSitemaps => {
+  const { dataValues: { id: _id, username } } = rawUserSitemaps
+  const rolesSitemaps = nestEachRoleSitemap(rawUserSitemaps)
   const mergedSitemap = mergeRolesSitemaps(rolesSitemaps)
   const formattedSitemap = formatSitemap(mergedSitemap)
 
@@ -87,9 +87,9 @@ const processSingleUserSitemap = UserSitemapRaw => {
   }
 }
 
-const processUsersSitemapsRaw = UsersSitemapsRaw => {
-  const UsersSitemaps = UsersSitemapsRaw.map(processSingleUserSitemap)
+const processRawUsersSitemaps = rawUsersSitemaps => {
+  const UsersSitemaps = rawUsersSitemaps.map(processSingleUserSitemaps)
   return UsersSitemaps
 }
 
-module.exports = processUsersSitemapsRaw
+module.exports = processRawUsersSitemaps

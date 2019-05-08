@@ -38,11 +38,11 @@ const nestEachRoleContentsResources = ({ roles }) => (
 const mergeRolesContentsResources = rolesContentsResources => _.merge({}, ...rolesContentsResources)
 
 const getUniqueResourcesAndFormat = ({
-  UserContentsResources,
+  rawUserContentsResources,
   statesByKey,
   regionsByKey,
 }) => {
-  const allPermissions = UserContentsResources.roles.map(({ permissions }) => permissions)
+  const allPermissions = rawUserContentsResources.roles.map(({ permissions }) => permissions)
   const flattenedPermissions = _.flatten(allPermissions)
   const permUniquedByResource = _.uniqBy(flattenedPermissions, ({ resource: { id } }) => id)
 
@@ -73,15 +73,15 @@ const getUniqueResourcesAndFormat = ({
 }
 
 const getMapCallback = (statesByKey, regionsByKey) => (
-  UserContentsResources => {
+  rawUserContentsResources => {
     const uniqueResources = getUniqueResourcesAndFormat({
-      UserContentsResources,
+      rawUserContentsResources,
       statesByKey,
       regionsByKey,
     })
 
-    const { dataValues: { id: userId, username } } = UserContentsResources
-    const rolesContentsResources = nestEachRoleContentsResources(UserContentsResources)
+    const { dataValues: { id: userId, username } } = rawUserContentsResources
+    const rolesContentsResources = nestEachRoleContentsResources(rawUserContentsResources)
     const mergedRolesContentsResources = mergeRolesContentsResources(rolesContentsResources)
 
     const rolledUpResult = rollupResult(mergedRolesContentsResources, uniqueResources)
@@ -91,16 +91,16 @@ const getMapCallback = (statesByKey, regionsByKey) => (
   }
 )
 
-const processUsersContentsResourcesRaw = ({
-  UsersContentsResourcesRaw,
+const processRawUsersContentsResources = ({
+  rawUsersContentsResources,
   statesByKey,
   regionsByKey,
 }) => {
   const processSingleUser = getMapCallback(statesByKey, regionsByKey)
-  let result = UsersContentsResourcesRaw.map(processSingleUser)
+  let result = rawUsersContentsResources.map(processSingleUser)
   result = _.flatten(result)
 
   return result
 }
 
-module.exports = processUsersContentsResourcesRaw
+module.exports = processRawUsersContentsResources

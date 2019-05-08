@@ -16,8 +16,8 @@ const {
   createRegionalTables,
 } = require('./initializeTables')
 
-const processUsersContentsResourcesRaw = require('./process-users-contents-resources')
-const processUsersSitemapsRaw = require('./process-users-sitemaps')
+const processRawUsersContentsResources = require('./process-users-contents-resources')
+const processRawUsersSitemaps = require('./process-users-sitemaps')
 
 let terminateScript
 
@@ -72,7 +72,7 @@ const executeDbOperations = async () => {
   })
 
   // get users.contents.resources
-  const UsersContentsResourcesRaw = await User.findAll(
+  const rawUsersContentsResources = await User.findAll(
     {
       duplicating: true,
       required: true,
@@ -127,8 +127,8 @@ const executeDbOperations = async () => {
   const statesByKey = _.keyBy(allStates, 'id')
   const regionsByKey = _.keyBy(allRegions, 'id')
 
-  const UsersContentsResourcesFormatted = processUsersContentsResourcesRaw({
-    UsersContentsResourcesRaw,
+  const usersContentsResources = processRawUsersContentsResources({
+    rawUsersContentsResources,
     statesByKey,
     regionsByKey,
   })
@@ -154,7 +154,7 @@ const executeDbOperations = async () => {
     sequelize.col('roles->contents->card->roles_cards.roleId'),
   )
 
-  const UsersSitemapsRaw = await User.findAll(
+  const rawUsersSitemaps = await User.findAll(
     {
       duplicating: true,
       required: true,
@@ -252,7 +252,12 @@ const executeDbOperations = async () => {
     },
   )
 
-  const UsersSitemapsFormatted = processUsersSitemapsRaw(UsersSitemapsRaw)
+  const usersSitemaps = processRawUsersSitemaps(rawUsersSitemaps)
+
+  return {
+    usersContentsResources,
+    usersSitemaps
+  }
 }
 
 executeDbOperations().then(async () => {
