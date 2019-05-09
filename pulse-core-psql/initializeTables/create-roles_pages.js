@@ -27,19 +27,24 @@ const createRolesPages = async ({
       })
     }
 
-    const regeneronEntriesToCreate = []
-    const pageIds = [9, 10, 11, 13, 15, 18, 19, 20, 21, 22, 23, 24]
-    pageIds.forEach((pageId, i) => {
-      regeneronEntriesToCreate.push({
-        roleId: 'c04bfb71-9314-4a51-be72-480c3d7c82cf',
-        pageId,
-        order: i + 1,
-      })
-    })
+    const regeneronPageIds = [9, 10, 11, 13, 15, 18, 19, 20, 21, 22, 23, 24]
+    const regeneronEntriesToCreate = regeneronPageIds.map((pageId, i) => ({
+      roleId: 'c04bfb71-9314-4a51-be72-480c3d7c82cf',
+      pageId,
+      order: i + 1,
+    }))
+
+    const lillyAdminPageIds = [1, 2, 3, 4, 5, 6, 7, 8]
+    const lillyAdminEntriesToCreate = lillyAdminPageIds.map((pageId, i) => ({
+      roleId: '2a46665f-d4f7-40bf-a239-85f5b0cad344',
+      pageId,
+      order: i + 1,
+    }))
 
     await RolePage.bulkCreate([
       ...adminEntriesToCreate,
       ...regeneronEntriesToCreate,
+      ...lillyAdminEntriesToCreate,
     ])
   }
 

@@ -27,20 +27,26 @@ const createPermissions = async ({
       })
     }
 
-    const regeneronPermissions = []
-    const contentIds = [9, 10, 11, 13, 15, 18, 19, 20, 21, 22, 23, 24]
-    contentIds.forEach(contentId => {
-      regeneronPermissions.push({
-        order: 1,
-        resourceId: contentId === 15 ? 1 : null,
-        contentId,
-        roleId: 'c04bfb71-9314-4a51-be72-480c3d7c82cf',
-      })
-    })
+    const regeneronContentIds = [9, 10, 11, 13, 15, 18, 19, 20, 21, 22, 23, 24]
+    const regeneronPermissions = regeneronContentIds.map(contentId => ({
+      order: 1,
+      resourceId: contentId === 15 ? 1 : null,
+      contentId,
+      roleId: 'c04bfb71-9314-4a51-be72-480c3d7c82cf',
+    }))
+
+    const lillyAdminContentIds = [1, 2, 3, 4, 5, 6, 7, 8]
+    const lillyAdminPermissions = lillyAdminContentIds.map(contentId => ({
+      order: 1,
+      resourceId: null,
+      contentId,
+      roleId: '2a46665f-d4f7-40bf-a239-85f5b0cad344',
+    }))
 
     await Permission.bulkCreate([
       ...adminPermissions,
-      ...regeneronPermissions
+      ...regeneronPermissions,
+      ...lillyAdminPermissions,
     ])
   }
 

@@ -23,19 +23,24 @@ const createRolesCards = async ({
       })
     }
 
-    const cardIds = [9, 10, 11, 13, 15, 18, 19, 20, 21, 22, 23, 24]
-    const regeneronEntriesToCreate = []
-    cardIds.forEach(cardId => {
-      regeneronEntriesToCreate.push({
-        roleId: 'c04bfb71-9314-4a51-be72-480c3d7c82cf',
-        cardId,
-        order: 1,
-      })
-    })
+    const regeneronCardIds = [9, 10, 11, 13, 15, 18, 19, 20, 21, 22, 23, 24]
+    const regeneronEntriesToCreate = regeneronCardIds.map(cardId => ({
+      roleId: 'c04bfb71-9314-4a51-be72-480c3d7c82cf',
+      cardId,
+      order: 1,
+    }))
+
+    const lillyAdminCardIds = [1, 2, 3, 4, 5, 6, 7, 8]
+    const lillyAdminEntriesToCreate = lillyAdminCardIds.map(cardId => ({
+      roleId: '2a46665f-d4f7-40bf-a239-85f5b0cad344',
+      cardId,
+      order: 1,
+    }))
 
     await RoleCard.bulkCreate([
       ...adminEntriesToCreate,
       ...regeneronEntriesToCreate,
+      ...lillyAdminEntriesToCreate,
     ])
   }
 

@@ -74,9 +74,31 @@ const createRolesDashboards = async ({
       },
     ]
 
+    const lillyAdminEntriesToCreate = [
+      {
+        roleId: '2a46665f-d4f7-40bf-a239-85f5b0cad344',
+        dashboardId: 1,
+        order: 1,
+        alias: 'Provider Targeted Accounts',
+      },
+      {
+        roleId: '2a46665f-d4f7-40bf-a239-85f5b0cad344',
+        dashboardId: 3,
+        order: 1,
+        alias: 'Provider Management',
+      },
+      {
+        roleId: '2a46665f-d4f7-40bf-a239-85f5b0cad344',
+        dashboardId: 5,
+        order: 2,
+        alias: 'Provider Accounts',
+      },
+    ]
+
     await RoleDashboard.bulkCreate([
       ...adminEntriesToCreate,
       ...regeneronEntriesToCreate,
+      ...lillyAdminEntriesToCreate,
     ])
   }
 
