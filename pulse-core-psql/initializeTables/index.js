@@ -6,6 +6,7 @@ const createContents = require('./create-contents')
 const createResources = require('./create-resources')
 const createPermissions = require('./create-permissions')
 const createRolesDashboards = require('./create-roles_dashboards')
+const createRolesContents = require('./create-roles_contents')
 const createRolesPages = require('./create-roles_pages')
 const createRolesCards = require('./create-roles_cards')
 const createRegionalTables = require('./create-regional-tables')
@@ -19,6 +20,7 @@ module.exports = {
   createResources,
   createPermissions,
   createRolesDashboards,
+  createRolesContents,
   createRolesPages,
   createRolesCards,
   createRegionalTables,
