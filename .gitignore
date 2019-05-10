@@ -20,6 +20,5 @@ lib/
 dist/
 public/
 
-db.config.js
 auth0_data*
 auth0.config.js
