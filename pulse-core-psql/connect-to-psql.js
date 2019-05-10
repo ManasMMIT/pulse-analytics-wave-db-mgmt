@@ -1,10 +1,10 @@
 require('dotenv').load()
 const Sequelize = require('sequelize')
 
-const PSQL_LOCAL_LOADER_URI = require('./db.config.js')
-const PSQL_PROD_LOADER_URI = process.env.PSQL_PROD_LOADER_URI
+const PSQL_LOADER_URI = process.env.PSQL_LOADER_URI
+const isProductionEnv = PSQL_LOADER_URI.includes('amazonaws')
 
-const sslConfig = PSQL_PROD_LOADER_URI
+const sslConfig = isProductionEnv
   ? {
     ssl: true,
     dialectOptions: {
@@ -14,13 +14,12 @@ const sslConfig = PSQL_PROD_LOADER_URI
   : {}
 
 const connectToPsql = async () => {
-  const sequelize = new Sequelize(PSQL_PROD_LOADER_URI || PSQL_LOCAL_LOADER_URI, sslConfig)
+  const sequelize = new Sequelize(PSQL_LOADER_URI, sslConfig)
 
   await sequelize
     .authenticate()
     .then(() => {
-      const environment = PSQL_PROD_LOADER_URI ? 'production' : 'local'
-      console.log(`-----Connected to PostgreSQL ${environment}-----`)
+      console.log(`-----Connected to PostgreSQL at ${PSQL_LOADER_URI}-----`)
     })
     .catch(err => {
       console.error('Unable to connect to the database:', err)
