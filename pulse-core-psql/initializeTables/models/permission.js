@@ -8,28 +8,15 @@ module.exports = function (sequelize, DataTypes) {
       primaryKey: true,
       autoIncrement: true,
     },
-    order: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
-    alias: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
-    contentId: {
-      type: DataTypes.INTEGER,
-      unique: 'compositeIndex',
-      allowNull: false,
-    },
     resourceId: {
       type: DataTypes.INTEGER,
       unique: 'compositeIndex',
-      allowNull: true,
-    },
-    roleId: {
-      type: DataTypes.STRING,
-      unique: 'compositeIndex',
       allowNull: false,
     },
+    role_content_id: {
+      type: DataTypes.INTEGER,
+      unique: 'compositeIndex',
+      allowNull: false,
+    }
   });
 };
