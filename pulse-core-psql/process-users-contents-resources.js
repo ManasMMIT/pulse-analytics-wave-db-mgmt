@@ -21,18 +21,22 @@ const rollupResult = (mergedRolesContentsResources, uniqueResources) => {
   return result
 }
 
-const getIndividualNestedPermissions = permissions => {
+const getIndividualNestedPermissions = roles_contents => {
   const nestedPermissions = d3.nest()
     .key(d => d.contentId)
-    .key(d => d.resourceId)
-    .rollup(arr => arr[0].resource.toJSON())
-    .object(permissions)
+    .rollup(arr => {
+      return d3.nest()
+        .key(d => d.id)
+        .rollup(singleResourceArr => singleResourceArr[0])
+        .object(arr[0].resources)
+    })
+    .object(roles_contents)
 
   return nestedPermissions
 }
 
 const nestEachRoleContentsResources = ({ roles }) => (
-  roles.map(({ permissions }) => getIndividualNestedPermissions(permissions))
+  roles.map(({ roles_contents }) => getIndividualNestedPermissions(roles_contents))
 )
 
 const mergeRolesContentsResources = rolesContentsResources => _.merge({}, ...rolesContentsResources)
@@ -42,34 +46,39 @@ const getUniqueResourcesAndFormat = ({
   statesByKey,
   regionsByKey,
 }) => {
-  const allPermissions = rawUserContentsResources.roles.map(({ permissions }) => permissions)
-  const flattenedPermissions = _.flatten(allPermissions)
-  const permUniquedByResource = _.uniqBy(flattenedPermissions, ({ resource: { id } }) => id)
+  const uniqueResourcesAcrossRoles = {}
 
-  const uniqueResources = permUniquedByResource
-    .filter(({ resource: { type } }) => type === 'regionalBreakdown') // temporary because no other resource types rn
-    .map(({ resource }) => {
-      let regionalBreakdown = resource.regionalBreakdown.toJSON().bsr
-      regionalBreakdown = regionalBreakdown.map(obj => {
-        const stateData = statesByKey[obj.stateId].toJSON()
-        const regionData = regionsByKey[obj.regionId].toJSON()
+  rawUserContentsResources.roles.forEach(role => {
+    const { roles_contents } = role
+    roles_contents.forEach(roleContentAssociation => {
+      const { resources } = roleContentAssociation
+      resources.forEach(resource => {
+        if (resource.type !== 'regionalBreakdown') return // temporary because no other resource types ready rn
 
-        return {
-          region: regionData.name,
-          ...stateData,
+        if (!uniqueResourcesAcrossRoles[resource.id]) {
+          let regionalBreakdown = resource.regionalBreakdown.toJSON().bsr
+
+          regionalBreakdown = regionalBreakdown.map(obj => {
+            const stateData = statesByKey[obj.stateId].toJSON()
+            const regionData = regionsByKey[obj.regionId].toJSON()
+
+            return {
+              region: regionData.name,
+              ...stateData,
+            }
+          })
+
+          uniqueResourcesAcrossRoles[resource.id] = {
+            id: resource.id,
+            type: resource.type,
+            data: regionalBreakdown,
+          }
         }
       })
-
-      return {
-        id: resource.id,
-        type: resource.type,
-        data: regionalBreakdown,
-      }
     })
+  })
 
-  const keyedResources = _.keyBy(uniqueResources, 'id')
-
-  return keyedResources
+  return uniqueResourcesAcrossRoles
 }
 
 const getMapCallback = (statesByKey, regionsByKey) => (
