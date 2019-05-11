@@ -10,7 +10,9 @@ const createUsersRolesClients = async ({ sequelize, shouldSeed }) => {
   User.belongsToMany(Role, { through: UserRole })
   Role.belongsToMany(User, { through: UserRole })
 
-  Client.hasMany(Role, { onDelete: 'cascade' })
+  // tried adding hooks: true but doesn't seem to work
+  // Reference: https://stackoverflow.com/questions/23128816/sequelize-js-ondelete-cascade-is-not-deleting-records-sequelize/55323664#55323664
+  Client.hasMany(Role, { onDelete: 'cascade', hooks: true })
   Role.belongsTo(Client)
 
   if (shouldSeed) {
