@@ -172,7 +172,7 @@ const generateDataForMongoDb = async () => {
           'ASC',
         ],
         [
-          sequelize.col('roles->contents->permission.order'),
+          sequelize.col('roles->contents->roles_contents.order'),
           'ASC',
         ],
       ],
