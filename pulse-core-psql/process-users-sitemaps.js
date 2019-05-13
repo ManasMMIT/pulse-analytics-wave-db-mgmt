@@ -8,7 +8,7 @@ const getGroupByKey = obj => {
   if (tableName === 'contents') {
     // TODO: content table doesn't actually need order in the key string
     // because that can be extracted from the contentObj directly
-    order = obj.permission.toJSON().order
+    order = obj.roles_contents.toJSON().order
   } else {
     const orderAndAliasTableName = `roles_${tableName}`
     if (obj[orderAndAliasTableName]) {
@@ -50,7 +50,7 @@ const formatSitemap = sitemapObj => {
   if (Array.isArray(firstValue)) {
     const result = _.map(sitemapObj, value => {
       const contentObj = value[0].toJSON()
-      const { name, component, id, permission: { order } } = contentObj
+      const { name, component, id, roles_contents: { order } } = contentObj
 
       return { name, component, id, order, type: 'content' }
     })
