@@ -22,7 +22,7 @@ if (filepath) {
   if (fileExists(filepath)) {
     const executeRegionalSeeding = async () => {
       const sequelize = await connectToPsql()
-      await createRegionalTables({ sequelize, shouldSeed: false })
+      await createRegionalTables({ sequelize, shouldSeed: true })
     }
 
     executeRegionalSeeding()
