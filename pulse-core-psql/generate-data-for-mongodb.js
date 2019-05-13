@@ -12,6 +12,7 @@ const {
   createRolesDashboards,
   createRolesPages,
   createRolesCards,
+  createRolesContents,
   createRegionalTables,
 } = require('./initializeTables')
 
@@ -27,6 +28,13 @@ const generateDataForMongoDb = async () => {
   const Card = await createCards({ sequelize, Page, shouldSeed: false })
   const Content = await createContents({ sequelize, Card, shouldSeed: false })
 
+  const RoleContent = await createRolesContents({
+    sequelize,
+    Role,
+    Content,
+    shouldSeed: false,
+  })
+
   // regional breakdown can only be seeded by uploading CSV
   const RegionalBreakdown = await createRegionalTables({ sequelize })
 
@@ -38,13 +46,10 @@ const generateDataForMongoDb = async () => {
 
   const Permission = await createPermissions({
     sequelize,
-    Role,
-    Content,
+    RoleContent,
     Resource,
     shouldSeed: false,
   })
-
-  Role.belongsToMany(Content, { through: Permission })
 
   const RoleDashboard = await createRolesDashboards({
     sequelize,
@@ -80,15 +85,10 @@ const generateDataForMongoDb = async () => {
           required: true,
           include: [
             {
-              model: Permission,
+              model: RoleContent,
               duplicating: true,
               required: true,
               include: [
-                {
-                  model: Content,
-                  duplicating: true,
-                  required: true,
-                },
                 {
                   model: Resource,
                   duplicating: true,
@@ -109,9 +109,9 @@ const generateDataForMongoDb = async () => {
                       ]
                     }
                   ]
-                },
+                }
               ]
-            },
+            }
           ],
         },
       ],
