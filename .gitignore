@@ -19,3 +19,8 @@ node_modules
 lib/
 dist/
 public/
+
+auth0_data*
+auth0.config.js
+
+.DS_Store
