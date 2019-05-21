@@ -2,24 +2,24 @@ const _ = require('lodash')
 const getAuth0Data = require('../processAuthData')
 
 const createUsersRolesClients = async ({ sequelize, shouldSeed }) => {
-  const User = await sequelize.import('user', require('./models/user'))
+  const Client = await sequelize.import('client', require('./models/client'))
+  const ClientRole = await sequelize.import('clients_roles', require('./models/clients_roles'))
   const Role = await sequelize.import('role', require('./models/role'))
   const UserRole = await sequelize.import('users_roles', require('./models/users_roles'))
-  const Client = await sequelize.import('client', require('./models/client'))
+  const User = await sequelize.import('user', require('./models/user'))
 
   User.belongsToMany(Role, { through: UserRole })
   Role.belongsToMany(User, { through: UserRole })
 
-  // tried adding hooks: true but doesn't seem to work
-  // Reference: https://stackoverflow.com/questions/23128816/sequelize-js-ondelete-cascade-is-not-deleting-records-sequelize/55323664#55323664
-  Client.hasMany(Role, { onDelete: 'cascade', hooks: true })
-  Role.belongsTo(Client)
+  Client.belongsToMany(Role, { through: ClientRole })
+  Role.belongsToMany(Client, { through: ClientRole })
 
   if (shouldSeed) {
     await Client.sync({ force: true })
-    await User.sync({ force: true })
+    await ClientRole.sync({ force: true })
     await Role.sync({ force: true })
     await UserRole.sync({ force: true })
+    await User.sync({ force: true })
 
     const { users, roles, clients } = await getAuth0Data()
 
