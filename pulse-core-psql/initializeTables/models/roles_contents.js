@@ -19,25 +19,25 @@ module.exports = function (sequelize, DataTypes) {
       unique: 'compositeIndex',
       allowNull: false,
     },
-    order: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
-    aliasTitle: {
+    name: {
       type: DataTypes.STRING,
       allowNull: true,
     },
-    aliasSubtitle: {
+    subtitle: {
       type: DataTypes.STRING,
       allowNull: true,
     },
-    aliasCaption: {
+    caption: {
       type: DataTypes.STRING,
       allowNull: true,
     },
     componentPath: {
       type: DataTypes.STRING,
       allowNull: true,
+    },
+    order: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
     },
   }, {
       tableName: 'roles_contents'
