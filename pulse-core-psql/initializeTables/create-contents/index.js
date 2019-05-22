@@ -1,5 +1,6 @@
 const createDashboards = require('./create-dashboards')
 const createPages = require('./create-pages')
+const createCards = require('./create-cards')
 
 const createContents = async ({ sequelize, shouldSeed }) => {
   const Content = await sequelize.import('content', require('../models/content'))
@@ -30,8 +31,17 @@ const createContents = async ({ sequelize, shouldSeed }) => {
     await c2c.sync({ force: true })
 
     const dashboards = await createDashboards(Content)
+    // extract provider_overview dash for adding cards to it directly
+    // later (the overview dashes have no pages)
     const { provider_overview } = dashboards
+
     const pages = await createPages({ Content, dashboards })
+
+    const cards = await createCards({
+      Content,
+      pages,
+      dashboards: { provider_overview }
+    })
 
 
   }
