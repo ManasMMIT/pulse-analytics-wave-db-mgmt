@@ -20,7 +20,10 @@ const createDashboards = async Content => {
         type: 'dashboard',
       })
 
-      dashboardsMap[_.camelCase(`${tool.name} ${dashboardName}`)] = dashboard
+      const firstWordOfToolName = tool.name.split(' ')[0].toLowerCase()
+      const firstWordOfDashName = dashboardName.toLowerCase()
+      const key = `${firstWordOfToolName}_${firstWordOfDashName}`
+      dashboardsMap[key] = dashboard
 
       await tool.addChild(dashboard)
     }
