@@ -1,27 +1,32 @@
-const createDashboards = async ({ sequelize, shouldSeed }) => {
-  const Dashboard = await sequelize.import('dashboard', require('./models/dashboard'))
-  Dashboard.belongsTo(Dashboard)
-  Dashboard.hasMany(Dashboard, { onDelete: 'cascade', as: 'ChildDashboard' })
+const _ = require('lodash')
 
-  if (shouldSeed) {
-    await Dashboard.sync({ force: true })
+const createDashboards = async Content => {
+  const providerTool = await Content.create({
+    name: 'Provider Targeted Accounts',
+    type: 'tool',
+  })
 
-    await Dashboard.bulkCreate([
-      { name: 'Provider Targeted Accounts' },
-      { name: 'Payer' },
-    ])
+  const payerTool = await Content.create({
+    name: 'Payer',
+    type: 'tool',
+  })
 
-    const parentDashes = await Dashboard.findAll()
-    for (const childDash of ['Management', 'Accounts']) {
-      for (const parentDash of parentDashes) {
-        const createdChildDash = await Dashboard.create({ name: childDash })
-        debugger
-        await parentDash.addChildDashboard(createdChildDash)
-      }
+  const dashboardsMap = {}
+
+  for (const tool of [providerTool, payerTool]) {
+    for (const dashboardName of ['Overview', 'Management', 'Accounts']) {
+      const dashboard = await Content.create({
+        name: dashboardName,
+        type: 'dashboard',
+      })
+
+      dashboardsMap[_.camelCase(`${tool.name} ${dashboardName}`)] = dashboard
+
+      await tool.addChild(dashboard)
     }
   }
 
-  return Dashboard
+  return dashboardsMap
 }
 
 module.exports = createDashboards
