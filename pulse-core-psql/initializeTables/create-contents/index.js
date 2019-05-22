@@ -1,4 +1,5 @@
 const createDashboards = require('./create-dashboards')
+const createPages = require('./create-pages')
 
 const createContents = async ({ sequelize, shouldSeed }) => {
   const Content = await sequelize.import('content', require('../models/content'))
@@ -28,14 +29,11 @@ const createContents = async ({ sequelize, shouldSeed }) => {
     await Content.sync({ force: true })
     await c2c.sync({ force: true })
 
-    const {
-      providerTargetedAccountsOverview,
-      providerTargetedAccountsManagement,
-      providerTargetedAccountsAccounts,
-      payerOverview,
-      payerManagement,
-      payerAccounts,
-    } = await createDashboards(Content)
+    const dashboards = await createDashboards(Content)
+    const { provider_overview } = dashboards
+    const pages = await createPages({ Content, dashboards })
+
+
   }
 
   return Content
