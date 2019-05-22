@@ -19,12 +19,12 @@ const generateDataForMongoDb = async () => {
   const { User, Role, Client } = await createUsersRolesClients({ sequelize, shouldSeed: false })
   const Content = await createContents({ sequelize, shouldSeed: false })
 
-  // const RoleContent = await createRolesContents({
-  //   sequelize,
-  //   Role,
-  //   Content,
-  //   shouldSeed: false,
-  // })
+  const RoleContent = await createRolesContents({
+    sequelize,
+    Role,
+    Content,
+    shouldSeed: false,
+  })
 
   // // regional breakdown can only be seeded by uploading CSV
   // const RegionalBreakdown = await createRegionalTables({ sequelize })
@@ -39,27 +39,6 @@ const generateDataForMongoDb = async () => {
   //   sequelize,
   //   RoleContent,
   //   Resource,
-  //   shouldSeed: false,
-  // })
-
-  // const RoleDashboard = await createRolesDashboards({
-  //   sequelize,
-  //   Role,
-  //   Dashboard,
-  //   shouldSeed: false,
-  // })
-
-  // const RolePage = await createRolesPages({
-  //   sequelize,
-  //   Role,
-  //   Page,
-  //   shouldSeed: false,
-  // })
-
-  // const RoleCard = await createRolesCards({
-  //   sequelize,
-  //   Role,
-  //   Card,
   //   shouldSeed: false,
   // })
 
