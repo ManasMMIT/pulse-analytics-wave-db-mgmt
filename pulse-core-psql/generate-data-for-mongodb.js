@@ -3,15 +3,9 @@ const connectToPsql = require('./connect-to-psql')
 
 const {
   createUsersRolesClients,
-  createDashboards,
-  createPages,
-  createCards,
   createContents,
   createResources,
   createPermissions,
-  createRolesDashboards,
-  createRolesPages,
-  createRolesCards,
   createRolesContents,
   createRegionalTables,
 } = require('./initializeTables')
@@ -23,10 +17,7 @@ const generateDataForMongoDb = async () => {
   const sequelize = await connectToPsql()
 
   const { User, Role, Client } = await createUsersRolesClients({ sequelize, shouldSeed: false })
-  // const Dashboard = await createDashboards({ sequelize, shouldSeed: false })
-  // const Page = await createPages({ sequelize, Dashboard, shouldSeed: false })
-  // const Card = await createCards({ sequelize, Page, shouldSeed: false })
-  // const Content = await createContents({ sequelize, Card, shouldSeed: false })
+  const Content = await createContents({ sequelize, shouldSeed: false })
 
   // const RoleContent = await createRolesContents({
   //   sequelize,
