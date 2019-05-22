@@ -23,7 +23,15 @@ module.exports = function (sequelize, DataTypes) {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    alias: {
+    aliasTitle: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    aliasSubtitle: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    aliasCaption: {
       type: DataTypes.STRING,
       allowNull: true,
     },
