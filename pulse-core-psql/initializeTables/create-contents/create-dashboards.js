@@ -1,6 +1,13 @@
 const _ = require('lodash')
 
-const createDashboards = async Content => {
+const createDashboards = async ({
+  Content,
+  sitemaps: {
+    adminSitemap,
+    lillyAdminSitemap,
+    regeneronAdminSitemap,
+  },
+}) => {
   const providerTool = await Content.create({
     name: 'Provider Targeted Accounts',
     type: 'tool',
@@ -11,7 +18,11 @@ const createDashboards = async Content => {
     type: 'tool',
   })
 
-  const dashboardsMap = {}
+  await adminSitemap.addChildren([providerTool, payerTool])
+  await lillyAdminSitemap.addChild(providerTool)
+  await regeneronAdminSitemap.addChild(payerTool)
+
+  const dashboards = {}
 
   for (const tool of [providerTool, payerTool]) {
     for (const dashboardName of ['Overview', 'Management', 'Accounts']) {
@@ -23,13 +34,13 @@ const createDashboards = async Content => {
       const firstWordOfToolName = tool.name.split(' ')[0].toLowerCase()
       const firstWordOfDashName = dashboardName.toLowerCase()
       const key = `${firstWordOfToolName}_${firstWordOfDashName}`
-      dashboardsMap[key] = dashboard
+      dashboards[key] = dashboard
 
       await tool.addChild(dashboard)
     }
   }
 
-  return dashboardsMap
+  return dashboards
 }
 
 module.exports = createDashboards

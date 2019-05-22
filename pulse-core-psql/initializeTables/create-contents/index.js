@@ -1,3 +1,4 @@
+const createSitemaps = require('./create-sitemaps')
 const createDashboards = require('./create-dashboards')
 const createPages = require('./create-pages')
 const createCards = require('./create-cards')
@@ -30,7 +31,9 @@ const createContents = async ({ sequelize, shouldSeed }) => {
     await Content.sync({ force: true })
     await c2c.sync({ force: true })
 
-    const dashboards = await createDashboards(Content)
+    const sitemaps = await createSitemaps(Content)
+
+    const dashboards = await createDashboards({ Content, sitemaps })
     // extract provider_overview dash for adding cards to it directly
     // later (the overview dashes have no pages)
     const { provider_overview } = dashboards
@@ -42,8 +45,6 @@ const createContents = async ({ sequelize, shouldSeed }) => {
       pages,
       dashboards: { provider_overview }
     })
-
-
   }
 
   return Content
