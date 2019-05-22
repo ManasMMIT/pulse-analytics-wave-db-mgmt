@@ -1,11 +1,14 @@
-/* jshint indent: 2 */
+const Sequelize = require('sequelize')
+const uuid = require('uuid/v4')
 
+// roles in auth0 are id'ed by UUID, so this model comports with that
 module.exports = function(sequelize, DataTypes) {
   return sequelize.define('role', {
     id: {
-      type: DataTypes.STRING,
       allowNull: false,
       primaryKey: true,
+      type: Sequelize.UUID,
+      defaultValue: () => uuid(),
     },
     name: {
       type: DataTypes.STRING,

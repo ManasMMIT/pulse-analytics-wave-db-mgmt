@@ -1,11 +1,15 @@
-/* jshint indent: 2 */
+const Sequelize = require('sequelize')
+const uuid = require('uuid/v4')
 
+// clients in auth0 are id'ed by UUID, so this model comports with that
+// (clients are extracted from the roles layer of auth0's hierarchy)
 module.exports = function (sequelize, DataTypes) {
   return sequelize.define('client', {
     id: {
-      type: DataTypes.STRING,
       allowNull: false,
       primaryKey: true,
+      type: Sequelize.UUID,
+      defaultValue: () => uuid(),
     },
     name: {
       type: DataTypes.STRING,

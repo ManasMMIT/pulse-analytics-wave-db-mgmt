@@ -1,12 +1,13 @@
-/* jshint indent: 2 */
+const Sequelize = require('sequelize')
+const uuid = require('uuid/v4')
 
 module.exports = function (sequelize, DataTypes) {
   return sequelize.define('regional_breakdowns_us_states_regions', {
     id: {
-      type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true,
-      autoIncrement: true,
+      type: Sequelize.UUID,
+      defaultValue: () => uuid(),
     },
     regional_breakdown_id: {
       type: DataTypes.INTEGER,
