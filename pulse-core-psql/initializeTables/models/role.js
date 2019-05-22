@@ -1,4 +1,3 @@
-const Sequelize = require('sequelize')
 const uuid = require('uuid/v4')
 
 // roles in auth0 are id'ed by UUID, so this model comports with that
@@ -7,7 +6,7 @@ module.exports = function(sequelize, DataTypes) {
     id: {
       allowNull: false,
       primaryKey: true,
-      type: Sequelize.UUID,
+      type: DataTypes.UUID,
       defaultValue: () => uuid(),
     },
     name: {
