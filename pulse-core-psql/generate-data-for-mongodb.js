@@ -3,28 +3,28 @@ const connectToPsql = require('./connect-to-psql')
 
 const {
   createUsersRolesClients,
-  createContents,
-  createResources,
-  createPermissions,
-  createRolesContents,
-  createRegionalTables,
+  createNodes,
+  // createResources,
+  // createPermissions,
+  createRolesNodes,
+  // createRegionalTables,
 } = require('./initializeTables')
 
-const processRawUsersContentsResources = require('./process-users-contents-resources')
-const processRawUsersSitemaps = require('./process-users-sitemaps')
+// const processRawUsersNodesResources = require('./process-users-nodes-resources')
+// const processRawUsersSitemaps = require('./process-users-sitemaps')
 
 const generateDataForMongoDb = async () => {
   const sequelize = await connectToPsql()
 
-  const { User, Role, Client } = await createUsersRolesClients({ sequelize, shouldSeed: false })
-  const Content = await createContents({ sequelize, shouldSeed: false })
+  const { User, Role, Client } = await createUsersRolesClients({ sequelize, shouldSeed: true })
+  const Node = await createNodes({ sequelize, shouldSeed: true })
 
-  const RoleContent = await createRolesContents({
-    sequelize,
-    Role,
-    Content,
-    shouldSeed: false,
-  })
+  // const RoleNode = await createRolesNodes({
+  //   sequelize,
+  //   Role,
+  //   Node,
+  //   shouldSeed: false,
+  // })
 
   // // regional breakdown can only be seeded by uploading CSV
   // const RegionalBreakdown = await createRegionalTables({ sequelize })
@@ -37,13 +37,13 @@ const generateDataForMongoDb = async () => {
 
   // const Permission = await createPermissions({
   //   sequelize,
-  //   RoleContent,
+  //   RoleNode,
   //   Resource,
   //   shouldSeed: false,
   // })
 
-  // // get users.contents.resources
-  // const rawUsersContentsResources = await User.findAll(
+  // // get users.nodes.resources
+  // const rawUsersNodesResources = await User.findAll(
   //   {
   //     duplicating: true,
   //     required: true,
@@ -55,7 +55,7 @@ const generateDataForMongoDb = async () => {
   //         required: true,
   //         include: [
   //           {
-  //             model: RoleContent,
+  //             model: RoleNode,
   //             duplicating: true,
   //             required: true,
   //             include: [
@@ -93,8 +93,8 @@ const generateDataForMongoDb = async () => {
   // const statesByKey = _.keyBy(allStates, 'id')
   // const regionsByKey = _.keyBy(allRegions, 'id')
 
-  // const usersContentsResources = processRawUsersContentsResources({
-  //   rawUsersContentsResources,
+  // const usersNodesResources = processRawUsersNodesResources({
+  //   rawUsersNodesResources,
   //   statesByKey,
   //   regionsByKey,
   // })
@@ -102,22 +102,22 @@ const generateDataForMongoDb = async () => {
   // // get users.sitemaps
   // const roleTopDashboardWhereCond = sequelize.where(
   //   sequelize.col('roles.id'),
-  //   sequelize.col('roles->contents->card->page->dashboard->dashboard->roles_dashboards.roleId'),
+  //   sequelize.col('roles->nodes->card->page->dashboard->dashboard->roles_dashboards.roleId'),
   // )
 
   // const roleLowerDashboardWhereCond = sequelize.where(
   //   sequelize.col('roles.id'),
-  //   sequelize.col('roles->contents->card->page->dashboard->roles_dashboards.roleId'),
+  //   sequelize.col('roles->nodes->card->page->dashboard->roles_dashboards.roleId'),
   // )
 
   // const rolePageWhereCond = sequelize.where(
   //   sequelize.col('roles.id'),
-  //   sequelize.col('roles->contents->card->page->roles_pages.roleId'),
+  //   sequelize.col('roles->nodes->card->page->roles_pages.roleId'),
   // )
 
   // const roleCardWhereCond = sequelize.where(
   //   sequelize.col('roles.id'),
-  //   sequelize.col('roles->contents->card->roles_cards.roleId'),
+  //   sequelize.col('roles->nodes->card->roles_cards.roleId'),
   // )
 
   // const rawUsersSitemaps = await User.findAll(
@@ -126,23 +126,23 @@ const generateDataForMongoDb = async () => {
   //     required: true,
   //     order: [
   //       [
-  //         sequelize.col('roles->contents->card->page->dashboard->dashboard->roles_dashboards.order'),
+  //         sequelize.col('roles->nodes->card->page->dashboard->dashboard->roles_dashboards.order'),
   //         'ASC',
   //       ],
   //       [
-  //         sequelize.col('roles->contents->card->page->dashboard->roles_dashboards.order'),
+  //         sequelize.col('roles->nodes->card->page->dashboard->roles_dashboards.order'),
   //         'ASC',
   //       ],
   //       [
-  //         sequelize.col('roles->contents->card->page->roles_pages.order'),
+  //         sequelize.col('roles->nodes->card->page->roles_pages.order'),
   //         'ASC',
   //       ],
   //       [
-  //         sequelize.col('roles->contents->card->roles_cards.order'),
+  //         sequelize.col('roles->nodes->card->roles_cards.order'),
   //         'ASC',
   //       ],
   //       [
-  //         sequelize.col('roles->contents->roles_contents.order'),
+  //         sequelize.col('roles->nodes->roles_nodes.order'),
   //         'ASC',
   //       ],
   //     ],
@@ -154,7 +154,7 @@ const generateDataForMongoDb = async () => {
   //         through: { attributes: [] },
   //         include: [
   //           {
-  //             model: Content,
+  //             model: Node,
   //             duplicating: true,
   //             required: true,
   //             include: [
@@ -221,7 +221,7 @@ const generateDataForMongoDb = async () => {
   // const usersSitemaps = processRawUsersSitemaps(rawUsersSitemaps)
 
   return {
-    // usersContentsResources,
+    // usersNodesResources,
     // usersSitemaps
   }
 }
@@ -243,7 +243,7 @@ module.exports = generateDataForMongoDb
 //                 model: Card,
 //                 include: [
 //                   {
-//                     model: Content,
+//                     model: Node,
 //                   }
 //                 ]
 //               }
