@@ -1,12 +1,13 @@
-/* jshint indent: 2 */
+const Sequelize = require('sequelize')
+const uuid = require('uuid/v4')
 
 module.exports = function (sequelize, DataTypes) {
   return sequelize.define('roles_contents', {
     id: {
-      type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true,
-      autoIncrement: true,
+      type: Sequelize.UUID,
+      defaultValue: () => uuid(),
     },
     contentId: {
       type: DataTypes.INTEGER,
@@ -23,6 +24,10 @@ module.exports = function (sequelize, DataTypes) {
       allowNull: false,
     },
     alias: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    componentPath: {
       type: DataTypes.STRING,
       allowNull: true,
     },
