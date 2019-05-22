@@ -1,74 +1,76 @@
-const createPages = async ({ sequelize, Dashboard, shouldSeed }) => {
-  const Page = await sequelize.import('page', require('./models/page'))
-  Page.belongsTo(Dashboard)
-  Dashboard.hasMany(Page, { onDelete: 'cascade' })
+const _ = require('lodash')
 
-  if (shouldSeed) {
-    await Page.sync({ force: true })
+const createPages = async ({
+  Content,
+  dashboards: {
+    provider_management,
+    provider_accounts,
+    payer_management,
+    payer_accounts,
+  },
+}) => {
+  const pages = {}
 
-    const providerMgmt = await Dashboard.findByPk(3)
-    const providerAccts = await Dashboard.findByPk(5)
-    const payerMgmt = await Dashboard.findByPk(4)
-    const payerAccts = await Dashboard.findByPk(6)
+  const providerMgmtPages = [
+    'Regional Footprint',
+    'Internal Pharmacy',
+    'Pathways',
+    'Alternative Payment Models',
+  ]
 
-    const providerMgmtPages = [
-      'Regional Footprint',
-      'Internal Pharmacy',
-      'Pathways',
-      'Alternative Payment Models',
-    ]
-
-    for (const pageName of providerMgmtPages) {
-      const createdPage = await Page.create({ name: pageName })
-      await providerMgmt.addPage(createdPage)
-    }
-
-    const providerAcctsPages = [
-      'Business Model & Capabilities',
-      'Clinical Sophistication',
-      'Value Based Care',
-      'Manufacturer Engagement',
-    ]
-
-    for (const pageName of providerAcctsPages) {
-      const createdPage = await Page.create({ name: pageName })
-      await providerAccts.addPage(createdPage)
-    }
-
-    const payerMgmtPages = [
-      'Summary',
-      'Quality of Access',
-      'Dupixent Relative Access',
-      'Competitive Access',
-      'Review Timing',
-      'Treatment Centers',
-      'Regional Targeting',
-      'Regional Targeting',
-      'Value Based Models',
-      'Strategic Accounts',
-      'Reports'
-    ]
-
-    for (const pageName of payerMgmtPages) {
-      const createdPage = await Page.create({ name: pageName })
-      await payerMgmt.addPage(createdPage)
-    }
-
-    const payerAcctsPages = [
-      'Summary & Engagement',
-      'Overview',
-      'Management Capabilities',
-      'Review Process',
-      'Product Coverage',
-    ]
-
-    for (const pageName of payerAcctsPages) {
-      const createdPage = await Page.create({ name: pageName })
-      await payerAccts.addPage(createdPage)
-    }
+  for (const pageName of providerMgmtPages) {
+    const createdPage = await Content.create({ name: pageName, type: 'page' })
+    pages[`provider_management_${_.camelCase(pageName)}`] = createdPage
+    await provider_management.addChild(createdPage)
   }
 
-  return Page
+  const providerAcctsPages = [
+    'Business Model & Capabilities',
+    'Clinical Sophistication',
+    'Value Based Care',
+    'Manufacturer Engagement',
+  ]
+
+  for (const pageName of providerAcctsPages) {
+    const createdPage = await Content.create({ name: pageName, type: 'page' })
+    pages[`provider_accounts_${_.camelCase(pageName)}`] = createdPage
+    await provider_accounts.addChild(createdPage)
+  }
+
+  const payerMgmtPages = [
+    'Summary',
+    'Quality of Access',
+    'Dupixent Relative Access',
+    'Competitive Access',
+    'Review Timing',
+    'Treatment Centers',
+    'Regional Targeting',
+    'Value Based Models',
+    'Strategic Accounts',
+    'Reports'
+  ]
+
+  for (const pageName of payerMgmtPages) {
+    const createdPage = await Content.create({ name: pageName, type: 'page' })
+    pages[`payer_management_${_.camelCase(pageName)}`] = createdPage
+    await payer_management.addChild(createdPage)
+  }
+
+  const payerAcctsPages = [
+    'Summary & Engagement',
+    'Overview',
+    'Management Capabilities',
+    'Review Process',
+    'Product Coverage',
+  ]
+
+  for (const pageName of payerAcctsPages) {
+    const createdPage = await Content.create({ name: pageName, type: 'page' })
+    pages[`payer_accounts_${_.camelCase(pageName)}`] = createdPage
+    await payer_accounts.addChild(createdPage)
+  }
+
+  return pages
 }
 
 module.exports = createPages
