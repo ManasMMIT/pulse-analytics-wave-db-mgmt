@@ -1,4 +1,4 @@
-const CARD_NODE_MAP = {
+const CARD_CONTENT_MAP = {
   provider_management_regionalFootprint_siteLocations: [
     {
       name: 'placeholderContent'
@@ -141,13 +141,13 @@ const CARD_NODE_MAP = {
   ],
 }
 
-const createNodes = async ({
-  Content,
+const createContents = async ({
+  Node,
   cards,
 }) => {
-  const nodes = {}
+  const contents = {}
 
-  return nodes
+  return contents
 }
 
-module.exports = createNodes
+module.exports = createContents
