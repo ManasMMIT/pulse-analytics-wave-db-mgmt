@@ -17,7 +17,7 @@ const providerOverviewCardsData = [
 ]
 
 const createCards = async ({
-  Content,
+  Node,
   pages,
   dashboards: { provider_overview },
 }) => {
@@ -33,7 +33,7 @@ const createCards = async ({
       type: 'card',
     }))
 
-    return Content.bulkCreate(cardsDataToPersist).then(createdCards => {
+    return Node.bulkCreate(cardsDataToPersist).then(createdCards => {
       createdCards.forEach(createdCard => {
         cards[`${pageKey}_${_.camelCase(createdCard.name)}`] = createdCard
       })
@@ -43,7 +43,7 @@ const createCards = async ({
   })
 
   promisesForCardsCreation.push(
-    Content.bulkCreate(providerOverviewCardsData).then(createdCards => {
+    Node.bulkCreate(providerOverviewCardsData).then(createdCards => {
       createdCards.forEach(createdCard => {
         cards[`provider_overview_${createdCard.name.toLowerCase()}Card`] = createdCard
       })

@@ -1,19 +1,19 @@
 const _ = require('lodash')
 
 const createDashboards = async ({
-  Content,
+  Node,
   sitemaps: {
     adminSitemap,
     lillyAdminSitemap,
     regeneronAdminSitemap,
   },
 }) => {
-  const providerTool = await Content.create({
+  const providerTool = await Node.create({
     name: 'Provider Targeted Accounts',
     type: 'tool',
   })
 
-  const payerTool = await Content.create({
+  const payerTool = await Node.create({
     name: 'Payer',
     type: 'tool',
   })
@@ -26,7 +26,7 @@ const createDashboards = async ({
 
   for (const tool of [providerTool, payerTool]) {
     for (const dashboardName of ['Overview', 'Management', 'Accounts']) {
-      const dashboard = await Content.create({
+      const dashboard = await Node.create({
         name: dashboardName,
         type: 'dashboard',
       })

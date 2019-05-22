@@ -1,7 +1,7 @@
 const _ = require('lodash')
 
 const createPages = async ({
-  Content,
+  Node,
   dashboards: {
     provider_management,
     provider_accounts,
@@ -19,7 +19,7 @@ const createPages = async ({
   ]
 
   for (const pageName of providerMgmtPages) {
-    const createdPage = await Content.create({ name: pageName, type: 'page' })
+    const createdPage = await Node.create({ name: pageName, type: 'page' })
     pages[`provider_management_${_.camelCase(pageName)}`] = createdPage
     await provider_management.addChild(createdPage)
   }
@@ -32,7 +32,7 @@ const createPages = async ({
   ]
 
   for (const pageName of providerAcctsPages) {
-    const createdPage = await Content.create({ name: pageName, type: 'page' })
+    const createdPage = await Node.create({ name: pageName, type: 'page' })
     pages[`provider_accounts_${_.camelCase(pageName)}`] = createdPage
     await provider_accounts.addChild(createdPage)
   }
@@ -51,7 +51,7 @@ const createPages = async ({
   ]
 
   for (const pageName of payerMgmtPages) {
-    const createdPage = await Content.create({ name: pageName, type: 'page' })
+    const createdPage = await Node.create({ name: pageName, type: 'page' })
     pages[`payer_management_${_.camelCase(pageName)}`] = createdPage
     await payer_management.addChild(createdPage)
   }
@@ -65,7 +65,7 @@ const createPages = async ({
   ]
 
   for (const pageName of payerAcctsPages) {
-    const createdPage = await Content.create({ name: pageName, type: 'page' })
+    const createdPage = await Node.create({ name: pageName, type: 'page' })
     pages[`payer_accounts_${_.camelCase(pageName)}`] = createdPage
     await payer_accounts.addChild(createdPage)
   }

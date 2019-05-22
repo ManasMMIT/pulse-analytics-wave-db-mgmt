@@ -1,15 +1,15 @@
-const createSitemaps = async Content => {
-  const adminSitemap = await Content.create({
+const createSitemaps = async Node => {
+  const adminSitemap = await Node.create({
     name: 'admin',
     type: 'sitemap',
   })
 
-  const lillyAdminSitemap = await Content.create({
+  const lillyAdminSitemap = await Node.create({
     name: 'Eli Lilly-admin',
     type: 'sitemap',
   })
 
-  const regeneronAdminSitemap = await Content.create({
+  const regeneronAdminSitemap = await Node.create({
     name: 'Regeneron/Sanofi-admin',
     type: 'sitemap',
   })
