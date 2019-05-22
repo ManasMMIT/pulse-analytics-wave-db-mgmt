@@ -1,7 +1,7 @@
 const uuid = require('uuid/v4')
 
 module.exports = function (sequelize, DataTypes) {
-  return sequelize.define('c2c', {
+  return sequelize.define('n2n', {
     id: {
       allowNull: false,
       primaryKey: true,
@@ -9,6 +9,6 @@ module.exports = function (sequelize, DataTypes) {
       defaultValue: () => uuid(),
     },
   }, {
-      tableName: 'c2c'
+      tableName: 'n2n'
     });
 };

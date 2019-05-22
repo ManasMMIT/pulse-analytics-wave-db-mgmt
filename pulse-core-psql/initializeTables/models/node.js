@@ -1,22 +1,16 @@
 const uuid = require('uuid/v4')
 
 module.exports = function (sequelize, DataTypes) {
-  return sequelize.define('roles_contents', {
+  return sequelize.define('node', {
     id: {
       allowNull: false,
       primaryKey: true,
       type: DataTypes.UUID,
       defaultValue: () => uuid(),
     },
-    contentId: {
-      type: DataTypes.INTEGER,
-      unique: 'compositeIndex',
-      allowNull: false,
-    },
-    roleId: {
+    type: {
       type: DataTypes.STRING,
-      unique: 'compositeIndex',
-      allowNull: false,
+      allowNull: true,
     },
     name: {
       type: DataTypes.STRING,
@@ -38,7 +32,5 @@ module.exports = function (sequelize, DataTypes) {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-  }, {
-      tableName: 'roles_contents'
-    });
+  });
 };

@@ -9,12 +9,12 @@ module.exports = function (sequelize, DataTypes) {
       defaultValue: () => uuid(),
     },
     resourceId: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
       unique: 'compositeIndex',
       allowNull: false,
     },
-    role_content_id: {
-      type: DataTypes.INTEGER,
+    role_node_id: {
+      type: DataTypes.UUID,
       unique: 'compositeIndex',
       allowNull: false,
     }
