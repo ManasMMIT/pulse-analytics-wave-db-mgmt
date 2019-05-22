@@ -16,10 +16,10 @@ const createUsersRolesClients = async ({ sequelize, shouldSeed }) => {
 
   if (shouldSeed) {
     await Client.sync({ force: true })
-    await ClientRole.sync({ force: true })
     await Role.sync({ force: true })
-    await UserRole.sync({ force: true })
     await User.sync({ force: true })
+    await ClientRole.sync({ force: true })
+    await UserRole.sync({ force: true })
 
     const { users, roles, clients } = await getAuth0Data()
 
