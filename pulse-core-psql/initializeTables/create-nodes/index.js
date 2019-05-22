@@ -3,24 +3,24 @@ const createDashboards = require('./create-dashboards')
 const createPages = require('./create-pages')
 const createCards = require('./create-cards')
 
-const createContents = async ({ sequelize, shouldSeed }) => {
-  const Content = await sequelize.import('content', require('../models/content'))
-  const c2c = await sequelize.import('c2c', require('../models/c2c'))
+const createNodes = async ({ sequelize, shouldSeed }) => {
+  const Node = await sequelize.import('node', require('../models/node'))
+  const n2n = await sequelize.import('n2n', require('../models/n2n'))
 
-  Content.belongsToMany(
-    Content,
+  Node.belongsToMany(
+    Node,
     {
-      through: c2c,
+      through: n2n,
       foreignKey: 'parentId',
       otherKey: 'childId',
       as: 'parents',
     }
   )
 
-  Content.belongsToMany(
-    Content,
+  Node.belongsToMany(
+    Node,
     {
-      through: c2c,
+      through: n2n,
       foreignKey: 'childId',
       otherKey: 'parentId',
       as: 'children',
@@ -28,36 +28,36 @@ const createContents = async ({ sequelize, shouldSeed }) => {
   )
 
   if (shouldSeed) {
-    await Content.sync({ force: true })
-    await c2c.sync({ force: true })
+    await Node.sync({ force: true })
+    await n2n.sync({ force: true })
 
-    const sitemaps = await createSitemaps(Content)
+    const sitemaps = await createSitemaps(Node)
 
-    const dashboards = await createDashboards({ Content, sitemaps })
+    const dashboards = await createDashboards({ Node, sitemaps })
     // extract provider_overview dash for adding cards to it directly
     // later (the overview dashes have no pages)
     const { provider_overview } = dashboards
 
-    const pages = await createPages({ Content, dashboards })
+    const pages = await createPages({ Node, dashboards })
 
     const cards = await createCards({
-      Content,
+      Node,
       pages,
       dashboards: { provider_overview }
     })
   }
 
-  return Content
+  return Node
 }
 
-module.exports = createContents
+module.exports = createNodes
 
 /*
 // test code to see if relations work as expected
 
-const middleNode = await Content.create({ name: 'middleNode', type: 'page' })
-const parentNode = await Content.create({ name: 'parentNode', type: 'dashboard' })
-const childNode = await Content.create({ name: 'childNode', type: 'card' })
+const middleNode = await Node.create({ name: 'middleNode', type: 'page' })
+const parentNode = await Node.create({ name: 'parentNode', type: 'dashboard' })
+const childNode = await Node.create({ name: 'childNode', type: 'card' })
 
 debugger
 await middleNode.addParent(parentNode)
