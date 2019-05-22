@@ -14,7 +14,7 @@ module.exports = function (sequelize, DataTypes) {
       unique: 'compositeIndex',
     },
     regionId: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
       allowNull: false,
       unique: 'compositeIndex',
     },

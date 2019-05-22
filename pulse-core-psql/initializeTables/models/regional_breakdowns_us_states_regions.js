@@ -9,12 +9,12 @@ module.exports = function (sequelize, DataTypes) {
       defaultValue: () => uuid(),
     },
     regional_breakdown_id: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
       allowNull: false,
       unique: 'compositeIndex',
     },
     us_state_region_id: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
       allowNull: false,
       unique: 'compositeIndex',
     },

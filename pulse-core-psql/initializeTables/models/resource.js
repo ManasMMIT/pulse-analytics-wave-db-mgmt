@@ -13,7 +13,7 @@ module.exports = function (sequelize, DataTypes) {
       allowNull: true
     },
     sourceId: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
       allowNull: false,
     },
   });
