@@ -1,15 +1,15 @@
 const createUsersRolesClients = require('./create-users-roles-clients')
-const createContents = require('./create-contents')
+const createNodes = require('./create-nodes')
 const createResources = require('./create-resources')
 const createPermissions = require('./create-permissions')
-const createRolesContents = require('./create-roles_contents')
+const createRolesNodes = require('./create-roles_nodes')
 const createRegionalTables = require('./create-regional-tables')
 
 module.exports = {
   createUsersRolesClients,
-  createContents,
+  createNodes,
   createResources,
   createPermissions,
-  createRolesContents,
+  createRolesNodes,
   createRegionalTables,
 }
