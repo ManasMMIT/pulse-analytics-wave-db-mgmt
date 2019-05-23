@@ -18,8 +18,13 @@ const createPages = async ({
     'Alternative Payment Models',
   ]
 
+  let i = 0
   for (const pageName of providerMgmtPages) {
-    const createdPage = await Node.create({ name: pageName, type: 'page' })
+    const createdPage = await Node.create({
+      name: pageName,
+      type: 'page',
+      order: ++i,
+    })
     pages[`provider_management_${_.camelCase(pageName)}`] = createdPage
     await provider_management.addChild(createdPage)
   }
@@ -31,8 +36,13 @@ const createPages = async ({
     'Manufacturer Engagement',
   ]
 
+  let j = 0
   for (const pageName of providerAcctsPages) {
-    const createdPage = await Node.create({ name: pageName, type: 'page' })
+    const createdPage = await Node.create({
+      name: pageName,
+      type: 'page',
+      order: ++j,
+    })
     pages[`provider_accounts_${_.camelCase(pageName)}`] = createdPage
     await provider_accounts.addChild(createdPage)
   }
@@ -50,8 +60,13 @@ const createPages = async ({
     'Reports'
   ]
 
+  let k = 0
   for (const pageName of payerMgmtPages) {
-    const createdPage = await Node.create({ name: pageName, type: 'page' })
+    const createdPage = await Node.create({
+      name: pageName,
+      type: 'page',
+      order: ++k,
+    })
     pages[`payer_management_${_.camelCase(pageName)}`] = createdPage
     await payer_management.addChild(createdPage)
   }
@@ -64,8 +79,13 @@ const createPages = async ({
     'Product Coverage',
   ]
 
+  let l = 0
   for (const pageName of payerAcctsPages) {
-    const createdPage = await Node.create({ name: pageName, type: 'page' })
+    const createdPage = await Node.create({
+      name: pageName,
+      type: 'page',
+      order: ++l,
+    })
     pages[`payer_accounts_${_.camelCase(pageName)}`] = createdPage
     await payer_accounts.addChild(createdPage)
   }

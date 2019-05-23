@@ -5,14 +5,17 @@ const providerOverviewCardsData = [
   {
     name: 'Management',
     type: 'card',
+    order: 1,
   },
   {
     name: 'Accounts',
     type: 'card',
+    order: 2,
   },
   {
     name: 'Tutorial',
     type: 'card',
+    order: 3,
   },
 ]
 
@@ -24,14 +27,9 @@ const createCards = async ({
   const cards = {}
 
   const promisesForCardsCreation = _.map(pages, (page, pageKey) => {
-    const cardEntry = PAGE_CARD_MAP[pageKey]
+    const cardsDataToPersist = PAGE_CARD_MAP[pageKey]
 
-    if (!cardEntry) return null
-
-    const cardsDataToPersist = cardEntry.map(({ name }) => ({
-      name,
-      type: 'card',
-    }))
+    if (!cardsDataToPersist) return null
 
     return Node.bulkCreate(cardsDataToPersist).then(createdCards => {
       createdCards.forEach(createdCard => {

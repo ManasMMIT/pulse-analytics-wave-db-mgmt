@@ -11,11 +11,13 @@ const createDashboards = async ({
   const providerTool = await Node.create({
     name: 'Provider Targeted Accounts',
     type: 'tool',
+    order: 3,
   })
 
   const payerTool = await Node.create({
     name: 'Payer',
     type: 'tool',
+    order: 1,
   })
 
   await adminSitemap.addChildren([providerTool, payerTool])
@@ -25,10 +27,13 @@ const createDashboards = async ({
   const dashboards = {}
 
   for (const tool of [providerTool, payerTool]) {
+    let i = 0
+
     for (const dashboardName of ['Overview', 'Management', 'Accounts']) {
       const dashboard = await Node.create({
         name: dashboardName,
         type: 'dashboard',
+        order: ++i,
       })
 
       const firstWordOfToolName = tool.name.split(' ')[0].toLowerCase()

@@ -1,4 +1,6 @@
-const PAGE_CARD_MAP = {
+const _ = require('lodash')
+
+const pagesCardsMapRaw = {
   provider_management_regionalFootprint: [
     {
       name: 'Site Locations',
@@ -136,5 +138,13 @@ const PAGE_CARD_MAP = {
 
   // ],
 }
+
+const PAGE_CARD_MAP = _.reduce(pagesCardsMapRaw, (acc, arrOfCardsData, key) => {
+  acc[key] = arrOfCardsData.map((obj, i) => {
+    return { type: 'card', order: i + 1, ...obj }
+  })
+
+  return acc
+}, {})
 
 module.exports = PAGE_CARD_MAP
