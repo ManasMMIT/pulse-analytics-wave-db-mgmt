@@ -95,7 +95,7 @@ PART_recursionQueryTopDown = `
   WITH RECURSIVE nodes_from_parents AS (
     SELECT id, name, '{}'::uuid[] as parents, 0 as level
     FROM (${queryToGetAllAccessibleNodes}) AS c
-    WHERE c.id NOT IN (SELECT "childId" from n2n)
+    WHERE c.id NOT IN (SELECT "childId" FROM n2n)
 
     UNION ALL
 
