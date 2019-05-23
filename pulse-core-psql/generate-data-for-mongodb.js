@@ -79,6 +79,76 @@ const generateDataForMongoDb = async () => {
   }
 }
 
+recursionQueryTopDown = `
+  WITH RECURSIVE nodes_from_parents AS (
+    SELECT id, name, '{}'::uuid[] as parents, 0 as level
+    FROM (${queryToGetAllAccessibleNodes}) AS nodes
+    WHERE nodes.id NOT IN (SELECT "childId" from n2n)
+
+    UNION ALL
+
+    SELECT c.id, c.name, parents || n2n."parentId", level+1
+    FROM nodes_from_parents AS p
+    JOIN n2n
+    ON n2n."parentId" = p.id
+    JOIN nodes AS c
+    ON n2n."childId" = c.id
+    WHERE NOT c.id = any(parents)
+  )
+  SELECT id, name, parents, level
+  FROM nodes_from_parents
+`
+await sequelize.query(recursionQueryTopDown)
+
+recursionQueryBottomUp = `
+  WITH RECURSIVE nodes_from_parents AS (${recursionQueryTopDown}),
+  nodes_from_children AS (
+    SELECT n2n."parentId", json_agg(jsonb_build_object('name', c.name))::jsonb as js
+    FROM nodes_from_parents AS tree
+    JOIN (SELECT "parentId", "childId" from n2n) as n2n
+    ON n2n."childId" = tree.id
+    JOIN nodes AS c
+    USING(id)
+    WHERE level > 0 AND NOT id = any(parents)
+    GROUP BY n2n."parentId"
+
+    UNION ALL
+
+    SELECT
+      n2n."parentId",
+      jsonb_build_object('name', c.name) || jsonb_build_object('kids', js) as js
+    FROM nodes_from_children AS tree
+    JOIN (SELECT "parentId", "childId" from n2n) as n2n
+    ON n2n."childId" = tree.id
+    JOIN nodes AS c
+    ON c.id = n2n."parentId"
+  )
+  SELECT jsonb_agg(js)
+  FROM nodes_from_children
+`
+
+await sequelize.query(recursionQueryBottomUp)
+
+`
+  SELECT n2n."parentId", json_agg(jsonb_build_object('name', n2n.name))::jsonb as js
+  FROM nodes_from_parents AS tree
+  JOIN n2n
+  ON n2n."childId" = tree.id
+  JOIN nodes as c
+  ON n2n."parentId" = c.id using(id)
+  WHERE level > 0 AND NOT id = any(parents)
+  GROUP BY n2n."parentId"
+
+  UNION ALL
+
+  SELECT
+  n2n."parentId",
+    jsonb_build_object('name', n2n.name) || jsonb_build_object('Sub Classes', js) as js
+  FROM nodes_from_children AS tree
+  JOIN
+`
+
+
 module.exports = generateDataForMongoDb
 
   // // get all the users who have sitemaps
