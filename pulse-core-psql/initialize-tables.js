@@ -39,6 +39,7 @@ const initializeTables = async () => {
   // })
 
   return {
+    sequelize,
     User,
     Role,
     Client,
