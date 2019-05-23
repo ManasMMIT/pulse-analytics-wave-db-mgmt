@@ -79,7 +79,19 @@ const generateDataForMongoDb = async () => {
   }
 }
 
-recursionQueryTopDown = `
+queryToGetAllAccessibleNodes = `
+  SELECT nodes.id, nodes.name, nodes.type, roles_nodes.order
+  FROM nodes
+  JOIN roles_nodes
+  ON nodes.id = roles_nodes."nodeId"
+  JOIN roles
+  ON roles.id = roles_nodes."roleId"
+  WHERE roles.id = 'c04bfb71-9314-4a51-be72-480c3d7c82cf'
+`
+
+await sequelize.query(queryToGetAllAccessibleNodes)
+
+PART_recursionQueryTopDown = `
   WITH RECURSIVE nodes_from_parents AS (
     SELECT id, name, '{}'::uuid[] as parents, 0 as level
     FROM (${queryToGetAllAccessibleNodes}) AS c
@@ -95,14 +107,17 @@ recursionQueryTopDown = `
     ON n2n."childId" = c.id
     WHERE NOT c.id = any(parents)
   )
-  SELECT id, name, parents, level
+`
+STANDALONE_recursionQueryTopDown = `
+  ${PART_recursionQueryTopDown}
+  SELECT *
   FROM nodes_from_parents
 `
-await sequelize.query(recursionQueryTopDown)
+await sequelize.query(STANDALONE_recursionQueryTopDown)
 
-recursionQueryBottomUp = `
-  WITH RECURSIVE nodes_from_parents AS (${recursionQueryTopDown}),
-  nodes_from_children AS (
+FULL_recursionQuery = `
+  ${PART_recursionQueryTopDown},
+    nodes_from_children AS (
     SELECT
       pcj."parentId",
       json_agg(
@@ -113,7 +128,7 @@ recursionQueryBottomUp = `
     FROM nodes_from_parents AS tree
     JOIN (SELECT "parentId", "childId" FROM n2n) as pcj
     ON pcj."childId" = tree.id
-    JOIN nodes as c
+    JOIN (${queryToGetAllAccessibleNodes}) as c
     USING(id)
     WHERE level > 0 AND NOT id = any(parents)
     GROUP BY pcj."parentId"
@@ -121,8 +136,8 @@ recursionQueryBottomUp = `
   SELECT jsonb_agg(js)
   FROM nodes_from_children
 `
-await sequelize.query(recursionQueryBottomUp)
 
+await sequelize.query(FULL_recursionQuery)
 
 // PAUSING ON THE BELOW BECAUSE IT'S GETTING CONFUSING
 // recursionQueryBottomUp = `
