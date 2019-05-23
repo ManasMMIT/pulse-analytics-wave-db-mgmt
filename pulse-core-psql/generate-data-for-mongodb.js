@@ -8,7 +8,7 @@ const {
   // createPermissions,
   createRolesNodes,
   // createRegionalTables,
-} = require('./initializeTables')
+} = require('./create-tables-util')
 
 // const processRawUsersNodesResources = require('./process-users-nodes-resources')
 // const processRawUsersSitemaps = require('./process-users-sitemaps')
@@ -16,15 +16,17 @@ const {
 const generateDataForMongoDb = async () => {
   const sequelize = await connectToPsql()
 
-  const { User, Role, Client } = await createUsersRolesClients({ sequelize, shouldSeed: true })
-  const Node = await createNodes({ sequelize, shouldSeed: true })
+  const { User, Role, Client } = await createUsersRolesClients({ sequelize, shouldSeed: false })
+  const Node = await createNodes({ sequelize, shouldSeed: false })
 
-  // const RoleNode = await createRolesNodes({
-  //   sequelize,
-  //   Role,
-  //   Node,
-  //   shouldSeed: false,
-  // })
+  const RoleNode = await createRolesNodes({
+    sequelize,
+    Role,
+    Node,
+    shouldSeed: true,
+  })
+
+  return { User, Role, Client, Node, RoleNode }
 
   // // regional breakdown can only be seeded by uploading CSV
   // const RegionalBreakdown = await createRegionalTables({ sequelize })
