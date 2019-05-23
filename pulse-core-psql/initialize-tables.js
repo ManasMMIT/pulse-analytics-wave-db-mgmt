@@ -3,10 +3,10 @@ const connectToPsql = require('./connect-to-psql')
 const {
   createUsersRolesClients,
   createNodes,
-  // createResources,
+  createResources,
   // createPermissions,
   createRolesNodes,
-  // createRegionalTables,
+  createRegionalTables,
 } = require('./create-tables-util')
 
 const initializeTables = async () => {
@@ -19,10 +19,34 @@ const initializeTables = async () => {
     sequelize,
     Role,
     Node,
-    shouldSeed: true,
+    shouldSeed: false,
   })
 
-  return { User, Role, Client, Node, RoleNode }
+  // regional breakdown can only be seeded by uploading CSV
+  const RegionalBreakdown = await createRegionalTables({ sequelize })
+
+  const Resource = await createResources({
+    sequelize,
+    RegionalBreakdown,
+    shouldSeed: false,
+  })
+
+  // const Permission = await createPermissions({
+  //   sequelize,
+  //   RoleNode,
+  //   Resource,
+  //   shouldSeed: false,
+  // })
+
+  return {
+    User,
+    Role,
+    Client,
+    Node,
+    RoleNode,
+    RegionalBreakdown,
+    Resource,
+  }
 }
 
 module.exports = initializeTables
