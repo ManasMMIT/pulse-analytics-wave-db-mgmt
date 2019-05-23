@@ -1,32 +1,20 @@
 const _ = require('lodash')
-const connectToPsql = require('./connect-to-psql')
+const initializeTables = require('./initialize-tables')
 
-const {
-  createUsersRolesClients,
-  createNodes,
-  // createResources,
-  // createPermissions,
-  createRolesNodes,
-  // createRegionalTables,
-} = require('./create-tables-util')
-
-// const processRawUsersNodesResources = require('./process-users-nodes-resources')
-// const processRawUsersSitemaps = require('./process-users-sitemaps')
+const processRawUsersNodesResources = require('./process-users-nodes-resources')
+const processRawUsersSitemaps = require('./process-users-sitemaps')
 
 const generateDataForMongoDb = async () => {
-  const sequelize = await connectToPsql()
-
-  const { User, Role, Client } = await createUsersRolesClients({ sequelize, shouldSeed: false })
-  const Node = await createNodes({ sequelize, shouldSeed: false })
-
-  const RoleNode = await createRolesNodes({
-    sequelize,
+  const {
+    User,
     Role,
+    Client,
     Node,
-    shouldSeed: true,
-  })
-
-  return { User, Role, Client, Node, RoleNode }
+    RoleNode,
+    RegionalBreakdown,
+    Resource,
+    Permission,
+  } = await initializeTables()
 
   // // regional breakdown can only be seeded by uploading CSV
   // const RegionalBreakdown = await createRegionalTables({ sequelize })
@@ -229,30 +217,3 @@ const generateDataForMongoDb = async () => {
 }
 
 module.exports = generateDataForMongoDb
-
-// // get masterSitemap
-// let masterSitemap = await Dashboard.findAll(
-//   {
-//     include: [
-//       {
-//         model: Dashboard,
-//         as: 'ChildDashboard',
-//         include: [
-//           {
-//             model: Page,
-//             include: [
-//               {
-//                 model: Card,
-//                 include: [
-//                   {
-//                     model: Node,
-//                   }
-//                 ]
-//               }
-//             ]
-//           }
-//         ],
-//       }
-//     ]
-//   }
-// )
