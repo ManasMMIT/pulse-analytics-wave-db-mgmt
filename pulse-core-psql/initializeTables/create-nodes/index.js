@@ -13,7 +13,7 @@ const createNodes = async ({ sequelize, shouldSeed }) => {
       through: n2n,
       foreignKey: 'parentId',
       otherKey: 'childId',
-      as: 'parents',
+      as: 'children',
     }
   )
 
@@ -23,7 +23,7 @@ const createNodes = async ({ sequelize, shouldSeed }) => {
       through: n2n,
       foreignKey: 'childId',
       otherKey: 'parentId',
-      as: 'children',
+      as: 'parents',
     }
   )
 
