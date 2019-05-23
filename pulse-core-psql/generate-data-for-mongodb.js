@@ -44,7 +44,7 @@ const generateDataForMongoDb = async () => {
     JOIN targetNodes.id = n2n.childId
   `)
 
-  const queryToGetAllAccessibleNodes = `
+  queryToGetAllAccessibleNodes = `
     SELECT
       nodes.id, nodes.name, nodes.type, roles_nodes.order
     FROM
@@ -82,8 +82,8 @@ const generateDataForMongoDb = async () => {
 recursionQueryTopDown = `
   WITH RECURSIVE nodes_from_parents AS (
     SELECT id, name, '{}'::uuid[] as parents, 0 as level
-    FROM (${queryToGetAllAccessibleNodes}) AS nodes
-    WHERE nodes.id NOT IN (SELECT "childId" from n2n)
+    FROM (${queryToGetAllAccessibleNodes}) AS c
+    WHERE c.id NOT IN (SELECT "childId" from n2n)
 
     UNION ALL
 
@@ -91,7 +91,7 @@ recursionQueryTopDown = `
     FROM nodes_from_parents AS p
     JOIN n2n
     ON n2n."parentId" = p.id
-    JOIN nodes AS c
+    JOIN (${queryToGetAllAccessibleNodes}) AS c
     ON n2n."childId" = c.id
     WHERE NOT c.id = any(parents)
   )
@@ -99,6 +99,47 @@ recursionQueryTopDown = `
   FROM nodes_from_parents
 `
 await sequelize.query(recursionQueryTopDown)
+
+
+// PAUSING ON THE BELOW BECAUSE IT'S GETTING CONFUSING
+recursionQueryBottomUp = `
+  WITH RECURSIVE nodes_from_parents AS (${recursionQueryTopDown}),
+  nodes_from_children AS (
+    SELECT
+      pcj."parentId",
+      json_agg(
+        jsonb_build_object('name', c.name)
+        || jsonb_build_object('id', c.id)
+        || jsonb_build_object('parentId', pcj."parentId")
+      )::jsonb AS js
+    FROM nodes_from_parents AS tree
+    LEFT JOIN (SELECT "parentId", "childId" FROM n2n) as pcj
+    ON pcj."childId" = tree.id
+    LEFT JOIN nodes as c
+    ON c.id = pcj."parentId"
+    GROUP BY pcj."parentId"
+  )
+  SELECT jsonb_agg(js)
+  FROM nodes_from_children
+`
+await sequelize.query(recursionQueryBottomUp)
+
+`
+
+    UNION ALL
+
+    SELECT
+      pcj2."parentId",
+      jsonb_build_object('name', c2.name)
+        || jsonb_build_object('id', c2.id)
+        || jsonb_build_object('parentId', pcj2."parentId")
+        || jsonb_build_object('kids', js) AS js
+    FROM nodes_from_children AS tree2
+    JOIN n2n AS pcj2
+    ON pcj2."childId" = tree2."parentId"
+    JOIN nodes AS c2
+    ON c2.id = pcj2."childId"
+`
 
 recursionQueryBottomUp = `
   WITH RECURSIVE nodes_from_parents AS (${recursionQueryTopDown}),
@@ -115,19 +156,17 @@ recursionQueryBottomUp = `
     UNION ALL
 
     SELECT
-      n2n."parentId",
+      asdf."parentId",
       jsonb_build_object('name', c.name) || jsonb_build_object('kids', js) as js
     FROM nodes_from_children AS tree
-    JOIN (SELECT "parentId", "childId" from n2n) as n2n
-    ON n2n."childId" = tree.id
+    JOIN n2n as asdf
+    ON asdf."childId" = tree."parentId"
     JOIN nodes AS c
-    ON c.id = n2n."parentId"
+    ON c.id = asdf."parentId"
   )
   SELECT jsonb_agg(js)
   FROM nodes_from_children
 `
-
-await sequelize.query(recursionQueryBottomUp)
 
 `
   SELECT n2n."parentId", json_agg(jsonb_build_object('name', n2n.name))::jsonb as js
