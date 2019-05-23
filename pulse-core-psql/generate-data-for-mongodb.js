@@ -99,13 +99,13 @@ PART_recursionQueryTopDown = `
 
     UNION ALL
 
-    SELECT c.id, c.name, parents || n2n."parentId", level+1
+    SELECT c2.id, c2.name, parents || n2n_1."parentId", level+1
     FROM nodes_from_parents AS p
-    JOIN n2n
-    ON n2n."parentId" = p.id
-    JOIN (${queryToGetAllAccessibleNodes}) AS c
-    ON n2n."childId" = c.id
-    WHERE NOT c.id = any(parents)
+    JOIN n2n as n2n_1
+    ON n2n_1."parentId" = p.id
+    JOIN (${queryToGetAllAccessibleNodes}) AS c2
+    ON n2n_1."childId" = c2.id
+    WHERE NOT c2.id = any(parents)
   )
 `
 STANDALONE_recursionQueryTopDown = `
@@ -121,14 +121,14 @@ FULL_recursionQuery = `
     SELECT
       pcj."parentId",
       json_agg(
-        jsonb_build_object('name', c.name)
-        || jsonb_build_object('id', c.id)
+        jsonb_build_object('name', c3.name)
+        || jsonb_build_object('id', c3.id)
         || jsonb_build_object('parentId', pcj."parentId")
       )::jsonb AS js
     FROM nodes_from_parents AS tree
     JOIN (SELECT "parentId", "childId" FROM n2n) as pcj
     ON pcj."childId" = tree.id
-    JOIN (${queryToGetAllAccessibleNodes}) as c
+    JOIN (${queryToGetAllAccessibleNodes}) as c3
     USING(id)
     WHERE level > 0 AND NOT id = any(parents)
     GROUP BY pcj."parentId"
