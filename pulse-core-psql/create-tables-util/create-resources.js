@@ -30,11 +30,11 @@ const createResources = async ({
     await Resource.bulkCreate([
       {
         type: 'regionalBreakdown',
-        sourceId: 1,
+        sourceId: '4be9cef4-455d-4b41-86e5-7248a2c3d8be',
       },
       {
         type: 'regionalBreakdown',
-        sourceId: 2,
+        sourceId: '7fc26f20-4aa5-4898-a181-f927bbb27ff4',
       },
       // {
       //   type: 'treatmentPlans',
