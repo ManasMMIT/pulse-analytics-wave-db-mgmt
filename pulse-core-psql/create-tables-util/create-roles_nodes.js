@@ -1,3 +1,5 @@
+const chain = require('../query-tables-util')
+
 const createRolesNodes = async ({
   sequelize,
   Role,
@@ -32,17 +34,90 @@ const createRolesNodes = async ({
     const regeneronRole = await Role.findByPk('c04bfb71-9314-4a51-be72-480c3d7c82cf')
     const lillyAdminRole = await Role.findByPk('2a46665f-d4f7-40bf-a239-85f5b0cad344')
 
+    // give admin role access to all contents except sitemap nodes for other roles
     const nodes = await Node.findAll()
-
-    // give admin role all contents except sitemap nodes for other roles
     for (const node of nodes) {
       if (!['Eli Lilly-admin', 'Regeneron/Sanofi-admin'].includes(node.name)) {
+        // docs on adding attributes to the join table:
+        // http://docs.sequelizejs.com/manual/associations.html#belongs-to-many-associations
         await adminRole.addNode(node, { through: { order: node.order } })
       }
     }
 
+    const getStageToAssociateAllChildren = role => ({
+      f: 'getChildren',
+      cb: async children => {
+        for (const child of children) {
+          await role.addNode(child, { through: { order: child.order } })
+        }
+      }
+    })
+
+    // give lilly role access to all provider tool nodes
+    const lillyStageToAssociateAllChildren = getStageToAssociateAllChildren(lillyAdminRole)
+
+    chain(Node, [
+      {
+        f: 'findOne',
+        o: { where: { name: 'Eli Lilly-admin' } },
+        cb: sitemapNode => lillyAdminRole.addNode(sitemapNode, { through: { order: 1 } })
+      },
+      lillyStageToAssociateAllChildren, // Provider tool
+      lillyStageToAssociateAllChildren, // Overview, Mgmt, Accts dashes
+      lillyStageToAssociateAllChildren, // Overview tool cards, Mgmt and Accts pages
+      lillyStageToAssociateAllChildren, // cards for Mgmt and Accts
+    ])
 
 
+    // give regeneron role access to selective parts of payer tool
+    const regeneronStageToAssociateAllChildren = getStageToAssociateAllChildren(regeneronRole)
+
+    const regeneronForbiddenPayerPages = [
+      'Competitive Access',
+      'Treatment Centers',
+      'Value Based Models'
+    ]
+
+    chain(Node, [
+      {
+        f: 'findOne',
+        o: { where: { name: 'Regeneron/Sanofi-admin' } },
+        cb: sitemapNode => regeneronRole.addNode(sitemapNode, { through: { order: 1 } })
+      },
+      regeneronStageToAssociateAllChildren, // Payer tool
+      {
+        f: 'getChildren', // Mgmt, Accts dashes but NOT the non-existent Overview dash
+        cb: async children => {
+          for (const child of children) {
+            if (['Management', 'Accounts'].includes(child.name)) {
+              await regeneronRole.addNode(child, { through: { order: child.order } })
+            }
+          }
+        }
+      },
+      {
+        // Mgmt pages EXCEPT: Competitive Access, Treatment Centers, Value Based Models;
+        // Access to all accts pages
+        f: 'getChildren',
+        cb: async children => {
+          children.sort((a, b) => a.order - b.order)
+
+          let i = 0
+          let j = 0
+          for (const child of children) {
+            if (!regeneronForbiddenPayerPages.includes(child.name)) {
+              const [parent] = await child.getParents()
+
+              if (parent.name === 'Management') {
+                await regeneronRole.addNode(child, { through: { order: ++i } })
+              } else {
+                await regeneronRole.addNode(child, { through: { order: ++j } })
+              }
+            }
+          }
+        }
+      },
+    ])
   }
 
   return RoleNode
