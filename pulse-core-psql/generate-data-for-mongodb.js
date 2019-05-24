@@ -132,6 +132,20 @@ FULL_recursionQuery = `
     USING(id)
     WHERE level > 0 AND NOT id = any(parents) AND pcj."parentId" IN (SELECT "id" FROM nodes_from_parents)
     GROUP BY pcj."parentId"
+
+    UNION ALL
+
+    SELECT
+      pcj2."parentId",
+      jsonb_build_object('name', c4.name)
+        || jsonb_build_object('id', c4.id)
+        || jsonb_build_object('parentId', pcj2."parentId")
+        || jsonb_build_object('kids', js) AS js
+    FROM nodes_from_children AS tree2
+    JOIN n2n AS pcj2
+    ON pcj2."childId" = tree2."parentId"
+    JOIN (${queryToGetAllAccessibleNodes}) AS c4
+    ON c4.id = pcj2."childId"
   )
   SELECT jsonb_agg(js)
   FROM nodes_from_children
@@ -165,19 +179,19 @@ await sequelize.query(FULL_recursionQuery)
 
 // `
 
-//     UNION ALL
+    // UNION ALL
 
-//     SELECT
-//       pcj2."parentId",
-//       jsonb_build_object('name', c2.name)
-//         || jsonb_build_object('id', c2.id)
-//         || jsonb_build_object('parentId', pcj2."parentId")
-//         || jsonb_build_object('kids', js) AS js
-//     FROM nodes_from_children AS tree2
-//     JOIN n2n AS pcj2
-//     ON pcj2."childId" = tree2."parentId"
-//     JOIN nodes AS c2
-//     ON c2.id = pcj2."childId"
+    // SELECT
+    //   pcj2."parentId",
+    //   jsonb_build_object('name', c2.name)
+    //     || jsonb_build_object('id', c2.id)
+    //     || jsonb_build_object('parentId', pcj2."parentId")
+    //     || jsonb_build_object('kids', js) AS js
+    // FROM nodes_from_children AS tree2
+    // JOIN n2n AS pcj2
+    // ON pcj2."childId" = tree2."parentId"
+    // JOIN nodes AS c2
+    // ON c2.id = pcj2."childId"
 // `
 
 // recursionQueryBottomUp = `
