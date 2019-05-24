@@ -147,7 +147,7 @@ FULL_recursionQuery = `
     JOIN n2n AS pcj2
     ON pcj2."childId" = tree2."parentId"
     JOIN (${queryToGetAllAccessibleNodes}) AS c4
-    ON c4.id = pcj2."childId"
+    ON c4.id = pcj2."parentId"
     WHERE pcj2."parentId" IN (SELECT "id" FROM nodes_from_parents)
   )
   SELECT jsonb_agg(js)
