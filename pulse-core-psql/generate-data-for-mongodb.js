@@ -130,7 +130,9 @@ FULL_recursionQuery = `
     ON pcj."childId" = tree.id
     JOIN (${queryToGetAllAccessibleNodes}) as c3
     USING(id)
-    WHERE level = 3 AND pcj."parentId" IN (SELECT "id" FROM nodes_from_parents)
+    WHERE
+      level = (SELECT MAX(level) FROM nodes_from_parents GROUP BY id LIMIT 1)
+      AND pcj."parentId" IN (SELECT "id" FROM nodes_from_parents)
     GROUP BY pcj."parentId"
 
     UNION ALL
