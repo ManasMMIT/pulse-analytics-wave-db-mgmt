@@ -115,36 +115,42 @@ STANDALONE_recursionQueryTopDown = `
 `
 await sequelize.query(STANDALONE_recursionQueryTopDown)
 
+BOTTOM_UP_PART_1_recursionQuery = `
+  SELECT
+    pcj."parentId",
+    json_agg(
+      jsonb_build_object('name', tree.name)
+      || jsonb_build_object('id', tree.id)
+      || jsonb_build_object('parentId', pcj."parentId")
+    )::jsonb AS js
+  FROM nodes_from_parents AS tree
+  JOIN (SELECT "parentId", "childId" FROM n2n) as pcj
+  ON pcj."childId" = tree.id
+  WHERE pcj."parentId" IN (SELECT "id" FROM nodes_from_parents)
+  GROUP BY pcj."parentId"
+`
+BOTTOM_UP_PART_2_recursionQuery = `
+  SELECT
+    pcj2."parentId",
+    jsonb_build_object('name', c4.name)
+      || jsonb_build_object('id', c4.id)
+      || jsonb_build_object('parentId', pcj2."parentId")
+      || jsonb_build_object('kids', js)
+    AS js
+  FROM nodes_from_children AS tree2
+  JOIN n2n AS pcj2
+  ON pcj2."childId" = tree2."parentId"
+  JOIN nodes AS c4
+  ON c4.id = pcj2."childId"
+  WHERE pcj2."parentId" IN (SELECT "id" FROM nodes_from_parents)
+`
+
 FULL_recursionQuery = `
   ${PART_recursionQueryTopDown},
     nodes_from_children AS (
-    SELECT
-      pcj."parentId",
-      json_agg(
-        jsonb_build_object('name', tree.name)
-        || jsonb_build_object('id', tree.id)
-        || jsonb_build_object('parentId', pcj."parentId")
-      )::jsonb AS js
-    FROM nodes_from_parents AS tree
-    JOIN (SELECT "parentId", "childId" FROM n2n) as pcj
-    ON pcj."childId" = tree.id
-    WHERE pcj."parentId" IN (SELECT "id" FROM nodes_from_parents)
-    GROUP BY pcj."parentId"
-
+    ${BOTTOM_UP_PART_1_recursionQuery}
     UNION ALL
-
-    SELECT
-      pcj2."parentId",
-      jsonb_build_object('name', c4.name)
-        || jsonb_build_object('id', c4.id)
-        || jsonb_build_object('parentId', pcj2."parentId")
-        || jsonb_build_object('kids', js) AS js
-    FROM nodes_from_children AS tree2
-    JOIN n2n AS pcj2
-    ON pcj2."childId" = tree2."parentId"
-    JOIN nodes AS c4
-    ON c4.id = pcj2."childId"
-    WHERE pcj2."parentId" IN (SELECT "id" FROM nodes_from_parents)
+    ${BOTTOM_UP_PART_2_recursionQuery}
   )
   SELECT jsonb_agg(js)
   FROM nodes_from_children
