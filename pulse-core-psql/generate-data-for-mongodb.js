@@ -126,7 +126,9 @@ BOTTOM_UP_PART_1_recursionQuery = `
   FROM nodes_from_parents AS tree
   JOIN (SELECT "parentId", "childId" FROM n2n) as pcj
   ON pcj."childId" = tree.id
-  WHERE pcj."parentId" IN (SELECT "id" FROM nodes_from_parents)
+  WHERE
+    level = (SELECT MAX(level) FROM nodes_from_parents GROUP BY level LIMIT 1)
+    AND pcj."parentId" IN (SELECT "id" FROM nodes_from_parents)
   GROUP BY pcj."parentId"
 `
 BOTTOM_UP_PART_2_recursionQuery = `
