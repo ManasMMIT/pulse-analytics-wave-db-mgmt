@@ -130,7 +130,7 @@ FULL_recursionQuery = `
     ON pcj."childId" = tree.id
     JOIN (${queryToGetAllAccessibleNodes}) as c3
     USING(id)
-    WHERE level > 0 AND NOT id = any(parents)
+    WHERE level > 0 AND NOT id = any(parents) AND pcj."parentId" IN (SELECT "id" FROM nodes_from_parents)
     GROUP BY pcj."parentId"
   )
   SELECT jsonb_agg(js)
