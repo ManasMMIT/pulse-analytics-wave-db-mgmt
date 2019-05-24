@@ -121,18 +121,14 @@ FULL_recursionQuery = `
     SELECT
       pcj."parentId",
       json_agg(
-        jsonb_build_object('name', c3.name)
-        || jsonb_build_object('id', c3.id)
+        jsonb_build_object('name', tree.name)
+        || jsonb_build_object('id', tree.id)
         || jsonb_build_object('parentId', pcj."parentId")
       )::jsonb AS js
     FROM nodes_from_parents AS tree
     JOIN (SELECT "parentId", "childId" FROM n2n) as pcj
     ON pcj."childId" = tree.id
-    JOIN (${queryToGetAllAccessibleNodes}) as c3
-    USING(id)
-    WHERE
-      level = (SELECT MAX(level) FROM nodes_from_parents GROUP BY id LIMIT 1)
-      AND pcj."parentId" IN (SELECT "id" FROM nodes_from_parents)
+    WHERE pcj."parentId" IN (SELECT "id" FROM nodes_from_parents)
     GROUP BY pcj."parentId"
 
     UNION ALL
@@ -146,8 +142,8 @@ FULL_recursionQuery = `
     FROM nodes_from_children AS tree2
     JOIN n2n AS pcj2
     ON pcj2."childId" = tree2."parentId"
-    JOIN (${queryToGetAllAccessibleNodes}) AS c4
-    ON c4.id = pcj2."parentId"
+    JOIN nodes AS c4
+    ON c4.id = pcj2."childId"
     WHERE pcj2."parentId" IN (SELECT "id" FROM nodes_from_parents)
   )
   SELECT jsonb_agg(js)
