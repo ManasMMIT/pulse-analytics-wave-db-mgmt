@@ -7,14 +7,16 @@ const processUsersSitemaps = require('./process-users-sitemaps')
 const generateDataForMongoDb = async () => {
   const {
     sequelize,
-    User,
-    Role,
-    Client,
-    Node,
-    RoleNode,
-    RegionalBreakdown,
-    Resource,
-    Permission,
+    models: {
+      User,
+      Role,
+      Client,
+      Node,
+      RoleNode,
+      RegionalBreakdown,
+      Resource,
+      Permission,
+    }
   } = await initializeTables()
 
   const usersSitemaps = await processUsersSitemaps({
@@ -83,7 +85,9 @@ const generateDataForMongoDb = async () => {
   //   regionsByKey,
   // })
 
-  return {}
+  return {
+    usersSitemaps,
+  }
 }
 
 module.exports = generateDataForMongoDb
