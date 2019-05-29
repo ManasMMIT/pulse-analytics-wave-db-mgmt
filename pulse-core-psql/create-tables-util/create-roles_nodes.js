@@ -30,6 +30,7 @@ const createRolesNodes = async ({
   if (shouldSeed) {
     await RoleNode.sync({ force: true })
 
+    const demoRole = await Role.findByPk('25903626-b6c1-49fe-8155-b06787ab0dbb')
     const adminRole = await Role.findByPk('e13031e3-9e3e-4dae-a879-51795babee56')
     const regeneronRole = await Role.findByPk('c04bfb71-9314-4a51-be72-480c3d7c82cf')
     const lillyAdminRole = await Role.findByPk('2a46665f-d4f7-40bf-a239-85f5b0cad344')
@@ -37,10 +38,16 @@ const createRolesNodes = async ({
     // give admin role access to all contents except sitemap nodes for other roles
     const nodes = await Node.findAll()
     for (const node of nodes) {
-      if (!['Eli Lilly-admin', 'Regeneron/Sanofi-admin'].includes(node.name)) {
+      if (!['Eli Lilly-admin', 'Regeneron/Sanofi-admin', 'demo'].includes(node.name)) {
         // docs on adding attributes to the join table:
         // http://docs.sequelizejs.com/manual/associations.html#belongs-to-many-associations
         await adminRole.addNode(node, { through: { order: node.order } })
+      }
+
+      if (!['Eli Lilly-admin', 'Regeneron/Sanofi-admin', 'admin'].includes(node.name)) {
+        // docs on adding attributes to the join table:
+        // http://docs.sequelizejs.com/manual/associations.html#belongs-to-many-associations
+        await demoRole.addNode(node, { through: { order: node.order } })
       }
     }
 
