@@ -1,57 +1,57 @@
 const d3 = require('d3-collection')
 const _ = require('lodash')
 
-const rollupResult = (mergedRolesContentsResources, uniqueResources) => {
+const rollupResult = (mergedRolesNodesResources, uniqueResources) => {
   const result = []
 
-  _.forEach(mergedRolesContentsResources, (resourcesObj, contentId) => {
-    const resourcesForSingleContent = {}
-    resourcesForSingleContent.contentId = Number(contentId)
-    resourcesForSingleContent.resources = {}
+  _.forEach(mergedRolesNodesResources, (resourcesObj, nodeId) => {
+    const resourcesForSingleNode = {}
+    resourcesForSingleNode.nodeId = nodeId
+    resourcesForSingleNode.resources = {}
 
     _.forEach(resourcesObj, (resource, resourceId) => {
       if (resource.type !== 'regionalBreakdown') return // temporary because no other resource types rn
       const uniqueResource = uniqueResources[resourceId]
-      resourcesForSingleContent.resources[uniqueResource.type] = uniqueResource.data
+      resourcesForSingleNode.resources[uniqueResource.type] = uniqueResource.data
     })
 
-    result.push(resourcesForSingleContent)
+    result.push(resourcesForSingleNode)
   })
 
   return result
 }
 
-const getIndividualNestedPermissions = roles_contents => {
+const getIndividualNestedPermissions = roles_nodes => {
   const nestedPermissions = d3.nest()
-    .key(d => d.contentId)
+    .key(d => d.nodeId)
     .rollup(arr => {
       return d3.nest()
         .key(d => d.id)
         .rollup(singleResourceArr => singleResourceArr[0])
         .object(arr[0].resources)
     })
-    .object(roles_contents)
+    .object(roles_nodes)
 
   return nestedPermissions
 }
 
-const nestEachRoleContentsResources = ({ roles }) => (
-  roles.map(({ roles_contents }) => getIndividualNestedPermissions(roles_contents))
+const nestEachRoleNodesResources = ({ roles }) => (
+  roles.map(({ roles_nodes }) => getIndividualNestedPermissions(roles_nodes))
 )
 
-const mergeRolesContentsResources = rolesContentsResources => _.merge({}, ...rolesContentsResources)
+const mergeRolesNodesResources = rolesNodesResources => _.merge({}, ...rolesNodesResources)
 
 const getUniqueResourcesAndFormat = ({
-  rawUserContentsResources,
+  rawUserNodesResources,
   statesByKey,
   regionsByKey,
 }) => {
   const uniqueResourcesAcrossRoles = {}
 
-  rawUserContentsResources.roles.forEach(role => {
-    const { roles_contents } = role
-    roles_contents.forEach(roleContentAssociation => {
-      const { resources } = roleContentAssociation
+  rawUserNodesResources.roles.forEach(role => {
+    const { roles_nodes } = role
+    roles_nodes.forEach(roleNodeAssociation => {
+      const { resources } = roleNodeAssociation
       resources.forEach(resource => {
         if (resource.type !== 'regionalBreakdown') return // temporary because no other resource types ready rn
 
@@ -82,34 +82,33 @@ const getUniqueResourcesAndFormat = ({
 }
 
 const getMapCallback = (statesByKey, regionsByKey) => (
-  rawUserContentsResources => {
+  rawUserNodesResources => {
     const uniqueResources = getUniqueResourcesAndFormat({
-      rawUserContentsResources,
+      rawUserNodesResources,
       statesByKey,
       regionsByKey,
     })
 
-    const { dataValues: { id: userId, username } } = rawUserContentsResources
-    const rolesContentsResources = nestEachRoleContentsResources(rawUserContentsResources)
-    const mergedRolesContentsResources = mergeRolesContentsResources(rolesContentsResources)
+    const { dataValues: { id: userId, username } } = rawUserNodesResources
+    const rolesNodesResources = nestEachRoleNodesResources(rawUserNodesResources)
+    const mergedRolesNodesResources = mergeRolesNodesResources(rolesNodesResources)
 
-    const rolledUpResult = rollupResult(mergedRolesContentsResources, uniqueResources)
+    const rolledUpResult = rollupResult(mergedRolesNodesResources, uniqueResources)
     const resultWithUserId = rolledUpResult.map(obj => ({ ...obj, userId, username }))
-
     return resultWithUserId
   }
 )
 
-const processRawUsersContentsResources = ({
-  rawUsersContentsResources,
+const processUsersNodesResources = ({
+  rawUsersNodesResources,
   statesByKey,
   regionsByKey,
 }) => {
   const processSingleUser = getMapCallback(statesByKey, regionsByKey)
-  let result = rawUsersContentsResources.map(processSingleUser)
+  let result = rawUsersNodesResources.map(processSingleUser)
   result = _.flatten(result)
 
   return result
 }
 
-module.exports = processRawUsersContentsResources
+module.exports = processUsersNodesResources
