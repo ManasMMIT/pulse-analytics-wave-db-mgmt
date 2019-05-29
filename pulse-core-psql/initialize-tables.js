@@ -40,13 +40,15 @@ const initializeTables = async () => {
 
   return {
     sequelize,
-    User,
-    Role,
-    Client,
-    Node,
-    RoleNode,
-    RegionalBreakdown,
-    Resource,
+    models: {
+      User,
+      Role,
+      Client,
+      Node,
+      RoleNode,
+      RegionalBreakdown,
+      Resource,
+    }
   }
 }
 
