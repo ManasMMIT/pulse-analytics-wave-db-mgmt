@@ -2,7 +2,7 @@ const _ = require('lodash')
 const initializeTables = require('./initialize-tables')
 
 // const processRawUsersNodesResources = require('./process-users-nodes-resources')
-// const processRawUsersSitemaps = require('./process-users-sitemaps')
+const processUsersSitemaps = require('./process-users-sitemaps')
 
 const generateDataForMongoDb = async () => {
   const {
@@ -17,18 +17,14 @@ const generateDataForMongoDb = async () => {
     Permission,
   } = await initializeTables()
 
-  await Role.findOne(
-    {
-      where: { id: 'c04bfb71-9314-4a51-be72-480c3d7c82cf' },
-      include: [
-        {
-          model: Node,
-          duplicating: true,
-          required: true,
-        },
-      ],
-    }
-  )
+  const usersSitemaps = await processUsersSitemaps({
+    sequelize,
+    User,
+    Role,
+    Node,
+  })
+
+  debugger
 
   // // get users.nodes.resources
   // const rawUsersNodesResources = await User.findAll(
@@ -86,6 +82,8 @@ const generateDataForMongoDb = async () => {
   //   statesByKey,
   //   regionsByKey,
   // })
+
+  return {}
 }
 
 module.exports = generateDataForMongoDb
