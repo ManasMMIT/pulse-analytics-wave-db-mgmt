@@ -3,6 +3,7 @@ const _ = require('lodash')
 const createDashboards = async ({
   Node,
   sitemaps: {
+    demoSitemap,
     adminSitemap,
     lillyAdminSitemap,
     regeneronAdminSitemap,
@@ -20,6 +21,7 @@ const createDashboards = async ({
     order: 1,
   })
 
+  await demoSitemap.addChildren([providerTool, payerTool])
   await adminSitemap.addChildren([providerTool, payerTool])
   await lillyAdminSitemap.addChild(providerTool)
   await regeneronAdminSitemap.addChild(payerTool)
