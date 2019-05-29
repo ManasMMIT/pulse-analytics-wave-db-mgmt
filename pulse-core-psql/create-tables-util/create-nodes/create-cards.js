@@ -6,16 +6,20 @@ const providerOverviewCardsData = [
     name: 'Management',
     type: 'card',
     order: 1,
+    caption: 'Discover trends across the entire account sample through aggregate views of the site of care mix, pharmacy capabilities, pathways, and alternative payment models.',
   },
   {
     name: 'Accounts',
     type: 'card',
     order: 2,
+    caption: 'In-depth account profiles detailing important operational infrastructure, clinical sophistication, cost and economic priorities, as well as key decision makers to engage.',
   },
   {
     name: 'Tutorial',
     type: 'card',
     order: 3,
+    caption: 'Walk-through of tool capabilities and functionality across the management and account dashboard views.',
+    subtitle: 'https://s3-us-west-2.amazonaws.com/tdgwebportal/Lilly+Key+Accounts/Web+Tool+Tutorial+-+Lilly+Key+Accounts+2019.pdf',
   },
 ]
 
