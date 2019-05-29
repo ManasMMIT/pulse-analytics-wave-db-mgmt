@@ -72,7 +72,7 @@ const pagesCardsMapRaw = {
       name: '3rd Party & Internal Pathways',
     },
     {
-      name: 'Internal Pathways: [Dynamic Account]',
+      name: 'Internal Pathways: $var1',
     },
     {
       name: 'Alternative Payment Model / Quality Program',
