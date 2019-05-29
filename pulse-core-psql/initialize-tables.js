@@ -4,7 +4,7 @@ const {
   createUsersRolesClients,
   createNodes,
   createResources,
-  // createPermissions,
+  createPermissions,
   createRolesNodes,
   createRegionalTables,
 } = require('./create-tables-util')
@@ -31,12 +31,12 @@ const initializeTables = async () => {
     shouldSeed: false,
   })
 
-  // const Permission = await createPermissions({
-  //   sequelize,
-  //   RoleNode,
-  //   Resource,
-  //   shouldSeed: false,
-  // })
+  const Permission = await createPermissions({
+    sequelize,
+    RoleNode,
+    Resource,
+    shouldSeed: false,
+  })
 
   return {
     sequelize,
