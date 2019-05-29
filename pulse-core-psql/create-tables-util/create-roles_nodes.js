@@ -25,6 +25,7 @@ const createRolesNodes = async ({
 
     Tested this on 5/10/19 and seemed to work without adding { onDelete: 'cascade }
   */
+
   Role.hasMany(RoleNode)
 
   if (shouldSeed) {
@@ -35,9 +36,17 @@ const createRolesNodes = async ({
     const regeneronRole = await Role.findByPk('c04bfb71-9314-4a51-be72-480c3d7c82cf')
     const lillyAdminRole = await Role.findByPk('2a46665f-d4f7-40bf-a239-85f5b0cad344')
 
-    // give admin role access to all contents except sitemap nodes for other roles
+    // give admin and demo access to all contents except sitemap nodes for other roles
     const nodes = await Node.findAll()
+
+    let i = 0
     for (const node of nodes) {
+      // associate only the first Regional Targeting page
+      if (node.name === 'Regional Targeting') {
+        if (i > 0) continue
+        i++
+      }
+
       if (!['Eli Lilly-admin', 'Regeneron/Sanofi-admin', 'demo'].includes(node.name)) {
         // docs on adding attributes to the join table:
         // http://docs.sequelizejs.com/manual/associations.html#belongs-to-many-associations
@@ -85,6 +94,7 @@ const createRolesNodes = async ({
       'Value Based Models'
     ]
 
+    let k = 0
     chain(Node, [
       {
         f: 'findOne',
@@ -103,7 +113,7 @@ const createRolesNodes = async ({
         }
       },
       {
-        // Mgmt pages EXCEPT: Competitive Access, Treatment Centers, Value Based Models;
+        // Mgmt pages EXCEPT: the second Regional Targeting page, Competitive Access, Treatment Centers, Value Based Models;
         // Access to all accts pages
         f: 'getChildren',
         cb: async children => {
@@ -116,6 +126,12 @@ const createRolesNodes = async ({
               const [parent] = await child.getParents()
 
               if (parent.name === 'Management') {
+                // associate only the first Regional Targeting page
+                if (child.name === 'Regional Targeting') {
+                  if (k > 0) continue
+                  k++
+                }
+
                 await regeneronRole.addNode(child, { through: { order: ++i } })
               } else {
                 await regeneronRole.addNode(child, { through: { order: ++j } })
