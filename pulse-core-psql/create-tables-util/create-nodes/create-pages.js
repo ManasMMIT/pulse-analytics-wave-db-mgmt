@@ -55,6 +55,7 @@ const createPages = async ({
     'Review Timing',
     'Treatment Centers',
     'Regional Targeting',
+    'Regional Targeting',
     'Value Based Models',
     'Strategic Accounts',
     'Reports'
