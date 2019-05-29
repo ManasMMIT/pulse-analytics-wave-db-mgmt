@@ -36,7 +36,7 @@ module.exports = function (sequelize, DataTypes) {
     },
     order: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,
     },
   }, {
       tableName: 'roles_nodes'
