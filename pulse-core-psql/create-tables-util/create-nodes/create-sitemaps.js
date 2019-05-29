@@ -5,6 +5,12 @@ const createSitemaps = async Node => {
     order: 1,
   })
 
+  const demoSitemap = await Node.create({
+    name: 'demo',
+    type: 'sitemap',
+    order: 1,
+  })
+
   const lillyAdminSitemap = await Node.create({
     name: 'Eli Lilly-admin',
     type: 'sitemap',
@@ -18,6 +24,7 @@ const createSitemaps = async Node => {
   })
 
   const sitemaps = {
+    demoSitemap,
     adminSitemap,
     lillyAdminSitemap,
     regeneronAdminSitemap,
