@@ -92,49 +92,49 @@ const pagesCardsMapRaw = {
       name: 'Key Decision Makers',
     },
   ],
-  // payer_management_summary: [
+  // payers_management_summary: [
 
   // ],
-  // payer_management_qualityOfAccess: [
+  // payers_management_qualityOfAccess: [
 
   // ],
-  // payer_management_dupixentRelativeAccess: [
+  // payers_management_dupixentRelativeAccess: [
 
   // ],
-  // payer_management_competitiveAccess: [
+  // payers_management_competitiveAccess: [
 
   // ],
-  // payer_management_reviewTiming: [
+  // payers_management_reviewTiming: [
 
   // ],
-  // payer_management_treatmentCenters: [
+  // payers_management_treatmentCenters: [
 
   // ],
-  // payer_management_regionalTargeting: [
+  // payers_management_regionalTargeting: [
 
   // ],
-  // payer_management_valueBasedModels: [
+  // payers_management_valueBasedModels: [
 
   // ],
-  // payer_management_strategicAccounts: [
+  // payers_management_strategicAccounts: [
 
   // ],
-  // payer_management_reports: [
+  // payers_management_reports: [
 
   // ],
-  // payer_accounts_summaryEngagement: [
+  // payers_accounts_summaryEngagement: [
 
   // ],
-  // payer_accounts_overview: [
+  // payers_accounts_overview: [
 
   // ],
-  // payer_accounts_managementCapabilities: [
+  // payers_accounts_managementCapabilities: [
 
   // ],
-  // payer_accounts_reviewProcess: [
+  // payers_accounts_reviewProcess: [
 
   // ],
-  // payer_accounts_productCoverage: [
+  // payers_accounts_productCoverage: [
 
   // ],
 }

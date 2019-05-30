@@ -5,8 +5,8 @@ const createPages = async ({
   dashboards: {
     provider_management,
     provider_accounts,
-    payer_management,
-    payer_accounts,
+    payers_management,
+    payers_accounts,
   },
 }) => {
   const pages = {}
@@ -68,8 +68,8 @@ const createPages = async ({
       type: 'page',
       order: ++k,
     })
-    pages[`payer_management_${_.camelCase(pageName)}`] = createdPage
-    await payer_management.addChild(createdPage)
+    pages[`payers_management_${_.camelCase(pageName)}`] = createdPage
+    await payers_management.addChild(createdPage)
   }
 
   const payerAcctsPages = [
@@ -87,8 +87,8 @@ const createPages = async ({
       type: 'page',
       order: ++l,
     })
-    pages[`payer_accounts_${_.camelCase(pageName)}`] = createdPage
-    await payer_accounts.addChild(createdPage)
+    pages[`payers_accounts_${_.camelCase(pageName)}`] = createdPage
+    await payers_accounts.addChild(createdPage)
   }
 
   return pages

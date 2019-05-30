@@ -16,7 +16,7 @@ const createDashboards = async ({
   })
 
   const payerTool = await Node.create({
-    name: 'Payer',
+    name: 'Payers',
     type: 'tool',
     order: 1,
   })
