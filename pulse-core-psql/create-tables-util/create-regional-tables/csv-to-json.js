@@ -11,6 +11,7 @@ const csvToJson = filepath => {
       header: true, // with header true, step func parses rows after the first row
       delimiter: ',',
       skipEmptyLines: true,
+      dynamicTyping: true,
       complete: () => {
         data = data.map(sanitizeKeysAndTrimData)
         resolve(data)
