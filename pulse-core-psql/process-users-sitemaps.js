@@ -1,95 +1,211 @@
-const d3 = require('d3-collection')
 const _ = require('lodash')
+const Op = require('sequelize').Op
 
-const getGroupByKey = obj => {
-  const tableName = obj._modelOptions.name.plural
+const formatJson = ({ kids }) => {
+  let arrayifiedObject = _.map(kids, obj => {
+    if (obj.kids) obj.kids = formatJson(obj)
+    return obj
+  })
 
-  let order
-  if (tableName === 'contents') {
-    // TODO: content table doesn't actually need order in the key string
-    // because that can be extracted from the contentObj directly
-    order = obj.roles_contents.toJSON().order
-  } else {
-    const orderAndAliasTableName = `roles_${tableName}`
-    if (obj[orderAndAliasTableName]) {
-      let [orderAndAliasTableRow] = obj[orderAndAliasTableName]
-      orderAndAliasTableRow = orderAndAliasTableRow.toJSON()
-      order = orderAndAliasTableRow.o || orderAndAliasTableRow.order
-    }
-  }
+  arrayifiedObject = _.sortBy(arrayifiedObject, 'order')
 
-  return (
-    `${obj.id}!${obj.name}!${obj._modelOptions.name.singular}!${order}`
+  return arrayifiedObject
+}
+
+const queryAllAccessibleNodes = `
+  SELECT
+    nodes.id,
+    nodes.type,
+    COALESCE(roles_nodes.name, nodes.name) as name,
+    COALESCE(roles_nodes.subtitle, nodes.subtitle) as subtitle,
+    COALESCE(roles_nodes.caption, nodes.caption) as caption,
+    COALESCE(roles_nodes.order, nodes.order) as order
+  FROM nodes
+  JOIN roles_nodes
+  ON nodes.id = roles_nodes."nodeId"
+  JOIN roles
+  ON roles.id = roles_nodes."roleId"
+  WHERE roles.id = :roleId
+`
+
+/* to try the above section on its own, run the following in console */
+
+// sequelize.query(
+//   queryAllAccessibleNodes,
+//   { type: sequelize.QueryTypes.SELECT }
+// ).then(console.log)
+
+const queryFromRootDown = `
+  nodes_from_parents AS (
+    SELECT
+      id,
+      type,
+      name,
+      subtitle,
+      caption,
+      accessible_nodes.order,
+      null::uuid as "parentId"
+    FROM accessible_nodes
+    WHERE accessible_nodes.id NOT IN (SELECT "childId" FROM n2n)
+
+    UNION ALL
+
+    SELECT
+      "childId" as id,
+      accessible_nodes.type,
+      accessible_nodes.name,
+      accessible_nodes.subtitle,
+      accessible_nodes.caption,
+      accessible_nodes.order,
+      n2n."parentId" as "parentId"
+    FROM nodes_from_parents
+    JOIN n2n
+    ON n2n."parentId" = nodes_from_parents.id
+    JOIN accessible_nodes
+    ON "childId" = accessible_nodes.id
   )
+`
+
+/*
+  The above queryFromRootDown cannot be individually executed without
+  queryAllAccessibleNodes feeding into it. Test it by running the query
+  below, which draws on queryAllAccessibleNodes.
+*/
+
+// sequelize.query(
+//   `
+//     WITH RECURSIVE accessible_nodes AS (${ queryAllAccessibleNodes}),
+//     ${ queryFromRootDown }
+//     SELECT * FROM nodes_from_parents
+//   `,
+//   { type: sequelize.QueryTypes.SELECT }
+// ).then(console.log)
+
+const initialGroupByParentQuery = `
+  SELECT
+    "parentId" as id,
+    jsonb_object_agg(
+      id,
+      jsonb_build_object('name', name)
+        || jsonb_build_object('id', id)
+        || jsonb_build_object('parentId', "parentId")
+        || jsonb_build_object('type', type)
+        || jsonb_build_object('subtitle', subtitle)
+        || jsonb_build_object('caption', caption)
+        || jsonb_build_object('order', nodes_from_parents.order)
+    ) AS kids
+  FROM nodes_from_parents
+  GROUP BY "parentId"
+`
+
+/*
+  The above query also depends on the queries that come before it.
+  Test it by running the query below, which draws on the previous queries.
+*/
+
+// await sequelize.query(
+//   `
+//     WITH RECURSIVE accessible_nodes AS (${ queryAllAccessibleNodes}),
+//     ${ queryFromRootDown},
+//     nodes_from_children AS (${initialGroupByParentQuery})
+//     SELECT *
+//     FROM nodes_from_children
+//   `,
+//   { type: sequelize.QueryTypes.SELECT }
+// ).then(console.log)
+
+const recursivelyAddNodesToTree = `
+  SELECT
+    "parentId" as id,
+    jsonb_build_object(
+      id,
+      jsonb_build_object('name', name)
+        || jsonb_build_object('id', id)
+        || jsonb_build_object('parentId', "parentId")
+        || jsonb_build_object('type', type)
+        || jsonb_build_object('subtitle', subtitle)
+        || jsonb_build_object('caption', caption)
+        || jsonb_build_object('order', nodes_from_parents.order)
+        || jsonb_build_object('kids', kids)
+    ) AS kids
+  FROM nodes_from_children
+  JOIN nodes_from_parents
+  USING(id)
+`
+
+const fullRecursiveQuery = `
+  WITH RECURSIVE accessible_nodes AS (${ queryAllAccessibleNodes }),
+  ${ queryFromRootDown},
+  nodes_from_children AS (
+    ${ initialGroupByParentQuery}
+    UNION ALL
+    ${ recursivelyAddNodesToTree}
+  )
+  SELECT *
+  FROM nodes_from_children
+  WHERE id IS NULL
+  LIMIT 200
+`
+
+const executeRecursiveQuery = async ({ sequelize, roleId }) => {
+  return sequelize.query(
+    fullRecursiveQuery,
+    {
+      replacements: { roleId },
+      type: sequelize.QueryTypes.SELECT,
+    }
+  ).then(queryResult => {
+    const mergedSitemap = _.merge({}, ...queryResult)
+    return mergedSitemap
+  })
 }
 
-const getIndividualNestedSitemap = contents => {
-  const nestedSitemap = d3.nest()
-    .key(d => getGroupByKey(d.card.page.dashboard.dashboard))
-    .key(d => getGroupByKey(d.card.page.dashboard))
-    .key(d => getGroupByKey(d.card.page))
-    .key(d => getGroupByKey(d.card))
-    .key(d => getGroupByKey(d))
-    .object(contents)
+const processUsersSitemaps = async ({
+  sequelize,
+  User,
+  Role,
+  Node,
+}) => {
+  // find all roles who have nodes
+  const roles = await Role.findAll({
+    attributes: ['id'],
+    include: [{ model: Node, required: true }]
+  })
 
-  return nestedSitemap
-}
+  const roleIds = roles.map(({ id }) => id)
 
-const nestEachRoleSitemap = ({ roles }) => (
-  roles.map(({ contents }) => getIndividualNestedSitemap(contents))
-)
-
-const mergeRolesSitemaps = rolesSitemaps => _.merge({}, ...rolesSitemaps)
-
-const formatSitemap = sitemapObj => {
-  // base case
-  const keys = Object.keys(sitemapObj)
-  const firstKey = keys[0]
-  const firstValue = sitemapObj[firstKey]
-
-  if (Array.isArray(firstValue)) {
-    const result = _.map(sitemapObj, value => {
-      const contentObj = value[0].toJSON()
-      const { name, component, id, roles_contents: { order } } = contentObj
-
-      return { name, component, id, order, type: 'content' }
-    })
-
-    return result
+  const rolesSitemapsMap = {}
+  for (const roleId of roleIds) {
+    const sitemap = await executeRecursiveQuery({ sequelize, roleId })
+    rolesSitemapsMap[roleId] = sitemap
   }
 
-  // iterative step
-  const result = _.map(sitemapObj, (value, key) => {
-    const [id, name, type, order] = key.split('!')
+  // find all users who have nodes
+  const users = await User.findAll({
+    include: [
+      {
+        model: Role,
+        where: { id: { [Op.in]: roleIds } }
+      }
+    ]
+  })
+
+  const usersSitemaps = users.map(user => {
+    const sitemapAcrossRoles = user.roles.reduce((acc, { id }) => {
+      const roleSitemap = rolesSitemapsMap[id]
+      return _.merge(acc, roleSitemap)
+    }, {})
+
+    const [formattedSitemap] = formatJson(sitemapAcrossRoles)
 
     return {
-      id: Number(id),
-      name,
-      type,
-      order: Number(order),
-      children: formatSitemap(value)
+      _id: user.id,
+      username: user.username,
+      sitemap: formattedSitemap,
     }
   })
 
-  return result
+  return usersSitemaps
 }
 
-const processSingleUserSitemaps = rawUserSitemaps => {
-  const { dataValues: { id: _id, username } } = rawUserSitemaps
-  const rolesSitemaps = nestEachRoleSitemap(rawUserSitemaps)
-  const mergedSitemap = mergeRolesSitemaps(rolesSitemaps)
-  const formattedSitemap = formatSitemap(mergedSitemap)
-
-  return {
-    _id,
-    username,
-    sitemap: formattedSitemap
-  }
-}
-
-const processRawUsersSitemaps = rawUsersSitemaps => {
-  const UsersSitemaps = rawUsersSitemaps.map(processSingleUserSitemaps)
-  return UsersSitemaps
-}
-
-module.exports = processRawUsersSitemaps
+module.exports = processUsersSitemaps

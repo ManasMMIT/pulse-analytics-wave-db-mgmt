@@ -10,7 +10,7 @@ const pushPsqlDataToMongoDb = async () => {
 
   try {
     const {
-      usersContentsResources,
+      usersNodesResources,
       usersSitemaps,
     } = await generateDataForMongoDb()
 
@@ -18,15 +18,15 @@ const pushPsqlDataToMongoDb = async () => {
     await pulseDevDb.collection('users.sitemaps')
       .deleteMany()
 
-    await pulseDevDb.collection('users.contents.resources')
+    await pulseDevDb.collection('users.nodes.resources')
       .deleteMany()
 
     // insert new data
     await pulseDevDb.collection('users.sitemaps')
       .insertMany(usersSitemaps)
 
-    await pulseDevDb.collection('users.contents.resources')
-      .insertMany(usersContentsResources)
+    await pulseDevDb.collection('users.nodes.resources')
+      .insertMany(usersNodesResources)
 
     console.log('All psql data successfully inserted into MongoDB.')
   } catch (e) {

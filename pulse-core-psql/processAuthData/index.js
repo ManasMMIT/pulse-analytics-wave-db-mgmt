@@ -1,11 +1,13 @@
+require('dotenv').load()
 const _ = require('lodash')
 const AuthorizationExtensionClient = require('./AuthorizationExtensionClient')
+
 const {
   auth0_auth_api_clientid,
   auth0_auth_api_secret,
   auth0_auth_api_url,
   auth0_auth_api_issuer,
-} = require('./auth0.config.js')
+} = process.env
 
 const clientId = auth0_auth_api_clientid
 const clientSecret = auth0_auth_api_secret
