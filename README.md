@@ -42,6 +42,7 @@ Replace the filepath with the filepath to the appropriate CSV file on your own c
 ```
 node ./importHistoricalData --filepath "/Users/jonlin/Desktop/Egnyte/Shared/Pulse Analytics/Data/Payer/Payer Historical Data/Project-Based/MerckAntiemetics/6-2018/MerckAntiemetics-QualityAccess-6-2018.csv"
 ```
+### Importing Payer Lives Data
 
 If you're importing data such as `payerHistoricalMmitStateLives`, `payerHistoricalDrgNationalLives`, or other historical data that isn't
 project-based, then run the same command but include the `--ignoreProjects` flag:
