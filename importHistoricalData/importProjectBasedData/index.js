@@ -1,6 +1,6 @@
 const _ = require('lodash')
 const connectToMongoDb = require('../../connect-to-mongodb')
-const parseCsvFileAndWriteToDb = require('../parse-csv-file-and-write-to-db')
+const parseCsvFile = require('../parse-csv-file')
 const pushToDev = require('./pushToDev')
 const {
   getScriptTerminator,
@@ -30,6 +30,29 @@ const importProjectBasedData = async filepath => {
 
   await verifyCollectionExists(collectionName, pulseCoreDb, mongoConnection)
 
+  const formattedData = await parseCsvFile({
+    filepath,
+    projectName,
+    fileMonth,
+    fileYear,
+  }).catch(terminateScript)
+
+  if (collectionName === 'payerHistoricalQualityAccess') {
+    const qualityAccessScores = await pulseCoreDb.collection('qualityAccessScores').find().toArray()
+    const validAccesses = _.keyBy(qualityAccessScores, 'access')
+
+    const invalidAccesses = formattedData.filter(({ access }) => !validAccesses[access])
+
+    const numInvalidAccesses = invalidAccesses.length
+
+    if (numInvalidAccesses > 0) {
+      console.error(`Incoming data has ${numInvalidAccesses} invalid access entries.`)
+      const uniqueInvalidAccesses = _.uniqBy(invalidAccesses, 'access').map(({ access }) => access)
+      console.error(`Unique invalid accesses are: ${uniqueInvalidAccesses.join(', ')}`)
+      await terminateScript()
+    }
+  }
+
   // Remove rows before appending
   await pulseCoreDb.collection(collectionName)
     .deleteMany({
@@ -37,21 +60,14 @@ const importProjectBasedData = async filepath => {
       year: fileYear,
       project: projectName
     })
-    .catch(async err => await terminateScript(err))
-
+    .catch(terminateScript)
 
   const monthYearProject = `Month: ${fileMonth} Year: ${fileYear} Project: ${projectName}`
 
   console.log(`Deleted Rows for ${monthYearProject} from pulse-core`)
 
-  await parseCsvFileAndWriteToDb({
-    db: pulseCoreDb,
-    filepath,
-    projectName,
-    collectionName,
-    fileMonth,
-    fileYear,
-  }).catch(async err => await terminateScript(err))
+  await pulseCoreDb.collection(collectionName).insertMany(formattedData)
+    .catch(terminateScript)
 
   console.log(`New data for ${monthYearProject} inserted into pulse-core`)
 
