@@ -41,14 +41,21 @@ const importProjectBasedData = async filepath => {
     const qualityAccessScores = await pulseCoreDb.collection('qualityAccessScores').find().toArray()
     const validAccesses = _.keyBy(qualityAccessScores, 'access')
 
-    const invalidAccesses = formattedData.filter(({ access }) => !validAccesses[access])
+    const problemRows = []
+    const invalidAccesses = formattedData.filter(({ access }, i) => {
+      const isAccessInvalid = !validAccesses[access]
+      if (isAccessInvalid) problemRows.push(i + 4) // add 1 for zero indexing, add 3 for rows skipped
+      return isAccessInvalid
+    })
 
     const numInvalidAccesses = invalidAccesses.length
 
     if (numInvalidAccesses > 0) {
+      console.error('Access validation failed!')
       console.error(`Incoming data has ${numInvalidAccesses} invalid access entries.`)
+      console.error(`Problem rows in CSV are: ${problemRows.join(', ')}`)
       const uniqueInvalidAccesses = _.uniqBy(invalidAccesses, 'access').map(({ access }) => access)
-      console.error(`Unique invalid accesses are: ${uniqueInvalidAccesses.join(', ')}`)
+      console.error(`Unique invalid accesses are:\n - ${uniqueInvalidAccesses.join('\n - ')}`)
       await terminateScript()
     }
   }
