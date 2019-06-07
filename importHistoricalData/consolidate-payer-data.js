@@ -1,8 +1,11 @@
 const _ = require('lodash')
 const d3 = require('d3-collection')
 const connectToMongoDb = require('../connect-to-mongodb')
-const getLatestMonthYearProjectPipeline = require('./importProjectBasedData/latest-month-year-project')
-const { getScriptTerminator } = require('../utils')
+// const getLatestMonthYearProjectPipeline = require('./importProjectBasedData/latest-month-year-project')
+const {
+  getScriptTerminator,
+  // latestMonthYearPipeline,
+} = require('../utils')
 
 const getLivesKey = (book, coverage) => {
   if (book.includes('Medicare')) {
@@ -12,7 +15,7 @@ const getLivesKey = (book, coverage) => {
 }
 
 const getTreatmentPlanKey = d => (
-  `${d.indication}|${d.population}|${d.line}}|${d.regimen}|${getLivesKey(d.book, d.coverage)}`
+  `${d.indication}|${d.population}|${d.line}|${d.regimen}|${getLivesKey(d.book, d.coverage)}`
 )
 
 const consolidatePayerData = async (...args) => {
@@ -32,11 +35,12 @@ const consolidatePayerData = async (...args) => {
   try {
     // Entry point for joining data is latest month/year/project qoa data
     let combinedPayerData = await pulseDevDb.collection('payerHistoricalQualityAccess')
-      .aggregate(getLatestMonthYearProjectPipeline(1), { allowDiskUse: true })
-      .toArray()
+      .find().toArray()
 
     // Join access objects from master access list in pulse-core
-    let qualityAccessScores = await pulseCoreDb.collection('qualityAccessScores').find().toArray()
+    let qualityAccessScores = await pulseCoreDb.collection('qualityAccessScores')
+      .find().toArray()
+
     qualityAccessScores = _.keyBy(qualityAccessScores, 'access')
 
     // warning: order of destructuring matters here! otherwise obj's _id is overwritten, resulting in dup keys
@@ -44,8 +48,7 @@ const consolidatePayerData = async (...args) => {
 
     // Join latest month/year/project historical policy links
     const payerHistoricalPolicyLinks = await pulseDevDb.collection('payerHistoricalPolicyLinks')
-      .aggregate(getLatestMonthYearProjectPipeline(1), { allowDiskUse: true })
-      .toArray()
+      .find().toArray()
 
     const policyLinksHash = _.keyBy(
       payerHistoricalPolicyLinks,
@@ -62,8 +65,7 @@ const consolidatePayerData = async (...args) => {
 
     // Join latest month/year/project historical additional criteria
     const payerHistoricalAdditionalCriteria = await pulseDevDb.collection('payerHistoricalAdditionalCriteria')
-      .aggregate(getLatestMonthYearProjectPipeline(1), { allowDiskUse: true })
-      .toArray()
+      .find().toArray()
 
     const addlCriteriaHash = _.groupBy(
       payerHistoricalAdditionalCriteria,
@@ -87,10 +89,70 @@ const consolidatePayerData = async (...args) => {
       }
     })
 
-    // just to make it easier to see the collection output; not yet used directly by APP or API
-    await pulseCoreDb.collection('payerHistoricalCombinedData').deleteMany()
-    await pulseCoreDb.collection('payerHistoricalCombinedData').insertMany(combinedPayerData)
-    console.log(`pulse-core collection 'payerHistoricalCombinedData' updated`)
+    // // just to make it easier to see the collection output; not yet used directly by APP or API
+    // await pulseCoreDb.collection('payerHistoricalCombinedData').deleteMany()
+    // await pulseCoreDb.collection('payerHistoricalCombinedData').insertMany(combinedPayerData)
+    // console.log(`pulse-core collection 'payerHistoricalCombinedData' updated`)
+
+    // a 'treatmentPlan' refers to the combo of indication, regimen, population, etc.
+    const payerDataGroupedByTreatmentPlan = d3.nest()
+      .key(getTreatmentPlanKey)
+      .rollup(arr => _.keyBy(arr, 'slug'))
+      .object(combinedPayerData)
+
+    // get latest month/year data for DRG and MMIT state lives
+    const payerHistoricalDrgStateLives = await pulseDevDb.collection('payerHistoricalDrgStateLives')
+      .find().toArray()
+
+    const payerHistoricalMmitStateLives = await pulseDevDb.collection('payerHistoricalMmitStateLives')
+      .find().toArray()
+
+    const drgGroupedBySlug = d3.nest()
+      .key(d => d.state)
+      .key(d => d.slug)
+      .rollup(arr => arr[0])
+      .object(payerHistoricalDrgStateLives)
+
+    const mmitGroupedBySlug = d3.nest()
+      .key(d => d.state)
+      .key(d => d.slug)
+      .rollup(arr => arr[0])
+      .object(payerHistoricalMmitStateLives)
+
+    const bucketizeLivesData = (livesGroupedBySlug, payerAccessHash) => {
+      const result = _.map(livesGroupedBySlug, (payers, state) => {
+        _.forEach(payers, (obj, slug) => {
+          obj.access = payerAccessHash[slug] ? payerAccessHash[slug].access : 'Not Audited'
+        })
+
+        const accessBuckets = _.groupBy(payers, 'access')
+
+        return {
+          state,
+          accessBuckets,
+        }
+      })
+
+      return result
+    }
+
+    // const allPayersAcrossDrgMmit = _.merge(drgGroupedBySlug, mmitGroupedBySlug)
+
+    // For every treatmentPlan, each payer has a given access category, provided in the payerAccessHash.
+    // Add a full set of states and lives data (both MMIT and DRG) to each treatmentPlan,
+    // while bucketizing the payers associated with each state by access category.
+    const payerDataWithLives = _.map(payerDataGroupedByTreatmentPlan, (payerAccessHash, treatmentPlan) => {
+      const DRG_statesData = bucketizeLivesData(drgGroupedBySlug, payerAccessHash)
+      const MMIT_statesData = bucketizeLivesData(mmitGroupedBySlug, payerAccessHash)
+
+      return {
+        treatmentPlan,
+        DRG_statesData,
+        MMIT_statesData,
+      }
+    })
+
+    // debugger
 
   } catch (e) {
     console.error(e)
@@ -119,3 +181,4 @@ consolidatePayerData()
 //     obj.isProfiled = false
 //   }
 // })
+0
