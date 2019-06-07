@@ -121,11 +121,10 @@ const consolidatePayerData = async (...args) => {
 
     const bucketizeLivesData = (livesGroupedBySlug, payerAccessHash) => {
       const result = _.map(livesGroupedBySlug, (payers, state) => {
-        _.forEach(payers, (obj, slug) => {
-          obj.access = payerAccessHash[slug] ? payerAccessHash[slug].access : 'Not Audited'
+        const accessBuckets = _.groupBy(payers, ({ slug }) => {
+          const access = payerAccessHash[slug] ? payerAccessHash[slug].access : 'Not Audited'
+          return access
         })
-
-        const accessBuckets = _.groupBy(payers, 'access')
 
         return {
           state,
@@ -152,7 +151,7 @@ const consolidatePayerData = async (...args) => {
       }
     })
 
-    // debugger
+    debugger
 
   } catch (e) {
     console.error(e)
@@ -181,4 +180,3 @@ consolidatePayerData()
 //     obj.isProfiled = false
 //   }
 // })
-0
