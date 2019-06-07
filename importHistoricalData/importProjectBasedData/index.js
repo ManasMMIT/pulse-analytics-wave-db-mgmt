@@ -2,6 +2,7 @@ const _ = require('lodash')
 const connectToMongoDb = require('../../connect-to-mongodb')
 const parseCsvFile = require('../parse-csv-file')
 const pushToDev = require('./pushToDev')
+const stringSimilarity = require('string-similarity')
 const {
   getScriptTerminator,
   verifyCollectionExists
@@ -55,7 +56,16 @@ const importProjectBasedData = async filepath => {
       console.error(`Incoming data has ${numInvalidAccesses} invalid access entries.`)
       console.error(`Problem rows in CSV are: ${problemRows.join(', ')}`)
       const uniqueInvalidAccesses = _.uniqBy(invalidAccesses, 'access').map(({ access }) => access)
-      console.error(`Unique invalid accesses are:\n - ${uniqueInvalidAccesses.join('\n - ')}`)
+
+      const validAccessArr = Object.keys(validAccesses)
+      const suggestions = uniqueInvalidAccesses.map(invalidAccess => {
+        const { bestMatch: { target } } = stringSimilarity.findBestMatch(invalidAccess, validAccessArr)
+        return { 'Invalid Access': invalidAccess, 'Did you mean...?': target }
+      })
+
+      console.error('Your unique invalid accesses are:')
+      console.table(suggestions, ['Invalid Access', 'Did you mean...?'])
+
       await terminateScript()
     }
   }
