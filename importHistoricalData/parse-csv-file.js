@@ -1,5 +1,4 @@
 const _ = require('lodash')
-const ProgressBar = require('progress');
 const Papa = require('papaparse')
 const fs = require('fs')
 
@@ -8,20 +7,15 @@ const {
   isEmptyRow
 } = require('../utils')
 
-const parseCsvFileAndWriteToDb = ({
-  db,
+const parseCsvFile = ({
   filepath,
   projectName,
-  collectionName,
   fileMonth,
   fileYear,
 }) => new Promise((resolve, reject) => {
   const stream = fs.createReadStream(filepath)
   // used to skip the two rows after the header row
   let rowParseCount = 0
-
-  // used for insertion progress bar
-  let rowInsertionCount = 0
 
   // toggled and used if parsing is interrupted to terminate script
   let wasParserAborted = false
@@ -43,7 +37,7 @@ const parseCsvFileAndWriteToDb = ({
 
       const projectObj = projectName ? { project: projectName } : {}
 
-      data.forEach(resultData => {
+      const formattedData = data.map(resultData => {
         const newData = {
           ...resultData,
           createdOn: new Date(),
@@ -52,30 +46,10 @@ const parseCsvFileAndWriteToDb = ({
           ...projectObj
         }
 
-        if (data.length !== 0) {
-          const bar = new ProgressBar('  Uploading [:bar] :current :percent', {
-            complete: '█',
-            incomplete: '░',
-            width: 80,
-            total: data.length
-          })
-
-          // Write to MongoDB
-          db.collection(collectionName)
-            .insertOne(
-              newData,
-              err => {
-                if (err) {
-                  reject(err)
-                } else {
-                  rowInsertionCount++
-                  bar.tick(rowInsertionCount)
-                  if (rowInsertionCount === data.length) resolve(data)
-                }
-              }
-            )
-        }
+        return newData
       })
+
+      resolve(formattedData)
     },
     step: (results, parser) => {
       const rowIndex = rowParseCount++ // this returns the number PRE-incrementation
@@ -105,4 +79,4 @@ const parseCsvFileAndWriteToDb = ({
   })
 })
 
-module.exports = parseCsvFileAndWriteToDb
+module.exports = parseCsvFile
