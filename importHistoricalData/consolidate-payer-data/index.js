@@ -1,6 +1,7 @@
 const _ = require('lodash')
 const connectionWrapper = require('./connection-wrapper')
 const combineQoaScoresLinksCriteria = require('./combine-qoa-scores-links-criteria')
+const combineLives = require('./combine-lives')
 
 /*
   * * PLAN OF ATTACK * *
@@ -24,14 +25,27 @@ let consolidatePayerData = async ({
   pulseCoreDb,
   terminateScript,
 }) => {
-  // * Step 1 of Plan of Attack
-  const combinedPayerData = await combineQoaScoresLinksCriteria({
-    pulseDevDb,
-    pulseCoreDb,
-    terminateScript
-  })
+  try {
+    // * Step 1
+    const combinedPayerData = await combineQoaScoresLinksCriteria({
+      pulseDevDb,
+      pulseCoreDb,
+      terminateScript
+    })
 
-  debugger
+    // * Step 2
+    const payerDataWithLives = await combineLives({
+      pulseDevDb,
+      pulseCoreDb,
+      terminateScript,
+      payerHistoricalCombinedData: combinedPayerData,
+    })
+  } catch(e) {
+    console.error(e)
+  } finally {
+    console.log('Script terminating...')
+    await terminateScript()
+  }
 }
 
 consolidatePayerData = connectionWrapper(consolidatePayerData)
