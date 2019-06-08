@@ -19,7 +19,7 @@ const connectionWrapper = callback => async (dbsProps = {}) => {
     pulseCoreDb = await mongoConnection.db('pulse-core')
   }
 
-  callback({ pulseDevDb, pulseCoreDb, terminateScript, ...rest })
+  return callback({ pulseDevDb, pulseCoreDb, terminateScript, ...rest })
 }
 
 module.exports = connectionWrapper
