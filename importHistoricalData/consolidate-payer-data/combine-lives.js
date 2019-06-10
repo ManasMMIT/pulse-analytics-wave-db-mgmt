@@ -19,8 +19,10 @@ let combineLives = async ({
       payerMmitStateLivesTotals,
       combinedPayerData,
     ] = await Promise.all([
-      pulseDevDb.collection('payerHistoricalDrgStateLives').find().toArray(),
-      pulseDevDb.collection('payerHistoricalMmitStateLives').find().toArray(),
+      pulseDevDb.collection('payerHistoricalDrgStateLives')
+        .find({ state: { $nin: ['GU', 'PR', 'Other'] } }).toArray(),
+      pulseCoreDb.collection('payerHistoricalMmitStateLives')
+        .find({ state: { $nin: ['GU', 'PR', 'Other'] } }).toArray(),
       pulseCoreDb.collection('payerDrgStateLivesTotals').find().toArray(),
       pulseCoreDb.collection('payerMmitStateLivesTotals').find().toArray(),
       payerHistoricalCombinedData || pulseDevDb.collection('payerHistoricalCombinedData').find().toArray()
@@ -99,6 +101,9 @@ let combineLives = async ({
       livesType,
       livesTotalsByState,
     }) {
+      let totalLivesAcrossStates = 0 // the total lives across states for this treatment plan
+      let totalAuditedLivesAcrossStates = 0
+
       const result = _.map(livesData, (payers, state) => {
         /*
           Note: Some commented out code has been left in below in case
@@ -106,9 +111,12 @@ let combineLives = async ({
           a lot of them. Not sure if meaningful to user.
         */
 
-        let notAuditedPayers = []
+        // let notAuditedPayers = []
         let auditedLives = 0 // total audited lives for the current state
+
         const totalLivesForStateAndLivesType = livesTotalsByState[state][livesType]
+        totalLivesAcrossStates += totalLivesForStateAndLivesType
+
         let restrictiveLivesPercent = 0
 
         let payersWithAccessAdded = _.reduce(payers, (acc, payerObj) => {
@@ -120,7 +128,7 @@ let combineLives = async ({
           // skip payers who aren't profiled in qoa data for the given treatment plan
           const qoaDataForSlug = combinedPayerDataBySlug[slug]
           if (!qoaDataForSlug) {
-            notAuditedPayers.push(payerObj)
+            // notAuditedPayers.push(payerObj)
             return acc
           }
 
@@ -173,6 +181,8 @@ let combineLives = async ({
         accessBuckets = Object.values(accessBuckets)
         accessBuckets = _.orderBy(accessBuckets, ['score'], ['desc'])
 
+        totalAuditedLivesAcrossStates += auditedLives
+
         let auditedLivesPercent = 0
         if (totalLivesForStateAndLivesType) { // to prevent division by 0
           auditedLivesPercent = auditedLives / totalLivesForStateAndLivesType
@@ -188,10 +198,19 @@ let combineLives = async ({
         }
       })
 
-      return result
+      let totalAuditedLivesAcrossStatesPercent = 0
+      if (totalLivesAcrossStates) { // to prevent division by 0
+        totalAuditedLivesAcrossStatesPercent = totalAuditedLivesAcrossStates / totalLivesAcrossStates
+      }
+
+      return {
+        statesData: result,
+        auditedLives: totalAuditedLivesAcrossStates,
+        totalLives: totalLivesAcrossStates,
+        auditedLivesPercent: totalAuditedLivesAcrossStatesPercent,
+      }
     }
 
-    debugger
     return payerDataWithStateLives
   } catch (e) {
     console.error(e)
