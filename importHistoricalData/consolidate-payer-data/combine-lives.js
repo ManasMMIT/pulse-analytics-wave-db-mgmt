@@ -21,7 +21,7 @@ let combineLives = async ({
     ] = await Promise.all([
       pulseDevDb.collection('payerHistoricalDrgStateLives')
         .find({ state: { $nin: ['GU', 'PR', 'Other'] } }).toArray(),
-      pulseCoreDb.collection('payerHistoricalMmitStateLives')
+      pulseDevDb.collection('payerHistoricalMmitStateLives')
         .find({ state: { $nin: ['GU', 'PR', 'Other'] } }).toArray(),
       pulseCoreDb.collection('payerDrgStateLivesTotals').find().toArray(),
       pulseCoreDb.collection('payerMmitStateLivesTotals').find().toArray(),
@@ -211,6 +211,8 @@ let combineLives = async ({
       }
     }
 
+    await pulseDevDb.collection('payerCombinedDataWithStateLives').deleteMany()
+    await pulseDevDb.collection('payerCombinedDataWithStateLives').insertMany(payerDataWithStateLives)
     return payerDataWithStateLives
   } catch (e) {
     console.error(e)
@@ -220,16 +222,3 @@ let combineLives = async ({
 
 combineLives = connectionWrapper(combineLives)
 module.exports = combineLives
-combineLives()
-
-
-  // "indication": "NSCLC",
-  // "population": "No Subtype Specified",
-  // "line": "1L+",
-  // "regimen": "Keytruda",
-  // "book": "Commercial",
-  // "coverage": "Medical",
-  // "treatmentPlan": "NSCLC|No Subtype Specified|1L+|Keytruda|commercialMedical",
-  // "auditedLives": 160078898,
-  // "totalLives": 169395659,
-  // "auditedLivesPercent": 0.945,
