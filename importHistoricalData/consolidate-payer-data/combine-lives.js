@@ -34,14 +34,7 @@ let combineLives = async ({
       .object(combinedPayerData)
 
     function getTreatmentPlanKey(d) {
-      return `${d.indication}|${d.population}|${d.line}|${d.regimen}|${getLivesKey(d.book, d.coverage)}`
-    }
-
-    function getLivesKey(book, coverage) {
-      if (book.includes('Medicare')) {
-        return _.camelCase(`medicare ${coverage}`)
-      }
-      return _.camelCase(`${book} ${coverage}`)
+      return `${d.indication}|${d.population}|${d.line}|${d.regimen}|${d.book}|${d.coverage}`
     }
 
     // group the payers and their lives data by state
@@ -63,7 +56,8 @@ let combineLives = async ({
     const payerDataWithStateLives = _.map(payerDataGroupedByTreatmentPlan, generateStateLivesData)
 
     function generateStateLivesData(combinedPayerDataBySlug, treatmentPlan) {
-      const livesType = _.last(treatmentPlan.split('|'))
+      const [indication, population, line, regimen, book, coverage] = treatmentPlan.split('|')
+      const livesType = getLivesKey(book, coverage)
 
       const DRG_statesData = bucketizeLivesData({
         livesData: LIVES_DATA_drgPayersByState,
@@ -80,10 +74,23 @@ let combineLives = async ({
       })
 
       return {
+        indication,
+        population,
+        line,
+        regimen,
+        book,
+        coverage,
         treatmentPlan,
         DRG_statesData,
         MMIT_statesData,
       }
+    }
+
+    function getLivesKey(book, coverage) {
+      if (book.includes('Medicare')) {
+        return _.camelCase(`medicare ${coverage}`)
+      }
+      return _.camelCase(`${book} ${coverage}`)
     }
 
     function bucketizeLivesData({
@@ -184,6 +191,7 @@ let combineLives = async ({
       return result
     }
 
+    debugger
     return payerDataWithStateLives
   } catch (e) {
     console.error(e)
