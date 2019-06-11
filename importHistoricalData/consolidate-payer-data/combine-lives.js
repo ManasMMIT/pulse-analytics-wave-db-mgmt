@@ -216,8 +216,7 @@ let combineLives = async ({
 
     return payerDataWithStateLives
   } catch (e) {
-    console.error(e)
-    await terminateScript()
+    await terminateScript(e)
   }
 }
 

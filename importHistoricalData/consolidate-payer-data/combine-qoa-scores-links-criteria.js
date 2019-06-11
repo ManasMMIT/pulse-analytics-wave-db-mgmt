@@ -72,8 +72,7 @@ let combineQoaScoresLinksCriteria = async ({
 
     return combinedPayerData
   } catch (e) {
-    console.error(e)
-    await terminateScript()
+    await terminateScript(e)
   }
 }
 
