@@ -40,6 +40,11 @@ const importNonProjectBasedData = async filepath => {
 
   console.log(`Deleted Rows for ${monthYear} from pulse-core`)
 
+  // TODO: validate against slugless entries making it into the DB
+
+  // TODO: investigate how older data has whitespaces despite trim operation
+  // consider dynamic typing option in Papaparse
+
   const formattedData = await parseCsvFile({
     filepath,
     fileMonth,
