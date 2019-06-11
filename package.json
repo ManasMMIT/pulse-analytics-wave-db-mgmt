@@ -6,6 +6,9 @@
   "repository": "https://github.com/pulse-data/wave-db-mgmt.git",
   "author": "Jon Lin <jon.cp.lin@gmail.com>",
   "license": "MIT",
+  "scripts": {
+    "repl": "node --inspect ./pulse-core-psql/sequelizeConsole.js"
+  },
   "dependencies": {
     "d3-collection": "^1.0.7",
     "dotenv": "^6.2.0",
