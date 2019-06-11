@@ -17,7 +17,8 @@ const combineLives = require('./combine-lives')
     (`treatmentPlan` is combination of indication, population, line,
     regimen, book, coverage), work in the DRG and MMIT state lives data so
     we can get a result that's the breakdown of payers and their lives by access
-    category for every state for every `treatmentPlan`.
+    category for every state for every `treatmentPlan`. We write that result to
+    pulse-dev as well.
 */
 
 let consolidatePayerData = async ({

@@ -28,8 +28,7 @@ let combineLives = async ({
       payerHistoricalCombinedData || pulseDevDb.collection('payerHistoricalCombinedData').find().toArray()
     ])
 
-    // group the combinedPayerData by `treatmentPlan` combination,
-    // while special-casing for `Medicare` lives
+    // group the combinedPayerData by `treatmentPlan` combination
     const payerDataGroupedByTreatmentPlan = d3.nest()
       .key(getTreatmentPlanKey)
       .rollup(arr => _.keyBy(arr, 'slug'))
@@ -211,8 +210,10 @@ let combineLives = async ({
       }
     }
 
-    await pulseDevDb.collection('payerCombinedDataWithStateLives').deleteMany()
-    await pulseDevDb.collection('payerCombinedDataWithStateLives').insertMany(payerDataWithStateLives)
+    await pulseDevDb.collection('payerCombinedStateLives').deleteMany()
+    await pulseDevDb.collection('payerCombinedStateLives').insertMany(payerDataWithStateLives)
+    console.log(`Updated 'payerCombinedStateLives' collection in pulse-dev`)
+
     return payerDataWithStateLives
   } catch (e) {
     console.error(e)
