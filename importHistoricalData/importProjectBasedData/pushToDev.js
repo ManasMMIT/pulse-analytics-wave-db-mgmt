@@ -1,5 +1,5 @@
 const getLatestMonthYearProjectPipeline = require('./latest-month-year-project')
-const consolidatePayerData = require('../consolidatePayerData')
+const consolidatePayerData = require('../consolidate-payer-data')
 
 const pushToDev = async ({
   collectionName,

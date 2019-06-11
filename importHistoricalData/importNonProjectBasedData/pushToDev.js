@@ -1,6 +1,6 @@
 const { latestMonthYearPipeline } = require('../../utils')
 const { getStateLivesTotal } = require('./get-payer-lives')
-const consolidatePayerData = require('../consolidatePayerData')
+const consolidatePayerData = require('../consolidate-payer-data')
 
 const pushToDev = async ({
   collectionName,
