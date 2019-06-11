@@ -1,5 +1,5 @@
 const { latestMonthYearPipeline } = require('../../utils')
-const { getStateLivesTotal } = require('./get-payer-lives')
+const { getStateLivesTotals } = require('./get-payer-lives')
 const consolidatePayerData = require('../consolidate-payer-data')
 
 const pushToDev = async ({
@@ -22,13 +22,13 @@ const pushToDev = async ({
 
     let stateLivesTotals
     if (collectionName === 'payerHistoricalDrgStateLives') {
-      statesLivesTotals = getStateLivesTotal(latestMonthYearData)
+      statesLivesTotals = getStateLivesTotals(latestMonthYearData)
       await pulseCoreDb.collection('payerDrgStateLivesTotals').deleteMany()
       await pulseCoreDb.collection('payerDrgStateLivesTotals').insertMany(statesLivesTotals)
       console.log(`pulse-core collection 'payerDrgStateLivesTotals' updated`)
     } else if (collectionName === 'payerHistoricalMmitStateLives') {
       // TODO: if it's MMIT lives data, you also have to resync the MMIT lives with the DRG lives
-      statesLivesTotals = getStateLivesTotal(latestMonthYearData)
+      statesLivesTotals = getStateLivesTotals(latestMonthYearData)
       await pulseCoreDb.collection('payerMmitStateLivesTotals').deleteMany()
       await pulseCoreDb.collection('payerMmitStateLivesTotals').insertMany(statesLivesTotals)
       console.log(`pulse-core collection 'payerMmitStateLivesTotals' updated`)
