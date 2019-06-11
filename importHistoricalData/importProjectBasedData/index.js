@@ -41,11 +41,12 @@ const importProjectBasedData = async filepath => {
   if (collectionName === 'payerHistoricalQualityAccess') {
     const qualityAccessScores = await pulseCoreDb.collection('qualityAccessScores').find().toArray()
     const validAccesses = _.keyBy(qualityAccessScores, 'access')
-
+    
+    const ROWS_TO_SKIP = 4 // add 1 for zero indexing, add 3 for rows skipped
     const problemRows = []
     const invalidAccesses = formattedData.filter(({ access }, i) => {
       const isAccessInvalid = !validAccesses[access]
-      if (isAccessInvalid) problemRows.push(i + 4) // add 1 for zero indexing, add 3 for rows skipped
+      if (isAccessInvalid) problemRows.push(i + ROWS_TO_SKIP) 
       return isAccessInvalid
     })
 
