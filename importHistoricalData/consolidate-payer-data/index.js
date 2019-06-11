@@ -48,7 +48,7 @@ let consolidatePayerData = async ({
   } catch(e) {
     await terminateScript(e)
   } finally {
-    console.log('Payer data consolidation completed...')
+    console.log('Payer data consolidation completed.')
   }
 }
 

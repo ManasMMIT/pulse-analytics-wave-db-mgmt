@@ -20,9 +20,9 @@ let combineLives = async ({
       combinedPayerData,
     ] = await Promise.all([
       pulseDevDb.collection('payerHistoricalDrgStateLives')
-        .find({ state: { $nin: ['GU', 'PR', 'Other'] } }).toArray(),
+        .find({ state: { $nin: ['GU', 'PR', 'Other'] } }).toArray(), // don't include these states in lives calculations
       pulseDevDb.collection('payerHistoricalMmitStateLives')
-        .find({ state: { $nin: ['GU', 'PR', 'Other'] } }).toArray(),
+        .find({ state: { $nin: ['GU', 'PR', 'Other'] } }).toArray(), // don't include these states in lives calculations
       pulseCoreDb.collection('payerDrgStateLivesTotals').find().toArray(),
       pulseCoreDb.collection('payerMmitStateLivesTotals').find().toArray(),
       payerHistoricalCombinedData || pulseDevDb.collection('payerHistoricalCombinedData').find().toArray()
