@@ -1,5 +1,6 @@
 const { latestMonthYearPipeline } = require('../../utils')
 const { getStateLivesTotal } = require('./get-payer-lives')
+const consolidatePayerData = require('../consolidatePayerData')
 
 const pushToDev = async ({
   collectionName,
@@ -32,6 +33,8 @@ const pushToDev = async ({
       await pulseCoreDb.collection('payerMmitStateLivesTotals').insertMany(statesLivesTotals)
       console.log(`pulse-core collection 'payerMmitStateLivesTotals' updated`)
     }
+
+    await consolidatePayerData({ pulseDevDb, pulseCoreDb, terminateScript })
   } catch(e) {
     console.error(e)
   } finally {
