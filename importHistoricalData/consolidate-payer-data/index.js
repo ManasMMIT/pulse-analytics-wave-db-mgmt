@@ -26,8 +26,11 @@ let consolidatePayerData = async ({
   pulseCoreDb,
   terminateScript,
 }) => {
+  console.log('Beginning payer data consolidation...')
+
   try {
     // * Step 1
+    console.log('Joining qoa, access scores, policy links, add\'l criteria...')
     const combinedPayerData = await combineQoaScoresLinksCriteria({
       pulseDevDb,
       pulseCoreDb,
@@ -35,6 +38,7 @@ let consolidatePayerData = async ({
     })
 
     // * Step 2
+    console.log('Joining state lives to every treatment plan, making calculations...')
     const payerDataWithLives = await combineLives({
       pulseDevDb,
       pulseCoreDb,
