@@ -1,7 +1,8 @@
 const _ = require('lodash')
 const connectToMongoDb = require('../../connect-to-mongodb')
-const parseCsvFileAndWriteToDb = require('../parse-csv-file-and-write-to-db')
+const parseCsvFile = require('../parse-csv-file')
 const pushToDev = require('./pushToDev')
+const stringSimilarity = require('string-similarity')
 const {
   getScriptTerminator,
   verifyCollectionExists
@@ -30,6 +31,46 @@ const importProjectBasedData = async filepath => {
 
   await verifyCollectionExists(collectionName, pulseCoreDb, mongoConnection)
 
+  const formattedData = await parseCsvFile({
+    filepath,
+    projectName,
+    fileMonth,
+    fileYear,
+  }).catch(terminateScript)
+
+  if (collectionName === 'payerHistoricalQualityAccess') {
+    const qualityAccessScores = await pulseCoreDb.collection('qualityAccessScores').find().toArray()
+    const validAccesses = _.keyBy(qualityAccessScores, 'access')
+    
+    const ROWS_TO_SKIP = 4 // add 1 for zero indexing, add 3 for rows skipped
+    const problemRows = []
+    const invalidAccesses = formattedData.filter(({ access }, i) => {
+      const isAccessInvalid = !validAccesses[access]
+      if (isAccessInvalid) problemRows.push(i + ROWS_TO_SKIP) 
+      return isAccessInvalid
+    })
+
+    const numInvalidAccesses = invalidAccesses.length
+
+    if (numInvalidAccesses > 0) {
+      console.error('Access validation failed!')
+      console.error(`Incoming data has ${numInvalidAccesses} invalid access entries.`)
+      console.error(`Problem rows in CSV are: ${problemRows.join(', ')}`)
+      const uniqueInvalidAccesses = _.uniqBy(invalidAccesses, 'access').map(({ access }) => access)
+
+      const validAccessArr = Object.keys(validAccesses)
+      const suggestions = uniqueInvalidAccesses.map(invalidAccess => {
+        const { bestMatch: { target } } = stringSimilarity.findBestMatch(invalidAccess, validAccessArr)
+        return { 'Invalid Access': invalidAccess, 'Did you mean...?': target }
+      })
+
+      console.error('Your unique invalid accesses are:')
+      console.table(suggestions, ['Invalid Access', 'Did you mean...?'])
+
+      await terminateScript()
+    }
+  }
+
   // Remove rows before appending
   await pulseCoreDb.collection(collectionName)
     .deleteMany({
@@ -37,21 +78,14 @@ const importProjectBasedData = async filepath => {
       year: fileYear,
       project: projectName
     })
-    .catch(async err => await terminateScript(err))
-
+    .catch(terminateScript)
 
   const monthYearProject = `Month: ${fileMonth} Year: ${fileYear} Project: ${projectName}`
 
   console.log(`Deleted Rows for ${monthYearProject} from pulse-core`)
 
-  await parseCsvFileAndWriteToDb({
-    db: pulseCoreDb,
-    filepath,
-    projectName,
-    collectionName,
-    fileMonth,
-    fileYear,
-  }).catch(async err => await terminateScript(err))
+  await pulseCoreDb.collection(collectionName).insertMany(formattedData)
+    .catch(terminateScript)
 
   console.log(`New data for ${monthYearProject} inserted into pulse-core`)
 

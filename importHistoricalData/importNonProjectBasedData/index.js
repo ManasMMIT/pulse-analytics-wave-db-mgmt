@@ -1,5 +1,5 @@
 const connectToMongoDb = require('../../connect-to-mongodb')
-const parseCsvFileAndWriteToDb = require('../parse-csv-file-and-write-to-db')
+const parseCsvFile = require('../parse-csv-file')
 const pushToDev = require('./pushToDev')
 const {
   getScriptTerminator,
@@ -40,13 +40,14 @@ const importNonProjectBasedData = async filepath => {
 
   console.log(`Deleted Rows for ${monthYear} from pulse-core`)
 
-  await parseCsvFileAndWriteToDb({
-    db: pulseCoreDb,
+  const formattedData = await parseCsvFile({
     filepath,
-    collectionName,
     fileMonth,
-    fileYear
-  }).catch(async err => await terminateScript(err))
+    fileYear,
+  }).catch(terminateScript)
+
+  await pulseCoreDb.collection(collectionName).insertMany(formattedData)
+    .catch(terminateScript)
 
   console.log(`New data for ${monthYear} inserted into pulse-core`)
 
