@@ -2,6 +2,23 @@ const { latestMonthYearPipeline } = require('../../utils')
 const { getStateLivesTotals } = require('./get-payer-lives')
 const consolidatePayerData = require('../consolidate-payer-data')
 
+const persistStateLivesTotals = async ({
+  latestMonthYearData,
+  collectionName,
+  pulseCoreDb,
+}) => {
+  const totalsCollectionName = collectionName === 'payerHistoricalDrgStateLives'
+    ? 'payerDrgStateLivesTotals'
+    : 'payerMmitStateLivesTotals'
+
+  const stateLivesTotals = getStateLivesTotals(latestMonthYearData)
+
+  await pulseCoreDb.collection(totalsCollectionName).deleteMany()
+  await pulseCoreDb.collection(totalsCollectionName).insertMany(stateLivesTotals)
+
+  console.log(`pulse-core collection '${totalsCollectionName}' updated`)
+}
+
 const pushToDev = async ({
   collectionName,
   pulseCoreDb,
@@ -20,19 +37,16 @@ const pushToDev = async ({
 
     console.log(`pulse-dev collection '${collectionName}' updated to only contain month: ${month}, year: ${year}`)
 
-    let stateLivesTotals
-    if (collectionName === 'payerHistoricalDrgStateLives') {
-      statesLivesTotals = getStateLivesTotals(latestMonthYearData)
-      await pulseCoreDb.collection('payerDrgStateLivesTotals').deleteMany()
-      await pulseCoreDb.collection('payerDrgStateLivesTotals').insertMany(statesLivesTotals)
-      console.log(`pulse-core collection 'payerDrgStateLivesTotals' updated`)
-    } else if (collectionName === 'payerHistoricalMmitStateLives') {
-      // TODO: if it's MMIT lives data, you also have to resync the MMIT lives with the DRG lives
-      statesLivesTotals = getStateLivesTotals(latestMonthYearData)
-      await pulseCoreDb.collection('payerMmitStateLivesTotals').deleteMany()
-      await pulseCoreDb.collection('payerMmitStateLivesTotals').insertMany(statesLivesTotals)
-      console.log(`pulse-core collection 'payerMmitStateLivesTotals' updated`)
+    const isLivesCollection = [
+      'payerHistoricalDrgStateLives',
+      'payerHistoricalMmitStateLives'
+    ].includes(collectionName)
+
+    if (isLivesCollection) {
+      await persistStateLivesTotals({ latestMonthYearData, collectionName, pulseCoreDb })
     }
+
+    // TODO: if it's MMIT lives data, you also have to resync the MMIT lives with the DRG lives
 
     await consolidatePayerData({ pulseDevDb, pulseCoreDb, terminateScript })
   } catch(e) {
