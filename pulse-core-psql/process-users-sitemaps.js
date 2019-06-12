@@ -19,7 +19,8 @@ const queryAllAccessibleNodes = `
     COALESCE(roles_nodes.name, nodes.name) as name,
     COALESCE(roles_nodes.subtitle, nodes.subtitle) as subtitle,
     COALESCE(roles_nodes.caption, nodes.caption) as caption,
-    COALESCE(roles_nodes.order, nodes.order) as order
+    COALESCE(roles_nodes.order, nodes.order) as order,
+    COALESCE(roles_nodes."componentPath", nodes."componentPath") as "componentPath"
   FROM nodes
   JOIN roles_nodes
   ON nodes.id = roles_nodes."nodeId"
@@ -44,6 +45,7 @@ const queryFromRootDown = `
       subtitle,
       caption,
       accessible_nodes.order,
+      "componentPath",
       null::uuid as "parentId"
     FROM accessible_nodes
     WHERE accessible_nodes.id NOT IN (SELECT "childId" FROM n2n)
@@ -57,6 +59,7 @@ const queryFromRootDown = `
       accessible_nodes.subtitle,
       accessible_nodes.caption,
       accessible_nodes.order,
+      accessible_nodes."componentPath",
       n2n."parentId" as "parentId"
     FROM nodes_from_parents
     JOIN n2n
@@ -93,6 +96,7 @@ const initialGroupByParentQuery = `
         || jsonb_build_object('subtitle', subtitle)
         || jsonb_build_object('caption', caption)
         || jsonb_build_object('order', nodes_from_parents.order)
+        || jsonb_build_object('componentPath', "componentPath")
     ) AS kids
   FROM nodes_from_parents
   GROUP BY "parentId"
@@ -127,6 +131,7 @@ const recursivelyAddNodesToTree = `
         || jsonb_build_object('caption', caption)
         || jsonb_build_object('order', nodes_from_parents.order)
         || jsonb_build_object('kids', kids)
+        || jsonb_build_object('componentPath', "componentPath")
     ) AS kids
   FROM nodes_from_children
   JOIN nodes_from_parents
