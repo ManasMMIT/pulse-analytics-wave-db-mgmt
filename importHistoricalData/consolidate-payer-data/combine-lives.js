@@ -104,7 +104,7 @@ let combineLives = async ({
       let totalLivesAcrossStates = 0 // the total lives across states for this treatment plan
       let totalAuditedLivesAcrossStates = 0
 
-      const result = _.map(livesData, (payers, state) => {
+      let result = _.map(livesData, (payers, state) => {
         /*
           Note: Some commented out code has been left in below in case
           we need to add in payers who aren't profiled in QOA data. But there's
@@ -167,13 +167,15 @@ let combineLives = async ({
             const livesRaw = arr.reduce((acc, payerObj) => acc + payerObj.livesRaw, 0)
             const livesPercent = livesRaw / totalLivesForStateAndLivesType
 
+            const orderedPayers = _.orderBy(payers, ['livesPercent'], ['desc'])
+
             return {
               access: arr[0].access,
               score: Number(arr[0].score),
               color: arr[0].color,
               livesRaw,
               livesPercent,
-              payers: arr
+              payers: orderedPayers,
             }
           })
           .object(payersWithAccessAdded)
@@ -202,6 +204,8 @@ let combineLives = async ({
       if (totalLivesAcrossStates) { // to prevent division by 0
         totalAuditedLivesAcrossStatesPercent = totalAuditedLivesAcrossStates / totalLivesAcrossStates
       }
+
+      result = _.orderBy(result, ['restrictiveLivesPercent'], ['desc'])
 
       return {
         statesData: result,
