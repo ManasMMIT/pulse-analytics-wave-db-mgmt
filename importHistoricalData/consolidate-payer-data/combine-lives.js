@@ -39,8 +39,17 @@ let combineLives = async ({
     }
 
     // group the payers and their lives data by state
-    // TODO: add validation to make sure same payer doesn't appear more than once for a given state
     const LIVES_DATA_drgPayersByState = _.groupBy(payerHistoricalDrgStateLives, 'state')
+
+    /*
+      Note: It's been observed that there can be non-unique payers for a given state
+      in MMIT lives. This was looked into and shouldn't affect lives calculations here
+      because depending on the payer, either
+        A) payers affiliated with state 'Other' have already been excluded at this point OR
+        B) because the duplicate payers each have lives for different types of lives
+
+      Duplicate payers are: magellan-health-services, express-scripts, baylor-scott-and-white
+    */
     const LIVES_DATA_mmitPayersByState = _.groupBy(payerHistoricalMmitStateLives, 'state')
 
     // key the precalculated lives totals by state for easy access
