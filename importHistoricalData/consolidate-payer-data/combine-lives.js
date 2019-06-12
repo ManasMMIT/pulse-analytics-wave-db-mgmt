@@ -43,6 +43,10 @@ let combineLives = async ({
     const LIVES_DATA_drgPayersByState = _.groupBy(payerHistoricalDrgStateLives, 'state')
     const LIVES_DATA_mmitPayersByState = _.groupBy(payerHistoricalMmitStateLives, 'state')
 
+    // key the precalculated lives totals by state for easy access
+    const LIVES_DATA_drgTotalsByState = _.keyBy(payerDrgStateLivesTotals, 'state')
+    const LIVES_DATA_mmitTotalsByState = _.keyBy(payerMmitStateLivesTotals, 'state')
+
     /*
       Add a full set of states and lives data (both MMIT and DRG) to each treatmentPlan,
       while bucketing the payers for each state by access category using the
@@ -51,9 +55,6 @@ let combineLives = async ({
       In the process of bucketing the payers, calculate lives percentages for payers as
       well as restrictive lives percentages.
     */
-    const drgStatesLivesTotalsByState = _.keyBy(payerDrgStateLivesTotals, 'state')
-    const mmitStatesLivesTotalsByState = _.keyBy(payerMmitStateLivesTotals, 'state')
-
     const payerDataWithStateLives = _.map(payerDataGroupedByTreatmentPlan, generateStateLivesData)
 
     function generateStateLivesData(combinedPayerDataBySlug, treatmentPlan) {
@@ -64,14 +65,14 @@ let combineLives = async ({
         livesData: LIVES_DATA_drgPayersByState,
         combinedPayerDataBySlug,
         livesType,
-        livesTotalsByState: drgStatesLivesTotalsByState,
+        livesTotalsByState: LIVES_DATA_drgTotalsByState,
       })
 
       const MMIT_statesData = bucketizeLivesData({
         livesData: LIVES_DATA_mmitPayersByState,
         combinedPayerDataBySlug,
         livesType,
-        livesTotalsByState: mmitStatesLivesTotalsByState,
+        livesTotalsByState: LIVES_DATA_mmitTotalsByState,
       })
 
       return {
