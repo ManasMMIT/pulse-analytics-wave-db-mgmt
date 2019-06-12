@@ -175,16 +175,18 @@ let combineLives = async ({
         // group the payers by access, restructure as needed
         let accessBuckets = d3.nest()
           .key(d => d.access)
-          .rollup(arr => {
-            const livesRaw = arr.reduce((acc, payerObj) => acc + payerObj.livesRaw, 0)
+          .rollup(payersForAccessBucket => {
+            const livesRaw = payersForAccessBucket.reduce((acc, payerObj) => acc + payerObj.livesRaw, 0)
             const livesPercent = livesRaw / totalLivesForStateAndLivesType
 
-            const orderedPayers = _.orderBy(payers, ['livesPercent'], ['desc'])
+            const orderedPayers = _.orderBy(payersForAccessBucket, ['livesPercent'], ['desc'])
+            let [{ access, score, color }] = payersForAccessBucket
+            score = Number(score)
 
             return {
-              access: arr[0].access,
-              score: Number(arr[0].score),
-              color: arr[0].color,
+              access,
+              score,
+              color,
               livesRaw,
               livesPercent,
               payers: orderedPayers,
