@@ -1,5 +1,6 @@
 const _ = require('lodash')
 const d3 = require('d3-collection')
+const STATE_ID_BY_ABBREV = require('./states-data-util')
 const connectionWrapper = require('./connection-wrapper')
 
 const RESTRICTIVE_SCORE_THRESHOLD = 11
@@ -114,6 +115,8 @@ let combineLives = async ({
       let totalAuditedLivesAcrossStates = 0
 
       let result = _.map(livesData, (payers, state) => {
+        const { stateLong } = payers[0]
+
         /*
           Note: Some commented out code has been left in below in case
           we need to add in payers who aren't profiled in QOA data. But there's
@@ -200,7 +203,9 @@ let combineLives = async ({
         }
 
         return {
+          id: STATE_ID_BY_ABBREV[state],
           state,
+          stateLong,
           auditedLives,
           totalLives: totalLivesForStateAndLivesType,
           auditedLivesPercent,
