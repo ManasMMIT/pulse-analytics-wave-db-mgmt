@@ -240,10 +240,13 @@ let combineLives = async ({
     console.log('Deletion completed.')
 
     console.log(`Inserting new data into 'payerCombinedStateLives' collection...`)
+    const insertionStartTime = new Date()
+
     await pulseDevDb.collection('payerCombinedStateLives')
       .insertMany(payerDataWithStateLives, { ordered: false })
 
-    console.log(`Updated 'payerCombinedStateLives' collection in pulse-dev`)
+    const insertionEndTime = new Date()
+    console.log(`Insertion completed in ${(insertionEndTime - insertionStartTime)/1000}s`)
 
     return payerDataWithStateLives
   } catch (e) {
