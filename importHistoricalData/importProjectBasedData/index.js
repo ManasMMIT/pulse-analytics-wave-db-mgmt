@@ -38,6 +38,8 @@ const importProjectBasedData = async filepath => {
     fileYear,
   }).catch(terminateScript)
 
+  // TODO: validate against slugless entries making it into the DB
+
   if (collectionName === 'payerHistoricalQualityAccess') {
     const qualityAccessScores = await pulseCoreDb.collection('qualityAccessScores').find().toArray()
     const validAccesses = _.keyBy(qualityAccessScores, 'access')

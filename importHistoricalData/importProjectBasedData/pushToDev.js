@@ -1,4 +1,5 @@
 const getLatestMonthYearProjectPipeline = require('./latest-month-year-project')
+const consolidatePayerData = require('../consolidate-payer-data')
 
 const pushToDev = async ({
   collectionName,
@@ -64,6 +65,7 @@ const pushToDev = async ({
     await pulseDevDb.collection(`${collectionName}Ht`).insertMany(latestSixMonthsData)
     console.log(`pulse-dev collection '${collectionName}Ht' updated`)
 
+    await consolidatePayerData({ pulseDevDb, pulseCoreDb, terminateScript })
   } catch(e) {
     console.error(e)
   } finally {

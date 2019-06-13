@@ -22,7 +22,7 @@ for (const role of roles) {
   const roleSitemapNode = await Node.create({ name: role.key, type: 'sitemap', order: 1 })
 
   await currentRole.addNode(roleSitemapNode)
-  // await currentRole.addNode(PayerTool)
+  await currentRole.addNode(PayerTool)
   await roleSitemapNode.addChild(PayerTool)
 
   const dashboards = role.values
