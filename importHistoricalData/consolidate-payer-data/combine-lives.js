@@ -12,6 +12,7 @@ let combineLives = async ({
   payerHistoricalCombinedData,
 }) => {
   try {
+    console.log('Fetching the lives data...')
     // fetch all the data we'll need to work with simultaneously upfront
     const [
       payerHistoricalDrgStateLives,
@@ -29,6 +30,7 @@ let combineLives = async ({
       payerHistoricalCombinedData || pulseDevDb.collection('payerHistoricalCombinedData').find().toArray()
     ])
 
+    console.log('Beginning data crunching for every treatment plan...')
     // group the combinedPayerData by `treatmentPlan` combination
     const payerDataGroupedByTreatmentPlan = d3.nest()
       .key(getTreatmentPlanKey)
@@ -231,7 +233,13 @@ let combineLives = async ({
       }
     }
 
+    console.log('Data crunching completed; moving onto DB operations.')
+
+    console.log(`Deleting all existing data in 'payerCombinedStateLives' collection...`)
     await pulseDevDb.collection('payerCombinedStateLives').deleteMany()
+    console.log('Deletion completed.')
+
+    console.log(`Inserting new data into 'payerCombinedStateLives' collection...`)
     await pulseDevDb.collection('payerCombinedStateLives').insertMany(payerDataWithStateLives)
     console.log(`Updated 'payerCombinedStateLives' collection in pulse-dev`)
 

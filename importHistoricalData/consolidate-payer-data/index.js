@@ -38,7 +38,7 @@ let consolidatePayerData = async ({
     })
 
     // * Step 2
-    console.log('Joining state lives to every treatment plan, making calculations...')
+    console.log('Beginning process to join state lives to every treatment plan...')
     await combineLives({
       pulseDevDb,
       pulseCoreDb,
