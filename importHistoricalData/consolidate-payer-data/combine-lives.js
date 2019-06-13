@@ -5,6 +5,9 @@ const connectionWrapper = require('./connection-wrapper')
 
 const RESTRICTIVE_SCORE_THRESHOLD = 11
 
+// don't include the following states in lives calculations
+const STATES_TO_EXCLUDE = ['GU', 'PR', 'Other']
+
 let combineLives = async ({
   pulseDevDb,
   pulseCoreDb,
@@ -14,6 +17,7 @@ let combineLives = async ({
   try {
     console.log('Fetching the lives data...')
     // fetch all the data we'll need to work with simultaneously upfront
+
     const [
       payerHistoricalDrgStateLives,
       payerHistoricalMmitStateLives,
@@ -22,9 +26,9 @@ let combineLives = async ({
       combinedPayerData,
     ] = await Promise.all([
       pulseDevDb.collection('payerHistoricalDrgStateLives')
-        .find({ state: { $nin: ['GU', 'PR', 'Other'] } }).toArray(), // don't include these states in lives calculations
+        .find({ state: { $nin: STATES_TO_EXCLUDE } }).toArray(),
       pulseDevDb.collection('payerHistoricalMmitStateLives')
-        .find({ state: { $nin: ['GU', 'PR', 'Other'] } }).toArray(), // don't include these states in lives calculations
+        .find({ state: { $nin: STATES_TO_EXCLUDE } }).toArray(),
       pulseCoreDb.collection('payerDrgStateLivesTotals').find().toArray(),
       pulseCoreDb.collection('payerMmitStateLivesTotals').find().toArray(),
       payerHistoricalCombinedData || pulseDevDb.collection('payerHistoricalCombinedData').find().toArray()
