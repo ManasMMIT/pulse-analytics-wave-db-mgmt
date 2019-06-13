@@ -240,7 +240,9 @@ let combineLives = async ({
     console.log('Deletion completed.')
 
     console.log(`Inserting new data into 'payerCombinedStateLives' collection...`)
-    await pulseDevDb.collection('payerCombinedStateLives').insertMany(payerDataWithStateLives)
+    await pulseDevDb.collection('payerCombinedStateLives')
+      .insertMany(payerDataWithStateLives, { ordered: false })
+
     console.log(`Updated 'payerCombinedStateLives' collection in pulse-dev`)
 
     return payerDataWithStateLives
