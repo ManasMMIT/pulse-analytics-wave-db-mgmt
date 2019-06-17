@@ -1,6 +1,7 @@
 const connectToMongoDb = require('../../connect-to-mongodb')
 const parseCsvFile = require('../parse-csv-file')
 const pushToDev = require('./pushToDev')
+const synchronizeDrgMmitMedicalLives = require('./syncDrgMmitMedicalLives')
 const {
   getScriptTerminator,
   verifyCollectionExists
@@ -26,41 +27,40 @@ const importNonProjectBasedData = async filepath => {
 
   await verifyCollectionExists(collectionName, pulseCoreDb, mongoConnection)
 
-  // Remove rows before appending
-  await pulseCoreDb.collection(collectionName)
-    .deleteMany({
-      $and: [
-        { $or: [{ month: Number(fileMonth) }, { month: fileMonth }] },
-        { $or: [{ year: Number(fileYear) }, { year: fileYear }] }
-      ]
-    })
-    .catch(async err => await terminateScript(err))
+  try {
+    // Remove rows before appending
+    await pulseCoreDb.collection(collectionName)
+      .deleteMany({
+        $and: [
+          { $or: [{ month: Number(fileMonth) }, { month: fileMonth }] },
+          { $or: [{ year: Number(fileYear) }, { year: fileYear }] }
+        ]
+      })
 
-  const monthYear = `Month:${fileMonth} Year:${fileYear}`
+    const monthYear = `Month: ${fileMonth} Year: ${fileYear}`
 
-  console.log(`Deleted Rows for ${monthYear} from pulse-core`)
+    console.log(`Deleted Rows for ${monthYear} from pulse-core`)
 
-  // TODO: validate against slugless entries making it into the DB
+    // TODO: validate against slugless entries making it into the DB
 
-  // TODO: investigate how older data has whitespaces despite trim operation
-  // consider dynamic typing option in Papaparse
+    // TODO: investigate how older data has whitespaces despite trim operation
+    // consider dynamic typing option in Papaparse
 
-  const formattedData = await parseCsvFile({
-    filepath,
-    fileMonth,
-    fileYear,
-  }).catch(terminateScript)
+    const formattedData = await parseCsvFile({ filepath, fileMonth, fileYear })
+    await pulseCoreDb.collection(collectionName).insertMany(formattedData)
+    console.log(`New data for ${monthYear} inserted into pulse-core \n`)
 
-  await pulseCoreDb.collection(collectionName).insertMany(formattedData)
-    .catch(terminateScript)
-
-  console.log(`New data for ${monthYear} inserted into pulse-core`)
+    const isMmitStateLives = collectionName === 'payerHistoricalMmitStateLives'
+    if (isMmitStateLives) await synchronizeDrgMmitMedicalLives(pulseCoreDb)
+  } catch (e) {
+    await terminateScript(e)
+  }
 
   pushToDev({
     collectionName,
     pulseCoreDb,
     pulseDevDb,
-    terminateScript
+    terminateScript,
   })
 }
 
