@@ -2,6 +2,7 @@ const connectToMongoDb = require('../../connect-to-mongodb')
 const parseCsvFile = require('../parse-csv-file')
 const pushToDev = require('./pushToDev')
 const synchronizeDrgMmitMedicalLives = require('./syncDrgMmitMedicalLives')
+const { STATE_LONG_BY_ABBREV } = require('../states-data-util')
 const {
   getScriptTerminator,
   verifyCollectionExists
@@ -46,11 +47,19 @@ const importNonProjectBasedData = async filepath => {
     // TODO: investigate how older data has whitespaces despite trim operation
     // consider dynamic typing option in Papaparse
 
-    const formattedData = await parseCsvFile({ filepath, fileMonth, fileYear })
+    let formattedData = await parseCsvFile({ filepath, fileMonth, fileYear })
+
+    const isMmitStateLives = collectionName === 'payerHistoricalMmitStateLives'
+    const isDrgStateLives = collectionName === 'payerHistoricalDrgStateLives'
+
+    if (isMmitStateLives || isDrgStateLives) {
+      console.log(`Overriding 'stateLong' column, if any, in incoming data with hardcoded lookup`)
+      formattedData = formattedData.map(row => ({ ...row, stateLong: STATE_LONG_BY_ABBREV[row.state] }))
+    }
+
     await pulseCoreDb.collection(collectionName).insertMany(formattedData)
     console.log(`New data for ${monthYear} inserted into pulse-core \n`)
 
-    const isMmitStateLives = collectionName === 'payerHistoricalMmitStateLives'
     if (isMmitStateLives) await synchronizeDrgMmitMedicalLives(pulseCoreDb)
   } catch (e) {
     await terminateScript(e)
