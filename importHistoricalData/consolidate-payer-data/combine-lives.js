@@ -1,6 +1,6 @@
 const _ = require('lodash')
 const d3 = require('d3-collection')
-const STATE_ID_BY_ABBREV = require('./states-data-util')
+const { STATE_ID_BY_ABBREV } = require('../states-data-util')
 const connectionWrapper = require('./connection-wrapper')
 
 const RESTRICTIVE_SCORE_THRESHOLD = 11
