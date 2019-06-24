@@ -4,8 +4,7 @@ This repo is meant to eventually become Pulse's primary internal database manage
 1. [Uploading CSV historical data to pulse-dev](#1-uploading-historical-data)
 2. [Uploading listsConfig JSONs to pulse-dev](#2-uploading-listsconfig-jsons)
 3. [Uploading a CSV of provider indication/regimen combos for admin hub to source from](#3-uploading-provider-ind/reg-combos-for-admin-hub)
-4. [Synchronizing DRG medical lives data with MMIT lives data](#4-synchronizing-drg/mmit-medical-lives)
-5. [Updating Dashboards Permissions Prototype Collection on Dev](#5-updating-dashboards-permissions-prototype-on-dev)
+4. [Updating Dashboards Permissions Prototype Collection on Dev](#4-updating-dashboards-permissions-prototype-on-dev)
 
 # Before you do anything else
 
@@ -42,7 +41,7 @@ Replace the filepath with the filepath to the appropriate CSV file on your own c
 ```
 node ./importHistoricalData --filepath "/Users/jonlin/Desktop/Egnyte/Shared/Pulse Analytics/Data/Payer/Payer Historical Data/Project-Based/MerckAntiemetics/6-2018/MerckAntiemetics-QualityAccess-6-2018.csv"
 ```
-### Importing Payer Lives Data
+### Importing Payer Lives Data (and other older non-project-based historical data)
 
 If you're importing data such as `payerHistoricalMmitStateLives`, `payerHistoricalDrgNationalLives`, or other historical data that isn't
 project-based, then run the same command but include the `--ignoreProjects` flag:
@@ -50,6 +49,12 @@ project-based, then run the same command but include the `--ignoreProjects` flag
 ```
 node ./importHistoricalData --filepath ~/Desktop/payerHistoricalMmitStateLives-9-2018.csv --ignoreProjects
 ```
+
+**NOTE:** The `syncDrgMmitMedicalLives` script automatically executes on pulse-core whenever MMIT lives are imported into pulse-core (but before the latest month/year MMIT lives data is pushed to pulse-dev, and before the MMIT totals collection is calculated). That script does the following:
+1. gets the latest month/year DRG lives but limits that data to the slugs found in the latest month/year MMIT lives set
+2. if a given slug/state combo in the DRG lives data from step 1 is found in the latest month/year MMIT lives set, then that MMIT lives row is updated to have a copy of the DRG medical lives (the pharmacy lives are left untouched)
+3. if a given slug/state combo in the DRG lives data from step 1 CANNOT be found in the latest month/year MMIT lives set, then that DRG row is copied over with only medical lives into the MMIT lives data
+
 
 #  2. Uploading listsConfig JSONs
 
@@ -114,19 +119,7 @@ Run the following command in your terminal.
 node ./importAdminProviderIndRegCombos --filepath ~/Desktop/providerIndRegCombos.csv
 ```
 
-#  4. Synchronizing DRG/MMIT Medical Lives
-
-The `syncDrgMmitMedicalLives` script will:
-1. append the medical lives with the latest month and year from the DRG data to the existing mongoDB documents with the latest month and year in the MMIT data set
-2. insert mongoDB documents with the latest month and year from the DRG data set for states that don't exist for organizations in the MMIT data set
-
-To run the script, run the following command:
-```
-node ./syncDrgMmitMedicalLives
-```
-
-
-#  5. Updating Dashboards Permissions Prototype on Dev
+#  4. Updating Dashboards Permissions Prototype on Dev
 
 Run the following command in your terminal after navigating to this repository's root directory.
 ```
