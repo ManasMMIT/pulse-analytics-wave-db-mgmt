@@ -5,6 +5,7 @@ This repo is meant to eventually become Pulse's primary internal database manage
 2. [Uploading listsConfig JSONs to pulse-dev](#2-uploading-listsconfig-jsons)
 3. [Uploading a CSV of provider indication/regimen combos for admin hub to source from](#3-uploading-provider-ind/reg-combos-for-admin-hub)
 4. [Updating Dashboards Permissions Prototype Collection on Dev](#4-updating-dashboards-permissions-prototype-on-dev)
+5. [Exporting Novartis CSV Data](#5-exporting-novartis-csv-data)
 
 # Before you do anything else
 
@@ -192,3 +193,15 @@ Here's an example of the output:
   ]
 }
 ```
+
+# 5. Exporting Novartis CSV Data
+
+Run the following command in terminal:
+
+```
+node ./exportNovartisCsvData
+```
+
+That will output a CSV file in the format `NOVARTIS_KYMRIAH_${DATE}.csv` within the `./exportNovartisCsvData` directory.
+
+Refer to [this Conf doc for specs](https://dedhamgroup.atlassian.net/wiki/spaces/PAD/pages/659521555/Kymriah+CSV+Export).
