@@ -1,9 +1,11 @@
 const express = require('express')
 
+// TODO: Uninstall uuid because auth0 has control over ids!
 // ? temporary until we change the user model via sequelize migration
-const uuid = require('uuid/v4')
+// const uuid = require('uuid/v4')
 
 const auth0 = require('./auth0')
+
 const {
   sequelize,
   models: {
@@ -17,28 +19,28 @@ const subApp = express()
 
 subApp.get('/clients', async (req, res) => {
   const clients = await Client.findAll()
-  
   res.json(clients)
 })
 
-subApp.get('/clients/:id', async ({ params }, res) => { 
-  // auth0.clients.find(id)
+subApp.get('/clients/:id', async ({ params }, res) => {
   const client = await Client.findByPk(params.id)
-
   res.json(client)
 })
 
-subApp.post('/clients', async ({
-  body: { name, description },
-}, res) => {
+subApp.post('/clients', async ({ body: { name, description } }, res, next) => {
   if (!Boolean(name)) {
-    res.send('A name value is required when creating a client')
+    next('A name value is required when creating a client')
     return
   }
-  const client = await Client.create({ name, description })
-    // .then(client => {
-      // auth0.clients.create(client)
-    // })
+
+  // write to auth0, which autogenerates a UUID for client
+  const clientInAuth0 = await auth0.clients.create({ name, description })
+  // TODO: Create default admin subgroup in auth0
+  // TODO: Create default admin role in auth0
+
+  // use the generated UUID when writing to psql
+  const client = await Client.create({ name, description, id: clientInAuth0._id })
+
   res.json(client)
 })
 
@@ -48,39 +50,47 @@ subApp.patch('/clients/:id', async ({
     name,
     description,
   },
-}, res) => {
-  // auth0.clients.update(id)
+}, res, next) => {
   if (!Boolean(name)) {
-    res.send('name field invalid')
+    next('name field invalid')
     return
   } else if (!Boolean(description)) {
-    res.send('description field invalid')
+    next('description field invalid')
     return
   }
 
   const client = await Client.findByPk(id)
 
   if (!Boolean(client)) {
-    res.send(`client with id ${ id } doesn't exist`)
+    next(`client with id ${ id } doesn't exist`)
     return
   }
 
-  await client.update({
+  await auth0.clients.update({
+    id,
     name,
     description,
   })
 
-  res.json(client)
+  const updatedClient = await client.update({
+    name,
+    description,
+  })
+
+  res.json(updatedClient)
 })
 
 subApp.delete('/clients/:id', async ({
   params: { id },
 }, res) => {
-  // auth0.clients.delete(id)
+  await auth0.clients.delete(id)
+  // TODO: Delete all teams, comprising associated subgroups and roles in auth0
+  // TODO: Delete all associated users in auth0
+
   const client = await Client.findByPk(id)
   await client.destroy()
 
-  res.send(`${ client.name } roasted by the Phoenix`)
+  res.json(client)
 })
 
 subApp.get('/clients/:clientId/roles', async ({
@@ -102,36 +112,43 @@ subApp.get('/roles/:roleId/clients', async ({
 })
 
 subApp.get('/roles', async (req, res) => {
-  // auth0.roles.find()
   const roles = await Role.findAll()
-
   res.json(roles)
 })
 
 subApp.get('/roles/:id', async ({
   params: { id },
 }, res) => {
-  // auth0.roles.find()
   const role = await Role.findByPk(id)
-
   res.json(role)
 })
 
-// TODO: Wrap in transaction
+// TODO: Wrap sequelize work in transaction
 subApp.post('/roles', async ({
   body: { name, description, clientId },
-}, res) => {
+}, res, next) => {
   if (!Boolean(name)) {
-    res.send('name field invalid')
+    next('name field invalid')
     return
   }
-  // auth0.roles.find()
+
+  const { name: clientName } = await auth0.clients.find(clientId)
+
+  const dataObjForAuth0 = {
+    clientId,
+    name: `${clientName}-${name}`,
+    description: name,
+  }
+
+  const roleCreatedInAuth0 = await auth0.roles.create(dataObjForAuth0)
+
   const clientIdArr = clientId
     ? [clientId]
     : null
 
   const role = await sequelize.transaction(t => {
     return Role.create({
+      id: roleCreatedInAuth0._id,
       name,
       description,
     }, {transaction: t})
@@ -144,7 +161,8 @@ subApp.post('/roles', async ({
     })
   })
   .then(role => role)
-  .catch(err => res.send(err))
+  .catch(next)
+
   // const role = await Role.create({ name, description })
 
   // await role.setClients([clientId])
@@ -153,32 +171,39 @@ subApp.post('/roles', async ({
 
 subApp.patch('/roles/:id', async ({
   params: { id },
-  body: { name, description },
+  body: { name },
 }, res) => {
-  // auth0.roles.find()
-  
-  const role = await Role.findByPk(id)
+  const updatedRole = await auth0.roles.update({ id, name })
 
-  await role.update({ name, description })
+  const role = await Role.findByPk(id)
+  await role.update({ name, description: updatedRole.description })
 
   res.json(role)
 })
 
+// ! NOTE: clientId is needed in the body for auth0 side
+// for severing association between client group and role group
 subApp.delete('/roles/:id', async ({
   params: { id },
-}, res) => {
-  // auth0.roles.find()
-  const role = await Role.findByPk(id)
+  body: { clientId },
+}, res, next) => {
+  if (!Boolean(clientId)) {
+    next('must specify clientId')
+    return
+  }
 
+  await auth0.roles.delete({ id, clientId })
+  // TODO: Delete all users who are only associated with this role
+
+  const role = await Role.findByPk(id)
   await role.destroy(id)
 
-  res.send(`${ role.name } role torched by the Phoenix`)
+  res.json(role)
 })
 
 subApp.get('/roles/:roleId/users', async ({
   params: { roleId },
 }, res) => {
-  // auth0.users.find()
   const role = await Role.findByPk(roleId)
   const roleUsers = await role.getUsers()
 
@@ -195,57 +220,57 @@ subApp.get('/users/:userId/roles', async ({
 })
 
 subApp.get('/users', async (req, res) => {
-  // auth0.users.find()
   const users = await User.findAll()
-
   res.json(users)
 })
 
 subApp.get('/users/:id', async ({
   params: { id },
 }, res) => {
-  // auth0.users.find()
   const user = await User.findByPk(id)
-
   res.json(user)
 })
 
 subApp.post('/users', async ({
-  body: { username },
-}, res) => {
-  // create own uuid for user and save in psql and auth0
-  // auth0.users.find()
+  body: { username, email, password },
+}, res, next) => {
   if (!Boolean(username)) {
-    res.send('username field invalid')
+    next('username field invalid')
     return
   }
-  const id = uuid()
-  const user = await User.create({ id, username })
+
+  const userInAuth0 = await auth0.users.create({ username, email, password })
+  // TODO: add the user to the auth0 client group
+  // TODO: add the user to the auth0 role group (but not the actual 'role' in auth0)
+
+  const user = await User.create({ id: userInAuth0.user_id, username })
 
   res.json(user)
 })
 
 subApp.patch('/users/:id', async ({
   params: { id },
-  body: { username },
+  body: { username, email, password },
 }, res) => {
-  // auth0.users.find()
+  await auth0.users.update({ id, username, email, password })
+
+  // TODO: Is there a sequelize find and update method?
   const user = await User.findByPk(id)
+  const updatedUser = await user.update({ username })
 
-  await user.update({ username })
-
-  res.json(user)
+  res.json(updatedUser)
 })
 
 subApp.delete('/users/:id', async ({
   params: { id },
 }, res) => {
-  // auth0.users.find()
-  const user = await User.findByPk(id)
+  await auth0.users.delete(id)
+  // TODO: Delete user's association to role GROUP in auth0
 
+  const user = await User.findByPk(id)
   await user.destroy()
 
-  res.send(`${ user.username } fell prey to the Phoenix`)
+  res.json(user)
 })
 
 module.exports = subApp

@@ -175,6 +175,17 @@ module.exports = class {
       .then(paginateUserRequest)
   }
 
+  getRole(id) {
+    return this.authenticate()
+      .then(
+        () => fetch(`${this.url}/roles/${id}`, {
+          method: 'GET',
+          headers: { authorization: `Bearer ${this.accessToken}` }
+        }))
+      .then(checkStatus)
+      .then(response => response.json())
+  }
+
   getRoles() {
     return this.authenticate()
       .then(
@@ -297,7 +308,7 @@ module.exports = class {
             description: description,
             applicationId: auth0_pulse_tools_clientid,
             applicationType: 'client',
-            permissions: permissions, // phase 2+
+            permissions, // phase 2+
           })
         }))
       .then(checkStatus)

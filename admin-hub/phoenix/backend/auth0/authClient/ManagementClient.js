@@ -153,23 +153,33 @@ module.exports = class {
       })
   }
 
-  updateUser(id, { email, password }) {
-    const bodyData = password ? { password } : { email }
+  // ! ALERT: 'username' in auth0 is coerced into lowercase; not sure why
+  updateUser(id, { username, email, password }) {
+    // auth0 can't update all the fields in the same request
+    // and more specifically, has to do isolated updates
+    // of password and email for some reason
+    const queryBody1 = { username, name: username }
+    const queryBody2 = { password }
+    const queryBody3 = { email }
+
+    const patchQuery = bodyObj => () => (
+      fetch(`${this.audience}users/${id}`, {
+        method: 'PATCH',
+        headers: {
+          Authorization: `Bearer ${this.accessToken}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          connection: 'Username-Password-Authentication',
+          ...bodyObj,
+        }),
+      })
+    )
+
     return this.authenticate()
-      .then(() =>
-        fetch(`${this.audience}users/${ id }`, {
-          method: 'PATCH',
-          headers: {
-            Authorization: `Bearer ${ this.accessToken }`,
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(
-            {
-              connection: 'Username-Password-Authentication',
-              ...bodyData
-            })
-        })
-      )
+      .then(patchQuery(queryBody1))
+      .then(patchQuery(queryBody2))
+      .then(patchQuery(queryBody3))
       .then(checkStatus)
       .then(response => response.json())
   }

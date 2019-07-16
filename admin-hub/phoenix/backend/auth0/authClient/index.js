@@ -44,6 +44,7 @@ module.exports = {
   addNestedGroup: authExtClient.addNestedGroup.bind(authExtClient),
   addNestedGroups: authExtClient.addNestedGroups.bind(authExtClient),
   getUser: authExtClient.getUser.bind(authExtClient),
+  getRole: authExtClient.getRole.bind(authExtClient),
   getRoles: authExtClient.getRoles.bind(authExtClient),
   getGroups: authExtClient.getGroups.bind(authExtClient),
   getPermissions: authExtClient.getPermissions.bind(authExtClient),
