@@ -1,5 +1,6 @@
 const _ = require('lodash')
 const Op = require('sequelize').Op
+const mergeSitemapsAcrossRoles = require('./merge-roles-sitemaps')
 
 const formatJson = ({ kids }) => {
   let arrayifiedObject = _.map(kids, obj => {
@@ -196,11 +197,7 @@ const processUsersSitemaps = async ({
   })
 
   const usersSitemaps = users.map(user => {
-    const sitemapAcrossRoles = user.roles.reduce((acc, { id }) => {
-      const roleSitemap = rolesSitemapsMap[id]
-      return _.merge(acc, roleSitemap)
-    }, {})
-
+    const sitemapAcrossRoles = mergeSitemapsAcrossRoles(user.roles, rolesSitemapsMap)
     const [formattedSitemap] = formatJson(sitemapAcrossRoles)
 
     return {
