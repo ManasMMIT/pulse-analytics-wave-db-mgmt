@@ -27,19 +27,36 @@ subApp.get('/clients/:id', async ({ params }, res) => {
   res.json(client)
 })
 
-subApp.post('/clients', async ({ body: { name, description } }, res, next) => {
+subApp.post('/clients', async ({ body: { name } }, res, next) => {
   if (!Boolean(name)) {
     next('A name value is required when creating a client')
     return
   }
 
   // write to auth0, which autogenerates a UUID for client
-  const clientInAuth0 = await auth0.clients.create({ name, description })
-  // TODO: Create default admin subgroup in auth0
-  // TODO: Create default admin role in auth0
+  const clientInAuth0 = await auth0.clients.create({ name, description: name })
+
+  // the create roles method in roles DAO creates both auth0 group and role
+  const defaultRoleName = `${name}-admin`
+  const defaultRoleDescrip = 'admin'
+
+  await auth0.roles.create({
+    clientId: clientInAuth0._id,
+    name: defaultRoleName,
+    description: defaultRoleDescrip,
+  })
 
   // use the generated UUID when writing to psql
-  const client = await Client.create({ name, description, id: clientInAuth0._id })
+  const client = await Client.create({
+    name,
+    description: clientInAuth0.description,
+    id: clientInAuth0._id
+  })
+
+  await Role.create({
+    name: defaultRoleName,
+    description: defaultRoleDescrip,
+  })
 
   res.json(client)
 })
@@ -80,12 +97,13 @@ subApp.patch('/clients/:id', async ({
   res.json(updatedClient)
 })
 
+// ! Phase 2+ todos
+// TODO: Delete all teams, comprising associated subgroups and roles in auth0, psql
+// TODO: Delete all associated users in auth0, psql
 subApp.delete('/clients/:id', async ({
   params: { id },
 }, res) => {
   await auth0.clients.delete(id)
-  // TODO: Delete all teams, comprising associated subgroups and roles in auth0
-  // TODO: Delete all associated users in auth0
 
   const client = await Client.findByPk(id)
   await client.destroy()
@@ -97,7 +115,7 @@ subApp.get('/clients/:clientId/roles', async ({
   params: { clientId },
 }, res) => {
   const client = await Client.findByPk(clientId)
-  const clientRoles = await client.getRoles()
+  const clientRoles = await client.getRoles({ raw: true })
 
   res.json(clientRoles)
 })
@@ -106,7 +124,7 @@ subApp.get('/roles/:roleId/clients', async ({
   params: { roleId },
 }, res) => {
   const role = await Role.findByPk(roleId)
-  const roleClients = await role.getClients()
+  const roleClients = await role.getClients({ raw: true })
 
   res.json(roleClients)
 })
@@ -123,15 +141,21 @@ subApp.get('/roles/:id', async ({
   res.json(role)
 })
 
-// TODO: Wrap sequelize work in transaction
 subApp.post('/roles', async ({
-  body: { name, description, clientId },
+  body: { name, clientId },
 }, res, next) => {
+
   if (!Boolean(name)) {
     next('name field invalid')
     return
+  } else if (!clientId) {
+    next('Transaction Rolled Back; ClientId must be specified')
+    return
   }
 
+  const transaction = await sequelize.transaction()
+
+  // auth0
   const { name: clientName } = await auth0.clients.find(clientId)
 
   const dataObjForAuth0 = {
@@ -142,47 +166,42 @@ subApp.post('/roles', async ({
 
   const roleCreatedInAuth0 = await auth0.roles.create(dataObjForAuth0)
 
-  const clientIdArr = clientId
-    ? [clientId]
-    : null
-
-  const role = await sequelize.transaction(t => {
-    return Role.create({
+  // Postgres
+  const role = await Role.create(
+    {
       id: roleCreatedInAuth0._id,
       name,
-      description,
-    }, {transaction: t})
-    .then(role => {
-      role.setClients(
-        [clientId],
-        { transaction: t }
-      )
-      return role
-    })
-  })
-  .then(role => role)
-  .catch(next)
+      description: roleCreatedInAuth0.description // follow auth0 weird casing coercion
+    },
+    { transaction }
+  )
 
-  // const role = await Role.create({ name, description })
+  const client = await Client.findByPk(clientId, { transaction })
+  await role.addClient(client, { transaction })
 
-  // await role.setClients([clientId])
+  transaction.commit()
+
   res.json(role)
 })
 
+// NOTE: assumption: a role's association with a client is never updated
 subApp.patch('/roles/:id', async ({
   params: { id },
   body: { name },
 }, res) => {
   const updatedRole = await auth0.roles.update({ id, name })
 
-  const role = await Role.findByPk(id)
-  await role.update({ name, description: updatedRole.description })
+  await role.update(
+    { name: updatedRole.name, description: name },
+    { where: { id } }
+  )
 
   res.json(role)
 })
 
-// ! NOTE: clientId is needed in the body for auth0 side
-// for severing association between client group and role group
+// ! NOTE 1: clientId is needed in the body for auth0 side
+// ! for severing association between client group and role group
+// ! NOTE 2: Phase 2+: TODO: Delete all users who are only associated with the deleted role
 subApp.delete('/roles/:id', async ({
   params: { id },
   body: { clientId },
@@ -193,10 +212,9 @@ subApp.delete('/roles/:id', async ({
   }
 
   await auth0.roles.delete({ id, clientId })
-  // TODO: Delete all users who are only associated with this role
 
   const role = await Role.findByPk(id)
-  await role.destroy(id)
+  await role.destroy()
 
   res.json(role)
 })
@@ -205,7 +223,7 @@ subApp.get('/roles/:roleId/users', async ({
   params: { roleId },
 }, res) => {
   const role = await Role.findByPk(roleId)
-  const roleUsers = await role.getUsers()
+  const roleUsers = await role.getUsers({ raw: true })
 
   res.json(roleUsers)
 })
@@ -214,7 +232,7 @@ subApp.get('/users/:userId/roles', async ({
   params: { userId },
 }, res) => {
   const user = await User.findByPk(userId)
-  const userRoles = await user.getRoles()
+  const userRoles = await user.getRoles({ raw: true })
 
   res.json(userRoles)
 })
@@ -232,19 +250,29 @@ subApp.get('/users/:id', async ({
 })
 
 subApp.post('/users', async ({
-  body: { username, email, password },
+  body: { username, email, password, clientId, roleId },
 }, res, next) => {
+
   if (!Boolean(username)) {
     next('username field invalid')
     return
+  } else if (!Boolean(roleId)) {
+    next('user must belong to at least one role')
+    return
   }
 
+  const transaction = await sequelize.transaction()
+
   const userInAuth0 = await auth0.users.create({ username, email, password })
-  // TODO: add the user to the auth0 client group
-  // TODO: add the user to the auth0 role group (but not the actual 'role' in auth0)
+  await auth0.authClient.addGroupMember(clientId, userInAuth0.user_id)
+  await auth0.authClient.addGroupMember(roleId, userInAuth0.user_id)
 
-  const user = await User.create({ id: userInAuth0.user_id, username })
+  const user = await User.create({ id: userInAuth0.user_id, username }, { transaction })
+  const role = await Role.findByPk(roleId, { transaction })
 
+  await user.addRole(role, { transaction })
+
+  transaction.commit()
   res.json(user)
 })
 
@@ -254,18 +282,15 @@ subApp.patch('/users/:id', async ({
 }, res) => {
   await auth0.users.update({ id, username, email, password })
 
-  // TODO: Is there a sequelize find and update method?
-  const user = await User.findByPk(id)
-  const updatedUser = await user.update({ username })
-
+  const updatedUser = await User.update({ username }, { where: { id } })
   res.json(updatedUser)
 })
 
+// ! Maybe Phase 2+: TODO: Delete user's association to role GROUP in auth0
 subApp.delete('/users/:id', async ({
   params: { id },
 }, res) => {
   await auth0.users.delete(id)
-  // TODO: Delete user's association to role GROUP in auth0
 
   const user = await User.findByPk(id)
   await user.destroy()

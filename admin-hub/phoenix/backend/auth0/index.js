@@ -11,4 +11,5 @@ module.exports = {
   clients,
   roles,
   users,
+  authClient,
 }
