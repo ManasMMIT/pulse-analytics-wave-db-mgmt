@@ -2,17 +2,13 @@
   "name": "wave-db-mgmt",
   "version": "1.0.0",
   "description": "A repository for managing data into Pulse databases.",
-  "main": "index.js",
   "repository": "https://github.com/pulse-data/wave-db-mgmt.git",
-  "author": "Jon Lin <jon.cp.lin@gmail.com>",
+  "proxy": "http://localhost:1337/",
   "license": "MIT",
-  "scripts": {
-    "repl": "node --inspect=127.0.0.1:2000 ./pulse-core-psql/sequelizeConsole.js",
-    "phoenix": "nodemon ./admin-hub/phoenix/backend/index.js",
-    "test": "jest",
-    "test:debug": "node --inspect node_modules/.bin/jest --runInBand"
-  },
   "dependencies": {
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "react-scripts": "3.0.1",
     "body-parser": "^1.19.0",
     "d3-collection": "^1.0.7",
     "dotenv": "^6.2.0",
@@ -27,9 +23,33 @@
     "sequelize": "^5.3.0",
     "string-similarity": "^3.0.0",
     "uuid": "^3.3.2",
-    "yargs": "^12.0.5"
+    "yargs": "^12.0.5",
+    "@emotion/core": "^10.0.14",
+    "@emotion/styled": "^10.0.14"
   },
-  "devDependencies": {
-    "jest": "^24.8.0"
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "react:test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "repl": "node --inspect=127.0.0.1:2000 ./pulse-core-psql/sequelizeConsole.js",
+    "phoenix": "nodemon ./admin-hub/phoenix/backend/index.js",
+    "test": "jest",
+    "test:debug": "node --inspect node_modules/.bin/jest --runInBand"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }
