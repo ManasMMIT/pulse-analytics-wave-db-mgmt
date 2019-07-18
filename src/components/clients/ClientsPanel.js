@@ -10,7 +10,7 @@ const Wrapper = styled.div({
   minHeight: '100vh',
   maxHeight: '100vh',
   overflowY: 'scroll',
-}) 
+})
 
 const Title = styled.div({
   color: '#536f8d',
