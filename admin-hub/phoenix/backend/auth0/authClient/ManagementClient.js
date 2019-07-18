@@ -159,8 +159,8 @@ module.exports = class {
     // and more specifically, has to do isolated updates
     // of password and email for some reason
     const queryBody1 = { username, name: username }
-    const queryBody2 = { password }
-    const queryBody3 = { email }
+    const queryBody2 = { email }
+    const queryBody3 = { password }
 
     const patchQuery = bodyObj => () => (
       fetch(`${this.audience}users/${id}`, {
@@ -176,10 +176,15 @@ module.exports = class {
       })
     )
 
-    return this.authenticate()
+    let promise = this.authenticate()
       .then(patchQuery(queryBody1))
       .then(patchQuery(queryBody2))
-      .then(patchQuery(queryBody3))
+
+    if (password) {
+      promise = promise.then(patchQuery(queryBody3))
+    }
+
+    return promise
       .then(checkStatus)
       .then(response => response.json())
   }

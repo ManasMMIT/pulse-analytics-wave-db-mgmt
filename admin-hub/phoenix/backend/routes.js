@@ -1,4 +1,5 @@
 const express = require('express')
+const _ = require('lodash')
 
 // TODO: Uninstall uuid because auth0 has control over ids!
 // ? temporary until we change the user model via sequelize migration
@@ -223,9 +224,17 @@ subApp.get('/roles/:roleId/users', async ({
   params: { roleId },
 }, res) => {
   const role = await Role.findByPk(roleId)
-  const roleUsers = await role.getUsers({ raw: true })
+  const roleUsers = await role.getUsers()
 
-  res.json(roleUsers)
+  const usersWithRolesForEachUser = []
+  for (const user of roleUsers) {
+    const roles = await user.getRoles({ raw: true })
+    const userJson = user.toJSON()
+    userJson.roles = roles
+    usersWithRolesForEachUser.push(userJson)
+  }
+
+  res.json(usersWithRolesForEachUser)
 })
 
 subApp.get('/users/:userId/roles', async ({
@@ -278,11 +287,55 @@ subApp.post('/users', async ({
 
 subApp.patch('/users/:id', async ({
   params: { id },
-  body: { username, email, password },
-}, res) => {
+  body: { username, email, password, roles },
+}, res, next) => {
+  if (!username || !email || _.isEmpty(roles)) {
+    next('Error: required fields were left blank')
+    return
+  }
+
+  let incomingRoles = roles
+  if (!Array.isArray(incomingRoles)) incomingRoles = [incomingRoles]
+
+  // AUTH0 WORK
+  const groupsInAuth0 = await auth0.authClient.getUserGroups(id, false)
+
+  // filter out the CLIENT group to only keep the role groups
+  // and map to get just the id strings
+  roleGroupsInAuth0 = groupsInAuth0
+    .filter(({ name }) => name.includes('-'))
+    .map(({ _id }) => _id)
+
+  const doRolesNeedUpdate = _.xor(incomingRoles, roleGroupsInAuth0).length > 0
+
+  let rolesToLink
+  if (doRolesNeedUpdate) {
+    const rolesToDelink = roleGroupsInAuth0.reduce((acc, currentRoleId) => {
+      if (!incomingRoles.includes(currentRoleId)) acc.push(currentRoleId)
+      return acc
+    }, [])
+
+    rolesToLink = incomingRoles.reduce((acc, incomingRoleId) => {
+      if (!roleGroupsInAuth0.includes(incomingRoleId)) acc.push(incomingRoleId)
+      return acc
+    }, [])
+
+    for (const roleToDelink of rolesToDelink) {
+      await auth0.authClient.removeGroupMember(roleToDelink, id)
+    }
+
+    for (const roleToLink of rolesToLink) {
+      await auth0.authClient.addGroupMember(roleToLink, id)
+    }
+  }
+
   await auth0.users.update({ id, username, email, password })
 
-  const updatedUser = await User.update({ username }, { where: { id } })
+  // PSQL WORK
+  const user = await User.findByPk(id)
+  if (doRolesNeedUpdate) await user.setRoles(incomingRoles)
+  const updatedUser = await user.update({ username })
+
   res.json(updatedUser)
 })
 
