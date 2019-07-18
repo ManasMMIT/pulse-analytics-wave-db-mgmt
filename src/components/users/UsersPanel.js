@@ -1,16 +1,46 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import styled from "@emotion/styled";
 
-import User from './User'
+import PanelItem from './../PanelItem'
 
-const UsersPanel = ({ users }) => (
-  <div style={{ flex: 2, backgroundColor: '#f7f9fa' }}>
-    <h1>Users</h1>
-    <div>{
-      users.map(user => <User key={user.id} user={user} />)
-    }</div>
-  </div>
-)
+const Title = styled.div({
+  fontWeight: 700,
+  fontSize: 24,
+  padding: 24,
+})
+
+const UsersPanel = ({
+  users,
+  teamName,
+  handlers,
+  selectedUser,
+}) => {
+
+  return (
+    <div style={{ flex: 2, backgroundColor: '#f7f9fa' }}>
+      <Title>Users</Title>
+      <div>{
+        users.map(user => {
+          // const isSelected = selectedUser === user.id
+          const style = {
+            padding: 24,
+          }
+
+          return (
+            <PanelItem
+              key={user.id}
+              style={style}
+              handlers={handlers}
+              item={user}
+              text={user.username}
+            />
+          )
+        })
+      }</div>
+    </div>
+  )
+}
 
 UsersPanel.defaultProps = {
   users: [],
@@ -18,6 +48,9 @@ UsersPanel.defaultProps = {
 
 UsersPanel.propTypes = {
   users: PropTypes.array,
-}
+  teamName: PropTypes.string,
+  handlers: PropTypes.object,
+  selectedUser: PropTypes.string,
+};
 
 export default UsersPanel

@@ -41,7 +41,7 @@ subApp.post('/clients', async ({ body: { name } }, res, next) => {
   const defaultRoleName = `${name}-admin`
   const defaultRoleDescrip = 'admin'
 
-  await auth0.roles.create({
+  const roleInAuth0 = await auth0.roles.create({
     clientId: clientInAuth0._id,
     name: defaultRoleName,
     description: defaultRoleDescrip,
@@ -51,13 +51,16 @@ subApp.post('/clients', async ({ body: { name } }, res, next) => {
   const client = await Client.create({
     name,
     description: clientInAuth0.description,
-    id: clientInAuth0._id
+    id: clientInAuth0._id,
   })
 
-  await Role.create({
+  const defaultRole = await Role.create({
+    id: roleInAuth0._id,
     name: defaultRoleName,
     description: defaultRoleDescrip,
   })
+
+  await client.addRole(defaultRole)
 
   res.json(client)
 })
@@ -154,8 +157,6 @@ subApp.post('/roles', async ({
     return
   }
 
-  const transaction = await sequelize.transaction()
-
   // auth0
   const { name: clientName } = await auth0.clients.find(clientId)
 
@@ -168,6 +169,8 @@ subApp.post('/roles', async ({
   const roleCreatedInAuth0 = await auth0.roles.create(dataObjForAuth0)
 
   // Postgres
+  const transaction = await sequelize.transaction()
+
   const role = await Role.create(
     {
       id: roleCreatedInAuth0._id,
@@ -190,14 +193,12 @@ subApp.patch('/roles/:id', async ({
   params: { id },
   body: { name },
 }, res) => {
-  const updatedRole = await auth0.roles.update({ id, name })
+  const roleInAuth0 = await auth0.roles.update({ id, name })
 
-  await role.update(
-    { name: updatedRole.name, description: name },
-    { where: { id } }
-  )
+  const roleInPsql = await Role.findByPk(id)
+  const updatedRole = await roleInPsql.update({ name: roleInAuth0.name, description: name })
 
-  res.json(role)
+  res.json(updatedRole)
 })
 
 // ! NOTE 1: clientId is needed in the body for auth0 side
@@ -207,11 +208,15 @@ subApp.delete('/roles/:id', async ({
   params: { id },
   body: { clientId },
 }, res, next) => {
+  console.log(clientId);
+
   if (!Boolean(clientId)) {
     next('must specify clientId')
     return
   }
 
+  // TODO: DOESN'T ACTUALLY DELETE THE ROLE (Removes associations)
+  // Reassess what auth0 deletion is actually doing
   await auth0.roles.delete({ id, clientId })
 
   const role = await Role.findByPk(id)
@@ -268,13 +273,16 @@ subApp.post('/users', async ({
   } else if (!Boolean(roleId)) {
     next('user must belong to at least one role')
     return
+  } else if (username.includes(' ')) {
+    next('username cannot have spaces')
   }
 
-  const transaction = await sequelize.transaction()
-
   const userInAuth0 = await auth0.users.create({ username, email, password })
+
   await auth0.authClient.addGroupMember(clientId, userInAuth0.user_id)
   await auth0.authClient.addGroupMember(roleId, userInAuth0.user_id)
+
+  const transaction = await sequelize.transaction()
 
   const user = await User.create({ id: userInAuth0.user_id, username }, { transaction })
   const role = await Role.findByPk(roleId, { transaction })

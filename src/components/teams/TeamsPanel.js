@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
 
-import Team from '../teams/Team'
+import PanelItem from "./../PanelItem";
 
 const Wrapper = styled.div({
   flex: 1,
@@ -36,28 +36,39 @@ const ListTitle = styled.div({
 })
 
 const TeamsPanel = ({
-  onClick,
+  handlers,
   teams,
-  client,
+  clientName,
   selectedTeam,
 }) => (
   <Wrapper>
     <Header>
       <Subtitle>Client</Subtitle>
-      <Title>{ client.name }</Title>
+      <Title>{ clientName }</Title>
     </Header>
     <ListTitle>Teams</ListTitle>
     <div>{
       teams.map(team => {
         const isSelected = team.id === selectedTeam
+        const style = {
+          cursor: isSelected ? "default" : "pointer",
+          backgroundColor: isSelected ? "#f8fafb" : null,
+          padding: 24,
+          color: isSelected ? "#2a7ad3" : "#838c96",
+          borderLeft: isSelected
+            ? "4px solid #1f6cc7"
+            : "4px solid transparent"
+        };
+
         return (
-          <Team
+          <PanelItem
+            style={style}
             key={team.id}
-            onClick={onClick}
-            team={team}
-            isSelected={isSelected}
+            handlers={handlers}
+            item={team}
+            text={team.description}
           />
-        )
+        );
     })
     }</div>
   </Wrapper>
@@ -69,7 +80,7 @@ TeamsPanel.defaultProps = {
 }
 
 TeamsPanel.propTypes = {
-  onClick: PropTypes.func.isRequired,
+  handlers: PropTypes.object,
   teams: PropTypes.array,
   client: PropTypes.object,
   selectedTeam: PropTypes.string,

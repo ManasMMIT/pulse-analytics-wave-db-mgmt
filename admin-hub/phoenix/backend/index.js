@@ -7,6 +7,7 @@ const app = express()
 const port = 1337
 
 app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json())
 
 app.use('/api', routes)
 

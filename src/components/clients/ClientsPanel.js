@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
 
-import Client from './Client'
+import PanelItem from './../PanelItem'
 
 const Wrapper = styled.div({
   flex: 1,
@@ -20,21 +20,30 @@ const Title = styled.div({
 })
 
 const ClientsPanel = ({
-  onClick,
+  handlers,
   clients,
   selectedClient,
 }) => (
   <Wrapper>
     <Title>Clients</Title>
     <div>{
-      clients.map((client, idx) => {
+      clients.map(client => {
         const  isSelected = client.id === selectedClient
+        const style = {
+          cursor: isSelected ? 'default' : 'pointer',
+          backgroundColor: isSelected ? '#1c4161' : null,
+          padding: 24,
+          color: isSelected ? '#ebf6fb' : '#7a97b1',
+          borderLeft: isSelected ? '4px solid #0f66d0' : '4px solid transparent',
+        }
+
         return (
-          <Client
+          <PanelItem
             key={client.id}
-            onClick={onClick}
-            client={client}
-            isSelected={isSelected}
+            style={style}
+            handlers={handlers}
+            item={client}
+            text={client.name}
           />
         )
       })
@@ -48,7 +57,7 @@ ClientsPanel.defaultProps = {
 
 ClientsPanel.propTypes = {
   clients: PropTypes.array,
-  onClick: PropTypes.func.isRequired,
+  handlers: PropTypes.object,
   selectedClient: PropTypes.string,
 }
 
