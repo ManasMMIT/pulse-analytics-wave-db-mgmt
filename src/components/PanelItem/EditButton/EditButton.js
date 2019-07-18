@@ -4,6 +4,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit } from "@fortawesome/free-solid-svg-icons";
 
 import Modal from '../../Modal'
+// import SimpleForm from './../../forms/SimpleForm'
+// import UserForm from './../../forms/UserForm'
 
 class EditButton extends Component {
   state = {
@@ -21,10 +23,14 @@ class EditButton extends Component {
   }
 
   render() {
-    // const {
-    //   editHandler,
-    //   item,
-    // } = this.props
+    const {
+      editHandler,
+      data,
+      // formType,
+    } = this.props
+    // const Form = formType !== 'user'
+    //   ? SimpleForm
+    //   : UserForm
 
     return (
       <>
@@ -36,9 +42,11 @@ class EditButton extends Component {
           show={this.state.open}
           handleClose={this.handleClose}
         >
-          ...
+          <Form
+            editHandler={editHandler}
+            data={data}
+          />
         </Modal>
-        {/* // <EditFormModal item={item} editHandler={editHandler} /> */}
       </>
     );
   }
