@@ -30,6 +30,11 @@ const Header = styled.div({
   justifyContent: 'space-between',
 });
 
+const Title = styled.div({
+  color: 'black',
+  fontWeight: 700,
+});
+
 const Modal = ({
   handleClose,
   children,
@@ -42,7 +47,7 @@ const Modal = ({
     <Wrapper>
       <Main>
         <Header>
-          <div>{title}</div>
+          <Title>{title}</Title>
           <button onClick={handleClose}>close</button>
         </Header>
         {children}
