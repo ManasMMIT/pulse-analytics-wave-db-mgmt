@@ -67,16 +67,10 @@ subApp.post('/clients', async ({ body: { name } }, res, next) => {
 
 subApp.patch('/clients/:id', async ({
   params: { id },
-  body: {
-    name,
-    description,
-  },
+  body: { name },
 }, res, next) => {
   if (!Boolean(name)) {
     next('name field invalid')
-    return
-  } else if (!Boolean(description)) {
-    next('description field invalid')
     return
   }
 
@@ -90,12 +84,12 @@ subApp.patch('/clients/:id', async ({
   await auth0.clients.update({
     id,
     name,
-    description,
+    description: name,
   })
 
   const updatedClient = await client.update({
     name,
-    description,
+    description: name,
   })
 
   res.json(updatedClient)
