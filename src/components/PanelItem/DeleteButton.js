@@ -11,7 +11,7 @@ const DeleteButton = ({
   return (
     <span
       style={style}
-      onClick={e => deleteHandler(e, itemId)}
+      onClick={() => deleteHandler(itemId)}
     >
       <FontAwesomeIcon icon={faTrashAlt} />
     </span>

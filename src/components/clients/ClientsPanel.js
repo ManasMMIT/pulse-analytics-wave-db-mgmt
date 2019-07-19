@@ -37,15 +37,21 @@ const ClientsPanel = ({
           borderLeft: isSelected ? '4px solid #0f66d0' : '4px solid transparent',
         }
 
+        const formConfig = {
+          formTitle: 'Edit Client',
+          formType: 'client',
+        }
+
         return (
           <PanelItem
             key={client.id}
             style={style}
             handlers={handlers}
+            formConfig={formConfig}
             item={client}
             text={client.name}
           />
-        )
+        );
       })
     }</div>
     </Wrapper>

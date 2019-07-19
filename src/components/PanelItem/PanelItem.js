@@ -10,11 +10,11 @@ const defaultStyle = {
 }
 
 const PanelItem = ({
-  // onClick,
   item,
   text,
   style,
   handlers,
+  formConfig,
   isSelected,
 }) => {
   const {
@@ -29,10 +29,19 @@ const PanelItem = ({
     >
       <span>{text}</span>
       <span>
-        {editHandler && <EditButton editHandler={editHandler} />}
+        {editHandler && (
+          <EditButton
+            data={item}
+            formConfig={formConfig}
+            editHandler={editHandler}
+          />
+        )}
         <span style={{ marginLeft: 12 }}>
           {deleteHandler && (
-            <DeleteButton itemId={item.id} deleteHandler={deleteHandler} />
+            <DeleteButton
+              itemId={item.id}
+              deleteHandler={deleteHandler}
+            />
           )}
         </span>
       </span>

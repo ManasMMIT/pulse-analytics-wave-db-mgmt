@@ -22,7 +22,6 @@ const UsersPanel = ({
       <Title>Users</Title>
       <div>{
         users.map(user => {
-          // const isSelected = selectedUser === user.id
           const style = {
             padding: 24,
           }

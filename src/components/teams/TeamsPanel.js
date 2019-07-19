@@ -60,11 +60,17 @@ const TeamsPanel = ({
             : "4px solid transparent"
         };
 
+        const formConfig = {
+          formTitle: 'Edit Team',
+          formType: 'team',
+        }
+
         return (
           <PanelItem
             style={style}
             key={team.id}
             handlers={handlers}
+            formConfig={formConfig}
             item={team}
             text={team.description}
           />
