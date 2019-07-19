@@ -35,25 +35,34 @@ const Title = styled.div({
   fontWeight: 700,
 });
 
-const Modal = ({
-  handleClose,
-  children,
-  show,
-  title,
-}) => {
-  if (!show) return null
+class Modal extends React.Component {
+  handleClickAway = e => {
+    if (!this.node.contains(e.target)) {
+      this.props.handleClose();
+    }
+  }
 
-  return (
-    <Wrapper>
-      <Main>
-        <Header>
-          <Title>{title}</Title>
-          <button onClick={handleClose}>close</button>
-        </Header>
-        {children}
-      </Main>
-    </Wrapper>
-  );
+  render() {
+    const {
+      handleClose,
+      children,
+      show,
+      title,
+    } = this.props;
+
+    if (!show) return null;
+
+    return (
+      <Wrapper onClick={this.handleClickAway}>
+        <Main ref={node => { this.node = node }}>
+          <Header>
+            <Title>{title}</Title>
+            <button onClick={handleClose}>close</button>
+          </Header>
+          {children}
+        </Main>
+      </Wrapper>
+    );
+  }
 }
-
-export default Modal
+export default Modal;
