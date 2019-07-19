@@ -18,9 +18,14 @@ const port = 2000
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
-app.use('/getCollections', async (req, res) => {
+app.use('/collections', async (req, res) => {
   const collections = await db.listCollections().toArray()
   res.json(collections.map(({ name }) => name))
+})
+
+app.post('/collection', async (req, res) => {
+  const createdCollection = await db.createCollection(req.body.collectionName)
+  res.send(createdCollection.collectionName)
 })
 
 app.listen(port, () => console.log(`ORION SERVER ONLINE. PORT ${port}!`))

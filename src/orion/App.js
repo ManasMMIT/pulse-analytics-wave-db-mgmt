@@ -2,6 +2,7 @@ import React, { Component } from "react"
 import _ from 'lodash'
 import XLSX from 'xlsx'
 import Select from 'react-select'
+import CreatableSelect from 'react-select/creatable'
 import './spinner.css'
 // import sheetToJson from 'sheetToJson'
 // const {
@@ -30,7 +31,7 @@ class App extends Component {
   }
 
   componentDidMount() {
-    fetch('getCollections')
+    fetch('collections')
       .then(res => res.json())
       .then(collectionNames => this.setState({ collectionNames }))
   }
@@ -41,6 +42,24 @@ class App extends Component {
 
   handleCollectionSelection = selectedCollection => {
     this.setState({ selectedCollection })
+  }
+
+  handleCollectionCreation = collectionName => {
+    fetch('collection', {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ collectionName }),
+    }).then(res => res.text())
+    .then(newCollectionName => {
+
+      const collectionNames = _.cloneDeep(this.state.collectionNames)
+      collectionNames.push(newCollectionName)
+
+      this.setState({
+        collectionNames,
+        selectedCollection: { value: newCollectionName, label: newCollectionName },
+      })
+    })
   }
 
   onFilesAdded = () => {
@@ -103,12 +122,16 @@ class App extends Component {
           selectedSheet && (
             <div style={{ marginTop: 24 }}>
               <p>Which collection which you like to upload to?</p>
-              <p>If the collection exists, it'll be overwritten. If not, a new collection will be created.</p>
+              <p>Create a blank collection or pick an existing collection to overwrite.</p>
 
-              <Select
-                value={selectedCollection}
+              <CreatableSelect
+                // isClearable
+                // isDisabled={isLoading}
+                // isLoading={isLoading}
                 onChange={this.handleCollectionSelection}
+                onCreateOption={this.handleCollectionCreation}
                 options={collectionNames.map(n => ({ value: n, label: n }))}
+                value={selectedCollection}
               />
             </div>
           )
