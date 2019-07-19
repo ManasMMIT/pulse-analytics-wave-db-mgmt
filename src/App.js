@@ -4,8 +4,12 @@ import ClientsPanel from "./components/clients/ClientsPanel";
 import {
   getAllClients,
   getClient,
+  editClient,
   getAllTeamUsers,
   getAllClientRoles,
+  deleteTeam,
+  deleteClient,
+  deleteUser,
 } from "./endpoints";
 import TeamsPanel from "./components/teams/TeamsPanel";
 import UsersPanel from "./components/users/UsersPanel";
@@ -32,7 +36,6 @@ class App extends Component {
     const selectedTeam = teams.length ? teams[0].id : null;
 
     const users = await getAllTeamUsers(selectedTeam);
-
     const selectedUser = users.length ? users[0].id : null;
 
     this.setState({
@@ -46,7 +49,7 @@ class App extends Component {
   };
 
   handleTeamClick = async teamId => {
-    const users = await getAllTeamUsers(teamId)
+    const users = await getAllTeamUsers(teamId);
     this.setState({
       users,
       selectedTeam: teamId,
@@ -59,7 +62,7 @@ class App extends Component {
 
     let users = [];
     if (teams.length) {
-      users = await getAllTeamUsers(teams[0].id)
+      users = await getAllTeamUsers(teams[0].id);
     }
 
     this.setState({
@@ -67,61 +70,57 @@ class App extends Component {
       users,
       selectedClient: clientId,
       selectedTeam: teams.length ? teams[0].id : null,
-      selectedUser: users.length ? users[0].id : null
+      selectedUser: users.length ? users[0].id : null,
     });
   };
 
-  handleUserClick = userId => {
+  handleEditClient = async ({ id: clientId, name }) => {
+    const client = await editClient(clientId, name);
+
+    const clientInState = this.state.clients
+      .find(({ id }) => clientId === id);
+
+    clientInState.name = client.name;
+    this.setState({ clients: this.state.clients });
+  }
+
+  handleClickUser = userId => {
     this.setState({ selectedUser: userId });
   };
 
-  deleteTeam = async (e, teamId) => {
-    e.stopPropagation();
-    debugger
-    await fetch(`api/roles/${teamId}`, {
-      method: "DELETE",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        clientId: this.state.selectedClient
-      }),
-    });
-    const { teams } = this.state;
+  handleDeleteTeam = async teamId => {
+    await deleteTeam(teamId);
+
+    const { teams, users } = this.state;
     const newTeams = teams.filter(({ id }) => id !== teamId);
     const selectedTeam = newTeams.length
       ? newTeams[0].id
       : null;
 
-    let newUsers = this.state.users
+    let newUsers = users;
     if (newTeams.length) {
-      newUsers = await getAllTeamUsers(newTeams[0].id)
+      newUsers = await getAllTeamUsers(newTeams[0].id);
     }
 
     this.setState({ teams: newTeams, selectedTeam, users: newUsers });
   };
 
-  deleteClient = async (e, clientId) => {
-    e.stopPropagation();
-
-    await fetch(`api/clients/${ clientId }`, {
-      method: 'DELETE',
-    })
-    console.log('deleted!');
+  handleDeleteClient = async clientId => {
+    await deleteClient(clientId);
   }
 
-  deleteUser = async (e, userId) => {
-    e.stopPropagation();
-    await fetch(`api/users/${ userId }`, {
-      method: 'DELETE',
-    })
+  handleDeleteUser = async userId => {
+    await deleteUser(userId);
+
     const { users } = this.state;
-    const newUsers = users.filter(({ id }) => id !== userId)
+    const newUsers = users.filter(({ id }) => id !== userId);
     const selectedUser = newUsers.length ? newUsers[0].id : null;
     this.setState({ users: newUsers, selectedUser });
   };
 
-  handleUserEdit = user => {
+  // handleUserEdit = user => {
     // TODO
-  }
+  // }
 
   render() {
     const {
@@ -145,8 +144,8 @@ class App extends Component {
           selectedClient={selectedClient}
           handlers={{
             onClick: this.handleClientClick,
-            editHandler: () => {},
-            deleteHandler: this.deleteClient,
+            editHandler: this.handleEditClient,
+            deleteHandler: this.handleDeleteClient
           }}
         />
         <TeamsPanel
@@ -155,7 +154,7 @@ class App extends Component {
           selectedTeam={selectedTeam}
           handlers={{
             onClick: this.handleTeamClick,
-            deleteHandler: this.deleteTeam,
+            deleteHandler: this.handleDeleteTeam,
             editHandler: () => {}
           }}
         />
@@ -163,8 +162,8 @@ class App extends Component {
           teamName={selectedTeamName}
           users={users}
           handlers={{
-            onClick: this.handleUserClick,
-            deleteHandler: this.deleteUser,
+            onClick: this.handleClickUser,
+            deleteHandler: this.handleDeleteUser,
             editHandler: this.handleUserEdit
           }}
           selectedUser={selectedUser}
