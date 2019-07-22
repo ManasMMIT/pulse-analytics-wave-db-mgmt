@@ -36,7 +36,7 @@ app.post('/upload', async (req, res) => {
 
   const persistedData = await targetCollection.find().toArray()
 
-  res.send(persistedData)
+  res.json(persistedData)
 })
 
 app.listen(port, () => console.log(`ORION SERVER ONLINE. PORT ${port}!`))
