@@ -90,8 +90,13 @@ class App extends Component {
         this.workbook = workbook
 
         const sheetNames = workbook.SheetNames
+        const selectedSheet = { value: sheetNames[0], label: sheetNames[0] }
 
-        this.setState({ sheetNames, isLoading: false })
+        this.setState({
+          sheetNames,
+          isLoading: false,
+          selectedSheet,
+        })
       }
 
       reader.readAsArrayBuffer(file)
