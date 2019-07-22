@@ -1,11 +1,27 @@
 import XLSX from 'xlsx'
+const _ = require('lodash')
 
-import {
-  isEmptyRow,
-  sanitizeKeysAndTrimData,
-} from '../../utils'
+function sanitizeKeysAndTrimData(obj) {
+  const result = _.reduce(obj, (acc, value, key) => {
+    const trimmedKey = key.trim() // in case the key has weird zero width unicode chars
+    if (!trimmedKey || value === '') return acc
 
-const convertToJson = sheet => {
+    acc[_.camelCase(trimmedKey)] = typeof value === 'string' ? value.trim() : value
+    return acc
+  }, {})
+
+  return result
+}
+
+function isEmptyRow(obj) {
+  for (const key in obj) {
+    if (obj[key] !== "") return false
+  }
+
+  return true
+}
+
+const sheetToJson = sheet => {
   const json = XLSX.utils.sheet_to_json(sheet, { blankrows: true })
 
   // remove the second and third rows from the json
@@ -25,4 +41,4 @@ const convertToJson = sheet => {
   return { json: formattedData, numExcludedRows }
 }
 
-export default convertToJson
+export default sheetToJson

@@ -4,13 +4,7 @@ import XLSX from 'xlsx'
 import Select from 'react-select'
 import CreatableSelect from 'react-select/creatable'
 import './spinner.css'
-// import sheetToJson from 'sheetToJson'
-// const {
-//   isEmptyRow,
-//   sanitizeKeysAndTrimData,
-//   getScriptTerminator
-// } = require('../utils')
-// const parseSchema = require('mongodb-schema')
+import sheetToJson from './sheetToJson'
 
 class App extends Component {
   constructor(props) {
@@ -62,24 +56,46 @@ class App extends Component {
     })
   }
 
+  submitHandler = () => {
+    const { selectedSheet, selectedCollection } = this.state
+
+    this.setState({ isLoading: true }, () => {
+      const selectedSheetObj = this.workbook.Sheets[selectedSheet.value]
+      const { json, numExcludedRows } = sheetToJson(selectedSheetObj)
+
+      fetch('upload', {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ data: json, collectionName: selectedCollection.value }),
+      }).then(res => res.json())
+        .then(persistedData => {
+          const numberOfRows = persistedData.length
+
+          this.setState({ isLoading: false }, () => {
+            alert(`${numberOfRows} rows uploaded; ${numExcludedRows} rows excluded`)
+          })
+        })
+    })
+  }
+
   onFilesAdded = () => {
-    this.setState({ isLoading: true })
+    this.setState({ isLoading: true }, () => {
+      const file = this.fileInputRef.current.files[0]
 
-    const file = this.fileInputRef.current.files[0]
+      const reader = new FileReader()
 
-    const reader = new FileReader()
+      reader.onload = e => {
+        const data = new Uint8Array(e.target.result)
+        const workbook = XLSX.read(data, { type: 'array' })
+        this.workbook = workbook
 
-    reader.onload = e => {
-      const data = new Uint8Array(e.target.result)
-      const workbook = XLSX.read(data, {type: 'array'})
-      this.workbook = workbook
+        const sheetNames = workbook.SheetNames
 
-      const sheetNames = workbook.SheetNames
+        this.setState({ sheetNames, isLoading: false })
+      }
 
-      this.setState({ sheetNames, isLoading: false })
-    }
-
-    reader.readAsArrayBuffer(file)
+      reader.readAsArrayBuffer(file)
+    })
   }
 
   render() {
@@ -125,14 +141,19 @@ class App extends Component {
               <p>Create a blank collection or pick an existing collection to overwrite.</p>
 
               <CreatableSelect
-                // isClearable
-                // isDisabled={isLoading}
-                // isLoading={isLoading}
                 onChange={this.handleCollectionSelection}
                 onCreateOption={this.handleCollectionCreation}
                 options={collectionNames.map(n => ({ value: n, label: n }))}
                 value={selectedCollection}
               />
+            </div>
+          )
+        }
+
+        {
+          selectedCollection && (
+            <div style={{ marginTop: 24 }}>
+              <button onClick={this.submitHandler}>Upload</button>
             </div>
           )
         }
@@ -145,14 +166,3 @@ class App extends Component {
 
 
 export default App
-
-        // var excelFile = document.getElementById("fileDemo").files[0];
-        // var password = $("#password").val();
-
-        // // here is excel IO API
-        // excelIo.open(excelFile, function(json) {
-        //     var workbookObj = json;
-
-        //     spread.fromJSON(workbookObj);
-        //   $('.spinner').hide()
-        //   $('.wrap').css({visibility:'visible'})

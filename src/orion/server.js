@@ -28,4 +28,15 @@ app.post('/collection', async (req, res) => {
   res.send(createdCollection.collectionName)
 })
 
+app.post('/upload', async (req, res) => {
+  const targetCollection = db.collection(req.body.collectionName)
+
+  await targetCollection.deleteMany()
+  await targetCollection.insertMany(req.body.data)
+
+  const persistedData = await targetCollection.find().toArray()
+
+  res.send(persistedData)
+})
+
 app.listen(port, () => console.log(`ORION SERVER ONLINE. PORT ${port}!`))
