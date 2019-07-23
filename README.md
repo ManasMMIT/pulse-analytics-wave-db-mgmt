@@ -51,7 +51,12 @@ project-based, then run the same command but include the `--ignoreProjects` flag
 node ./importHistoricalData --filepath ~/Desktop/payerHistoricalMmitStateLives-9-2018.csv --ignoreProjects
 ```
 
-**NOTE:** The `syncDrgMmitMedicalLives` script automatically executes on pulse-core whenever MMIT lives are imported into pulse-core (but before the latest month/year MMIT lives data is pushed to pulse-dev, and before the MMIT totals collection is calculated). That script does the following:
+#### Syncing MMIT State Medical Lives
+The MMIT Lives provided by Regeneron either does not contain or contains sparce medical lives data for each payer. To solve this we created a script that fills in the missing medical state lives. **This does not fill in missing medical NATIONAL Lives**
+
+The `syncDrgMmitMedicalLives` script automatically executes on pulse-core whenever MMIT lives are imported into pulse-core (but before the latest month/year MMIT lives data is pushed to pulse-dev, and before the MMIT totals collection is calculated).
+
+That script does the following:
 1. gets the latest month/year DRG lives but limits that data to the slugs found in the latest month/year MMIT lives set
 2. if a given slug/state combo in the DRG lives data from step 1 is found in the latest month/year MMIT lives set, then that MMIT lives row is updated to have a copy of the DRG medical lives (the pharmacy lives are left untouched)
 3. if a given slug/state combo in the DRG lives data from step 1 CANNOT be found in the latest month/year MMIT lives set, then that DRG row is copied over with only medical lives into the MMIT lives data
