@@ -7,6 +7,7 @@ This repo is meant to eventually become Pulse's primary internal database manage
 3. [Uploading a CSV of provider indication/regimen combos for admin hub to source from](#3-uploading-provider-ind/reg-combos-for-admin-hub)
 4. [Updating Dashboards Permissions Prototype Collection on Dev](#4-updating-dashboards-permissions-prototype-on-dev)
 5. [Exporting Novartis CSV Data](#5-exporting-novartis-csv-data)
+6. [Phoenix](#6-phoenix)
 
 # Before you do anything else
 
@@ -232,3 +233,16 @@ node ./exportNovartisCsvData
 That will output a CSV file in the format `NOVARTIS_KYMRIAH_${DATE}.csv` within the `./exportNovartisCsvData` directory.
 
 Refer to [this Conf doc for specs](https://dedhamgroup.atlassian.net/wiki/spaces/PAD/pages/659521555/Kymriah+CSV+Export).
+
+# 6. Phoenix
+Phoenix controls and manages all permissions in the Pulse Analytics application. It is the 2nd iteration of permission management. The pervious version was Admin Hub delivered in March 2018.
+
+## Starting Phoenix Locally
+Start the server:
+```
+yarn phoenix
+```
+Start the front-end app:
+```
+yarn start
+```
