@@ -105,6 +105,7 @@ module.exports = class {
     return this.addNestedGroups(groupId, [groupIdToAdd])
   }
 
+  // TODO: This function is known to occasionally randomly fail
   addNestedGroups(groupId, groupIdsToAddArray) {
     return this.authenticate().then(() =>
       fetch(`https://pulse-digital.us.webtask.io/adf6e2f2b84784b57522e3b19dfc9201/api/groups/${groupId}/nested`, {
@@ -173,6 +174,17 @@ module.exports = class {
 
     return this.authenticate()
       .then(paginateUserRequest)
+  }
+
+  getRole(id) {
+    return this.authenticate()
+      .then(
+        () => fetch(`${this.url}/roles/${id}`, {
+          method: 'GET',
+          headers: { authorization: `Bearer ${this.accessToken}` }
+        }))
+      .then(checkStatus)
+      .then(response => response.json())
   }
 
   getRoles() {
@@ -297,7 +309,7 @@ module.exports = class {
             description: description,
             applicationId: auth0_pulse_tools_clientid,
             applicationType: 'client',
-            permissions: permissions, // phase 2+
+            permissions, // phase 2+
           })
         }))
       .then(checkStatus)
