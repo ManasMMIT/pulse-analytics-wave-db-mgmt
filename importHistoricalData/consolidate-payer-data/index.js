@@ -15,10 +15,12 @@ const combineLives = require('./combine-lives')
   STEP 2:
     For every `treatmentPlan` in `combinedPayerData`
     (`treatmentPlan` is combination of indication, population, line,
-    regimen, book, coverage), work in the DRG and MMIT state lives data so
-    we can get a result that's the breakdown of payers and their lives by access
-    category for every state for every `treatmentPlan`. We write that result to
-    pulse-dev as well.
+    regimen, book, coverage), work in the DRG and MMIT state and national lives data so we can: 
+      1. Get a result that's the breakdown of payers and their lives by access
+      category for every state for every `treatmentPlan`
+      2. Get a result that's the breakdown of payers and their lives by access 
+      category nationally for every `treatmentPlan`
+    We write both results to pulse-dev as well.
 */
 
 let consolidatePayerData = async ({
@@ -38,7 +40,7 @@ let consolidatePayerData = async ({
     })
 
     // * Step 2
-    console.log('Beginning process to join state lives to every treatment plan...')
+    console.log('Beginning process to join national and state lives to every treatment plan...')
     await combineLives({
       pulseDevDb,
       pulseCoreDb,
