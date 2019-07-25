@@ -1,1 +1,1 @@
-export { default } from './Phoenix'
+export { default } from './PhoenixContainer'
