@@ -1,5 +1,7 @@
+const wait = require('./../utils/wait')
 const express = require('express')
 const _ = require('lodash')
+
 
 // TODO: Uninstall uuid because auth0 has control over ids!
 // ? temporary until we change the user model via sequelize migration
@@ -162,6 +164,7 @@ subApp.post('/roles', async ({
     description,
   }
 
+  await wait()
   const roleCreatedInAuth0 = await auth0.roles.create(dataObjForAuth0)
 
   // Postgres
@@ -193,7 +196,6 @@ subApp.patch('/roles/:id', async ({
 
   const roleInPsql = await Role.findByPk(id)
 
-  // TODO: Change description to take in roleInAuth0.description to maintain parity
   const updatedRole = await roleInPsql.update({
     name: roleInAuth0.name,
     description: roleInAuth0.description,
@@ -279,12 +281,13 @@ subApp.post('/users', async ({
 
   const userInAuth0 = await auth0.users.create({ username, email, password })
 
+  await wait()
   await auth0.authClient.addGroupMember(clientId, userInAuth0.user_id)
 
-  // add the user to potentially multiple roles
-  await Promise.all(
-    roles.map(roleId => auth0.authClient.addGroupMember(roleId, userInAuth0.user_id))
-  )
+  for (const roleId of roles) {
+    await wait()
+    await auth0.authClient.addGroupMember(roleId, userInAuth0.user_id)
+  }
 
   const transaction = await sequelize.transaction()
 
@@ -334,15 +337,18 @@ subApp.patch('/users/:id', async ({
       incomingRoleId => !roleGroupsInAuth0.includes(incomingRoleId)
     )
 
-    await Promise.all(
-      rolesToDelink.map(roleToDelink => auth0.authClient.removeGroupMember(roleToDelink, id))
-    )
+    for (const roleToDelink of rolesToDelink) {
+      await wait()
+      await auth0.authClient.removeGroupMember(roleToDelink, id)
+    }
 
-    await Promise.all(
-      rolesToLink.map(roleToLink => auth0.authClient.addGroupMember(roleToLink, id))
-    )
+    for (const roleToLink of rolesToLink) {
+      await wait()
+      await auth0.authClient.addGroupMember(roleToLink, id)
+    }
   }
 
+  await wait()
   await auth0.users.update({ id, username, email, password })
 
   // PSQL WORK
