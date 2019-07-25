@@ -118,8 +118,11 @@ subApp.get('/clients/:clientId/roles', async ({
 }, res) => {
   const client = await Client.findByPk(clientId)
   const clientRoles = await client.getRoles({ raw: true })
+  const adminRole = clientRoles.find(({ name }) => name.includes('-admin'))
+  adminRole.isDefault = true
 
-  res.json(clientRoles)
+  const sortedClientRoles = _.sortBy(clientRoles, ({ description}) => description.toLowerCase())
+  res.json(sortedClientRoles)
 })
 
 subApp.get('/roles/:roleId/clients', async ({
