@@ -9,25 +9,6 @@ export const GET_CLIENTS = gql`
     }
   }
 `
-export const GET_USERS = gql`
-  query getUsers {
-    users @rest(type: "User", path: "/users") {
-      id
-      username
-      email
-    }
-  }
-`
-
-export const SELECT_CLIENT = gql`
-  mutation SelectClient($id: String) {
-    selectedClient(id: $id) @client {
-      id
-      name
-      description
-    }
-  }
-`
 
 export const GET_SELECTED_CLIENT = gql`
   query getSelectedClient {
@@ -35,6 +16,46 @@ export const GET_SELECTED_CLIENT = gql`
       id
       name
       description
+    }
+  }
+`
+
+export const GET_CLIENT_TEAMS = gql`
+  query getTeams($clientId: String) {
+    teams(clientId: $clientId) @rest(type: "Role", path: "/clients/{args.clientId}/roles") {
+      id
+      name
+      description
+    }
+  }
+`
+
+export const GET_SELECTED_TEAM = gql`
+  query getSelectedTeam {
+    selectedTeam @client {
+      id
+      name
+      description
+    }
+  }
+`
+
+export const GET_TEAM_USERS = gql`
+  query getTeamUsers($teamId: String) {
+    teams(teamId: $teamId) @rest(type: "User", path: "/roles/{args.teamId}/users") {
+      id
+      username
+      email
+    }
+  }
+`
+
+export const GET_SELECTED_USER = gql`
+  query getSelectedUser {
+    selectedUser @client {
+      id
+      username
+      email
     }
   }
 `
