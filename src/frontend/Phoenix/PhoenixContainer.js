@@ -1,5 +1,6 @@
 import React from 'react'
-import { GET_CLIENTS, SELECT_CLIENT } from '../api/queries'
+import { GET_CLIENTS } from '../api/queries'
+import { SELECT_CLIENT } from '../api/mutations'
 import { Query, Mutation } from 'react-apollo';
 
 import Phoenix from './Phoenix'
