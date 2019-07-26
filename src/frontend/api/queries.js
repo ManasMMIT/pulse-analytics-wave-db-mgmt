@@ -9,6 +9,15 @@ export const GET_CLIENTS = gql`
     }
   }
 `
+export const GET_USERS = gql`
+  query getUsers {
+    users @rest(type: "User", path: "/users") {
+      id
+      username
+      email
+    }
+  }
+`
 
 export const SELECT_CLIENT = gql`
   mutation SelectClient($id: String) {

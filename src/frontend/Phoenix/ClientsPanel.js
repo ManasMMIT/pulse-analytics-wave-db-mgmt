@@ -1,8 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
+import { Query } from 'react-apollo'
 
-import PanelItem from './shared/PanelItem'
+import { GET_CLIENTS } from '../api/queries'
+// import PanelItem from './shared/PanelItem'
 import TextFormButton from './shared/TextFormButton'
 
 const Wrapper = styled.div({
@@ -36,49 +38,53 @@ const createButtonStyle = {
 }
 
 const ClientsPanel = ({
-  handlers,
-  clients,
+  selectClient,
   selectedClient,
 }) => (
-  <Wrapper>
-    <Header>
-      <Title>Clients</Title>
-      <TextFormButton
-        modalTitle={CREATE_MODAL_TITLE}
-        buttonLabel={CREATE_BUTTON_TXT}
-        buttonStyle={createButtonStyle}
-        handleSubmit={handlers.createHandler}
-      />
-    </Header>
-    <div>{
-      clients.map(client => {
-        const  isSelected = client.id === selectedClient
-        const style = {
-          cursor: isSelected ? 'default' : 'pointer',
-          backgroundColor: isSelected ? '#1c4161' : null,
-          padding: 24,
-          color: isSelected ? '#ebf6fb' : '#7a97b1',
-          borderLeft: isSelected ? '4px solid #0f66d0' : '4px solid transparent',
-        }
+  <Query query={GET_CLIENTS}>
+    {({ data, loading, error }) => {
+      return (
+        <Wrapper>
+          <Header>
+            <Title>Clients</Title>
+            <TextFormButton
+              modalTitle={CREATE_MODAL_TITLE}
+              buttonLabel={CREATE_BUTTON_TXT}
+              buttonStyle={createButtonStyle}
+              // handleSubmit={handlers.createHandler}
+            />
+          </Header>
+          <div>{
+            data.clients.map(client => {
+              const isSelected = selectedClient ? client.id === selectedClient.id : false
+              const style = {
+                cursor: isSelected ? 'default' : 'pointer',
+                backgroundColor: isSelected ? '#1c4161' : null,
+                padding: 24,
+                color: isSelected ? '#ebf6fb' : '#7a97b1',
+                borderLeft: isSelected ? '4px solid #0f66d0' : '4px solid transparent',
+              }
 
-        const formConfig = {
-          formTitle: 'Edit Client',
-          formType: 'client',
-        }
+              // const formConfig = {
+              //   formTitle: 'Edit Client',
+              //   formType: 'client',
+              // }
 
-        return (
-          <PanelItem
-            key={client.id}
-            style={style}
-            handlers={handlers}
-            formConfig={formConfig}
-            item={client}
-            text={client.description}
-          />
-        );
-      })
-    }</div>
-    </Wrapper>
+              return (
+                <div
+                  key={client.id}
+                  style={style}
+                  onClick={() => selectClient({ variables: { id: client.id }})}
+                >
+                  {client.name}
+                </div>
+              );
+            })
+          }</div>
+        </Wrapper>
+      )
+    }}
+  </Query>
 )
 
 ClientsPanel.defaultProps = {
@@ -88,7 +94,7 @@ ClientsPanel.defaultProps = {
 ClientsPanel.propTypes = {
   clients: PropTypes.array,
   handlers: PropTypes.object,
-  selectedClient: PropTypes.string,
+  // selectedClient: PropTypes.string,
 }
 
 export default ClientsPanel
