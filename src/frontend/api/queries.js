@@ -22,7 +22,7 @@ export const GET_SELECTED_CLIENT = gql`
 
 export const GET_CLIENT_TEAMS = gql`
   query getTeams($clientId: String) {
-    teams(clientId: $clientId) @rest(type: "Role", path: "/clients/{args.clientId}/roles") {
+    teams(clientId: $clientId) @rest(type: "Team", path: "/clients/{args.clientId}/roles") {
       id
       name
       description
