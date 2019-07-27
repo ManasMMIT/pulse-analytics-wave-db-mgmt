@@ -3,8 +3,9 @@ import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
 import { Query } from 'react-apollo'
 
-import { GET_CLIENTS } from '../api/queries'
-// import PanelItem from './shared/PanelItem'
+import { SELECT_CLIENT } from '../api/mutations'
+import { GET_CLIENTS, GET_SELECTED_CLIENT } from '../api/queries'
+import Panel from './shared/Panel'
 import TextFormButton from './shared/TextFormButton'
 
 const Wrapper = styled.div({
@@ -38,11 +39,21 @@ const createButtonStyle = {
 }
 
 const ClientsPanel = ({
-  selectClient,
-  selectedClient,
+  // selectClient,
+  // selectedClient,
 }) => (
   <Query query={GET_CLIENTS}>
-    {({ data, loading, error }) => {
+    {({
+      data,
+      loading,
+      error,
+      client, // direct access to apollo client
+    }) => {
+      if (loading) return null
+      if (error) return <div>error</div>
+
+      // client.mutate({ mutation: SELECT_CLIENT })
+
       return (
         <Wrapper>
           <Header>
@@ -54,33 +65,11 @@ const ClientsPanel = ({
               // handleSubmit={handlers.createHandler}
             />
           </Header>
-          <div>{
-            data.clients.map(client => {
-              const isSelected = selectedClient ? client.id === selectedClient.id : false
-              const style = {
-                cursor: isSelected ? 'default' : 'pointer',
-                backgroundColor: isSelected ? '#1c4161' : null,
-                padding: 24,
-                color: isSelected ? '#ebf6fb' : '#7a97b1',
-                borderLeft: isSelected ? '4px solid #0f66d0' : '4px solid transparent',
-              }
 
-              // const formConfig = {
-              //   formTitle: 'Edit Client',
-              //   formType: 'client',
-              // }
-
-              return (
-                <div
-                  key={client.id}
-                  style={style}
-                  onClick={() => selectClient({ variables: { id: client.id }})}
-                >
-                  {client.name}
-                </div>
-              );
-            })
-          }</div>
+          <Panel
+            mutationDoc={SELECT_CLIENT}
+            data={data.clients.map(c => ({ ...c, text: c.description }))}
+          />
         </Wrapper>
       )
     }}

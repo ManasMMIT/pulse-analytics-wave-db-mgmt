@@ -31,16 +31,16 @@ class Phoenix extends Component {
     selectedUser: null,
   }
 
-  componentDidMount = () => {
-    this.props.selectClient()
-  }
+  // componentDidMount = () => {
+  //   this.props.selectClient()
+  // }
 
   render() {
     return (
       <div>
         <ClientsPanel
-          selectClient={this.props.selectClient}
-          selectedClient={this.props.data && this.props.data.selectedClient}
+          // selectClient={this.props.selectClient}
+          // selectedClient={this.props.data && this.props.data.selectedClient}
         />
       </div>
     )
