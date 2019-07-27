@@ -42,7 +42,7 @@ export const GET_SELECTED_TEAM = gql`
 
 export const GET_TEAM_USERS = gql`
   query getTeamUsers($teamId: String) {
-    teams(teamId: $teamId) @rest(type: "User", path: "/roles/{args.teamId}/users") {
+    users(teamId: $teamId) @rest(type: "User", path: "/roles/{args.teamId}/users") {
       id
       username
       email
