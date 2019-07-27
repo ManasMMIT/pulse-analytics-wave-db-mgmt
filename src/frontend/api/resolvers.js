@@ -7,6 +7,10 @@ import {
   GET_SELECTED_USER,
 } from './queries'
 
+import {
+  SELECT_TEAM,
+} from './mutations'
+
 const resolvers = {
   // Query: {
   //   selectedClient: (obj, args, context, info) => {
@@ -55,26 +59,20 @@ const resolvers = {
       return selectedTeam
     },
     selectedUser: async (_, { id }, { cache, client }) => {
-      debugger
-
-      // ! Note: a team should always be selected by the time a user selection
-      // ! is made but if this is being resolver is hit in isolation, there
-      // ! needs to be a default
       let selectedTeam
       try {
         const data = cache.readQuery({ query: GET_SELECTED_TEAM })
         selectedTeam = data.selectedTeam
       } catch(e) {
-        debugger
-        const response = await client.mutate({ query: GET_SELECTED_TEAM })
-        debugger
+        // ! Note: in actual application usage, this catch block should never
+        // ! be hit because there'll always be a selected client and a
+        // ! selected team in the cache already
+
+        const response = await client.mutate({ mutation: SELECT_TEAM })
         selectedTeam = response.data.selectedTeam
-        debugger
       }
 
       const teamId = selectedTeam.id
-
-      debugger
 
       const queryObjForTeamUsers = {
         query: GET_TEAM_USERS,
@@ -86,11 +84,9 @@ const resolvers = {
       try {
         const data = cache.readQuery(queryObjForTeamUsers)
         users = data.users
-        debugger
       } catch(e) {
         const response = await client.query(queryObjForTeamUsers)
         users = response.data.users
-        debugger
       }
 
       let selectedUser = users[0]
@@ -102,7 +98,6 @@ const resolvers = {
       cache.writeQuery({ query: GET_SELECTED_USER, data: { selectedUser } })
       return selectedUser
     },
-
     // ! Sample resolver:
     // addOrRemoveFromCart: (_, { id }, { cache }) => {
     //   const { cartItems } = cache.readQuery({ query: GET_CART_ITEMS })
@@ -115,7 +110,6 @@ const resolvers = {
     //   return data.cartItems
     // },
   },
-
 }
 
 export default resolvers
