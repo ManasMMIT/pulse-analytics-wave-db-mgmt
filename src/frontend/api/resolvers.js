@@ -9,6 +9,7 @@ import {
 
 import {
   SELECT_TEAM,
+  SELECT_USER,
 } from './mutations'
 
 const resolvers = {
@@ -19,7 +20,7 @@ const resolvers = {
   //   },
   // },
   Mutation: {
-    selectedClient: (_, { id }, { cache, client }) => {
+    selectedClient: async (_, { id }, { cache, client }) => {
       const { clients } = cache.readQuery({ query: GET_CLIENTS })
 
       let selectedClient = clients[0]
@@ -29,6 +30,9 @@ const resolvers = {
       }
 
       cache.writeQuery({ query: GET_SELECTED_CLIENT, data: { selectedClient } })
+
+      await client.mutate({ mutation: SELECT_TEAM })
+
       return selectedClient
     },
     selectedTeam: async (_, { id }, { cache, client }) => {
@@ -56,6 +60,9 @@ const resolvers = {
       }
 
       cache.writeQuery({ query: GET_SELECTED_TEAM, data: { selectedTeam } })
+
+      await client.mutate({ mutation: SELECT_USER })
+
       return selectedTeam
     },
     selectedUser: async (_, { id }, { cache, client }) => {
