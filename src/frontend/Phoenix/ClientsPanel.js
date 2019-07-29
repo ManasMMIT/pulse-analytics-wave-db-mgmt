@@ -1,10 +1,9 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
 import { Query } from 'react-apollo'
 
 import { SELECT_CLIENT } from '../api/mutations'
-import { GET_CLIENTS, GET_SELECTED_CLIENT } from '../api/queries'
+import { GET_CLIENTS } from '../api/queries'
 import Panel from './shared/Panel'
 import TextFormButton from './shared/TextFormButton'
 
@@ -38,21 +37,11 @@ const createButtonStyle = {
   color: 'white',
 }
 
-const ClientsPanel = ({
-  // selectClient,
-  // selectedClient,
-}) => (
+const ClientsPanel = () => (
   <Query query={GET_CLIENTS}>
-    {({
-      data,
-      loading,
-      error,
-      client, // direct access to apollo client
-    }) => {
+    {({ data, loading, error }) => {
       if (loading) return null
       if (error) return <div>error</div>
-
-      // client.mutate({ mutation: SELECT_CLIENT })
 
       return (
         <Wrapper>
@@ -62,7 +51,6 @@ const ClientsPanel = ({
               modalTitle={CREATE_MODAL_TITLE}
               buttonLabel={CREATE_BUTTON_TXT}
               buttonStyle={createButtonStyle}
-              // handleSubmit={handlers.createHandler}
             />
           </Header>
 
@@ -75,15 +63,5 @@ const ClientsPanel = ({
     }}
   </Query>
 )
-
-ClientsPanel.defaultProps = {
-  clients: [],
-}
-
-ClientsPanel.propTypes = {
-  clients: PropTypes.array,
-  handlers: PropTypes.object,
-  // selectedClient: PropTypes.string,
-}
 
 export default ClientsPanel
