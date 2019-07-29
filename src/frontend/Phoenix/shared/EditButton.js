@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faEdit } from "@fortawesome/free-solid-svg-icons"
 
-import ButtonWithModal from './../../components/ButtonWithModal'
+import Modal from './../../components/Modal'
 
 const editIcon = <FontAwesomeIcon size="lg" icon={faEdit} />
 
@@ -28,16 +28,21 @@ class EditButton extends React.Component {
     } = this.props
 
     return (
-      <ButtonWithModal
-        buttonLabel={editIcon}
-        buttonStyle={{ ...style, ...defaultButtonStyle }}
-        modalTitle={modalTitle}
-        openModal={this.openModal}
-        closeModal={this.closeModal}
-        isModalOpen={this.state.isModalOpen}
-      >
-        { children }
-      </ButtonWithModal>
+      <>
+        <button
+          style={{ ...defaultButtonStyle, ...style }}
+          onClick={this.openModal}
+        >
+          {editIcon}
+        </button>
+        <Modal
+          handleClose={this.closeModal}
+          show={this.state.isModalOpen}
+          title={modalTitle}
+        >
+          {children}
+        </Modal>
+      </>
     )
   }
 }

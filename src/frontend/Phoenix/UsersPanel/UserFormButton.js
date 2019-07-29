@@ -1,6 +1,7 @@
 import React from 'react'
 import UserForm from '../../components/forms/UserForm'
-import ButtonWithModal from '../../components/ButtonWithModal'
+
+import Modal from './../../components/Modal'
 
 class UserFormButton extends React.Component {
   state = { isModalOpen: false }
@@ -9,34 +10,36 @@ class UserFormButton extends React.Component {
 
   closeModal = () => this.setState({ isModalOpen: false })
 
+  finalSubmitHandler = data => this.props.handleSubmit(data).then(this.closeModal)
+
   render() {
     const { isModalOpen } = this.state
 
     const {
-      handleSubmit,
       selectedTeam,
       selectedClient,
       teams,
     } = this.props
 
-    const finalSubmitHandler = data => handleSubmit(data).then(this.closeModal)
-
     return (
-      <ButtonWithModal
-        // buttonStyle={{ padding: 6 }} // TODO: css prop in reusable component doesn't work
-        buttonLabel="Create new user"
-        modalTitle="Create new user"
-        isModalOpen={isModalOpen}
-        closeModal={this.closeModal}
-        openModal={this.openModal}
-      >
-        <UserForm
-          handleSubmit={finalSubmitHandler}
-          selectedTeam={selectedTeam}
-          selectedClient={selectedClient}
-          teams={teams}
-        />
-      </ButtonWithModal>
+      <>
+        <button
+          onClick={this.openModal}
+        >
+          Create new user
+        </button>
+        <Modal
+          handleClose={this.closeModal}
+          show={isModalOpen}
+        >
+          <UserForm
+            handleSubmit={this.finalSubmitHandler}
+            selectedTeam={selectedTeam}
+            selectedClient={selectedClient}
+            teams={teams}
+          />
+        </Modal>
+      </>
     )
   }
 }
