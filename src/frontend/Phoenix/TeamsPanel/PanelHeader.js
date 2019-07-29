@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
 
-import TextFormButton from "../shared/TextFormButton"
+import TextFormButton from "../shared/TextForm/Button"
 import TeamPanelItem from './TeamPanelItems/TeamPanelItem'
 
 const Header = styled.div({

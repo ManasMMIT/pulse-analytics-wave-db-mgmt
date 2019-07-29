@@ -1,17 +1,17 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import Modal from './../../components/Modal'
-import TextForm from './../../components/forms/TextForm'
+import Modal from '../../../components/Modal'
+import TextForm from './TextForm'
 
 const defaultButtonStyle = {
-  border: "none",
+  border: 'none',
   height: 30,
   borderRadius: 4,
   fontWeight: 700,
 }
 
-class TextFormButton extends React.Component {
+class Button extends React.Component {
   state = {
     isModalOpen: false,
   }
@@ -57,7 +57,7 @@ class TextFormButton extends React.Component {
   }
 }
 
-TextFormButton.propTypes = {
+Button.propTypes = {
   data: PropTypes.object,
   handleSubmit: PropTypes.func,
   buttonLabel: PropTypes.node,
@@ -66,7 +66,7 @@ TextFormButton.propTypes = {
   modalStyle: PropTypes.object,
 }
 
-TextFormButton.defaultProps = {
+Button.defaultProps = {
   data: { name: '' },
   handleSubmit: () => { console.log('submit action triggered') },
   buttonLabel: <div>click to open</div>,
@@ -75,4 +75,4 @@ TextFormButton.defaultProps = {
   modalStyle: {},
 }
 
-export default TextFormButton
+export default Button

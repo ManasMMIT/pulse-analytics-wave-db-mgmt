@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
 
 import PanelItem from './shared/PanelItem'
-import TextFormButton from './shared/TextFormButton'
+import TextFormButton from './shared/TextForm/Button'
 
 const Wrapper = styled.div({
   flex: 1,
@@ -61,21 +61,15 @@ const ClientsPanel = ({
           borderLeft: isSelected ? '4px solid #0f66d0' : '4px solid transparent',
         }
 
-        const formConfig = {
-          formTitle: 'Edit Client',
-          formType: 'client',
-        }
-
         return (
           <PanelItem
             key={client.id}
+            itemId={client.id}
+            label={client.description}
             style={style}
-            handlers={handlers}
-            formConfig={formConfig}
-            item={client}
-            text={client.description}
+            onClick={handlers.onClick}
           />
-        );
+        )
       })
     }</div>
     </Wrapper>

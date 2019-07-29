@@ -2,7 +2,13 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import PanelItem from '../../shared/PanelItem'
-import TextForm from './../../../components/forms/TextForm'
+
+import TextFormButton from '../../shared/TextForm/Button'
+import DeleteButton from '../../shared/DeleteButton'
+
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faEdit } from "@fortawesome/free-solid-svg-icons"
+const editIcon = <FontAwesomeIcon size="lg" icon={faEdit} />
 
 const TeamPanelItem = ({
   team,
@@ -21,22 +27,35 @@ const TeamPanelItem = ({
       : "4px solid transparent"
   }
 
-  const editForm = (
-    <TextForm
-      data={{ description: team.description }}
-      handleSubmit={handlers.editHandler}
-    />
-  )
-
   return (
     <PanelItem
-      style={style}
       key={team.id}
-      editForm={editForm}
-      handlers={handlers}
-      item={team}
-      text={team.description}
-    />
+      itemId={team.id}
+      label={team.description}
+      style={style}
+      onClick={handlers.onClick}
+    >
+      <span>
+        {handlers.editHandler && (
+          <TextFormButton
+            data={{ description: team.description }}
+            handleSubmit={handlers.editHandler}
+            buttonLabel={editIcon}
+            buttonStyle={{ border: 'none', background: 'none', color: '#b6b9bc' }}
+            modalTitle={'Edit Team'}
+          />
+        )}
+
+        <span>
+          {handlers.deleteHandler && (
+            <DeleteButton
+              itemId={team.id}
+              deleteHandler={handlers.deleteHandler}
+            />
+          )}
+        </span>
+      </span>
+    </PanelItem>
   )
 }
 
