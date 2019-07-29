@@ -22,26 +22,10 @@ import ClientsPanel from './ClientsPanel'
 // import UsersPanel from './UsersPanel'
 
 class Phoenix extends Component {
-  state = {
-    clients: [],
-    teams: [],
-    users: [],
-    selectedClient: null,
-    selectedTeam: null,
-    selectedUser: null,
-  }
-
-  // componentDidMount = () => {
-  //   this.props.selectClient()
-  // }
-
   render() {
     return (
-      <div>
-        <ClientsPanel
-          // selectClient={this.props.selectClient}
-          // selectedClient={this.props.data && this.props.data.selectedClient}
-        />
+      <div style={{ display: "flex" }}>
+        <ClientsPanel />
       </div>
     )
   }
