@@ -34,7 +34,7 @@ const resolvers = {
         selectedClient = clients.find(({ id: clientId }) => id === clientId)
       }
 
-      cache.writeQuery({ query: GET_SELECTED_CLIENT, data: { selectedClient } })
+      client.writeQuery({ query: GET_SELECTED_CLIENT, data: { selectedClient } })
 
       await client.mutate({ mutation: SELECT_TEAM })
 
@@ -47,7 +47,7 @@ const resolvers = {
       const { clients } = cache.readQuery({ query: GET_CLIENTS })
       const clientsPlusNewClient = [...clients, createdClient]
 
-      cache.writeQuery({ query: GET_CLIENTS, data: { clients: clientsPlusNewClient } })
+      client.writeQuery({ query: GET_CLIENTS, data: { clients: clientsPlusNewClient } })
 
       await client.mutate({ mutation: SELECT_CLIENT, variables: { id: createdClient.id } })
 
@@ -77,7 +77,7 @@ const resolvers = {
         selectedTeam = teams.find(({ id: teamId }) => id === teamId)
       }
 
-      cache.writeQuery({ query: GET_SELECTED_TEAM, data: { selectedTeam } })
+      client.writeQuery({ query: GET_SELECTED_TEAM, data: { selectedTeam } })
 
       await client.mutate({ mutation: SELECT_USER })
 
@@ -120,7 +120,7 @@ const resolvers = {
         selectedUser = users.find(({ id: userId }) => id === userId)
       }
 
-      cache.writeQuery({ query: GET_SELECTED_USER, data: { selectedUser } })
+      client.writeQuery({ query: GET_SELECTED_USER, data: { selectedUser } })
       return selectedUser
     },
     // ! Sample resolver:
@@ -131,7 +131,7 @@ const resolvers = {
     //       ? cartItems.filter(i => i !== id)
     //       : [...cartItems, id],
     //   }
-    //   cache.writeQuery({ query: GET_CART_ITEMS, data })
+    //   client.writeQuery({ query: GET_CART_ITEMS, data })
     //   return data.cartItems
     // },
   },
