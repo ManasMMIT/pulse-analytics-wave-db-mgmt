@@ -1,4 +1,8 @@
 import React, { Component } from 'react'
+import { withApollo } from 'react-apollo'
+
+import { GET_CLIENTS, GET_SELECTED_CLIENT } from './../api/queries'
+import { SELECT_CLIENT } from './../api/mutations'
 // import _ from 'lodash'
 
 // import {
@@ -22,7 +26,22 @@ import ClientsPanel from './ClientsPanel'
 // import UsersPanel from './UsersPanel'
 
 class Phoenix extends Component {
+  state = {
+    isLoading: true,
+  }
+
+  componentDidMount() {
+    const { client } = this.props
+
+    client.query({ query: GET_CLIENTS })
+      .then(() => client.mutate({ mutation: SELECT_CLIENT }))
+      .then(() => client.query({ query: GET_SELECTED_CLIENT }))
+      .then(() => this.setState({ isLoading: false }))
+  }
+
   render() {
+    if (this.state.isLoading) return null
+
     return (
       <div style={{ display: "flex" }}>
         <ClientsPanel />
@@ -31,7 +50,7 @@ class Phoenix extends Component {
   }
 }
 
-export default Phoenix
+export default withApollo(Phoenix)
 
 // class Phoenix extends Component {
 //   state = {
