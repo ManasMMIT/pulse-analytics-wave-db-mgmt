@@ -51,6 +51,7 @@ const ClientsPanel = () => (
 
     <Query query={GET_CLIENTS}>
       {({ data: { clients }, loading, error }) => {
+        debugger
         if (loading) return null
         if (error) return <div>error</div>
 

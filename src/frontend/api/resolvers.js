@@ -26,6 +26,7 @@ const resolvers = {
   // },
   Mutation: {
     selectedClient: async (_, { id }, { cache, client }) => {
+      debugger
       const { clients } = cache.readQuery({ query: GET_CLIENTS })
 
       let selectedClient = clients[0]
@@ -41,6 +42,7 @@ const resolvers = {
       return selectedClient
     },
     createdClient: async (_, { description }, { cache, client }) => {
+      debugger
       let createdClient = await createClient({ description })
       createdClient = { ...createdClient, __typename: 'Client' }
 
@@ -54,6 +56,7 @@ const resolvers = {
       return createdClient
     },
     selectedTeam: async (_, { id }, { cache, client }) => {
+      debugger
       const { selectedClient: { id: clientId } } = cache.readQuery({ query: GET_SELECTED_CLIENT })
 
       const queryObjForClientTeams = {
