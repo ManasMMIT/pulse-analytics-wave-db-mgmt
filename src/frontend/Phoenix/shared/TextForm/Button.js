@@ -20,13 +20,10 @@ class Button extends React.Component {
 
   closeModal = () => this.setState({ isModalOpen: false })
 
-  finalHandleSubmit = data => {
-    this.props.handleSubmit(data).then(this.closeModal)
-  }
-
   render () {
     const {
       data,
+      mutationDoc,
       buttonLabel,
       buttonStyle,
       modalTitle,
@@ -49,7 +46,8 @@ class Button extends React.Component {
         >
           <TextForm
             data={data}
-            handleSubmit={this.finalHandleSubmit}
+            mutationDoc={mutationDoc}
+            afterSubmitHook={this.closeModal}
           />
         </Modal>
       </>
@@ -58,8 +56,7 @@ class Button extends React.Component {
 }
 
 Button.propTypes = {
-  data: PropTypes.object,
-  handleSubmit: PropTypes.func,
+  ...TextForm.propTypes,
   buttonLabel: PropTypes.node,
   buttonStyle: PropTypes.object,
   modalTitle: PropTypes.string,
@@ -67,8 +64,7 @@ Button.propTypes = {
 }
 
 Button.defaultProps = {
-  data: { description: '' },
-  handleSubmit: () => { console.log('submit action triggered') },
+  ...TextForm.defaultProps,
   buttonLabel: <div>click to open</div>,
   buttonStyle: {},
   modalTitle: null,
