@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faTrashAlt } from "@fortawesome/free-solid-svg-icons"
 
-import ButtonWithModal from './../../components/ButtonWithModal'
+import Modal from './../../components/Modal'
 
 const trashCan = <FontAwesomeIcon size="lg" icon={faTrashAlt} />
 
@@ -12,6 +12,7 @@ const modalButtonStyle = {
   color: 'white',
   fontWeight: 700,
   padding: '4px 8px',
+  textAlign: 'center',
 }
 
 const buttonStyle = {
@@ -33,29 +34,39 @@ class DeleteButton extends React.Component {
 
   render() {
     const {
-      style,
-      modalTitle,
-      modalText,
-      itemId,
-    } = this.props
+      openModal,
+      closeModal,
+      state: { isModalOpen },
+      props: {
+        style,
+        modalTitle,
+        modalText,
+        itemId,
+      },
+    } = this
 
     return (
-      <ButtonWithModal
-        buttonLabel={trashCan}
-        buttonStyle={{ ...buttonStyle, ...style }}
-        modalTitle={modalTitle}
-        openModal={this.openModal}
-        closeModal={this.closeModal}
-        isModalOpen={this.state.isModalOpen}
-      >
-        {modalText}
+      <>
         <button
-          style={modalButtonStyle}
-          onClick={() => this.finalDeleteHandler(itemId)}
+          style={{ ...buttonStyle, ...style }}
+          onClick={openModal}
         >
-          Delete Forever
+          {trashCan}
         </button>
-      </ButtonWithModal>
+        <Modal
+          handleClose={closeModal}
+          show={isModalOpen}
+          title={modalTitle}
+        >
+          {modalText}
+          <div
+            style={modalButtonStyle}
+            onClick={() => this.finalDeleteHandler(itemId)}
+          >
+            Delete Forever
+          </div>
+        </Modal>
+      </>
     )
   }
 }

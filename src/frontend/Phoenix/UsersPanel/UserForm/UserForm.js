@@ -72,7 +72,7 @@ class UserForm extends React.Component {
     const rolesToPersistOnSubmit = Object.keys(_.pickBy(checkboxesMap, value => value))
 
     const submitHandler = () => handleSubmit({
-      id: userId,
+      id: userId, // only needed for update, not create
       username,
       email,
       password,
@@ -123,6 +123,7 @@ UserForm.propTypes = {
   email: PropTypes.string,
   allTeamsUserIsOn: PropTypes.array,
   handleSubmit: PropTypes.func,
+  teams: PropTypes.array,
 }
 
 UserForm.defaultProps = {
@@ -133,6 +134,7 @@ UserForm.defaultProps = {
   email: '',
   allTeamsUserIsOn: [],
   handleSubmit: () => console.log('submit was clicked'),
+  teams: [],
 }
 
 export default UserForm

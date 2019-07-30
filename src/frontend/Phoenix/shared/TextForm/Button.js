@@ -1,17 +1,17 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import ButtonWithModal from './../../components/ButtonWithModal'
-import TextForm from './../../components/forms/TextForm'
+import Modal from '../../../components/Modal'
+import TextForm from './TextForm'
 
 const defaultButtonStyle = {
-  border: "none",
+  border: 'none',
   height: 30,
   borderRadius: 4,
   fontWeight: 700,
 }
 
-class TextFormButton extends React.Component {
+class Button extends React.Component {
   state = {
     isModalOpen: false,
   }
@@ -20,37 +20,44 @@ class TextFormButton extends React.Component {
 
   closeModal = () => this.setState({ isModalOpen: false })
 
+  finalHandleSubmit = data => {
+    this.props.handleSubmit(data).then(this.closeModal)
+  }
+
   render () {
     const {
       data,
-      handleSubmit,
       buttonLabel,
       buttonStyle,
       modalTitle,
       modalStyle,
     } = this.props
 
-    const finalHandleSubmit = data => {
-      handleSubmit(data).then(this.closeModal)
-    }
-
     return (
-      <ButtonWithModal
-        isModalOpen={this.state.isModalOpen}
-        closeModal={this.closeModal}
-        openModal={this.openModal}
-        buttonStyle={{ ...buttonStyle, ...defaultButtonStyle }}
-        buttonLabel={buttonLabel}
-        modalTitle={modalTitle}
-        modalStyle={modalStyle}
-      >
-        <TextForm data={data} handleSubmit={finalHandleSubmit} />
-      </ButtonWithModal>
+      <>
+        <button
+          style={{ ...defaultButtonStyle, ...buttonStyle }}
+          onClick={this.openModal}
+        >
+          {buttonLabel}
+        </button>
+        <Modal
+          style={modalStyle}
+          handleClose={this.closeModal}
+          show={this.state.isModalOpen}
+          title={modalTitle}
+        >
+          <TextForm
+            data={data}
+            handleSubmit={this.finalHandleSubmit}
+          />
+        </Modal>
+      </>
     )
   }
 }
 
-TextFormButton.propTypes = {
+Button.propTypes = {
   data: PropTypes.object,
   handleSubmit: PropTypes.func,
   buttonLabel: PropTypes.node,
@@ -59,7 +66,7 @@ TextFormButton.propTypes = {
   modalStyle: PropTypes.object,
 }
 
-TextFormButton.defaultProps = {
+Button.defaultProps = {
   data: { name: '' },
   handleSubmit: () => { console.log('submit action triggered') },
   buttonLabel: <div>click to open</div>,
@@ -68,4 +75,4 @@ TextFormButton.defaultProps = {
   modalStyle: {},
 }
 
-export default TextFormButton
+export default Button

@@ -1,11 +1,11 @@
 import React from 'react'
 import styled from '@emotion/styled'
-import { Query } from 'react-apollo'
+import { Query, Mutation } from 'react-apollo'
 
 import { SELECT_CLIENT } from '../api/mutations'
 import { GET_CLIENTS } from '../api/queries'
-import Panel from './shared/Panel'
-import TextFormButton from './shared/TextFormButton'
+import PanelItem from './shared/PanelItem'
+import TextFormButton from './shared/TextForm/Button'
 
 const Wrapper = styled.div({
   flex: 1,
@@ -38,30 +38,68 @@ const createButtonStyle = {
 }
 
 const ClientsPanel = () => (
-  <Query query={GET_CLIENTS}>
-    {({ data, loading, error }) => {
-      if (loading) return null
-      if (error) return <div>error</div>
+  <Wrapper>
+    <Header>
+      <Title>Clients</Title>
+      <TextFormButton
+        modalTitle={CREATE_MODAL_TITLE}
+        buttonLabel={CREATE_BUTTON_TXT}
+        buttonStyle={createButtonStyle}
+      />
+    </Header>
 
-      return (
-        <Wrapper>
-          <Header>
-            <Title>Clients</Title>
-            <TextFormButton
-              modalTitle={CREATE_MODAL_TITLE}
-              buttonLabel={CREATE_BUTTON_TXT}
-              buttonStyle={createButtonStyle}
-            />
-          </Header>
+    <Query query={GET_CLIENTS}>
+      {({ data: { clients }, loading, error }) => {
+        if (loading) return null
+        if (error) return <div>error</div>
 
-          <Panel
-            mutationDoc={SELECT_CLIENT}
-            data={data.clients.map(c => ({ ...c, text: c.description }))}
-          />
-        </Wrapper>
-      )
-    }}
-  </Query>
+        return (
+          <Mutation mutation={SELECT_CLIENT}>
+            {(handleSelect, { data: selectedEntityData, called }) => {
+              if (!called) handleSelect()
+
+              return (
+                <div>
+                  {
+                    clients.map(client => {
+                      let style = {
+                        cursor: "pointer",
+                        backgroundColor: "none",
+                        padding: 24,
+                        color: "#838c96",
+                        borderLeft: "4px solid transparent",
+                      }
+
+                      if (selectedEntityData) {
+                        const isSelected = client.id === selectedEntityData.selectedClient.id
+
+                        style = {
+                          cursor: isSelected ? 'default' : 'pointer',
+                          backgroundColor: isSelected ? '#1c4161' : null,
+                          padding: 24,
+                          color: isSelected ? '#ebf6fb' : '#7a97b1',
+                          borderLeft: isSelected ? '4px solid #0f66d0' : '4px solid transparent',
+                        }
+                      }
+
+                      return (
+                        <PanelItem
+                          key={client.id}
+                          label={client.description}
+                          style={style}
+                          onClick={handleSelect.bind(null, { variables: { id: client.id } })}
+                        />
+                      )
+                    })
+                  }
+                </div>
+              )
+            }}
+          </Mutation>
+        )
+      }}
+    </Query>
+  </Wrapper>
 )
 
 export default ClientsPanel
