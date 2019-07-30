@@ -2,7 +2,7 @@ import React from 'react'
 import styled from '@emotion/styled'
 import { Query, Mutation } from 'react-apollo'
 
-import { SELECT_CLIENT } from '../api/mutations'
+import { SELECT_CLIENT, CREATE_CLIENT } from '../api/mutations'
 import { GET_CLIENTS } from '../api/queries'
 import PanelItem from './shared/PanelItem'
 import TextFormButton from './shared/TextForm/Button'
@@ -45,6 +45,7 @@ const ClientsPanel = () => (
         modalTitle={CREATE_MODAL_TITLE}
         buttonLabel={CREATE_BUTTON_TXT}
         buttonStyle={createButtonStyle}
+        mutationDoc={CREATE_CLIENT}
       />
     </Header>
 
