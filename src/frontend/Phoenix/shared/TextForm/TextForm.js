@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
+import { Mutation } from 'react-apollo'
+
 class TextForm extends Component {
   constructor(props) {
     super(props)
@@ -22,7 +24,7 @@ class TextForm extends Component {
     const {
       state,
       handleChange,
-      props: { handleSubmit },
+      props: { mutationDoc, afterSubmitHook },
     } = this
 
     return (
@@ -33,9 +35,17 @@ class TextForm extends Component {
           onChange={handleChange}
           value={state.description}
         />
-        <button type="submit" onClick={() => handleSubmit(state)}>
-          submit
-        </button>
+
+        <Mutation mutation={mutationDoc}>
+          {handleSubmit => (
+            <button
+              type="submit"
+              onClick={() => handleSubmit({ variables: state }).then(afterSubmitHook)}
+            >
+              submit
+            </button>
+          )}
+        </Mutation>
       </div>
     );
   }
@@ -43,7 +53,12 @@ class TextForm extends Component {
 
 TextForm.propTypes = {
   data: PropTypes.object,
-  handleSubmit: PropTypes.func,
+  mutationDoc: PropTypes.object,
+}
+
+TextForm.defaultProps = {
+  data: { description: '' },
+  mutationDoc: {},
 }
 
 export default TextForm
