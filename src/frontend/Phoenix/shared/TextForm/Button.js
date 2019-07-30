@@ -67,7 +67,7 @@ Button.propTypes = {
 }
 
 Button.defaultProps = {
-  data: { name: '' },
+  data: { description: '' },
   handleSubmit: () => { console.log('submit action triggered') },
   buttonLabel: <div>click to open</div>,
   buttonStyle: {},
