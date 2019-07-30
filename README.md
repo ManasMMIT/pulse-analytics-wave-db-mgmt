@@ -2,7 +2,9 @@
 
 This repo is meant to eventually become Pulse's primary internal database management tool for importing and updating data in our database. It currently contains five scripts for the following purposes:
 1. [Uploading CSV historical data to pulse-dev](#1-uploading-historical-data)
-
+    1. [Historical Import Quick Guide](#historical-import-quick-guide)
+        1. [Importing Payer Project Historical Data](#importing-payer-project-historical-data)
+        2. [Importing Payer Lives](#importing-payer-lives)
 2. [Uploading listsConfig JSONs to pulse-dev](#2-uploading-listsconfig-jsons)
 3. [Uploading a CSV of provider indication/regimen combos for admin hub to source from](#3-uploading-provider-ind/reg-combos-for-admin-hub)
 4. [Updating Dashboards Permissions Prototype Collection on Dev](#4-updating-dashboards-permissions-prototype-on-dev)
@@ -17,10 +19,10 @@ In order for the script to connect to MongoDB, you'll also need to pull down the
 
 #  1. Uploading Historical Data
 
-## Historical Import Quick Guide
+##  Historical Import Quick Guide
 Make sure that all sheets have been exported in the CSV format AND have the correct filename.
 
-### Importing Payer Project Historical Data
+###  Importing Payer Project Historical Data
 Sheets affected:
 * QualityAccess
 * AdditionalCriteria
@@ -29,7 +31,7 @@ Sheets affected:
 Run the following command: `node ./importHistoricalData --filepath replaceWithLocalFilepath`
 **Note: It takes several minutes to import each sheet.**
 
-### Importing Payer Lives
+###  Importing Payer Lives
 Sheets affected:
 * payerHistoricalDrgNationalLives
 * payerHistoricalDrgStateLives
