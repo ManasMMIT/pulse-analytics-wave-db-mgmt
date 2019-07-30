@@ -1,5 +1,9 @@
 import React from 'react'
+import { Mutation } from 'react-apollo'
+
 import PanelItem from '../shared/PanelItem'
+
+import { SELECT_CLIENT } from '../../api/mutations'
 
 const defaultStyle = {
   cursor: "pointer",
@@ -12,7 +16,6 @@ const defaultStyle = {
 const ClientsPanelItem = ({
   selectedClient,
   client,
-  handleSelect
 }) => {
   let style = defaultStyle
 
@@ -31,12 +34,18 @@ const ClientsPanelItem = ({
   }
 
   return (
-    <PanelItem
-      label={client.description}
-      style={style}
-      onClick={handleSelect.bind(null, { variables: { id: client.id } })}
-    />
-  )
-}
-
-export default ClientsPanelItem
+    <Mutation mutation={SELECT_CLIENT}>
+      {handleSelect => {
+        return (
+          <PanelItem
+            label={client.description}
+            style={style}
+            onClick={handleSelect.bind(null, { variables: { id: client.id } })}
+          />
+        )}
+      }
+    </Mutation>
+    )
+  }
+  
+  export default ClientsPanelItem

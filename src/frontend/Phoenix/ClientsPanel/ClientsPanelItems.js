@@ -1,7 +1,6 @@
 import React from 'react'
-import { Query, Mutation } from 'react-apollo'
+import { Query } from 'react-apollo'
 
-import { SELECT_CLIENT } from '../../api/mutations'
 import { GET_SELECTED_CLIENT } from '../../api/queries'
 import ClientsPanelItem from './ClientsPanelItem'
 
@@ -9,27 +8,18 @@ const ClientsPanelItems = ({ clients }) => (
   <Query query={GET_SELECTED_CLIENT}>
     {({ data: { selectedClient } }) => {
       return (
-        <Mutation mutation={SELECT_CLIENT}>
-          {(handleSelect, { called }) => {
-            if (!called) handleSelect()
-
-            return (
-              <div>
-                {
-                  clients.map(client => (
-                    <ClientsPanelItem
-                      key={client.id}
-                      handleSelect={handleSelect}
-                      selectedClient={selectedClient}
-                      client={client}
-                    />
-                  ))
-                }
-              </div>
-            )
-          }}
-        </Mutation>
-      )
+          <div>
+            {
+              clients.map(client => (
+                <ClientsPanelItem
+                  key={client.id}
+                  selectedClient={selectedClient}
+                  client={client}
+                />
+              ))
+            }
+          </div>
+        )
     }}
   </Query>
 )
