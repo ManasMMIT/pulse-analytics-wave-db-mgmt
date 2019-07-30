@@ -8,9 +8,14 @@ import {
 } from './queries'
 
 import {
+  SELECT_CLIENT,
   SELECT_TEAM,
   SELECT_USER,
 } from './mutations'
+
+import {
+  createClient,
+} from './server-endpoints'
 
 const resolvers = {
   // Query: {
@@ -34,6 +39,19 @@ const resolvers = {
       await client.mutate({ mutation: SELECT_TEAM })
 
       return selectedClient
+    },
+    createdClient: async (_, { description }, { cache, client }) => {
+      let createdClient = await createClient({ description })
+      createdClient = { ...createdClient, __typename: 'Client' }
+
+      const { clients } = cache.readQuery({ query: GET_CLIENTS })
+      const clientsPlusNewClient = [...clients, createdClient]
+
+      cache.writeQuery({ query: GET_CLIENTS, data: { clients: clientsPlusNewClient } })
+
+      await client.mutate({ mutation: SELECT_CLIENT, variables: { id: createdClient.id } })
+
+      return createdClient
     },
     selectedTeam: async (_, { id }, { cache, client }) => {
       const { selectedClient: { id: clientId } } = cache.readQuery({ query: GET_SELECTED_CLIENT })
