@@ -9,7 +9,7 @@ const defaultStyle = {
   borderLeft: "4px solid transparent",
 }
 
-const ClientPanelItem = ({
+const ClientsPanelItem = ({
   selectedClient,
   client,
   handleSelect
@@ -39,4 +39,4 @@ const ClientPanelItem = ({
   )
 }
 
-export default ClientPanelItem
+export default ClientsPanelItem
