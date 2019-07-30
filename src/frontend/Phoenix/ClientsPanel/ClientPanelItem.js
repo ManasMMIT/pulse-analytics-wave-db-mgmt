@@ -10,14 +10,14 @@ const defaultStyle = {
 }
 
 const ClientPanelItem = ({
-  selectedEntityData,
+  selectedClient,
   client,
   handleSelect
 }) => {
   let style = defaultStyle
 
-  if (selectedEntityData) {
-    const isSelected = client.id === selectedEntityData.selectedClient.id
+  if (selectedClient) {
+    const isSelected = client.id === selectedClient.id
 
     const conditionalStyle = {
       cursor: isSelected ? 'default' : 'pointer',
