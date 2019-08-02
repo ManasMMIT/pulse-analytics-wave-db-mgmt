@@ -1,80 +1,37 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import styled from "@emotion/styled";
+import React, { useState } from 'react'
 
-import UserFormButton from './UserFormButton'
-import UserForm from '../../components/forms/UserForm'
-import PanelItem from '../shared/PanelItem'
+import { UnderlinedTabs } from './../../components/Tabs'
 
-const Title = styled.div({
-  fontWeight: 700,
-  fontSize: 24,
-  padding: 24,
-})
+import UsersTab from './UsersTab'
+import ViewControlTab from './ViewControlTab'
 
-const UsersPanel = ({
-  users,
-  teamName,
-  teams,
-  selectedTeam,
-  selectedClient,
-  handlers,
-  selectedUser,
-}) => {
+
+const TAB_ONE = 'Users'
+const TAB_TWO = 'View Control'
+
+const FILTER_TAB_OPTIONS = [
+  TAB_ONE,
+  TAB_TWO,
+]
+
+const COMPONENT_MAP = {
+  [TAB_ONE]: UsersTab,
+  [TAB_TWO]: ViewControlTab,
+}
+
+const UsersPanel = () => {
+  const [selectedTab, selectTab] = useState(TAB_ONE)
+
+  const Component = COMPONENT_MAP[selectedTab]
   return (
-    <div style={{ flex: 2, backgroundColor: '#f7f9fa' }}>
-      <Title>Users</Title>
-
-      <UserFormButton
-        handleSubmit={handlers.createHandler}
-        selectedTeam={selectedTeam}
-        selectedClient={selectedClient}
-        teams={teams}
+    <div>
+      <UnderlinedTabs
+        tabsData={FILTER_TAB_OPTIONS}
+        selectedTab={selectedTab}
+        onTabClick={selectTab}
       />
-
-      <div>{
-        users.map(user => {
-          const style = {
-            padding: 24,
-          }
-
-          const userFormNode = (
-            <UserForm
-              userId={user.id}
-              username={user.username}
-              email={user.email}
-              selectedTeam={selectedTeam}
-              allTeamsUserIsOn={user.roles}
-              teams={teams}
-              handleSubmit={handlers.editHandler}
-            />
-          )
-
-          return (
-            <PanelItem
-              key={user.id}
-              style={style}
-              handlers={handlers}
-              item={user}
-              text={user.username}
-              editForm={userFormNode}
-            />
-          )
-        })
-      }</div>
+      <Component />
     </div>
   )
 }
-
-UsersPanel.defaultProps = {
-  users: [],
-}
-
-UsersPanel.propTypes = {
-  users: PropTypes.array,
-  teamName: PropTypes.string,
-  handlers: PropTypes.object,
-  selectedUser: PropTypes.string,
-};
-
 export default UsersPanel

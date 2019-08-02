@@ -1,4 +1,4 @@
-const _ = require('lodash')
+const wait = require('./../../utils/wait')
 
 class UserDao {
   constructor(authClient) {
@@ -6,52 +6,43 @@ class UserDao {
   }
 
   async find(id) {
-    try {
-      let result
+    let result
 
-      if (id) {
-        result = await this.authClient.getUser(id)
-      } else {
-        result = await this.authClient.getUsers()
-      }
-
-      return result
-    } catch (e) {
-      console.error(e)
-      return null
+    if (id) {
+      result = await this.authClient.getUser(id)
+    } else {
+      result = await this.authClient.getUsers()
     }
+
+    return result
   }
 
   async create({ username, email, password }) {
-    try {
-      const createdUser = await this.authClient.createUser(username, email, password)
-      return createdUser
-    } catch (e) {
-      console.error(e)
-      return null
-    }
+    const createdUser = await this.authClient.createUser(username, email, password)
+    return createdUser
   }
 
   async update({ id, username, email, password }) {
-    try {
-      const updatedUser = await this.authClient.updateUser(id, { username, email, password })
-      return updatedUser
-    } catch (e) {
-      console.error(e)
-      return null
-    }
+    const updatedUser = await this.authClient.updateUser(id, { username, email, password })
+    return updatedUser
   }
 
   async delete(id) {
-    try {
-      const userToDelete = await this.find(id)
-      await this.authClient.deleteUser(id)
+    // remove user from all groups
+    const userGroups = await this.authClient.getUserGroups(id)
 
-      return userToDelete
-    } catch (e) {
-      console.error(e)
-      return null
+    for (const group of userGroups) {
+      await wait()
+      await this.authClient.removeGroupMember(group._id, id)
     }
+
+    // delete actual user
+    await wait()
+    const userToDelete = await this.find(id)
+    await wait()
+    await this.authClient.deleteUser(id)
+
+    return userToDelete
   }
 }
 

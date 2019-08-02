@@ -1,129 +1,106 @@
 import React from 'react'
-import PropTypes from 'prop-types'
-import styled from '@emotion/styled'
-import _ from 'lodash'
+import { Query } from 'react-apollo'
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faEdit } from "@fortawesome/free-solid-svg-icons"
 
-import PanelItem from './shared/PanelItem'
-import TextFormButton from "./shared/TextFormButton"
-import TextForm from './../components/forms/TextForm'
+import Panel from './shared/Panel'
+import TextFormButton from './shared/TextForm/Button'
+import DeleteButton from './shared/DeleteButton'
 
-const Wrapper = styled.div({
-  flex: 1,
-  backgroundColor: '#edf1f5',
-  minHeight: '100vh',
-  maxHeight: '100vh',
-  overflowY: 'scroll',
-})
+import {
+  CREATE_TEAM,
+  SELECT_TEAM,
+  UPDATE_TEAM,
+  DELETE_TEAM,
+} from '../api/mutations'
 
-const Header = styled.div({
-  borderBottom: '2px solid #dfe3e6',
-  padding: '24px 0',
-})
+import {
+  GET_SELECTED_CLIENT,
+  GET_CLIENT_TEAMS,
+  GET_SELECTED_TEAM,
+} from '../api/queries'
 
-const Subheader = styled.div({
-  padding: 24,
-  display: 'flex',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-})
-
-const Title = styled.div({
-  fontWeight: 700,
-  fontSize: 24,
-  padding: '2px 24px'
-})
-
-const Subtitle = styled.div({
-  fontWeight: 500,
-  color: '#a5acb2',
-  padding: '2px 24px',
-})
-
-const ListTitle = styled.div({
-  color: '#a5acb2',
-  fontWeight: 500,
-})
-
-const CREATE_BUTTON_TXT = 'Create Team'
-const CREATE_MODAL_TITLE = "Create New Team"
+const editIcon = <FontAwesomeIcon size="lg" icon={faEdit} />
 
 const createButtonStyle = {
   background: '#d4e2f2',
   color: '#1d66b8',
 }
 
-const TeamsPanel = ({
-  handlers,
-  teams,
-  clientName,
-  selectedTeam,
-}) => (
-  <Wrapper>
-    <Header>
-      <Subtitle>Client</Subtitle>
-      <Title>{ clientName }</Title>
-    </Header>
-    <Subheader>
-      <ListTitle>Teams</ListTitle>
+const defaultPanelItemStyle = {
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  cursor: 'pointer',
+  color: '#838c96',
+  borderLeft: '4px solid transparent',
+  padding: 24,
+}
+
+const activePanelItemStyle = {
+  cursor: 'default',
+  backgroundColor: '#f8fafb',
+  color: '#2a7ad3',
+  borderLeft: '4px solid #1f6cc7',
+}
+
+const buttonGroupCallback = team => {
+  if (team.isDefault) return null
+
+  return (
+    <>
       <TextFormButton
-        modalTitle={CREATE_MODAL_TITLE}
-        buttonLabel={CREATE_BUTTON_TXT}
-        buttonStyle={createButtonStyle}
-        handleSubmit={handlers.createHandler}
+        modalTitle="Edit Team"
+        buttonLabel={editIcon}
+        buttonStyle={{ border: 'none', background: 'none', color: '#b6b9bc' }}
+        data={{ description: team.description }}
+        mutationDoc={UPDATE_TEAM}
       />
-    </Subheader>
-    <div>{
-      teams.map(team => {
-        const isSelected = team.id === selectedTeam
-        const style = {
-          cursor: isSelected ? "default" : "pointer",
-          backgroundColor: isSelected ? "#f8fafb" : null,
-          padding: 24,
-          color: isSelected ? "#2a7ad3" : "#838c96",
-          borderLeft: isSelected
-            ? "4px solid #1f6cc7"
-            : "4px solid transparent"
-        }
 
-        let actualHandlers = _.cloneDeep(handlers)
+      <DeleteButton
+        itemId={team.id}
+        mutationDoc={DELETE_TEAM}
+      />
+    </>
+  )
+}
 
-        if (team.name.includes('-admin')) {
-          delete actualHandlers.editHandler
-          delete actualHandlers.deleteHandler
-        }
+const panelItemConfig = {
+  selectEntityMutationDoc: SELECT_TEAM,
+  style: defaultPanelItemStyle,
+  activeStyle: activePanelItemStyle,
+  buttonGroupCallback,
+  // ! Note: inactiveStyle not needed until hover effects differ
+  // ! between active and inactive states
+  // inactiveStyle: inactivePanelItemStyle,
+}
 
-        const editForm = (
-          <TextForm
-            data={{ description: team.description }}
-            handleSubmit={actualHandlers.editHandler}
-          />
-        )
-
-        return (
-          <PanelItem
-            style={style}
-            key={team.id}
-            editForm={editForm}
-            handlers={actualHandlers}
-            item={team}
-            text={team.description}
-          />
-        )
-      })
-    }</div>
-  </Wrapper>
+const createButton = (
+  <TextFormButton
+    modalTitle="Create Team"
+    buttonLabel="Create Team"
+    buttonStyle={createButtonStyle}
+    mutationDoc={CREATE_TEAM}
+  />
 )
 
-TeamsPanel.defaultProps = {
-  teams: [],
-  client: { name: '' },
-}
-
-TeamsPanel.propTypes = {
-  handlers: PropTypes.object,
-  teams: PropTypes.array,
-  client: PropTypes.object,
-  selectedTeam: PropTypes.string,
-}
+const TeamsPanel = () => (
+  <Query query={GET_SELECTED_CLIENT}>
+    {({ data: { selectedClient: { description: clientName }} }) => (
+      <Panel
+        style={{ backgroundColor: '#edf1f5' }}
+        title={`Teams for ${clientName}`}
+        titleStyle={{ color: '#536f8d' }}
+        createButton={createButton}
+        queryDocs={{
+          fetchAllEntities: GET_CLIENT_TEAMS,
+          fetchSelectedEntity: GET_SELECTED_TEAM,
+        }}
+        panelItemConfig={panelItemConfig}
+        buttonGroupCallback={buttonGroupCallback}
+      />
+    )}
+  </Query>
+)
 
 export default TeamsPanel

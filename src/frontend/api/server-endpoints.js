@@ -61,7 +61,7 @@ export const deleteTeam = (teamId, data) => {
     method: "DELETE",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data)
-  })
+  }).then(response => response.json())
 }
 
 export const deleteUser = userId => fetch(`api/users/${ userId }`, { method: "DELETE" })
