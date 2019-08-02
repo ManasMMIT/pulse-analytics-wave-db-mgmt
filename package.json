@@ -2,30 +2,70 @@
   "name": "wave-db-mgmt",
   "version": "1.0.0",
   "description": "A repository for managing data into Pulse databases.",
-  "main": "index.js",
   "repository": "https://github.com/pulse-data/wave-db-mgmt.git",
-  "author": "Jon Lin <jon.cp.lin@gmail.com>",
+  "proxy": "http://localhost:1337/",
   "license": "MIT",
-  "scripts": {
-    "repl": "node --inspect ./pulse-core-psql/sequelizeConsole.js",
-    "test": "jest",
-    "test:debug": "node --inspect node_modules/.bin/jest --runInBand"
-  },
   "dependencies": {
+    "@emotion/core": "^10.0.14",
+    "@emotion/styled": "^10.0.14",
+    "@fortawesome/fontawesome-svg-core": "^1.2.19",
+    "@fortawesome/free-solid-svg-icons": "^5.9.0",
+    "@fortawesome/react-fontawesome": "^0.1.4",
+    "apollo-cache-inmemory": "^1.6.2",
+    "apollo-client": "^2.6.3",
+    "apollo-link": "^1.2.12",
+    "apollo-link-rest": "^0.7.3",
+    "body-parser": "^1.19.0",
     "d3-collection": "^1.0.7",
     "dotenv": "^6.2.0",
+    "express": "^4.17.1",
+    "glamor": "^2.20.40",
+    "glamorous": "^5.0.0",
+    "graphql": "^14.4.2",
+    "graphql-anywhere": "^4.2.4",
+    "graphql-tag": "^2.10.1",
     "lodash": "^4.17.11",
     "mongodb": "^3.1.13",
     "node-fetch": "^2.4.1",
+    "nodemon": "^1.19.1",
     "papaparse": "^4.6.3",
     "pg": "^7.9.0",
     "pg-hstore": "^2.3.2",
+    "polished": "^3.4.1",
+    "qs": "^6.7.0",
+    "react": "^16.8.6",
+    "react-apollo": "^2.5.8",
+    "react-dom": "^16.8.6",
+    "react-inspector": "^3.0.2",
+    "react-scripts": "3.0.1",
     "sequelize": "^5.3.0",
     "string-similarity": "^3.0.0",
     "uuid": "^3.3.2",
     "yargs": "^12.0.5"
   },
-  "devDependencies": {
-    "jest": "^24.8.0"
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "react:test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "repl": "node --inspect=127.0.0.1:2000 ./pulse-core-psql/sequelizeConsole.js",
+    "phoenix": "nodemon --inspect ./src/backend",
+    "test": "jest",
+    "test:debug": "node --inspect node_modules/.bin/jest --runInBand"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }
