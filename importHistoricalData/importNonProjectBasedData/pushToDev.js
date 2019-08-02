@@ -1,5 +1,6 @@
 const { latestMonthYearPipeline } = require('../../utils')
 const persistStateLivesTotals = require('./persist-state-lives-totals')
+const persistNationalLivesTotal = require('./persist-national-lives-totals')
 const consolidatePayerData = require('../consolidate-payer-data')
 
 const pushToDev = async ({
@@ -27,6 +28,15 @@ const pushToDev = async ({
 
     if (isStateLivesCollection) {
       await persistStateLivesTotals({ latestMonthYearData, collectionName, pulseCoreDb })
+    }
+
+    const isNationalLivesCollection = [
+      'payerHistoricalDrgNationalLives',
+      'payerHistoricalMmitNationalLives'
+    ].includes(collectionName)
+
+    if (isNationalLivesCollection) {
+      await persistNationalLivesTotal({ latestMonthYearData, collectionName, pulseCoreDb })
     }
 
     await consolidatePayerData({ pulseDevDb, pulseCoreDb, terminateScript })

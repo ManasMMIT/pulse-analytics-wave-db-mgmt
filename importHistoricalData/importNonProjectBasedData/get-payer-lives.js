@@ -48,6 +48,42 @@ const getStateLivesTotals = stateLives => {
   return result
 }
 
+const getNationalLivesTotals = data => {
+  const livesType = {
+    commercialMedical: 0,
+    medicareMedical: 0,
+    commercialPharmacy: 0,
+    medicarePharmacy: 0,
+    managedMedicaidPharmacy: 0,
+    managedMedicaidMedical: 0,
+    ffsMedicaidMedical: 0,
+    ffsMedicaidPharmacy: 0,
+    totalPharmacy: 0,
+    totalMedical: 0,
+    macMedical: 0,
+    tricareMedical: 0,
+    tricarePharmacy: 0,
+    vaMedical: 0,
+    vaPharmacy: 0
+  }
+
+  const reduceCallback = (memo, item) => {
+    // disregard rows that have a dataType, and also rows that have a parentSlug
+    // to avoid redundant counting of both parent and children payer lives
+    if (item.dataType || item.parentSlug) return memo
+
+    Object.keys(livesType)
+      .forEach(objKey => { memo[objKey] += (Number(item[objKey]) || 0)})
+      
+    return memo
+  }
+
+  const nationalLivesTotals = data.reduce(reduceCallback, livesType)
+
+  return nationalLivesTotals
+}
+
 module.exports = {
   getStateLivesTotals,
+  getNationalLivesTotals,
 }

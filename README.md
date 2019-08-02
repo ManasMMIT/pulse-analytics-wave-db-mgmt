@@ -2,10 +2,14 @@
 
 This repo is meant to eventually become Pulse's primary internal database management tool for importing and updating data in our database. It currently contains five scripts for the following purposes:
 1. [Uploading CSV historical data to pulse-dev](#1-uploading-historical-data)
+    1. [Historical Import Quick Guide](#historical-import-quick-guide)
+        1. [Importing Payer Project Historical Data](#importing-payer-project-historical-data)
+        2. [Importing Payer Lives](#importing-payer-lives)
 2. [Uploading listsConfig JSONs to pulse-dev](#2-uploading-listsconfig-jsons)
 3. [Uploading a CSV of provider indication/regimen combos for admin hub to source from](#3-uploading-provider-ind/reg-combos-for-admin-hub)
 4. [Updating Dashboards Permissions Prototype Collection on Dev](#4-updating-dashboards-permissions-prototype-on-dev)
 5. [Exporting Novartis CSV Data](#5-exporting-novartis-csv-data)
+6. [Phoenix](#6-phoenix)
 
 # Before you do anything else
 
@@ -14,6 +18,27 @@ When you first clone this repo and `cd` into the root directory in your terminal
 In order for the script to connect to MongoDB, you'll also need to pull down the `dot-env` file from `/Dropbox/Tech-Group/pulse-analytics/env-variables/dot-env` and save it as `.env` in this directory.
 
 #  1. Uploading Historical Data
+
+##  Historical Import Quick Guide
+Make sure that all sheets have been exported in the CSV format AND have the correct filename.
+
+###  Importing Payer Project Historical Data
+Sheets affected:
+* QualityAccess
+* AdditionalCriteria
+* PolicyLinks
+
+Run the following command: `node ./importHistoricalData --filepath replaceWithLocalFilepath`
+**Note: It takes several minutes to import each sheet.**
+
+###  Importing Payer Lives
+Sheets affected:
+* payerHistoricalDrgNationalLives
+* payerHistoricalDrgStateLives
+* payerHistoricalMmitNationalLives
+* payerHistoricalMmitStateLives
+
+Run the following command: `node ./importHistoricalData --filepath replaceWithLocalFilepath --ignoreProjects`
 
 ## File Naming Convention for Project-Based Data
 
@@ -51,7 +76,12 @@ project-based, then run the same command but include the `--ignoreProjects` flag
 node ./importHistoricalData --filepath ~/Desktop/payerHistoricalMmitStateLives-9-2018.csv --ignoreProjects
 ```
 
-**NOTE:** The `syncDrgMmitMedicalLives` script automatically executes on pulse-core whenever MMIT lives are imported into pulse-core (but before the latest month/year MMIT lives data is pushed to pulse-dev, and before the MMIT totals collection is calculated). That script does the following:
+#### Syncing MMIT State Medical Lives
+The MMIT Lives provided by Regeneron either does not contain or contains sparce medical lives data for each payer. To solve this we created a script that fills in the missing medical state lives. **This does not fill in missing medical NATIONAL Lives**
+
+The `syncDrgMmitMedicalLives` script automatically executes on pulse-core whenever MMIT lives are imported into pulse-core (but before the latest month/year MMIT lives data is pushed to pulse-dev, and before the MMIT totals collection is calculated).
+
+That script does the following:
 1. gets the latest month/year DRG lives but limits that data to the slugs found in the latest month/year MMIT lives set
 2. if a given slug/state combo in the DRG lives data from step 1 is found in the latest month/year MMIT lives set, then that MMIT lives row is updated to have a copy of the DRG medical lives (the pharmacy lives are left untouched)
 3. if a given slug/state combo in the DRG lives data from step 1 CANNOT be found in the latest month/year MMIT lives set, then that DRG row is copied over with only medical lives into the MMIT lives data
@@ -205,3 +235,16 @@ node ./exportNovartisCsvData
 That will output a CSV file in the format `NOVARTIS_KYMRIAH_${DATE}.csv` within the `./exportNovartisCsvData` directory.
 
 Refer to [this Conf doc for specs](https://dedhamgroup.atlassian.net/wiki/spaces/PAD/pages/659521555/Kymriah+CSV+Export).
+
+# 6. Phoenix
+Phoenix controls and manages all permissions in the Pulse Analytics application. It is the 2nd iteration of permission management. The pervious version was Admin Hub delivered in March 2018.
+
+## Starting Phoenix Locally
+Start the server:
+```
+yarn phoenix
+```
+Start the front-end app:
+```
+yarn start
+```
