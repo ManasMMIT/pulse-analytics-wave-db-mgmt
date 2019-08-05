@@ -38,8 +38,9 @@ class TextForm extends Component {
         />
 
         <Mutation mutation={mutationDoc}>
-          {(handleSubmit, { loading }) => {
+          {(handleSubmit, { loading, error }) => {
             if (loading) return <Spinner />
+            if (error) return <div style={{ color: 'red' }}>Error processing request</div>
 
             return (
               <button
