@@ -20,7 +20,7 @@ module.exports = [
       _id: 0,
       STATE_CD: '$stateLives.state',
       STATE_NAME: '$stateLives.stateLong',
-      PLAN_NAME: '$organization',
+      PayerName: '$organization',
       LIVES: {
         $switch: {
           branches: [
@@ -57,7 +57,7 @@ module.exports = [
       },
       PLAN_TYPE: '$book',
       INDICATION: '$indication',
-      PA_URL: '$policyLink',
+      URL_TO_PA_Policy: '$siteLink',
       RESTRICTION_CODE: {
         $switch: {
           branches: [
@@ -87,15 +87,13 @@ module.exports = [
   },
   {
     $addFields: {
+      PLAN_NAME: null,
       PLAN_ID: null,
       PLAN_RANK: null,
       TIER: null,
       TIER_NUMBER: null,
       DW_INS_DT: null,
-      RETAIL_COPAY_MIN: null,
-      RETAIL_COPAY_MAX: null,
-      MO_COPAY_MIN: null,
-      MO_COPAY_MAX: null,
+      PA_URL: null,
     }
   }
 ]

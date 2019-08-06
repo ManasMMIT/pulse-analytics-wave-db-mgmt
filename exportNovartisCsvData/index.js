@@ -18,7 +18,7 @@ const connectToMongoAndWriteCsv = async () => {
 
     if (obj.RESTRICTION_DETAIL_TEXT) {
       additionalCriteriaNotes = obj.RESTRICTION_DETAIL_TEXT.map(({ criteriaNotes }) => criteriaNotes)
-      additionalCriteriaNotes = additionalCriteriaNotes.join(', ')
+      additionalCriteriaNotes = additionalCriteriaNotes.join('| ')
     }
 
     return { ...obj, RESTRICTION_DETAIL_TEXT: additionalCriteriaNotes }
@@ -28,6 +28,7 @@ const connectToMongoAndWriteCsv = async () => {
     'STATE_CD',
     'STATE_NAME',
     'PLAN_ID',
+    'PayerName',
     'PLAN_NAME',
     'PLAN_RANK',
     'LIVES',
@@ -36,11 +37,8 @@ const connectToMongoAndWriteCsv = async () => {
     'TIER_NUMBER',
     'INDICATION',
     'DW_INS_DT',
-    'RETAIL_COPAY_MIN',
-    'RETAIL_COPAY_MAX',
-    'MO_COPAY_MIN',
-    'MO_COPAY_MAX',
     'PA_URL',
+    'URL_TO_PA_Policy',
     'RESTRICTION_CODE',
     'RESTRICTION_DETAIL_TEXT',
     'PROD_NAME',
