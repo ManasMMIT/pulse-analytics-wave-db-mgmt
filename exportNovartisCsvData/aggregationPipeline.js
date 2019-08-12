@@ -89,7 +89,6 @@ module.exports = [
     $addFields: {
       PLAN_NAME: null,
       PLAN_ID: null,
-      PLAN_RANK: null,
       TIER: null,
       TIER_NUMBER: null,
       DW_INS_DT: null,

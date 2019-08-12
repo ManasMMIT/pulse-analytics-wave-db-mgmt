@@ -30,7 +30,6 @@ const connectToMongoAndWriteCsv = async () => {
     'PLAN_ID',
     'PayerName',
     'PLAN_NAME',
-    'PLAN_RANK',
     'LIVES',
     'PLAN_TYPE',
     'TIER',
