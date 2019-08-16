@@ -13,7 +13,7 @@ const PanelItem = ({
     buttonGroupCallback = () => null,
   },
 }) => {
-  const isSelected = entity.id === selectedEntity.id
+  const isSelected = entity._id === selectedEntity._id
 
   let finalStyle = style
   if (isSelected) {
@@ -28,9 +28,9 @@ const PanelItem = ({
         return (
           <div
             style={finalStyle}
-            onClick={handleSelect.bind(null, { variables: { id: entity.id } })}
+            onClick={handleSelect.bind(null, { variables: { _id: entity._id } })}
           >
-            <span>{entity.description || entity.username}</span>
+            <span>{entity.description || entity.username || entity.name}</span>
 
             <span>
               {buttonGroupCallback(entity)}

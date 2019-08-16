@@ -31,8 +31,8 @@ class DeleteButton extends React.Component {
 
   closeModal = () => this.setState({ isModalOpen: false })
 
-  finalDeleteHandler = id => {
-    this.props.deleteHandler(id).then(this.closeModal)
+  finalDeleteHandler = _id => {
+    this.props.deleteHandler(_id).then(this.closeModal)
   }
 
   render() {
@@ -72,7 +72,7 @@ class DeleteButton extends React.Component {
               return (
                 <div
                   style={modalButtonStyle}
-                  onClick={() => handleSubmit({ variables: { id: itemId } })}
+                  onClick={() => handleSubmit({ variables: { _id: itemId } })}
                 >
                   Delete Forever
                 </div>

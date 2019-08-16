@@ -20,8 +20,8 @@ const Panel = ({
   headerContainerStyle,
   createButton,
   queryDocs: {
-    fetchAllEntities,
-    fetchSelectedEntity,
+    fetchAllQueryProps,
+    fetchSelectedQueryProps,
   },
   panelItemConfig,
 }) => {
@@ -36,7 +36,7 @@ const Panel = ({
       </PanelHeader>
 
 
-      <Query query={fetchAllEntities}>
+      <Query {...fetchAllQueryProps}>
         {({ data, loading, error }) => {
           if (loading) return null
           if (error) return <div>Error fetching data</div>
@@ -50,7 +50,7 @@ const Panel = ({
           return (
             <PanelItems
               data={extractedData}
-              fetchSelectedEntity={fetchSelectedEntity}
+              fetchSelectedQueryProps={fetchSelectedQueryProps}
               panelItemConfig={panelItemConfig}
             />
           )
@@ -66,8 +66,8 @@ Panel.propTypes = {
   ...PanelHeader.propTypes,
   createButton: PropTypes.node,
   queryDocs: PropTypes.shape({
-    fetchAllEntities: PropTypes.object,
-    fetchSelectedEntity: PropTypes.object,
+    fetchAllQueryProps: PropTypes.object,
+    fetchSelectedQueryProps: PropTypes.object,
   }).isRequired,
   panelItemConfig: PanelItems.propTypes.panelItemConfig,
 }
@@ -77,8 +77,8 @@ Panel.defaultProps = {
   ...PanelHeader.defaultProps,
   createButton: null,
   queryDocs: {
-    fetchAllEntities: null,
-    fetchSelectedEntity: null,
+    fetchAllQueryProps: null,
+    fetchSelectedQueryProps: null,
   },
   panelItemConfig: PanelItems.defaultProps.panelItemConfig,
 }

@@ -9,30 +9,30 @@ const typeDefs = gql`
     selectedTeam: Team,
     selectedUser: User,
     sitemap: Sitemap,
+    userTeams: [Team],
   }
 
   type Client {
-    id: String
+    _id: String
     name: String
     description: String
   }
 
   type Team {
-    id: String
+    _id: String
     name: String
     description: String
     isDefault: Boolean
   }
 
   type User {
-    id: String
+    _id: String
     username: String
     email: String
-    roles: [Team]
   }
 
   type Sitemap {
-    id: String
+    _id: String
     name: String
     kids: JSON
   }

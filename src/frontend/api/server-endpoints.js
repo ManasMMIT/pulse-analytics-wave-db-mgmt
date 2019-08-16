@@ -32,14 +32,14 @@ export const createUser = data => fetch(`api/users`, {
   body: JSON.stringify(data),
 }).then(response => response.json())
 
-export const editUser = (id, userData) => fetch(`api/users/${id}`, {
+export const editUser = (userId, userData) => fetch(`api/users/${userId}`, {
   method: "PATCH",
   headers: { "Content-Type": "application/json" },
   body: JSON.stringify(userData),
 }).then(response => response.json())
 
-export const editClient = (id, name) => {
-  return fetch(`api/clients/${ id }`, {
+export const editClient = (clientId, name) => {
+  return fetch(`api/clients/${ clientId }`, {
     method: 'PATCH',
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ name })
@@ -48,8 +48,8 @@ export const editClient = (id, name) => {
 
 export const deleteClient = clientId => fetch(`api/clients/${clientId}`, { method: "DELETE" })
 
-export const editTeam = (id, data) => {
-  return fetch(`api/roles/${ id }`, {
+export const editTeam = (teamId, data) => {
+  return fetch(`api/roles/${ teamId }`, {
     method: 'PATCH',
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data)
@@ -65,3 +65,4 @@ export const deleteTeam = (teamId, data) => {
 }
 
 export const deleteUser = userId => fetch(`api/users/${ userId }`, { method: "DELETE" })
+  .then(response => response.json())

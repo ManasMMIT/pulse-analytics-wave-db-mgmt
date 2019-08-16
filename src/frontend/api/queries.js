@@ -3,12 +3,12 @@ import gql from 'graphql-tag'
 export const GET_TEAM_SITEMAP = gql`
   query getSitemap($roleId: String) {
     sitemap(roleId: $roleId) @rest(type: "Sitemap", path: "/sitemaps/{args.roleId}") {
-      id
+      _id
       name
       kids
     }
     selectedTeam @client {
-      id @export(as: "roleId")
+      _id @export(as: "roleId")
     }
   }
 `
@@ -16,7 +16,7 @@ export const GET_TEAM_SITEMAP = gql`
 export const GET_CLIENTS = gql`
   query getClients {
     clients @rest(type: "Client", path: "/clients") {
-      id
+      _id
       name
       description
     }
@@ -26,7 +26,7 @@ export const GET_CLIENTS = gql`
 export const GET_SELECTED_CLIENT = gql`
   query getSelectedClient {
     selectedClient @client {
-      id
+      _id
       name
       description
     }
@@ -36,13 +36,14 @@ export const GET_SELECTED_CLIENT = gql`
 export const GET_CLIENT_TEAMS = gql`
   query getTeams($clientId: String) {
     teams(clientId: $clientId) @rest(type: "Team", path: "/clients/{args.clientId}/roles") {
-      id
+      _id
       name
       description
       isDefault
+      newSitemap
     }
     selectedClient @client {
-      id @export(as: "clientId")
+      _id @export(as: "clientId")
     }
   }
 `
@@ -50,9 +51,10 @@ export const GET_CLIENT_TEAMS = gql`
 export const GET_SELECTED_TEAM = gql`
   query getSelectedTeam {
     selectedTeam @client {
-      id
+      _id
       name
       description
+      newSitemap
     }
   }
 `
@@ -60,17 +62,23 @@ export const GET_SELECTED_TEAM = gql`
 export const GET_TEAM_USERS = gql`
   query getTeamUsers($teamId: String) {
     users(teamId: $teamId) @rest(type: "User", path: "/roles/{args.teamId}/users") {
-      id
+      _id
       username
       email
-      roles @type(name: "Team") {
-        id
-        name
-        description
-      }
     }
     selectedTeam @client {
-      id @export(as: "teamId")
+      _id @export(as: "teamId")
+    }
+  }
+`
+
+export const GET_USER_TEAMS = gql`
+  query getUserTeams($userId: String) {
+    userTeams(userId: $userId) @rest(type: "Team", path: "/users/{args.userId}/roles") {
+      _id
+      name
+      description
+      isDefault
     }
   }
 `
@@ -78,9 +86,146 @@ export const GET_TEAM_USERS = gql`
 export const GET_SELECTED_USER = gql`
   query getSelectedUser {
     selectedUser @client {
-      id
+      _id
       username
       email
+    }
+  }
+`
+
+export const GET_SOURCE_TOOLS = gql`
+  query getSourceTools {
+    nodes(type: "tool") {
+      _id
+      name
+      type
+      componentPath
+      text
+      subtitle
+      caption
+      order
+      parentId
+    }
+  }
+`
+
+export const GET_SELECTED_TOOL = gql`
+  query getSelectedTool {
+    selectedTool @client {
+      _id
+      name
+      type
+      componentPath
+      text
+      subtitle
+      caption
+      order
+      parentId
+    }
+  }
+`
+
+export const GET_TOOL_DASHBOARDS = gql`
+  query getToolDashboards($parentId: String)  {
+    nodes(type: "dashboard", parentId: $parentId) {
+      _id
+      name
+      type
+      componentPath
+      text
+      subtitle
+      caption
+      order
+      parentId
+    }
+    selectedTool @client {
+      _id @export(as: "parentId")
+    }
+  }
+`
+
+export const GET_SELECTED_DASHBOARD = gql`
+  query getSelectedDashboard {
+    selectedDashboard @client {
+      _id
+      name
+      type
+      componentPath
+      text
+      subtitle
+      caption
+      order
+      parentId
+    }
+  }
+`
+
+export const GET_DASHBOARD_PAGES = gql`
+  query getDashboardPages($parentId: String)  {
+    nodes(type: "page", parentId: $parentId) {
+      _id
+      name
+      type
+      componentPath
+      text
+      subtitle
+      caption
+      order
+      parentId
+    }
+    selectedDashboard @client {
+      _id @export(as: "parentId")
+    }
+  }
+`
+
+export const GET_SELECTED_PAGE = gql`
+  query getSelectedPage {
+    selectedPage @client {
+      _id
+      name
+      type
+      componentPath
+      text
+      subtitle
+      caption
+      order
+      parentId
+    }
+  }
+`
+
+export const GET_PAGE_CARDS = gql`
+  query getPageCards($parentId: String)  {
+    nodes(type: "card", parentId: $parentId) {
+      _id
+      name
+      type
+      componentPath
+      text
+      subtitle
+      caption
+      order
+      parentId
+    }
+    selectedPage @client {
+      _id @export(as: "parentId")
+    }
+  }
+`
+
+export const GET_SELECTED_CARD = gql`
+  query getSelectedCard {
+    selectedCard @client {
+      _id
+      name
+      type
+      componentPath
+      text
+      subtitle
+      caption
+      order
+      parentId
     }
   }
 `

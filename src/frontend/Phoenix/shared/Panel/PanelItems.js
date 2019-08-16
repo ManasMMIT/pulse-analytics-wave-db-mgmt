@@ -6,10 +6,10 @@ import PanelItem from './PanelItem'
 
 const PanelItems = ({
   data,
-  fetchSelectedEntity,
+  fetchSelectedQueryProps,
   panelItemConfig,
 }) => (
-  <Query query={fetchSelectedEntity}>
+  <Query {...fetchSelectedQueryProps}>
     {({ data: selectedEntityData }) => {
       const firstDataKey = Object.keys(selectedEntityData)[0]
       const selectedEntity = selectedEntityData[firstDataKey]
@@ -19,7 +19,7 @@ const PanelItems = ({
           {
             data.map(entity => (
               <PanelItem
-                key={entity.id}
+                key={entity._id}
                 selectedEntity={selectedEntity}
                 entity={entity}
                 panelItemConfig={panelItemConfig}
@@ -34,13 +34,13 @@ const PanelItems = ({
 
 PanelItems.propTypes = {
   data: PropTypes.arrayOf(PropTypes.object),
-  fetchSelectedEntity: PropTypes.object,
+  fetchSelectedQueryProps: PropTypes.object,
   panelItemConfig: PanelItem.propTypes.panelItemConfig,
 }
 
 PanelItems.defaultProps = {
   data: [],
-  fetchSelectedEntity: null,
+  fetchSelectedQueryProps: null,
   panelItemConfig: PanelItem.defaultProps.panelItemConfig,
 }
 
