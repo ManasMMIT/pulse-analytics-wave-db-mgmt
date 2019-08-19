@@ -96,6 +96,7 @@ const {
   getRoleController,
   getUserController,
   getSitemapController,
+  getNodeController,
 } = require('./controllers')
 
 const MongoClient = require('mongodb').MongoClient
@@ -170,11 +171,13 @@ MongoClient.connect(process.env.LOADER_URI, { useNewUrlParser: true }, (err, cli
   const roleController = getRoleController(voltronDBsConfig)
   const userController = getUserController(voltronDBsConfig)
   const sitemapController = getSitemapController(voltronDBsConfig)
+  const nodeController = getNodeController(voltronDBsConfig)
 
   subApp.use('/clients', clientController)
   subApp.use('/roles', roleController)
   subApp.use('/users', userController)
   subApp.use('/sitemaps', sitemapController)
+  subApp.use('/nodes', nodeController)
 })
 
 
