@@ -26,9 +26,9 @@ class SitemapPanel extends React.Component {
 
   getInitialState(props = this.props) {
     const { data: { selectedTeam } } = props
-    const { newSitemap } = selectedTeam
+    const { sitemap } = selectedTeam
 
-    const initialState = _.mapValues(newSitemap, arr => _.keyBy(arr, '_id'))
+    const initialState = _.mapValues(sitemap, arr => _.keyBy(arr, '_id'))
 
     return initialState
   }

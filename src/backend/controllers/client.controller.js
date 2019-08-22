@@ -85,8 +85,7 @@ module.exports = ({
       name: roleInAuth0.name,
       description: roleInAuth0.description,
       client: mongoClientObj,
-      sitemap: null,
-      newSitemap: {
+      sitemap: {
         tools: [],
         dashboards: [],
         pages: [],

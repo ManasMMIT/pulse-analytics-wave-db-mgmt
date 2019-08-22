@@ -3,9 +3,10 @@ import gql from 'graphql-tag'
 export const GET_TEAM_SITEMAP = gql`
   query getSitemap($roleId: String) {
     sitemap(roleId: $roleId) @rest(type: "Sitemap", path: "/sitemaps/{args.roleId}") {
-      _id
-      name
-      kids
+      tools
+      dashboards
+      pages
+      cards
     }
     selectedTeam @client {
       _id @export(as: "roleId")
@@ -40,7 +41,7 @@ export const GET_CLIENT_TEAMS = gql`
       name
       description
       isDefault
-      newSitemap
+      sitemap
     }
     selectedClient @client {
       _id @export(as: "clientId")
@@ -54,7 +55,7 @@ export const GET_SELECTED_TEAM = gql`
       _id
       name
       description
-      newSitemap
+      sitemap
     }
   }
 `

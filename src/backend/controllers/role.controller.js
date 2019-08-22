@@ -101,8 +101,7 @@ module.exports = ({
           name: roleCreatedInAuth0.name,
           description: roleCreatedInAuth0.description,
           client,
-          sitemap: [],
-          newSitemap: {
+          sitemap: {
             tools: [],
             dashboards: [],
             pages: [],

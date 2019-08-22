@@ -83,10 +83,10 @@ const resolvers = {
       return pulseCoreDb.collection('roles')
         .findOneAndUpdate(
           { _id: teamId },
-          { $set: { newSitemap: updatedSitemap } },
+          { $set: { sitemap: updatedSitemap } },
           { returnOriginal: false }
         )
-        .then(({ value }) => value.newSitemap)
+        .then(({ value }) => value.sitemap)
     }
   }
 };

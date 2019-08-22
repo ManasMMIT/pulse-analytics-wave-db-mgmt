@@ -26,7 +26,7 @@ const NODE_TYPES = [
 
 const getNodeTypesFilter = nodeId => (
   NODE_TYPES.map(type => (
-    { [`newSitemap.${type}s`]: { $elemMatch: { _id: nodeId } } }
+    { [`sitemap.${type}s`]: { $elemMatch: { _id: nodeId } } }
   ))
 )
 
@@ -69,7 +69,7 @@ module.exports = ({
       next(`${ body.type } is not an accepted node type. Must be one of the following: ${ NODE_TYPES }`)
       return
     }
-    
+
     const node = await mongoNodes.insertOne({ _id: uuid(), ...body })
 
     res.json(node.ops[0])
@@ -97,7 +97,7 @@ module.exports = ({
   })
 
   // subApp.delete('/:nodeId', async ({
-  //   params: { nodeId } 
+  //   params: { nodeId }
   // }, res, next) => {
   //   if (!nodeId) {
   //     next('Node id required for deletion')
@@ -105,7 +105,7 @@ module.exports = ({
   //   }
 
   //   const session = mongoClient.startSession()
-    
+
   //   try {
   //     await session.withTransaction(async () => {
   //       const { value: deletedNode } = await mongoNodes.findOneAndDelete(
@@ -114,20 +114,20 @@ module.exports = ({
   //       )
 
   //       const rolesToUpdate = await mongoRoles.find(
-  //         { [`newSitemap.${ deletedNode.type }s._id`]: nodeId },
+  //         { [`sitemap.${ deletedNode.type }s._id`]: nodeId },
   //         { session }
   //       ).toArray()
 
   //       const promiseArray = rolesToUpdate.map(({ _id }) => {
   //         return mongoRoles.updateOne(
   //           { _id },
-  //           { $pull: { [`newSitemap.${ deletedNode.type }s`]: { _id: nodeId } } },
+  //           { $pull: { [`sitemap.${ deletedNode.type }s`]: { _id: nodeId } } },
   //           { session }
   //         )
   //       })
 
   //       await Promise.all(promiseArray)
-        
+
   //       res.json(deletedNode)
   //     })
   //   } catch(error) {
@@ -166,7 +166,7 @@ module.exports = ({
     if (body.order) body.order = parseInt(body.order)
 
     const session = mongoClient.startSession()
-    
+
     try {
       await session.withTransaction(async () => {
         const updatedSourceNode = await mongoNodes.findOneAndUpdate(
@@ -179,7 +179,7 @@ module.exports = ({
         )
 
         const rolesToUpdate = await mongoRoles.find(
-          { [`newSitemap.${body.type}s._id`]: nodeId },
+          { [`sitemap.${body.type}s._id`]: nodeId },
           { session }
         ).toArray()
 
@@ -188,13 +188,13 @@ module.exports = ({
             const pullPushPromise =  async () => {
               await mongoRoles.updateOne(
                 { _id },
-                { $pull: { [`newSitemap.${ body.type }s`]: { _id: nodeId } } },
+                { $pull: { [`sitemap.${ body.type }s`]: { _id: nodeId } } },
                 { session }
               )
-      
+
               await mongoRoles.updateOne(
                 { _id },
-                { $push: { [`newSitemap.${ body.type }s`]: updatedSourceNode.value } },
+                { $push: { [`sitemap.${ body.type }s`]: updatedSourceNode.value } },
                 { session }
               )
             }
@@ -234,13 +234,13 @@ module.exports = ({
       await session.withTransaction(async () => {
         /*const updateOne = */ await mongoRoles.findOneAndUpdate(
           { _id: roleId },
-          { $pull: { [`newSitemap.${ body.type }s`]: { _id: nodeId } } },
+          { $pull: { [`sitemap.${ body.type }s`]: { _id: nodeId } } },
           { returnOriginal: false, session, },
         )
 
         const updateTwo = await mongoRoles.findOneAndUpdate(
           { _id: roleId },
-          { $push: { [`newSitemap.${ body.type }s`]: { _id: nodeId, ...body } } },
+          { $push: { [`sitemap.${ body.type }s`]: { _id: nodeId, ...body } } },
           { returnOriginal: false, session, },
         )
 
@@ -271,7 +271,7 @@ module.exports = ({
 
         const updatedRole = await mongoRoles.findOneAndUpdate(
           { _id: roleId },
-          { $addToSet: { [`newSitemap.${sourceNode.type}s`]: sourceNode } },
+          { $addToSet: { [`sitemap.${sourceNode.type}s`]: sourceNode } },
           {
             returnOriginal: false,
             session,
@@ -299,7 +299,7 @@ module.exports = ({
 
     const updatedRole = await mongoRoles.findOneAndUpdate(
       { _id: roleId },
-      { $pull: { [`newSitemap.${type}s`]: { _id: nodeId } } },
+      { $pull: { [`sitemap.${type}s`]: { _id: nodeId } } },
       { returnOriginal: false },
     )
     res.json(updatedRole.value)

@@ -1,6 +1,6 @@
 /* eslint-disable no-loop-func */
 // const _ = require('lodash')
-const getCombinedNewSitemaps = require('./getCombinedNewSitemaps')
+const getCombinedSitemaps = require('./getCombinedSitemaps')
 
 const generateSitemaps = async ({
   mongoClient,
@@ -22,24 +22,22 @@ const generateSitemaps = async ({
       let promise
       if (usersSitemapUser) {
         promise = CoreRoles
-          .find({ 'users._id': user._id }, { session }).toArray()
+          .find({
+            'users._id': user._id },
+            { session },
+          ).toArray()
           .then(userRoles => {
-            const userRolesNewSitemaps = userRoles
-              .map(({ newSitemap }) => newSitemap)
+            const userRolesSitemap = userRoles.map(({ sitemap }) => sitemap)
 
-            let oldSitemap = null
-            if (userRoles.length) oldSitemap = userRoles[0].sitemap
-      
-            const combinedNewSitemap = getCombinedNewSitemaps(userRolesNewSitemaps)
-      
+            const combinedSitemap = getCombinedSitemaps(userRolesSitemap)
+
             const client = userRoles.length ? userRoles[0].client : null
-      
+
             return DevUsers.updateOne(
               { _id: user._id },
               {
                 $set: {
-                  sitemap: oldSitemap,
-                  newSitemap: combinedNewSitemap,
+                  sitemap: combinedSitemap,
                   client,
                   schemaVersion: 'v1.1.0',
                   updatedAt: new Date()
@@ -50,25 +48,23 @@ const generateSitemaps = async ({
           })
       } else {
         promise = CoreRoles
-          .find({ 'users._id': user._id }, { session }).toArray()
+          .find(
+            { 'users._id': user._id },
+            { session },
+          ).toArray()
           .then(userRoles => {
-            const userRolesNewSitemaps = userRoles
-              .map(({ newSitemap }) => newSitemap)
+            const userRolesSitemap = userRoles.map(({ sitemap }) => sitemap)
 
-            const combinedNewSitemap = getCombinedNewSitemaps(userRolesNewSitemaps)
+            const combinedSitemap = getCombinedSitemaps(userRolesSitemap)
 
             const client = userRoles.length ? userRoles[0].client : null
-
-            let oldSitemap = null
-            if (userRoles.length) oldSitemap = userRoles[0].sitemap
 
             return DevUsers.insertOne(
               {
                 _id: user._id,
                 username: user.username,
                 client,
-                newSitemap: combinedNewSitemap,
-                sitemap: oldSitemap,
+                sitemap: combinedSitemap,
                 schemaVersion: 'v1.1.0',
                 updatedAt: new Date(),
                 createdAt: new Date()
@@ -84,7 +80,7 @@ const generateSitemaps = async ({
     await Promise.all(promiseArray)
   })
 
-  console.log('New sitemap slice in pulse-dev users.sitemaps collection updated.')
+  console.log('Sitemap slice in pulse-dev users.sitemaps collection updated.')
 
   return true
 }
