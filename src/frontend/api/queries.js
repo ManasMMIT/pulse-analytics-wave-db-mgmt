@@ -230,3 +230,12 @@ export const GET_SELECTED_CARD = gql`
     }
   }
 `
+
+export const GET_SOURCE_INDICATIONS = gql`
+  query getMasterIndications {
+    indications {
+      _id
+      name
+    }
+  }
+`

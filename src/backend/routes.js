@@ -8,10 +8,12 @@ const typeDefs = gql`
 
   type Query {
     nodes(parentId: String, type: String): [Node]
+    indications: [Indication]
   }
 
   type Mutation {
     updateRoleSitemap(input: UpdateRoleSitemapInput!): UpdateRoleSitemapPayload
+    createIndication(input: CreateIndicationInput!): CreateIndicationPayload
   }
 
   input UpdateRoleSitemapInput {
@@ -31,6 +33,15 @@ const typeDefs = gql`
     dashboards: [Node]
     pages: [Node]
     cards: [Node]
+  }
+
+  input CreateIndicationInput {
+    name: String!
+  }
+
+  type CreateIndicationPayload {
+    _id: ID
+    name: String
   }
 
   # need to create NodeInput of type Input, otherwise server fails:
@@ -62,6 +73,11 @@ const typeDefs = gql`
     schemaVersion: String
     icon: String # TODO: deprecate and change to iconId
   }
+
+  type Indication {
+    _id: ID!
+    name: String
+  }
 `
 
 const resolvers = {
@@ -76,6 +92,9 @@ const resolvers = {
         .find(queryObj)
         .sort({ order: 1 })
         .toArray()
+    },
+    indications: (parent, args, { pulseCoreDb }, info) => {
+      return pulseCoreDb.collection('indications').find().toArray()
     }
   },
   Mutation: {
@@ -87,7 +106,11 @@ const resolvers = {
           { returnOriginal: false }
         )
         .then(({ value }) => value.sitemap)
-    }
+    },
+    createIndication: (parent, { input: { name } }, { pulseCoreDb }, info) => {
+      return pulseCoreDb.collection('indications').insertOne({ name })
+        .then(res => res.ops[0])
+    },
   }
 };
 

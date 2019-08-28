@@ -8,29 +8,47 @@ const PanelItems = ({
   data,
   fetchSelectedQueryProps,
   panelItemConfig,
-}) => (
-  <Query {...fetchSelectedQueryProps}>
-    {({ data: selectedEntityData }) => {
-      const firstDataKey = Object.keys(selectedEntityData)[0]
-      const selectedEntity = selectedEntityData[firstDataKey]
+}) => {
+  if (fetchSelectedQueryProps) {
+    return (
+      <Query {...fetchSelectedQueryProps}>
+        {({ data: selectedEntityData }) => {
+          const firstDataKey = Object.keys(selectedEntityData)[0]
+          const selectedEntity = selectedEntityData[firstDataKey]
 
-      return (
-        <div>
-          {
-            data.map(entity => (
-              <PanelItem
-                key={entity._id}
-                selectedEntity={selectedEntity}
-                entity={entity}
-                panelItemConfig={panelItemConfig}
-              />
-            ))
-          }
-        </div>
-      )
-    }}
-  </Query>
-)
+          return (
+            <div>
+              {
+                data.map(entity => (
+                  <PanelItem
+                    key={entity._id}
+                    selectedEntity={selectedEntity}
+                    entity={entity}
+                    panelItemConfig={panelItemConfig}
+                  />
+                ))
+              }
+            </div>
+          )
+        }}
+      </Query>
+    )
+  }
+
+  return (
+    <div>
+      {
+        data.map(entity => (
+          <PanelItem
+            key={entity._id}
+            entity={entity}
+            panelItemConfig={panelItemConfig}
+          />
+        ))
+      }
+    </div>
+  )
+}
 
 PanelItems.propTypes = {
   data: PropTypes.arrayOf(PropTypes.object),

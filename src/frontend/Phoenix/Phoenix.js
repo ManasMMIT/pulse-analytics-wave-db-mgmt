@@ -27,11 +27,10 @@ class Phoenix extends Component {
     if (this.state.isLoading) return null
 
     return (
-      <div>
+      <div style={{ flex: 1 }}>
         <Switch>
-          <Route exact path="/" component={Home} />
-          <Route path="/sitemap/:teamId" component={SitemapPanel} />
-          <Redirect to="/" />
+          <Route exact path="/phoenix" component={Home} />
+          <Route path="/phoenix/sitemap/:teamId" component={SitemapPanel} />
         </Switch>
       </div>
     )

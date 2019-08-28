@@ -10,8 +10,9 @@ const VerticalTabs = props => {
     activeTabStyle,
     inactiveTabStyle,
     tabsData,
-    selectedTab,
-    onTabClick,
+    defaultSelectedTab,
+    useStateProps,
+    children,
   } = props
 
   const combinedTabsContainerStyle = Object.assign(
@@ -25,9 +26,11 @@ const VerticalTabs = props => {
       activeTabStyle={activeTabStyle}
       inactiveTabStyle={inactiveTabStyle}
       tabsData={tabsData}
-      selectedTab={selectedTab}
-      onTabClick={onTabClick}
-    />
+      useStateProps={useStateProps}
+      defaultSelectedTab={defaultSelectedTab}
+    >
+      {children}
+    </Tabs>
   )
 }
 
@@ -41,22 +44,22 @@ VerticalTabs.propTypes = {
       })
     ])
   ),
-  selectedTab: PropTypes.string,
-  onTabClick: PropTypes.func,
   activeTabStyle: PropTypes.object,
   inactiveTabStyle: PropTypes.object,
   tabContainerStyle: PropTypes.object,
   tabsContainerStyle: PropTypes.object,
+  defaultSelectedTab: Tabs.propTypes.defaultSelectedTab,
+  useStateProps: Tabs.propTypes.useStateProps,
 }
 
 VerticalTabs.defaultProps = {
   tabsData: Tabs.defaultProps.tabsData,
-  selectedTab: Tabs.defaultProps.selectedTab,
-  onTabClick: () => {},
   activeTabStyle: {},
   inactiveTabStyle: {},
   tabContainerStyle: {},
   tabsContainerStyle: {},
+  defaultSelectedTab: Tabs.defaultProps.defaultSelectedTab,
+  useStateProps: Tabs.defaultProps.useStateProps,
 }
 
 export default VerticalTabs

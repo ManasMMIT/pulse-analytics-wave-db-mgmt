@@ -22,23 +22,35 @@ const PanelItem = ({
     finalStyle = { ...finalStyle, ...inactiveStyle }
   }
 
-  return (
-    <Mutation mutation={selectEntityMutationDoc}>
-      {handleSelect => {
-        return (
-          <div
-            style={finalStyle}
-            onClick={handleSelect.bind(null, { variables: { _id: entity._id } })}
-          >
-            <span>{entity.description || entity.username || entity.name}</span>
+  if (selectEntityMutationDoc) {
+    return (
+      <Mutation mutation={selectEntityMutationDoc}>
+        {handleSelect => {
+          return (
+            <div
+              style={finalStyle}
+              onClick={handleSelect.bind(null, { variables: { _id: entity._id } })}
+            >
+              <span>{entity.description || entity.username || entity.name}</span>
 
-            <span>
-              {buttonGroupCallback(entity)}
-            </span>
-          </div>
-        )
-      }}
-    </Mutation>
+              <span>
+                {buttonGroupCallback(entity)}
+              </span>
+            </div>
+          )
+        }}
+      </Mutation>
+    )
+  }
+
+  return (
+    <div style={finalStyle}>
+      <span>{entity.description || entity.username || entity.name}</span>
+
+      <span>
+        {buttonGroupCallback(entity)}
+      </span>
+    </div>
   )
 }
 

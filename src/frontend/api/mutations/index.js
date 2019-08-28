@@ -26,6 +26,10 @@ import {
   SELECT_CARD,
 } from './sitemaps'
 
+import {
+  CREATE_INDICATION,
+} from './indications'
+
 export {
   SELECT_CLIENT,
   CREATE_CLIENT,
@@ -43,4 +47,5 @@ export {
   SELECT_DASHBOARD,
   SELECT_PAGE,
   SELECT_CARD,
+  CREATE_INDICATION,
 }

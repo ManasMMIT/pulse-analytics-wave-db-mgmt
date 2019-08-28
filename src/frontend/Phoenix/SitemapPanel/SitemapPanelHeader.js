@@ -67,7 +67,7 @@ const SitemapPanelHeader = ({ updatedSitemap, teamId }) => (
     <div>
       <Mutation mutation={SELECT_TOOL}>
         {resetToolSelection => (
-          <Link to="/" style={cancelButtonStyle} onClick={resetToolSelection}>
+          <Link to="/phoenix" style={cancelButtonStyle} onClick={resetToolSelection}>
             Cancel
           </Link>
         )}

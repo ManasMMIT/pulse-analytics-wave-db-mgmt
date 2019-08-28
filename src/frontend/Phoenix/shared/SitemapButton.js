@@ -11,7 +11,7 @@ const buttonStyle = {
 }
 
 const SitemapButton = ({ teamId }) => (
-  <Link style={buttonStyle} to={`/sitemap/${teamId}`}>
+  <Link style={buttonStyle} to={`/phoenix/sitemap/${teamId}`}>
     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24">
       <g fill="none" fillRule="evenodd">
         <rect width="6" height="6" fill="#b6b9bc" rx="1.5" />
