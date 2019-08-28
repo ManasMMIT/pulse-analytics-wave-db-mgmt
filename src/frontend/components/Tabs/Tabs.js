@@ -1,32 +1,43 @@
-import React from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { css } from 'glamor'
+import _ from 'lodash'
 
 import Tab from './Tab'
 
-class Tabs extends React.Component {
-  shouldComponentUpdate(nextProps) {
-    return this.props.selectedTab !== nextProps.selectedTab
-  }
+const areUseStatePropsValid = useStateProps => (
+  Array.isArray(useStateProps)
+    && useStateProps.length === 2
+    && (_.isString(useStateProps[0]) || _.isObject(useStateProps[0]))
+    && _.isFunction(useStateProps[1])
+)
 
-  handleClick(selectedTab) {
-    this.props.onTabClick(selectedTab)
-  }
+const Tabs = props => {
+  const {
+    tabsData,
+    activeTabStyle,
+    inactiveTabStyle,
+    tabContainerStyle,
+    tabsContainerStyle,
+    defaultSelectedTab,
+    useStateProps,
+    children,
+  } = props
 
-  render() {
-    const {
-      tabsData,
-      selectedTab,
-      onTabClick,
-      activeTabStyle,
-      inactiveTabStyle,
-      tabContainerStyle,
-      tabsContainerStyle,
-    } = this.props
+  let [selectedTab, onTabClick] = useState(defaultSelectedTab || tabsData[0])
+  if (areUseStatePropsValid(useStateProps)) [selectedTab, onTabClick] = useStateProps
 
-    const combinedTabsContainerStyle = Object.assign({}, { display: 'flex' }, tabsContainerStyle)
+  const selectedValue = _.isObject(selectedTab) ? selectedTab.value : selectedTab
 
-    return (
+  const selectedIdx = tabsData.findIndex(tab => {
+    const tabValue = _.isObject(tab) ? tab.value : tab
+    return tabValue === selectedValue
+  })
+
+  const combinedTabsContainerStyle = Object.assign({}, { display: 'flex' }, tabsContainerStyle)
+
+  return (
+    <>
       <div {...css(combinedTabsContainerStyle)}>
         {
           tabsData.map(tabDatum => {
@@ -36,7 +47,7 @@ class Tabs extends React.Component {
               <Tab
                 key={tabValue}
                 tabContent={tabDatum}
-                handleClick={onTabClick}
+                handleClick={value => onTabClick(value)}
                 selectedTab={selectedTab}
                 activeTabStyle={activeTabStyle}
                 inactiveTabStyle={inactiveTabStyle}
@@ -46,8 +57,10 @@ class Tabs extends React.Component {
           })
         }
       </div>
-    )
-  }
+
+      {children[selectedIdx]}
+    </>
+  )
 }
 
 Tabs.propTypes = {
@@ -60,22 +73,28 @@ Tabs.propTypes = {
       })
     ])
   ),
-  selectedTab: PropTypes.string,
-  onTabClick: PropTypes.func,
   activeTabStyle: PropTypes.object,
   inactiveTabStyle: PropTypes.object,
   tabContainerStyle: PropTypes.object,
   tabsContainerStyle: PropTypes.object,
+  defaultSelectedTab: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.shape({
+      value: PropTypes.string,
+      label: PropTypes.node // can be a React el or anything else that's renderable
+    })
+  ]),
+  useStateProps: PropTypes.array, // needs to follow useState format
 }
 
 Tabs.defaultProps = {
   tabsData: [Tab.defaultProps.tabContent],
-  selectedTab: Tab.defaultProps.selectedTab,
-  onTabClick: () => {},
   activeTabStyle: {},
   inactiveTabStyle: {},
   tabContainerStyle: {},
   tabsContainerStyle: {},
+  defaultSelectedTab: null,
+  useStateProps: null,
 }
 
 export default Tabs

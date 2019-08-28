@@ -16,7 +16,7 @@ const defaultTabContainerStyle = {
 
 const defaultActiveTabStyle = {
   backgroundColor: Colors.White,
-  borderBottom: `2px solid ${ Colors.PulseBlue }`
+  borderBottom: `2px solid ${Colors.PulseBlue}`,
 }
 
 const defaultInactiveTabStyle = {
@@ -26,7 +26,7 @@ const defaultInactiveTabStyle = {
   ':hover': {
     backgroundColor: TransColors.White50,
     color: TransColors.Black30,
-    borderBottom: `2px solid ${ TransColors.Black30 }`
+    borderBottom: `2px solid ${TransColors.Black30}`,
   }
 }
 
@@ -37,8 +37,9 @@ const UnderlinedTabs = props => {
     activeTabStyle,
     inactiveTabStyle,
     tabsData,
-    selectedTab,
-    onTabClick,
+    defaultSelectedTab,
+    useStateProps,
+    children,
   } = props
 
   const combinedTabContainerStyle = _.merge({}, defaultTabContainerStyle, tabContainerStyle)
@@ -52,9 +53,11 @@ const UnderlinedTabs = props => {
       activeTabStyle={combinedActiveTabStyle}
       inactiveTabStyle={combinedInactiveTabStyle}
       tabsData={tabsData}
-      selectedTab={selectedTab}
-      onTabClick={onTabClick}
-    />
+      useStateProps={useStateProps}
+      defaultSelectedTab={defaultSelectedTab}
+    >
+      {children}
+    </Tabs>
   )
 }
 
@@ -68,22 +71,22 @@ UnderlinedTabs.propTypes = {
       })
     ])
   ),
-  selectedTab: PropTypes.string,
-  onTabClick: PropTypes.func,
   activeTabStyle: PropTypes.object,
   inactiveTabStyle: PropTypes.object,
   tabContainerStyle: PropTypes.object,
   tabsContainerStyle: PropTypes.object,
+  defaultSelectedTab: Tabs.propTypes.defaultSelectedTab,
+  useStateProps: Tabs.propTypes.useStateProps,
 }
 
 UnderlinedTabs.defaultProps = {
   tabsData: Tabs.defaultProps.tabsData,
-  selectedTab: Tabs.defaultProps.selectedTab,
-  onTabClick: () => {},
   activeTabStyle: {},
   inactiveTabStyle: {},
   tabContainerStyle: {},
   tabsContainerStyle: {},
+  defaultSelectedTab: Tabs.defaultProps.defaultSelectedTab,
+  useStateProps: Tabs.defaultProps.useStateProps,
 }
 
 export default UnderlinedTabs
