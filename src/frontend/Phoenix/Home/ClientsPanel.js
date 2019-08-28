@@ -32,6 +32,7 @@ const panelItemConfig = {
   selectEntityMutationDoc: SELECT_CLIENT,
   style: defaultPanelItemStyle,
   activeStyle: activePanelItemStyle,
+  label1Callback: ({ description }) => description,
   // ! Note: inactiveStyle not needed until hover effects differ
   // ! between active and inactive states
   // inactiveStyle: inactivePanelItemStyle,

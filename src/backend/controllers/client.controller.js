@@ -7,27 +7,22 @@ module.exports = ({
 
   // mongo guys
   mongoClient,
-  mongoUsers,
-  mongoRoles,
-  mongoClients,
-
-  // psql stuff
-  User,
-  Role,
-  Client,
+  coreUsers,
+  coreRoles,
+  coreClients,
 }) => {
   const subApp = express()
 
-  subApp.get('/', async (req, res) => {
-    let clients = await mongoClients.find().toArray()
-    clients = _.sortBy(clients, ({ description }) => description.toLowerCase())
-    res.json(clients)
-  })
+  // subApp.get('/', async (req, res) => {
+  //   let clients = await coreClients.find().toArray()
+  //   clients = _.sortBy(clients, ({ description }) => description.toLowerCase())
+  //   res.json(clients)
+  // })
 
   subApp.get('/:id', async ({
     params: { id },
   }, res) => {
-    const client = await mongoClients.findOne({ _id: id })
+    const client = await coreClients.findOne({ _id: id })
     res.json(client)
   })
 
@@ -57,22 +52,6 @@ module.exports = ({
       description: defaultRoleDescrip,
     })
 
-    // ! psql
-    // use the generated UUID when writing to psql
-    const clientInPsql = await Client.create({
-      id: clientInAuth0._id,
-      name: clientInAuth0.name,
-      description: clientInAuth0.description,
-    })
-
-    const defaultRole = await Role.create({
-      id: roleInAuth0._id,
-      name: roleInAuth0.name,
-      description: roleInAuth0.description,
-    })
-
-    await clientInPsql.addRole(defaultRole)
-
     // ! mongodb
     const mongoClientObj = {
       _id: clientInAuth0._id,
@@ -98,9 +77,9 @@ module.exports = ({
     const session = mongoClient.startSession()
     try {
       await session.withTransaction(async () => {
-        const client = await mongoClients.insertOne(mongoClientObj, { session })
+        const client = await coreClients.insertOne(mongoClientObj, { session })
 
-        await mongoRoles.insertOne(defaultMongoRole, { session })
+        await coreRoles.insertOne(defaultMongoRole, { session })
         res.json(client.ops[0])
       })
     } catch (error) {
@@ -123,20 +102,16 @@ module.exports = ({
       return
     }
 
-    // ! psql
-    const client = await Client.findByPk(id)
-    await client.destroy()
-
     // ! mongodb
     const session = mongoClient.startSession()
 
     try {
       await session.withTransaction(async () => {
-        const client = mongoClients.findOne({ _id: id })
+        const client = coreClients.findOne({ _id: id })
 
-        await mongoClients.deleteOne({ _id: id }, { session })
-        await mongoRoles.deleteMany({ "client._id": id }, { session })
-        await mongoUsers.deleteMany({ "client._id": id }, { session })
+        await coreClients.deleteOne({ _id: id }, { session })
+        await coreRoles.deleteMany({ "client._id": id }, { session })
+        await coreUsers.deleteMany({ "client._id": id }, { session })
 
         console.log(`Successfully deleted client ${client.description}`)
         res.json(client)
@@ -147,27 +122,29 @@ module.exports = ({
     }
   })
 
-  subApp.get('/:clientId/roles', async ({
-    params: { clientId },
-  }, res) => {
-    const clientRoles = await mongoRoles.find({ "client._id": clientId }).toArray()
+  // subApp.get('/:clientId/roles', async ({
+  //   params: { clientId },
+  // }, res) => {
+  //   const clientRoles = await coreRoles.find({ "client._id": clientId }).toArray()
 
-    const [[adminRole], restOfRoles] = _.partition(
-      clientRoles,
-      ({ name }) => name.includes('-admin')
-    )
+  //   const [[adminRole], restOfRoles] = _.partition(
+  //     clientRoles,
+  //     ({ name }) => name.includes('-admin')
+  //   )
 
-    adminRole.isDefault = true
+  //   if (adminRole) {
+  //     adminRole.isDefault = true
+  //   }
 
-    const sortedOtherRoles = _.sortBy(
-      restOfRoles,
-      ({ description }) => description.toLowerCase()
-    )
+  //   const sortedOtherRoles = _.sortBy(
+  //     restOfRoles,
+  //     ({ description }) => description.toLowerCase()
+  //   )
 
-    const result = [adminRole, ...sortedOtherRoles]
+  //   const result = _.compact([adminRole, ...sortedOtherRoles])
 
-    res.json(result)
-  })
+  //   res.json(result)
+  // })
 
   return subApp
 }

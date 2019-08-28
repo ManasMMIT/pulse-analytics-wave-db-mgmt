@@ -1,10 +1,14 @@
 import gql from 'graphql-tag'
 
-export const PUSH_SITEMAP = gql`
-  mutation pushSitemapToDevProd {
-    pushSitemap(input: {}) @rest(path: "/sitemaps/generate", method: "POST") {
-      success
-    }
+export const PUSH_SITEMAP_TO_DEV = gql`
+  mutation PushSitemapToDev {
+    pushSitemapToDev
+  }
+`
+
+export const PUSH_SITEMAP_TO_PROD = gql`
+  mutation PushSitemapToProd {
+    pushSitemapToProd
   }
 `
 

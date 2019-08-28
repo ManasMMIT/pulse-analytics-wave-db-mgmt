@@ -73,6 +73,7 @@ const panelItemConfig = {
   style: defaultPanelItemStyle,
   activeStyle: activePanelItemStyle,
   buttonGroupCallback,
+  label1Callback: ({ description }) => description,
   // ! Note: inactiveStyle not needed until hover effects differ
   // ! between active and inactive states
   // inactiveStyle: inactivePanelItemStyle,

@@ -11,6 +11,8 @@ const PanelItem = ({
     activeStyle,
     inactiveStyle,
     buttonGroupCallback = () => null,
+    label1Callback = () => null,
+    label2Callback = () => null,
   },
 }) => {
   const isSelected = entity._id === selectedEntity._id
@@ -63,6 +65,8 @@ PanelItem.propTypes = {
     activeStyle: PropTypes.object,
     inactiveStyle: PropTypes.object,
     buttonGroupCallback: PropTypes.func,
+    label1Callback: PropTypes.func,
+    label2Callback: PropTypes.func,
   }),
 }
 
@@ -75,6 +79,8 @@ PanelItem.defaultProps = {
     activeStyle: {},
     inactiveStyle: {},
     buttonGroupCallback: () => null,
+    label1Callback: () => null,
+    label2Callback: () => null,
   }
 }
 

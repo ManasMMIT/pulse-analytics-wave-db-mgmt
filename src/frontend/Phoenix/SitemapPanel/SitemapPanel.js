@@ -1,8 +1,13 @@
 import React from 'react'
 import _ from 'lodash'
-import { graphql } from 'react-apollo'
+import { graphql, compose } from 'react-apollo'
 
-import { GET_SELECTED_TEAM } from '../../api/queries'
+// TODO: Grab all selected nodes at each level,
+// * to pass appropriate indications/accounts
+import {
+  GET_SELECTED_TEAM,
+  GET_SELECTED_TOOL,
+} from '../../api/queries'
 import SitemapPanelHeader from './SitemapPanelHeader'
 import ToolsPanel from './ToolsPanel'
 import DashboardsPanel from './DashboardsPanel'
@@ -17,15 +22,16 @@ class SitemapPanel extends React.Component {
     this.state = initialState
   }
 
-  // needed because sometimes the initialState set in the constructor
-  // is one cycle behind the most recent selection
+  // ! Extra GET_SELECTED_TEAM query is needed because
+  // ! sometimes the initialState set in the constructor
+  // ! is one cycle behind the most recent selection
   componentWillReceiveProps(nextProps) {
     const initialState = this.getInitialState(nextProps)
     this.setState(initialState)
   }
 
   getInitialState(props = this.props) {
-    const { data: { selectedTeam } } = props
+    const { selectedTeamQuery: { selectedTeam } } = props
     const { sitemap } = selectedTeam
 
     const initialState = _.mapValues(sitemap, arr => _.keyBy(arr, '_id'))
@@ -38,8 +44,37 @@ class SitemapPanel extends React.Component {
     this.setState(newState)
   }
 
+  handleRegBrkToggle = ({
+    nodeType,
+    nodeId,
+    regionalBreakdown,
+    checked,
+  }) => {
+    const newState = _.merge({}, this.state)
+    const { resources: currentResources } = newState[nodeType][nodeId]
+
+    if (checked) {
+      newState[nodeType][nodeId].resources = _.merge(
+        currentResources,
+        { regionalBreakdown }
+      )
+    } else {
+      delete newState[nodeType][nodeId]
+        .resources.regionalBreakdown
+    }
+
+    this.setState(newState)
+  }
+
   render() {
-    const { data: { selectedTeam: { _id: teamId } } } = this.props
+    const {
+      selectedTeamQuery: {
+        selectedTeam: { _id: teamId },
+      },
+      selectedToolQuery: {
+        selectedTool,
+      }
+    } = this.props
 
     const {
       tools,
@@ -47,6 +82,15 @@ class SitemapPanel extends React.Component {
       pages,
       cards
     } = this.state
+
+    const selectedTeamTool = tools[selectedTool._id]
+
+    let resources = {}
+    if (selectedTeamTool && selectedTeamTool.resources) {
+      resources = selectedTeamTool.resources
+    }
+
+    const { regionalBreakdown } = resources
 
     // prepare the data for potential persistence
     const updatedSitemap = _.mapValues(
@@ -79,16 +123,22 @@ class SitemapPanel extends React.Component {
           />
 
           <DashboardsPanel
+            regionalBreakdown={regionalBreakdown}
+            handleRegBrkToggle={this.handleRegBrkToggle}
             dashboardsStatus={dashboards}
             handleToggle={this.handleToggle}
           />
 
           <PagesPanel
+            regionalBreakdown={regionalBreakdown}
+            handleRegBrkToggle={this.handleRegBrkToggle}
             pagesStatus={pages}
             handleToggle={this.handleToggle}
           />
 
           <CardsPanel
+            regionalBreakdown={regionalBreakdown}
+            handleRegBrkToggle={this.handleRegBrkToggle}
             cardsStatus={cards}
             handleToggle={this.handleToggle}
           />
@@ -98,4 +148,7 @@ class SitemapPanel extends React.Component {
   }
 }
 
-export default graphql(GET_SELECTED_TEAM)(SitemapPanel)
+export default compose(
+  graphql(GET_SELECTED_TEAM, { name: 'selectedTeamQuery' }),
+  graphql(GET_SELECTED_TOOL, { name: 'selectedToolQuery' })
+)(SitemapPanel)

@@ -1,9 +1,7 @@
 import React from 'react'
 import { Query } from 'react-apollo'
 import { transparentize } from 'polished'
-import Switch from '@material-ui/core/Switch'
 
-import Panel from '../shared/Panel'
 import {
   GET_TOOL_DASHBOARDS,
   GET_SELECTED_DASHBOARD,
@@ -11,6 +9,9 @@ import {
 } from '../../api/queries'
 
 import { SELECT_DASHBOARD } from '../../api/mutations'
+
+import Panel from '../shared/Panel'
+import ButtonGroup from './shared/ButtonGroup'
 
 const defaultPanelStyle = {
   padding: 20,
@@ -22,6 +23,9 @@ const panelHeaderStyle = {
 }
 
 const panelItemStyle = {
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'center',
   padding: '17px 20px',
   color: '#0E2539',
   fontWeight: 600,
@@ -36,22 +40,34 @@ const panelItemActiveStyle = {
   color: '#0668D9',
 }
 
-const DashboardsPanel = ({ handleToggle, dashboardsStatus }) => {
+const DashboardsPanel = ({
+  handleToggle,
+  dashboardsStatus,
+  regionalBreakdown,
+  handleRegBrkToggle,
+}) => {
   const buttonGroupCallback = dashboard => (
-    <Switch
-      key={dashboard._id}
-      checked={Boolean(dashboardsStatus[dashboard._id])}
-      color="primary"
-      onChange={e => (
-        handleToggle({
-          type: 'dashboards',
-          _id: e.target.value,
-          node: e.target.checked && dashboard,
-        })
-      )}
-      value={dashboard._id}
+    <ButtonGroup
+      sourceEntity={dashboard}
+      teamEntityNodes={dashboardsStatus}
+      handlers={{
+        handleRegBrkToggle,
+        handleToggle,
+      }}
+      resources={{ regionalBreakdown }}
+      nodeType="dashboards"
     />
   )
+
+  const label2Callback = ({ _id, name: sourceNodeName }) => {
+    const teamNode = dashboardsStatus[_id]
+    if (!teamNode) return null
+
+    const teamNodeTitle = teamNode.text.title
+    if (sourceNodeName === teamNodeTitle) return null
+
+    return teamNodeTitle
+  }
 
   return (
     <Query query={GET_SELECTED_TOOL}>
@@ -70,6 +86,8 @@ const DashboardsPanel = ({ handleToggle, dashboardsStatus }) => {
               style: panelItemStyle,
               activeStyle: panelItemActiveStyle,
               buttonGroupCallback,
+              label1Callback: ({ name }) => name,
+              label2Callback,
             }}
           />
       )}

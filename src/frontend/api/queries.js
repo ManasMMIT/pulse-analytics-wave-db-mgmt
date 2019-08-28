@@ -1,22 +1,8 @@
 import gql from 'graphql-tag'
 
-export const GET_TEAM_SITEMAP = gql`
-  query getSitemap($roleId: String) {
-    sitemap(roleId: $roleId) @rest(type: "Sitemap", path: "/sitemaps/{args.roleId}") {
-      tools
-      dashboards
-      pages
-      cards
-    }
-    selectedTeam @client {
-      _id @export(as: "roleId")
-    }
-  }
-`
-
 export const GET_CLIENTS = gql`
   query getClients {
-    clients @rest(type: "Client", path: "/clients") {
+    clients {
       _id
       name
       description
@@ -36,7 +22,7 @@ export const GET_SELECTED_CLIENT = gql`
 
 export const GET_CLIENT_TEAMS = gql`
   query getTeams($clientId: String) {
-    teams(clientId: $clientId) @rest(type: "Team", path: "/clients/{args.clientId}/roles") {
+    teams(clientId: $clientId) {
       _id
       name
       description
@@ -62,7 +48,7 @@ export const GET_SELECTED_TEAM = gql`
 
 export const GET_TEAM_USERS = gql`
   query getTeamUsers($teamId: String) {
-    users(teamId: $teamId) @rest(type: "User", path: "/roles/{args.teamId}/users") {
+    teamUsers(teamId: $teamId) {
       _id
       username
       email
@@ -75,7 +61,7 @@ export const GET_TEAM_USERS = gql`
 
 export const GET_USER_TEAMS = gql`
   query getUserTeams($userId: String) {
-    userTeams(userId: $userId) @rest(type: "Team", path: "/users/{args.userId}/roles") {
+    userTeams(userId: $userId) {
       _id
       name
       description
@@ -106,6 +92,7 @@ export const GET_SOURCE_TOOLS = gql`
       caption
       order
       parentId
+      resources
     }
   }
 `
@@ -122,6 +109,7 @@ export const GET_SELECTED_TOOL = gql`
       caption
       order
       parentId
+      resources
     }
   }
 `
@@ -138,6 +126,7 @@ export const GET_TOOL_DASHBOARDS = gql`
       caption
       order
       parentId
+      resources
     }
     selectedTool @client {
       _id @export(as: "parentId")
@@ -157,6 +146,7 @@ export const GET_SELECTED_DASHBOARD = gql`
       caption
       order
       parentId
+      resources
     }
   }
 `
@@ -173,6 +163,7 @@ export const GET_DASHBOARD_PAGES = gql`
       caption
       order
       parentId
+      resources
     }
     selectedDashboard @client {
       _id @export(as: "parentId")
@@ -192,6 +183,7 @@ export const GET_SELECTED_PAGE = gql`
       caption
       order
       parentId
+      resources
     }
   }
 `
@@ -208,6 +200,7 @@ export const GET_PAGE_CARDS = gql`
       caption
       order
       parentId
+      resources
     }
     selectedPage @client {
       _id @export(as: "parentId")
@@ -227,6 +220,7 @@ export const GET_SELECTED_CARD = gql`
       caption
       order
       parentId
+      resources
     }
   }
 `

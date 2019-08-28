@@ -1,8 +1,6 @@
 import React from "react";
-// // import PropTypes from "prop-types";
+import PropTypes from "prop-types";
 import styled from "@emotion/styled";
-// eslint-disable-next-line no-unused-vars
-import { jsx } from '@emotion/core'
 
 const Wrapper = styled.div({
   position: 'fixed',
@@ -11,6 +9,14 @@ const Wrapper = styled.div({
   width: '100%',
   height: '100%',
   background: 'rgba(0, 0, 0, 0.6)',
+  zIndex: 1,
+  /*
+    Since our modal is nested in the DOM, not at the top,
+    We need to override styles that might be inherited.
+  */
+  cursor: 'default',
+  fontWeight: 'normal',
+  color: 'black',
 })
 
 const Main = styled.section({
@@ -79,4 +85,21 @@ class Modal extends React.Component {
     );
   }
 }
+
+Modal.defaultProps = {
+  handleClose: () => {
+    console.error('No close handler passed to Modal')
+  },
+  show: false,
+  title: null,
+  style: {},
+}
+
+Modal.propTypes = {
+  handleClose: PropTypes.func,
+  show: PropTypes.bool,
+  title: PropTypes.string,
+  style: PropTypes.object,
+}
+
 export default Modal;

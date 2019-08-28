@@ -9,27 +9,21 @@ module.exports = ({
 
   // mongo guys
   mongoClient,
-  mongoRoles,
-  mongoClients,
-
-  // psql stuff
-  sequelize,
-  User,
-  Role,
-  Client,
+  coreRoles,
+  coreClients,
 }) => {
   const subApp = express()
 
   subApp.get('/:roleId/clients', async ({
     params: { roleId },
   }, res) => {
-    const role = await mongoRoles.findOne({ _id: roleId })
+    const role = await coreRoles.findOne({ _id: roleId })
     const clientAssociatedWithRole = role.client
     res.json(clientAssociatedWithRole)
   })
 
   subApp.get('/', async (req, res) => {
-    const roles = await mongoRoles.find().toArray()
+    const roles = await coreRoles.find().toArray()
 
     const sortedRoles = _.sortBy(roles, ({ name }) => name.toLowerCase())
     res.json(sortedRoles)
@@ -38,7 +32,7 @@ module.exports = ({
   subApp.get('/:id', async ({
     params: { id },
   }, res) => {
-    const role = await mongoRoles.findOne({ _id: id })
+    const role = await coreRoles.findOne({ _id: id })
     res.json(role)
   })
 
@@ -70,33 +64,14 @@ module.exports = ({
       return
     }
 
-    await wait()
-
-    // ! psql
-    const transaction = await sequelize.transaction()
-
-    const roleInPsql = await Role.create(
-      {
-        id: roleCreatedInAuth0._id,
-        name: roleCreatedInAuth0.name,
-        description: roleCreatedInAuth0.description // follow auth0 weird casing coercion
-      },
-      { transaction }
-    )
-
-    const client = await Client.findByPk(clientId, { transaction })
-    await roleInPsql.addClient(client, { transaction })
-
-    transaction.commit()
-
     // ! mongodb
     const session = mongoClient.startSession()
 
     try {
       await session.withTransaction(async () => {
-        const client = await mongoClients.findOne({ _id: clientId }, { session })
+        const client = await coreClients.findOne({ _id: clientId }, { session })
 
-        const role = await mongoRoles.insertOne({
+        const role = await coreRoles.insertOne({
           _id: roleCreatedInAuth0._id,
           name: roleCreatedInAuth0.name,
           description: roleCreatedInAuth0.description,
@@ -133,19 +108,11 @@ module.exports = ({
       return
     }
 
-    // ! psql
-    const roleInPsql = await Role.findByPk(id)
-
-    await roleInPsql.update({
-      name: roleInAuth0.name,
-      description: roleInAuth0.description,
-    })
-
     // ! mongodb
 
     // ! Note: Must use { returnOriginal: false }, which is specific to MongoDB node driver,
     // ! rather than { returnNewDocument: true }
-    const { value: roleInMongo } = await mongoRoles.findOneAndUpdate(
+    const { value: roleInMongo } = await coreRoles.findOneAndUpdate(
       { _id: id },
       {
         $set: {
@@ -181,13 +148,9 @@ module.exports = ({
       return
     }
 
-    // ! psql
-    const roleInPsql = await Role.findByPk(id)
-    await roleInPsql.destroy()
-
     // ! mongodb
-    const roleToDelete = await mongoRoles.findOne({ _id: id })
-    await mongoRoles.findOneAndDelete({ _id: id })
+    const roleToDelete = await coreRoles.findOne({ _id: id })
+    await coreRoles.findOneAndDelete({ _id: id })
 
     res.json(roleToDelete)
   })
@@ -195,12 +158,10 @@ module.exports = ({
   subApp.get('/:roleId/users', async ({
     params: { roleId },
   }, res) => {
-    const { users: usersAssociatedWithRole } = await mongoRoles.findOne({ _id: roleId })
+    const { users: usersAssociatedWithRole } = await coreRoles.findOne({ _id: roleId })
 
     res.json(usersAssociatedWithRole)
   })
-
-  // subApp.get('/:roleId/nodes', roleNodesController)
 
   return subApp
 }

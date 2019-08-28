@@ -32,13 +32,13 @@ const getNodeTypesFilter = nodeId => (
 
 module.exports = ({
   mongoClient,
-  mongoRoles,
-  mongoNodes,
+  coreRoles,
+  coreNodes,
 }) => {
   const subApp = express()
 
   subApp.get('/', async (req, res) => {
-    const nodes = await mongoNodes
+    const nodes = await coreNodes
       .find()
       .sort({
         type: 1,
@@ -57,7 +57,7 @@ module.exports = ({
       return
     }
 
-    const node = await mongoNodes.findOne({ _id: nodeId })
+    const node = await coreNodes.findOne({ _id: nodeId })
     res.json(node)
   })
 
@@ -70,7 +70,7 @@ module.exports = ({
       return
     }
 
-    const node = await mongoNodes.insertOne({ _id: uuid(), ...body })
+    const node = await coreNodes.insertOne({ _id: uuid(), ...body })
 
     res.json(node.ops[0])
   })
@@ -87,7 +87,7 @@ module.exports = ({
       return
     }
 
-    const updatedNode = await mongoNodes.findOneAndUpdate(
+    const updatedNode = await coreNodes.findOneAndUpdate(
       { _id: nodeId },
       { $set: { ...body } },
       { returnOriginal: false }
@@ -108,18 +108,18 @@ module.exports = ({
 
   //   try {
   //     await session.withTransaction(async () => {
-  //       const { value: deletedNode } = await mongoNodes.findOneAndDelete(
+  //       const { value: deletedNode } = await coreNodes.findOneAndDelete(
   //         { _id: nodeId },
   //         { session }
   //       )
 
-  //       const rolesToUpdate = await mongoRoles.find(
+  //       const rolesToUpdate = await coreRoles.find(
   //         { [`sitemap.${ deletedNode.type }s._id`]: nodeId },
   //         { session }
   //       ).toArray()
 
   //       const promiseArray = rolesToUpdate.map(({ _id }) => {
-  //         return mongoRoles.updateOne(
+  //         return coreRoles.updateOne(
   //           { _id },
   //           { $pull: { [`sitemap.${ deletedNode.type }s`]: { _id: nodeId } } },
   //           { session }
@@ -142,7 +142,7 @@ module.exports = ({
     // TODO find all roles with local copy of node
     const filterOptions = getNodeTypesFilter(nodeId)
 
-    const roles = await mongoRoles.find({ $or: filterOptions }).toArray()
+    const roles = await coreRoles.find({ $or: filterOptions }).toArray()
 
     res.json(roles)
   })
@@ -169,7 +169,7 @@ module.exports = ({
 
     try {
       await session.withTransaction(async () => {
-        const updatedSourceNode = await mongoNodes.findOneAndUpdate(
+        const updatedSourceNode = await coreNodes.findOneAndUpdate(
           { _id: nodeId },
           { $set: { ...body } },
           {
@@ -178,7 +178,7 @@ module.exports = ({
           }
         )
 
-        const rolesToUpdate = await mongoRoles.find(
+        const rolesToUpdate = await coreRoles.find(
           { [`sitemap.${body.type}s._id`]: nodeId },
           { session }
         ).toArray()
@@ -186,13 +186,13 @@ module.exports = ({
         const pullThenPushPromiseArray = rolesToUpdate
           .map(({ _id }) => {
             const pullPushPromise =  async () => {
-              await mongoRoles.updateOne(
+              await coreRoles.updateOne(
                 { _id },
                 { $pull: { [`sitemap.${ body.type }s`]: { _id: nodeId } } },
                 { session }
               )
 
-              await mongoRoles.updateOne(
+              await coreRoles.updateOne(
                 { _id },
                 { $push: { [`sitemap.${ body.type }s`]: updatedSourceNode.value } },
                 { session }
@@ -232,13 +232,13 @@ module.exports = ({
 
     try {
       await session.withTransaction(async () => {
-        /*const updateOne = */ await mongoRoles.findOneAndUpdate(
+        /*const updateOne = */ await coreRoles.findOneAndUpdate(
           { _id: roleId },
           { $pull: { [`sitemap.${ body.type }s`]: { _id: nodeId } } },
           { returnOriginal: false, session, },
         )
 
-        const updateTwo = await mongoRoles.findOneAndUpdate(
+        const updateTwo = await coreRoles.findOneAndUpdate(
           { _id: roleId },
           { $push: { [`sitemap.${ body.type }s`]: { _id: nodeId, ...body } } },
           { returnOriginal: false, session, },
@@ -259,7 +259,7 @@ module.exports = ({
 
     try {
       session.withTransaction(async () => {
-        const sourceNode = await mongoNodes.findOne(
+        const sourceNode = await coreNodes.findOne(
           { _id: nodeId },
           { session }
         )
@@ -269,7 +269,7 @@ module.exports = ({
           return
         }
 
-        const updatedRole = await mongoRoles.findOneAndUpdate(
+        const updatedRole = await coreRoles.findOneAndUpdate(
           { _id: roleId },
           { $addToSet: { [`sitemap.${sourceNode.type}s`]: sourceNode } },
           {
@@ -297,7 +297,7 @@ module.exports = ({
       return
     }
 
-    const updatedRole = await mongoRoles.findOneAndUpdate(
+    const updatedRole = await coreRoles.findOneAndUpdate(
       { _id: roleId },
       { $pull: { [`sitemap.${type}s`]: { _id: nodeId } } },
       { returnOriginal: false },

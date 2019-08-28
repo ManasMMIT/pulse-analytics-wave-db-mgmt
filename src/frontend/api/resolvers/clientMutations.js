@@ -91,12 +91,12 @@ const clientSideMutations = {
     }
 
     const response = await client.query(queryObjForTeamUsers)
-    const users = response.data.users
+    const { teamUsers } = response.data
 
-    let selectedUser = users[0]
+    let selectedUser = teamUsers[0]
 
     if (userId) {
-      selectedUser = users.find(({ _id }) => _id === userId)
+      selectedUser = teamUsers.find(({ _id }) => _id === userId)
     }
 
     client.writeQuery({ query: GET_SELECTED_USER, data: { selectedUser } })

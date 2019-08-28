@@ -9,35 +9,29 @@ module.exports = ({
 
   // mongo guys
   mongoClient,
-  mongoUsers,
-  mongoRoles,
-  mongoClients,
-
-  // psql stuff
-  sequelize,
-  User,
-  Role,
-  Client,
+  coreUsers,
+  coreRoles,
+  coreClients,
 }) => {
   const subApp = express()
 
   subApp.get('/:userId/roles', async ({
     params: { userId },
   }, res) => {
-    const rolesAssociatedWithUser = await mongoRoles.find({ 'users._id': userId }).toArray()
+    const rolesAssociatedWithUser = await coreRoles.find({ 'users._id': userId }).toArray()
 
     res.json(rolesAssociatedWithUser)
   })
 
   subApp.get('/', async (req, res) => {
-    const users = await mongoUsers.find().toArray()
+    const users = await coreUsers.find().toArray()
     res.json(users)
   })
 
   subApp.get('/:id', async ({
     params: { id },
   }, res) => {
-    const user = await mongoUsers.findOne({ _id: id })
+    const user = await coreUsers.findOne({ _id: id })
     res.json(user)
   })
 
@@ -75,27 +69,14 @@ module.exports = ({
       await auth0.authClient.addGroupMember(roleId, userInAuth0.user_id)
     }
 
-    // ! psql
-    const transaction = await sequelize.transaction()
-
-    const userInPsql = await User.create(
-      { id: userInAuth0.user_id, username, email },
-      { transaction }
-    )
-
-    const rolesInPsql = await Role.findAll({ where: { id: roles } }, { transaction })
-    await userInPsql.addRoles(rolesInPsql, { transaction })
-
-    transaction.commit()
-
     // ! mongodb
     const session = mongoClient.startSession()
 
     try {
       await session.withTransaction(async () => {
-        const client = await mongoClients.findOne({ _id: clientId }, { session })
+        const client = await coreClients.findOne({ _id: clientId }, { session })
 
-        const user = await mongoUsers.insertOne({
+        const user = await coreUsers.insertOne({
           _id: userInAuth0.user_id,
           username,
           email,
@@ -104,7 +85,7 @@ module.exports = ({
         }, { session })
 
         for (const roleId of roles) {
-          await mongoRoles.findOneAndUpdate(
+          await coreRoles.findOneAndUpdate(
             { _id: roleId },
             {
               $push: {
@@ -181,12 +162,6 @@ module.exports = ({
       return
     }
 
-    // ! psql
-    const user = await User.findByPk(id)
-    if (doRolesNeedUpdate) await user.setRoles(incomingRoles)
-    await user.update({ username, email })
-    await User.findByPk(id, { include: [{ model: Role }] })
-
     // ! mongodb
     const session = mongoClient.startSession()
 
@@ -198,7 +173,7 @@ module.exports = ({
 
         // ! Note: Must use { returnOriginal:   false }, which is specific to MongoDB node driver,
         // ! rather than { returnNewDocument: true }
-        const { value: updatedResult } = await mongoUsers.findOneAndUpdate(
+        const { value: updatedResult } = await coreUsers.findOneAndUpdate(
           { _id: id },
           { $set: { username, email } },
           { returnOriginal: false, session }
@@ -209,14 +184,14 @@ module.exports = ({
         // ! Note: We have to do steps 2 and 3 even if role associations aren't changing
         // ! because the user's username and email may have changed
         // 2. pull user from all roles.users they were a part of
-        await mongoRoles.updateMany(
+        await coreRoles.updateMany(
           { users: { $elemMatch: { _id: id } } },
           { $pull: { users: { _id: id } } },
           { session }
         )
 
         // 3. push user into all the roles.users they need to belong to
-        await mongoRoles.updateMany(
+        await coreRoles.updateMany(
           { _id: { $in: incomingRoles } }, // query all incoming roles from edit
           {
             $push: { users: { _id: id, username, email } }
@@ -244,10 +219,6 @@ module.exports = ({
       return
     }
 
-    // ! psql
-    const userInPsql = await User.findByPk(id)
-    await userInPsql.destroy()
-
     // ! mongodb
     const session = mongoClient.startSession()
 
@@ -255,15 +226,15 @@ module.exports = ({
     try {
       await session.withTransaction(async () => {
         // pull user out of all its roles
-        await mongoRoles.updateMany(
+        await coreRoles.updateMany(
           { users: { $elemMatch: { _id: id } } },
           { $pull: { users: { _id: id } } },
           { session }
         )
 
         // delete user from source collection
-        deletedUser = await mongoUsers.findOne({ _id: id })
-        await mongoUsers.findOneAndDelete({ _id: id }, { session })
+        deletedUser = await coreUsers.findOne({ _id: id })
+        await coreUsers.findOneAndDelete({ _id: id }, { session })
       })
     } catch (error) {
       next(error)

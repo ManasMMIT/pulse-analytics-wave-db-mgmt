@@ -3,7 +3,7 @@ import styled from '@emotion/styled'
 import { Mutation } from 'react-apollo'
 
 import Spinner from '../shared/Spinner'
-import { PUSH_SITEMAP } from '../../api/mutations'
+import { PUSH_SITEMAP_TO_DEV, PUSH_SITEMAP_TO_PROD } from '../../api/mutations'
 
 const Wrapper = styled.div({
   flex: 1,
@@ -13,7 +13,8 @@ const Wrapper = styled.div({
   overflowY: 'scroll',
   backgroundColor: '#0a3557',
   display: 'flex',
-  justifyContent: 'center',
+  alignItems: 'center',
+  flexDirection: 'column',
 })
 
 const buttonStyle = {
@@ -29,21 +30,41 @@ const buttonStyle = {
 
 const StatusPanel = () => (
   <Wrapper>
-    <Mutation mutation={PUSH_SITEMAP}>
-      {(handleSubmit, { loading, error }) => {
-        if (error) return <div style={{ color: 'red' }}>Error processing request</div>
-        if (loading) return <Spinner fill="white" />
+    <div>
+      <Mutation mutation={PUSH_SITEMAP_TO_DEV}>
+        {(handleSubmit, { loading, error }) => {
+          if (error) return <div style={{ color: 'red' }}>Error processing request</div>
+          if (loading) return <Spinner fill="white" />
 
-        return (
-          <button
-            style={buttonStyle}
-            onClick={handleSubmit}
-          >
-            Push Sitemaps to Dev
-          </button>
-        )
-      }}
-    </Mutation>
+          return (
+            <button
+              style={buttonStyle}
+              onClick={handleSubmit}
+            >
+              Push Sitemaps to Dev
+            </button>
+          )
+        }}
+      </Mutation>
+    </div>
+
+    <div style={{ marginTop: 24 }}>
+      <Mutation mutation={PUSH_SITEMAP_TO_PROD}>
+        {(handleSubmit, { loading, error }) => {
+          if (error) return <div style={{ color: 'red' }}>Error processing request</div>
+          if (loading) return <Spinner fill="white" />
+
+          return (
+            <button
+              style={buttonStyle}
+              onClick={handleSubmit}
+            >
+              Push Sitemaps to Prod
+            </button>
+          )
+        }}
+      </Mutation>
+    </div>
   </Wrapper>
 )
 

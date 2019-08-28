@@ -129,17 +129,17 @@ const serverMutations = {
       // do nothing because if the user has been added to other teams
       // that user will be refetched from backend when those other teams are selected
       if (teamId === roleId) {
-        const { users: prevUsers } = cache.readQuery({
+        const { teamUsers: prevTeamUsers } = cache.readQuery({
           query: GET_TEAM_USERS,
           variables: { teamId }, // needed despite @export var in query itself
         })
 
-        const nextUsers = [...prevUsers, createdUser]
+        const nextTeamUsers = [...prevTeamUsers, createdUser]
 
         client.writeQuery({
           query: GET_TEAM_USERS,
           variables: { teamId }, // needed despite @export var in query itself
-          data: { users: nextUsers },
+          data: { teamUsers: nextTeamUsers },
         })
 
         await client.mutate({ mutation: SELECT_USER, variables: { _id: createdUser._id } })
@@ -154,17 +154,17 @@ const serverMutations = {
 
     const { selectedTeam: { _id: teamId } } = cache.readQuery({ query: GET_SELECTED_TEAM })
 
-    const { users } = cache.readQuery({
+    const { teamUsers } = cache.readQuery({
       query: GET_TEAM_USERS,
       variables: { teamId }, // needed despite @export var in query itself
     })
 
-    const usersMinusDeletedTeam = users.filter(({ _id }) => userId !== _id)
+    const usersMinusDeletedTeam = teamUsers.filter(({ _id }) => userId !== _id)
 
     client.writeQuery({
       query: GET_TEAM_USERS,
       variables: { teamId }, // needed despite @export var in query itself
-      data: { users: usersMinusDeletedTeam },
+      data: { teamUsers: usersMinusDeletedTeam },
     })
 
     await client.mutate({ mutation: SELECT_USER })
@@ -182,30 +182,30 @@ const serverMutations = {
 
     const { selectedTeam: { _id: teamId } } = cache.readQuery({ query: GET_SELECTED_TEAM })
 
-    let { users } = cache.readQuery({
+    let { teamUsers } = cache.readQuery({
       query: GET_TEAM_USERS,
       variables: { teamId }, // needed despite @export var in query itself
     })
 
-    const updateGetTeamUsers = users => (
+    const updateGetTeamUsers = teamUsers => (
       client.writeQuery({
         query: GET_TEAM_USERS,
         variables: { teamId }, // needed despite @export var in query itself
-        data: { users },
+        data: { teamUsers },
       })
     )
 
     if (roles.includes(teamId)) {
-      const targetUserIdx = users.findIndex(({ _id: userId }) => userId === _id)
-      users[targetUserIdx] = editedUser
-      updateGetTeamUsers(users)
+      const targetUserIdx = teamUsers.findIndex(({ _id: userId }) => userId === _id)
+      teamUsers[targetUserIdx] = editedUser
+      updateGetTeamUsers(teamUsers)
 
       // if user is part of the currently selected team, there's no need
       // to reselect the same user (when that user's edit button is clicked
       // his changed roles, if any, will be fetched
     } else {
-      users = users.filter(user => user._id !== _id)
-      updateGetTeamUsers(users)
+      teamUsers = teamUsers.filter(user => user._id !== _id)
+      updateGetTeamUsers(teamUsers)
 
       // the user doesn't belong to the selected role anymore; pick the first user
       // for the selected role
