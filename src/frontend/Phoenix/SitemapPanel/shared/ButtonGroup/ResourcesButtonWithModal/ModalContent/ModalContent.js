@@ -3,40 +3,44 @@ import PropTypes from 'prop-types'
 import _ from 'lodash'
 
 import { UnderlinedTabs } from './../../../../../../components/Tabs'
-import RegionalBreakdownTab from './RegionalBreakdownTab'
+import RegionalBreakdownTabContent from './RegionalBreakdownTabContent'
 
-const COMPONENT_MAP = {
-  regionalBreakdown: RegionalBreakdownTab
-}
+// 1. regionalBreakdown 
+// - find currently selected tool 
+// - pluck it out of the selected team's sitemap in (needs tools slice)
+// - grab the regionalBreakdown from the tool if it's there
+// - use it to prime the toggle (if on, copy; if off, remove)
+
+// the selectedNode, below, does not reflect changes in sitemap panel's state, so it gets behind almost immediately
+  // const selectedNode = sitemap[nodeType].find(({ _id }) => _id === nodeId)
+  // const { resources } = selectedNode
+
+// 2. Every other type of resource
+// - get the resources for the node
 
 const ModalContent = ({
   nodeId,
   nodeType,
-  resources,
   handlers,
-  teamEntityNodes,
+  teamTools,
+  selectedTeamNode,
 }) => {
-  const tabsData = []
-  const tabChildren = []
-  Object.keys(resources).forEach(resourceType => {
-    tabsData.push(_.startCase(resourceType))
 
-    const Component = COMPONENT_MAP[resourceType]
+  if (!selectedTeamNode) return null
 
-    tabChildren.push(
-      <Component
-        resources={resources}
+  const resources = selectedTeamNode // In case there's no resources field (which shouldn't matter when adding the first resource)
+    ? selectedTeamNode.resources
+    : {}
+
+  return (
+    <UnderlinedTabs tabsData={['Regional Breakdown']}>
+      <RegionalBreakdownTabContent
         nodeId={nodeId}
         nodeType={nodeType}
         handlers={handlers}
-        teamEntityNodes={teamEntityNodes}
+        resources={resources}
+        teamTools={teamTools}
       />
-    )
-  })
-
-  return (
-    <UnderlinedTabs tabsData={tabsData}>
-      {tabChildren}
     </UnderlinedTabs>
   )
 }
@@ -45,16 +49,14 @@ ModalContent.propTypes = {
   nodeId: PropTypes.string,
   nodeType: PropTypes.string,
   handlers: PropTypes.object,
-  teamEntityNodes: PropTypes.object,
-  resources: PropTypes.object,
+  sitemap: PropTypes.object,
 }
 
 ModalContent.defaultProps = {
   nodeId: null,
   nodeType: null,
   handlers: {},
-  teamEntityNodes: {},
-  resources: { empty: null }
+  sitemap: {},
 }
 
 export default ModalContent

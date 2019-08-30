@@ -25,12 +25,20 @@ const Tabs = props => {
   } = props
 
   let [selectedTab, onTabClick] = useState(defaultSelectedTab || tabsData[0])
-  if (areUseStatePropsValid(useStateProps)) [selectedTab, onTabClick] = useStateProps
 
-  const selectedValue = _.isObject(selectedTab) ? selectedTab.value : selectedTab
+  if (areUseStatePropsValid(useStateProps)) {
+    [selectedTab, onTabClick] = useStateProps
+  }
+
+  const selectedValue = _.isObject(selectedTab)
+    ? selectedTab.value
+    : selectedTab
 
   const selectedIdx = tabsData.findIndex(tab => {
-    const tabValue = _.isObject(tab) ? tab.value : tab
+    const tabValue = _.isObject(tab)
+      ? tab.value
+      : tab
+
     return tabValue === selectedValue
   })
 
@@ -41,7 +49,9 @@ const Tabs = props => {
       <div {...css(combinedTabsContainerStyle)}>
         {
           tabsData.map(tabDatum => {
-            const tabValue = typeof tabDatum === 'string' ? tabDatum : tabDatum.value
+            const tabValue = typeof tabDatum === 'string'
+              ? tabDatum
+              : tabDatum.value
 
             return (
               <Tab
@@ -58,7 +68,11 @@ const Tabs = props => {
         }
       </div>
 
-      {children[selectedIdx]}
+      {
+        Array.isArray(children)
+          ? children[selectedIdx]
+          : children
+      }
     </>
   )
 }

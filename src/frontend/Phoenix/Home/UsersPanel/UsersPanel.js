@@ -2,7 +2,7 @@ import React from 'react'
 
 import { UnderlinedTabs } from '../../../components/Tabs'
 
-import UsersTab from './UsersTab'
+import UsersTabContent from './UsersTabContent'
 
 const TAB_ONE = 'Users'
 
@@ -14,11 +14,7 @@ const UsersPanel = () => {
   return (
     <div>
       <UnderlinedTabs tabsData={FILTER_TAB_OPTIONS}>
-        {
-          [
-            <UsersTab key="Users" />,
-          ]
-        }
+        <UsersTabContent key="Users" />
       </UnderlinedTabs>
     </div>
   )

@@ -39,12 +39,8 @@ const Orion = () => {
         inactiveTabStyle={inactiveTabStyle}
         activeTabStyle={activeTabStyle}
       >
-        {
-          [
-            <IndicationsPanel key="Indications" />,
-            <div key="Products" />
-          ]
-        }
+        <IndicationsPanel key="Indications" />
+        <div key="Products" />
       </VerticalTabs>
     </div>
   )

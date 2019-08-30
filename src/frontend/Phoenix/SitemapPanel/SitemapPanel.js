@@ -1,12 +1,11 @@
 import React from 'react'
 import _ from 'lodash'
-import { graphql, compose } from 'react-apollo'
+import { graphql } from 'react-apollo'
 
 // TODO: Grab all selected nodes at each level,
 // * to pass appropriate indications/accounts
 import {
   GET_SELECTED_TEAM,
-  GET_SELECTED_TOOL,
 } from '../../api/queries'
 import SitemapPanelHeader from './SitemapPanelHeader'
 import ToolsPanel from './ToolsPanel'
@@ -70,9 +69,6 @@ class SitemapPanel extends React.Component {
     const {
       selectedTeamQuery: {
         selectedTeam: { _id: teamId },
-      },
-      selectedToolQuery: {
-        selectedTool,
       }
     } = this.props
 
@@ -82,15 +78,6 @@ class SitemapPanel extends React.Component {
       pages,
       cards
     } = this.state
-
-    const selectedTeamTool = tools[selectedTool._id]
-
-    let resources = {}
-    if (selectedTeamTool && selectedTeamTool.resources) {
-      resources = selectedTeamTool.resources
-    }
-
-    const { regionalBreakdown } = resources
 
     // prepare the data for potential persistence
     const updatedSitemap = _.mapValues(
@@ -123,21 +110,18 @@ class SitemapPanel extends React.Component {
           />
 
           <DashboardsPanel
-            regionalBreakdown={regionalBreakdown}
             handleRegBrkToggle={this.handleRegBrkToggle}
             dashboardsStatus={dashboards}
             handleToggle={this.handleToggle}
           />
 
           <PagesPanel
-            regionalBreakdown={regionalBreakdown}
             handleRegBrkToggle={this.handleRegBrkToggle}
             pagesStatus={pages}
             handleToggle={this.handleToggle}
           />
 
           <CardsPanel
-            regionalBreakdown={regionalBreakdown}
             handleRegBrkToggle={this.handleRegBrkToggle}
             cardsStatus={cards}
             handleToggle={this.handleToggle}
@@ -148,7 +132,4 @@ class SitemapPanel extends React.Component {
   }
 }
 
-export default compose(
-  graphql(GET_SELECTED_TEAM, { name: 'selectedTeamQuery' }),
-  graphql(GET_SELECTED_TOOL, { name: 'selectedToolQuery' })
-)(SitemapPanel)
+export default graphql(GET_SELECTED_TEAM, { name: 'selectedTeamQuery' })(SitemapPanel)

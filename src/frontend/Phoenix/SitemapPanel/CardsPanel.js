@@ -44,19 +44,17 @@ const panelItemActiveStyle = {
 const PagesPanel = ({
   handleToggle,
   cardsStatus,
-  regionalBreakdown,
   handleRegBrkToggle,
 }) => {
   const buttonGroupCallback = card => (
     <ButtonGroup
       sourceEntity={card}
       teamEntityNodes={cardsStatus}
+      nodeType="cards"
       handlers={{
         handleRegBrkToggle,
         handleToggle,
       }}
-      resources={{ regionalBreakdown }}
-      nodeType="cards"
     />
   )
 

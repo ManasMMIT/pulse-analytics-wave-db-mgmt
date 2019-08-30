@@ -13,7 +13,7 @@ const SitemapSwitch = ({
     color="primary"
     onChange={e => (
       handleToggle({
-        type: 'pages',
+        type: `${sourceEntity.type}s`,
         _id: e.target.value,
         node: e.target.checked && sourceEntity,
       })

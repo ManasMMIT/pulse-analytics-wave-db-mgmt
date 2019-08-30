@@ -6,13 +6,12 @@ import ResourcesButtonWithModal from './ResourcesButtonWithModal'
 
 const ButtonGroup = ({
   sourceEntity,
-  teamEntityNodes,
   handlers,
-  resources,
   nodeType,
+  teamEntityNodes,
 }) => {
   const nodeId = sourceEntity._id
-  const doesTeamHaveNode = Boolean(teamEntityNodes[nodeId])
+  const selectedTeamNode = teamEntityNodes[nodeId]
 
   return (
     <>
@@ -21,21 +20,14 @@ const ButtonGroup = ({
         teamEntityNodes={teamEntityNodes}
         handleToggle={handlers.handleToggle}
       />
-      {
-        resources.regionalBreakdown && doesTeamHaveNode && (
-          <ResourcesButtonWithModal
-            nodeId={nodeId}
-            nodeType={nodeType}
-            teamEntityNodes={teamEntityNodes}
-            resources={{
-              regionalBreakdown: resources.regionalBreakdown
-            }}
-            handlers={{
-              handleRegBrkToggle: handlers.handleRegBrkToggle
-            }}
-          />
-        )
-      }
+      <ResourcesButtonWithModal
+        nodeId={nodeId}
+        nodeType={nodeType}
+        selectedTeamNode={selectedTeamNode}
+        handlers={{
+          handleRegBrkToggle: handlers.handleRegBrkToggle
+        }}
+      />
     </>
   )
 }

@@ -43,19 +43,17 @@ const panelItemActiveStyle = {
 const DashboardsPanel = ({
   handleToggle,
   dashboardsStatus,
-  regionalBreakdown,
   handleRegBrkToggle,
 }) => {
   const buttonGroupCallback = dashboard => (
     <ButtonGroup
       sourceEntity={dashboard}
       teamEntityNodes={dashboardsStatus}
+      nodeType="dashboards"
       handlers={{
         handleRegBrkToggle,
         handleToggle,
       }}
-      resources={{ regionalBreakdown }}
-      nodeType="dashboards"
     />
   )
 

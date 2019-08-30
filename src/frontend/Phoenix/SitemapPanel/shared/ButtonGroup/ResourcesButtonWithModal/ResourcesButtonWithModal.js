@@ -7,9 +7,8 @@ import ModalContent from './ModalContent'
 const ResourcesButton = ({
   nodeId,
   nodeType,
-  resources,
   handlers,
-  teamEntityNodes,
+  selectedTeamNode,
 }) => {
   const [isOpen, setIsOpen] = useState(false)
 
@@ -27,10 +26,9 @@ const ResourcesButton = ({
       >
         <ModalContent
           nodeId={nodeId}
+          selectedTeamNode={selectedTeamNode}
           nodeType={nodeType}
-          resources={resources}
           handlers={handlers}
-          teamEntityNodes={teamEntityNodes}
         />
       </Modal>
     </>
@@ -40,9 +38,8 @@ const ResourcesButton = ({
 ResourcesButton.propTypes = {
   nodeId: PropTypes.string,
   nodeType: PropTypes.string,
-  resources: PropTypes.object,
   handlers: PropTypes.object,
-  teamEntityNodes: PropTypes.object,
+  selectedTeamNode: PropTypes.object,
 }
 
 export default ResourcesButton
