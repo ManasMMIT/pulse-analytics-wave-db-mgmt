@@ -13,6 +13,7 @@ import {
   GET_SELECTED_PAGE,
   GET_PAGE_CARDS,
   GET_SELECTED_CARD,
+  GET_STAGED_SITEMAP,
 } from '../queries'
 
 import {
@@ -179,6 +180,26 @@ const clientSideMutations = {
     client.writeQuery({ query: GET_SELECTED_CARD, data: { selectedCard } })
 
     return selectedCard
+  },
+  setStagedSitemap: async (_, { input: { stagedSitemap } }, { cache, client}) => {
+    // 1. Query for selectedTeam (if it's cached, you got it; if it's not, you have bigger problems)
+    // 2a. If stagedSitemap is empty, use teamId to get selected team and seed it
+    // 2b. If stagedSitemap isn't empty, EDITS ARE IN PROGRESS ON THE SITEMAP (DON'T SEED!)
+    // 3. Write staged sitemap to GET_STAGED_SITEMAP (expect listeners to that query to trigger)
+    // 4. OPEN QUESTION: HOW DOES THE NODE TOGGLE AND REGIONAL BREAKDOWN TOGGLE FIT IN? (if they don't use React local state)
+
+    const formattedStagedSitemap = {
+      ...stagedSitemap,
+      __typename: "Sitemap",
+      _id: "Sitemap",
+    }
+
+    client.writeQuery({
+      query: GET_STAGED_SITEMAP,
+      data: { stagedSitemap: formattedStagedSitemap },
+    })
+
+    return formattedStagedSitemap
   },
 }
 

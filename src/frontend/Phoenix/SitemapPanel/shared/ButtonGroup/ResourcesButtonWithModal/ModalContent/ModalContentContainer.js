@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Query } from 'react-apollo'
 
-import { GET_SELECTED_TEAM } from './../../../../../../api/queries'
+import { GET_STAGED_SITEMAP } from './../../../../../../api/queries'
 
 import ModalContent from './ModalContent'
 
@@ -13,19 +13,17 @@ const ModalContentContainer = ({
   selectedTeamNode,
 }) => {
 
-  // ! This query only fetches the original (old) team from Apollo Cache set from users.sitemaps in mongo
-  // ! The edited team resources are stored in React local state
   return (
-    <Query query={GET_SELECTED_TEAM}>
+    <Query query={GET_STAGED_SITEMAP}>
       {
-        ({ data: { selectedTeam: { sitemap: { tools } } } }) => {
+        ({ data: { stagedSitemap }, loading, error }) => {
           return (
             <ModalContent
               nodeId={nodeId}
               nodeType={nodeType}
               handlers={handlers}
               selectedTeamNode={selectedTeamNode}
-              teamTools={tools}
+              teamTools={stagedSitemap.tools}
             />
           )
         }

@@ -22,8 +22,7 @@ const RegionalBreakdownTabContent = ({
     <Query query={GET_SELECTED_TOOL}>
       {
         ({ data: { selectedTool } }) => {
-          const selectedTeamTool = teamTools
-            .find(({ _id }) => _id === selectedTool._id)
+          const selectedTeamTool = teamTools[selectedTool._id]
 
           // ! selectedTeamTool may not exist, because it's based
           // ! on old, cached team data, not up-to-date staged team data
@@ -84,7 +83,7 @@ RegionalBreakdownTabContent.propTypes = {
   nodeId: PropTypes.string,
   nodeType: PropTypes.string,
   resources: PropTypes.object,
-  teamTools: PropTypes.array,
+  teamTools: PropTypes.object,
   handlers: PropTypes.object,
 }
 

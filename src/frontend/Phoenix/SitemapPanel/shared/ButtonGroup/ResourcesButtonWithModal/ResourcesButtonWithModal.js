@@ -39,7 +39,10 @@ ResourcesButton.propTypes = {
   nodeId: PropTypes.string,
   nodeType: PropTypes.string,
   handlers: PropTypes.object,
-  selectedTeamNode: PropTypes.object,
+  selectedTeamNode: PropTypes.oneOfType([
+    PropTypes.object,
+    PropTypes.bool,
+  ]),
 }
 
 export default ResourcesButton

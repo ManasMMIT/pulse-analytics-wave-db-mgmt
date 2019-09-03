@@ -233,3 +233,15 @@ export const GET_SOURCE_INDICATIONS = gql`
     }
   }
 `
+
+export const GET_STAGED_SITEMAP = gql`
+  query getStagedSitemap {
+    stagedSitemap @client {
+      _id
+      tools
+      dashboards
+      pages
+      cards
+    }
+  }
+`

@@ -98,3 +98,15 @@ export const SELECT_CARD = gql`
     }
   }
 `
+
+export const SET_STAGED_SITEMAP = gql`
+  mutation SetStagedSitemap($input: SitemapInput) {
+    setStagedSitemap(input: $input) @client {
+      _id
+      tools
+      dashboards
+      pages
+      cards
+    }
+  }
+`

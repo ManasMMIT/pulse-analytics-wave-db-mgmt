@@ -1,12 +1,22 @@
 import React from 'react'
 import _ from 'lodash'
-import { graphql } from 'react-apollo'
+import {
+  Query,
+  graphql,
+  withApollo,
+} from 'react-apollo'
 
 // TODO: Grab all selected nodes at each level,
 // * to pass appropriate indications/accounts
 import {
   GET_SELECTED_TEAM,
+  GET_STAGED_SITEMAP,
 } from '../../api/queries'
+
+import {
+  SET_STAGED_SITEMAP,
+} from '../../api/mutations'
+
 import SitemapPanelHeader from './SitemapPanelHeader'
 import ToolsPanel from './ToolsPanel'
 import DashboardsPanel from './DashboardsPanel'
@@ -35,11 +45,27 @@ class SitemapPanel extends React.Component {
 
     const initialState = _.mapValues(sitemap, arr => _.keyBy(arr, '_id'))
 
+    this.setStagedSitemapCache(initialState)
+
     return initialState
+  }
+
+  setStagedSitemapCache = newSitemap => {
+    this.props.client.mutate({
+      mutation: SET_STAGED_SITEMAP,
+      variables: {
+        input: {
+          stagedSitemap: newSitemap,
+        }
+      }
+    })
   }
 
   handleToggle = ({ type, _id, node }) => {
     const newState = _.merge({}, this.state, { [type]: { [_id]: node } })
+
+    this.setStagedSitemapCache(newState)
+
     this.setState(newState)
   }
 
@@ -62,6 +88,8 @@ class SitemapPanel extends React.Component {
         .resources.regionalBreakdown
     }
 
+    this.setStagedSitemapCache(newState)
+
     this.setState(newState)
   }
 
@@ -79,29 +107,20 @@ class SitemapPanel extends React.Component {
       cards
     } = this.state
 
-    // prepare the data for potential persistence
-    const updatedSitemap = _.mapValues(
-      this.state,
-      obj => {
-        // arrayify the object
-        const nodesAsArray = Object.values(obj)
-
-        // remove any nodes that have been checked off (false values)
-        const nodesAsArrayTrimmed = _.compact(nodesAsArray)
-
-        // this step is necessary because https://github.com/apollographql/react-apollo/issues/741
-        const nodesWithTypenameRemoved = nodesAsArrayTrimmed.map(({ __typename, ...rest }) => rest)
-
-        return nodesWithTypenameRemoved
-      }
-    )
-
     return (
       <div>
-        <SitemapPanelHeader
-          teamId={teamId}
-          updatedSitemap={updatedSitemap}
-        />
+        <Query query={GET_STAGED_SITEMAP}>
+          {
+            ({ data: { stagedSitemap } }) => {
+              return (
+                <SitemapPanelHeader
+                  stagedSitemap={stagedSitemap}
+                  teamId={teamId}
+                />
+              )
+            }
+          }
+        </Query>
 
         <div style={{ display: 'flex' }}>
           <ToolsPanel
@@ -132,4 +151,7 @@ class SitemapPanel extends React.Component {
   }
 }
 
-export default graphql(GET_SELECTED_TEAM, { name: 'selectedTeamQuery' })(SitemapPanel)
+export default graphql(
+  GET_SELECTED_TEAM,
+  { name: 'selectedTeamQuery' },
+)(withApollo(SitemapPanel))

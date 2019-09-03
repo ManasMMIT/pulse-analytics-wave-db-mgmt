@@ -10,8 +10,8 @@ const typeDefs = gql`
     selectedUser: User,
     sitemap: Sitemap,
     userTeams: [Team],
+    stagedSitemap: Sitemap
   }
-
   type Client {
     _id: String
     name: String
@@ -33,8 +33,18 @@ const typeDefs = gql`
 
   type Sitemap {
     _id: String
-    name: String
-    kids: JSON
+    tools: JSON
+    dashboards: JSON
+    pages: JSON
+    cards: JSON
+  }
+
+  input SitemapInput {
+    _id: String
+    tools: JSON
+    dashboards: JSON
+    pages: JSON
+    cards: JSON
   }
 
   # extend type Mutation {

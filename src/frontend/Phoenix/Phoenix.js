@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Route, Switch, Redirect } from 'react-router-dom'
+import { Route, Switch } from 'react-router-dom'
 import { withApollo } from 'react-apollo'
 
 import { GET_CLIENTS, GET_SOURCE_TOOLS } from './../api/queries'
