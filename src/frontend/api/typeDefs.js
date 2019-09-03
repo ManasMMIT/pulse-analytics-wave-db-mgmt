@@ -8,10 +8,9 @@ const typeDefs = gql`
     selectedClient: Client,
     selectedTeam: Team,
     selectedUser: User,
-    sitemap: Sitemap,
-    userTeams: [Team],
-    stagedSitemap: Sitemap
+    stagedSitemap: Sitemap,
   }
+
   type Client {
     _id: String
     name: String

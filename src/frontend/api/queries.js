@@ -48,7 +48,7 @@ export const GET_SELECTED_TEAM = gql`
 
 export const GET_TEAM_USERS = gql`
   query getTeamUsers($teamId: String) {
-    teamUsers(teamId: $teamId) {
+    users(teamId: $teamId) {
       _id
       username
       email
@@ -61,7 +61,7 @@ export const GET_TEAM_USERS = gql`
 
 export const GET_USER_TEAMS = gql`
   query getUserTeams($userId: String) {
-    userTeams(userId: $userId) {
+    teams(userId: $userId) {
       _id
       name
       description

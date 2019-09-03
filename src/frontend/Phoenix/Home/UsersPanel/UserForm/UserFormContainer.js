@@ -22,15 +22,15 @@ const UserFormContainer = ({
           if (error) return <div style={{ color: 'red' }}>Error processing request</div>
           if (loading) return <Spinner />
 
-          // ! If data doesn't have userTeams, don't render form
-          if (!data.userTeams) return null
+          // ! If data doesn't have teams, don't render form
+          if (!data.teams) return null
 
           /*
             ! If there are user teams, but no userId, updating will fail
             ! else if there aren't user teams, but there is a userId,
             ! we're assuming you're trying to create a user while holding an old id
           */
-          if (data.userTeams.length) {
+          if (data.teams.length) {
             if (!userId) return null
           } else {
             if (userId) return null
@@ -42,7 +42,7 @@ const UserFormContainer = ({
               username={username}
               email={email}
               selectedTeamId={selectedTeamId}
-              allTeamsUserIsOn={data.userTeams}
+              allTeamsUserIsOn={data.teams}
               afterSubmitHook={() => refetch().then(afterSubmitHook)} // refresh user's roles in cache
               mutationDoc={mutationDoc}
             />
