@@ -8,3 +8,21 @@ export const CREATE_INDICATION = gql`
     }
   }
 `
+
+export const UPDATE_SOURCE_INDICATION = gql`
+  mutation UpdateSourceIndication($input: UpdateSourceIndicationInput!) {
+    updateSourceIndication(input: $input) {
+      _id
+      name
+    }
+  }
+`
+
+export const DELETE_SOURCE_INDICATION = gql`
+  mutation DeleteSourceIndication($input: DeleteSourceIndicationInput!) {
+    deleteSourceIndication(input: $input) {
+      _id
+      name
+    }
+  }
+`

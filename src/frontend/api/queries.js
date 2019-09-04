@@ -226,10 +226,20 @@ export const GET_SELECTED_CARD = gql`
 `
 
 export const GET_SOURCE_INDICATIONS = gql`
-  query getMasterIndications {
+  query getSourceIndications {
     indications {
       _id
       name
+    }
+  }
+`
+export const GET_SOURCE_PRODUCTS = gql`
+  query getSourceProducts {
+    products {
+      _id
+      nameGeneric
+      nameBrand
+      tags
     }
   }
 `

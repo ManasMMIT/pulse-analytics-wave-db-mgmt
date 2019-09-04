@@ -5,6 +5,7 @@ const teams = require('./teams')
 const users = require('./users')
 const nodes = require('./nodes')
 const indications = require('./indications')
+const products = require('./products')
 
 module.exports = {
   clients,
@@ -12,4 +13,5 @@ module.exports = {
   users,
   nodes,
   indications,
+  products,
 }

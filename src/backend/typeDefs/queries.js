@@ -7,6 +7,7 @@ const queries = gql`
     teams(clientId: String, userId: String): [Team]
     users(teamId: String, clientId: String): [User]
     indications: [Indication]
+    products: [Product]
   }
 
   type Node {
@@ -47,6 +48,13 @@ const queries = gql`
   type Indication {
     _id: ID!
     name: String
+  }
+
+  type Product {
+    _id: ID!
+    nameGeneric: String
+    nameBrand: String
+    tags: [String]
   }
 `
 

@@ -1,9 +1,19 @@
 import React from 'react'
 
 import Panel from '../Phoenix/shared/Panel'
+import TextFormButton from './shared/TextForm/Button'
+import DeleteButton from './shared/DeleteButton'
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faEdit } from "@fortawesome/free-solid-svg-icons"
 import { GET_SOURCE_INDICATIONS } from './../api/queries'
-import { CREATE_INDICATION } from '../api/mutations'
-import TextFormButton from '../Phoenix/shared/TextForm/Button'
+
+import {
+  CREATE_INDICATION,
+  UPDATE_SOURCE_INDICATION,
+  DELETE_SOURCE_INDICATION,
+} from '../api/mutations'
+
+const editIcon = <FontAwesomeIcon size="lg" icon={faEdit} />
 
 const CREATE_BUTTON_TXT = 'Create Indication'
 
@@ -14,34 +24,77 @@ const createButtonStyle = {
   color: 'white',
 }
 
+const defaultPanelItemStyle = {
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  padding: '17px 20px',
+  color: '#0E2539',
+  fontWeight: 600,
+  fontSize: 12,
+  marginTop: 10,
+  borderTop: '1px solid rgb(182, 185, 188)',
+}
+
+const getInputFields = (state, handleChange) => {
+  return (
+    <>
+      <span>name: </span>
+      <input
+        type="text"
+        name="name"
+        onChange={handleChange}
+        value={state.input.name}
+      />
+    </>
+  )
+}
+
 const createButton = (
   <TextFormButton
     modalTitle={CREATE_MODAL_TITLE}
     buttonLabel={CREATE_BUTTON_TXT}
     buttonStyle={createButtonStyle}
     mutationDoc={CREATE_INDICATION}
+    refetchQueryDoc={GET_SOURCE_INDICATIONS}
+    getInputFields={getInputFields}
   />
 )
 
-// const panelItemConfig = {
-  // selectEntityMutationDoc: SELECT_USER,
-  // style: defaultPanelItemStyle,
-  // activeStyle: activePanelItemStyle,
-  // buttonGroupCallback,
-  // ! Note: inactiveStyle not needed until hover effects differ
-  // ! between active and inactive states
-  // inactiveStyle: inactivePanelItemStyle,
-// }
+const buttonGroupCallback = ({ name, _id }) => (
+  <>
+    <TextFormButton
+      modalTitle="Edit Indication"
+      buttonLabel={editIcon}
+      buttonStyle={{ border: 'none', background: 'none', color: '#b6b9bc' }}
+      data={{ input: { name, _id } }}
+      mutationDoc={UPDATE_SOURCE_INDICATION}
+      refetchQueryDoc={GET_SOURCE_INDICATIONS}
+      getInputFields={getInputFields}
+    />
+
+    <DeleteButton
+      itemId={_id}
+      mutationDoc={DELETE_SOURCE_INDICATION}
+      refetchQueryDoc={GET_SOURCE_INDICATIONS}
+    />
+  </>
+)
+
+const panelItemConfig = {
+  style: defaultPanelItemStyle,
+  buttonGroupCallback,
+  label1Callback: ({ name }) => name,
+}
 
 const IndicationsPanel = () => (
   <Panel
-    // style={panelStyle}
     title="Indications"
     createButton={createButton}
     queryDocs={{
       fetchAllQueryProps: { query: GET_SOURCE_INDICATIONS },
     }}
-    // panelItemConfig={panelItemConfig}
+    panelItemConfig={panelItemConfig}
   />
 )
 

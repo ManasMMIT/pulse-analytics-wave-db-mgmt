@@ -33,11 +33,17 @@ const PanelItem = ({
               style={finalStyle}
               onClick={handleSelect.bind(null, { variables: { _id: entity._id } })}
             >
-              <span>{entity.description || entity.username || entity.name}</span>
+              <div>
+                <div>{label1Callback(entity)}</div>
 
-              <span>
+                <div style={{ fontWeight: 300, fontStyle: 'italic' }}>
+                  {label2Callback(entity)}
+                </div>
+              </div>
+
+              <div>
                 {buttonGroupCallback(entity)}
-              </span>
+              </div>
             </div>
           )
         }}
@@ -47,11 +53,17 @@ const PanelItem = ({
 
   return (
     <div style={finalStyle}>
-      <span>{entity.description || entity.username || entity.name}</span>
+      <div>
+        <div>{label1Callback(entity)}</div>
 
-      <span>
+        <div style={{ fontWeight: 300, fontStyle: 'italic' }}>
+          {label2Callback(entity)}
+        </div>
+      </div>
+
+      <div>
         {buttonGroupCallback(entity)}
-      </span>
+      </div>
     </div>
   )
 }

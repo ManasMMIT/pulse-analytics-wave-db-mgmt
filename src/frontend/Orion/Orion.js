@@ -2,6 +2,7 @@ import React from 'react'
 
 import VerticalTabs from '../components/Tabs/VerticalTabs'
 import IndicationsPanel from './IndicationsPanel'
+import ProductsPanel from './ProductsPanel'
 
 const TAB_ONE = 'Indications'
 const TAB_TWO = 'Products'
@@ -40,7 +41,7 @@ const Orion = () => {
         activeTabStyle={activeTabStyle}
       >
         <IndicationsPanel key="Indications" />
-        <div key="Products" />
+        <ProductsPanel key="Products" />
       </VerticalTabs>
     </div>
   )
