@@ -43,16 +43,20 @@ const connectToMongoAndWriteCsv = async () => {
     'PROD_NAME',
   ]
 
-  const csvData = Papa.unparse({
-    fields: fieldsOrder,
-    data: result,
-  })
-
   const date = new Date()
   const formattedDate = date.toJSON().substring(0, 10).replace(/[-]/g, '')
-  const filename = `./exportNovartisCsvData/NOVARTIS_KYMRIAH_${formattedDate}.csv`
+  const getCSVConfigByIndication = indication => ({
+    filename: `./exportNovartisCsvData/NOVARTIS_KYMRIAH_${ indication }_${formattedDate}.csv`,
+    csvData: Papa.unparse({
+      fields: fieldsOrder,
+      data: result.filter(({ INDICATION }) => INDICATION === indication ),
+    })
+  })
 
-  const writeToCsv = () => new Promise((resolve, reject) => {
+  const ALL_config = getCSVConfigByIndication('ALL')
+  const DLBCL_config = getCSVConfigByIndication('DLBCL')
+
+  const writeToCsv = ({ filename, csvData }) => new Promise((resolve, reject) => {
     fs.writeFile(filename, csvData, err => {
       if (err) {
         console.log(`Error writing to ${filename}`)
@@ -64,7 +68,8 @@ const connectToMongoAndWriteCsv = async () => {
     })
   })
 
-  await writeToCsv()
+  await writeToCsv(ALL_config)
+  await writeToCsv(DLBCL_config)
 
   await terminateScript()
 }

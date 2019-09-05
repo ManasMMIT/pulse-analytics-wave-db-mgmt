@@ -40,6 +40,7 @@ let combineQoaScoresLinksCriteria = async ({
         if (policyLinksHash[comboKey]) {
           obj.policyLink = policyLinksHash[comboKey].link
           obj.siteLink = policyLinksHash[comboKey].siteLink
+          obj.paLink = policyLinksHash[comboKey].paLink
         }
     })
 

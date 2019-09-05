@@ -55,9 +55,23 @@ module.exports = [
           ]
         }
       },
-      PLAN_TYPE: '$book',
+      PLAN_TYPE: {
+        $switch: {
+          branches: [
+            {
+              case: { $eq: ['$book', 'Medicare'] },
+              then: 'Medicare Advantage',
+            },
+            {
+              case: { $eq: ['$book', 'FFS Medicaid'] },
+              then: 'State Fee-for-Service Medicaid',
+            },
+          ],
+          default: '$book'
+        }
+      },
       INDICATION: '$indication',
-      URL_TO_PA_Policy: '$siteLink',
+      URL_TO_PA_Policy: { $ifNull: [ "$siteLink", "Not Available" ] },
       RESTRICTION_CODE: {
         $switch: {
           branches: [
@@ -83,6 +97,7 @@ module.exports = [
       },
       RESTRICTION_DETAIL_TEXT: '$additionalCriteria',
       PROD_NAME: '$regimen',
+      PA_URL: { $ifNull: [ "$paLink", "Not Available" ] }
     }
   },
   {
@@ -92,7 +107,6 @@ module.exports = [
       TIER: null,
       TIER_NUMBER: null,
       DW_INS_DT: null,
-      PA_URL: null,
     }
   }
 ]
