@@ -1,12 +1,12 @@
 const { ObjectId } = require('mongodb')
 
-const deleteSourceIndication = async (
+const deleteSourceRegimen = async (
   parent,
   { input: { _id } },
   { pulseCoreDb },
   info,
 ) => {
-  let result = await pulseCoreDb.collection('indications').findOneAndDelete(
+  let result = await pulseCoreDb.collection('regimens').findOneAndDelete(
     { _id: ObjectId(_id) },
   )
 
@@ -15,4 +15,4 @@ const deleteSourceIndication = async (
   return result
 }
 
-module.exports = deleteSourceIndication
+module.exports = deleteSourceRegimen

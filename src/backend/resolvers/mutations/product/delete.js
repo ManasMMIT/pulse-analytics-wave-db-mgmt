@@ -3,16 +3,31 @@ const { ObjectId } = require('mongodb')
 const deleteSourceProduct = async (
   parent,
   { input: { _id } },
-  { pulseCoreDb },
+  { mongoClient, pulseCoreDb },
   info,
 ) => {
-  let result = await pulseCoreDb.collection('products').findOneAndDelete(
-    { _id: new ObjectId(_id) },
-  )
+  const id = ObjectId(_id)
 
-  result = result.value
+  let result
 
-  return result
+  const session = mongoClient.startSession()
+
+  await session.withTransaction(async () => {
+    // delete the product from the products collection
+    result = await pulseCoreDb.collection('products').findOneAndDelete(
+      { _id: id },
+      { session },
+    )
+
+    // delete the product from all regimens
+    await pulseCoreDb.collection('regimens').updateMany(
+      { products: { $elemMatch: { _id: id } } },
+      { $pull: { products: { _id: id } } },
+      { session }
+    )
+  })
+
+  return result.value
 }
 
 module.exports = deleteSourceProduct

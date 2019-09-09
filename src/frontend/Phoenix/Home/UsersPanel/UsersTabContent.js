@@ -86,7 +86,7 @@ const UsersTab = () => (
     {
       ({ data: { selectedTeam } }) => {
 
-        const createButton = (
+        const headerChildren = (
           <UserFormButton
             modalTitle="Create User"
             buttonLabel="Create User"
@@ -100,7 +100,7 @@ const UsersTab = () => (
           <Panel
             style={panelStyle}
             title={`Users for ${selectedTeam.description}`}
-            createButton={createButton}
+            headerChildren={headerChildren}
             queryDocs={{
               fetchAllQueryProps: { query: GET_TEAM_USERS },
               fetchSelectedQueryProps: { query: GET_SELECTED_USER },

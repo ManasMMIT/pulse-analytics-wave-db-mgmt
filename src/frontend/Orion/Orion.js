@@ -3,13 +3,16 @@ import React from 'react'
 import VerticalTabs from '../components/Tabs/VerticalTabs'
 import IndicationsPanel from './IndicationsPanel'
 import ProductsPanel from './ProductsPanel'
+import RegimensPanel from './RegimensPanel'
 
 const TAB_ONE = 'Indications'
 const TAB_TWO = 'Products'
+const TAB_THREE = 'Regimens'
 
 const FILTER_TAB_OPTIONS = [
   TAB_ONE,
   TAB_TWO,
+  TAB_THREE,
 ]
 
 const tabsContainerStyle = {
@@ -40,8 +43,9 @@ const Orion = () => {
         inactiveTabStyle={inactiveTabStyle}
         activeTabStyle={activeTabStyle}
       >
-        <IndicationsPanel key="Indications" />
-        <ProductsPanel key="Products" />
+        <IndicationsPanel />
+        <ProductsPanel />
+        <RegimensPanel />
       </VerticalTabs>
     </div>
   )

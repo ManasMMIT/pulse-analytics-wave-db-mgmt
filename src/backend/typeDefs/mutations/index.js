@@ -3,6 +3,7 @@ const { gql } = require('apollo-server-express')
 const sitemap = require('./sitemap')
 const indication = require('./indication')
 const product = require('./product')
+const regimen = require('./regimen')
 
 const mutationType = gql`
   type Mutation {
@@ -15,6 +16,9 @@ const mutationType = gql`
     createProduct(input: CreateProductInput!): CreateProductPayload
     updateSourceProduct(input: UpdateSourceProductInput!): UpdateSourceProductPayload
     deleteSourceProduct(input: DeleteSourceProductInput!): DeleteSourceProductPayload
+    createRegimen(input: CreateRegimenInput!): CreateRegimenPayload
+    updateSourceRegimen(input: UpdateSourceRegimenInput!): UpdateSourceRegimenPayload
+    deleteSourceRegimen(input: DeleteSourceRegimenInput!): DeleteSourceRegimenPayload
   }
 `
 
@@ -23,4 +27,5 @@ module.exports = [
   ...sitemap,
   ...indication,
   ...product,
+  ...regimen,
 ]

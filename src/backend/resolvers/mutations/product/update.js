@@ -3,18 +3,32 @@ const { ObjectId } = require('mongodb')
 const updateSourceProduct = async (
   parent,
   { input: { _id, ...body } },
-  { pulseCoreDb },
+  { mongoClient, pulseCoreDb },
   info,
 ) => {
-  let result = await pulseCoreDb.collection('products').findOneAndUpdate(
-    { _id: new ObjectId(_id) },
-    { $set: body },
-    { returnOriginal: false },
-  )
+  const id = ObjectId(_id)
 
-  result = result.value
+  let result
 
-  return result
+  const session = mongoClient.startSession()
+
+  await session.withTransaction(async () => {
+    // update the product in the products collection
+    result = await pulseCoreDb.collection('products').findOneAndUpdate(
+      { _id: id },
+      { $set: body },
+      { session, returnOriginal: false },
+    )
+
+    // update the product for all regimens in the regimens collection
+    await pulseCoreDb.collection('regimens').updateMany(
+      { products: { $elemMatch: { _id: id } } },
+      { $set: { 'products.$': { _id: id, ...body } } }, // only need to update the 1st match in products array because they're unique
+      { session }
+    )
+  })
+
+  return result.value
 }
 
 module.exports = updateSourceProduct

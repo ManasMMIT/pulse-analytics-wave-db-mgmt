@@ -18,7 +18,7 @@ const Panel = ({
   title,
   titleStyle,
   headerContainerStyle,
-  createButton,
+  headerChildren,
   queryDocs: {
     fetchAllQueryProps,
     fetchSelectedQueryProps,
@@ -32,7 +32,7 @@ const Panel = ({
         title={title}
         titleStyle={titleStyle}
       >
-        {createButton}
+        {headerChildren}
       </PanelHeader>
 
 
@@ -64,7 +64,7 @@ const Panel = ({
 Panel.propTypes = {
   style: PropTypes.object,
   ...PanelHeader.propTypes,
-  createButton: PropTypes.node,
+  headerChildren: PropTypes.node,
   queryDocs: PropTypes.shape({
     fetchAllQueryProps: PropTypes.object,
     fetchSelectedQueryProps: PropTypes.object,
@@ -75,7 +75,7 @@ Panel.propTypes = {
 Panel.defaultProps = {
   style: {},
   ...PanelHeader.defaultProps,
-  createButton: null,
+  headerChildren: null,
   queryDocs: {
     fetchAllQueryProps: null,
     fetchSelectedQueryProps: null,

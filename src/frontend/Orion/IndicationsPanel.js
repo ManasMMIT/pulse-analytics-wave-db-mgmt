@@ -1,10 +1,11 @@
 import React from 'react'
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faEdit } from "@fortawesome/free-solid-svg-icons"
 
 import Panel from '../Phoenix/shared/Panel'
 import TextFormButton from './shared/TextForm/Button'
 import DeleteButton from './shared/DeleteButton'
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faEdit } from "@fortawesome/free-solid-svg-icons"
+import CopyOneOfStringButton from './shared/CopyOneOfStringButton'
 import { GET_SOURCE_INDICATIONS } from './../api/queries'
 
 import {
@@ -19,7 +20,7 @@ const CREATE_BUTTON_TXT = 'Create Indication'
 
 const CREATE_MODAL_TITLE = 'Create New Indication'
 
-const createButtonStyle = {
+const buttonStyle = {
   background: "#234768",
   color: 'white',
 }
@@ -50,15 +51,22 @@ const getInputFields = (state, handleChange) => {
   )
 }
 
-const createButton = (
-  <TextFormButton
-    modalTitle={CREATE_MODAL_TITLE}
-    buttonLabel={CREATE_BUTTON_TXT}
-    buttonStyle={createButtonStyle}
-    mutationDoc={CREATE_INDICATION}
-    refetchQueryDoc={GET_SOURCE_INDICATIONS}
-    getInputFields={getInputFields}
-  />
+const headerChildren = (
+  <div>
+    <TextFormButton
+      modalTitle={CREATE_MODAL_TITLE}
+      buttonLabel={CREATE_BUTTON_TXT}
+      buttonStyle={buttonStyle}
+      mutationDoc={CREATE_INDICATION}
+      refetchQueries={[{ query: GET_SOURCE_INDICATIONS }]}
+      getInputFields={getInputFields}
+    />
+
+    <CopyOneOfStringButton
+      queryDoc={GET_SOURCE_INDICATIONS}
+      dataKey="indications"
+    />
+  </div>
 )
 
 const buttonGroupCallback = ({ name, _id }) => (
@@ -69,14 +77,14 @@ const buttonGroupCallback = ({ name, _id }) => (
       buttonStyle={{ border: 'none', background: 'none', color: '#b6b9bc' }}
       data={{ input: { name, _id } }}
       mutationDoc={UPDATE_SOURCE_INDICATION}
-      refetchQueryDoc={GET_SOURCE_INDICATIONS}
+      refetchQueries={[{ query: GET_SOURCE_INDICATIONS }]}
       getInputFields={getInputFields}
     />
 
     <DeleteButton
       itemId={_id}
       mutationDoc={DELETE_SOURCE_INDICATION}
-      refetchQueryDoc={GET_SOURCE_INDICATIONS}
+      refetchQueries={[{ query: GET_SOURCE_INDICATIONS }]}
     />
   </>
 )
@@ -90,7 +98,7 @@ const panelItemConfig = {
 const IndicationsPanel = () => (
   <Panel
     title="Indications"
-    createButton={createButton}
+    headerChildren={headerChildren}
     queryDocs={{
       fetchAllQueryProps: { query: GET_SOURCE_INDICATIONS },
     }}

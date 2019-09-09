@@ -7,7 +7,7 @@ const updateSourceIndication = async (
   info,
 ) => {
   let result = await pulseCoreDb.collection('indications').findOneAndUpdate(
-    { _id: new ObjectId(_id) },
+    { _id: ObjectId(_id) },
     { $set: body },
     { returnOriginal: false },
   )

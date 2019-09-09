@@ -6,6 +6,7 @@ const users = require('./users')
 const nodes = require('./nodes')
 const indications = require('./indications')
 const products = require('./products')
+const regimens = require('./regimens')
 
 module.exports = {
   clients,
@@ -14,4 +15,5 @@ module.exports = {
   nodes,
   indications,
   products,
+  regimens,
 }

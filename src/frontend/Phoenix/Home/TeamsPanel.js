@@ -79,7 +79,7 @@ const panelItemConfig = {
   // inactiveStyle: inactivePanelItemStyle,
 }
 
-const createButton = (
+const headerChildren = (
   <TextFormButton
     modalTitle="Create Team"
     buttonLabel="Create Team"
@@ -95,7 +95,7 @@ const TeamsPanel = () => (
         style={{ backgroundColor: '#edf1f5' }}
         title={`Teams for ${clientName}`}
         titleStyle={{ color: '#536f8d' }}
-        createButton={createButton}
+        headerChildren={headerChildren}
         queryDocs={{
           fetchAllQueryProps: { query: GET_CLIENT_TEAMS },
           fetchSelectedQueryProps: { query: GET_SELECTED_TEAM },

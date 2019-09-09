@@ -38,22 +38,22 @@ const panelItemConfig = {
   // inactiveStyle: inactivePanelItemStyle,
 }
 
-const ClientsPanel = () => {
-  const createButton = (
-    <TextFormButton
-      modalTitle={CREATE_MODAL_TITLE}
-      buttonLabel={CREATE_BUTTON_TXT}
-      buttonStyle={createButtonStyle}
-      mutationDoc={CREATE_CLIENT}
-    />
-  )
+const headerChildren = (
+  <TextFormButton
+    modalTitle={CREATE_MODAL_TITLE}
+    buttonLabel={CREATE_BUTTON_TXT}
+    buttonStyle={createButtonStyle}
+    mutationDoc={CREATE_CLIENT}
+  />
+)
 
+const ClientsPanel = () => {
   return (
     <Panel
       style={{ backgroundColor: '#0a3557' }}
       title="Clients"
       titleStyle={{ color: '#536f8d' }}
-      createButton={createButton}
+      headerChildren={headerChildren}
       queryDocs={{
         fetchAllQueryProps: { query: GET_CLIENTS },
         fetchSelectedQueryProps: { query: GET_SELECTED_CLIENT },

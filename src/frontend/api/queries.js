@@ -243,6 +243,20 @@ export const GET_SOURCE_PRODUCTS = gql`
     }
   }
 `
+export const GET_SOURCE_REGIMENS = gql`
+  query getSourceRegimens {
+    regimens {
+      _id
+      name
+      products {
+        _id
+        nameGeneric
+        nameBrand
+        tags
+      }
+    }
+  }
+`
 
 export const GET_STAGED_SITEMAP = gql`
   query getStagedSitemap {

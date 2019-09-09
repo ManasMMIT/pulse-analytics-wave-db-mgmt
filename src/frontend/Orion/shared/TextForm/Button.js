@@ -29,7 +29,7 @@ class Button extends React.Component {
       buttonStyle,
       modalTitle,
       modalStyle,
-      refetchQueryDoc,
+      refetchQueries,
       getInputFields,
     } = this.props
 
@@ -50,7 +50,7 @@ class Button extends React.Component {
           <TextForm
             data={data}
             mutationDoc={mutationDoc}
-            refetchQueryDoc={refetchQueryDoc}
+            refetchQueries={refetchQueries}
             afterSubmitHook={this.closeModal}
             getInputFields={getInputFields}
           />

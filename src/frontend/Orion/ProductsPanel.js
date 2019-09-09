@@ -6,7 +6,7 @@ import TextFormButton from './shared/TextForm/Button'
 import DeleteButton from './shared/DeleteButton'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faEdit } from "@fortawesome/free-solid-svg-icons"
-import { GET_SOURCE_PRODUCTS } from './../api/queries'
+import { GET_SOURCE_PRODUCTS, GET_SOURCE_REGIMENS } from './../api/queries'
 
 import {
   CREATE_PRODUCT,
@@ -66,13 +66,13 @@ const getInputFields = (state, handleChange) => {
   )
 }
 
-const createButton = (
+const headerChildren = (
   <TextFormButton
     modalTitle={CREATE_MODAL_TITLE}
     buttonLabel={CREATE_BUTTON_TXT}
     buttonStyle={createButtonStyle}
     mutationDoc={CREATE_PRODUCT}
-    refetchQueryDoc={GET_SOURCE_PRODUCTS}
+    refetchQueries={[{ query: GET_SOURCE_PRODUCTS }]}
     getInputFields={getInputFields}
   />
 )
@@ -88,14 +88,20 @@ const buttonGroupCallback = ({
       buttonStyle={{ border: 'none', background: 'none', color: '#b6b9bc' }}
       data={{ input: product }}
       mutationDoc={UPDATE_SOURCE_PRODUCT}
-      refetchQueryDoc={GET_SOURCE_PRODUCTS}
+      refetchQueries={[
+        { query: GET_SOURCE_PRODUCTS },
+        { query: GET_SOURCE_REGIMENS }, // refresh regimens cache after update
+      ]}
       getInputFields={getInputFields}
     />
 
     <DeleteButton
       itemId={product._id}
       mutationDoc={DELETE_SOURCE_PRODUCT}
-      refetchQueryDoc={GET_SOURCE_PRODUCTS}
+      refetchQueries={[
+        { query: GET_SOURCE_PRODUCTS },
+        { query: GET_SOURCE_REGIMENS }, // refresh regimens cache after delete
+      ]}
     />
   </>
 )
@@ -122,7 +128,7 @@ const panelItemConfig = {
 const ProductsPanel = () => (
   <Panel
     title="Products"
-    createButton={createButton}
+    headerChildren={headerChildren}
     queryDocs={{
       fetchAllQueryProps: { query: GET_SOURCE_PRODUCTS },
     }}

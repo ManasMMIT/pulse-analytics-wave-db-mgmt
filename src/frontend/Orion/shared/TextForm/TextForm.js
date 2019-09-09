@@ -34,7 +34,7 @@ class TextForm extends Component {
         getInputFields,
         mutationDoc,
         afterSubmitHook,
-        refetchQueryDoc,
+        refetchQueries,
       },
     } = this
 
@@ -44,11 +44,17 @@ class TextForm extends Component {
 
         <Mutation
           mutation={mutationDoc}
-          refetchQueries={[{ query: refetchQueryDoc }]}
+          refetchQueries={refetchQueries}
         >
           {(handleSubmit, { loading, error }) => {
             if (loading) return <Spinner />
-            if (error) return <div style={{ color: 'red' }}>Error processing request</div>
+            if (error) {
+              return (
+                <div style={{ color: 'red' }}>
+                  {error.message || "Error processing request"}
+                </div>
+              )
+            }
 
             return (
               <button
@@ -71,12 +77,14 @@ TextForm.propTypes = {
   data: PropTypes.object,
   mutationDoc: PropTypes.object,
   getInputFields: PropTypes.func,
+  refetchQueries: PropTypes.arrayOf(PropTypes.object),
 }
 
 TextForm.defaultProps = {
   data: { input: {} },
   mutationDoc: {},
   getInputFields: () => null,
+  refetchQueries: [],
 }
 
 export default TextForm
