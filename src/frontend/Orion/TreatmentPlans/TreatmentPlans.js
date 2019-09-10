@@ -1,7 +1,7 @@
 import React from 'react'
-// import { Query } from 'react-apollo'
-// import Select from 'react-select'
-// import _ from 'lodash'
+import { Query } from 'react-apollo'
+import Select from 'react-select'
+import _ from 'lodash'
 import { transparentize } from 'polished'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faEdit } from "@fortawesome/free-solid-svg-icons"
@@ -10,11 +10,12 @@ import Panel from '../../Phoenix/shared/Panel'
 import ModalButtonWithForm from '../shared/ModalButtonWithForm'
 // import DeleteButton from '../shared/DeleteButton'
 // import CopyOneOfStringButton from '../shared/CopyOneOfStringButton'
-// import Spinner from '../../Phoenix/shared/Spinner'
+import Spinner from '../../Phoenix/shared/Spinner'
+import stripTypename from '../shared/strip-typename'
 
 import {
   GET_SOURCE_INDICATIONS,
-  // GET_SOURCE_REGIMENS,
+  GET_SOURCE_REGIMENS,
   GET_SELECTED_INDICATION,
   GET_SELECTED_REGIMENS,
 } from '../../api/queries'
@@ -53,13 +54,54 @@ const panelItemActiveStyle = {
 const getInputFields = (state, handleChange) => {
   return (
     <>
-      <span>name: </span>
-      <input
-        type="text"
-        name="name"
-        onChange={handleChange}
-        value={state.input.name}
-      />
+      <div>
+        <span>name: </span>
+        <input
+          type="text"
+          name="name"
+          onChange={handleChange}
+          value={state.input.name}
+        />
+      </div>
+
+      <div>
+        <span>regimens: </span>
+        <Query query={GET_SOURCE_REGIMENS}>
+          {({ data: { regimens }, loading, error }) => {
+            if (error) return <div style={{ color: 'red' }}>Error processing request</div>
+            if (loading) return <Spinner />
+
+            const initialSelections = state.input.regimens.map(({ _id, name }) => (
+              { value: _id, label: name }
+            ))
+
+            const regimensByKey = _.keyBy(regimens, '_id')
+
+            const options = regimens.map(({ _id, name }) => (
+              { value: _id, label: name }
+            ))
+
+            return (
+              <Select
+                defaultValue={initialSelections}
+                isMulti
+                options={options}
+                onChange={arrOfVals => {
+                  let newRegimens = arrOfVals || []
+
+                  newRegimens = newRegimens.map(
+                    ({ value }) => stripTypename(regimensByKey[value])
+                  )
+
+                  // ! HACK: Mock HTML event.target structure to get tags
+                  // ! able to written into TextForm's local state by handleChange
+                  handleChange({ target: { name: 'regimens', value: newRegimens } })
+                }}
+              />
+            )
+          }}
+        </Query>
+      </div>
     </>
   )
 }
@@ -82,13 +124,13 @@ const getInputFields = (state, handleChange) => {
 //   </div>
 // )
 
-const buttonGroupCallback = ({ name, _id }) => (
+const buttonGroupCallback = ({ name, _id, regimens }) => (
   <>
     <ModalButtonWithForm
       modalTitle="Edit Indication"
       buttonLabel={editIcon}
       buttonStyle={{ border: 'none', background: 'none', color: '#b6b9bc' }}
-      data={{ input: { name, _id } }}
+      data={{ input: { name, _id, regimens } }}
       mutationDoc={UPDATE_SOURCE_INDICATION}
       refetchQueries={[{ query: GET_SOURCE_INDICATIONS }]}
       getInputFields={getInputFields}
@@ -118,36 +160,6 @@ const regimensPanelItemConfig = {
 
 // const regimensHeaderChildren = (
 //   <div>
-//     <Query query={GET_SOURCE_REGIMENS}>
-//       {({ data: { regimens }, loading, error }) => {
-//         if (error) return <div style={{ color: 'red' }}>Error processing request</div>
-//         if (loading) return <Spinner />
-
-//         const options = regimens.map(({ name }) => ({ value: name, label: name }))
-
-//         return (
-//           <Select
-//             defaultValue={options[0]}
-//             // isMulti
-//             options={options}
-//             // className="basic-multi-select"
-//             // classNamePrefix="select"
-//             // onChange={arrOfVals => {
-//             //   let newProducts = arrOfVals || []
-
-//             //   newProducts = newProducts.map(({ value }) => {
-//             //     const { __typename, ...product } = productsByKey[value]
-//             //     return product
-//             //   })
-
-//             //   // ! HACK: Mock HTML event.target structure to get tags
-//             //   // ! able to written into TextForm's local state by handleChange
-//             //   handleChange({ target: { name: 'products', value: newProducts } })
-//             // }}
-//           />
-//         )
-//       }}
-//     </Query>
 //   </div>
 // )
 
