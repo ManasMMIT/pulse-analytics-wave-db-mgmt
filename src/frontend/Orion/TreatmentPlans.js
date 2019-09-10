@@ -62,12 +62,14 @@ const getInputFields = (state, handleChange) => {
             if (error) return <div style={{ color: 'red' }}>Error processing request</div>
             if (loading) return <Spinner />
 
+            // TODO: also make searchable by products and their tags, not just regimen name
             const initialSelections = state.input.regimens.map(({ _id, name }) => (
               { value: _id, label: name }
             ))
 
             const regimensByKey = _.keyBy(regimens, '_id')
 
+            // TODO: also make searchable by products and their tags, not just regimen name
             const options = regimens.map(({ _id, name }) => (
               { value: _id, label: name }
             ))
