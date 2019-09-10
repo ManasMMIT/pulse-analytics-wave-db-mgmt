@@ -35,6 +35,7 @@ class Form extends Component {
         getInputFields,
         mutationDoc,
         afterSubmitHook,
+        afterMutationHook,
         refetchQueries,
       },
     } = this
@@ -46,6 +47,7 @@ class Form extends Component {
         <Mutation
           mutation={mutationDoc}
           refetchQueries={refetchQueries}
+          update={afterMutationHook}
         >
           {(handleSubmit, { loading, error }) => {
             if (loading) return <Spinner />
@@ -78,6 +80,8 @@ Form.propTypes = {
   data: PropTypes.object,
   mutationDoc: PropTypes.object,
   getInputFields: PropTypes.func,
+  afterSubmitHook: PropTypes.func,
+  afterMutationHook: PropTypes.func,
   refetchQueries: PropTypes.arrayOf(PropTypes.object),
 }
 
@@ -85,6 +89,8 @@ Form.defaultProps = {
   data: { input: {} },
   mutationDoc: {},
   getInputFields: () => null,
+  afterSubmitHook: () => null,
+  afterMutationHook: () => null,
   refetchQueries: [],
 }
 
