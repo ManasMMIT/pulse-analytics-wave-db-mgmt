@@ -12,7 +12,7 @@ import { SELECT_INDICATION } from './../api/mutations'
 const TAB_ONE = 'Indications'
 const TAB_TWO = 'Products'
 const TAB_THREE = 'Regimens'
-const TAB_FOUR = 'Indications+Regimens'
+const TAB_FOUR = 'Treatment Plans'
 
 const FILTER_TAB_OPTIONS = [
   TAB_ONE,
