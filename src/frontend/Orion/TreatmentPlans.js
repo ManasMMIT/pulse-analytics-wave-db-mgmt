@@ -139,6 +139,7 @@ const TreatmentPlans = () => (
   <div style={{ display: 'flex' }}>
     <Panel
       title="Indications"
+      style={{ borderRight: '1px solid black' }}
       // headerChildren={headerChildren}
       queryDocs={{
         fetchAllQueryProps: { query: GET_SOURCE_INDICATIONS },
