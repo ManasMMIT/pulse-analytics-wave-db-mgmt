@@ -8,8 +8,6 @@ import { faEdit } from "@fortawesome/free-solid-svg-icons"
 
 import Panel from '../../Phoenix/shared/Panel'
 import ModalButtonWithForm from '../shared/ModalButtonWithForm'
-// import DeleteButton from '../shared/DeleteButton'
-// import CopyOneOfStringButton from '../shared/CopyOneOfStringButton'
 import Spinner from '../../Phoenix/shared/Spinner'
 import stripTypename from '../shared/strip-typename'
 
@@ -26,13 +24,6 @@ import {
 } from '../../api/mutations'
 
 const editIcon = <FontAwesomeIcon size="lg" icon={faEdit} />
-
-// const ADD_REGIMEN_ASSOCIATION = 'Associate Other Regimens'
-
-// const buttonStyle = {
-//   background: "#234768",
-//   color: 'white',
-// }
 
 const defaultPanelItemStyle = {
   display: 'flex',
@@ -106,24 +97,6 @@ const getInputFields = (state, handleChange) => {
   )
 }
 
-// const headerChildren = (
-//   <div>
-//     <ModalButtonWithForm
-//       modalTitle={CREATE_MODAL_TITLE}
-//       buttonLabel={CREATE_BUTTON_TXT}
-//       buttonStyle={buttonStyle}
-//       mutationDoc={CREATE_INDICATION}
-//       refetchQueries={[{ query: GET_SOURCE_INDICATIONS }]}
-//       getInputFields={getInputFields}
-//     />
-
-//     <CopyOneOfStringButton
-//       queryDoc={GET_SOURCE_INDICATIONS}
-//       dataKey="indications"
-//     />
-//   </div>
-// )
-
 const buttonGroupCallback = ({ name, _id, regimens }) => (
   <>
     <ModalButtonWithForm
@@ -135,12 +108,6 @@ const buttonGroupCallback = ({ name, _id, regimens }) => (
       refetchQueries={[{ query: GET_SOURCE_INDICATIONS }]}
       getInputFields={getInputFields}
     />
-
-    {/* <DeleteButton
-      itemId={_id}
-      mutationDoc={DELETE_SOURCE_INDICATION}
-      refetchQueries={[{ query: GET_SOURCE_INDICATIONS }]}
-    /> */}
   </>
 )
 
@@ -154,14 +121,8 @@ const indicationsPanelItemConfig = {
 
 const regimensPanelItemConfig = {
   style: defaultPanelItemStyle,
-  // buttonGroupCallback,
   label1Callback: ({ name }) => name,
 }
-
-// const regimensHeaderChildren = (
-//   <div>
-//   </div>
-// )
 
 const TreatmentPlans = () => (
   <div style={{ display: 'flex' }}>
@@ -187,7 +148,6 @@ const TreatmentPlans = () => (
 )
 
 export default TreatmentPlans
-
 
 // agg pipeline for starting with indications and left joining
 // treatmentPlans (or ind/reg combos) onto it, and then left joining
