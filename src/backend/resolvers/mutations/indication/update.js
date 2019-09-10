@@ -7,22 +7,24 @@ const updateSourceIndication = async (
   { pulseCoreDb },
   info,
 ) => {
-  const editedRegimens = body.regimens.map(({ _id: regimenId, name, products }) => {
-    const newRegimenId = ObjectId(regimenId)
+  if (body.regimens) {
+    const editedRegimens = body.regimens.map(({ _id: regimenId, name, products }) => {
+      const newRegimenId = ObjectId(regimenId)
 
-    const editedProducts = products.map(({ _id: productId, ...product }) => {
-      const newProductId = ObjectId(productId)
-      return { _id: newProductId, ...product }
+      const editedProducts = products.map(({ _id: productId, ...product }) => {
+        const newProductId = ObjectId(productId)
+        return { _id: newProductId, ...product }
+      })
+
+      return {
+        _id: newRegimenId,
+        name,
+        products: editedProducts,
+      }
     })
 
-    return {
-      _id: newRegimenId,
-      name,
-      products: editedProducts,
-    }
-  })
-
-  body.regimens = editedRegimens
+    body.regimens = editedRegimens
+  }
 
   let result = await pulseCoreDb.collection('indications').findOneAndUpdate(
     { _id: ObjectId(_id) },
