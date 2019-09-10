@@ -10,7 +10,7 @@ const updateSourceIndicationTypeDefs = gql`
   type UpdateSourceIndicationPayload {
     _id: ID
     name: String
-    regimens: [Regimen]
+    regimens: [UpdateSourceRegimenPayload]
   }
 `
 

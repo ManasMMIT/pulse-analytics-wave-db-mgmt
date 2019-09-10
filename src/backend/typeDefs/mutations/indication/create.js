@@ -10,7 +10,7 @@ const createIndicationTypeDefs = gql`
   type CreateIndicationPayload {
     _id: ID
     name: String
-    regimens: [Regimen]
+    regimens: [CreateRegimenPayload]
   }
 `
 

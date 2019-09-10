@@ -8,7 +8,7 @@ const deleteSourceIndicationTypeDefs = gql`
   type DeleteSourceIndicationPayload {
     _id: ID
     name: String
-    regimens: [Regimen]
+    regimens: [DeleteSourceRegimenPayload]
   }
 `
 
