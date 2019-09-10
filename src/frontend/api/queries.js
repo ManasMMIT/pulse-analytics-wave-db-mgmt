@@ -230,6 +230,16 @@ export const GET_SOURCE_INDICATIONS = gql`
     indications {
       _id
       name
+      regimens {
+        _id
+        name
+        products {
+          _id
+          nameGeneric
+          nameBrand
+          tags
+    }
+  }
     }
   }
 `
