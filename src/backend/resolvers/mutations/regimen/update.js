@@ -31,7 +31,15 @@ const updateSourceRegimen = async (
     // update the regimen for all indications in the indications collection
     await pulseCoreDb.collection('indications').updateMany(
       { regimens: { $elemMatch: { _id: id } } },
-      { $set: { 'regimens.$': { _id: id, name, products } } }, // only need to update the 1st match in regimens array because they're unique
+      {
+        $set: {
+          'regimens.$': {
+            _id: id,
+            name,
+            products: formattedProducts,
+          }
+        }
+      }, // only need to update the 1st match in regimens array because they're unique
       { session },
     )
   })
