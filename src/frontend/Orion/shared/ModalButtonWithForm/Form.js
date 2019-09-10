@@ -4,12 +4,13 @@ import _ from 'lodash'
 
 import { Mutation } from 'react-apollo'
 import Spinner from '../../../Phoenix/shared/Spinner'
+import stripTypename from '../strip-typename'
 
 class Form extends Component {
   constructor(props) {
     super(props)
 
-    this.state = props.data
+    this.state = stripTypename(props.data)
   }
 
   handleChange = e => {
