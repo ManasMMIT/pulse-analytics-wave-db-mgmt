@@ -108,6 +108,15 @@ const buttonGroupCallback = ({ name, _id, regimens }) => (
       data={{ input: { name, _id, regimens } }}
       mutationDoc={UPDATE_SOURCE_INDICATION}
       refetchQueries={[{ query: GET_SOURCE_INDICATIONS }]}
+      afterMutationHook={(cache, { data }) => {
+        const updatedIndication = data.updateSourceIndication
+        const { regimens } = updatedIndication
+
+        cache.writeQuery({
+          query: GET_SELECTED_REGIMENS,
+          data: { selectedRegimens: regimens },
+        })
+      }}
       getInputFields={getInputFields}
     />
   </>
