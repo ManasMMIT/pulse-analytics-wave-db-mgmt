@@ -2,7 +2,7 @@ import React from 'react'
 import CreatableMultiSelect from './shared/CreatableMultiSelect';
 
 import Panel from '../Phoenix/shared/Panel'
-import TextFormButton from './shared/TextForm/Button'
+import ModalButtonWithForm from './shared/ModalButtonWithForm'
 import DeleteButton from './shared/DeleteButton'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faEdit } from "@fortawesome/free-solid-svg-icons"
@@ -57,7 +57,7 @@ const getInputFields = (state, handleChange) => {
             const newTags = arrOfVals.map(({ value }) => value)
 
             // ! HACK: Mock HTML event.target structure to get tags
-            // ! able to written into TextForm's local state by handleChange
+            // ! able to written into Form's local state by handleChange
             handleChange({ target: { name: 'tags', value: newTags } })
           }}
         />
@@ -67,7 +67,7 @@ const getInputFields = (state, handleChange) => {
 }
 
 const headerChildren = (
-  <TextFormButton
+  <ModalButtonWithForm
     modalTitle={CREATE_MODAL_TITLE}
     buttonLabel={CREATE_BUTTON_TXT}
     buttonStyle={createButtonStyle}
@@ -82,7 +82,7 @@ const buttonGroupCallback = ({
   ...product
 }) => (
   <>
-    <TextFormButton
+    <ModalButtonWithForm
       modalTitle="Edit Product"
       buttonLabel={editIcon}
       buttonStyle={{ border: 'none', background: 'none', color: '#b6b9bc' }}

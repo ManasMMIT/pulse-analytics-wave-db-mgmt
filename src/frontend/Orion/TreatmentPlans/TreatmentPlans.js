@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faEdit } from "@fortawesome/free-solid-svg-icons"
 
 import Panel from '../../Phoenix/shared/Panel'
-import TextFormButton from '../shared/TextForm/Button'
+import ModalButtonWithForm from '../shared/ModalButtonWithForm'
 // import DeleteButton from '../shared/DeleteButton'
 // import CopyOneOfStringButton from '../shared/CopyOneOfStringButton'
 // import Spinner from '../../Phoenix/shared/Spinner'
@@ -66,7 +66,7 @@ const getInputFields = (state, handleChange) => {
 
 // const headerChildren = (
 //   <div>
-//     <TextFormButton
+//     <ModalButtonWithForm
 //       modalTitle={CREATE_MODAL_TITLE}
 //       buttonLabel={CREATE_BUTTON_TXT}
 //       buttonStyle={buttonStyle}
@@ -84,7 +84,7 @@ const getInputFields = (state, handleChange) => {
 
 const buttonGroupCallback = ({ name, _id }) => (
   <>
-    <TextFormButton
+    <ModalButtonWithForm
       modalTitle="Edit Indication"
       buttonLabel={editIcon}
       buttonStyle={{ border: 'none', background: 'none', color: '#b6b9bc' }}

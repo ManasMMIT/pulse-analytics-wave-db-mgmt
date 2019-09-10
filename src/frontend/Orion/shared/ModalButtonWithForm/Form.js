@@ -5,7 +5,7 @@ import _ from 'lodash'
 import { Mutation } from 'react-apollo'
 import Spinner from '../../../Phoenix/shared/Spinner'
 
-class TextForm extends Component {
+class Form extends Component {
   constructor(props) {
     super(props)
 
@@ -73,18 +73,18 @@ class TextForm extends Component {
   }
 }
 
-TextForm.propTypes = {
+Form.propTypes = {
   data: PropTypes.object,
   mutationDoc: PropTypes.object,
   getInputFields: PropTypes.func,
   refetchQueries: PropTypes.arrayOf(PropTypes.object),
 }
 
-TextForm.defaultProps = {
+Form.defaultProps = {
   data: { input: {} },
   mutationDoc: {},
   getInputFields: () => null,
   refetchQueries: [],
 }
 
-export default TextForm
+export default Form

@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import Modal from '../../../components/Modal'
-import TextForm from './TextForm'
+import Form from './Form'
 
 const defaultButtonStyle = {
   border: 'none',
@@ -47,7 +47,7 @@ class Button extends React.Component {
           show={this.state.isModalOpen}
           title={modalTitle}
         >
-          <TextForm
+          <Form
             data={data}
             mutationDoc={mutationDoc}
             refetchQueries={refetchQueries}
@@ -61,7 +61,7 @@ class Button extends React.Component {
 }
 
 Button.propTypes = {
-  ...TextForm.propTypes,
+  ...Form.propTypes,
   buttonLabel: PropTypes.node,
   buttonStyle: PropTypes.object,
   modalTitle: PropTypes.string,
@@ -69,7 +69,7 @@ Button.propTypes = {
 }
 
 Button.defaultProps = {
-  ...TextForm.defaultProps,
+  ...Form.defaultProps,
   buttonLabel: <div>click to open</div>,
   buttonStyle: {},
   modalTitle: null,
