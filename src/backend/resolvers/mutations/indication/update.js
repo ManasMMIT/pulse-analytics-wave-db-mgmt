@@ -7,7 +7,7 @@ const updateSourceIndication = async (
   { pulseCoreDb },
   info,
 ) => {
-  if (body.regimens) {
+  if (body.regimens) { // TODO: shouldn't have to guard against this; every indication should have an regimens array
     const editedRegimens = body.regimens.map(({ _id: regimenId, name, products }) => {
       const newRegimenId = ObjectId(regimenId)
 
