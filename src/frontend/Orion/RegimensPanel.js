@@ -4,7 +4,7 @@ import Select from 'react-select'
 import _ from 'lodash'
 
 import Panel from '../Phoenix/shared/Panel'
-import TextFormButton from './shared/TextForm/Button'
+import ModalButtonWithForm from './shared/ModalButtonWithForm'
 import DeleteButton from './shared/DeleteButton'
 import CopyOneOfStringButton from './shared/CopyOneOfStringButton'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
@@ -14,6 +14,8 @@ import Spinner from '../Phoenix/shared/Spinner'
 import {
   GET_SOURCE_PRODUCTS,
   GET_SOURCE_REGIMENS,
+  GET_SOURCE_INDICATIONS,
+  GET_SELECTED_REGIMENS,
 } from '../api/queries'
 
 import {
@@ -79,7 +81,7 @@ const getInputFields = (state, handleChange) => {
                   })
 
                   // ! HACK: Mock HTML event.target structure to get tags
-                  // ! able to written into TextForm's local state by handleChange
+                  // ! able to written into Form's local state by handleChange
                   handleChange({ target: { name: 'products', value: newProducts } })
                 }}
               />
@@ -93,7 +95,7 @@ const getInputFields = (state, handleChange) => {
 
 const headerChildren = (
   <div>
-    <TextFormButton
+    <ModalButtonWithForm
       modalTitle={CREATE_MODAL_TITLE}
       buttonLabel={CREATE_BUTTON_TXT}
       buttonStyle={buttonStyle}
@@ -109,25 +111,55 @@ const headerChildren = (
   </div>
 )
 
-const buttonGroupCallback = ({
-  __typename, // ! remove __typename because GraphQL throws error when attempting to fire mutation
-  ...regimen
-}) => (
+const buttonGroupCallback = regimen => (
   <>
-    <TextFormButton
+    <ModalButtonWithForm
       modalTitle="Edit Regimen"
       buttonLabel={editIcon}
       buttonStyle={{ border: 'none', background: 'none', color: '#b6b9bc' }}
       data={{ input: regimen }}
       mutationDoc={UPDATE_SOURCE_REGIMEN}
-      refetchQueries={[{ query: GET_SOURCE_REGIMENS }]}
+      refetchQueries={[
+        { query: GET_SOURCE_REGIMENS },
+        { query: GET_SOURCE_INDICATIONS },
+      ]}
+      afterMutationHook={(cache, { data }) => {
+        const updatedRegimen = data.updateSourceRegimen
+
+        const { selectedRegimens } = cache.readQuery({ query: GET_SELECTED_REGIMENS })
+
+        const newRegimens = selectedRegimens.map(regimen => {
+          if (regimen._id === updatedRegimen._id) return updatedRegimen
+          return regimen
+        })
+
+        cache.writeQuery({
+          query: GET_SELECTED_REGIMENS,
+          data: { selectedRegimens: newRegimens },
+        })
+      }}
       getInputFields={getInputFields}
     />
 
     <DeleteButton
       itemId={regimen._id}
       mutationDoc={DELETE_SOURCE_REGIMEN}
-      refetchQueries={[{ query: GET_SOURCE_REGIMENS }]}
+      refetchQueries={[
+        { query: GET_SOURCE_REGIMENS },
+        { query: GET_SOURCE_INDICATIONS },
+      ]}
+      afterMutationHook={(cache, { data }) => {
+        const { _id: deletedRegimenId } = data.deleteSourceRegimen
+
+        const { selectedRegimens } = cache.readQuery({ query: GET_SELECTED_REGIMENS })
+
+        const updatedRegimens = selectedRegimens.filter(({ _id }) => _id !== deletedRegimenId)
+
+        cache.writeQuery({
+          query: GET_SELECTED_REGIMENS,
+          data: { selectedRegimens: updatedRegimens },
+        })
+      }}
     />
   </>
 )

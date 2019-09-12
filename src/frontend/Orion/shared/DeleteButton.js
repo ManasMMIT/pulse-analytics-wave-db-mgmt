@@ -47,6 +47,7 @@ class DeleteButton extends React.Component {
         itemId,
         mutationDoc,
         refetchQueries,
+        afterMutationHook,
       },
     } = this
 
@@ -68,6 +69,7 @@ class DeleteButton extends React.Component {
           <Mutation
             mutation={mutationDoc}
             refetchQueries={refetchQueries}
+            update={afterMutationHook}
           >
             {(handleSubmit, { loading, error }) => {
               if (loading) return <Spinner />
@@ -96,6 +98,7 @@ DeleteButton.propTypes = {
   modalTitle: PropTypes.string,
   modalText: PropTypes.string,
   itemId: PropTypes.string,
+  afterMutationHook: PropTypes.func,
 };
 
 export default DeleteButton

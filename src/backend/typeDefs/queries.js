@@ -49,6 +49,7 @@ const queries = gql`
   type Indication {
     _id: ID!
     name: String
+    regimens: [Regimen]
   }
 
   type Product {

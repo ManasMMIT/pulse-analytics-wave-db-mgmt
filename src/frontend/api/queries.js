@@ -230,9 +230,54 @@ export const GET_SOURCE_INDICATIONS = gql`
     indications {
       _id
       name
+      regimens {
+        _id
+        name
+        products {
+          _id
+          nameGeneric
+          nameBrand
+          tags
+        }
+      }
     }
   }
 `
+
+export const GET_SELECTED_INDICATION = gql`
+  query getSelectedIndication {
+    selectedIndication @client {
+      _id
+      name
+      regimens {
+        _id
+        name
+        products {
+          _id
+          nameGeneric
+          nameBrand
+          tags
+        }
+      }
+    }
+  }
+`
+
+export const GET_SELECTED_REGIMENS = gql`
+  query getSelectedRegimens {
+    selectedRegimens @client {
+      _id
+      name
+      products {
+        _id
+        nameGeneric
+        nameBrand
+        tags
+      }
+    }
+  }
+`
+
 export const GET_SOURCE_PRODUCTS = gql`
   query getSourceProducts {
     products {

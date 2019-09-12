@@ -5,6 +5,16 @@ export const CREATE_INDICATION = gql`
     createIndication(input: $input) {
       _id
       name
+      regimens {
+        _id
+        name
+        products {
+          _id
+          nameGeneric
+          nameBrand
+          tags
+        }
+      }
     }
   }
 `
@@ -14,6 +24,16 @@ export const UPDATE_SOURCE_INDICATION = gql`
     updateSourceIndication(input: $input) {
       _id
       name
+      regimens {
+        _id
+        name
+        products {
+          _id
+          nameGeneric
+          nameBrand
+          tags
+        }
+      }
     }
   }
 `
@@ -23,6 +43,35 @@ export const DELETE_SOURCE_INDICATION = gql`
     deleteSourceIndication(input: $input) {
       _id
       name
+      regimens {
+        _id
+        name
+        products {
+          _id
+          nameGeneric
+          nameBrand
+          tags
+        }
+      }
+    }
+  }
+`
+
+export const SELECT_INDICATION = gql`
+  mutation SelectIndication($_id: String) {
+    selectIndication(_id: $_id) @client {
+      _id
+      name
+      regimens {
+        _id
+        name
+        products {
+          _id
+          nameGeneric
+          nameBrand
+          tags
+        }
+      }
     }
   }
 `

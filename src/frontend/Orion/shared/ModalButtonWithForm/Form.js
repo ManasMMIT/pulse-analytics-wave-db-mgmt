@@ -4,12 +4,13 @@ import _ from 'lodash'
 
 import { Mutation } from 'react-apollo'
 import Spinner from '../../../Phoenix/shared/Spinner'
+import stripTypename from '../strip-typename'
 
-class TextForm extends Component {
+class Form extends Component {
   constructor(props) {
     super(props)
 
-    this.state = props.data
+    this.state = stripTypename(props.data)
   }
 
   handleChange = e => {
@@ -34,6 +35,7 @@ class TextForm extends Component {
         getInputFields,
         mutationDoc,
         afterSubmitHook,
+        afterMutationHook,
         refetchQueries,
       },
     } = this
@@ -45,6 +47,7 @@ class TextForm extends Component {
         <Mutation
           mutation={mutationDoc}
           refetchQueries={refetchQueries}
+          update={afterMutationHook}
         >
           {(handleSubmit, { loading, error }) => {
             if (loading) return <Spinner />
@@ -73,18 +76,22 @@ class TextForm extends Component {
   }
 }
 
-TextForm.propTypes = {
+Form.propTypes = {
   data: PropTypes.object,
   mutationDoc: PropTypes.object,
   getInputFields: PropTypes.func,
+  afterSubmitHook: PropTypes.func,
+  afterMutationHook: PropTypes.func,
   refetchQueries: PropTypes.arrayOf(PropTypes.object),
 }
 
-TextForm.defaultProps = {
+Form.defaultProps = {
   data: { input: {} },
   mutationDoc: {},
   getInputFields: () => null,
+  afterSubmitHook: () => null,
+  afterMutationHook: () => null,
   refetchQueries: [],
 }
 
-export default TextForm
+export default Form
