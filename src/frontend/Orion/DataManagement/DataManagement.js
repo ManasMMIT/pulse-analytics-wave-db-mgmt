@@ -25,7 +25,7 @@ class DataManagement extends Component {
   }
 
   componentDidMount() {
-    fetch('collections')
+    fetch('/api/collections')
       .then(res => res.json())
       .then(collectionNames => this.setState({ collectionNames }))
   }
@@ -39,7 +39,7 @@ class DataManagement extends Component {
   }
 
   handleCollectionCreation = collectionName => {
-    fetch('collection', {
+    fetch('/api/collection', {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ collectionName }),
@@ -63,7 +63,7 @@ class DataManagement extends Component {
       const selectedSheetObj = this.workbook.Sheets[selectedSheet.value]
       const { json, numExcludedRows } = sheetToJson(selectedSheetObj)
 
-      fetch('upload', {
+      fetch('/api/upload', {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ data: json, collectionName: selectedCollection.value }),

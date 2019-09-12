@@ -21,6 +21,7 @@ const subApp = express()
 MongoClient.connect(process.env.LOADER_URI, { useNewUrlParser: true }, (err, client) => {
   if (err) throw err;
   const mongoClient = client
+  const pulseRawDb = client.db('pulse-raw')
   const pulseDevDb = client.db('pulse-dev')
   const pulseCoreDb = client.db('pulse-core')
   const pulseProdDb = client.db('pulse-prod')
@@ -38,6 +39,7 @@ MongoClient.connect(process.env.LOADER_URI, { useNewUrlParser: true }, (err, cli
 
     // Torso/Backside
     mongoClient,
+    pulseRawDb,
     pulseDevDb,
     pulseCoreDb,
     pulseProdDb,
@@ -65,6 +67,27 @@ MongoClient.connect(process.env.LOADER_URI, { useNewUrlParser: true }, (err, cli
   subApp.use('/roles', roleController)
   subApp.use('/users', userController)
   subApp.use('/nodes', nodeController)
+
+  subApp.use('/collections', async (req, res) => {
+    const collections = await pulseRawDb.listCollections().toArray()
+    res.json(collections.map(({ name }) => name))
+  })
+
+  subApp.post('/collection', async (req, res) => {
+    const createdCollection = await pulseRawDb.createCollection(req.body.collectionName)
+    res.send(createdCollection.collectionName)
+  })
+
+  subApp.post('/upload', async (req, res) => {
+    const targetCollection = pulseRawDb.collection(req.body.collectionName)
+
+    await targetCollection.deleteMany()
+    await targetCollection.insertMany(req.body.data)
+
+    const persistedData = await targetCollection.find().toArray()
+
+    res.json(persistedData)
+  })
 })
 
 
