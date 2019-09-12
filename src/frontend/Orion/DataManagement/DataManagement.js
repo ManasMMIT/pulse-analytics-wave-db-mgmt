@@ -75,6 +75,7 @@ class DataManagement extends Component {
             alert(`${numberOfRows} rows uploaded; ${numExcludedRows} rows excluded`)
           })
         })
+        .catch(alert)
     })
   }
 
