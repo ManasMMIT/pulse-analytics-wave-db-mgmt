@@ -1,18 +1,10 @@
 import React from 'react'
-import Panel from '../shared/Panel'
-import TextFormButton from '../shared/TextForm/Button'
 
-import { CREATE_CLIENT, SELECT_CLIENT } from '../../api/mutations'
-import { GET_CLIENTS, GET_SELECTED_CLIENT } from '../../api/queries'
+import Panel from '../../shared/Panel'
+import CreateButton from './CreateButton'
 
-const CREATE_BUTTON_TXT = 'Create Client'
-
-const CREATE_MODAL_TITLE = 'Create New Client'
-
-const createButtonStyle = {
-  background: "#234768",
-  color: 'white',
-}
+import { SELECT_CLIENT } from '../../../api/mutations'
+import { GET_CLIENTS, GET_SELECTED_CLIENT } from '../../../api/queries'
 
 const defaultPanelItemStyle = {
   cursor: 'pointer',
@@ -38,14 +30,7 @@ const panelItemConfig = {
   // inactiveStyle: inactivePanelItemStyle,
 }
 
-const headerChildren = (
-  <TextFormButton
-    modalTitle={CREATE_MODAL_TITLE}
-    buttonLabel={CREATE_BUTTON_TXT}
-    buttonStyle={createButtonStyle}
-    mutationDoc={CREATE_CLIENT}
-  />
-)
+const headerChildren = <CreateButton />  
 
 const ClientsPanel = () => {
   return (

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import styled from "@emotion/styled";
 import _ from 'lodash'
 
-import { Mutation, Query } from 'react-apollo'
+import { Mutation, Query, withApollo } from 'react-apollo'
 
 import Spinner from '../../../shared/Spinner'
 import { GET_CLIENT_TEAMS } from '../../../../api/queries'
@@ -70,7 +70,18 @@ class UserForm extends React.Component {
       userId,
       afterSubmitHook,
       mutationDoc,
+      additionalFormData,
+      client,
+      clientMutation,
     } = this.props
+
+    const updateMutationCallback = (
+      store,
+      { data }
+    ) => client.mutate({
+      mutation: clientMutation,
+      variables: { data },
+    })
 
     // pick out only the checked boxes and get array of ids
     const teamsToPersistOnSubmit = Object.keys(_.pickBy(checkboxesMap, value => value))
@@ -78,16 +89,34 @@ class UserForm extends React.Component {
     return (
       <UserFormContainer>
         <Label>username</Label>
-        <input type="text" name="username" value={username} onChange={this.handleChange} />
+        <input
+          type="text"
+          name="username"
+          value={username}
+          onChange={this.handleChange}
+          autoComplete="off"
+        />
 
         <Label>email</Label>
-        <input type="text" name="email" value={email} onChange={this.handleChange} />
+        <input
+          type="text"
+          name="email"
+          value={email}
+          onChange={this.handleChange}
+          autoComplete="off"
+        />
 
         <Label>password</Label>
         <div style={{ fontSize: 10 }}>
           (if updating user, leave blank to keep unchanged)
         </div>
-        <input type="password" name="password" value={password} onChange={this.handleChange} />
+        <input
+          type="password"
+          name="password"
+          value={password}
+          onChange={this.handleChange}
+          autoComplete="off"
+        />
 
         <Label>teams</Label>
 
@@ -115,7 +144,10 @@ class UserForm extends React.Component {
           }}
         </Query>
 
-        <Mutation mutation={mutationDoc}>
+        <Mutation
+          mutation={mutationDoc}
+          update={updateMutationCallback}
+        >
           {(handleSubmit, { loading, error }) => {
             if (loading) return <Spinner />
             if (error) return <div style={{ color: 'red' }}>Error processing request</div>
@@ -126,11 +158,14 @@ class UserForm extends React.Component {
                 type="submit"
                 onClick={() => handleSubmit({
                   variables: {
-                    _id: userId, // only needed for update, not create
-                    username,
-                    email,
-                    password,
-                    roles: teamsToPersistOnSubmit,
+                    input: {
+                      _id: userId, // only needed for update, not create
+                      username,
+                      email,
+                      password,
+                      roles: teamsToPersistOnSubmit,
+                      ...additionalFormData,
+                    }
                   },
                 }).then(afterSubmitHook)}
               >
@@ -152,6 +187,8 @@ UserForm.propTypes = {
   allTeamsUserIsOn: PropTypes.array,
   afterSubmitHook: PropTypes.func,
   mutationDoc: PropTypes.object,
+  clientMutation: PropTypes.object,
+  additionalFormData: PropTypes.object,
 }
 
 UserForm.defaultProps = {
@@ -162,6 +199,8 @@ UserForm.defaultProps = {
   allTeamsUserIsOn: [],
   afterSubmitHook: () => null,
   mutationDoc: null,
+  clientMutation: null,
+  additionalFormData: {},
 }
 
-export default UserForm
+export default withApollo(UserForm)

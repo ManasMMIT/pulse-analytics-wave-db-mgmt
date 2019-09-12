@@ -1,10 +1,14 @@
-import clientMutations from './clientMutations'
-import serverMutations from './serverMutations'
+import clientResolvers from './client'
+import teamResolvers from './team'
+import userResolvers from './user'
+import sitemapResolvers from './sitemap'
 
 const resolvers = {
   Mutation: {
-    ...clientMutations,
-    ...serverMutations,
+    ...clientResolvers,
+    ...teamResolvers,
+    ...userResolvers,
+    ...sitemapResolvers,
   }
 }
 

@@ -29,6 +29,8 @@ class Button extends React.Component {
       buttonStyle,
       modalTitle,
       modalStyle,
+      clientMutation,
+      additionalFormData,
     } = this.props
 
     return (
@@ -48,6 +50,8 @@ class Button extends React.Component {
           <TextForm
             data={data}
             mutationDoc={mutationDoc}
+            additionalFormData={additionalFormData}
+            clientMutation={clientMutation}
             afterSubmitHook={this.closeModal}
           />
         </Modal>

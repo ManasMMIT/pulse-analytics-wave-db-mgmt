@@ -28,7 +28,7 @@ const teams = async (parent, { clientId, userId }, { pulseCoreDb }) => {
   )
 
   const result = _.compact([adminRole, ...sortedOtherRoles])
-
+    
   return result
 }
 

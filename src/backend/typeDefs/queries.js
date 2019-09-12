@@ -38,6 +38,7 @@ const queries = gql`
     description: String!
     isDefault: Boolean
     sitemap: JSON
+    client: Client
   }
 
   type User {

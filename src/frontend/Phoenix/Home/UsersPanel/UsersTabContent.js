@@ -1,18 +1,13 @@
 import React from 'react'
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { Query } from 'react-apollo'
 
-import { faEdit } from "@fortawesome/free-solid-svg-icons"
-
 import Panel from '../../shared/Panel'
-import UserFormButton from './UserForm/Button'
-import DeleteButton from '../../shared/DeleteButton'
+import CreateButton from './CreateButton'
+import UpdateButton from './UpdateButton'
+import DeleteButton from './DeleteButton'
 
 import {
   SELECT_USER,
-  CREATE_USER,
-  UPDATE_USER,
-  DELETE_USER,
 } from '../../../api/mutations'
 
 import {
@@ -20,8 +15,6 @@ import {
   GET_SELECTED_USER,
   GET_SELECTED_TEAM,
 } from '../../../api/queries'
-
-const editIcon = <FontAwesomeIcon size="lg" icon={faEdit} />
 
 const defaultPanelItemStyle = {
   display: 'flex',
@@ -45,20 +38,8 @@ const buttonGroupCallback = user => {
 
   return (
     <>
-      <UserFormButton
-        modalTitle="Edit User"
-        buttonLabel={editIcon}
-        buttonStyle={{ border: 'none', background: 'none', color: '#b6b9bc' }}
-        userId={user._id}
-        username={user.username}
-        email={user.email}
-        mutationDoc={UPDATE_USER}
-      />
-
-      <DeleteButton
-        itemId={user._id}
-        mutationDoc={DELETE_USER}
-      />
+      <UpdateButton user={user} />
+      <DeleteButton userId={user._id} />
     </>
   )
 }
@@ -81,21 +62,12 @@ const panelStyle = {
   maxHeight: 'calc(100vh - 37px)',
 }
 
+const headerChildren = <CreateButton />
+
 const UsersTab = () => (
   <Query query={GET_SELECTED_TEAM}>
     {
       ({ data: { selectedTeam } }) => {
-
-        const headerChildren = (
-          <UserFormButton
-            modalTitle="Create User"
-            buttonLabel="Create User"
-            buttonStyle={{ background: '#d4e2f2', color: '#1d66b8' }}
-            selectedTeamId={selectedTeam._id}
-            mutationDoc={CREATE_USER}
-          />
-        )
-
         return (
           <Panel
             style={panelStyle}

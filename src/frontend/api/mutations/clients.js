@@ -11,8 +11,18 @@ export const SELECT_CLIENT = gql`
 `
 
 export const CREATE_CLIENT = gql`
-  mutation CreateClient($description: String) {
-    createClient(description: $description) @client {
+  mutation CreateClient($input: CreateClientInput!) {
+    createClient(input: $input) {
+      _id
+      name
+      description
+    }
+  }
+`
+
+export const MANAGE_CREATED_CLIENT = gql`
+  mutation ManageCreatedClient($data: JSON) {
+    manageCreatedClient(data: $data) @client {
       _id
       name
       description

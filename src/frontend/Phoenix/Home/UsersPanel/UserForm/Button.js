@@ -23,15 +23,15 @@ class Button extends React.Component {
     const { isModalOpen } = this.state
 
     const {
+      user,
       buttonLabel,
       buttonStyle,
       modalTitle,
       modalStyle,
-      userId,
-      username,
-      email,
       selectedTeamId,
       mutationDoc,
+      additionalFormData,
+      clientMutation,
     } = this.props
 
     return (
@@ -50,12 +50,12 @@ class Button extends React.Component {
           show={isModalOpen}
         >
           <UserForm
-            userId={userId}
-            username={username}
-            email={email}
+            user={user}
             selectedTeamId={selectedTeamId}
             afterSubmitHook={this.closeModal}
             mutationDoc={mutationDoc}
+            additionalFormData={additionalFormData}
+            clientMutation={clientMutation}
           />
         </Modal>
       </>
@@ -78,6 +78,5 @@ Button.defaultProps = {
   modalStyle: {},
   ...UserForm.defaultProps,
 }
-
 
 export default Button

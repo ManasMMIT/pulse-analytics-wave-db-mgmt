@@ -1,15 +1,20 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import { Mutation, withApollo } from 'react-apollo'
 
-import { Mutation } from 'react-apollo'
 import Spinner from '../Spinner'
 
 class TextForm extends Component {
   constructor(props) {
     super(props)
-    const { data: { description } } = props
+    const {
+      data: {
+        description
+      },
+      additionalFormData
+    } = props
 
-    this.state = { description }
+    this.state = { description, ...additionalFormData }
   }
 
   handleChange = e => {
@@ -25,8 +30,20 @@ class TextForm extends Component {
     const {
       state,
       handleChange,
-      props: { mutationDoc, afterSubmitHook },
+      props: {
+        mutationDoc,
+        afterSubmitHook,
+        clientMutation,
+        client,
+      },
     } = this
+
+    const updateClientMutationCallback = (cache, { data }) => {
+      client.mutate({
+        mutation: clientMutation,
+        variables: { data },
+      })
+    }
 
     return (
       <div>
@@ -37,7 +54,10 @@ class TextForm extends Component {
           value={state.description}
         />
 
-        <Mutation mutation={mutationDoc}>
+        <Mutation
+          mutation={mutationDoc}
+          update={updateClientMutationCallback}
+        >
           {(handleSubmit, { loading, error }) => {
             if (loading) return <Spinner />
             if (error) return <div style={{ color: 'red' }}>Error processing request</div>
@@ -45,7 +65,7 @@ class TextForm extends Component {
             return (
               <button
                 type="submit"
-                onClick={() => handleSubmit({ variables: state }).then(afterSubmitHook)}
+                onClick={() => handleSubmit({ variables: { input: state } }).then(afterSubmitHook)}
               >
                 submit
               </button>
@@ -60,11 +80,17 @@ class TextForm extends Component {
 TextForm.propTypes = {
   data: PropTypes.object,
   mutationDoc: PropTypes.object,
+  afterMutationHook: PropTypes.func,
+  clientMutation: PropTypes.object,
+  additionalFormData: PropTypes.object,
 }
 
 TextForm.defaultProps = {
   data: { description: '' },
   mutationDoc: {},
+  clientMutation: {},
+  afterMutationHook: () => null,
+  additionalFormData: {},
 }
 
-export default TextForm
+export default withApollo(TextForm)

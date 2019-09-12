@@ -11,8 +11,38 @@ export const SELECT_TEAM = gql`
 `
 
 export const CREATE_TEAM = gql`
-  mutation CreateTeam($description: String) {
-    createTeam(description: $description) @client {
+  mutation CreateTeam($input: CreateTeamInput!) {
+    createTeam(input: $input) {
+      _id
+      name
+      description
+      isDefault
+      sitemap
+      client {
+        _id
+      }
+    }
+  }
+`
+
+export const MANAGE_CREATED_TEAM = gql`
+  mutation ManageCreatedTeam($data: JSON) {
+    manageCreatedTeam(data: $data) @client {
+      _id
+      name
+      description
+      isDefault
+      sitemap
+      client {
+        _id
+      }
+    }
+  }
+`
+
+export const DELETE_TEAM = gql`
+  mutation DeleteTeam($input: DeleteTeamInput!) {
+    deleteTeam(input: $input) {
       _id
       name
       description
@@ -20,9 +50,9 @@ export const CREATE_TEAM = gql`
   }
 `
 
-export const DELETE_TEAM = gql`
-  mutation DeleteTeam($_id: String) {
-    deleteTeam(_id: $_id) @client {
+export const MANAGE_DELETED_TEAM = gql`
+  mutation ManageDeletedTeam($data: JSON) {
+    manageDeletedTeam(data: $data) @client {
       _id
       name
       description
@@ -31,11 +61,29 @@ export const DELETE_TEAM = gql`
 `
 
 export const UPDATE_TEAM = gql`
-  mutation UpdateTeam($description: String) {
-    updateTeam(description: $description) @client {
+  mutation UpdateTeam($input: UpdateTeamInput!) {
+    updateTeam(input: $input) {
       _id
       name
       description
+      sitemap
+      client {
+        _id
+      }
+    }
+  }
+`
+
+export const MANAGE_UPDATED_TEAM = gql`
+  mutation ManageUpdatedTeam($data: JSON) {
+    manageUpdatedTeam(data: $data) @client {
+      _id
+      name
+      description
+      sitemap
+      client {
+        _id
+      }
     }
   }
 `

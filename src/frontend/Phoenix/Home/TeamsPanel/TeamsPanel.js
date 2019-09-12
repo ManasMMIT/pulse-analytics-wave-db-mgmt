@@ -1,32 +1,19 @@
 import React from 'react'
 import { Query } from 'react-apollo'
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faEdit } from "@fortawesome/free-solid-svg-icons"
 
-import Panel from '../shared/Panel'
-import TextFormButton from '../shared/TextForm/Button'
-import DeleteButton from '../shared/DeleteButton'
-import SitemapButton from '../shared/SitemapButton'
+import Panel from '../../shared/Panel'
+import CreateButton from './CreateButton'
+import UpdateButton from './UpdateButton'
+import DeleteButton from './DeleteButton'
+import SitemapButton from '../../shared/SitemapButton'
 
-import {
-  CREATE_TEAM,
-  SELECT_TEAM,
-  UPDATE_TEAM,
-  DELETE_TEAM,
-} from '../../api/mutations'
+import { SELECT_TEAM } from '../../../api/mutations'
 
 import {
   GET_SELECTED_CLIENT,
   GET_CLIENT_TEAMS,
   GET_SELECTED_TEAM,
-} from '../../api/queries'
-
-const editIcon = <FontAwesomeIcon size="lg" icon={faEdit} />
-
-const createButtonStyle = {
-  background: '#d4e2f2',
-  color: '#1d66b8',
-}
+} from '../../../api/queries'
 
 const defaultPanelItemStyle = {
   display: 'flex',
@@ -50,20 +37,9 @@ const buttonGroupCallback = team => {
 
   return (
     <>
-      <TextFormButton
-        modalTitle="Edit Team"
-        buttonLabel={editIcon}
-        buttonStyle={{ border: 'none', background: 'none', color: '#b6b9bc' }}
-        data={{ description: team.description }}
-        mutationDoc={UPDATE_TEAM}
-      />
-
+      <UpdateButton team={team} />
       <SitemapButton teamId={team._id} />
-
-      <DeleteButton
-        itemId={team._id}
-        mutationDoc={DELETE_TEAM}
-      />
+      <DeleteButton teamId={team._id} />
     </>
   )
 }
@@ -79,18 +55,11 @@ const panelItemConfig = {
   // inactiveStyle: inactivePanelItemStyle,
 }
 
-const headerChildren = (
-  <TextFormButton
-    modalTitle="Create Team"
-    buttonLabel="Create Team"
-    buttonStyle={createButtonStyle}
-    mutationDoc={CREATE_TEAM}
-  />
-)
+const headerChildren = <CreateButton />
 
 const TeamsPanel = () => (
   <Query query={GET_SELECTED_CLIENT}>
-    {({ data: { selectedClient: { description: clientName }} }) => (
+    {({ data: { selectedClient: { description: clientName } } }) => (
       <Panel
         style={{ backgroundColor: '#edf1f5' }}
         title={`Teams for ${clientName}`}

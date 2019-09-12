@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Mutation } from 'react-apollo'
+import { Mutation, withApollo } from 'react-apollo'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faTrashAlt } from "@fortawesome/free-solid-svg-icons"
 
@@ -46,8 +46,16 @@ class DeleteButton extends React.Component {
         modalText,
         itemId,
         mutationDoc,
+        clientMutation,
+        client,
+        additionalFormData,
       },
     } = this
+
+    const updateClientMutationCallback = (store, { data }) => client.mutate({
+      mutation: clientMutation,
+      variables: { data }
+    })
 
     return (
       <>
@@ -64,7 +72,10 @@ class DeleteButton extends React.Component {
         >
           {modalText}
 
-          <Mutation mutation={mutationDoc}>
+          <Mutation
+            mutation={mutationDoc}
+            update={updateClientMutationCallback}
+          >
             {(handleSubmit, { loading, error }) => {
               if (loading) return <Spinner />
               if (error) return <div style={{ color: 'red' }}>Error processing request</div>
@@ -72,7 +83,7 @@ class DeleteButton extends React.Component {
               return (
                 <div
                   style={modalButtonStyle}
-                  onClick={() => handleSubmit({ variables: { _id: itemId } })}
+                  onClick={() => handleSubmit({ variables: { input: { _id: itemId, ...additionalFormData } } })}
                 >
                   Delete Forever
                 </div>
@@ -91,6 +102,9 @@ DeleteButton.propTypes = {
   modalTitle: PropTypes.string,
   modalText: PropTypes.string,
   itemId: PropTypes.string,
-};
+  clientMutation: PropTypes.object,
+  client: PropTypes.object,
+  additionalFormData: PropTypes.object,
+}
 
-export default DeleteButton
+export default withApollo(DeleteButton)

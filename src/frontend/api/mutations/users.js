@@ -11,18 +11,18 @@ export const SELECT_USER = gql`
 `
 
 export const CREATE_USER = gql`
-  mutation CreateUser(
-    $username: String,
-    $email: String,
-    $password: String,
-    $roles: [String],
-  ) {
-    createUser(
-      username: $username,
-      email: $email,
-      password: $password,
-      roles: $roles,
-    ) @client {
+  mutation CreateUser($input: CreateUserInput!) {
+    createUser(input: $input) {
+      _id
+      username
+      email
+    }
+  }
+`
+
+export const MANAGE_CREATED_USER = gql`
+  mutation ManageCreatedUser($data: JSON) {
+    manageCreatedUser(data: $data) @client {
       _id
       username
       email
@@ -31,8 +31,18 @@ export const CREATE_USER = gql`
 `
 
 export const DELETE_USER = gql`
-  mutation DeleteUser($_id: String) {
-    deleteUser(_id: $_id) @client {
+  mutation DeleteUser($input: DeleteUserInput!) {
+    deleteUser(input: $input) {
+      _id
+      username
+      email
+    }
+  }
+`
+
+export const MANAGE_DELETED_USER = gql`
+  mutation ManageDeletedUser($data: JSON) {
+    manageDeletedUser(data: $data) @client {
       _id
       username
       email
@@ -41,20 +51,18 @@ export const DELETE_USER = gql`
 `
 
 export const UPDATE_USER = gql`
-  mutation UpdateUser(
-    $_id: String,
-    $username: String,
-    $email: String,
-    $password: String,
-    $roles: [String],
-  ) {
-    updateUser(
-      _id: $_id,
-      username: $username,
-      email: $email,
-      password: $password,
-      roles: $roles,
-    ) @client {
+  mutation UpdateUser($input: UpdateUserInput!) {
+    updateUser(input: $input) {
+      _id
+      username
+      email
+    }
+  }
+`
+
+export const MANAGE_UPDATED_USER = gql`
+  mutation ManageUpdatedUser($data: JSON) {
+    manageUpdatedUser(data: $data) @client {
       _id
       username
       email
