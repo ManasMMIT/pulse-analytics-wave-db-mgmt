@@ -3,6 +3,7 @@ import _ from 'lodash'
 const removeTypenameFromObj = ({ __typename, ...obj }) => obj
 
 const stripTypename = data => {
+  debugger
   const isArray = Array.isArray(data)
   const isObject = _.isPlainObject(data)
 
