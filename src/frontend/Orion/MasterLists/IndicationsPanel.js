@@ -2,17 +2,17 @@ import React from 'react'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faEdit } from "@fortawesome/free-solid-svg-icons"
 
-import Panel from '../Phoenix/shared/Panel'
-import ModalButtonWithForm from './shared/ModalButtonWithForm'
-import DeleteButton from './shared/DeleteButton'
-import CopyOneOfStringButton from './shared/CopyOneOfStringButton'
-import { GET_SOURCE_INDICATIONS } from './../api/queries'
+import Panel from '../../Phoenix/shared/Panel'
+import ModalButtonWithForm from '../shared/ModalButtonWithForm'
+import DeleteButton from '../shared/DeleteButton'
+import CopyOneOfStringButton from '../shared/CopyOneOfStringButton'
+import { GET_SOURCE_INDICATIONS } from '../../api/queries'
 
 import {
   CREATE_INDICATION,
   UPDATE_SOURCE_INDICATION,
   DELETE_SOURCE_INDICATION,
-} from '../api/mutations'
+} from '../../api/mutations'
 
 const editIcon = <FontAwesomeIcon size="lg" icon={faEdit} />
 

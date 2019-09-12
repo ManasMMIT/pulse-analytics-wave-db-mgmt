@@ -1,18 +1,18 @@
 import React from 'react'
-import CreatableMultiSelect from './shared/CreatableMultiSelect';
+import CreatableMultiSelect from '../shared/CreatableMultiSelect';
 
-import Panel from '../Phoenix/shared/Panel'
-import ModalButtonWithForm from './shared/ModalButtonWithForm'
-import DeleteButton from './shared/DeleteButton'
+import Panel from '../../Phoenix/shared/Panel'
+import ModalButtonWithForm from '../shared/ModalButtonWithForm'
+import DeleteButton from '../shared/DeleteButton'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faEdit } from "@fortawesome/free-solid-svg-icons"
-import { GET_SOURCE_PRODUCTS, GET_SOURCE_REGIMENS } from './../api/queries'
+import { GET_SOURCE_PRODUCTS, GET_SOURCE_REGIMENS } from '../../api/queries'
 
 import {
   CREATE_PRODUCT,
   UPDATE_SOURCE_PRODUCT,
   DELETE_SOURCE_PRODUCT,
-} from '../api/mutations'
+} from '../../api/mutations'
 
 const editIcon = <FontAwesomeIcon size="lg" icon={faEdit} />
 
