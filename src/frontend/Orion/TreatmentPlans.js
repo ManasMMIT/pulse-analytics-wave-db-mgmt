@@ -9,7 +9,7 @@ import { faEdit } from "@fortawesome/free-solid-svg-icons"
 import Panel from '../Phoenix/shared/Panel'
 import ModalButtonWithForm from './shared/ModalButtonWithForm'
 import Spinner from '../Phoenix/shared/Spinner'
-import stripTypename from './shared/strip-typename'
+import stripTypename from './shared/stripTypename'
 
 import {
   GET_SOURCE_INDICATIONS,

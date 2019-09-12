@@ -4,7 +4,7 @@ import _ from 'lodash'
 
 import { Mutation } from 'react-apollo'
 import Spinner from '../../../Phoenix/shared/Spinner'
-import stripTypename from '../strip-typename'
+import stripTypename from '../stripTypename'
 
 class Form extends Component {
   constructor(props) {
