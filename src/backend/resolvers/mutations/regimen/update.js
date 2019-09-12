@@ -3,7 +3,7 @@ const _ = require('lodash')
 
 const updateSourceRegimen = async (
   parent,
-  { input: { _id, products, name } },
+  { input: { _id: regimenId, products, name } },
   { mongoClient, pulseCoreDb },
   info,
 ) => {
@@ -13,7 +13,7 @@ const updateSourceRegimen = async (
     { ...product, _id: ObjectId(product._id) }
   ))
 
-  const id = ObjectId(_id)
+  const _id = ObjectId(regimenId)
 
   let result
 
@@ -21,7 +21,7 @@ const updateSourceRegimen = async (
 
   await session.withTransaction(async () => {
     result = await pulseCoreDb.collection('regimens').findOneAndUpdate(
-      { _id: id },
+      { _id },
       { $set: { name, products: formattedProducts } },
       { session, returnOriginal: false },
     )
@@ -30,11 +30,11 @@ const updateSourceRegimen = async (
 
     // update the regimen for all indications in the indications collection
     await pulseCoreDb.collection('indications').updateMany(
-      { regimens: { $elemMatch: { _id: id } } },
+      { regimens: { $elemMatch: { _id } } },
       {
         $set: {
           'regimens.$': {
-            _id: id,
+            _id,
             name,
             products: formattedProducts,
           }

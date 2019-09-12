@@ -3,7 +3,7 @@ const { ObjectId } = require('mongodb')
 
 const updateSourceIndication = async (
   parent,
-  { input: { _id, ...body } },
+  { input: { _id: indicationId, ...body } },
   { pulseCoreDb },
   info,
 ) => {
@@ -27,7 +27,7 @@ const updateSourceIndication = async (
   }
 
   let result = await pulseCoreDb.collection('indications').findOneAndUpdate(
-    { _id: ObjectId(_id) },
+    { _id: ObjectId(indicationId) },
     { $set: body },
     { returnOriginal: false },
   )

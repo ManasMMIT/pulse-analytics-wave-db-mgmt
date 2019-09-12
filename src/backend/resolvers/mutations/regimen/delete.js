@@ -2,18 +2,18 @@ const { ObjectId } = require('mongodb')
 
 const deleteSourceRegimen = async (
   parent,
-  { input: { _id } },
+  { input: { _id: regimenId } },
   { mongoClient, pulseCoreDb },
   info,
 ) => {
-  const id = ObjectId(_id)
+  const _id = ObjectId(regimenId)
 
   const session = mongoClient.startSession()
 
   let result
   await session.withTransaction(async () => {
     result = await pulseCoreDb.collection('regimens').findOneAndDelete(
-      { _id: id },
+      { _id },
       { session },
     )
 
@@ -21,8 +21,8 @@ const deleteSourceRegimen = async (
 
     // delete the regimen from all indications
     await pulseCoreDb.collection('indications').updateMany(
-      { regimens: { $elemMatch: { _id: id } } },
-      { $pull: { regimens: { _id: id } } },
+      { regimens: { $elemMatch: { _id } } },
+      { $pull: { regimens: { _id } } },
       { session },
     )
   })
