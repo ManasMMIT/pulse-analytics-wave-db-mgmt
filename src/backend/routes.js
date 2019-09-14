@@ -6,6 +6,7 @@ const { ApolloServer } = require('apollo-server-express')
 
 const typeDefs = require('./typeDefs')
 const resolvers = require('./resolvers')
+const initializeChangeStreams = require('./change-streams')
 const validateIndications = require('./validators/indications')
 
 const {
@@ -33,6 +34,8 @@ MongoClient.connect(process.env.LOADER_URI, { useNewUrlParser: true }, (err, cli
   const coreRoles = pulseCoreDb.collection('roles')
   const coreNodes = pulseCoreDb.collection('nodes')
   const coreClients = pulseCoreDb.collection('clients')
+
+  initializeChangeStreams(client)
 
   console.log(`Connected to MongoDB: ${process.env.LOADER_URI}`)
 
