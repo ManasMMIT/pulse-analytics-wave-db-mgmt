@@ -54,6 +54,10 @@ import {
   DELETE_SOURCE_REGIMEN,
 } from './regimens'
 
+import {
+  CREATE_QUALITY_ACCESS_SCORE,
+} from './qualityAccessScores'
+
 export {
   SELECT_CLIENT,
   CREATE_CLIENT,
@@ -90,4 +94,5 @@ export {
   CREATE_REGIMEN,
   UPDATE_SOURCE_REGIMEN,
   DELETE_SOURCE_REGIMEN,
+  CREATE_QUALITY_ACCESS_SCORE,
 }

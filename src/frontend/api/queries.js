@@ -320,3 +320,18 @@ export const GET_STAGED_SITEMAP = gql`
     }
   }
 `
+
+export const GET_SOURCE_QUALITY_ACCESS_SCORES = gql`
+  query getQualityAccessScores {
+    qualityAccessScores {
+      _id
+      access
+      accessTiny
+      score
+      sortOrder
+      color
+      relevance
+      caption
+    }
+  }
+`

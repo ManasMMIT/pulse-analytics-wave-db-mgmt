@@ -6,6 +6,7 @@ import IndicationsPanel from './IndicationsPanel'
 import ProductsPanel from './ProductsPanel'
 import RegimensPanel from './RegimensPanel'
 import TreatmentPlans from './TreatmentPlans'
+import QualityAccessScorePanel from './QualityAccessScorePanel'
 
 import { SELECT_INDICATION } from './../api/mutations'
 
@@ -13,12 +14,14 @@ const TAB_ONE = 'Indications'
 const TAB_TWO = 'Products'
 const TAB_THREE = 'Regimens'
 const TAB_FOUR = 'Treatment Plans'
+const TAB_FIVE = 'Quality Access Scores'
 
 const FILTER_TAB_OPTIONS = [
   TAB_ONE,
   TAB_TWO,
   TAB_THREE,
   TAB_FOUR,
+  TAB_FIVE,
 ]
 
 const tabsContainerStyle = {
@@ -67,6 +70,7 @@ class Orion extends React.Component {
           <ProductsPanel />
           <RegimensPanel />
           <TreatmentPlans />
+          <QualityAccessScorePanel />
         </VerticalTabs>
       </div>
     )
