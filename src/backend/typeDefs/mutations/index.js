@@ -7,6 +7,7 @@ const sitemap = require('./sitemap')
 const indication = require('./indication')
 const product = require('./product')
 const regimen = require('./regimen')
+const qualityAccessScore = require('./qualityAccessScore')
 
 const mutationType = gql`
   type Mutation {
@@ -29,6 +30,7 @@ const mutationType = gql`
     createRegimen(input: CreateRegimenInput!): CreateRegimenPayload
     updateSourceRegimen(input: UpdateSourceRegimenInput!): UpdateSourceRegimenPayload
     deleteSourceRegimen(input: DeleteSourceRegimenInput!): DeleteSourceRegimenPayload
+    createQualityAccessScore(input: CreateQualityAccessScoreInput!): CreateQualityAccessScorePayload
   }
 `
 
@@ -41,4 +43,5 @@ module.exports = [
   ...indication,
   ...product,
   ...regimen,
+  ...qualityAccessScore,
 ]
