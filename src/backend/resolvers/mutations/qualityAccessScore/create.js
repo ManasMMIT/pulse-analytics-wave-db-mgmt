@@ -19,16 +19,22 @@ const createQualityAccessScore = async (
     _id,
     access,
     accessTiny,
-    score,
-    sortOrder,
+    score: parseInt(score),
+    sortOrder: parseInt(sortOrder),
     color,
     relevance,
-    caption,
+    indication: relevance,
+    note:caption,
+    caption: {
+      [relevance]: caption,
+    },
   }
-debugger
+
+  const newAccessScore = await pulseCoreDb.collection('qualityOfAccessScore')
+  .insertOne(newAccessScoreObj)
+  await pulseCoreDb.collection('qualityAccessScores').insertOne(newAccessScoreObj)
   await pulseDevDb.collection('qualityOfAccessScore').insertOne(newAccessScoreObj)
-  const newAccessScore = await pulseCoreDb.collection('indications').insertOne(newAccessScoreObj)
-debugger
+
   return newAccessScore.ops[0]
 }
 
