@@ -116,7 +116,7 @@ const headerChildren = (
 const buttonGroupCallback = ({ name, _id }) => (
   <>
     <ModalButtonWithForm
-      modalTitle="Edit Indication"
+      modalTitle="Edit Quality of Access Score"
       buttonLabel={editIcon}
       buttonStyle={{ border: 'none', background: 'none', color: '#b6b9bc' }}
       data={{ input: { name, _id } }}
@@ -136,12 +136,20 @@ const buttonGroupCallback = ({ name, _id }) => (
 const panelItemConfig = {
   style: defaultPanelItemStyle,
   buttonGroupCallback,
-  label1Callback: ({ access }) => access,
+  label1Callback: ({ access, score, relevance, color }) => (
+    <div style={{ display: 'flex', alignItems: 'center' }}>
+      <div style={{ width: 200 }}>
+        <div style={{ color, fontWeight: 700 }}>{access}</div>
+        <div style={{ fontWeight: 300, padding: '12px 0px 0px 0px' }}><em>{relevance}</em></div>
+      </div>
+      <span style={{ padding: '0 24px', fontSize: 20, color, fontWeight: 700 }}>Score: {score}</span>
+    </div>
+  )
 }
 
 const QualityAccessScorePanel = () => (
   <Panel
-    title="Indications"
+    title="Quality of Access Scores"
     headerChildren={headerChildren}
     queryDocs={{
       fetchAllQueryProps: { query: GET_SOURCE_QUALITY_ACCESS_SCORES },
