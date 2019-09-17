@@ -2,7 +2,6 @@ const createQualityOfAccessScore = async (
   parent,
   {
     input: {
-      _id,
       access,
       accessTiny,
       score,
@@ -15,8 +14,8 @@ const createQualityOfAccessScore = async (
   { pulseCoreDb, pulseDevDb },
   info
 ) => {
+  debugger
   const newAccessScoreObj = {
-    _id,
     access,
     accessTiny,
     score: parseInt(score),
