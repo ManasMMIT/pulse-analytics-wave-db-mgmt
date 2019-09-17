@@ -9,6 +9,7 @@ const queries = gql`
     indications: [Indication]
     products: [Product]
     regimens: [Regimen]
+    qualityOfAccessScores: [QualityOfAccessScore]
   }
 
   type Node {
@@ -64,6 +65,17 @@ const queries = gql`
     _id: ID!
     name: String!
     products: [Product!]!
+  }
+
+  type QualityOfAccessScore {
+    _id: ID!
+    access: String
+    accessTiny: String
+    score: Int
+    sortOrder: Int
+    color: String
+    relevance: String
+    caption: JSON
   }
 `
 
