@@ -39,7 +39,6 @@ const defaultPanelItemStyle = {
 
 
 const getInputFields = (state, handleChange) => {
-  debugger
   return (
     <div style={{
       height: 200,
@@ -53,28 +52,28 @@ const getInputFields = (state, handleChange) => {
           type="text"
           name="access"
           onChange={handleChange}
-          value={state.input.access}
+          value={state.input.access || ''}
         />
         <span>accessTiny: </span>
         <input
           type="text"
           name="accessTiny"
           onChange={handleChange}
-          value={state.input.accessTiny}
+          value={state.input.accessTiny || ''}
         />
         <span>score: </span>
         <input
           type="text"
           name="score"
           onChange={handleChange}
-          value={state.input.score}
+          value={state.input.score || ''}
         />
         <span>sortOrder: </span>
         <input
           type="text"
           name="sortOrder"
           onChange={handleChange}
-          value={state.input.sortOrder}
+          value={state.input.sortOrder || ''}
         />
       </div>
       <div style={{ display: 'flex', justifyContent: 'space-around' }}>
@@ -83,21 +82,21 @@ const getInputFields = (state, handleChange) => {
           type="color"
           name="color"
           onChange={handleChange}
-          value={state.input.color}
+          value={state.input.color || ''}
         />
         <span>relevance: </span>
         <input
           type="text"
           name="relevance"
           onChange={handleChange}
-          value={state.input.relevance}
+          value={state.input.relevance || ''}
         />
         <span>caption: </span>
         <input
           type="text"
           name="caption"
           onChange={handleChange}
-          value={state.input.caption}
+          value={state.input.caption || ''}
         />
       </div>
     </div>
@@ -128,7 +127,7 @@ const buttonGroupCallback = entity => (
       modalTitle="Edit Quality of Access Score"
       buttonLabel={editIcon}
       buttonStyle={{ border: 'none', background: 'none', color: '#b6b9bc' }}
-      data={{ input: entity }}
+      data={{ input: { ...entity, caption: Object.values(entity.caption)[0], } }}
       mutationDoc={UPDATE_QUALITY_OF_ACCESS_SCORE}
       refetchQueries={[{ query: GET_SOURCE_QUALITY_OF_ACCESS_SCORES }]}
       getInputFields={getInputFields}
