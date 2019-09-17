@@ -3,15 +3,15 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faEdit } from "@fortawesome/free-solid-svg-icons"
 
 import Panel from '../Phoenix/shared/Panel'
-import ModalButtonWithForm from './shared/ModalButtonWithForm' // ! look into this
-import DeleteButton from './shared/DeleteButton'
+import ModalButtonWithForm from './shared/ModalButtonWithForm'
+// import DeleteButton from './shared/DeleteButton'
 import CopyOneOfStringButton from './shared/CopyOneOfStringButton'
-import { GET_SOURCE_QUALITY_ACCESS_SCORES } from './../api/queries'
+import { GET_SOURCE_QUALITY_OF_ACCESS_SCORES } from './../api/queries'
 
 import {
-  CREATE_QUALITY_ACCESS_SCORE,
-  // UPDATE_SOURCE_INDICATION,
-  // DELETE_SOURCE_INDICATION,
+  CREATE_QUALITY_OF_ACCESS_SCORE,
+  UPDATE_QUALITY_OF_ACCESS_SCORE,
+  // DELETE__QUALITY_ACCESS_SCORE,
 } from '../api/mutations'
 
 const editIcon = <FontAwesomeIcon size="lg" icon={faEdit} />
@@ -110,35 +110,35 @@ const headerChildren = (
       modalTitle={CREATE_MODAL_TITLE}
       buttonLabel={CREATE_BUTTON_TXT}
       buttonStyle={buttonStyle}
-      mutationDoc={CREATE_QUALITY_ACCESS_SCORE}
-      refetchQueries={[{ query: GET_SOURCE_QUALITY_ACCESS_SCORES }]}
+      mutationDoc={CREATE_QUALITY_OF_ACCESS_SCORE}
+      refetchQueries={[{ query: GET_SOURCE_QUALITY_OF_ACCESS_SCORES }]}
       getInputFields={getInputFields}
     />
 
-    {/* <CopyOneOfStringButton
-      queryDoc={GET_SOURCE_QUALITY_ACCESS_SCORES}
-      dataKey="indications"
-    /> */}
+    <CopyOneOfStringButton
+      queryDoc={GET_SOURCE_QUALITY_OF_ACCESS_SCORES}
+      dataKey='qualityOfAccessScores'
+    />
   </div>
 )
 
-const buttonGroupCallback = ({ name, _id }) => (
+const buttonGroupCallback = entity => (
   <>
     <ModalButtonWithForm
       modalTitle="Edit Quality of Access Score"
       buttonLabel={editIcon}
       buttonStyle={{ border: 'none', background: 'none', color: '#b6b9bc' }}
-      data={{ input: { name, _id } }}
-      // mutationDoc={UPDATE_SOURCE_INDICATION}
-      // refetchQueries={[{ query: GET_SOURCE_QUALITY_ACCESS_SCORES }]}
-      // getInputFields={getInputFields}
+      data={{ input: entity }}
+      mutationDoc={UPDATE_QUALITY_OF_ACCESS_SCORE}
+      refetchQueries={[{ query: GET_SOURCE_QUALITY_OF_ACCESS_SCORES }]}
+      getInputFields={getInputFields}
     />
 
-    <DeleteButton
+    {/* <DeleteButton
       itemId={_id}
-      // mutationDoc={DELETE_SOURCE_INDICATION}
-      // refetchQueries={[{ query: GET_SOURCE_QUALITY_ACCESS_SCORES }]}
-    />
+      mutationDoc={DELETE_QUALITY_ACCESS_SCORE}
+      refetchQueries={[{ query: GET_SOURCE_QUALITY_OF_ACCESS_SCORES }]}
+    /> */}
   </>
 )
 
@@ -161,7 +161,7 @@ const QualityAccessScorePanel = () => (
     title="Quality of Access Scores"
     headerChildren={headerChildren}
     queryDocs={{
-      fetchAllQueryProps: { query: GET_SOURCE_QUALITY_ACCESS_SCORES },
+      fetchAllQueryProps: { query: GET_SOURCE_QUALITY_OF_ACCESS_SCORES },
     }}
     panelItemConfig={panelItemConfig}
   />

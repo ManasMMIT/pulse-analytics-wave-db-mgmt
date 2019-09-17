@@ -14,23 +14,31 @@ const mutationType = gql`
     createUser(input: CreateUserInput!): CreateUserPayload
     updateUser(input: UpdateUserInput!): UpdateUserPayload
     deleteUser(input: DeleteUserInput!): DeleteUserPayload
+
     createClient(input: CreateClientInput!): CreateClientPayload
+
     createTeam(input: CreateTeamInput!): CreateTeamPayload
     updateTeam(input: UpdateTeamInput!): UpdateTeamPayload
     deleteTeam(input: DeleteTeamInput!): DeleteTeamPayload
+
     updateRoleSitemap(input: UpdateRoleSitemapInput!): UpdateRoleSitemapPayload
     pushSitemapToDev: String
     pushSitemapToProd: String
+
     createIndication(input: CreateIndicationInput!): CreateIndicationPayload
     updateSourceIndication(input: UpdateSourceIndicationInput!): UpdateSourceIndicationPayload
     deleteSourceIndication(input: DeleteSourceIndicationInput!): DeleteSourceIndicationPayload
+
     createProduct(input: CreateProductInput!): CreateProductPayload
     updateSourceProduct(input: UpdateSourceProductInput!): UpdateSourceProductPayload
     deleteSourceProduct(input: DeleteSourceProductInput!): DeleteSourceProductPayload
+
     createRegimen(input: CreateRegimenInput!): CreateRegimenPayload
     updateSourceRegimen(input: UpdateSourceRegimenInput!): UpdateSourceRegimenPayload
     deleteSourceRegimen(input: DeleteSourceRegimenInput!): DeleteSourceRegimenPayload
-    createQualityAccessScore(input: CreateQualityAccessScoreInput!): CreateQualityAccessScorePayload
+
+    createQualityOfAccessScore(input: CreateQualityOfAccessScoreInput!): CreateQualityOfAccessScorePayload
+    updateQualityOfAccessScore(input: UpdateQualityOfAccessScoreInput!): UpdateQualityOfAccessScorePayload
   }
 `
 

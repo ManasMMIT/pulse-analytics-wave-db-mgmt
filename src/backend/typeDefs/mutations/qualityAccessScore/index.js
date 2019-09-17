@@ -1,5 +1,7 @@
-const createQualityAccessScoreTypeDefs = require('./create')
+const createQualityOfAccessScoreTypeDefs = require('./create')
+const updateQualityOfAccessScoreTypeDefs = require('./update')
 
 module.exports = [
-  createQualityAccessScoreTypeDefs,
+  createQualityOfAccessScoreTypeDefs,
+  updateQualityOfAccessScoreTypeDefs,
 ]

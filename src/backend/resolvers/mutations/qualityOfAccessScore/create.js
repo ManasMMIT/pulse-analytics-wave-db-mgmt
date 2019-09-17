@@ -1,4 +1,4 @@
-const createQualityAccessScore = async (
+const createQualityOfAccessScore = async (
   parent,
   {
     input: {
@@ -32,10 +32,10 @@ const createQualityAccessScore = async (
 
   const newAccessScore = await pulseCoreDb.collection('qualityOfAccessScore')
   .insertOne(newAccessScoreObj)
-  await pulseCoreDb.collection('qualityAccessScores').insertOne(newAccessScoreObj)
-  await pulseDevDb.collection('qualityOfAccessScore').insertOne(newAccessScoreObj)
+  // await pulseCoreDb.collection('qualityAccessScores').insertOne(newAccessScoreObj)
+  // await pulseDevDb.collection('qualityOfAccessScore').insertOne(newAccessScoreObj)
 
   return newAccessScore.ops[0]
 }
 
-module.exports = createQualityAccessScore
+module.exports = createQualityOfAccessScore

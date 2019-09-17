@@ -5,7 +5,7 @@ const indicationResolvers = require('./indication')
 const productResolvers = require('./product')
 const regimenResolvers = require('./regimen')
 const sitemapResolvers = require('./sitemap')
-const qualityAccessScoreResolvers = require('./qualityAccessScore')
+const qualityOfAccessScoreResolvers = require('./qualityOfAccessScore')
 
 module.exports = {
   ...clientResolvers,
@@ -15,5 +15,5 @@ module.exports = {
   ...productResolvers,
   ...sitemapResolvers,
   ...regimenResolvers,
-  ...qualityAccessScoreResolvers,
+  ...qualityOfAccessScoreResolvers,
 }

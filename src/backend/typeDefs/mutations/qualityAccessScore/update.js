@@ -1,7 +1,8 @@
 const { gql } = require('apollo-server-express')
 
-const createQualityOfAccessScoreTypeDefs = gql`
-  input CreateQualityOfAccessScoreInput {
+const updateQualityOfAccessScoreTypeDefs = gql`
+  input UpdateQualityOfAccessScoreInput {
+    _id: ID!
     access: String
     accessTiny: String
     score: String
@@ -11,8 +12,8 @@ const createQualityOfAccessScoreTypeDefs = gql`
     caption: String
   }
 
-  type CreateQualityOfAccessScorePayload {
-    _id: ID!
+  type UpdateQualityOfAccessScorePayload {
+    _id: ID
     access: String
     accessTiny: String
     score: Int
@@ -23,4 +24,4 @@ const createQualityOfAccessScoreTypeDefs = gql`
   }
 `
 
-module.exports = createQualityOfAccessScoreTypeDefs
+module.exports = updateQualityOfAccessScoreTypeDefs

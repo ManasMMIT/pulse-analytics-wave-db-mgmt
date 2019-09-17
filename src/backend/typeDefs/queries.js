@@ -9,7 +9,7 @@ const queries = gql`
     indications: [Indication]
     products: [Product]
     regimens: [Regimen]
-    qualityAccessScores: [QualityAccessScore]
+    qualityOfAccessScores: [QualityOfAccessScore]
   }
 
   type Node {
@@ -67,7 +67,7 @@ const queries = gql`
     products: [Product!]!
   }
 
-  type QualityAccessScore {
+  type QualityOfAccessScore {
     _id: ID!
     access: String
     accessTiny: String

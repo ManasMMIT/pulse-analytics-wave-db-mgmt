@@ -321,9 +321,9 @@ export const GET_STAGED_SITEMAP = gql`
   }
 `
 
-export const GET_SOURCE_QUALITY_ACCESS_SCORES = gql`
-  query getQualityAccessScores {
-    qualityAccessScores {
+export const GET_SOURCE_QUALITY_OF_ACCESS_SCORES = gql`
+  query getQualityOfAccessScores {
+    qualityOfAccessScores {
       _id
       access
       accessTiny
