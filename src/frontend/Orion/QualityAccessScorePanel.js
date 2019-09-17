@@ -80,10 +80,10 @@ const getInputFields = (state, handleChange) => {
       <div>
         <span>color: </span>
         <input
-          type="color"
+          type="text"
           name="color"
           onChange={handleChange}
-          value={state.input.color || '#D3D3D3'}
+          value={state.input.color || ''}
         />
         <span>relevance: </span>
         <input
