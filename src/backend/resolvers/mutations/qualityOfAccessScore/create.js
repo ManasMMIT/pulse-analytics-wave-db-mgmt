@@ -14,7 +14,6 @@ const createQualityOfAccessScore = async (
   { pulseCoreDb, pulseDevDb },
   info
 ) => {
-  debugger
   const newAccessScoreObj = {
     access,
     accessTiny,
