@@ -8,7 +8,7 @@ import IndicationsPanel from './IndicationsPanel'
 import ProductsPanel from './ProductsPanel'
 import RegimensPanel from './RegimensPanel'
 import TreatmentPlans from './TreatmentPlans'
-// import QualityAccessScorePanel from './QualityAccessScorePanel'
+import QualityAccessScorePanel from './QualityAccessScorePanel'
 
 import { SELECT_INDICATION } from './../api/mutations'
 
@@ -36,7 +36,8 @@ class Orion extends React.Component {
           <Route path={'/orion/indications'} component={IndicationsPanel} />
           <Route path={'/orion/regimens'} component={RegimensPanel} />
           <Route path={'/orion/products'} component={ProductsPanel} />
-          <Redirect to={'/orion/treatment-plans'} />
+          <Route path={'/orion/payer/scores'} component={ProductsPanel} />
+          <Redirect to={'/orion/treatment-plans'} component={QualityAccessScorePanel} />
         </Switch>
       </div>
     )
