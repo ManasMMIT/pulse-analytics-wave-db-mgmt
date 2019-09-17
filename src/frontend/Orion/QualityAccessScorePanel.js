@@ -128,7 +128,7 @@ const buttonGroupCallback = entity => (
       modalTitle="Edit Quality of Access Score"
       buttonLabel={editIcon}
       buttonStyle={{ border: 'none', background: 'none', color: '#b6b9bc' }}
-      data={{ input: { ...entity, caption: Object.values(entity.caption)[0], score: parseInt(entity.score), sortOrder: parseInt(entity.sortOrder) } }}
+      data={{ input: { ...entity, caption: Object.values(entity.caption)[0], score: String(entity.score), sortOrder: String(entity.sortOrder) } }}
       mutationDoc={UPDATE_QUALITY_OF_ACCESS_SCORE}
       refetchQueries={[{ query: GET_SOURCE_QUALITY_OF_ACCESS_SCORES }]}
       getInputFields={getInputFields}
