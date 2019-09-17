@@ -5,8 +5,8 @@ const updateQualityOfAccessScoreTypeDefs = gql`
     _id: ID!
     access: String!
     accessTiny: String!
-    score: Int!
-    sortOrder: Int!
+    score: String!
+    sortOrder: String!
     color: String!
     relevance: String!
     caption: String!
