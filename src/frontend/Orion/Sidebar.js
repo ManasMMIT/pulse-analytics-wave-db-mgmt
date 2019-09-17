@@ -37,10 +37,12 @@ const ORDERED_MASTER_LIST_ITEMS = [
   'Indications',
   'Regimens',
   'Products',
+  'Manufacturers'
 ]
 
 const ORDERED_TOOL_MASTER_LIST_ITEMS = [
-  'Alternative Payment Models',
+  'Payer Quality of Access',
+  'Provider Key Accounts',
 ]
 
 const getNavLink = label => (
