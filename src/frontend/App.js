@@ -6,7 +6,13 @@ import { InMemoryCache } from 'apollo-cache-inmemory'
 import { RestLink } from 'apollo-link-rest'
 import { HttpLink } from 'apollo-link-http'
 import { ApolloProvider } from 'react-apollo'
-import { BrowserRouter as Router, Route, Redirect, Link } from 'react-router-dom'
+import {
+  BrowserRouter as Router,
+  Route,
+  Redirect,
+  Link,
+  Switch,
+} from 'react-router-dom'
 
 import resolvers from './api/resolvers'
 import typeDefs from './api/typeDefs'
@@ -55,10 +61,11 @@ const App = () => {
                 <Link to="/orion" style={linkStyle}>O</Link>
               </div>
             </div>
-
-            <Route path="/phoenix" component={Phoenix} />
-            <Route path="/orion" component={Orion} />
-            <Redirect to="/phoenix" />
+            <Switch>
+              <Route path="/phoenix" component={Phoenix} />
+              <Route path="/orion" component={Orion} />
+              <Redirect to="/phoenix" />
+            </Switch>
           </div>
         </Router>
     </ApolloProvider>
