@@ -16,7 +16,7 @@ export const CREATE_QUALITY_OF_ACCESS_SCORE = gql`
 `
 export const UPDATE_QUALITY_OF_ACCESS_SCORE = gql`
   mutation UpdateQualityOfAccessScore($input: UpdateQualityOfAccessScoreInput!) {
-    UpdateQualityOfAccessScore(input: $input) {
+    updateQualityOfAccessScore(input: $input) {
       _id
       access
       accessTiny
