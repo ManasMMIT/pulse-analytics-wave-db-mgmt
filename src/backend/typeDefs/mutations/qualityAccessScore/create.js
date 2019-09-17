@@ -2,14 +2,13 @@ const { gql } = require('apollo-server-express')
 
 const createQualityAccessScoreTypeDefs = gql`
   input CreateQualityAccessScoreInput {
-    _id: ID!
     access: String
     accessTiny: String
-    score: Int
-    sortOrder: Int
+    score: String
+    sortOrder: String
     color: String
     relevance: String
-    caption: JSON
+    caption: String
   }
 
   type CreateQualityAccessScorePayload {
