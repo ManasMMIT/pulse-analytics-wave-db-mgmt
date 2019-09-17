@@ -39,7 +39,7 @@ const updateQualityAccessScore = async (
   )
 
   await pulseCoreDb.collection('qualityAccessScores').updateOne(
-    { _id },
+    { _id: ObjectId(_id) },
     {
       $set: {
         ...updateAccessScoreObj
@@ -48,7 +48,7 @@ const updateQualityAccessScore = async (
   )
 
   await pulseDevDb.collection('qualityOfAccessScore').updateOne(
-    { _id },
+    { _id: ObjectId(_id) },
     {
       $set: {
         ...updateAccessScoreObj
