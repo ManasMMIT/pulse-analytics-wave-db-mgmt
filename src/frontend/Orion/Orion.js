@@ -1,52 +1,23 @@
 import React from 'react'
+import { Switch, Route, Redirect } from 'react-router-dom'
 import { withApollo } from 'react-apollo'
 
-import VerticalTabs from '../components/Tabs/VerticalTabs'
+import Sidebar from './Sidebar'
+
 import IndicationsPanel from './IndicationsPanel'
 import ProductsPanel from './ProductsPanel'
 import RegimensPanel from './RegimensPanel'
 import TreatmentPlans from './TreatmentPlans'
-import QualityAccessScorePanel from './QualityAccessScorePanel'
+// import QualityAccessScorePanel from './QualityAccessScorePanel'
 
 import { SELECT_INDICATION } from './../api/mutations'
-
-const TAB_ONE = 'Indications'
-const TAB_TWO = 'Products'
-const TAB_THREE = 'Regimens'
-const TAB_FOUR = 'Treatment Plans'
-const TAB_FIVE = 'Quality Access Scores'
-
-const FILTER_TAB_OPTIONS = [
-  TAB_ONE,
-  TAB_TWO,
-  TAB_THREE,
-  TAB_FOUR,
-  TAB_FIVE,
-]
-
-const tabsContainerStyle = {
-  width: 250,
-  backgroundColor: 'rgb(10, 53, 87)',
-}
-
-const tabContainerStyle = {
-  padding: 24,
-}
-
-const inactiveTabStyle = {
-  color: 'rgb(122, 151, 177)',
-}
-
-const activeTabStyle = {
-  color: 'rgb(235, 246, 251)',
-  borderLeft: '4px solid rgb(15, 102, 208)',
-}
 
 class Orion extends React.Component {
   state = {
     isLoading: true,
   }
 
+  // TODO: Not sure if needed anymore 
   componentDidMount() {
     const { client } = this.props
 
@@ -59,19 +30,14 @@ class Orion extends React.Component {
 
     return (
       <div style={{ display: 'flex', flex: 1 }}>
-        <VerticalTabs
-          tabsData={FILTER_TAB_OPTIONS}
-          tabsContainerStyle={tabsContainerStyle}
-          tabContainerStyle={tabContainerStyle}
-          inactiveTabStyle={inactiveTabStyle}
-          activeTabStyle={activeTabStyle}
-        >
-          <IndicationsPanel />
-          <ProductsPanel />
-          <RegimensPanel />
-          <TreatmentPlans />
-          <QualityAccessScorePanel />
-        </VerticalTabs>
+        <Sidebar />
+        <Switch>
+          <Route path={'/orion/treatment-plans'} component={TreatmentPlans} />
+          <Route path={'/orion/indications'} component={IndicationsPanel} />
+          <Route path={'/orion/regimens'} component={RegimensPanel} />
+          <Route path={'/orion/products'} component={ProductsPanel} />
+          <Redirect to={'/orion/treatment-plans'} />
+        </Switch>
       </div>
     )
   }
