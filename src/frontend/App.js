@@ -1,5 +1,5 @@
 import React from 'react'
-
+import { transparentize } from 'polished'
 import { ApolloClient } from 'apollo-client'
 import { ApolloLink } from 'apollo-link'
 import { InMemoryCache } from 'apollo-cache-inmemory'
@@ -10,7 +10,7 @@ import {
   BrowserRouter as Router,
   Route,
   Redirect,
-  Link,
+  NavLink,
   Switch,
 } from 'react-router-dom'
 
@@ -46,7 +46,13 @@ const sidebarStyle = {
 const linkStyle = {
   color: 'white',
   textDecoration: 'none',
+  padding: '24px 36px',
 }
+
+const activeLinkStyle = borderColor => ({
+  borderLeft: `4px solid ${ transparentize(.3, borderColor) }`,
+  padding: '24px 36px',
+})
 
 const App = () => {
   return (
@@ -54,12 +60,20 @@ const App = () => {
         <Router>
           <div style={{ display: 'flex' }}>
             <div style={sidebarStyle}>
-              <div style={{ padding: 24 }}>
-                <Link to="/phoenix" style={linkStyle}>P</Link>
-              </div>
-              <div style={{ padding: 24 }}>
-                <Link to="/orion" style={linkStyle}>O</Link>
-              </div>
+              <NavLink
+                to="/phoenix"
+                style={linkStyle}
+                activeStyle={activeLinkStyle('red')}
+              >
+                P
+              </NavLink>
+              <NavLink
+                to="/orion"
+                style={linkStyle}
+                activeStyle={activeLinkStyle('green')}
+              >
+                O
+              </NavLink>
             </div>
             <Switch>
               <Route path="/phoenix" component={Phoenix} />
