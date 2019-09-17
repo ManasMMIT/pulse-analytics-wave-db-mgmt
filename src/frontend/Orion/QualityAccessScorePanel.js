@@ -41,57 +41,66 @@ const defaultPanelItemStyle = {
 const getInputFields = (state, handleChange) => {
   debugger
   return (
-    <>
-      <span>access: </span>
-      <input
-        type="text"
-        name="access"
-        onChange={handleChange}
-        value={state.input.access}
-      />
-      <span>accessTiny: </span>
-      <input
-        type="text"
-        name="accessTiny"
-        onChange={handleChange}
-        value={state.input.accessTiny}
-      />
-      <span>score: </span>
-      <input
-        type="text"
-        name="score"
-        onChange={handleChange}
-        value={state.input.score}
-      />
-      <span>sortOrder: </span>
-      <input
-        type="text"
-        name="sortOrder"
-        onChange={handleChange}
-        value={state.input.sortOrder}
-      />
-      <span>color: </span>
-      <input
-        type="color"
-        name="color"
-        onChange={handleChange}
-        value={state.input.color}
-      />
-      <span>relevance: </span>
-      <input
-        type="text"
-        name="relevance"
-        onChange={handleChange}
-        value={state.input.relevance}
-      />
-      <span>caption: </span>
-      <input
-        type="text"
-        name="caption"
-        onChange={handleChange}
-        value={state.input.caption}
-      />
-    </>
+    <div style={{
+      height: 200,
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'space-evenly',
+    }}>
+      <div style={{ display: 'flex', justifyContent: 'space-around' }}>
+        <span>access: </span>
+        <input
+          type="text"
+          name="access"
+          onChange={handleChange}
+          value={state.input.access}
+        />
+        <span>accessTiny: </span>
+        <input
+          type="text"
+          name="accessTiny"
+          onChange={handleChange}
+          value={state.input.accessTiny}
+        />
+        <span>score: </span>
+        <input
+          type="text"
+          name="score"
+          onChange={handleChange}
+          value={state.input.score}
+        />
+        <span>sortOrder: </span>
+        <input
+          type="text"
+          name="sortOrder"
+          onChange={handleChange}
+          value={state.input.sortOrder}
+        />
+      </div>
+      <div style={{ display: 'flex', justifyContent: 'space-around' }}>
+        <span>color: </span>
+        <input
+          type="color"
+          name="color"
+          onChange={handleChange}
+          value={state.input.color}
+        />
+        <span>relevance: </span>
+        <input
+          type="text"
+          name="relevance"
+          onChange={handleChange}
+          value={state.input.relevance}
+        />
+        <span>caption: </span>
+        <input
+          type="text"
+          name="caption"
+          onChange={handleChange}
+          value={state.input.caption}
+        />
+      </div>
+    </div>
   )
 }
 
