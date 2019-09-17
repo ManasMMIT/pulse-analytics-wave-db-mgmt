@@ -2,6 +2,8 @@ import React from 'react'
 import { NavLink } from 'react-router-dom'
 import _ from 'lodash'
 
+import Dropdown from './shared/Dropdown'
+
 const tabsContainerStyle = {
   width: 250,
   backgroundColor: 'rgb(10, 53, 87)',
@@ -40,11 +42,6 @@ const ORDERED_MASTER_LIST_ITEMS = [
   'Manufacturers'
 ]
 
-const ORDERED_TOOL_MASTER_LIST_ITEMS = [
-  'Payer Quality of Access',
-  'Provider Key Accounts',
-]
-
 const getNavLink = label => (
     <NavLink
       key={`nav-link:${label}`}
@@ -57,10 +54,7 @@ const getNavLink = label => (
 )
 
 const Sidebar = () => {
-
   const masterListItems = ORDERED_MASTER_LIST_ITEMS.map(getNavLink)
-
-  const toolMasterListItems = ORDERED_TOOL_MASTER_LIST_ITEMS.map(getNavLink)
 
   return (
     <div style={tabsContainerStyle}>
@@ -73,7 +67,18 @@ const Sidebar = () => {
           <div style={sectionHeaderStyle}>
             TOOL MASTER LISTS
           </div>
-          {toolMasterListItems}
+          <Dropdown
+            style={inactiveLinkStyle}
+            label={'Payer Quality of Access'}
+          >
+            <NavLink
+              style={{ ...inactiveLinkStyle, padding: '12px 24px' }}
+              activeStyle={{ ...activeLinkStyle, padding: '12px 24px' }}
+              to={'/orion/payer/scores'}
+            >
+              Quality of Access Scores
+            </NavLink>
+          </Dropdown>
         </div>
       </div>
     </div>
