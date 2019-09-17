@@ -4,8 +4,8 @@ const createQualityOfAccessScoreTypeDefs = gql`
   input CreateQualityOfAccessScoreInput {
     access: String
     accessTiny: String
-    score: String
-    sortOrder: String
+    score: Int
+    sortOrder: Int
     color: String
     relevance: String
     caption: String
