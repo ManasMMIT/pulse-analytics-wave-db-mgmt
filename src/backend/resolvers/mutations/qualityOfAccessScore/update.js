@@ -1,3 +1,5 @@
+const ObjectId = require('mongodb').ObjectId
+
 const updateQualityAccessScore = async (
   parent,
   {
@@ -16,7 +18,6 @@ const updateQualityAccessScore = async (
   info
 ) => {
   const updateAccessScoreObj = {
-    _id,
     access,
     accessTiny,
     score: parseInt(score),
@@ -31,14 +32,12 @@ const updateQualityAccessScore = async (
   }
 
   const newAccessScore = await pulseCoreDb.collection('qualityOfAccessScore')
-    .updateOne(
-      { _id },
-      {
-        $set: {
-          ...updateAccessScoreObj
-        }
-      }
-    )
+    .findOneAndUpdate(
+    { _id: ObjectId(_id) },
+    { $set: { ...updateAccessScoreObj } },
+    { returnOriginal: false }
+  )
+
   await pulseCoreDb.collection('qualityAccessScores').updateOne(
     { _id },
     {
@@ -47,16 +46,17 @@ const updateQualityAccessScore = async (
       }
     }
   )
-  // await pulseDevDb.collection('qualityOfAccessScore').updateOne(
-  //   { _id },
-  //   {
-  //     $set: {
-  //       ...updateAccessScoreObj
-  //     }
-  //   }
-  // )
 
-  return newAccessScore.ops[0]
+  await pulseDevDb.collection('qualityOfAccessScore').updateOne(
+    { _id },
+    {
+      $set: {
+        ...updateAccessScoreObj
+      }
+    }
+  )
+
+  return newAccessScore.value
 }
 
 module.exports = updateQualityAccessScore
