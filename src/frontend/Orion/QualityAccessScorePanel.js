@@ -7,6 +7,7 @@ import ModalButtonWithForm from './shared/ModalButtonWithForm'
 // import DeleteButton from './shared/DeleteButton'
 import CopyOneOfStringButton from './shared/CopyOneOfStringButton'
 import { GET_SOURCE_QUALITY_OF_ACCESS_SCORES } from './../api/queries'
+import ColorBox from './shared/ColorBox'
 
 import {
   CREATE_QUALITY_OF_ACCESS_SCORE,
@@ -145,12 +146,20 @@ const panelItemConfig = {
   style: defaultPanelItemStyle,
   buttonGroupCallback,
   label1Callback: ({ access, score, relevance, color }) => (
-    <div style={{ display: 'flex', alignItems: 'center' }}>
-      <div style={{ width: 200 }}>
-        <div style={{ color, fontWeight: 700 }}>{access}</div>
-        <div style={{ fontWeight: 300, padding: '12px 0px 0px 0px' }}><em>{relevance}</em></div>
+    <div style={{}}>
+      <div style={{ fontSize: 16, fontWeight: 700 }}>
+        {access}
       </div>
-      <span style={{ padding: '0 24px', fontSize: 20, color, fontWeight: 700 }}>Score: {score}</span>
+      <div style={{ display: 'flex' }}>
+        <ColorBox
+          style={{ margin: '12px 12px 0px 0px' }}
+          label={score}
+          boxColor={color}
+        />
+        <div style={{ padding: '24px 24px 0 24px' }}>
+          <em>{relevance}</em>
+        </div>
+      </div>
     </div>
   )
 }
