@@ -47,7 +47,7 @@ const getInputFields = (state, handleChange) => {
       flexDirection: 'column',
       justifyContent: 'space-evenly',
     }}>
-      <div style={{ display: 'flex', justifyContent: 'space-around' }}>
+      <div>
         <span>access: </span>
         <input
           type="text"
@@ -77,13 +77,13 @@ const getInputFields = (state, handleChange) => {
           value={state.input.sortOrder || ''}
         />
       </div>
-      <div style={{ display: 'flex', justifyContent: 'space-around' }}>
+      <div>
         <span>color: </span>
         <input
           type="color"
           name="color"
           onChange={handleChange}
-          value={state.input.color || ''}
+          value={state.input.color || '#D3D3D3'}
         />
         <span>relevance: </span>
         <input
@@ -128,7 +128,7 @@ const buttonGroupCallback = entity => (
       modalTitle="Edit Quality of Access Score"
       buttonLabel={editIcon}
       buttonStyle={{ border: 'none', background: 'none', color: '#b6b9bc' }}
-      data={{ input: { ...entity, caption: Object.values(entity.caption)[0], } }}
+      data={{ input: { ...entity, caption: Object.values(entity.caption)[0], score: parseInt(entity.score), sortOrder: parseInt(entity.sortOrder) } }}
       mutationDoc={UPDATE_QUALITY_OF_ACCESS_SCORE}
       refetchQueries={[{ query: GET_SOURCE_QUALITY_OF_ACCESS_SCORES }]}
       getInputFields={getInputFields}
