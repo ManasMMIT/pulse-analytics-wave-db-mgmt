@@ -26,6 +26,18 @@ const activeLinkStyle = {
   ...sharedStyles,
 }
 
+const dropdownInactiveLinkStyle = {
+  ...inactiveLinkStyle,
+  padding: '12px 24px',
+  display: 'block',
+}
+
+const dropdownActiveLinkStyle = {
+  ...activeLinkStyle,
+  padding: '12px 24px',
+  display: 'block',
+}
+
 const sectionHeaderStyle = {
   padding: 24,
   fontSize: 18,
@@ -71,8 +83,8 @@ const Sidebar = () => {
             label={'Alternative Payment Models'}
           >
             <NavLink
-              style={{ ...inactiveLinkStyle, padding: '12px 24px', display: 'block' }}
-              activeStyle={{ ...activeLinkStyle, padding: '12px 24px', display: 'block' }}
+              style={dropdownInactiveLinkStyle}
+              activeStyle={dropdownActiveLinkStyle}
               to={'/orion/tools/apm/accounts'}
             >
               Accounts
@@ -83,8 +95,8 @@ const Sidebar = () => {
             label={'Pathways'}
           >
             <NavLink
-              style={{ ...inactiveLinkStyle, padding: '12px 24px', display: 'block' }}
-              activeStyle={{ ...activeLinkStyle, padding: '12px 24px', display: 'block' }}
+              style={dropdownInactiveLinkStyle}
+              activeStyle={dropdownActiveLinkStyle}
               to={'/orion/tools/pathways/accounts'}
             >
               Accounts
@@ -95,15 +107,15 @@ const Sidebar = () => {
             label={'Payer Quality of Access'}
           >
             <NavLink
-              style={{ ...inactiveLinkStyle, padding: '12px 24px', display: 'block' }}
-              activeStyle={{ ...activeLinkStyle, padding: '12px 24px', display: 'block' }}
+              style={dropdownInactiveLinkStyle}
+              activeStyle={dropdownActiveLinkStyle}
               to={'/orion/tools/payer/accounts'}
             >
               Accounts
             </NavLink>
             <NavLink
-              style={{ ...inactiveLinkStyle, padding: '12px 24px', display: 'block' }}
-              activeStyle={{ ...activeLinkStyle, padding: '12px 24px', display: 'block' }}
+              style={dropdownInactiveLinkStyle}
+              activeStyle={dropdownActiveLinkStyle}
               to={'/orion/tools/payer/scores'}
             >
               Quality of Access Scores
@@ -114,8 +126,8 @@ const Sidebar = () => {
             label={'Provider Key Accounts'}
           >
             <NavLink
-              style={{ ...inactiveLinkStyle, padding: '12px 24px', display: 'block' }}
-              activeStyle={{ ...activeLinkStyle, padding: '12px 24px', display: 'block' }}
+              style={dropdownInactiveLinkStyle}
+              activeStyle={dropdownActiveLinkStyle}
               to={'/orion/tools/provider/accounts'}
             >
               Accounts
