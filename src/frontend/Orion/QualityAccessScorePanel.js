@@ -51,8 +51,12 @@ const formatIndicationStrings = indications => (
 )
 
 const getInputFields = (state, handleChange) => {
-  const formattedRelevance = { value: 0, label: state.input.relevance}
-
+  let default_relevance
+  if (state.input.relevance) {
+    default_relevance = { value: 1, label: state.input.relevance}
+  } else {
+    default_relevance = { value: 0, label: 'General' }
+  }
   return (
     <div style={{
       height: 200,
@@ -106,7 +110,7 @@ const getInputFields = (state, handleChange) => {
 
             return (
               <Select
-                defaultValue={formattedRelevance || ''}
+                defaultValue={default_relevance}
                 options={formatIndicationStrings(indications)}
                 className="basic-multi-select"
                 classNamePrefix="select"
