@@ -36,8 +36,8 @@ class Orion extends React.Component {
           <Route path={'/orion/indications'} component={IndicationsPanel} />
           <Route path={'/orion/regimens'} component={RegimensPanel} />
           <Route path={'/orion/products'} component={ProductsPanel} />
-          <Route path={'/orion/payer/scores'} component={ProductsPanel} />
-          <Redirect to={'/orion/treatment-plans'} component={QualityAccessScorePanel} />
+          <Route path={'/orion/payer/scores'} component={QualityAccessScorePanel} />
+          <Redirect to={'/orion/treatment-plans'} component={TreatmentPlans} />
         </Switch>
       </div>
     )
