@@ -10,7 +10,6 @@ const tabsContainerStyle = {
 }
 
 const sharedStyles = {
-  display: 'block',
   padding: 24,
   textDecoration: 'none',
   fontWeight: 600,
@@ -72,8 +71,8 @@ const Sidebar = () => {
             label={'Payer Quality of Access'}
           >
             <NavLink
-              style={{ ...inactiveLinkStyle, padding: '12px 24px' }}
-              activeStyle={{ ...activeLinkStyle, padding: '12px 24px' }}
+              style={{ ...inactiveLinkStyle, padding: '12px 24px', display: 'block' }}
+              activeStyle={{ ...activeLinkStyle, padding: '12px 24px', display: 'block' }}
               to={'/orion/payer/scores'}
             >
               Quality of Access Scores
