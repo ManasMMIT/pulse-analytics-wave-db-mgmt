@@ -1,4 +1,6 @@
 import React from 'react'
+import { Query } from 'react-apollo'
+import Select from 'react-select'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faEdit } from "@fortawesome/free-solid-svg-icons"
 
@@ -8,12 +10,17 @@ import ModalButtonWithForm from './shared/ModalButtonWithForm'
 import CopyOneOfStringButton from './shared/CopyOneOfStringButton'
 import { GET_SOURCE_QUALITY_OF_ACCESS_SCORES } from './../api/queries'
 import ColorBox from './shared/ColorBox'
+import Spinner from '../Phoenix/shared/Spinner'
 
 import {
   CREATE_QUALITY_OF_ACCESS_SCORE,
   UPDATE_QUALITY_OF_ACCESS_SCORE,
   // DELETE__QUALITY_ACCESS_SCORE,
 } from '../api/mutations'
+
+import {
+  GET_SOURCE_INDICATIONS,
+} from '../api/queries'
 
 const editIcon = <FontAwesomeIcon size="lg" icon={faEdit} />
 
@@ -38,8 +45,14 @@ const defaultPanelItemStyle = {
   borderTop: '1px solid rgb(182, 185, 188)',
 }
 
+const formatIndicationStrings = indications => (
+  indications
+    .map(({ _id, name }) => ({ value: _id, label: name }))
+)
 
 const getInputFields = (state, handleChange) => {
+  const formattedRelevance = { value: 0, label: state.input.relevance}
+
   return (
     <div style={{
       height: 200,
@@ -85,13 +98,30 @@ const getInputFields = (state, handleChange) => {
           onChange={handleChange}
           value={state.input.color || ''}
         />
-        <span>relevance: </span>
-        <input
-          type="text"
-          name="relevance"
-          onChange={handleChange}
-          value={state.input.relevance || ''}
-        />
+        <div>relevance: </div>
+        <Query query={GET_SOURCE_INDICATIONS}>
+          {({ data: { indications }, loading, error }) => {
+            if (error) return <div style={{ color: 'red' }}>Error processing request</div>
+            if (loading) return <Spinner />
+
+            return (
+              <Select
+                defaultValue={formattedRelevance || ''}
+                options={formatIndicationStrings(indications)}
+                className="basic-multi-select"
+                classNamePrefix="select"
+                onChange={({ label }) => {
+                  handleChange({
+                    target: {
+                      name: 'relevance',
+                      value: label
+                    }
+                  })
+                }}
+              />
+            )
+          }}
+        </Query>
         <span>caption: </span>
         <input
           type="text"
