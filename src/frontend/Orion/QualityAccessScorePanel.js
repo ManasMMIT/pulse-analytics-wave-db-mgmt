@@ -98,7 +98,7 @@ const getInputFields = (state, handleChange) => {
           onChange={handleChange}
           value={state.input.color || ''}
         />
-        <span>relevance: </span>
+        <div>relevance: </div>
         <Query query={GET_SOURCE_INDICATIONS}>
           {({ data: { indications }, loading, error }) => {
             if (error) return <div style={{ color: 'red' }}>Error processing request</div>
