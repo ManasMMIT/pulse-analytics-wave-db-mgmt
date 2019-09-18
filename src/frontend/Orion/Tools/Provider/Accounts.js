@@ -8,18 +8,16 @@ import Panel from '../../../Phoenix/shared/Panel'
 import ModalButtonWithForm from '../../shared/ModalButtonWithForm'
 // import DeleteButton from './shared/DeleteButton'
 // import CopyOneOfStringButton from '../../shared/CopyOneOfStringButton'
+
+// import Spinner from '../../../Phoenix/shared/Spinner'
+
+import {
+  UPDATE_PROVIDER_ACCOUNT,
+} from '../../../api/mutations'
+
 import {
   GET_PROVIDER_ACCOUNTS,
 } from '../../../api/queries'
-// import Spinner from '../../../Phoenix/shared/Spinner'
-
-// import {
-
-// } from '../../../api/mutations'
-
-// import {
-//   GET_PROVIDER_ACCOUNTS,
-// } from '../../../api/queries'
 
 const editIcon = <FontAwesomeIcon size="lg" icon={faEdit} />
 
@@ -45,7 +43,38 @@ const defaultPanelItemStyle = {
 }
 
 const getInputFields = (state, handleChange) => {
-  return <div>no</div>
+  return (
+    <>
+      <span>slug: </span>
+      <input
+        type="text"
+        name="slug"
+        onChange={handleChange}
+        value={state.input.slug}
+      />
+      <span>organization: </span>
+      <input
+        type="text"
+        name="organization"
+        onChange={handleChange}
+        value={state.input.organization}
+      />
+      <span>organizationTiny: </span>
+      <input
+        type="text"
+        name="organizationTiny"
+        onChange={handleChange}
+        value={state.input.organizationTiny}
+      />
+      <span>cancer center: </span>
+      <input
+        type="text"
+        name="providerCancerCenter"
+        onChange={handleChange}
+        value={state.input.providerCancerCenter || ''}
+      />
+    </>
+  )
 }
 
 const headerChildren = (
@@ -73,8 +102,8 @@ const buttonGroupCallback = entity => (
       buttonLabel={editIcon}
       buttonStyle={{ border: 'none', background: 'none', color: '#b6b9bc' }}
       data={{ input: entity }}
-      // mutationDoc={UPDATE_PROVIDER_ACCOUNTS}
-      // refetchQueries={[{ query: GET_PROVIDER_ACCOUNTS }]}
+      mutationDoc={UPDATE_PROVIDER_ACCOUNT}
+      refetchQueries={[{ query: GET_PROVIDER_ACCOUNTS }]}
       getInputFields={getInputFields}
     />
 
