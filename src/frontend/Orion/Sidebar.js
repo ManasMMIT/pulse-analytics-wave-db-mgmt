@@ -46,7 +46,7 @@ const getNavLink = label => (
       key={`nav-link:${label}`}
       style={inactiveLinkStyle}
       activeStyle={activeLinkStyle}
-      to={`/orion/${_.kebabCase(label)}`}
+      to={`/orion/lists/${_.kebabCase(label)}`}
     >
       {label}
     </NavLink>

@@ -3,26 +3,26 @@ import { Query } from 'react-apollo'
 import Select from 'react-select'
 import _ from 'lodash'
 
-import Panel from '../Phoenix/shared/Panel'
-import ModalButtonWithForm from './shared/ModalButtonWithForm'
-import DeleteButton from './shared/DeleteButton'
-import CopyOneOfStringButton from './shared/CopyOneOfStringButton'
+import Panel from '../../Phoenix/shared/Panel'
+import ModalButtonWithForm from '../shared/ModalButtonWithForm'
+import DeleteButton from '../shared/DeleteButton'
+import CopyOneOfStringButton from '../shared/CopyOneOfStringButton'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faEdit } from "@fortawesome/free-solid-svg-icons"
-import Spinner from '../Phoenix/shared/Spinner'
+import Spinner from '../../Phoenix/shared/Spinner'
 
 import {
   GET_SOURCE_PRODUCTS,
   GET_SOURCE_REGIMENS,
   GET_SOURCE_INDICATIONS,
   GET_SELECTED_REGIMENS,
-} from '../api/queries'
+} from '../../api/queries'
 
 import {
   CREATE_REGIMEN,
   UPDATE_SOURCE_REGIMEN,
   DELETE_SOURCE_REGIMEN,
-} from '../api/mutations'
+} from '../../api/mutations'
 
 const editIcon = <FontAwesomeIcon size="lg" icon={faEdit} />
 
