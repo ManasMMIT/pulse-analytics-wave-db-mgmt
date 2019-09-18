@@ -10,7 +10,7 @@ const Tools = () => (
     {/* <Route path={'/orion/tools/pathways'} component={Pathways} /> */}
     <Route path={'/orion/tools/payer'} component={Payer} />
     {/* <Route path={'/orion/tools/provider'} component={Provider} /> */}
-    {/* <Redirect to={'/orion/tools/pathways'} component={Pathways} /> */}
+    {/* <Redirect to={'/orion/tools/pathways'} /> */}
   </Switch>
 )
 

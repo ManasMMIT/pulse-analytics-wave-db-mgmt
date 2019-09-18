@@ -7,9 +7,6 @@ import Sidebar from './Sidebar'
 import MasterLists from './MasterLists'
 import Tools from './Tools'
 
-// ! Needed to set redirect
-import TreatmentPlans from './MasterLists/TreatmentPlans'
-
 import { SELECT_INDICATION } from './../api/mutations'
 
 class Orion extends React.Component {
@@ -34,7 +31,7 @@ class Orion extends React.Component {
         <Switch>
           <Route path={'/orion/lists'} component={MasterLists} />
           <Route path={'/orion/tools'} component={Tools} />
-          <Redirect to={'/orion/lists/treatment-plans'} component={TreatmentPlans} />
+          <Redirect to={'/orion/lists/treatment-plans'} />
         </Switch>
       </div>
     )
