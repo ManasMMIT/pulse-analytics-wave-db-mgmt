@@ -68,14 +68,45 @@ const Sidebar = () => {
           </div>
           <Dropdown
             style={inactiveLinkStyle}
+            label={'Pathways'}
+          >
+            <NavLink
+              style={{ ...inactiveLinkStyle, padding: '12px 24px', display: 'block' }}
+              activeStyle={{ ...activeLinkStyle, padding: '12px 24px', display: 'block' }}
+              to={'/orion/pathways/accounts'}
+            >
+              Accounts
+            </NavLink>
+          </Dropdown>
+          <Dropdown
+            style={inactiveLinkStyle}
             label={'Payer Quality of Access'}
           >
+            <NavLink
+              style={{ ...inactiveLinkStyle, padding: '12px 24px', display: 'block' }}
+              activeStyle={{ ...activeLinkStyle, padding: '12px 24px', display: 'block' }}
+              to={'/orion/payer/accounts'}
+            >
+              Accounts
+            </NavLink>
             <NavLink
               style={{ ...inactiveLinkStyle, padding: '12px 24px', display: 'block' }}
               activeStyle={{ ...activeLinkStyle, padding: '12px 24px', display: 'block' }}
               to={'/orion/payer/scores'}
             >
               Quality of Access Scores
+            </NavLink>
+          </Dropdown>
+          <Dropdown
+            style={inactiveLinkStyle}
+            label={'Provider Key Accounts'}
+          >
+            <NavLink
+              style={{ ...inactiveLinkStyle, padding: '12px 24px', display: 'block' }}
+              activeStyle={{ ...activeLinkStyle, padding: '12px 24px', display: 'block' }}
+              to={'/orion/provider/accounts'}
+            >
+              Accounts
             </NavLink>
           </Dropdown>
         </div>
