@@ -248,3 +248,12 @@ Start the front-end app:
 ```
 yarn start
 ```
+
+# 7. Consolidating Alerts Data 
+Run the following command in terminal: 
+```
+node ./consolidateAlertSheets
+```
+This will update the consolidated `alerts` collection with Pathways alerts sourced from `protocols`, `providers`, and `pathwaysInfluencers`
+
+Refer to [this Conf doc](https://dedhamgroup.atlassian.net/wiki/spaces/POL/pages/699334658/Consolidate+Alerts+Sheet+Script)
