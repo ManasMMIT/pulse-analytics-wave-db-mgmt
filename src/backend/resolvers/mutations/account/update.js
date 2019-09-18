@@ -1,4 +1,5 @@
 const { ObjectId } = require('mongodb')
+const _ = require('lodash')
 
 const updateAccount = async (
   parent,
@@ -7,6 +8,15 @@ const updateAccount = async (
   info,
 ) => {
   const _id = ObjectId(stringId)
+
+  // cleanup body
+  Object.keys(body).forEach(key => {
+    // remove white spaces
+    body[key] = _.trim(body[key])
+
+    // if empty remove from object
+    if (_.isEmpty(body[key])) delete body[key]
+  })
 
   let result
   switch (type) {
