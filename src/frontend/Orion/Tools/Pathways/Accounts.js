@@ -12,7 +12,7 @@ import ModalButtonWithForm from '../../shared/ModalButtonWithForm'
 // import Spinner from '../../../Phoenix/shared/Spinner'
 
 import {
-  UPDATE_PATHWAYS_ACCOUNT
+  UPDATE_PATHWAYS_ACCOUNT,
 } from '../../../api/mutations'
 
 import {
