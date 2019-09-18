@@ -73,7 +73,7 @@ const Sidebar = () => {
             <NavLink
               style={{ ...inactiveLinkStyle, padding: '12px 24px', display: 'block' }}
               activeStyle={{ ...activeLinkStyle, padding: '12px 24px', display: 'block' }}
-              to={'/orion/pathways/accounts'}
+              to={'/orion/tools/pathways/accounts'}
             >
               Accounts
             </NavLink>
@@ -85,14 +85,14 @@ const Sidebar = () => {
             <NavLink
               style={{ ...inactiveLinkStyle, padding: '12px 24px', display: 'block' }}
               activeStyle={{ ...activeLinkStyle, padding: '12px 24px', display: 'block' }}
-              to={'/orion/payer/accounts'}
+              to={'/orion/tools/payer/accounts'}
             >
               Accounts
             </NavLink>
             <NavLink
               style={{ ...inactiveLinkStyle, padding: '12px 24px', display: 'block' }}
               activeStyle={{ ...activeLinkStyle, padding: '12px 24px', display: 'block' }}
-              to={'/orion/payer/scores'}
+              to={'/orion/tools/payer/scores'}
             >
               Quality of Access Scores
             </NavLink>
@@ -104,7 +104,7 @@ const Sidebar = () => {
             <NavLink
               style={{ ...inactiveLinkStyle, padding: '12px 24px', display: 'block' }}
               activeStyle={{ ...activeLinkStyle, padding: '12px 24px', display: 'block' }}
-              to={'/orion/provider/accounts'}
+              to={'/orion/tools/provider/accounts'}
             >
               Accounts
             </NavLink>
