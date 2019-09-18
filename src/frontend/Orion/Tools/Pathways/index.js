@@ -1,1 +1,1 @@
-export { default } from 'Pathways'
+export { default } from './Pathways'
