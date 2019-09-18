@@ -7,6 +7,7 @@ const nodes = require('./nodes')
 const indications = require('./indications')
 const products = require('./products')
 const regimens = require('./regimens')
+const accounts = require('./accounts')
 const qualityOfAccessScores = require('./qualityOfAccessScores')
 
 module.exports = {
@@ -17,5 +18,6 @@ module.exports = {
   indications,
   products,
   regimens,
+  accounts,
   qualityOfAccessScores,
 }

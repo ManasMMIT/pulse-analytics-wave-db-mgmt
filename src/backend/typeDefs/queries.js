@@ -9,6 +9,7 @@ const queries = gql`
     indications: [Indication]
     products: [Product]
     regimens: [Regimen]
+    accounts(type: String): [Account]
     qualityOfAccessScores: [QualityOfAccessScore]
   }
 
@@ -76,6 +77,15 @@ const queries = gql`
     color: String
     relevance: String
     caption: JSON
+  }
+
+  type Account {
+    _id: ID!
+    slug: String!
+    type: String
+    organization: String
+    organizationTiny: String
+    providerCancerCenter: String # TODO: Change to just cancerCenter or create separate tool account typedefs
   }
 `
 
