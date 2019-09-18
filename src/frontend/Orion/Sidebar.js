@@ -68,6 +68,18 @@ const Sidebar = () => {
           </div>
           <Dropdown
             style={inactiveLinkStyle}
+            label={'Alternative Payment Models'}
+          >
+            <NavLink
+              style={{ ...inactiveLinkStyle, padding: '12px 24px', display: 'block' }}
+              activeStyle={{ ...activeLinkStyle, padding: '12px 24px', display: 'block' }}
+              to={'/orion/tools/apm/accounts'}
+            >
+              Accounts
+            </NavLink>
+          </Dropdown>
+          <Dropdown
+            style={inactiveLinkStyle}
             label={'Pathways'}
           >
             <NavLink
