@@ -45,27 +45,33 @@ const defaultPanelItemStyle = {
 const getInputFields = (state, handleChange) => {
   return (
     <>
-      <span>slug: </span>
-      <input
-        type="text"
-        name="slug"
-        onChange={handleChange}
-        value={state.input.slug}
-      />
-      <span>organization: </span>
-      <input
-        type="text"
-        name="organization"
-        onChange={handleChange}
-        value={state.input.organization}
-      />
-      <span>organizationTiny: </span>
-      <input
-        type="text"
-        name="organizationTiny"
-        onChange={handleChange}
-        value={state.input.organizationTiny}
-      />
+      <div>
+        <span>slug: </span>
+        <input
+          type="text"
+          name="slug"
+          onChange={handleChange}
+          value={state.input.slug}
+        />
+      </div>
+      <div>
+        <span>organization: </span>
+        <input
+          type="text"
+          name="organization"
+          onChange={handleChange}
+          value={state.input.organization}
+        />
+      </div>
+      <div>
+        <span>organizationTiny: </span>
+        <input
+          type="text"
+          name="organizationTiny"
+          onChange={handleChange}
+          value={state.input.organizationTiny}
+        />
+      </div>
     </>
   )
 }
