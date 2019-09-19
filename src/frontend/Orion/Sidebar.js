@@ -71,6 +71,16 @@ const Sidebar = () => {
     <div style={tabsContainerStyle}>
       <div style={{ display: 'flex', flexDirection: 'column' }}>
         <div style={sectionHeaderStyle}>
+          Data Management
+        </div>
+        <NavLink
+          style={inactiveLinkStyle}
+          activeStyle={activeLinkStyle}
+          to={`/orion/data-management/import`}
+        >
+          Import Excel Sheets
+        </NavLink>
+        <div style={sectionHeaderStyle}>
           MASTER LISTS
         </div>
         {masterListItems}
