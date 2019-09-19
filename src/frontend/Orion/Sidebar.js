@@ -85,7 +85,7 @@ const Sidebar = () => {
             <NavLink
               style={dropdownInactiveLinkStyle}
               activeStyle={dropdownActiveLinkStyle}
-              to={'/orion/tools/apm/accounts'}
+              to={'/orion/lists/tools/apm/accounts'}
             >
               Accounts
             </NavLink>
@@ -97,7 +97,7 @@ const Sidebar = () => {
             <NavLink
               style={dropdownInactiveLinkStyle}
               activeStyle={dropdownActiveLinkStyle}
-              to={'/orion/tools/pathways/accounts'}
+              to={'/orion/lists/tools/pathways/accounts'}
             >
               Accounts
             </NavLink>
@@ -109,14 +109,14 @@ const Sidebar = () => {
             <NavLink
               style={dropdownInactiveLinkStyle}
               activeStyle={dropdownActiveLinkStyle}
-              to={'/orion/tools/payer/accounts'}
+              to={'/orion/lists/tools/payer/accounts'}
             >
               Accounts
             </NavLink>
             <NavLink
               style={dropdownInactiveLinkStyle}
               activeStyle={dropdownActiveLinkStyle}
-              to={'/orion/tools/payer/scores'}
+              to={'/orion/lists/tools/payer/scores'}
             >
               Quality of Access Scores
             </NavLink>
@@ -128,7 +128,7 @@ const Sidebar = () => {
             <NavLink
               style={dropdownInactiveLinkStyle}
               activeStyle={dropdownActiveLinkStyle}
-              to={'/orion/tools/provider/accounts'}
+              to={'/orion/lists/tools/provider/accounts'}
             >
               Accounts
             </NavLink>

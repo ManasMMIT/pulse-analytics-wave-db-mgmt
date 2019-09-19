@@ -6,9 +6,9 @@ import Accounts from './Accounts'
 
 const Payer = () => (
   <Switch>
-    <Route path={'/orion/tools/payer/accounts'} component={Accounts} />
-    <Route path={'/orion/tools/payer/scores'} component={QualityAccessScorePanel} />
-    <Redirect to={'/orion/tools/payer/accounts'} />
+    <Route path={'/orion/lists/tools/payer/accounts'} component={Accounts} />
+    <Route path={'/orion/lists/tools/payer/scores'} component={QualityAccessScorePanel} />
+    <Redirect to={'/orion/lists/tools/payer/accounts'} />
   </Switch>
 )
 
