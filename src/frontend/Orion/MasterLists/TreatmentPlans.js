@@ -6,22 +6,22 @@ import { transparentize } from 'polished'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faEdit } from "@fortawesome/free-solid-svg-icons"
 
-import Panel from '../Phoenix/shared/Panel'
-import ModalButtonWithForm from './shared/ModalButtonWithForm'
-import Spinner from '../Phoenix/shared/Spinner'
-import stripTypename from './shared/strip-typename'
+import Panel from '../../Phoenix/shared/Panel'
+import ModalButtonWithForm from '../shared/ModalButtonWithForm'
+import Spinner from '../../Phoenix/shared/Spinner'
+import stripTypename from '../shared/strip-typename'
 
 import {
   GET_SOURCE_INDICATIONS,
   GET_SOURCE_REGIMENS,
   GET_SELECTED_INDICATION,
   GET_SELECTED_REGIMENS,
-} from '../api/queries'
+} from '../../api/queries'
 
 import {
   SELECT_INDICATION,
   UPDATE_SOURCE_INDICATION,
-} from '../api/mutations'
+} from '../../api/mutations'
 
 const editIcon = <FontAwesomeIcon size="lg" icon={faEdit} />
 

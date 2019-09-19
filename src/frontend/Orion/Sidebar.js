@@ -10,7 +10,6 @@ const tabsContainerStyle = {
 }
 
 const sharedStyles = {
-  display: 'block',
   padding: 24,
   textDecoration: 'none',
   fontWeight: 600,
@@ -25,6 +24,18 @@ const activeLinkStyle = {
   color: 'rgb(235, 246, 251)',
   borderLeft: '4px solid rgb(15, 102, 208)',
   ...sharedStyles,
+}
+
+const dropdownInactiveLinkStyle = {
+  ...inactiveLinkStyle,
+  padding: '12px 24px',
+  display: 'block',
+}
+
+const dropdownActiveLinkStyle = {
+  ...activeLinkStyle,
+  padding: '12px 24px',
+  display: 'block',
 }
 
 const sectionHeaderStyle = {
@@ -47,7 +58,7 @@ const getNavLink = label => (
       key={`nav-link:${label}`}
       style={inactiveLinkStyle}
       activeStyle={activeLinkStyle}
-      to={`/orion/${_.kebabCase(label)}`}
+      to={`/orion/lists/${_.kebabCase(label)}`}
     >
       {label}
     </NavLink>
@@ -69,14 +80,57 @@ const Sidebar = () => {
           </div>
           <Dropdown
             style={inactiveLinkStyle}
+            label={'Alternative Payment Models'}
+          >
+            <NavLink
+              style={dropdownInactiveLinkStyle}
+              activeStyle={dropdownActiveLinkStyle}
+              to={'/orion/tools/apm/accounts'}
+            >
+              Accounts
+            </NavLink>
+          </Dropdown>
+          <Dropdown
+            style={inactiveLinkStyle}
+            label={'Pathways'}
+          >
+            <NavLink
+              style={dropdownInactiveLinkStyle}
+              activeStyle={dropdownActiveLinkStyle}
+              to={'/orion/tools/pathways/accounts'}
+            >
+              Accounts
+            </NavLink>
+          </Dropdown>
+          <Dropdown
+            style={inactiveLinkStyle}
             label={'Payer Quality of Access'}
           >
             <NavLink
-              style={{ ...inactiveLinkStyle, padding: '12px 24px' }}
-              activeStyle={{ ...activeLinkStyle, padding: '12px 24px' }}
-              to={'/orion/payer/scores'}
+              style={dropdownInactiveLinkStyle}
+              activeStyle={dropdownActiveLinkStyle}
+              to={'/orion/tools/payer/accounts'}
+            >
+              Accounts
+            </NavLink>
+            <NavLink
+              style={dropdownInactiveLinkStyle}
+              activeStyle={dropdownActiveLinkStyle}
+              to={'/orion/tools/payer/scores'}
             >
               Quality of Access Scores
+            </NavLink>
+          </Dropdown>
+          <Dropdown
+            style={inactiveLinkStyle}
+            label={'Provider Key Accounts'}
+          >
+            <NavLink
+              style={dropdownInactiveLinkStyle}
+              activeStyle={dropdownActiveLinkStyle}
+              to={'/orion/tools/provider/accounts'}
+            >
+              Accounts
             </NavLink>
           </Dropdown>
         </div>
