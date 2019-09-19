@@ -1,11 +1,12 @@
 import React from 'react'
-import CreatableMultiSelect from '../shared/CreatableMultiSelect';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faEdit } from "@fortawesome/free-solid-svg-icons"
 
 import Panel from '../../Phoenix/shared/Panel'
 import ModalButtonWithForm from '../shared/ModalButtonWithForm'
 import DeleteButton from '../shared/DeleteButton'
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faEdit } from "@fortawesome/free-solid-svg-icons"
+import CreatableMultiSelect from '../shared/CreatableMultiSelect';
+
 import { GET_SOURCE_PRODUCTS, GET_SOURCE_REGIMENS } from '../../api/queries'
 
 import {

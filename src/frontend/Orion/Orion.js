@@ -1,19 +1,40 @@
 import React from 'react'
-import { Route, Switch } from 'react-router-dom'
-import Home from './Home'
+import { withApollo } from 'react-apollo'
+import { Route, Switch, Redirect } from 'react-router-dom'
+
+import { SELECT_INDICATION } from './../api/mutations'
+
 import DataManagement from './DataManagement'
 import MasterLists from './MasterLists'
+import Sidebar from './Sidebar'
 
-const Orion = () => {
-  return (
-    <div style={{ flex: 1 }}>
-      <Switch>
-        <Route exact path="/orion" component={Home} />
-        <Route path="/orion/master-lists" component={MasterLists} />
-        <Route path="/orion/data-management" component={DataManagement} />
-      </Switch>
-    </div>
-  )
+class Orion extends React.Component {
+  state = {
+    isLoading: true,
+  }
+
+  componentDidMount() {
+    const { client } = this.props
+
+    client.mutate({ mutation: SELECT_INDICATION })
+      .then(() => this.setState({ isLoading: false }))
+  }
+
+  render() {
+    if (this.state.isLoading) return null
+
+    return (
+      <div style={{ display: 'flex', flex: 1 }}>
+        <Sidebar />
+        <Switch>
+          {/* <Route exact path="/orion" component={Home} /> */}
+          <Route path="/orion/lists" component={MasterLists} />
+          <Route path="/orion/data-management" component={DataManagement} />
+          <Redirect to={'/orion/data-management'} />
+        </Switch>
+      </div>
+    )
+  }
 }
 
-export default Orion
+export default withApollo(Orion)
