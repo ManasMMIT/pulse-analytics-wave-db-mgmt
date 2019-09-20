@@ -27,7 +27,6 @@ class Orion extends React.Component {
       <div style={{ display: 'flex', flex: 1 }}>
         <Sidebar />
         <Switch>
-          {/* <Route exact path="/orion" component={Home} /> */}
           <Route path="/orion/lists" component={MasterLists} />
           <Route path="/orion/data-management/import" component={DataManagement} />
           <Redirect to={'/orion/data-management/import'} />
