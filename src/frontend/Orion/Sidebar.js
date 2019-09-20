@@ -17,6 +17,8 @@ const Wrapper = styled.div({
   backgroundColor: 'rgb(10, 53, 87)',
   display: 'flex',
   flexDirection: 'column',
+  overflowY: 'scroll',
+  height: '100vh',
 })
 
 const sharedStyles = {
