@@ -1,7 +1,7 @@
 import XLSX from 'xlsx'
 const _ = require('lodash')
 
-function sanitizeKeysAndTrimData(obj) {
+const sanitizeKeysAndTrimData = obj => {
   const result = _.reduce(obj, (acc, value, key) => {
     const trimmedKey = key.trim() // in case the key has weird zero width unicode chars
     if (!trimmedKey || value === '') return acc
@@ -13,7 +13,7 @@ function sanitizeKeysAndTrimData(obj) {
   return result
 }
 
-function isEmptyRow(obj) {
+const isEmptyRow = obj => {
   for (const key in obj) {
     if (obj[key] !== "") return false
   }
