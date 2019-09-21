@@ -3,8 +3,11 @@ import _ from 'lodash'
 import XLSX from 'xlsx'
 import Select from 'react-select'
 import CreatableSelect from 'react-select/creatable'
+
 import Spinner from '../../Phoenix/shared/Spinner'
 import sheetToJson from './sheetToJson'
+
+import ValidationErrors from './ValidationErrors'
 
 class DataManagement extends Component {
   constructor(props) {
@@ -17,6 +20,7 @@ class DataManagement extends Component {
 
     this.state = {
       sheetNames: [],
+      error: null,
       isLoading: false,
       selectedSheet: null,
       collectionNames: [],
@@ -69,13 +73,17 @@ class DataManagement extends Component {
         body: JSON.stringify({ data: json, collectionName: selectedCollection.value }),
       }).then(res => res.json())
         .then(persistedData => {
+          if (persistedData.error) throw persistedData.error
           const numberOfRows = persistedData.length
 
           this.setState({ isLoading: false }, () => {
             alert(`${numberOfRows} rows uploaded; ${numExcludedRows} rows excluded`)
           })
         })
-        .catch(alert)
+        .catch(error => {
+          debugger
+          this.setState({ error })
+        })
     })
   }
 
@@ -111,6 +119,7 @@ class DataManagement extends Component {
       isLoading,
       collectionNames,
       selectedCollection,
+      error,
     } = this.state
 
     return (
@@ -164,7 +173,8 @@ class DataManagement extends Component {
           )
         }
 
-        {isLoading && <Spinner />}
+        {isLoading && !error && <Spinner />}
+        {!!error && <ValidationErrors errors={error} />}
       </div>
     )
   }
