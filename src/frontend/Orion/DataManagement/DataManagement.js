@@ -81,7 +81,6 @@ class DataManagement extends Component {
           })
         })
         .catch(error => {
-          debugger
           this.setState({ error })
         })
     })
