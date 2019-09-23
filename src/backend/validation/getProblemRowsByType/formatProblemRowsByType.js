@@ -6,7 +6,7 @@ const formatProblemRowsByType = (validFieldsByType, data) => (
   data.reduce((acc, row, index) => {
     const { indication, slug, regimen } = row
 
-    const trueIndex = index + ROWS_TO_SKIP
+    const sheetRow = index + ROWS_TO_SKIP
 
     const validIndications = validFieldsByType.indication
 
@@ -23,7 +23,7 @@ const formatProblemRowsByType = (validFieldsByType, data) => (
       } = stringSimilarity.findBestMatch(indication, validIndications)
 
       acc.indication.push({
-        index: trueIndex,
+        sheetRow,
         value: indication,
         suggestion: target,
       })
@@ -38,7 +38,7 @@ const formatProblemRowsByType = (validFieldsByType, data) => (
       } = stringSimilarity.findBestMatch(slug, validIndications)
 
       acc.slug.push({
-        index: trueIndex,
+        sheetRow,
         value: slug,
         suggestion: target,
       })
@@ -53,7 +53,7 @@ const formatProblemRowsByType = (validFieldsByType, data) => (
       } = stringSimilarity.findBestMatch(regimen, validIndications)
 
       acc.regimen.push({
-        index: trueIndex,
+        sheetRow,
         value: regimen,
         suggestion: target,
       })
