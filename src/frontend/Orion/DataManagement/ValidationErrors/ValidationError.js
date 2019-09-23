@@ -65,10 +65,22 @@ const ValidationError = ({
       </Cell>
       <MultiCellWrapper>
         <Cell style={{ padding: 0 }}>
-          {values.map(value => <MultiCell>{value}</MultiCell>)}
+          {
+            values.map(value => (
+              <MultiCell key={value}>
+                {value}
+              </MultiCell>
+            ))
+          }
         </Cell>
         <Cell style={{ padding: 0 }}>
-          {suggestions.map(suggestion => <MultiCell>{suggestion}</MultiCell>)}
+          {
+            suggestions.map(suggestion => (
+              <MultiCell key={suggestion}>
+                {suggestion}
+              </MultiCell>
+            ))
+          }
         </Cell>
       </MultiCellWrapper>
     </Row>
