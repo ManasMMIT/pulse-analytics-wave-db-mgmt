@@ -35,7 +35,7 @@ const formatProblemRowsByType = (validFieldsByType, data) => (
     ) {
       const {
         bestMatch: { target }
-      } = stringSimilarity.findBestMatch(slug, validIndications)
+      } = stringSimilarity.findBestMatch(slug, validSlugs)
 
       acc.slug.push({
         sheetRow,
@@ -50,7 +50,7 @@ const formatProblemRowsByType = (validFieldsByType, data) => (
     ) {
       const {
         bestMatch: { target }
-      } = stringSimilarity.findBestMatch(regimen, validIndications)
+      } = stringSimilarity.findBestMatch(regimen, validRegimens)
 
       acc.regimen.push({
         sheetRow,
