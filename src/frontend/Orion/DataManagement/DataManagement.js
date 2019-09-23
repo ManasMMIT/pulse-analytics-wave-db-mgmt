@@ -40,24 +40,6 @@ class DataManagement extends Component {
     this.setState({ selectedCollection })
   }
 
-  handleCollectionCreation = collectionName => {
-    fetch('/api/collection', {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ collectionName }),
-    }).then(res => res.text())
-      .then(newCollectionName => {
-
-        const collectionNames = _.cloneDeep(this.state.collectionNames)
-        collectionNames.push(newCollectionName)
-
-        this.setState({
-          collectionNames,
-          selectedCollection: { value: newCollectionName, label: newCollectionName },
-        })
-      })
-  }
-
   submitHandler = () => {
     const { selectedSheet, selectedCollection } = this.state
 
@@ -158,7 +140,6 @@ class DataManagement extends Component {
                   return (
                     <CreatableSelect
                       onChange={this.handleCollectionSelection}
-                      // onCreateOption={this.handleCollectionCreation}
                       options={collections.map(n => ({ value: n, label: n }))}
                       value={selectedCollection}
                     />
