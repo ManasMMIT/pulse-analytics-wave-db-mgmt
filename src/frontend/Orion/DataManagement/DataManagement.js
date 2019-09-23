@@ -1,4 +1,5 @@
 import React, { Component } from "react"
+import { Query } from 'react-apollo'
 import _ from 'lodash'
 import XLSX from 'xlsx'
 import Select from 'react-select'
@@ -8,6 +9,10 @@ import Spinner from '../../Phoenix/shared/Spinner'
 import sheetToJson from './sheetToJson'
 
 import ValidationErrors from './ValidationErrors'
+
+import {
+  GET_RAW_COLLECTION_NAMES,
+} from './../../api/queries'
 
 class DataManagement extends Component {
   constructor(props) {
@@ -23,15 +28,8 @@ class DataManagement extends Component {
       error: null,
       isLoading: false,
       selectedSheet: null,
-      collectionNames: [],
       selectedCollection: null,
     }
-  }
-
-  componentDidMount() {
-    fetch('/api/collections')
-      .then(res => res.json())
-      .then(collectionNames => this.setState({ collectionNames }))
   }
 
   handleSheetSelection = selectedSheet => {
@@ -116,7 +114,6 @@ class DataManagement extends Component {
       sheetNames,
       selectedSheet,
       isLoading,
-      collectionNames,
       selectedCollection,
       error,
     } = this.state
@@ -153,13 +150,21 @@ class DataManagement extends Component {
             <div style={{ marginTop: 24 }}>
               <p>Which collection which you like to upload to?</p>
               <p>Create a blank collection or pick an existing collection to overwrite.</p>
+              <Query query={GET_RAW_COLLECTION_NAMES}>
+                {({ data: { collections }, loading, error }) => {
+                  if (error) return <div style={{ color: 'red' }}>Error processing request</div>
+                  if (loading) return <Spinner />
 
-              <CreatableSelect
-                onChange={this.handleCollectionSelection}
-                // onCreateOption={this.handleCollectionCreation}
-                options={collectionNames.map(n => ({ value: n, label: n }))}
-                value={selectedCollection}
-              />
+                  return (
+                    <CreatableSelect
+                      onChange={this.handleCollectionSelection}
+                      // onCreateOption={this.handleCollectionCreation}
+                      options={collections.map(n => ({ value: n, label: n }))}
+                      value={selectedCollection}
+                    />
+                  )
+                }}
+              </Query>
             </div>
           )
         }

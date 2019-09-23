@@ -379,3 +379,9 @@ export const GET_APM_ACCOUNTS = gql`
     }
   }
 `
+
+export const GET_RAW_COLLECTION_NAMES = gql`
+  query getRawCollectionNames {
+    collections(type: "raw")
+  }
+`
