@@ -11,6 +11,7 @@ const queries = gql`
     regimens: [Regimen]
     accounts(type: String): [Account]
     qualityOfAccessScores: [QualityOfAccessScore]
+    collections(type: String): [String]
   }
 
   type Node {
