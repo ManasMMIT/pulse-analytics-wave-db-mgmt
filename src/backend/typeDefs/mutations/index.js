@@ -9,6 +9,7 @@ const product = require('./product')
 const regimen = require('./regimen')
 const account = require('./account')
 const qualityAccessScore = require('./qualityAccessScore')
+const collection = require('./collection')
 
 const mutationType = gql`
   type Mutation {
@@ -42,6 +43,8 @@ const mutationType = gql`
 
     createQualityOfAccessScore(input: CreateQualityOfAccessScoreInput!): CreateQualityOfAccessScorePayload
     updateQualityOfAccessScore(input: UpdateQualityOfAccessScoreInput!): UpdateQualityOfAccessScorePayload
+
+    uploadCollection(input: UploadCollectionInput!): JSON
   }
 `
 
@@ -56,4 +59,5 @@ module.exports = [
   ...regimen,
   ...account,
   ...qualityAccessScore,
+  ...collection,
 ]
