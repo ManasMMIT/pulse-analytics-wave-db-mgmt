@@ -156,7 +156,7 @@ class DataManagement extends Component {
 
               <CreatableSelect
                 onChange={this.handleCollectionSelection}
-                onCreateOption={this.handleCollectionCreation}
+                // onCreateOption={this.handleCollectionCreation}
                 options={collectionNames.map(n => ({ value: n, label: n }))}
                 value={selectedCollection}
               />
