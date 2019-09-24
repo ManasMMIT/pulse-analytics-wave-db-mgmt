@@ -4,7 +4,7 @@ import { Mutation } from 'react-apollo'
 import Spinner from '../../../Phoenix/shared/Spinner'
 import sheetToJson from './sheetToJson'
 
-import ValidationErrors from '../ValidationErrors'
+import ValidationErrors from './ValidationErrors'
 
 import {
   UPLOAD_COLLECTION,
