@@ -6,8 +6,8 @@ const routes = require('./routes')
 const app = express()
 const port = 1337
 
-app.use(bodyParser.urlencoded({ extended: false }))
-app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }))
+app.use(bodyParser.json({ limit: '50mb' }))
 
 app.use('/api', routes)
 

@@ -4,24 +4,24 @@ import React from 'react'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faEdit } from "@fortawesome/free-solid-svg-icons"
 
-import Panel from '../../../Phoenix/shared/Panel'
-import ModalButtonWithForm from '../../shared/ModalButtonWithForm'
+import Panel from '../../../../Phoenix/shared/Panel'
+import ModalButtonWithForm from '../../../shared/ModalButtonWithForm'
 // import DeleteButton from './shared/DeleteButton'
 // import CopyOneOfStringButton from '../../shared/CopyOneOfStringButton'
 
 // import Spinner from '../../../Phoenix/shared/Spinner'
 
 import {
-  UPDATE_PROVIDER_ACCOUNT,
-} from '../../../api/mutations'
+  UPDATE_PATHWAYS_ACCOUNT,
+} from '../../../../api/mutations'
 
 import {
-  GET_PROVIDER_ACCOUNTS,
-} from '../../../api/queries'
+  GET_PATHWAYS_ACCOUNTS,
+} from '../../../../api/queries'
 
 const editIcon = <FontAwesomeIcon size="lg" icon={faEdit} />
 
-// const CREATE_BUTTON_TXT = 'Create Provider Account'
+// const CREATE_BUTTON_TXT = 'Create Pathways Account'
 
 // const CREATE_MODAL_TITLE = 'Create New Account'
 
@@ -72,15 +72,6 @@ const getInputFields = (state, handleChange) => {
           value={state.input.organizationTiny}
         />
       </div>
-      <div>
-        <span>cancer center: </span>
-        <input
-          type="text"
-          name="providerCancerCenter"
-          onChange={handleChange}
-          value={state.input.providerCancerCenter || ''}
-        />
-      </div>
     </>
   )
 }
@@ -91,13 +82,13 @@ const headerChildren = (
       modalTitle={CREATE_MODAL_TITLE}
       buttonLabel={CREATE_BUTTON_TXT}
       buttonStyle={buttonStyle}
-      // mutationDoc={CREATE_PROVIDER_ACCOUNTS}
-      // refetchQueries={[{ query: GET_PROVIDER_ACCOUNTS }]}
+      // mutationDoc={CREATE_PATHWAYS_ACCOUNTS}
+      // refetchQueries={[{ query: GET_PATHWAYS_ACCOUNTS }]}
       getInputFields={getInputFields}
     /> */}
 
     {/* <CopyOneOfStringButton
-      queryDoc={GET_PROVIDER_ACCOUNTS}
+      queryDoc={GET_PATHWAYS_ACCOUNTS}
       dataKey='slug'
     /> */}
   </div>
@@ -106,19 +97,19 @@ const headerChildren = (
 const buttonGroupCallback = entity => (
   <>
     <ModalButtonWithForm
-      modalTitle="Edit Provider Account"
+      modalTitle="Edit Pathways Account"
       buttonLabel={editIcon}
       buttonStyle={{ border: 'none', background: 'none', color: '#b6b9bc' }}
       data={{ input: entity }}
-      mutationDoc={UPDATE_PROVIDER_ACCOUNT}
-      refetchQueries={[{ query: GET_PROVIDER_ACCOUNTS }]}
+      mutationDoc={UPDATE_PATHWAYS_ACCOUNT}
+      refetchQueries={[{ query: GET_PATHWAYS_ACCOUNTS }]}
       getInputFields={getInputFields}
     />
 
     {/* <DeleteButton
       itemId={_id}
-      mutationDoc={DELETE_PROVIDER_ACCOUNTS}
-      refetchQueries={[{ query: GET_PROVIDER_ACCOUNTS }]}
+      mutationDoc={DELETE_PATHWAYS_ACCOUNTS}
+      refetchQueries={[{ query: GET_PATHWAYS_ACCOUNTS }]}
     /> */}
   </>
 )
@@ -133,15 +124,15 @@ const panelItemConfig = {
   )
 }
 
-const ProviderAccounts = () => (
+const PathwaysAccounts = () => (
   <Panel
-    title="Provider Accounts"
+    title="Pathways Accounts"
     headerChildren={headerChildren}
     queryDocs={{
-      fetchAllQueryProps: { query: GET_PROVIDER_ACCOUNTS },
+      fetchAllQueryProps: { query: GET_PATHWAYS_ACCOUNTS },
     }}
     panelItemConfig={panelItemConfig}
   />
 )
 
-export default ProviderAccounts
+export default PathwaysAccounts

@@ -5,8 +5,8 @@ import Accounts from './Accounts'
 
 const APM = () => (
   <Switch>
-    <Route path={'/orion/tools/apm/accounts'} component={Accounts} />
-    <Redirect to={'/orion/tools/apm/accounts'} />
+    <Route path={'/orion/lists/tools/apm/accounts'} component={Accounts} />
+    <Redirect to={'/orion/lists/tools/apm/accounts'} />
   </Switch>
 )
 

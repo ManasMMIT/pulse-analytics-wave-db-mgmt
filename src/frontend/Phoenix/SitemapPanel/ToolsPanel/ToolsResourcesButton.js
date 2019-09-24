@@ -22,8 +22,7 @@ const statesWrapperStyle = {
 const ResourcesButton = ({
   resources
 }) => {
-  const [isOpen,
-    setIsOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(false)
 
   const doesNotHaveResources = Object.keys(resources)
     .every(resourceType => _.isEmpty(resources[resourceType]))

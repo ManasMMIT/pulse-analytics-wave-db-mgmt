@@ -5,8 +5,8 @@ import Accounts from './Accounts'
 
 const Provider = () => (
   <Switch>
-    <Route path={'/orion/tools/provider/accounts'} component={Accounts} />
-    <Redirect to={'/orion/tools/provider/accounts'} />
+    <Route path={'/orion/lists/tools/provider/accounts'} component={Accounts} />
+    <Redirect to={'/orion/lists/tools/provider/accounts'} />
   </Switch>
 )
 

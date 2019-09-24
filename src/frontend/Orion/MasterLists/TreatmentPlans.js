@@ -136,7 +136,7 @@ const regimensPanelItemConfig = {
 }
 
 const TreatmentPlans = () => (
-  <div style={{ display: 'flex' }}>
+  <div style={{ display: 'flex', flex: 1 }}>
     <Panel
       title="Indications"
       style={{ borderRight: '1px solid black' }}

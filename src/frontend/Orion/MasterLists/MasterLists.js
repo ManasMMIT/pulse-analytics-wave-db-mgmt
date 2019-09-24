@@ -5,6 +5,7 @@ import IndicationsPanel from './IndicationsPanel'
 import ProductsPanel from './ProductsPanel'
 import RegimensPanel from './RegimensPanel'
 import TreatmentPlans from './TreatmentPlans'
+import Tools from './Tools'
 
 const MasterLists = () => (
   <Switch>
@@ -12,6 +13,7 @@ const MasterLists = () => (
     <Route path={'/orion/lists/indications'} component={IndicationsPanel} />
     <Route path={'/orion/lists/regimens'} component={RegimensPanel} />
     <Route path={'/orion/lists/products'} component={ProductsPanel} />
+    <Route path={'/orion/lists/tools'} component={Tools} />
     <Redirect to={'/orion/lists/treatment-plans'} component={TreatmentPlans} />
   </Switch>
 )

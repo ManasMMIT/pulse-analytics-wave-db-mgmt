@@ -1,20 +1,18 @@
 import React from 'react'
-import { Switch, Route, Redirect } from 'react-router-dom'
 import { withApollo } from 'react-apollo'
-
-import Sidebar from './Sidebar'
-
-import MasterLists from './MasterLists'
-import Tools from './Tools'
+import { Route, Switch, Redirect } from 'react-router-dom'
 
 import { SELECT_INDICATION } from './../api/mutations'
+
+import DataManagement from './DataManagement'
+import MasterLists from './MasterLists'
+import Sidebar from './Sidebar'
 
 class Orion extends React.Component {
   state = {
     isLoading: true,
   }
 
-  // TODO: Not sure if needed anymore 
   componentDidMount() {
     const { client } = this.props
 
@@ -29,9 +27,9 @@ class Orion extends React.Component {
       <div style={{ display: 'flex', flex: 1 }}>
         <Sidebar />
         <Switch>
-          <Route path={'/orion/lists'} component={MasterLists} />
-          <Route path={'/orion/tools'} component={Tools} />
-          <Redirect to={'/orion/lists/treatment-plans'} />
+          <Route path="/orion/lists" component={MasterLists} />
+          <Route path="/orion/data-management/import" component={DataManagement} />
+          <Redirect to={'/orion/data-management/import'} />
         </Switch>
       </div>
     )

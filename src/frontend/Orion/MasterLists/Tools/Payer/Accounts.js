@@ -4,24 +4,24 @@ import React from 'react'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faEdit } from "@fortawesome/free-solid-svg-icons"
 
-import Panel from '../../../Phoenix/shared/Panel'
-import ModalButtonWithForm from '../../shared/ModalButtonWithForm'
+import Panel from '../../../../Phoenix/shared/Panel'
+import ModalButtonWithForm from '../../../shared/ModalButtonWithForm'
 // import DeleteButton from './shared/DeleteButton'
 // import CopyOneOfStringButton from '../../shared/CopyOneOfStringButton'
 
 // import Spinner from '../../../Phoenix/shared/Spinner'
 
 import {
-  UPDATE_APM_ACCOUNT,
-} from '../../../api/mutations'
+  UPDATE_PAYER_ACCOUNT,
+} from '../../../../api/mutations'
 
 import {
-  GET_APM_ACCOUNTS,
-} from '../../../api/queries'
+  GET_PAYER_ACCOUNTS,
+} from '../../../../api/queries'
 
 const editIcon = <FontAwesomeIcon size="lg" icon={faEdit} />
 
-// const CREATE_BUTTON_TXT = 'Create Alternative Payment Models Account'
+// const CREATE_BUTTON_TXT = 'Create Payer Account'
 
 // const CREATE_MODAL_TITLE = 'Create New Account'
 
@@ -82,13 +82,13 @@ const headerChildren = (
       modalTitle={CREATE_MODAL_TITLE}
       buttonLabel={CREATE_BUTTON_TXT}
       buttonStyle={buttonStyle}
-      // mutationDoc={CREATE_APM_ACCOUNTS}
-      // refetchQueries={[{ query: GET_APM_ACCOUNTS }]}
+      // mutationDoc={CREATE_PAYER_ACCOUNTS}
+      // refetchQueries={[{ query: GET_PAYER_ACCOUNTS }]}
       getInputFields={getInputFields}
     /> */}
 
     {/* <CopyOneOfStringButton
-      queryDoc={GET_APM_ACCOUNTS}
+      queryDoc={GET_PAYER_ACCOUNTS}
       dataKey='slug'
     /> */}
   </div>
@@ -97,19 +97,19 @@ const headerChildren = (
 const buttonGroupCallback = entity => (
   <>
     <ModalButtonWithForm
-      modalTitle="Edit Alternative Payment Models Account"
+      modalTitle="Edit Payer Account"
       buttonLabel={editIcon}
       buttonStyle={{ border: 'none', background: 'none', color: '#b6b9bc' }}
       data={{ input: entity }}
-      mutationDoc={UPDATE_APM_ACCOUNT}
-      refetchQueries={[{ query: GET_APM_ACCOUNTS }]}
+      mutationDoc={UPDATE_PAYER_ACCOUNT}
+      refetchQueries={[{ query: GET_PAYER_ACCOUNTS }]}
       getInputFields={getInputFields}
     />
 
     {/* <DeleteButton
       itemId={_id}
-      mutationDoc={DELETE_APM_ACCOUNTS}
-      refetchQueries={[{ query: GET_APM_ACCOUNTS }]}
+      mutationDoc={DELETE_PAYER_ACCOUNTS}
+      refetchQueries={[{ query: GET_PAYER_ACCOUNTS }]}
     /> */}
   </>
 )
@@ -124,15 +124,15 @@ const panelItemConfig = {
   )
 }
 
-const PathwaysAccounts = () => (
+const PayerAccounts = () => (
   <Panel
-    title="Alternative Payment Models Accounts"
+    title="Payer Accounts"
     headerChildren={headerChildren}
     queryDocs={{
-      fetchAllQueryProps: { query: GET_APM_ACCOUNTS },
+      fetchAllQueryProps: { query: GET_PAYER_ACCOUNTS },
     }}
     panelItemConfig={panelItemConfig}
   />
 )
 
-export default PathwaysAccounts
+export default PayerAccounts

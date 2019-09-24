@@ -1,13 +1,25 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom'
 import _ from 'lodash'
+import styled from '@emotion/styled'
 
 import Dropdown from './shared/Dropdown'
 
-const tabsContainerStyle = {
+const Header = styled.div({
+  padding: 24,
+  fontSize: 18,
+  fontWeight: 500,
+  color: '#4b6b89',
+})
+
+const Wrapper = styled.div({
   width: 250,
   backgroundColor: 'rgb(10, 53, 87)',
-}
+  display: 'flex',
+  flexDirection: 'column',
+  overflowY: 'scroll',
+  height: '100vh',
+})
 
 const sharedStyles = {
   padding: 24,
@@ -38,13 +50,6 @@ const dropdownActiveLinkStyle = {
   display: 'block',
 }
 
-const sectionHeaderStyle = {
-  padding: 24,
-  fontSize: 18,
-  fontWeight: 500,
-  color: '#4b6b89',
-}
-
 const ORDERED_MASTER_LIST_ITEMS = [
   'Treatment Plans',
   'Indications',
@@ -64,78 +69,90 @@ const getNavLink = label => (
     </NavLink>
 )
 
+const getToolItemPath = (tool, item) => {
+  return `/orion/lists/tools/${tool}/${item}`
+}
+
 const Sidebar = () => {
   const masterListItems = ORDERED_MASTER_LIST_ITEMS.map(getNavLink)
 
   return (
-    <div style={tabsContainerStyle}>
-      <div style={{ display: 'flex', flexDirection: 'column' }}>
-        <div style={sectionHeaderStyle}>
-          MASTER LISTS
-        </div>
-        {masterListItems}
-        <div>
-          <div style={sectionHeaderStyle}>
-            TOOL MASTER LISTS
-          </div>
-          <Dropdown
-            style={inactiveLinkStyle}
-            label={'Alternative Payment Models'}
+    <Wrapper>
+      <Header>
+        Data Management
+      </Header>
+      <NavLink
+        style={inactiveLinkStyle}
+        activeStyle={activeLinkStyle}
+        to={`/orion/data-management/import`}
+      >
+        Import Excel Sheets
+      </NavLink>
+      <Header>
+        MASTER LISTS
+      </Header>
+      {masterListItems}
+      <div>
+        <Header>
+          TOOL MASTER LISTS
+        </Header>
+        <Dropdown
+          style={inactiveLinkStyle}
+          label={'Alternative Payment Models'}
+        >
+          <NavLink
+            style={dropdownInactiveLinkStyle}
+            activeStyle={dropdownActiveLinkStyle}
+            to={getToolItemPath('apm', 'accounts')}
           >
-            <NavLink
-              style={dropdownInactiveLinkStyle}
-              activeStyle={dropdownActiveLinkStyle}
-              to={'/orion/tools/apm/accounts'}
-            >
-              Accounts
-            </NavLink>
-          </Dropdown>
-          <Dropdown
-            style={inactiveLinkStyle}
-            label={'Pathways'}
+            Accounts
+          </NavLink>
+        </Dropdown>
+        <Dropdown
+          style={inactiveLinkStyle}
+          label={'Pathways'}
+        >
+          <NavLink
+            style={dropdownInactiveLinkStyle}
+            activeStyle={dropdownActiveLinkStyle}
+            to={getToolItemPath('pathways', 'accounts')}
           >
-            <NavLink
-              style={dropdownInactiveLinkStyle}
-              activeStyle={dropdownActiveLinkStyle}
-              to={'/orion/tools/pathways/accounts'}
-            >
-              Accounts
-            </NavLink>
-          </Dropdown>
-          <Dropdown
-            style={inactiveLinkStyle}
-            label={'Payer Quality of Access'}
+            Accounts
+          </NavLink>
+        </Dropdown>
+        <Dropdown
+          style={inactiveLinkStyle}
+          label={'Payer Quality of Access'}
+        >
+          <NavLink
+            style={dropdownInactiveLinkStyle}
+            activeStyle={dropdownActiveLinkStyle}
+            to={getToolItemPath('payer', 'accounts')}
           >
-            <NavLink
-              style={dropdownInactiveLinkStyle}
-              activeStyle={dropdownActiveLinkStyle}
-              to={'/orion/tools/payer/accounts'}
-            >
-              Accounts
-            </NavLink>
-            <NavLink
-              style={dropdownInactiveLinkStyle}
-              activeStyle={dropdownActiveLinkStyle}
-              to={'/orion/tools/payer/scores'}
-            >
-              Quality of Access Scores
-            </NavLink>
-          </Dropdown>
-          <Dropdown
-            style={inactiveLinkStyle}
-            label={'Provider Key Accounts'}
+            Accounts
+          </NavLink>
+          <NavLink
+            style={dropdownInactiveLinkStyle}
+            activeStyle={dropdownActiveLinkStyle}
+            to={getToolItemPath('payer', 'scores')}
           >
-            <NavLink
-              style={dropdownInactiveLinkStyle}
-              activeStyle={dropdownActiveLinkStyle}
-              to={'/orion/tools/provider/accounts'}
-            >
-              Accounts
-            </NavLink>
-          </Dropdown>
-        </div>
+            Quality of Access Scores
+          </NavLink>
+        </Dropdown>
+        <Dropdown
+          style={inactiveLinkStyle}
+          label={'Provider Key Accounts'}
+        >
+          <NavLink
+            style={dropdownInactiveLinkStyle}
+            activeStyle={dropdownActiveLinkStyle}
+            to={getToolItemPath('provider', 'accounts')}
+          >
+            Accounts
+          </NavLink>
+        </Dropdown>
       </div>
-    </div>
+    </Wrapper>
   )
 }
 
