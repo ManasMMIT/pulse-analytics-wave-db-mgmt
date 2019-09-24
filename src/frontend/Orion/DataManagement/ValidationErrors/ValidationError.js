@@ -11,7 +11,6 @@ const Row = styled.div({
 const Cell = styled.div({
   display: 'flex',
   alignItems: 'center',
-  justifyContent: 'center',
   width: 200,
   boxSizing: 'border-box',
   padding: 12,
@@ -20,7 +19,6 @@ const Cell = styled.div({
 })
 
 const MultiCellWrapper = styled.div({
-  flex: 1,
   display: 'flex',
 })
 
@@ -30,8 +28,7 @@ const MultiCell = styled.div({
   width: '100%',
   textAlign: 'center',
   borderBottom: '1px solid black',
-  flex: 1,
-  minHeight: 50,
+  height: 50,
 })
 
 const ValidationError = ({
