@@ -29,6 +29,7 @@ const MultiCell = styled.div({
   textAlign: 'center',
   borderBottom: '1px solid black',
   height: 50,
+  overflowY: 'scroll',
 })
 
 const ValidationError = ({
