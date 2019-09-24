@@ -17,7 +17,7 @@ const getErrorObj = async (rawJson, core) => {
     
     const uniqProblemRows = _.uniqBy(problemRows, 'value')
     const uniqSortedProblemRows = _.sortBy(uniqProblemRows, ({ value }) => value.toLowerCase())
-    debugger
+
     return {
       type: field,
       message: `${ _.capitalize(field) } validation failed`,
