@@ -21,7 +21,8 @@ const pushInvalidValues = ({ valueToCheck, validValues, errorArray, sheetRow }) 
 
 const formatProblemRowsByType = (validFieldsByType, data) => (
   data.reduce((acc, row, index) => {
-    const { indication, slug, regimen } = row
+    const { indication, slug, regimen, access } = row
+
     const isCSVIndications = indication && indication.split(', ').length > 1
 
     const sheetRow = index + ROWS_TO_SKIP
@@ -32,10 +33,17 @@ const formatProblemRowsByType = (validFieldsByType, data) => (
 
     const validRegimens = validFieldsByType.regimen
 
+    const validAccesses = validFieldsByType.access
+
     if (isCSVIndications) {
       indication.split(', ').forEach(indication => {
+        const noTrailingCommaIndication = indication
+          .split('')
+          .filter(c => c !== ',')
+          .join('')
+
         pushInvalidValues({
-          valueToCheck: indication,
+          valueToCheck: noTrailingCommaIndication,
           validValues: validIndications,
           errorArray: acc.indication,
           sheetRow,
@@ -64,8 +72,15 @@ const formatProblemRowsByType = (validFieldsByType, data) => (
       sheetRow,
     })
 
+    pushInvalidValues({
+      valueToCheck: access,
+      validValues: validAccesses,
+      errorArray: acc.access,
+      sheetRow,
+    })
+
     return acc
-  }, { regimen: [], indication: [], slug: [] })
+  }, { regimen: [], indication: [], slug: [], access: [] })
 )
 
 module.exports = formatProblemRowsByType

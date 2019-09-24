@@ -9,12 +9,17 @@ const VALIDATION_MAP = [
   {
     docField: 'name',
     sheetField: 'regimen',
-    collectionName: 'regimens'
+    collectionName: 'regimens',
   },
   {
     docField: 'slug',
     sheetField: 'slug',
-    collectionName: 'organizations'
+    collectionName: 'organizations',
+  },
+  {
+    docField: 'access',
+    sheetField: 'access',
+    collectionName: 'qualityOfAccessScore',
   },
 ]
 
