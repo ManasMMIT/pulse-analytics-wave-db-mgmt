@@ -106,7 +106,7 @@ class DataManagement extends Component {
         {
           selectedSheet && (
             <div style={{ marginTop: 24 }}>
-              <p>Which collection which you like to upload to?</p>
+              <p>Which collection would you like to upload to?</p>
               <p>Create a blank collection or pick an existing collection to overwrite.</p>
               <Query query={GET_RAW_COLLECTION_NAMES}>
                 {({ data: { collections }, loading, error }) => {
