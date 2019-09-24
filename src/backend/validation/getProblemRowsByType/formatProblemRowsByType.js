@@ -1,4 +1,5 @@
 const stringSimilarity = require('string-similarity')
+const _ = require('lodash')
 
 const ROWS_TO_SKIP = 4
 
@@ -21,8 +22,9 @@ const pushInvalidValues = ({ valueToCheck, validValues, errorArray, sheetRow }) 
 
 const formatProblemRowsByType = (validFieldsByType, data) => (
   data.reduce((acc, row, index) => {
-    const { indication, slug, regimen } = row
-    const isCSVIndications = indication && indication.split(', ').length > 1
+    const { indication, slug, regimen, access } = row
+
+    const isCSVIndications = indication && indication.split(',').length > 1
 
     const sheetRow = index + ROWS_TO_SKIP
 
@@ -32,10 +34,14 @@ const formatProblemRowsByType = (validFieldsByType, data) => (
 
     const validRegimens = validFieldsByType.regimen
 
+    const validAccesses = validFieldsByType.access
+
     if (isCSVIndications) {
-      indication.split(', ').forEach(indication => {
+      indication.split(',').forEach(indication => {
+        const noCommaOrSpaceIndication = _.trim(indication)
+
         pushInvalidValues({
-          valueToCheck: indication,
+          valueToCheck: noCommaOrSpaceIndication,
           validValues: validIndications,
           errorArray: acc.indication,
           sheetRow,
@@ -64,8 +70,15 @@ const formatProblemRowsByType = (validFieldsByType, data) => (
       sheetRow,
     })
 
+    pushInvalidValues({
+      valueToCheck: access,
+      validValues: validAccesses,
+      errorArray: acc.access,
+      sheetRow,
+    })
+
     return acc
-  }, { regimen: [], indication: [], slug: [] })
+  }, { regimen: [], indication: [], slug: [], access: [] })
 )
 
 module.exports = formatProblemRowsByType
