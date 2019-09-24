@@ -2,9 +2,27 @@ const stringSimilarity = require('string-similarity')
 
 const ROWS_TO_SKIP = 4
 
+const pushInvalidValues = ({ valueToCheck, validValues, errorArray, sheetRow }) => {
+  if (
+    valueToCheck
+    && !validValues.includes(valueToCheck)
+  ) {
+    const {
+      bestMatch: { target }
+    } = stringSimilarity.findBestMatch(valueToCheck, validValues)
+
+    errorArray.push({
+      sheetRow,
+      value: valueToCheck,
+      suggestion: target,
+    })
+  }
+}
+
 const formatProblemRowsByType = (validFieldsByType, data) => (
   data.reduce((acc, row, index) => {
     const { indication, slug, regimen } = row
+    const isCSVIndications = indication && indication.split(', ').length > 1
 
     const sheetRow = index + ROWS_TO_SKIP
 
@@ -14,50 +32,37 @@ const formatProblemRowsByType = (validFieldsByType, data) => (
 
     const validRegimens = validFieldsByType.regimen
 
-    if (
-      indication
-      && !validIndications.includes(indication)
-    ) {
-      const {
-        bestMatch: { target }
-      } = stringSimilarity.findBestMatch(indication, validIndications)
-
-      acc.indication.push({
+    if (isCSVIndications) {
+      indication.split(', ').forEach(indication => {
+        pushInvalidValues({
+          valueToCheck: indication,
+          validValues: validIndications,
+          errorArray: acc.indication,
+          sheetRow,
+        })
+      })
+    } else {
+      pushInvalidValues({
+        valueToCheck: indication,
+        validValues: validIndications,
+        errorArray: acc.indication,
         sheetRow,
-        value: indication,
-        suggestion: target,
       })
     }
 
-    if (
-      slug
-      && !validSlugs.includes(slug)
-    ) {
-      const {
-        bestMatch: { target }
-      } = stringSimilarity.findBestMatch(slug, validSlugs)
+    pushInvalidValues({
+      valueToCheck: slug,
+      validValues: validSlugs,
+      errorArray: acc.slug,
+      sheetRow,
+    })
 
-      acc.slug.push({
-        sheetRow,
-        value: slug,
-        suggestion: target,
-      })
-    }
-
-    if (
-      regimen
-      && !validRegimens.includes(regimen)
-    ) {
-      const {
-        bestMatch: { target }
-      } = stringSimilarity.findBestMatch(regimen, validRegimens)
-
-      acc.regimen.push({
-        sheetRow,
-        value: regimen,
-        suggestion: target,
-      })
-    }
+    pushInvalidValues({
+      valueToCheck: regimen,
+      validValues: validRegimens,
+      errorArray: acc.regimen,
+      sheetRow,
+    })
 
     return acc
   }, { regimen: [], indication: [], slug: [] })

@@ -1,4 +1,5 @@
 import React, { Component } from "react"
+import { Query, Mutation } from 'react-apollo'
 import _ from 'lodash'
 import XLSX from 'xlsx'
 import Select from 'react-select'
@@ -8,6 +9,14 @@ import Spinner from '../../Phoenix/shared/Spinner'
 import sheetToJson from './sheetToJson'
 
 import ValidationErrors from './ValidationErrors'
+
+import {
+  GET_RAW_COLLECTION_NAMES,
+} from './../../api/queries'
+
+import {
+  UPLOAD_COLLECTION,
+} from './../../api/mutations'
 
 class DataManagement extends Component {
   constructor(props) {
@@ -20,18 +29,10 @@ class DataManagement extends Component {
 
     this.state = {
       sheetNames: [],
-      error: null,
       isLoading: false,
       selectedSheet: null,
-      collectionNames: [],
       selectedCollection: null,
     }
-  }
-
-  componentDidMount() {
-    fetch('/api/collections')
-      .then(res => res.json())
-      .then(collectionNames => this.setState({ collectionNames }))
   }
 
   handleSheetSelection = selectedSheet => {
@@ -40,50 +41,6 @@ class DataManagement extends Component {
 
   handleCollectionSelection = selectedCollection => {
     this.setState({ selectedCollection })
-  }
-
-  handleCollectionCreation = collectionName => {
-    fetch('/api/collection', {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ collectionName }),
-    }).then(res => res.text())
-      .then(newCollectionName => {
-
-        const collectionNames = _.cloneDeep(this.state.collectionNames)
-        collectionNames.push(newCollectionName)
-
-        this.setState({
-          collectionNames,
-          selectedCollection: { value: newCollectionName, label: newCollectionName },
-        })
-      })
-  }
-
-  submitHandler = () => {
-    const { selectedSheet, selectedCollection } = this.state
-
-    this.setState({ isLoading: true }, () => {
-      const selectedSheetObj = this.workbook.Sheets[selectedSheet.value]
-      const { json, numExcludedRows } = sheetToJson(selectedSheetObj)
-
-      fetch('/api/upload', {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ data: json, collectionName: selectedCollection.value }),
-      }).then(res => res.json())
-        .then(persistedData => {
-          if (persistedData.error) throw persistedData.error
-          const numberOfRows = persistedData.length
-
-          this.setState({ isLoading: false }, () => {
-            alert(`${numberOfRows} rows uploaded; ${numExcludedRows} rows excluded`)
-          })
-        })
-        .catch(error => {
-          this.setState({ error })
-        })
-    })
   }
 
   onFilesAdded = () => {
@@ -116,9 +73,7 @@ class DataManagement extends Component {
       sheetNames,
       selectedSheet,
       isLoading,
-      collectionNames,
       selectedCollection,
-      error,
     } = this.state
 
     return (
@@ -151,29 +106,64 @@ class DataManagement extends Component {
         {
           selectedSheet && (
             <div style={{ marginTop: 24 }}>
-              <p>Which collection which you like to upload to?</p>
+              <p>Which collection would you like to upload to?</p>
               <p>Create a blank collection or pick an existing collection to overwrite.</p>
+              <Query query={GET_RAW_COLLECTION_NAMES}>
+                {({ data: { collections }, loading, error }) => {
+                  if (error) return <div style={{ color: 'red' }}>Error processing request</div>
+                  if (loading) return <Spinner />
 
-              <CreatableSelect
-                onChange={this.handleCollectionSelection}
-                // onCreateOption={this.handleCollectionCreation}
-                options={collectionNames.map(n => ({ value: n, label: n }))}
-                value={selectedCollection}
-              />
+                  return (
+                    <CreatableSelect
+                      onChange={this.handleCollectionSelection}
+                      options={collections.map(n => ({ value: n, label: n }))}
+                      value={selectedCollection}
+                    />
+                  )
+                }}
+              </Query>
             </div>
           )
         }
 
         {
           selectedCollection && (
-            <div style={{ marginTop: 24 }}>
-              <button onClick={this.submitHandler}>Upload</button>
-            </div>
+            <Mutation mutation={UPLOAD_COLLECTION}>
+              {(handleUpload, { loading, error }) => {
+                if (loading) return <Spinner />
+
+                const { selectedSheet, selectedCollection } = this.state
+
+                // TODO: Make error handling less wonky
+                const errors = error && error.graphQLErrors[0].extensions.exception.error
+
+                const selectedSheetObj = this.workbook.Sheets[selectedSheet.value]
+                const { json } = sheetToJson(selectedSheetObj)
+
+                const handleSubmit = () => {
+                  handleUpload({
+                    variables: {
+                      input: {
+                        data: json,
+                        collectionName: selectedCollection.value,
+                      }
+                    }
+                  })
+                }
+
+                return (
+                  <>
+                    <div style={{ marginTop: 24 }}>
+                      <button onClick={handleSubmit}>Upload</button>
+                    </div>
+                    {!!error && <ValidationErrors errors={errors} />}
+                  </>
+                )
+              }}
+            </Mutation>
           )
         }
-
-        {isLoading && !error && <Spinner />}
-        {!!error && <ValidationErrors errors={error} />}
+        {isLoading && <Spinner />}
       </div>
     )
   }

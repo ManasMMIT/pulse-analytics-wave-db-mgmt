@@ -66,6 +66,10 @@ import {
   UPDATE_QUALITY_OF_ACCESS_SCORE,
 } from './qualityOfAccessScores'
 
+import {
+  UPLOAD_COLLECTION
+} from './collection'
+
 export {
   SELECT_CLIENT,
   CREATE_CLIENT,
@@ -116,4 +120,6 @@ export {
 
   CREATE_QUALITY_OF_ACCESS_SCORE,
   UPDATE_QUALITY_OF_ACCESS_SCORE,
+
+  UPLOAD_COLLECTION,
 }

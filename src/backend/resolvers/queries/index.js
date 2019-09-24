@@ -1,5 +1,3 @@
-const _ = require('lodash')
-
 const clients = require('./clients')
 const teams = require('./teams')
 const users = require('./users')
@@ -9,8 +7,10 @@ const products = require('./products')
 const regimens = require('./regimens')
 const accounts = require('./accounts')
 const qualityOfAccessScores = require('./qualityOfAccessScores')
+const collections = require('./collections')
 
 module.exports = {
+  collections,
   clients,
   teams,
   users,
