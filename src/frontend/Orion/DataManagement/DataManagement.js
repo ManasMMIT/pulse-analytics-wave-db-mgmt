@@ -156,7 +156,6 @@ class DataManagement extends Component {
                     <div style={{ marginTop: 24 }}>
                       <button onClick={handleSubmit}>Upload</button>
                     </div>
-                    {isLoading && !error && <Spinner />}
                     {!!error && <ValidationErrors errors={errors} />}
                   </>
                 )
@@ -164,6 +163,7 @@ class DataManagement extends Component {
             </Mutation>
           )
         }
+        {isLoading && <Spinner />}
       </div>
     )
   }
