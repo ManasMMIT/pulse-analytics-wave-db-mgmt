@@ -2,7 +2,6 @@ import React from "react"
 import { Mutation } from 'react-apollo'
 
 import Spinner from '../../../Phoenix/shared/Spinner'
-import sheetToJson from './sheetToJson'
 
 import ValidationErrors from './ValidationErrors'
 
@@ -11,10 +10,9 @@ import {
 } from '../../../api/mutations'
 
 const SubmitButton = ({
-  workbook,
+  data,
   selectedCollection,
   handleSuccess,
-  selectedSheet,
 }) => (
   <>
     {
@@ -29,14 +27,11 @@ const SubmitButton = ({
             // TODO: Make error handling less wonky
             const errors = error && error.graphQLErrors[0].extensions.exception.error
 
-            const selectedSheetObj = workbook.Sheets[selectedSheet.value]
-            const { json } = sheetToJson(selectedSheetObj)
-
             const handleSubmit = () => {
               handleUpload({
                 variables: {
                   input: {
-                    data: json,
+                    data,
                     collectionName: selectedCollection.value,
                   }
                 }
