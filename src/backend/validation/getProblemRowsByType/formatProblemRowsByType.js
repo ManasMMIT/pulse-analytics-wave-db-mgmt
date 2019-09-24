@@ -1,4 +1,5 @@
 const stringSimilarity = require('string-similarity')
+const _ = require('lodash')
 
 const ROWS_TO_SKIP = 4
 
@@ -23,7 +24,7 @@ const formatProblemRowsByType = (validFieldsByType, data) => (
   data.reduce((acc, row, index) => {
     const { indication, slug, regimen, access } = row
 
-    const isCSVIndications = indication && indication.split(', ').length > 1
+    const isCSVIndications = indication && indication.split(',').length > 1
 
     const sheetRow = index + ROWS_TO_SKIP
 
@@ -36,14 +37,11 @@ const formatProblemRowsByType = (validFieldsByType, data) => (
     const validAccesses = validFieldsByType.access
 
     if (isCSVIndications) {
-      indication.split(', ').forEach(indication => {
-        const noTrailingCommaIndication = indication
-          .split('')
-          .filter(c => c !== ',')
-          .join('')
+      indication.split(',').forEach(indication => {
+        const noCommaOrSpaceIndication = _.trim(indication)
 
         pushInvalidValues({
-          valueToCheck: noTrailingCommaIndication,
+          valueToCheck: noCommaOrSpaceIndication,
           validValues: validIndications,
           errorArray: acc.indication,
           sheetRow,
