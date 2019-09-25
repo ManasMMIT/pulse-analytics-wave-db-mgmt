@@ -6,8 +6,8 @@ const mockData = require('./mjmlTemplates/pathwaysAlerts/mockData')
 
 const TEMPLATE_MAP = {
   pathwaysAlerts: {
-    templatePath: 'services/utils/mjmlTemplates/pathwaysAlerts/index.mjml',
-    emailSubject: 'Pathways Latest Changes'
+    templatePath: 'backend/resolvers/mutations/alert/mjmlTemplates/pathwaysAlerts/index.mjml',
+    emailSubject: 'Pathways Latest Changes',
   }
 }
 
@@ -22,11 +22,15 @@ const emailAlerts = async (
   { input: { templateType, emailList } },
   { pulseDevDb },
 ) => {
-  debugger 
-
   const apiKey = process.env.SENDGRID_API_KEY
   sgMail.setApiKey(apiKey)
   const env = nunjucks.configure('src')
+
+  const compileTemplate = ({ templatePath, data }) => {
+    const result = env.render(templatePath, data)
+
+    return result
+  }
 
   const sendSingleEmail = async ({ email, templateDetails, data }) => {
     const { templatePath, emailSubject } = templateDetails
@@ -71,12 +75,6 @@ const emailAlerts = async (
         message,
       })
     }
-  }
-
-  const compileTemplate = ({ templatePath, data }) => {
-    const result = env.render(templatePath, data)
-
-    return result
   }
 
   const failedEmails = []
