@@ -8,6 +8,7 @@ const regimens = require('./regimens')
 const accounts = require('./accounts')
 const qualityOfAccessScores = require('./qualityOfAccessScores')
 const collections = require('./collections')
+const newTreatmentPlans = require('./newTreatmentPlans')
 
 module.exports = {
   collections,
@@ -20,4 +21,5 @@ module.exports = {
   regimens,
   accounts,
   qualityOfAccessScores,
+  newTreatmentPlans,
 }
