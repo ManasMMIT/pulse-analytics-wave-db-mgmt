@@ -70,6 +70,10 @@ import {
   UPLOAD_COLLECTION
 } from './collection'
 
+import {
+  EMAIL_ALERTS,
+} from './alerts'
+
 export {
   SELECT_CLIENT,
   CREATE_CLIENT,
@@ -122,4 +126,6 @@ export {
   UPDATE_QUALITY_OF_ACCESS_SCORE,
 
   UPLOAD_COLLECTION,
+
+  EMAIL_ALERTS,
 }

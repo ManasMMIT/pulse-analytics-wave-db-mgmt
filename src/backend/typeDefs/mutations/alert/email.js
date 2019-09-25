@@ -1,12 +1,12 @@
 const { gql } = require('apollo-server-express')
 
 const emailAlertsTypeDefs = gql`
-  input UpdateEmailAlertInput {
+  input EmailAlertInput {
     templateType: String!
     emailList: [String!]!
   }
 
-  type UpdateEmailAlertPayload {
+  type EmailAlertPayload {
     message: String
     failedEmails: [String]
   }

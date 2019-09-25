@@ -47,7 +47,7 @@ const mutationType = gql`
 
     uploadCollection(input: UploadCollectionInput!): JSON
 
-    emailAlerts(input: UpdateEmailAlertInput!): JSON
+    emailAlerts(input: EmailAlertInput!): JSON
   }
 `
 
