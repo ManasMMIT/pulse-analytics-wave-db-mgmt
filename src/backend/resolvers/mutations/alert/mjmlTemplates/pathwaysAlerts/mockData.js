@@ -1,4 +1,4 @@
-export default {
+module.exports =  {
   helpers: {
     getDate: {
       month: () => (new Date()).toLocaleString('default', { month: 'long' }),

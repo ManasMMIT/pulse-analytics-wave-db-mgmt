@@ -23,6 +23,7 @@ const emailAlerts = async (
   { pulseDevDb },
 ) => {
   debugger 
+
   const apiKey = process.env.SENDGRID_API_KEY
   sgMail.setApiKey(apiKey)
   const env = nunjucks.configure('src')
