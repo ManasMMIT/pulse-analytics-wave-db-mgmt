@@ -1,0 +1,30 @@
+<mj-raw><a name='positioning-section'/></mj-raw>
+<mj-section mj-class='default-background'>
+  <mj-column>
+    <mj-text mj-class='body-section-date trans-text'>
+      {{ helpers.getDate.month() }} {{ helpers.getDate.year() }}
+    </mj-text>
+    <mj-text mj-class='body-section-title'>
+      Positioning Changes
+    </mj-text>
+  </mj-column>
+</mj-section>
+<mj-section mj-class='default-background' padding-top='0'>
+  <mj-column>
+    <mj-text css-class='section-navbar-link'>
+    {% for orgName, indicationData in positioning %}
+      {% set orgSlug = helpers.getSlug(indicationData) %}
+        <a
+          href='#{{ orgSlug }}-positioning'
+          style='color: #0668D9; padding: 0 8px'
+        >
+          {{ orgName }}
+        </a>
+    {% endfor %}
+    </mj-text>
+  </mj-column>
+</mj-section>
+{% for orgName, indicationData in positioning %}
+  {% set orgSlug = helpers.getSlug(indicationData) %}
+  {% include "./positioningOrg.mjml" %}
+{% endfor %}

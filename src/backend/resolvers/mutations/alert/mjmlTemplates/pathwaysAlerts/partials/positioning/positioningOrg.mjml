@@ -1,0 +1,30 @@
+<mj-raw><a name='{{ orgSlug }}-positioning'/></mj-raw>
+<mj-wrapper mj-class='default-background body-content organization-section'>
+  <mj-section mj-class='organization-header'>
+    <mj-column>
+      <mj-text mj-class='organization-header-text'>
+        {{ orgName }}
+      </mj-text>
+      <mj-text align='center' padding='2px 0' mj-class='view-account-link'>
+        <a
+          href='https://pulse-tools.com/pathways/accounts/pathways/{{ orgSlug }}/positioning'
+          style='color: #0668D9;'
+        >
+          View Account
+        </a>
+      </mj-text>
+    </mj-column>
+  </mj-section>
+  {% for indication, alerts in indicationData %}
+    <mj-section mj-class='default-background no-padding'>
+      <mj-column mj-class='no-padding'>
+        <mj-text mj-class='alert-item-category'>
+          {{ indication }}
+        </mj-text>
+      </mj-column>
+    </mj-section>
+    {% for item in alerts %}
+      {% include "./positioningAlert.mjml" %}
+    {% endfor %}
+  {% endfor %}
+</mj-wrapper>
