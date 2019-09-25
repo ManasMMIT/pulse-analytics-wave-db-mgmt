@@ -1,5 +1,6 @@
 import React from "react"
 import XLSX from 'xlsx'
+import _ from 'lodash'
 
 import sheetToJson from './sheetToJson'
 
@@ -7,6 +8,7 @@ import SheetSelector from './SheetSelector'
 import CollectionSelector from './CollectionSelector'
 import SubmitButton from './SubmitButton'
 import Spinner from '../../../Phoenix/shared/Spinner'
+import TreatmentPlanManager from './TreatmentPlanManager'
 
 class Import extends React.Component {
   constructor(props) {
@@ -138,8 +140,7 @@ class Import extends React.Component {
             )
         }
         {isLoading && <Spinner />}
-        {/* Add treatment plan creation step here */}
-        {/* <TreatmentPlanManager /> */}
+        {!_.isEmpty(data) && <TreatmentPlanManager data={data} />}
       </div>
     )
 
