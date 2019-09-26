@@ -385,3 +385,9 @@ export const GET_RAW_COLLECTION_NAMES = gql`
     collections(type: "raw")
   }
 `
+
+export const GET_NEW_TREATMENT_PLANS = gql`
+  query getNewTreatmentPlans($data: JSON) {
+    newTreatmentPlans(data: $data)
+  }
+`

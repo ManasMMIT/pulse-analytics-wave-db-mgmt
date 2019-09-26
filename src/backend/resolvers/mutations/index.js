@@ -9,6 +9,7 @@ const sitemapResolvers = require('./sitemap')
 const qualityOfAccessScoreResolvers = require('./qualityOfAccessScore')
 const collectionResolvers = require('./collection')
 const alertResolvers = require('./alert')
+const treatmentPlan = require('./treatmentPlan')
 
 module.exports = {
   ...clientResolvers,
@@ -22,4 +23,5 @@ module.exports = {
   ...qualityOfAccessScoreResolvers,
   ...collectionResolvers,
   ...alertResolvers,
+  ...treatmentPlan,
 }
