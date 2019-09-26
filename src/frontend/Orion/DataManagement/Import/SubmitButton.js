@@ -1,5 +1,6 @@
 import React from "react"
 import { Mutation } from 'react-apollo'
+import styled from '@emotion/styled'
 import _ from 'lodash'
 
 import Spinner from '../../../Phoenix/shared/Spinner'
@@ -8,9 +9,28 @@ import {
   UPLOAD_COLLECTION,
 } from '../../../api/mutations'
 
+const Button = styled.button({
+  border: 'none',
+  background: '#006aff',
+  color: 'white',
+  fontWeight: 700,
+  padding: 6,
+  borderRadius: 3,
+})
+
+const DisabledButton = styled.button({
+  border: 'none',
+  background: '#006aff0f',
+  color: '#00000033',
+  fontWeight: 700,
+  padding: 6,
+  borderRadius: 3,
+})
+
 const SubmitButton = ({
   data,
   selectedCollection,
+  selectedSheet,
   handleSuccess,
   handleError,
   handleClick,
@@ -31,6 +51,8 @@ const SubmitButton = ({
         handleError(errors)
       }
 
+      const isDisabled = _.isEmpty(data) || !selectedCollection || !selectedSheet
+
       const handleSubmit = () => {
         handleClick(true)
 
@@ -43,17 +65,19 @@ const SubmitButton = ({
           }
         })
       }
+      const StyledButton = isDisabled
+        ? DisabledButton
+        : Button
 
       return (
         <>
           <div style={{ marginTop: 24 }}>
-            <button
+            <StyledButton
               onClick={handleSubmit}
-              style={{ padding: 12 }}
-              disabled={_.isEmpty(data) && !selectedCollection}
+              disabled={isDisabled}
             >
-              Upload
-            </button>
+              Import Sheet
+            </StyledButton>
             {error && <span style={{ color: 'red', marginLeft: 24 }}>IMPORT FAILED</span>}
           </div>
         </>
