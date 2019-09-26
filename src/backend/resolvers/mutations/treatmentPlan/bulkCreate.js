@@ -8,7 +8,7 @@ const convertRegimenIds = regimen => {
   })
 }
 
-const createTeam = async (
+const bulkCreateTreatmentPlan = async (
   parent,
   { input: { data } },
   { pulseCoreDb },
@@ -38,4 +38,4 @@ const createTeam = async (
   return 'success'
 }
 
-module.exports = createTeam
+module.exports = bulkCreateTreatmentPlan
