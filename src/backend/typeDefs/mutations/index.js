@@ -10,6 +10,7 @@ const regimen = require('./regimen')
 const account = require('./account')
 const qualityAccessScore = require('./qualityAccessScore')
 const collection = require('./collection')
+const treatmentPlan = require('./treatmentPlan')
 
 const mutationType = gql`
   type Mutation {
@@ -45,6 +46,8 @@ const mutationType = gql`
     updateQualityOfAccessScore(input: UpdateQualityOfAccessScoreInput!): UpdateQualityOfAccessScorePayload
 
     uploadCollection(input: UploadCollectionInput!): JSON
+
+    bulkCreateTreatmentPlans(input: BulkCreateTreatmentPlansInput!): JSON
   }
 `
 
@@ -60,4 +63,5 @@ module.exports = [
   ...account,
   ...qualityAccessScore,
   ...collection,
+  ...treatmentPlan,
 ]

@@ -10,6 +10,19 @@ import SubmitButton from './SubmitButton'
 import Spinner from '../../../Phoenix/shared/Spinner'
 import TreatmentPlanManager from './TreatmentPlanManager'
 
+import Card from '../../../components/Card'
+
+const importButtonStyle = {
+  display: 'block',
+  border: '2px dotted #0076ffe6',
+  backgroundColor: '#0076ff38',
+  borderRadius: 9,
+  color: 'blue',
+  padding: '8px 0',
+  textAlign: 'center',
+  textDecoration: 'underline',
+}
+
 class Import extends React.Component {
   constructor(props) {
     super(props)
@@ -95,50 +108,47 @@ class Import extends React.Component {
     }
 
     return (
-      <div style={{ padding: 24 }}>
+      <div style={{ padding: 24, backgroundColor: '#e8ebec', flex: 1 }}>
         {/* TODO: Figure out ref logic to pull this into FileSelector.js */}
-        <div>
-          <p>Pick an Excel file:</p>
-          <label style={{
-            display: 'block',
-            border: '1px solid black',
-            borderRadius: 4,
-            padding: '100px 200px',
-            textAlign: 'center',
-          }}>
-            Import File
-            <input
-              style={{ display: 'none' }}
-              ref={this.fileInputRef}
-              type="file"
-              multiple
-              onChange={this.onFilesAdded}
-            />
-          </label>
-        </div>
-        {
-          greatSuccess
-            ? <div>IMPORT SUCCESSFUL</div>
-            : (
-              <>
-                <SheetSelector
-                  sheetNames={sheetNames}
-                  selectedSheet={selectedSheet}
-                  handleSheetSelection={this.handleSheetSelection}
-                />
-                <CollectionSelector
-                  selectedCollection={selectedCollection}
-                  selectedSheet={selectedSheet}
-                  handleCollectionSelection={this.handleCollectionSelection}
-                />
-                <SubmitButton
-                  data={data}
-                  selectedCollection={selectedCollection}
-                  handleSuccess={this.handleSuccess}
-                />
-              </>
-            )
-        }
+        <Card width={'50%'} title={'IMPORT SHEET'}>
+          <div>
+            <p style={{ fontWeight: 'bold' }}>Upload Excel File:</p>
+            <label style={importButtonStyle}>
+              Drag File Here or Click to Upload
+              <input
+                style={{ display: 'none' }}
+                ref={this.fileInputRef}
+                type="file"
+                multiple
+                onChange={this.onFilesAdded}
+              />
+            </label>
+          </div>
+
+          {
+            greatSuccess
+              ? <div>IMPORT SUCCESSFUL</div>
+              : (
+                <>
+                  <SheetSelector
+                    sheetNames={sheetNames}
+                    selectedSheet={selectedSheet}
+                    handleSheetSelection={this.handleSheetSelection}
+                  />
+                  <CollectionSelector
+                    selectedCollection={selectedCollection}
+                    selectedSheet={selectedSheet}
+                    handleCollectionSelection={this.handleCollectionSelection}
+                  />
+                  <SubmitButton
+                    data={data}
+                    selectedCollection={selectedCollection}
+                    handleSuccess={this.handleSuccess}
+                  />
+                </>
+              )
+          }
+        </Card>
         {isLoading && <Spinner />}
         {!_.isEmpty(data) && <TreatmentPlanManager data={data} />}
       </div>

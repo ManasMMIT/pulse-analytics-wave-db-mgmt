@@ -67,8 +67,12 @@ import {
 } from './qualityOfAccessScores'
 
 import {
-  UPLOAD_COLLECTION
+  UPLOAD_COLLECTION,
 } from './collection'
+
+import {
+  BULK_CREATE_TREATMENT_PLAN,
+} from './treatmentPlan'
 
 export {
   SELECT_CLIENT,
@@ -122,4 +126,5 @@ export {
   UPDATE_QUALITY_OF_ACCESS_SCORE,
 
   UPLOAD_COLLECTION,
+  BULK_CREATE_TREATMENT_PLAN,
 }
