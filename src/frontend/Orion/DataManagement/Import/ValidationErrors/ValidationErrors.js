@@ -36,12 +36,15 @@ const ProblemRowWrapper = styled.div({
 
 const ColumnItems = styled.span({
   width: '33%',
+  padding: 12,
   overflowWrap: 'break-word',
+  maxHeight: 40,
+  overflowY: 'scroll',
 }, ({ color }) => ({ color }))
 
 const ValidationErrors = ({ errors }) => {
   if (!errors) return null
-  debugger
+
   return (
     <div>
       {

@@ -18,6 +18,15 @@ const Button = styled.button({
   borderRadius: 3,
 })
 
+const DisabledButton = styled.button({
+  border: 'none',
+  background: '#006aff0f',
+  color: '#00000033',
+  fontWeight: 700,
+  padding: 6,
+  borderRadius: 3,
+})
+
 const SubmitButton = ({
   data,
   selectedCollection,
@@ -42,6 +51,8 @@ const SubmitButton = ({
         handleError(errors)
       }
 
+      const isDisabled = _.isEmpty(data) || !selectedCollection || !selectedSheet
+
       const handleSubmit = () => {
         handleClick(true)
 
@@ -54,16 +65,19 @@ const SubmitButton = ({
           }
         })
       }
+      const StyledButton = isDisabled
+        ? DisabledButton
+        : Button
 
       return (
         <>
           <div style={{ marginTop: 24 }}>
-            <Button
+            <StyledButton
               onClick={handleSubmit}
-              disabled={_.isEmpty(data) || !selectedCollection || !selectedSheet}
+              disabled={isDisabled}
             >
               Import Sheet
-            </Button>
+            </StyledButton>
             {error && <span style={{ color: 'red', marginLeft: 24 }}>IMPORT FAILED</span>}
           </div>
         </>
