@@ -120,7 +120,7 @@ class Import extends React.Component {
       const { json } = sheetToJson(selectedSheetObj)
       data = json
     }
-debugger
+
     return (
       <div style={{ padding: 24, backgroundColor: '#e8ebec', flex: 1 }}>
         {/* TODO: Figure out ref logic to pull this into FileSelector.js */}
