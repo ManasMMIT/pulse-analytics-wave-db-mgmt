@@ -5,7 +5,7 @@ import Spinner from '../Phoenix/shared/Spinner'
 
 import { EMAIL_ALERTS } from '../api/mutations'
 
-const Email = () => (
+const Mercury = () => (
   <Mutation
     mutation={EMAIL_ALERTS}
   >
@@ -28,7 +28,7 @@ const Email = () => (
     return (
       <>
         <div style={{ marginTop: 24 }}>
-          <button onClick={handleSubmit}>Email</button>
+          <button onClick={handleSubmit}>Send Pathways Email</button>
         </div>
       </>
     )
@@ -36,4 +36,4 @@ const Email = () => (
 </Mutation>
 )
 
-export default Email
+export default Mercury
