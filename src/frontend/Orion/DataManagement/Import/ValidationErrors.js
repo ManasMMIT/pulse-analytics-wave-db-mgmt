@@ -1,7 +1,25 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import ValidationError from './ValidationError'
+import ErrorList from './ErrorList'
+
+const HEADERS = ['Value', 'Rows', 'Suggestions'] 
+
+const ROW_CONFIG = [
+  {
+    key: 'value',
+    color: 'red',
+  },
+  {
+    key: 'sheetRows',
+    color: 'black',
+    csv: true,
+  },
+  {
+    key: 'suggestion',
+    color: 'blue',
+  },
+]
 
 const ValidationErrors = ({ errors }) => {
   if (!errors) return null
@@ -10,11 +28,12 @@ const ValidationErrors = ({ errors }) => {
     <div>
       {
         errors.map(({ type, problemRows }) => (
-          <ValidationError
+          <ErrorList
             style={{ marginBottom: 24 }}
+            headers={HEADERS}
             type={type}
-            problemRows={problemRows}
-            rowColors={['red', 'black', 'blue']}
+            data={problemRows}
+            rowConfig={ROW_CONFIG}
           />
         ))
       }
