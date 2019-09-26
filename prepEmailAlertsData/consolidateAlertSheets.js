@@ -138,8 +138,9 @@ const consolidateAlertSheets = async ({ pulseDevDb, mongoConnection }) => {
       console.log('"alerts" collection has been successfully updated!')
       console.log('-------- step 1 completed --------')
     })
-  } catch {
+  } catch (e){
     console.log('Failed to update alerts collection in mongoDB')
+    console.log(e)
   }
 }
 
