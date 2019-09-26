@@ -22,20 +22,6 @@ const Column = styled.div({
 
 const ValidationErrors = ({ errors }) => (
   <>
-    <div style={{ padding: '24px 0', color: 'red' }}>
-      <div style={{ fontWeight: 700, paddingBottom: '12' }}>Sheet Errors</div>
-      <div>
-        <ul>
-          {
-            errors.map(({ message }) => (
-              <li key={message}>
-                {message}
-              </li>
-            ))
-          }
-        </ul>
-      </div>
-    </div>
     <TableHeader>
       {
         COLUMNS.map(label => (

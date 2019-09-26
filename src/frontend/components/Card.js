@@ -25,9 +25,11 @@ const Card = ({
   children,
 }) => (
   <Wrapper style={{ width }}>
-    <Header>
-      {title}
-    </Header>
+    {title && (
+      <Header>
+        {title}
+      </Header>
+    )}
     <Body>
       {children}
     </Body>

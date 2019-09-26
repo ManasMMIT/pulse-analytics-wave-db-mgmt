@@ -4,8 +4,6 @@ import _ from 'lodash'
 
 import Spinner from '../../../Phoenix/shared/Spinner'
 
-import ValidationErrors from './ValidationErrors'
-
 import {
   UPLOAD_COLLECTION,
 } from '../../../api/mutations'
@@ -14,6 +12,9 @@ const SubmitButton = ({
   data,
   selectedCollection,
   handleSuccess,
+  handleError,
+  handleClick,
+  clicked,
 }) => (
   <Mutation
     mutation={UPLOAD_COLLECTION}
@@ -23,9 +24,16 @@ const SubmitButton = ({
       if (loading) return <Spinner />
 
       // TODO: Make error handling less wonky
-      const errors = error && error.graphQLErrors[0].extensions.exception.error
+      let errors
+      if (error && clicked) {
+        errors = error.graphQLErrors[0].extensions.exception.error
+
+        handleError(errors)
+      }
 
       const handleSubmit = () => {
+        handleClick(true)
+
         handleUpload({
           variables: {
             input: {
@@ -46,8 +54,8 @@ const SubmitButton = ({
             >
               Upload
             </button>
+            {error && <span style={{ color: 'red', marginLeft: 24 }}>IMPORT FAILED</span>}
           </div>
-          {!!error && <ValidationErrors errors={errors} />}
         </>
       )
     }}
