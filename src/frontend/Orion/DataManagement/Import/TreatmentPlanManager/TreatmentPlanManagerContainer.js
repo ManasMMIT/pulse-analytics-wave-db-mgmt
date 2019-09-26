@@ -20,6 +20,8 @@ const getIndicationsWithRegimens = data => {
 }
 
 const TreatmentPlanManagerContainer = ({ data }) => {
+  if (_.isEmpty(data)) return null
+
   const hasTreatmentPlan = data.some(({ indication, regimen }) => indication && regimen)
 
   if (!hasTreatmentPlan) return null
