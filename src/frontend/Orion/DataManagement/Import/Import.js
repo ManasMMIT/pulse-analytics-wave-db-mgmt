@@ -1,10 +1,14 @@
 import React from "react"
 import XLSX from 'xlsx'
+import _ from 'lodash'
+
+import sheetToJson from './sheetToJson'
 
 import SheetSelector from './SheetSelector'
 import CollectionSelector from './CollectionSelector'
 import SubmitButton from './SubmitButton'
 import Spinner from '../../../Phoenix/shared/Spinner'
+import TreatmentPlanManager from './TreatmentPlanManager'
 
 class Import extends React.Component {
   constructor(props) {
@@ -59,6 +63,7 @@ class Import extends React.Component {
 
   handleSuccess = () => {
     this.fileInputRef.current.value = ''
+    this.workbook = null
 
     this.setState({ greatSuccess: true }, () => {
       setTimeout(() => {
@@ -81,6 +86,13 @@ class Import extends React.Component {
       selectedCollection,
       greatSuccess,
     } = this.state
+
+    let data
+    if (this.workbook) {
+      const selectedSheetObj = this.workbook.Sheets[selectedSheet.value]
+      const { json } = sheetToJson(selectedSheetObj)
+      data = json
+    }
 
     return (
       <div style={{ padding: 24 }}>
@@ -120,15 +132,15 @@ class Import extends React.Component {
                   handleCollectionSelection={this.handleCollectionSelection}
                 />
                 <SubmitButton
-                  workbook={this.workbook}
+                  data={data}
                   selectedCollection={selectedCollection}
                   handleSuccess={this.handleSuccess}
-                  selectedSheet={selectedSheet}
                 />
               </>
             )
         }
         {isLoading && <Spinner />}
+        {!_.isEmpty(data) && <TreatmentPlanManager data={data} />}
       </div>
     )
 
