@@ -1,5 +1,6 @@
 import React from "react"
 import XLSX from 'xlsx'
+import styled from '@emotion/styled'
 
 import sheetToJson from './sheetToJson'
 
@@ -13,7 +14,16 @@ import ValidationErrors from './ValidationErrors'
 
 import Card from '../../../components/Card'
 
-const importButtonStyle = {
+const Page = styled.div({
+  padding: 24,
+  backgroundColor: '#e8ebec',
+  flex: 1,
+  height: '100vh',
+  overflowY: 'scroll',
+  boxSizing: 'border-box',
+})
+
+const ImportButton = styled.label({
   display: 'block',
   border: '2px dotted #0076ffe6',
   backgroundColor: '#0076ff38',
@@ -22,7 +32,7 @@ const importButtonStyle = {
   padding: '8px 0',
   textAlign: 'center',
   textDecoration: 'underline',
-}
+})
 
 class Import extends React.Component {
   constructor(props) {
@@ -114,22 +124,22 @@ class Import extends React.Component {
       errors,
     } = this.state
 
-    let data
+    let data, fileName
     if (this.workbook) {
       const selectedSheetObj = this.workbook.Sheets[selectedSheet.value]
       const { json } = sheetToJson(selectedSheetObj)
       data = json
+      fileName = this.fileInputRef.current.files[0].name
     }
-
     return (
-      <div style={{ padding: 24, backgroundColor: '#e8ebec', flex: 1 }}>
+      <Page>
         {/* TODO: Figure out ref logic to pull this into FileSelector.js */}
         <div style={{ display: 'flex' }}>
           <Card width={'50%'} title={'IMPORT SHEET'}>
             <div>
               <p style={{ fontWeight: 'bold' }}>Upload Excel File:</p>
-              <label style={importButtonStyle}>
-                Drag File Here or Click to Upload
+              <ImportButton>
+                { fileName || 'Drag File Here or Click to Upload'}
                 <input
                   style={{ display: 'none' }}
                   ref={this.fileInputRef}
@@ -137,7 +147,7 @@ class Import extends React.Component {
                   multiple
                   onChange={this.onFilesAdded}
                 />
-              </label>
+              </ImportButton>
             </div>
 
             {
@@ -163,6 +173,7 @@ class Import extends React.Component {
                       handleClick={this.handleClick}
                       clicked={clicked}
                       greatSuccess={greatSuccess}
+                      selectedSheet={selectedSheet}
                     />
                   </>
                 )
@@ -187,12 +198,12 @@ class Import extends React.Component {
           </Card>
         </div>
         <Card>
-          {errors && <ValidationErrors errors={errors} />}
+          <ValidationErrors errors={errors} />
           <TreatmentPlanManager data={data} />
         </Card>
-      </div>
+      </Page>
     )
-
   }
 }
+
 export default Import
