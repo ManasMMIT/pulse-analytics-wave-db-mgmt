@@ -30,7 +30,7 @@ const Mercury = () => (
         <h2>Follow instructions to send pathways email:</h2>
         <section>
           <ol>
-            <li style={{ paddingBottom: 24 }}>Run "node ./prepEmailAlertsData" in your terminal</li>
+            <li style={{ paddingBottom: 24 }}>Run <code>node ./prepEmailAlertsData</code> in wave-db-mgmt</li>
             <li><button onClick={handleSubmit}>Send Pathways Email</button></li>
           </ol>
         </section>
