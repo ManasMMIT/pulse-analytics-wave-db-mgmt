@@ -3,7 +3,7 @@ const _ = require('lodash')
 const mjml2html = require('mjml')
 const sgMail = require('@sendgrid/mail')
 const nunjucks = require('nunjucks')
-const helpers = require('./mjmlTemplates/pathwaysAlerts/mockData')
+const helpers = require('./mjmlTemplates/pathwaysAlerts/helpers')
 
 const TEMPLATE_MAP = {
   pathwaysAlerts: {
@@ -48,10 +48,10 @@ const sendSingleEmail = async ({ email, templateDetails, data }) => {
 
     const sgResponse = await sgMail.send(sgData)
       .then(() => {
-        console.log('Email successfully received by server')
+        console.log(`Email to '${email}' successfully received by server`)
       })
       .catch(err => {
-        console.error('Server failed to receive email')
+        console.error(`Server failed to receive email to ${email}`)
         console.error(err)
 
         const { code, message } = err
@@ -89,8 +89,8 @@ const emailAlerts = async (
     const filteredAlerts = clientTeams.reduce((acc, teamObj) => {
       const { pathwaysAlerts: pathwaysTeamAlerts } = teamObj.resources
       const teamUsersById = _.keyBy(teamObj.users, '_id')
-      if (teamUsersById[userId]) return acc
-
+      if (teamUsersById[userId]) return acc 
+       
       pathwaysTeamAlerts.forEach(alert => {
         const { _id, organizationType: orgType } = alert
         if (orgType && orgType !== organizationType) return acc
@@ -100,9 +100,26 @@ const emailAlerts = async (
       return acc
     }, {})
     
-    // FILTER ALERTS BY WHAT THE MOCK DATA EXPECTS HERE
-    return filteredAlerts
-}
+    const formattedAlerts = d3.nest()
+      .key(d => (d.superAlertType).toLowerCase())
+      .rollup(arr => {
+        const { superAlertType } = arr[0]
+
+        let data =  _.groupBy(arr, 'slug')
+        if (superAlertType === 'Positioning'){
+           data = Object.entries(data).reduce((acc, arr) =>{
+            const [alertName, alertData] = arr
+            acc[alertName] = _.groupBy(alertData, 'indication')
+            return acc
+          }, {})
+        }
+        
+        return data
+      })
+      .object(Object.values(filteredAlerts))
+    
+    return formattedAlerts
+  }
 
   const failedEmails = []
 
@@ -118,7 +135,7 @@ const emailAlerts = async (
     for (const user of clientUsers){
       const { _id, email } = user
       const filteredData = filterUserAlert({ clientTeams, organizationType: PATHWAYS_ORG_TYPE, userId: _id })
-      const data = Object.values(filteredData)
+      const data = { ...helpers, ...filteredData }
 
       const status = await sendSingleEmail({ email, templateDetails, data }) // eslint-disable-line
       if (status) failedEmails.push(status)
@@ -129,7 +146,8 @@ const emailAlerts = async (
     ? `${ failedEmails.length } emails failed delivery to server`
     : `All emails delivered to server`
 
-  return { message, failedEmails }
+  console.log('-----------')
+  console.log(message)
 }
 
 module.exports = emailAlerts
