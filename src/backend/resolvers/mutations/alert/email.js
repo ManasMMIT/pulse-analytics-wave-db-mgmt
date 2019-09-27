@@ -75,6 +75,42 @@ const sendSingleEmail = async ({ email, templateDetails, data }) => {
   }
 }
 
+const filterUserAlert = ({ clientTeams, organizationType, userId }) => {
+  const filteredAlerts = clientTeams.reduce((acc, teamObj) => {
+    const { pathwaysAlerts: pathwaysTeamAlerts } = teamObj.resources
+    const teamUsersById = _.keyBy(teamObj.users, '_id')
+    if (teamUsersById[userId]) return acc 
+     
+    pathwaysTeamAlerts.forEach(alert => {
+      const { _id, organizationType: orgType } = alert
+      if (orgType && orgType !== organizationType) return acc
+      if (!acc[_id]) acc[_id] = alert
+    })
+
+    return acc
+  }, {})
+  
+  const formattedAlerts = d3.nest()
+    .key(d => (d.superAlertType).toLowerCase())
+    .rollup(arr => {
+      const { superAlertType } = arr[0]
+
+      let data =  _.groupBy(arr, 'slug')
+      if (superAlertType === 'Positioning'){
+         data = Object.entries(data).reduce((acc, arr) =>{
+          const [alertName, alertData] = arr
+          acc[alertName] = _.groupBy(alertData, 'indication')
+          return acc
+        }, {})
+      }
+      
+      return data
+    })
+    .object(Object.values(filteredAlerts))
+  
+  return formattedAlerts
+}
+
 const emailAlerts = async (
   parent,
   { input: {templateType} },
@@ -85,42 +121,6 @@ const emailAlerts = async (
   const clientsWithAlerts = await pulseDevDb.collection('temp.teams').find({ _id: 'meta'}).toArray()
   delete clientsWithAlerts[0]._id // remove the _id
   
-  const filterUserAlert = ({ clientTeams, organizationType, userId }) => {
-    const filteredAlerts = clientTeams.reduce((acc, teamObj) => {
-      const { pathwaysAlerts: pathwaysTeamAlerts } = teamObj.resources
-      const teamUsersById = _.keyBy(teamObj.users, '_id')
-      if (teamUsersById[userId]) return acc 
-       
-      pathwaysTeamAlerts.forEach(alert => {
-        const { _id, organizationType: orgType } = alert
-        if (orgType && orgType !== organizationType) return acc
-        if (!acc[_id]) acc[_id] = alert
-      })
-
-      return acc
-    }, {})
-    
-    const formattedAlerts = d3.nest()
-      .key(d => (d.superAlertType).toLowerCase())
-      .rollup(arr => {
-        const { superAlertType } = arr[0]
-
-        let data =  _.groupBy(arr, 'slug')
-        if (superAlertType === 'Positioning'){
-           data = Object.entries(data).reduce((acc, arr) =>{
-            const [alertName, alertData] = arr
-            acc[alertName] = _.groupBy(alertData, 'indication')
-            return acc
-          }, {})
-        }
-        
-        return data
-      })
-      .object(Object.values(filteredAlerts))
-    
-    return formattedAlerts
-  }
-
   const failedEmails = []
 
   for (const clientArr of Object.entries(clientsWithAlerts[0])){
