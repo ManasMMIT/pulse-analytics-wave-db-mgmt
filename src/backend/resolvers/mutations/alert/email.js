@@ -87,13 +87,16 @@ const emailAlerts = async (
     if (status) failedEmails.push(status)
   }
 
-  if (emailList.length === failedEmails.length) {
+  const failedEmailLength = failedEmails.length
+  const emailListLength = emailList.length
+
+  if (emailList.length === failedEmailLength) {
     throw new Error('All emails failed delivery to server')
   }
 
-  const message = failedEmails.length > 0
-    ? `${ failedEmails.length } of ${ emailList.length } emails failed delivery to server`
-    : `All ${ emailList.length } emails delivered to server`
+  const message = failedEmailLength > 0
+    ? `${ failedEmailLength } of ${ emailListLength } emails failed delivery to server`
+    : `All ${ emailListLength } emails delivered to server`
 
   return { message, failedEmails }
 }

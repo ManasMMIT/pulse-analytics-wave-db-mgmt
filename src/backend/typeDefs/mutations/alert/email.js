@@ -7,7 +7,7 @@ const emailAlertsTypeDefs = gql`
   }
 
   type EmailAlertPayload {
-    message: String
+    message: String!
     failedEmails: [String]
   }
 `
