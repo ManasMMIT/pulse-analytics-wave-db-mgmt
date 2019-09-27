@@ -48,10 +48,10 @@ const sendSingleEmail = async ({ email, templateDetails, data }) => {
 
     const sgResponse = await sgMail.send(sgData)
       .then(() => {
-        console.log(`Email to '${email}' successfully received by server`)
+        console.log(`Email to '${ email }' successfully received by server`)
       })
       .catch(err => {
-        console.error(`Server failed to receive email to ${email}`)
+        console.error(`Server failed to receive email to ${ email }`)
         console.error(err)
 
         const { code, message } = err
@@ -122,6 +122,7 @@ const emailAlerts = async (
   delete clientsWithAlerts[0]._id // remove the _id
   
   const failedEmails = []
+  const emailsList = []
 
   for (const clientArr of Object.entries(clientsWithAlerts[0])){
     const [clientName, clientUsers] = clientArr
@@ -134,6 +135,7 @@ const emailAlerts = async (
     
     for (const user of clientUsers){
       const { _id, email } = user
+      emailsList.push(email)
       const filteredData = filterUserAlert({ clientTeams, organizationType: PATHWAYS_ORG_TYPE, userId: _id })
       const data = { ...helpers, ...filteredData }
 
@@ -142,9 +144,16 @@ const emailAlerts = async (
     }
   }
 
-  const message = failedEmails.length > 0
-    ? `${ failedEmails.length } emails failed delivery to server`
-    : `All emails delivered to server`
+  const failedEmailLength = failedEmails.length
+  const emailListLength = emailsList.length
+
+  if (emailListLength === failedEmailLength) {
+    throw new Error('All emails failed delivery to server')
+  }
+
+  const message = failedEmailLength > 0
+    ? `${ failedEmailLength } of ${ emailListLength } emails failed delivery to server`
+    : `All ${ emailListLength } emails delivered to server`
 
   console.log('-----------')
   console.log(message)

@@ -67,12 +67,16 @@ import {
 } from './qualityOfAccessScores'
 
 import {
-  UPLOAD_COLLECTION
+  UPLOAD_COLLECTION,
 } from './collection'
 
 import {
   EMAIL_ALERTS,
 } from './alerts'
+
+import {
+  BULK_CREATE_TREATMENT_PLAN,
+} from './treatmentPlan'
 
 export {
   SELECT_CLIENT,
@@ -128,4 +132,6 @@ export {
   UPLOAD_COLLECTION,
 
   EMAIL_ALERTS,
+  
+  BULK_CREATE_TREATMENT_PLAN,
 }

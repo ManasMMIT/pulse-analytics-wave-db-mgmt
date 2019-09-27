@@ -1,8 +1,6 @@
 import React from "react"
 import PropTypes from 'prop-types'
 
-import _ from 'lodash'
-
 import Select from 'react-select'
 
 const SheetSelector = ({
@@ -11,20 +9,16 @@ const SheetSelector = ({
   handleSheetSelection,
 }) => (
   <>
-    {
-      (_.isEmpty(sheetNames) || (
-        <div style={{ marginTop: 24, width: 500 }}>
-          <p>Sheets to Upload:</p>
-          {
-            <Select
-              value={selectedSheet}
-              onChange={handleSheetSelection}
-              options={sheetNames.map(n => ({ value: n, label: n }))}
-            />
-          }
-        </div>
-      ))
-    }
+    <div style={{ marginTop: 24 }}>
+      <p style={{ fontWeight: 700 }}>Select Sheets to Upload:</p>
+      {
+        <Select
+          value={selectedSheet}
+          onChange={handleSheetSelection}
+          options={sheetNames.map(n => ({ value: n, label: n }))}
+        />
+      }
+    </div>
   </>
 )
 

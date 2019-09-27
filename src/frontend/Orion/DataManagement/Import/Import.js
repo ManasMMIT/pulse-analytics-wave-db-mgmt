@@ -1,10 +1,38 @@
 import React from "react"
 import XLSX from 'xlsx'
+import styled from '@emotion/styled'
+
+import sheetToJson from './sheetToJson'
 
 import SheetSelector from './SheetSelector'
 import CollectionSelector from './CollectionSelector'
 import SubmitButton from './SubmitButton'
-import Spinner from '../../../Phoenix/shared/Spinner'
+
+import TreatmentPlanManager from './TreatmentPlanManager'
+
+import ValidationErrors from './ValidationErrors'
+
+import Card from '../../../components/Card'
+
+const Page = styled.div({
+  padding: 24,
+  backgroundColor: '#e8ebec',
+  flex: 1,
+  height: '100vh',
+  overflowY: 'scroll',
+  boxSizing: 'border-box',
+})
+
+const ImportButton = styled.label({
+  display: 'block',
+  border: '2px dotted #0076ffe6',
+  backgroundColor: '#0076ff38',
+  borderRadius: 9,
+  color: 'blue',
+  padding: '8px 0',
+  textAlign: 'center',
+  textDecoration: 'underline',
+})
 
 class Import extends React.Component {
   constructor(props) {
@@ -17,10 +45,12 @@ class Import extends React.Component {
 
     this.state = {
       sheetNames: [],
-      isLoading: false,
+      isLoading: false, // TODO: May not be needed anymore
       selectedSheet: null,
       selectedCollection: null,
       greatSuccess: false,
+      errors: null,
+      clicked: false,
     }
   }
 
@@ -59,6 +89,7 @@ class Import extends React.Component {
 
   handleSuccess = () => {
     this.fileInputRef.current.value = ''
+    this.workbook = null
 
     this.setState({ greatSuccess: true }, () => {
       setTimeout(() => {
@@ -68,70 +99,111 @@ class Import extends React.Component {
           selectedSheet: null,
           selectedCollection: null,
           greatSuccess: false,
+          errors: null,
+          clicked: false,
         })
       }, 1500)
     })
+  }
+
+  handleError = errors => {
+    this.setState({ errors, clicked: false })
+  }
+
+  handleClick = () => {
+    this.setState({ clicked: true })
   }
 
   render() {
     const {
       sheetNames,
       selectedSheet,
-      isLoading,
       selectedCollection,
       greatSuccess,
+      clicked,
+      errors,
     } = this.state
 
+    let data, fileName
+    if (this.workbook) {
+      const selectedSheetObj = this.workbook.Sheets[selectedSheet.value]
+      const { json } = sheetToJson(selectedSheetObj)
+      data = json
+      fileName = this.fileInputRef.current.files[0].name
+    }
     return (
-      <div style={{ padding: 24 }}>
+      <Page>
         {/* TODO: Figure out ref logic to pull this into FileSelector.js */}
-        <div>
-          <p>Pick an Excel file:</p>
-          <label style={{
-            display: 'block',
-            border: '1px solid black',
-            borderRadius: 4,
-            padding: '100px 200px',
-            textAlign: 'center',
-          }}>
-            Import File
-            <input
-              style={{ display: 'none' }}
-              ref={this.fileInputRef}
-              type="file"
-              multiple
-              onChange={this.onFilesAdded}
-            />
-          </label>
-        </div>
-        {
-          greatSuccess
-            ? <div>IMPORT SUCCESSFUL</div>
-            : (
-              <>
-                <SheetSelector
-                  sheetNames={sheetNames}
-                  selectedSheet={selectedSheet}
-                  handleSheetSelection={this.handleSheetSelection}
+        <div style={{ display: 'flex' }}>
+          <Card width={'50%'} title={'IMPORT SHEET'}>
+            <div>
+              <p style={{ fontWeight: 'bold' }}>Upload Excel File:</p>
+              <ImportButton>
+                { fileName || 'Drag File Here or Click to Upload'}
+                <input
+                  style={{ display: 'none' }}
+                  ref={this.fileInputRef}
+                  type="file"
+                  multiple
+                  onChange={this.onFilesAdded}
                 />
-                <CollectionSelector
-                  selectedCollection={selectedCollection}
-                  selectedSheet={selectedSheet}
-                  handleCollectionSelection={this.handleCollectionSelection}
-                />
-                <SubmitButton
-                  workbook={this.workbook}
-                  selectedCollection={selectedCollection}
-                  handleSuccess={this.handleSuccess}
-                  selectedSheet={selectedSheet}
-                />
-              </>
-            )
-        }
-        {isLoading && <Spinner />}
-      </div>
-    )
+              </ImportButton>
+            </div>
 
+            {
+              greatSuccess
+                ? <div>IMPORT SUCCESSFUL</div>
+                : (
+                  <>
+                    <SheetSelector
+                      sheetNames={sheetNames}
+                      selectedSheet={selectedSheet}
+                      handleSheetSelection={this.handleSheetSelection}
+                    />
+                    <CollectionSelector
+                      selectedCollection={selectedCollection}
+                      selectedSheet={selectedSheet}
+                      handleCollectionSelection={this.handleCollectionSelection}
+                    />
+                    <SubmitButton
+                      data={data}
+                      selectedCollection={selectedCollection}
+                      handleSuccess={this.handleSuccess}
+                      handleError={this.handleError}
+                      handleClick={this.handleClick}
+                      clicked={clicked}
+                      greatSuccess={greatSuccess}
+                      selectedSheet={selectedSheet}
+                    />
+                  </>
+                )
+            }
+          </Card>
+          <Card width={'50%'} title={"SYSTEM STATUS"}>
+            {errors && (
+              <div style={{ color: 'red' }}>
+                <div>
+                  <ul>
+                    {
+                      errors.map(({ message }) => (
+                        <li key={message}>
+                          {message}
+                        </li>
+                      ))
+                    }
+                  </ul>
+                </div>
+              </div>)
+            }
+          </Card>
+        </div>
+        <Card>
+          <ValidationErrors errors={errors} />
+          <TreatmentPlanManager data={data} />
+        </Card>
+      </Page>
+    )
   }
 }
+
 export default Import

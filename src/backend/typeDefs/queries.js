@@ -12,6 +12,7 @@ const queries = gql`
     accounts(type: String): [Account]
     qualityOfAccessScores: [QualityOfAccessScore]
     collections(type: String): [String]
+    newTreatmentPlans(data: JSON): JSON
   }
 
   type Node {
