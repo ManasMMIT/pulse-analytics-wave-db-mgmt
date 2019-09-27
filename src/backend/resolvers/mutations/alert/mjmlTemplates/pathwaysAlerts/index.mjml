@@ -1,0 +1,104 @@
+<mjml>
+  <mj-head>
+    {% include "./styles/styles.mjml" %}
+  </mj-head>
+  <mj-body mj-class='mj-body'>
+    <!-- Header Logo -->
+    <mj-section mj-class='header'>
+      <mj-column>
+        <mj-image 
+          src='https://res.cloudinary.com/pulsedatatools/image/upload/v1534519813/system/logo/pulse-logo-full-white.svg'
+        />
+        <mj-text mj-class='header-subject' font-weight='600'>
+          PATHWAYS UPDATE
+        </mj-text>
+        <mj-text mj-class='header-subject' >
+          {{ helpers.getDate.month() }} {{ helpers.getDate.year() }}
+        </mj-text>
+      </mj-column>
+    </mj-section>
+    <!-- Header Details -->
+    <mj-section mj-class='default-background'>
+      <mj-column>
+        <mj-text mj-class='header-text'>
+          Welcome to your {{ helpers.getDate.month() }} {{ helpers.getDate.year() }} Pathways update. View the latest Pathways changes in the email below 
+          or visit the Pathways tool to view more in-depth data.
+        </mj-text>
+        <mj-text align='center' padding-top='24px'>
+          <a
+            class='visit-pathways-btn'
+            href='https://pulse-tools.com/pathways/overview/pathways'
+          >
+            <span>
+              Visit Pathways Tool
+            </span>
+          </a>
+        </mj-text>
+      </mj-column>
+    </mj-section>
+    <!-- Navbar -->
+    <mj-section mj-class='default-background no-padding'>
+      <mj-column>
+        <mj-navbar mj-class='no-padding'>
+          <mj-navbar-link 
+            mj-class='header-navbar-link'
+            href='#positioning-section'
+          >
+            POSITIONING
+          </mj-navbar-link>
+          <mj-navbar-link>
+            <span class='navbar-bullet'>
+              &bull;
+            </span>
+          </mj-navbar-link>
+          <mj-navbar-link
+            mj-class='header-navbar-link'
+            href='#influencers-section'
+          >
+            INFLUENCERS
+          </mj-navbar-link>
+          <mj-navbar-link>
+            <span class='navbar-bullet'>
+              &bull;
+            </span>
+          </mj-navbar-link>
+          <mj-navbar-link
+            mj-class='header-navbar-link'
+            href='#providers-section'
+          >
+            PROVIDERS
+          </mj-navbar-link>
+        </mj-navbar>
+        <mj-divider mj-class='section-divider' />
+      </mj-column>
+    </mj-section>
+    <!-- Positioning Section -->
+    {% include "./partials/positioning/positioningSection.mjml" %}
+    <mj-section mj-class='default-background'>
+      <mj-column>
+        <mj-text align='center' padding-top='24px'>
+          <a
+            class='visit-pathways-btn'
+            href='https://pulse-tools.com/pathways/overview/pathways'
+          >
+            <span>
+              Visit Pathways Tool
+            </span>
+          </a>
+        </mj-text>
+      </mj-column>
+    </mj-section>
+    <!-- Email Footer -->
+    <mj-section mj-class='footer'>
+      <mj-column>
+        <mj-text mj-class='footer-text'>
+          You're receiving this email because you have an account with Pulse Digital. If you are receiving
+          this emails in error, please contact us.
+        </mj-text>
+        <mj-text mj-class='footer-text'>
+          &copy; {{ helpers.getDate.year() }} Pulse Digital
+        </mj-text>
+      </mj-column>
+    </mj-section>
+  </mj-body>
+</mjml>

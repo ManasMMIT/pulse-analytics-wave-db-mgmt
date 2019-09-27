@@ -18,6 +18,7 @@ import resolvers from './api/resolvers'
 import typeDefs from './api/typeDefs'
 import Phoenix from './Phoenix'
 import Orion from './Orion'
+import Delphi from './Delphi'
 
 const cache = new InMemoryCache()
 
@@ -74,10 +75,18 @@ const App = () => {
               >
                 O
               </NavLink>
+              <NavLink
+                to="/delphi"
+                style={linkStyle}
+                activeStyle={activeLinkStyle('lightblue')}
+              >
+                D
+              </NavLink>
             </div>
             <Switch>
               <Route path="/phoenix" component={Phoenix} />
               <Route path="/orion" component={Orion} />
+              <Route path="/delphi" component={Delphi} />
               <Redirect to="/phoenix" />
             </Switch>
           </div>

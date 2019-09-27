@@ -10,6 +10,7 @@ const regimen = require('./regimen')
 const account = require('./account')
 const qualityAccessScore = require('./qualityAccessScore')
 const collection = require('./collection')
+const alert = require('./alert')
 const treatmentPlan = require('./treatmentPlan')
 
 const mutationType = gql`
@@ -47,6 +48,8 @@ const mutationType = gql`
 
     uploadCollection(input: UploadCollectionInput!): JSON
 
+    emailAlerts(input: EmailAlertInput!): JSON
+    
     bulkCreateTreatmentPlans(input: BulkCreateTreatmentPlansInput!): JSON
   }
 `
@@ -63,5 +66,6 @@ module.exports = [
   ...account,
   ...qualityAccessScore,
   ...collection,
+  ...alert,
   ...treatmentPlan,
 ]
