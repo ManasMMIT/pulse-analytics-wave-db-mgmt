@@ -20,13 +20,12 @@ const mjmlOptions = {
   beautify: true,
 }
 
-const sendSingleEmail = async ({ email, templateDetails, data }) => {
+const sendSingleEmail = async ({ email, templateDetails, data, nunjucksEnv }) => {
   const apiKey = process.env.SENDGRID_API_KEY
   sgMail.setApiKey(apiKey)
-  const env = nunjucks.configure('src')
   
   const compileTemplate = ({ templatePath, data }) => {
-    const result = env.render(templatePath, data)
+    const result = nunjucksEnv.render(templatePath, data)
 
     return result
   }
@@ -79,6 +78,7 @@ const filterUserAlert = ({ clientTeams, organizationType, userId }) => {
   const filteredAlerts = clientTeams.reduce((acc, teamObj) => {
     const { pathwaysAlerts: pathwaysTeamAlerts } = teamObj.resources
     const teamUsersById = _.keyBy(teamObj.users, '_id')
+    
     if (teamUsersById[userId]) return acc 
      
     pathwaysTeamAlerts.forEach(alert => {
@@ -117,6 +117,7 @@ const emailAlerts = async (
   { pulseDevDb },
 ) => {
   const templateDetails = TEMPLATE_MAP[templateType]
+  const nunjucksEnv = nunjucks.configure('src')
 
   const clientsWithAlerts = await pulseDevDb.collection('temp.teams').find({ _id: 'meta'}).toArray()
   delete clientsWithAlerts[0]._id // remove the _id
@@ -139,7 +140,7 @@ const emailAlerts = async (
       const filteredData = filterUserAlert({ clientTeams, organizationType: PATHWAYS_ORG_TYPE, userId: _id })
       const data = { ...helpers, ...filteredData }
 
-      const status = await sendSingleEmail({ email, templateDetails, data }) // eslint-disable-line
+      const status = await sendSingleEmail({ email, templateDetails, data, nunjucksEnv }) 
       if (status) failedEmails.push(status)
     }
   }
