@@ -79,7 +79,7 @@ const filterUserAlert = ({ clientTeams, organizationType, userId }) => {
     const { pathwaysAlerts: pathwaysTeamAlerts } = teamObj.resources
     const teamUsersById = _.keyBy(teamObj.users, '_id')
     
-    if (teamUsersById[userId]) return acc 
+    if (!teamUsersById[userId]) return acc 
      
     pathwaysTeamAlerts.forEach(alert => {
       const { _id, organizationType: orgType } = alert
