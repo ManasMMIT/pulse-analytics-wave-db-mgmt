@@ -10,7 +10,7 @@
       <span>
         {{ item.superAlertType }}: 
       </span>
-      <span style='color: {{ helpers.relativeAccessColors[item.relativeAccess] }}; font-weight: 700'>
+      <span style='color: {{ utils.relativeAccessColors[item.relativeAccess] }}; font-weight: 700'>
         {{ item.position }}
       </span>
     </mj-text>

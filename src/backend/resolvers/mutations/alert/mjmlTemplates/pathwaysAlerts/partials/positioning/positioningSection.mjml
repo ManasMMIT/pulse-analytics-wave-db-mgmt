@@ -2,7 +2,7 @@
 <mj-section mj-class='default-background'>
   <mj-column>
     <mj-text mj-class='body-section-date trans-text'>
-      {{ helpers.getDate.month() }} {{ helpers.getDate.year() }}
+      {{ utils.getDate.month() }} {{ utils.getDate.year() }}
     </mj-text>
     <mj-text mj-class='body-section-title'>
       Positioning Changes
@@ -13,7 +13,7 @@
   <mj-column>
     <mj-text css-class='section-navbar-link'>
     {% for orgName, indicationData in positioning %}
-      {% set orgSlug = helpers.getSlug(indicationData) %}
+      {% set orgSlug = utils.getSlug(indicationData) %}
         <a
           href='#{{ orgSlug }}-positioning'
           style='color: #0668D9; padding: 0 8px'
@@ -25,6 +25,6 @@
   </mj-column>
 </mj-section>
 {% for orgName, indicationData in positioning %}
-  {% set orgSlug = helpers.getSlug(indicationData) %}
+  {% set orgSlug = utils.getSlug(indicationData) %}
   {% include "./positioningOrg.mjml" %}
 {% endfor %}

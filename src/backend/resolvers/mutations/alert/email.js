@@ -3,7 +3,7 @@ const _ = require('lodash')
 const mjml2html = require('mjml')
 const sgMail = require('@sendgrid/mail')
 const nunjucks = require('nunjucks')
-const helpers = require('./mjmlTemplates/pathwaysAlerts/helpers')
+const utils = require('./mjmlTemplates/pathwaysAlerts/utils')
 
 const TEMPLATE_MAP = {
   pathwaysAlerts: {
@@ -138,7 +138,7 @@ const emailAlerts = async (
       const { _id, email } = user
       emailsList.push(email)
       const filteredData = filterUserAlert({ clientTeams, organizationType: PATHWAYS_ORG_TYPE, userId: _id })
-      const data = { ...helpers, ...filteredData }
+      const data = { ...utils, ...filteredData }
 
       const status = await sendSingleEmail({ email, templateDetails, data, nunjucksEnv }) 
       if (status) failedEmails.push(status)
