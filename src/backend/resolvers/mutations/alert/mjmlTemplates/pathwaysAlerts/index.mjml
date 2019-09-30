@@ -13,7 +13,7 @@
           PATHWAYS UPDATE
         </mj-text>
         <mj-text mj-class='header-subject' >
-          {{ helpers.getDate.month() }} {{ helpers.getDate.year() }}
+          {{ utils.getDate.month() }} {{ utils.getDate.year() }}
         </mj-text>
       </mj-column>
     </mj-section>
@@ -21,7 +21,7 @@
     <mj-section mj-class='default-background'>
       <mj-column>
         <mj-text mj-class='header-text'>
-          Welcome to your {{ helpers.getDate.month() }} {{ helpers.getDate.year() }} Pathways update. View the latest Pathways changes in the email below 
+          Welcome to your {{ utils.getDate.month() }} {{ utils.getDate.year() }} Pathways update. View the latest Pathways changes in the email below 
           or visit the Pathways tool to view more in-depth data.
         </mj-text>
         <mj-text align='center' padding-top='24px'>
@@ -96,7 +96,7 @@
           this emails in error, please contact us.
         </mj-text>
         <mj-text mj-class='footer-text'>
-          &copy; {{ helpers.getDate.year() }} Pulse Digital
+          &copy; {{ utils.getDate.year() }} Pulse Digital
         </mj-text>
       </mj-column>
     </mj-section>
