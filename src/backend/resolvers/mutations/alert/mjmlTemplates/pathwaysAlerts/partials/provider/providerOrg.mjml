@@ -1,0 +1,21 @@
+<mj-raw><a id='{{ orgSlug }}-provider' name='{{ orgSlug }}-provider'></a></mj-raw>
+<mj-wrapper mj-class='default-background body-content organization-section'>
+  <mj-section mj-class='organization-header'>
+    <mj-column>
+      <mj-text mj-class='organization-header-text'>
+        {{ orgName }}
+      </mj-text>
+      <mj-text align='center' padding='2px 0' mj-class='view-account-link'>
+        <a
+          href='https://pulse-tools.com/pathways/accounts/pathways/{{ orgSlug }}/adoption-reach'
+          style='color: #0668D9;'
+        >
+          View Account
+        </a>
+      </mj-text>
+    </mj-column>
+  </mj-section>
+  {% for item in alerts %}
+    {% include "./providerAlert.mjml" %}
+  {% endfor %}
+</mj-wrapper>

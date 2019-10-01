@@ -95,7 +95,7 @@ const filterUserAlert = ({ clientTeams, organizationType, userId }) => {
     .rollup(arr => {
       const { superAlertType } = arr[0]
 
-      let data =  _.groupBy(arr, 'slug')
+      let data =  _.groupBy(arr, 'organization')
       if (superAlertType === 'Positioning'){
          data = Object.entries(data).reduce((acc, arr) =>{
           const [alertName, alertData] = arr
@@ -138,7 +138,7 @@ const emailAlerts = async (
       const { _id, email } = user
       emailsList.push(email)
       const filteredData = filterUserAlert({ clientTeams, organizationType: PATHWAYS_ORG_TYPE, userId: _id })
-      const data = { ...utils, ...filteredData }
+      const data = { ...utils, data: filteredData }
 
       const status = await sendSingleEmail({ email, templateDetails, data, nunjucksEnv }) 
       if (status) failedEmails.push(status)

@@ -1,7 +1,11 @@
 <mj-attributes>
+  <mj-all
+    font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif"
+  />
   <mj-class
     name='mj-body'
     width='600px'
+    background-color='#F1F3F6'
   />
   <!-- START: Shared attribute styles -->
   <mj-class 
@@ -19,6 +23,10 @@
   <mj-class
     name='bold-text'
     font-weight='700'
+  />
+  <mj-class
+    name='italic-text'
+    font-style='italic'
   />
   <!-- END: Shared attribute styles -->
   <!-- START: Shared component styles -->
@@ -65,14 +73,14 @@
   />
   <mj-class
     name='body-content'
-    padding='0 25px 25px 25px'
+    padding='0 16px 25px 16px'
   />
   <mj-class
     name='body-section-date'
     font-size='12px'
     font-weight='600'
     line-height='18px'
-    padding='0px 25px'
+    padding='0px 16px'
   />
   <mj-class
     name='body-section-title'
@@ -80,7 +88,7 @@
     font-weight='700'
     line-height='33px'
     color='#0E2539'
-    padding='0px 25px'
+    padding='0px 16px'
   />
   <mj-class
     name='organization-section'
@@ -103,6 +111,7 @@
   <mj-class
     name='view-account-link'
     align='center'
+    padding='0 2px'
     font-size='12px'
     font-style='italic'
     line-height='18px'
@@ -133,10 +142,18 @@
     name='alert-item-description'
     padding-top='12px'
   />
+  <mj-class 
+    name='alert-item-last'
+    border-radius='0 0 10px 10px'
+  />
   <mj-class
     name='alert-bottom-divider'
     padding='0 12px'
     background-color='#FFFFFF'
+  />
+  <mj-class
+    name='navbar-bullet'
+    color='rgba(14,37,57, 0.3)'
   />
 </mj-attributes>
 <mj-style inline="inline">
@@ -148,13 +165,19 @@
     font-weight: 700;
     text-decoration: none;
   }
-  .section-navbar-link {
-    font-size: '14px';
-    line-height: '21px';
-    color: '#0668D9';
+  .section-navbar-link a {
+    font-size: 14px;
+    line-height: 21px;
+    color: #0668D9;
+    display: inline-block;
+    margin: 0 8px 8px 8px;
+    white-space: nowrap;
   }
-  .navbar-bullet {
-    color: #0E2539;
-    opacity: 0.30;
+</mj-style>
+<mj-style>
+  @media (max-width: 480px) {
+    .on-page-link {
+      display: none !important;
+    } 
   }
 </mj-style>

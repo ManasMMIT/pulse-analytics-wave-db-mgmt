@@ -1,4 +1,4 @@
-<mj-raw><a id='positioning-section' name='positioning-section'></a></mj-raw>
+<mj-raw><a id='influencer-section' name='influencer-section'></a></mj-raw>
 {% include "../shared/sectionNavbar.mjml" %}
 <mj-section mj-class='default-background'>
   <mj-column>
@@ -6,23 +6,23 @@
       {{ utils.getDate.month() }} {{ utils.getDate.year() }}
     </mj-text>
     <mj-text mj-class='body-section-title'>
-      Positioning Changes
+      Influencer Changes
     </mj-text>
   </mj-column>
 </mj-section>
 <mj-section mj-class='default-background' padding-top='0'>
   <mj-column>
     <mj-text padding='0 8px' css-class='section-navbar-link on-page-link'>
-    {% for orgName, indicationData in data.positioning %}
-      {% set orgSlug = utils.getSlug(indicationData) %}
-        <a href='#{{ orgSlug }}-positioning'>
+    {% for orgName, alerts in data.influencer %}
+      {% set orgSlug = utils.getSlug(alerts) %}
+        <a href='#{{ orgSlug }}-data.influencer'>
           {{ orgName }}
         </a>
     {% endfor %}
     </mj-text>
   </mj-column>
 </mj-section>
-{% for orgName, indicationData in data.positioning %}
-  {% set orgSlug = utils.getSlug(indicationData) %}
-  {% include "./positioningOrg.mjml" %}
+{% for orgName, alerts in data.influencer %}
+  {% set orgSlug = utils.getSlug(alerts) %}
+  {% include "./influencerOrg.mjml" %}
 {% endfor %}

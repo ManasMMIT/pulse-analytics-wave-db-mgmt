@@ -6,8 +6,10 @@
     <!-- Header Logo -->
     <mj-section mj-class='header'>
       <mj-column>
-        <mj-image 
-          src='https://res.cloudinary.com/pulsedatatools/image/upload/v1534519813/system/logo/pulse-logo-full-white.svg'
+        <mj-image
+          height='48px'
+          width='350px'
+          src='https://res.cloudinary.com/pulsedatatools/image/upload/c_scale,q_100,w_500/v1534519813/system/logo/pulse-logo-full-white.png'
         />
         <mj-text mj-class='header-subject' font-weight='600'>
           PATHWAYS UPDATE
@@ -36,58 +38,37 @@
         </mj-text>
       </mj-column>
     </mj-section>
-    <!-- Navbar -->
-    <mj-section mj-class='default-background no-padding'>
-      <mj-column>
-        <mj-navbar mj-class='no-padding'>
-          <mj-navbar-link 
-            mj-class='header-navbar-link'
-            href='#positioning-section'
-          >
-            POSITIONING
-          </mj-navbar-link>
-          <mj-navbar-link>
-            <span class='navbar-bullet'>
-              &bull;
-            </span>
-          </mj-navbar-link>
-          <mj-navbar-link
-            mj-class='header-navbar-link'
-            href='#influencers-section'
-          >
-            INFLUENCERS
-          </mj-navbar-link>
-          <mj-navbar-link>
-            <span class='navbar-bullet'>
-              &bull;
-            </span>
-          </mj-navbar-link>
-          <mj-navbar-link
-            mj-class='header-navbar-link'
-            href='#providers-section'
-          >
-            PROVIDERS
-          </mj-navbar-link>
-        </mj-navbar>
-        <mj-divider mj-class='section-divider' />
-      </mj-column>
-    </mj-section>
-    <!-- Positioning Section -->
-    {% include "./partials/positioning/positioningSection.mjml" %}
-    <mj-section mj-class='default-background'>
-      <mj-column>
-        <mj-text align='center' padding-top='24px'>
-          <a
-            class='visit-pathways-btn'
-            href='https://pulse-tools.com/pathways/overview/pathways'
-          >
-            <span>
-              Visit Pathways Tool
-            </span>
-          </a>
-        </mj-text>
-      </mj-column>
-    </mj-section>
+    {% if data | length > 0 %}
+      <!-- Positioning Section -->
+      {% if data.positioning %}
+        {% include "./partials/positioning/positioningSection.mjml" %}
+      {% endif %}
+      <!-- Influencer Section -->
+      {% if data.influencer %}
+        {% include "./partials/influencer/influencerSection.mjml" %}
+      {% endif %}
+      <!-- Providers Section -->
+      {% if data.provider %}
+        {% include "./partials/provider/providerSection.mjml" %}
+      {% endif %}
+      <mj-section mj-class='default-background'>
+        <mj-column>
+          <mj-text align='center'>
+            <a
+              class='visit-pathways-btn'
+              href='https://pulse-tools.com/pathways/overview/pathways'
+            >
+              <span>
+                Visit Pathways Tool
+              </span>
+            </a>
+          </mj-text>
+        </mj-column>
+      </mj-section>
+    {% else %}
+      <!-- No Data Placeholder -->
+      {% include "./partials/shared/noChanges.mjml" %}
+    {% endif %}
     <!-- Email Footer -->
     <mj-section mj-class='footer'>
       <mj-column>

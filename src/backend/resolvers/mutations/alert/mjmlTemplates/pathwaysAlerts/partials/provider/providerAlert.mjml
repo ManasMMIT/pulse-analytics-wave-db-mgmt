@@ -1,20 +1,16 @@
-<mj-section mj-class='alert-item-details {% if lastIndication and loop.last %}alert-item-last{% endif %}'>
+<mj-section mj-class='alert-item-details {% if loop.last %}alert-item-last{% endif %}'>
   <mj-column>
     <mj-text mj-class='alert-item-row trans-text'>
       {{ item.alertDate }}
     </mj-text>
     <mj-text mj-class='alert-item-row bold-text'>
-      {{ item.regimen }}
+      {{ item.provider }},
+      <span style='font-weight: 400; font-style: italic'>{{ item.state }}</span>
     </mj-text>
-    <mj-text mj-class='alert-item-row trans-text'>
-      <span>
-        {{ item.superAlertType }}: 
-      </span>
-      <span style='color: {{ utils.relativeAccessColors[item.relativeAccess] }}; font-weight: 700'>
-        {{ item.position }}
-      </span>
+    <mj-text mj-class='alert-item-row'>
+      <span style='color: rgba(14,37,57, 0.3);'>Oncologists: </span><span>{{ item.oncologists }}</span>
     </mj-text>
-    <mj-text mj-class='alert-item-row alert-item-description'>
+    <mj-text mj-class='alert-item-row'>
       {{ item.alertDescription }}
     </mj-text>
   </mj-column>

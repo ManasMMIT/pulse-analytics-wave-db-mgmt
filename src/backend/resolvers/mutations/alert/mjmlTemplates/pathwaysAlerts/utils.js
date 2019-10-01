@@ -4,7 +4,10 @@ module.exports =  {
       month: () => (new Date()).toLocaleString('default', { month: 'long' }),
       year: () => (new Date()).getFullYear()
     },
-    getSlug: indicationData => Object.values(indicationData)[0][0].slug,
+    getSlug: data => {
+      if (data instanceof Array) return data[0].slug
+      return Object.values(data)[0][0].slug
+    },
     relativeAccessColors: {
       'No Pathways': '#BACDDE',
       'No Pathways Coverage': '#BACDDE',
