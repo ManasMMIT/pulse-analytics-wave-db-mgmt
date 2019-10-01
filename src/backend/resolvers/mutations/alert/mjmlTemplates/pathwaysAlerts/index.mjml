@@ -73,8 +73,11 @@
     <mj-section mj-class='footer'>
       <mj-column>
         <mj-text mj-class='footer-text'>
-          You're receiving this email because you have an account with Pulse Digital. If you are receiving
-          this emails in error, please contact us.
+          <span>
+            You're receiving this email because you have an account with Pulse Digital. If you are receiving 
+            this email in error or have any questions, please contact us at
+            <a href="mailto:support@pulse-tools.com">support@pulse-tools.com</a>.
+          </span>
         </mj-text>
         <mj-text mj-class='footer-text'>
           &copy; {{ utils.getDate.year() }} Pulse Digital
