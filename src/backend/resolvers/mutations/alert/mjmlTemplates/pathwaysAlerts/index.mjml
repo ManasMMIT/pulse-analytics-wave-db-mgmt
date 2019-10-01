@@ -51,7 +51,7 @@
       {% if data.provider %}
         {% include "./partials/provider/providerSection.mjml" %}
       {% endif %}
-      <mj-section mj-class='default-background'>
+      <mj-section mj-class='default-background bottom-button'>
         <mj-column>
           <mj-text align='center'>
             <a

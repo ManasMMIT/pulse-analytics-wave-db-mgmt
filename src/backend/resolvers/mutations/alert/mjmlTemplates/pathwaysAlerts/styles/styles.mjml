@@ -155,6 +155,10 @@
     name='navbar-bullet'
     color='rgba(14,37,57, 0.3)'
   />
+  <mj-class
+    name='bottom-button'
+    padding='7px 0 32px 0'
+  />
 </mj-attributes>
 <mj-style inline="inline">
   .visit-pathways-btn {
