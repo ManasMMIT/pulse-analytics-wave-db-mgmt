@@ -58,9 +58,11 @@ const getInputFields = (state, handleChange) => {
       <div>
         <span>regimens: </span>
         <Query query={GET_SOURCE_REGIMENS}>
-          {({ data: { regimens }, loading, error }) => {
+          {({ data, loading, error }) => {
             if (error) return <div style={{ color: 'red' }}>Error processing request</div>
             if (loading) return <Spinner />
+
+            const { regimens } = data
 
             // TODO: also make searchable by products and their tags, not just regimen name
             const initialSelections = state.input.regimens.map(({ _id, name }) => (

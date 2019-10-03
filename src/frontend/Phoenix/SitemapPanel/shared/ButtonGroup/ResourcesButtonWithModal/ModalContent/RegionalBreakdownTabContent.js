@@ -21,7 +21,10 @@ const RegionalBreakdownTabContent = ({
   return (
     <Query query={GET_SELECTED_TOOL}>
       {
-        ({ data: { selectedTool } }) => {
+        ({ data, loading }) => {
+          if (loading) return null
+
+          const { selectedTool } = data
           const selectedTeamTool = teamTools[selectedTool._id]
 
           // ! selectedTeamTool may not exist, because it's based

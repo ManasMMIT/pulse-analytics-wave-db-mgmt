@@ -69,26 +69,32 @@ const PagesPanel = ({
 
   return (
     <Query query={GET_SELECTED_DASHBOARD}>
-      {({ data: { selectedDashboard: { name: dashboardName } } }) => (
-        <Panel
-          style={defaultPanelStyle}
-          headerContainerStyle={panelHeaderStyle}
-          title={`PAGES / ${dashboardName}`}
-          titleStyle={{ fontSize: 16 }}
-          queryDocs={{
-            fetchAllQueryProps: { query: GET_DASHBOARD_PAGES },
-            fetchSelectedQueryProps: { query: GET_SELECTED_PAGE },
-          }}
-          panelItemConfig={{
-            selectEntityMutationDoc: SELECT_PAGE,
-            style: panelItemStyle,
-            activeStyle: panelItemActiveStyle,
-            buttonGroupCallback,
-            label1Callback: ({ name }) => name,
-            label2Callback,
-          }}
-        />
-      )}
+      {({ data, loading }) => {
+        if (loading) return null
+
+        const { selectedDashboard: { name: dashboardName } } = data
+
+        return (
+          <Panel
+            style={defaultPanelStyle}
+            headerContainerStyle={panelHeaderStyle}
+            title={`PAGES / ${dashboardName}`}
+            titleStyle={{ fontSize: 16 }}
+            queryDocs={{
+              fetchAllQueryProps: { query: GET_DASHBOARD_PAGES },
+              fetchSelectedQueryProps: { query: GET_SELECTED_PAGE },
+            }}
+            panelItemConfig={{
+              selectEntityMutationDoc: SELECT_PAGE,
+              style: panelItemStyle,
+              activeStyle: panelItemActiveStyle,
+              buttonGroupCallback,
+              label1Callback: ({ name }) => name,
+              label2Callback,
+            }}
+          />
+        )
+      }}
     </Query>
   )
 }

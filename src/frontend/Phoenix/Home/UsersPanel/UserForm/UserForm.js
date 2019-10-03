@@ -122,7 +122,7 @@ class UserForm extends React.Component {
 
         <Query query={GET_CLIENT_TEAMS}>
           {({ data, loading, error }) => {
-            if (_.isEmpty(data)) return <Spinner />
+            if (loading || _.isEmpty(data)) return <Spinner />
 
             return (
               <>

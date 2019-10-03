@@ -87,7 +87,13 @@ const SitemapPanelHeader = ({
 
         <Span1>
           <Query query={GET_SELECTED_CLIENT}>
-            {({ data: { selectedClient } }) => selectedClient.description}
+            {({ data, loading }) => {
+              if (loading) return null
+
+              const { selectedClient: { description } } = data
+
+              return description
+            }}
           </Query>
         </Span1>
 
@@ -95,7 +101,13 @@ const SitemapPanelHeader = ({
 
         <Span2>
           <Query query={GET_SELECTED_TEAM}>
-            {({ data: { selectedTeam } }) => selectedTeam.description}
+            {({ data, loading }) => {
+              if (loading) return null
+
+              const { selectedTeam: { description } } = data
+
+              return description
+            }}
           </Query>
         </Span2>
       </div>

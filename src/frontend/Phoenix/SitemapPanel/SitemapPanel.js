@@ -112,7 +112,11 @@ class SitemapPanel extends React.Component {
       <div>
         <Query query={GET_STAGED_SITEMAP}>
           {
-            ({ data: { stagedSitemap } }) => {
+            ({ data, loading }) => {
+              if (loading) return null
+
+              const { stagedSitemap } = data
+
               return (
                 <SitemapPanelHeader
                   stagedSitemap={stagedSitemap}

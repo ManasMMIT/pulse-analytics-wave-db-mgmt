@@ -60,9 +60,10 @@ const getInputFields = (state, handleChange) => {
       <div>
         <span>Products:</span>
         <Query query={GET_SOURCE_PRODUCTS}>
-          {({ data: { products: defaultProducts }, loading, error }) => {
+          {({ data, loading, error }) => {
             if (error) return <div style={{ color: 'red' }}>Error processing request</div>
             if (loading) return <Spinner />
+            const { products: defaultProducts } = data
             const productsByKey = _.keyBy(defaultProducts, '_id')
 
             return (

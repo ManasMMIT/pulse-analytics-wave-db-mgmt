@@ -14,13 +14,19 @@ import {
 
 export default ({ teamId }) => (
   <Query query={GET_SELECTED_CLIENT}>
-    {({ data: { selectedClient } }) => (
-      <DeleteButton
-        itemId={teamId}
-        mutationDoc={DELETE_TEAM}
-        additionalFormData={{ clientId: selectedClient._id }}
-        clientMutation={MANAGE_DELETED_TEAM}
-      />
-    )}
+    {({ data, loading }) => {
+      if (loading) return null
+
+      const { selectedClient } = data
+
+      return (
+        <DeleteButton
+          itemId={teamId}
+          mutationDoc={DELETE_TEAM}
+          additionalFormData={{ clientId: selectedClient._id }}
+          clientMutation={MANAGE_DELETED_TEAM}
+        />
+      )
+    }}
   </Query>
 )

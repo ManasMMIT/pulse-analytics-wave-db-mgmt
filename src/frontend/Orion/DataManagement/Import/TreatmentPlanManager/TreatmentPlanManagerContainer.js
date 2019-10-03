@@ -34,15 +34,15 @@ const TreatmentPlanManagerContainer = ({ data }) => {
 
   return (
     <Query query={GET_NEW_TREATMENT_PLANS} variables={{ data: indicationsWithRegimens }}>
-      {({ data: { newTreatmentPlans }, loading, error }) => {
+      {({ data, loading, error }) => {
         if (error) return <div style={{ color: 'red' }}>Error processing request</div>
         if (loading) return <Spinner />
 
-        if (_.isEmpty(newTreatmentPlans)) return null
+        if (_.isEmpty(data.newTreatmentPlans)) return null
 
         return (
           <TreatmentPlanManager
-            newTreatmentPlans={newTreatmentPlans}
+            newTreatmentPlans={data.newTreatmentPlans}
           />
         )
       }}

@@ -17,14 +17,14 @@ const CollectionSelector = ({
     <div style={{ marginTop: 24 }}>
       <p style={{ fontWeight: 700 }}>Select Collection:</p>
       <Query query={GET_RAW_COLLECTION_NAMES}>
-        {({ data: { collections }, loading, error }) => {
+        {({ data, loading, error }) => {
           if (error) return <div style={{ color: 'red' }}>Error processing request</div>
           if (loading) return <Spinner />
 
           return (
             <CreatableSelect
               onChange={handleCollectionSelection}
-              options={collections.map(n => ({ value: n, label: n }))}
+              options={data.collections.map(n => ({ value: n, label: n }))}
               value={selectedCollection}
             />
           )

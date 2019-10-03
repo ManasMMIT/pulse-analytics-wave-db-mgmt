@@ -15,7 +15,12 @@ import {
 const CreateButton = () => (
   <Query query={GET_SELECTED_TEAM}>
     {
-      ({ data: { selectedTeam } }) => (
+      ({ data, loading }) => {
+        if (loading) return null
+
+        const { selectedTeam } = data
+
+        return (
           <UserFormButton
             modalTitle="Create User"
             buttonLabel="Create User"
@@ -26,7 +31,7 @@ const CreateButton = () => (
             clientMutation={MANAGE_CREATED_USER}
           />
         )
-      }
+      }}
   </Query>
 )
 

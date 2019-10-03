@@ -69,7 +69,12 @@ const DashboardsPanel = ({
 
   return (
     <Query query={GET_SELECTED_TOOL}>
-      {({ data: { selectedTool: { name: toolName } } }) => (
+      {({ data, loading }) => {
+        if (loading) return null
+
+        const { selectedTool: { name: toolName } } = data
+
+        return (
           <Panel
             style={defaultPanelStyle}
             headerContainerStyle={panelHeaderStyle}
@@ -88,7 +93,8 @@ const DashboardsPanel = ({
               label2Callback,
             }}
           />
-      )}
+        )
+      }}
     </Query>
   )
 }

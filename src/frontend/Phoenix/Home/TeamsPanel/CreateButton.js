@@ -19,16 +19,22 @@ const createButtonStyle = {
 
 const CreateButton = () => (
   <Query query={GET_SELECTED_CLIENT}>
-    {({ data: { selectedClient: { _id: clientId } } }) => (
-      <TextFormButton
-        modalTitle="Create Team"
-        buttonLabel="Create Team"
-        additionalFormData={{ clientId }}
-        buttonStyle={createButtonStyle}
-        mutationDoc={CREATE_TEAM}
-        clientMutation={MANAGE_CREATED_TEAM}
-      />
-    )}
+    {({ data, loading }) => {
+      if (loading) return null
+
+      const { selectedClient: { _id: clientId } } = data
+
+      return (
+        <TextFormButton
+          modalTitle="Create Team"
+          buttonLabel="Create Team"
+          additionalFormData={{ clientId }}
+          buttonStyle={createButtonStyle}
+          mutationDoc={CREATE_TEAM}
+          clientMutation={MANAGE_CREATED_TEAM}
+        />
+      )
+    }}
   </Query>
 )
 

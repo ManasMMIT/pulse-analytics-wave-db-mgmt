@@ -70,7 +70,9 @@ const PagesPanel = ({
 
   return (
     <Query query={GET_SELECTED_PAGE}>
-      {({ data }) => {
+      {({ data, loading }) => {
+        if (loading) return null
+
         let pageName = data && data.selectedPage && data.selectedPage.name
         if (!pageName) pageName = ''
 

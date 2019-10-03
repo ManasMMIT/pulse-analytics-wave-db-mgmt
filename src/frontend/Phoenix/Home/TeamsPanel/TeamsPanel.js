@@ -59,20 +59,26 @@ const headerChildren = <CreateButton />
 
 const TeamsPanel = () => (
   <Query query={GET_SELECTED_CLIENT}>
-    {({ data: { selectedClient: { description: clientName } } }) => (
-      <Panel
-        style={{ backgroundColor: '#edf1f5' }}
-        title={`Teams for ${clientName}`}
-        titleStyle={{ color: '#536f8d' }}
-        headerChildren={headerChildren}
-        queryDocs={{
-          fetchAllQueryProps: { query: GET_CLIENT_TEAMS },
-          fetchSelectedQueryProps: { query: GET_SELECTED_TEAM },
-        }}
-        panelItemConfig={panelItemConfig}
-        buttonGroupCallback={buttonGroupCallback}
-      />
-    )}
+    {({ data, loading }) => {
+      if (loading) return null
+
+      const { selectedClient: { description: clientName } } = data
+
+      return (
+        <Panel
+          style={{ backgroundColor: '#edf1f5' }}
+          title={`Teams for ${clientName}`}
+          titleStyle={{ color: '#536f8d' }}
+          headerChildren={headerChildren}
+          queryDocs={{
+            fetchAllQueryProps: { query: GET_CLIENT_TEAMS },
+            fetchSelectedQueryProps: { query: GET_SELECTED_TEAM },
+          }}
+          panelItemConfig={panelItemConfig}
+          buttonGroupCallback={buttonGroupCallback}
+        />
+      )
+    }}
   </Query>
 )
 

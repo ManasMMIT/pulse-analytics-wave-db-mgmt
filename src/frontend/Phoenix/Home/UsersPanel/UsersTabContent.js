@@ -67,7 +67,11 @@ const headerChildren = <CreateButton />
 const UsersTab = () => (
   <Query query={GET_SELECTED_TEAM}>
     {
-      ({ data: { selectedTeam } }) => {
+      ({ data, loading }) => {
+        if (loading) return null
+
+        const { selectedTeam } = data
+
         return (
           <Panel
             style={panelStyle}

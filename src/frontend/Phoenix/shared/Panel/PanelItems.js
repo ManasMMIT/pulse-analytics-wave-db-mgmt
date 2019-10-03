@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Query } from 'react-apollo'
+import _ from 'lodash'
 
 import PanelItem from './PanelItem'
 
@@ -12,7 +13,9 @@ const PanelItems = ({
   if (fetchSelectedQueryProps) {
     return (
       <Query {...fetchSelectedQueryProps}>
-        {({ data: selectedEntityData }) => {
+        {({ data: selectedEntityData, loading }) => {
+          if (loading || _.isEmpty(selectedEntityData)) return null
+
           const firstDataKey = Object.keys(selectedEntityData)[0]
           const selectedEntity = selectedEntityData[firstDataKey]
 
