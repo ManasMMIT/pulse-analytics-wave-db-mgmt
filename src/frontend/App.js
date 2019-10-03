@@ -1,11 +1,13 @@
 import React from 'react'
 import { transparentize } from 'polished'
-import { ApolloClient } from 'apollo-client'
-import { ApolloLink } from 'apollo-link'
-import { InMemoryCache } from 'apollo-cache-inmemory'
-import { RestLink } from 'apollo-link-rest'
-import { HttpLink } from 'apollo-link-http'
+// import { ApolloClient } from 'apollo-client'
+// import { ApolloLink } from 'apollo-link'
+// import { InMemoryCache } from 'apollo-cache-inmemory'
+// import { RestLink } from 'apollo-link-rest'
+// import { HttpLink } from 'apollo-link-http'
 import { ApolloProvider } from 'react-apollo'
+import ApolloClient from 'apollo-boost'
+
 import {
   BrowserRouter as Router,
   Route,
@@ -20,21 +22,29 @@ import Phoenix from './Phoenix'
 import Orion from './Orion'
 import Delphi from './Delphi'
 
-const cache = new InMemoryCache()
+// const cache = new InMemoryCache()
 
-const restLink = new RestLink({ uri: '/api' })
-const httpLink = new HttpLink({ uri: '/api/graphql' })
+// const restLink = new RestLink({ uri: '/api' })
+// const httpLink = new HttpLink({ uri: '/api/graphql' })
 
-const link = ApolloLink.from([
-  restLink,
-  httpLink,
-]);
+// const link = ApolloLink.from([
+//   restLink,
+//   httpLink,
+// ]);
+
+// const client = new ApolloClient({
+//   cache,
+//   link,
+//   resolvers,
+//   typeDefs,
+// })
 
 const client = new ApolloClient({
-  cache,
-  link,
-  resolvers,
-  typeDefs,
+  uri: '/api/graphql',
+  clientState: {
+    resolvers,
+    typeDefs,
+  }
 })
 
 const sidebarStyle = {
