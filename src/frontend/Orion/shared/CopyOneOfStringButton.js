@@ -10,7 +10,7 @@ const buttonStyle = {
 }
 
 const getOneOfString = arr => {
-  let result = arr.map(({ name }) => name)
+  let result = arr.map(({ name, access }) => name || access)
   result = JSON.stringify(result)
   result = 'oneOf:' + result
 

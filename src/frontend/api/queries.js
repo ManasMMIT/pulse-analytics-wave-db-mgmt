@@ -320,3 +320,73 @@ export const GET_STAGED_SITEMAP = gql`
     }
   }
 `
+
+export const GET_SOURCE_QUALITY_OF_ACCESS_SCORES = gql`
+  query getQualityOfAccessScores {
+    qualityOfAccessScores {
+      _id
+      access
+      accessTiny
+      score
+      sortOrder
+      color
+      caption
+    }
+  }
+`
+export const GET_PROVIDER_ACCOUNTS = gql`
+  query getProviderAccounts {
+    accounts(type: "provider") {
+      _id
+      slug
+      organization
+      organizationTiny
+      providerCancerCenter
+    }
+  }
+`
+
+export const GET_PAYER_ACCOUNTS = gql`
+  query getPayerAccounts {
+    accounts(type: "payer") {
+      _id
+      slug
+      organization
+      organizationTiny
+    }
+  }
+`
+
+export const GET_PATHWAYS_ACCOUNTS = gql`
+  query getPathwaysAccounts {
+    accounts(type: "pathways") {
+      _id
+      slug
+      organization
+      organizationTiny
+    }
+  }
+`
+
+export const GET_APM_ACCOUNTS = gql`
+  query getAPMAccounts {
+    accounts(type: "apm") {
+      _id
+      slug
+      organization
+      organizationTiny
+    }
+  }
+`
+
+export const GET_RAW_COLLECTION_NAMES = gql`
+  query getRawCollectionNames {
+    collections(type: "raw")
+  }
+`
+
+export const GET_NEW_TREATMENT_PLANS = gql`
+  query getNewTreatmentPlans($data: JSON) {
+    newTreatmentPlans(data: $data)
+  }
+`

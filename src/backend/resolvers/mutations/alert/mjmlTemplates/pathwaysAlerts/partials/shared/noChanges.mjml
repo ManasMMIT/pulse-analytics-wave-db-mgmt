@@ -1,0 +1,8 @@
+<mj-section mj-class='default-background'>
+  <mj-column>
+    <mj-divider mj-class='section-divider' />
+    <mj-text mj-class='header-text'>
+      Pathways have remained stable in the past month and no changes have been identified. Please visit the tool to view the latest pathways trends.
+    </mj-text>
+  </mj-column>
+</mj-section>

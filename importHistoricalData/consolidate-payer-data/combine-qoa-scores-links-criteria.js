@@ -10,12 +10,12 @@ let combineQoaScoresLinksCriteria = async ({
     // fetch all the data we'll need to work with simultaneously upfront
     const [
       payerHistoricalQualityAccess,
-      qualityAccessScores,
+      qualityOfAccessScore,
       payerHistoricalPolicyLinks,
       payerHistoricalAdditionalCriteria,
     ] = await Promise.all([
       pulseDevDb.collection('payerHistoricalQualityAccess').find().toArray(),
-      pulseCoreDb.collection('qualityAccessScores').find().toArray(), // this master collection is in CORE
+      pulseCoreDb.collection('qualityOfAccessScore').find().toArray(), // this master collection is in CORE
       pulseDevDb.collection('payerHistoricalPolicyLinks').find().toArray(),
       pulseDevDb.collection('payerHistoricalAdditionalCriteria').find().toArray(),
     ])
@@ -24,7 +24,7 @@ let combineQoaScoresLinksCriteria = async ({
     let combinedPayerData = _.merge([], payerHistoricalQualityAccess)
 
     // First join the access properties such as score to combinedPayerData
-    const accessScoresByAccess = _.keyBy(qualityAccessScores, 'access')
+    const accessScoresByAccess = _.keyBy(qualityOfAccessScore, 'access')
     // WARNING: order of destructuring matters here! otherwise obj's _id is overwritten, resulting in dup keys
     combinedPayerData = combinedPayerData.map(obj => ({ ...accessScoresByAccess[obj.access], ...obj }))
 

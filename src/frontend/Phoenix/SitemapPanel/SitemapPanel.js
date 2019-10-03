@@ -62,6 +62,7 @@ class SitemapPanel extends React.Component {
   }
 
   handleToggle = ({ type, _id, node }) => {
+    // TODO: grab current, staged sitemap
     const newState = _.merge({}, this.state, { [type]: { [_id]: node } })
 
     this.setStagedSitemapCache(newState)
@@ -104,7 +105,7 @@ class SitemapPanel extends React.Component {
       tools,
       dashboards,
       pages,
-      cards
+      cards,
     } = this.state
 
     return (

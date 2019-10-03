@@ -1,0 +1,22 @@
+<mj-section mj-class='default-background no-padding'>
+  <mj-column>
+    <mj-divider mj-class='section-divider' />
+    <mj-navbar mj-class='no-padding' css-class='on-page-link'>
+      {% for key, arr in data %}
+        <mj-navbar-link 
+          mj-class='header-navbar-link'
+          href='#{{ key | lower }}-section'
+        >
+          {{ key | upper }}
+        </mj-navbar-link>
+        {% if loop.last === false %}
+          <mj-navbar-link mj-class='navbar-bullet'>
+            <span>
+              &bull;
+            </span>
+          </mj-navbar-link>
+        {% endif %}
+      {% endfor %}
+    </mj-navbar>
+  </mj-column>
+</mj-section>

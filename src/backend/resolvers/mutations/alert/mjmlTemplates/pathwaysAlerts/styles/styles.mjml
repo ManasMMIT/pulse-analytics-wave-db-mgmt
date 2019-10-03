@@ -1,0 +1,183 @@
+<mj-attributes>
+  <mj-all
+    font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif"
+  />
+  <mj-class
+    name='mj-body'
+    width='600px'
+    background-color='#F1F3F6'
+  />
+  <!-- START: Shared attribute styles -->
+  <mj-class 
+    name='default-background'
+    background-color='#EDF6FF'
+  />
+  <mj-class
+    name='no-padding'
+    padding='0'
+  />
+  <mj-class 
+    name='trans-text'
+    color='rgba(14,37,57, 0.3)'
+  />
+  <mj-class
+    name='bold-text'
+    font-weight='700'
+  />
+  <mj-class
+    name='italic-text'
+    font-style='italic'
+  />
+  <!-- END: Shared attribute styles -->
+  <!-- START: Shared component styles -->
+  <mj-class
+    name='section-divider'
+    padding='10px 0'
+    border-color='rgba(14, 37, 57, 0.07)'
+    border-width='1px'
+  />
+  <!-- END: Shared component styles -->
+  <mj-class
+    name='header'
+    background-color='#0668D9'
+  />
+  <mj-class 
+    name='header-subject'
+    align='center'
+    font-size='16px'
+    line-height='24px'
+    color='#FFFFFF'
+    padding='0px'
+  />
+  <mj-class
+    name='header-text'
+    font-size='16px'
+    line-height='24px'
+    letter-spacing='-0.13px'
+    color='rgba(14,37,57,0.8)'
+  />
+  <mj-class
+    name='header-navbar-link'
+    font-size='14px'
+    line-height='21px'
+    color='#0668D9'
+  />
+  <mj-class
+    name='footer'
+    background-color='#0E2539'
+  />
+  <mj-class
+    name='footer-text'
+    align='center'
+    color='#FFFFFF'
+  />
+  <mj-class
+    name='body-content'
+    padding='0 16px 25px 16px'
+  />
+  <mj-class
+    name='body-section-date'
+    font-size='12px'
+    font-weight='600'
+    line-height='18px'
+    padding='0px 16px'
+  />
+  <mj-class
+    name='body-section-title'
+    font-size='22px'
+    font-weight='700'
+    line-height='33px'
+    color='#0E2539'
+    padding='0px 16px'
+  />
+  <mj-class
+    name='organization-section'
+    background-color='#EDF6FF'
+  />
+  <mj-class
+    name='organization-header'
+    background-color='#DBE9FA'
+    border-radius='10px 10px 0 0'
+  />
+  <mj-class 
+    name='organization-header-text'
+    padding='0'
+    align='center'
+    font-size='18px'
+    line-height='27px'
+    color='#0668D9'
+    font-weight='700'
+  />
+  <mj-class
+    name='view-account-link'
+    align='center'
+    padding='0 2px'
+    font-size='12px'
+    font-style='italic'
+    line-height='18px'
+  />
+  <mj-class
+    name='alert-item-category'
+    align='left'
+    padding = '0 25px' 
+    font-size='18px'
+    line-height='48px'
+    container-background-color='#F7FAFD'
+    color='#0E2539'
+    font-weight='700'
+  />
+  <mj-class
+    name='alert-item-details'
+    background-color='#FFFFFF'
+    color='#0E2539'
+  />
+  <mj-class
+    name='alert-item-row'
+    padding='0 25px'
+    align='left'
+    font-size='14px'
+    line-height='21px'
+  />
+  <mj-class
+    name='alert-item-description'
+    padding-top='12px'
+  />
+  <mj-class 
+    name='alert-item-last'
+    border-radius='0 0 10px 10px'
+  />
+  <mj-class
+    name='alert-bottom-divider'
+    padding='0 12px'
+    background-color='#FFFFFF'
+  />
+  <mj-class
+    name='navbar-bullet'
+    color='rgba(14,37,57, 0.3)'
+  />
+</mj-attributes>
+<mj-style inline="inline">
+  .visit-pathways-btn {
+    border-radius: 4px;
+    padding: 12px;
+    background-color: #0668D9;
+    color: #FFFFFF;
+    font-weight: 700;
+    text-decoration: none;
+  }
+  .section-navbar-link a {
+    font-size: 14px;
+    line-height: 21px;
+    color: #0668D9;
+    display: inline-block;
+    margin: 0 8px 8px 8px;
+    white-space: nowrap;
+  }
+</mj-style>
+<mj-style>
+  @media (max-width: 480px) {
+    .on-page-link {
+      display: none !important;
+    } 
+  }
+</mj-style>

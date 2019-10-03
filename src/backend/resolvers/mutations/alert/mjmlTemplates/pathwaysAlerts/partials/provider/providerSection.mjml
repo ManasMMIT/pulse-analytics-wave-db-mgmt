@@ -1,0 +1,28 @@
+<mj-raw><a id='provider-section' name='provider-section'></a></mj-raw>
+{% include "../shared/sectionNavbar.mjml" %}
+<mj-section mj-class='default-background'>
+  <mj-column>
+    <mj-text mj-class='body-section-date trans-text'>
+      {{ utils.getDate.month() }} {{ utils.getDate.year() }}
+    </mj-text>
+    <mj-text mj-class='body-section-title'>
+      Provider Changes
+    </mj-text>
+  </mj-column>
+</mj-section>
+<mj-section mj-class='default-background' padding-top='0'>
+  <mj-column>
+    <mj-text padding='0 8px' css-class='section-navbar-link on-page-link'>
+    {% for orgName, alerts in data.provider %}
+      {% set orgSlug = utils.getSlug(alerts) %}
+        <a href='#{{ orgSlug }}-provider'>
+          {{ orgName }}
+        </a>
+    {% endfor %}
+    </mj-text>
+  </mj-column>
+</mj-section>
+{% for orgName, alerts in data.provider %}
+  {% set orgSlug = utils.getSlug(alerts) %}
+  {% include "./providerOrg.mjml" %}
+{% endfor %}

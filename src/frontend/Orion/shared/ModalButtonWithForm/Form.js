@@ -37,11 +37,12 @@ class Form extends Component {
         afterSubmitHook,
         afterMutationHook,
         refetchQueries,
+        style,
       },
     } = this
 
     return (
-      <div>
+      <div style={style}>
         { getInputFields(this.state, handleChange) }
 
         <Mutation
@@ -77,6 +78,7 @@ class Form extends Component {
 }
 
 Form.propTypes = {
+  style: PropTypes.object, 
   data: PropTypes.object,
   mutationDoc: PropTypes.object,
   getInputFields: PropTypes.func,
@@ -86,6 +88,7 @@ Form.propTypes = {
 }
 
 Form.defaultProps = {
+  style: {},
   data: { input: {} },
   mutationDoc: {},
   getInputFields: () => null,

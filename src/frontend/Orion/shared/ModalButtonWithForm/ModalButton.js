@@ -24,6 +24,7 @@ class Button extends React.Component {
   render () {
     const {
       data,
+      formStyle,
       mutationDoc,
       buttonLabel,
       buttonStyle,
@@ -49,6 +50,7 @@ class Button extends React.Component {
           title={modalTitle}
         >
           <Form
+            style={formStyle}
             data={data}
             mutationDoc={mutationDoc}
             refetchQueries={refetchQueries}

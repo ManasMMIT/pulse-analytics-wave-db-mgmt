@@ -41,8 +41,8 @@ const importProjectBasedData = async filepath => {
   // TODO: validate against slugless entries making it into the DB
 
   if (collectionName === 'payerHistoricalQualityAccess') {
-    const qualityAccessScores = await pulseCoreDb.collection('qualityAccessScores').find().toArray()
-    const validAccesses = _.keyBy(qualityAccessScores, 'access')
+    const qualityOfAccessScore = await pulseCoreDb.collection('qualityOfAccessScore').find().toArray()
+    const validAccesses = _.keyBy(qualityOfAccessScore, 'access')
     
     const ROWS_TO_SKIP = 4 // add 1 for zero indexing, add 3 for rows skipped
     const problemRows = []

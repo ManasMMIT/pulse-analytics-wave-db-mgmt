@@ -9,6 +9,10 @@ const queries = gql`
     indications: [Indication]
     products: [Product]
     regimens: [Regimen]
+    accounts(type: String): [Account]
+    qualityOfAccessScores: [QualityOfAccessScore]
+    collections(type: String): [String]
+    newTreatmentPlans(data: JSON): JSON
   }
 
   type Node {
@@ -64,6 +68,25 @@ const queries = gql`
     _id: ID!
     name: String!
     products: [Product!]!
+  }
+
+  type QualityOfAccessScore {
+    _id: ID!
+    access: String
+    accessTiny: String
+    score: Int
+    sortOrder: Int
+    color: String
+    caption: JSON
+  }
+
+  type Account {
+    _id: ID!
+    slug: String!
+    type: String
+    organization: String
+    organizationTiny: String
+    providerCancerCenter: String # TODO: Change to just cancerCenter or create separate tool account typedefs
   }
 `
 
