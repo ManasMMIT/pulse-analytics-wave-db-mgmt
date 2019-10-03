@@ -51,6 +51,10 @@
       {% if data.provider %}
         {% include "./partials/provider/providerSection.mjml" %}
       {% endif %}
+      <!-- Payers Section -->
+      {% if data.payer %}
+        {% include "./partials/payer/payerSection.mjml" %}
+      {% endif %}
       <mj-section mj-class='default-background'>
         <mj-column>
           <mj-text align='center'>

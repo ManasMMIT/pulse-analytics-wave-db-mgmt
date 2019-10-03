@@ -8,6 +8,7 @@ module.exports =  {
       if (data instanceof Array) return data[0].slug
       return Object.values(data)[0][0].slug
     },
+    formatInt: int => parseInt(int).toLocaleString(),
     relativeAccessColors: {
       'No Pathways': '#BACDDE',
       'No Pathways Coverage': '#BACDDE',
