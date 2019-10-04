@@ -2,7 +2,7 @@
   <mj-column>
     <mj-divider mj-class='section-divider' />
     <mj-navbar mj-class='no-padding' css-class='on-page-link'>
-      {% for key, arr in data %}
+      {% for key in utils.getSortedLinks(data) %}
         <mj-navbar-link 
           mj-class='header-navbar-link'
           href='#{{ key | lower }}-section'

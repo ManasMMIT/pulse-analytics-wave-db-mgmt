@@ -89,20 +89,31 @@ const filterUserAlert = ({ clientTeams, organizationType, userId }) => {
 
     return acc
   }, {})
-  
+
   const formattedAlerts = d3.nest()
     .key(d => (d.superAlertType).toLowerCase())
     .rollup(arr => {
       const { superAlertType } = arr[0]
+      const isPositioning = superAlertType === 'Positioning'
+      const dateSort = ({ alertDate }) => (new Date(alertDate)).valueOf() * -1
 
-      let data =  _.groupBy(arr, 'organization')
-      if (superAlertType === 'Positioning'){
-         data = Object.entries(data).reduce((acc, arr) =>{
-          const [alertName, alertData] = arr
-          acc[alertName] = _.groupBy(alertData, 'indication')
-          return acc
-        }, {})
-      }
+      // Sort at organization level by oncologistPercent
+      const sortedByOnco = arr.sort((a, b) => b.oncologistPercent - a.oncologistPercent)
+
+      let data =  _.groupBy(sortedByOnco, 'organization')
+
+      data = Object.entries(data).reduce((acc, arr) =>{
+        const [orgName, orgAlerts] = arr
+
+        // Positioning data sorted by indication and date. Other alerts only sorted by date
+        const sortKeys = isPositioning ? ['indication', dateSort] : [dateSort]
+
+        const sortedData = _.sortBy(orgAlerts, sortKeys)
+
+        acc[orgName] = isPositioning ? _.groupBy(sortedData, 'indication') : sortedData
+
+        return acc
+      }, {})
       
       return data
     })

@@ -9,6 +9,11 @@ module.exports =  {
       return Object.values(data)[0][0].slug
     },
     formatInt: int => parseInt(int).toLocaleString(),
+    getSortedLinks: data => {
+      const sortOrder = ['positioning', 'influencer', 'provider', 'payer']
+      const keys = Object.keys(data)
+      return keys.sort((a, b) => sortOrder.indexOf(a) - sortOrder.indexOf(b))
+    },
     relativeAccessColors: {
       'No Pathways': '#BACDDE',
       'No Pathways Coverage': '#BACDDE',
