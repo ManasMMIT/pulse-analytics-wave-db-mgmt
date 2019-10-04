@@ -20,9 +20,11 @@ const clientResolvers = {
       selectedClient = clients.find(({ _id }) => _id === clientId)
     }
 
+    debugger
     client.writeQuery({ query: GET_SELECTED_CLIENT, data: { selectedClient } })
+    debugger
 
-    await client.mutate({ mutation: SELECT_TEAM })
+    // await client.mutate({ mutation: SELECT_TEAM })
 
     return selectedClient
   },

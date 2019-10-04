@@ -41,6 +41,8 @@ const Panel = ({
           if (loading) return null
           if (error) return <div>Error fetching data</div>
 
+          debugger
+
           let extractedData = []
           if (data) {
             const firstKey = Object.keys(data)[0]

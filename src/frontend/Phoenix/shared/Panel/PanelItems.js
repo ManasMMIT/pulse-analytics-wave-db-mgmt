@@ -13,11 +13,27 @@ const PanelItems = ({
   if (fetchSelectedQueryProps) {
     return (
       <Query {...fetchSelectedQueryProps}>
-        {({ data: selectedEntityData, loading }) => {
-          if (loading || _.isEmpty(selectedEntityData)) return null
+        {({ data: selectedEntityData, loading, error, client }) => {
+          debugger
+
+          if (loading) return null
+
+          if (_.isEmpty(data)) {
+            return null
+          }
+
+          if (_.isEmpty(selectedEntityData)) {
+            client.writeQuery({
+              query: fetchSelectedQueryProps.query,
+              data: { selectedClient: data[0] },
+            })
+
+            return null
+          }
 
           const firstDataKey = Object.keys(selectedEntityData)[0]
           const selectedEntity = selectedEntityData[firstDataKey]
+          debugger
 
           return (
             <div>
