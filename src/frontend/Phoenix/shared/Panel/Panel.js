@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
-import { Query } from 'react-apollo'
+import { useQuery } from 'react-apollo'
 
 import PanelHeader from './PanelHeader'
 import PanelItems from './PanelItems'
@@ -25,6 +25,16 @@ const Panel = ({
   },
   panelItemConfig,
 }) => {
+  const { data, loading, error } = useQuery(fetchAllQueryProps.query)
+  if (loading) return null
+  if (error) return <div>Error fetching data</div>
+
+  let extractedData = []
+  if (data) {
+    const firstKey = Object.keys(data)[0]
+    extractedData = data[firstKey]
+  }
+
   return (
     <Wrapper style={style}>
       <PanelHeader
@@ -34,30 +44,11 @@ const Panel = ({
       >
         {headerChildren}
       </PanelHeader>
-
-
-      <Query {...fetchAllQueryProps}>
-        {({ data, loading, error }) => {
-          if (loading) return null
-          if (error) return <div>Error fetching data</div>
-
-          debugger
-
-          let extractedData = []
-          if (data) {
-            const firstKey = Object.keys(data)[0]
-            extractedData = data[firstKey]
-          }
-
-          return (
-            <PanelItems
-              data={extractedData}
-              fetchSelectedQueryProps={fetchSelectedQueryProps}
-              panelItemConfig={panelItemConfig}
-            />
-          )
-        }}
-      </Query>
+      <PanelItems
+        data={extractedData}
+        fetchSelectedQueryProps={fetchSelectedQueryProps}
+        panelItemConfig={panelItemConfig}
+      />
     </Wrapper>
   )
 }
