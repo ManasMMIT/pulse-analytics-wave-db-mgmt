@@ -3,12 +3,12 @@ import {
   GET_TEAM_USERS,
   GET_SELECTED_USER,
   GET_USER_TEAMS,
-} from '../queries'
+} from '../../queries'
 
 import {
   SELECT_TEAM,
   SELECT_USER,
-} from '../mutations'
+} from '../../mutations'
 
 const userResolvers = {
   selectUser: async (_, { _id: userId }, { cache, client }) => {

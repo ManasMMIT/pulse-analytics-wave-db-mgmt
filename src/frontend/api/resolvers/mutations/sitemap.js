@@ -11,13 +11,13 @@ import {
   GET_SOURCE_INDICATIONS,
   GET_SELECTED_INDICATION,
   GET_SELECTED_REGIMENS,
-} from '../queries'
+} from '../../queries'
 
 import {
   SELECT_DASHBOARD,
   SELECT_PAGE,
   SELECT_CARD,
-} from '../mutations'
+} from '../../mutations'
 
 const sitemapResolvers = {
   selectTool: async (_, { _id: toolId }, { cache, client }) => {

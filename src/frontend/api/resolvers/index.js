@@ -1,15 +1,9 @@
-import clientResolvers from './client'
-import teamResolvers from './team'
-import userResolvers from './user'
-import sitemapResolvers from './sitemap'
+import mutations from './mutations'
+import queries from './queries'
 
 const resolvers = {
-  Mutation: {
-    ...clientResolvers,
-    ...teamResolvers,
-    ...userResolvers,
-    ...sitemapResolvers,
-  }
+  Mutation: mutations,
+  Query: queries,
 }
 
 export default resolvers

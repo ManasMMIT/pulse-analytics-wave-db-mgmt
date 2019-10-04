@@ -2,12 +2,12 @@ import {
   GET_SELECTED_CLIENT,
   GET_CLIENT_TEAMS,
   GET_SELECTED_TEAM,
-} from '../queries'
+} from '../../queries'
 
 import {
   SELECT_USER,
   SELECT_TEAM,
-} from '../mutations'
+} from '../../mutations'
 
 const teamResolvers = {
   selectTeam: async (_, { _id: teamId }, { cache, client }) => {
@@ -33,10 +33,10 @@ const teamResolvers = {
     if (teamId) {
       selectedTeam = teams.find(({ _id }) => _id === teamId)
     }
-
+debugger
     client.writeQuery({ query: GET_SELECTED_TEAM, data: { selectedTeam } })
-
-    await client.mutate({ mutation: SELECT_USER })
+debugger
+    // await client.mutate({ mutation: SELECT_USER })
 
     return selectedTeam
   },

@@ -3,12 +3,12 @@ import _ from 'lodash'
 import {
   GET_CLIENTS,
   GET_SELECTED_CLIENT,
-} from '../queries'
+} from '../../queries'
 
 import {
   SELECT_TEAM,
   SELECT_CLIENT,
-} from '../mutations'
+} from '../../mutations'
 
 const clientResolvers = {
   selectClient: async (parent, { _id: clientId }, { cache, client }) => {
@@ -24,7 +24,7 @@ const clientResolvers = {
     client.writeQuery({ query: GET_SELECTED_CLIENT, data: { selectedClient } })
     debugger
 
-    // await client.mutate({ mutation: SELECT_TEAM })
+    // client.mutate({ mutation: SELECT_TEAM })
 
     return selectedClient
   },
