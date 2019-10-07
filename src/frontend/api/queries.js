@@ -32,6 +32,7 @@ export const GET_CLIENT_TEAMS = gql`
         _id
       }
     }
+
     selectedClient @client {
       _id @export(as: "clientId")
     }
@@ -40,7 +41,7 @@ export const GET_CLIENT_TEAMS = gql`
 
 export const GET_SELECTED_TEAM = gql`
   query getSelectedTeam {
-    selectedTeam @client {
+    selectedTeam @client(always: true) {
       _id
       name
       description
