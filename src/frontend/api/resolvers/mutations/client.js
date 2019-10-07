@@ -6,7 +6,6 @@ import {
 } from '../../queries'
 
 import {
-  SELECT_TEAM,
   SELECT_CLIENT,
 } from '../../mutations'
 
@@ -20,11 +19,7 @@ const clientResolvers = {
       selectedClient = clients.find(({ _id }) => _id === clientId)
     }
 
-    debugger
     client.writeQuery({ query: GET_SELECTED_CLIENT, data: { selectedClient } })
-    debugger
-
-    // client.mutate({ mutation: SELECT_TEAM })
 
     return selectedClient
   },
