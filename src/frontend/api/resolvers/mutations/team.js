@@ -11,31 +11,29 @@ import {
 
 const teamResolvers = {
   selectTeam: async (_, { _id: teamId }, { cache, client }) => {
-    const { selectedClient: { _id: clientId } } = cache.readQuery({ query: GET_SELECTED_CLIENT })
+    const {
+      selectedClient: {
+        _id: clientId
+      }
+    } = cache.readQuery({ query: GET_SELECTED_CLIENT })
 
-    const queryObjForClientTeams = {
+    const {
+      data: {
+        teams,
+      }
+    } = await client.query({
       query: GET_CLIENT_TEAMS,
       variables: { clientId },
-    }
-
-    // TODO: make the following try...catch into a util
-    let teams
-    try {
-      const data = cache.readQuery(queryObjForClientTeams)
-      teams = data.teams
-    } catch (e) {
-      const response = await client.query(queryObjForClientTeams)
-      teams = response.data.teams
-    }
+    })
 
     let selectedTeam = teams[0]
 
     if (teamId) {
       selectedTeam = teams.find(({ _id }) => _id === teamId)
     }
-debugger
+
     client.writeQuery({ query: GET_SELECTED_TEAM, data: { selectedTeam } })
-debugger
+
     // await client.mutate({ mutation: SELECT_USER })
 
     return selectedTeam
