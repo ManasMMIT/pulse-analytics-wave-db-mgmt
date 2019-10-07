@@ -5,33 +5,33 @@ import {
 } from '../../queries'
 
 const teamQueryResolvers = {
-  // This resolver has ONE JOB: to set a default team, if
-  // 1. there is no selected team in the cache or
-  // 2. the selected team doesn't belong to the selected client.
-  // The mutation resolver `selectTeam` handles cache updates.
+  /*
+    This resolver has ONE JOB: to set a default team (first team)
+    from the selected client's teams list, if:
+    1. the app is initially loading and team is the dummy initial team, or
+    2. the selected team is old and doesn't belong to a newly selected client.
+
+    The mutation resolver `selectTeam` handles cache updates.
+  */
   selectedTeam: async (root, args, { client, cache }) => {
-    let selectedTeam
-    try {
-      // ? line 16 will most likely error once, on initial load
-      selectedTeam = cache.readQuery({ query: GET_SELECTED_TEAM }).selectedTeam
+    const { selectedTeam } = cache.readQuery({ query: GET_SELECTED_TEAM })
+    const { selectedClient } = cache.readQuery({ query: GET_SELECTED_CLIENT })
 
-      const { selectedClient } = cache.readQuery({ query: GET_SELECTED_CLIENT })
-
-      if (selectedTeam.client._id !== selectedClient._id) {
-        throw Error('Current selected team not in client')
-      }
-
-    } catch (e) {
+    let result = selectedTeam
+    if (
+      selectedTeam._id === 'initialTeam'
+      || selectedTeam.client._id !== selectedClient._id
+    ) {
       const {
         data: { teams }
       } = await client.query({
-        query: GET_CLIENT_TEAMS,
+        query: GET_CLIENT_TEAMS, // gql query uses @export to get clientId
       })
 
-      selectedTeam = teams[0]
+      result = teams[0]
     }
 
-    return selectedTeam
+    return result
   },
 }
 

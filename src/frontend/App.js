@@ -1,7 +1,7 @@
 import React from 'react'
 import { transparentize } from 'polished'
 import { ApolloProvider } from 'react-apollo'
-import ApolloClient from 'apollo-boost'
+import ApolloClient, { InMemoryCache } from 'apollo-boost'
 
 import {
   BrowserRouter as Router,
@@ -17,12 +17,36 @@ import Phoenix from './Phoenix'
 import Orion from './Orion'
 import Delphi from './Delphi'
 
+const cache = new InMemoryCache()
+
 const client = new ApolloClient({
   uri: '/api/graphql',
   clientState: {
     resolvers,
     typeDefs,
-  }
+  },
+  cache,
+})
+
+cache.writeData({
+  data: {
+    selectedClient: {
+      __typename: 'Client',
+      _id: 'initialClient',
+      name: 'InitialClient',
+      description: 'InitialClient',
+    },
+    selectedTeam: {
+      __typename: 'Team',
+      _id: 'initialTeam',
+      name: 'InitialTeam',
+      description: 'InitialTeam',
+      isDefault: true,
+      sitemap: null,
+      client: { __typename: 'Client', _id: 'initialClient' },
+    },
+    // selectedUser: {},
+  },
 })
 
 const sidebarStyle = {

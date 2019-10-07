@@ -6,23 +6,25 @@ import {
 } from '../../queries'
 
 const clientQueryResolvers = {
-  // This resolver has ONE JOB: to set a default client.
+  // This resolver has ONE JOB: to replace dummy initial client
+  // with default client (first client) from clients list.
   // The mutation resolver `selectClient` handles cache updates.
   selectedClient: async (root, args, { client, cache }) => {
-    let selectedClient
-    try {
-      selectedClient = cache.readQuery({ query: GET_SELECTED_CLIENT }).selectedClient
-    } catch(e) {
+    const { selectedClient } = cache.readQuery({ query: GET_SELECTED_CLIENT })
+
+    let result = selectedClient
+
+    if (selectedClient._id === 'initialClient') {
       const {
         data: {
           clients,
         }
       } = await client.query({ query: GET_CLIENTS })
 
-      selectedClient = clients[0]
+      result = clients[0]
     }
 
-    return selectedClient
+    return result
   },
 }
 
