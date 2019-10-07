@@ -26,6 +26,8 @@ const PanelItems = ({
     const firstDataKey = Object.keys(selectedEntityData)[0]
     const selectedEntity = selectedEntityData[firstDataKey]
 
+    if (firstDataKey === 'selectedTeam') console.log('from teams panel', selectedEntity.description)
+    
     return (
       <div>
         {

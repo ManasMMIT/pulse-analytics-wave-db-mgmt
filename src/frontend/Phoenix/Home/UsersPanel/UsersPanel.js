@@ -70,19 +70,21 @@ const UsersPanel = () => {
   if (error) return <div>{error}</div>
 
   const { selectedTeam } = data
+console.log('From users panel', selectedTeam.description);
 
-  return (
-    <Panel
-      style={panelStyle}
-      title={`Users for ${selectedTeam.description}`}
-      headerChildren={headerChildren}
-      queryDocs={{
-        fetchAllQueryProps: { query: GET_TEAM_USERS },
-        fetchSelectedQueryProps: { query: GET_SELECTED_USER },
-      }}
-      panelItemConfig={panelItemConfig}
-    />
-  )
+  return <div>{`Users for ${selectedTeam.description}`}</div>
+  // return (
+  //   <Panel
+  //     style={panelStyle}
+  //     title={`Users for ${selectedTeam.description}`}
+  //     headerChildren={headerChildren}
+  //     queryDocs={{
+  //       fetchAllQueryProps: { query: GET_TEAM_USERS },
+  //       fetchSelectedQueryProps: { query: GET_SELECTED_USER },
+  //     }}
+  //     panelItemConfig={panelItemConfig}
+  //   />
+  // )
 }
 
 export default UsersPanel
