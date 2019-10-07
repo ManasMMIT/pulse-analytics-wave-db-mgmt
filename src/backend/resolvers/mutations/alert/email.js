@@ -9,6 +9,10 @@ const TEMPLATE_MAP = {
   pathwaysAlerts: {
     templatePath: 'backend/resolvers/mutations/alert/mjmlTemplates/pathwaysAlerts/index.mjml',
     emailSubject: 'Pathways Latest Changes',
+  },
+  test: {
+    templatePath: 'backend/resolvers/mutations/alert/mjmlTemplates/pathwaysAlerts/index.mjml',
+    emailSubject: 'Pathways Latest Changes',
   }
 }
 
@@ -130,20 +134,24 @@ const emailAlerts = async (
   const templateDetails = TEMPLATE_MAP[templateType]
   const nunjucksEnv = nunjucks.configure('src')
 
-  const clientsWithAlerts = await pulseDevDb.collection('temp.teams').find({ _id: 'meta'}).toArray()
+  let clientsWithAlerts = await pulseDevDb.collection('temp.teams').find({ _id: 'meta'}).toArray()
   delete clientsWithAlerts[0]._id // remove the _id
-  
+
   const failedEmails = []
   const emailsList = []
 
   for (const clientArr of Object.entries(clientsWithAlerts[0])){
-    const [clientName, clientUsers] = clientArr
+    let [clientName, clientUsers] = clientArr
     const clientTeams = await pulseDevDb.collection('temp.teams')
       .find({ $and: [
         { 'client.name': clientName },
         { resources: { $exists: true } },
       ]})
       .toArray()
+    
+    if (templateType === 'test'){
+      clientUsers = clientUsers.filter(({test}) => test)
+    } 
     
     for (const user of clientUsers){
       const { _id, email } = user
