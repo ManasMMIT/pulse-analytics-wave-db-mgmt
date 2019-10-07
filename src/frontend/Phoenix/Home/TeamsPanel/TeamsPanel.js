@@ -60,7 +60,7 @@ const headerChildren = <CreateButton />
 const TeamsPanel = () => (
   <Query query={GET_SELECTED_CLIENT}>
     {({ data, loading }) => {
-      if (loading) return null
+      if (loading || !data) return null
 
       const { selectedClient: { description: clientName } } = data
 

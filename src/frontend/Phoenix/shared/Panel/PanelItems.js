@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Query, useQuery } from 'react-apollo'
+import { useQuery } from 'react-apollo'
 import _ from 'lodash'
 
 import PanelItem from './PanelItem'
@@ -19,7 +19,7 @@ const PanelItems = ({
   // which is why the commented out code still exists.
 
   // if (fetchSelectedQueryProps) {
-    if (loading || _.isEmpty(data)) return null
+    if (loading || _.isEmpty(selectedEntityData)) return null
     if (error) return <div>{error}</div>
 
 
