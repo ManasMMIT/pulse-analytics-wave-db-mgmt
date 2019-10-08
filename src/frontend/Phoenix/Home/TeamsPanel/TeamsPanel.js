@@ -1,5 +1,5 @@
 import React from 'react'
-// import { Query } from 'react-apollo'
+import { useQuery } from '@apollo/react-hooks'
 
 import Panel from '../../shared/Panel'
 import CreateButton from './CreateButton'
@@ -57,29 +57,27 @@ const panelItemConfig = {
 
 // const headerChildren = <CreateButton />
 
-const TeamsPanel = () => (
-  // <Query query={GET_SELECTED_CLIENT}>
-  //   {({ data, loading }) => {
-  //     if (loading) return null
+const TeamsPanel = () => {
+  const { data, loading, error } = useQuery(GET_SELECTED_CLIENT)
+  if (loading) return null
+  if (error) return <div>Error fetching data</div>
 
-  //     const { selectedClient: { description: clientName } } = data
+  const { selectedClient: { description: clientName } } = data
 
-      // return (
-        <Panel
-          style={{ backgroundColor: '#edf1f5' }}
-          // title={`Teams for ${clientName}`}
-          titleStyle={{ color: '#536f8d' }}
-          // headerChildren={headerChildren}
-          queryDocs={{
-            fetchAllQueryProps: { query: GET_CLIENT_TEAMS },
-            fetchSelectedQueryProps: { query: GET_SELECTED_TEAM },
-          }}
-          panelItemConfig={panelItemConfig}
-          // buttonGroupCallback={buttonGroupCallback}
-        />
-      // )
-  //   }}
-  // </Query>
-)
+  return (
+    <Panel
+      style={{ backgroundColor: '#edf1f5' }}
+      title={`Teams for ${clientName}`}
+      titleStyle={{ color: '#536f8d' }}
+      // headerChildren={headerChildren}
+      queryDocs={{
+        fetchAllQueryProps: { query: GET_CLIENT_TEAMS },
+        fetchSelectedQueryProps: { query: GET_SELECTED_TEAM },
+      }}
+      panelItemConfig={panelItemConfig}
+    // buttonGroupCallback={buttonGroupCallback}
+    />
+  )
+}
 
 export default TeamsPanel
