@@ -1,9 +1,8 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { Mutation, withApollo } from 'react-apollo'
+import { useMutation, useApolloClient } from '@apollo/react-hooks'
 
 import Spinner from '../Spinner'
-
 class TextForm extends Component {
   constructor(props) {
     super(props)
@@ -20,7 +19,7 @@ class TextForm extends Component {
   handleChange = e => {
     const {
       value,
-      name
+      name,
     } = e.target
 
     this.setState({ [name]: value })
@@ -31,19 +30,10 @@ class TextForm extends Component {
       state,
       handleChange,
       props: {
-        mutationDoc,
+        handleSubmit,
         afterSubmitHook,
-        clientMutation,
-        client,
       },
     } = this
-
-    const updateClientMutationCallback = (cache, { data }) => {
-      client.mutate({
-        mutation: clientMutation,
-        variables: { data },
-      })
-    }
 
     return (
       <div>
@@ -53,31 +43,45 @@ class TextForm extends Component {
           onChange={handleChange}
           value={state.description}
         />
-
-        <Mutation
-          mutation={mutationDoc}
-          update={updateClientMutationCallback}
+        <button
+          type="submit"
+          onClick={() => handleSubmit({ variables: { input: state } }).then(afterSubmitHook)}
         >
-          {(handleSubmit, { loading, error }) => {
-            if (loading) return <Spinner />
-            if (error) return <div style={{ color: 'red' }}>Error processing request</div>
-
-            return (
-              <button
-                type="submit"
-                onClick={() => handleSubmit({ variables: { input: state } }).then(afterSubmitHook)}
-              >
-                submit
-              </button>
-            )
-          }}
-        </Mutation>
+          submit
+        </button>
       </div>
     );
   }
 }
 
-TextForm.propTypes = {
+const TextFormContainer = ({ mutationDoc, clientMutation, ...otherProps }) => {
+  const client = useApolloClient()
+
+  const updateClientMutationCallback = (cache, { data }) => {
+    client.mutate({
+      mutation: clientMutation,
+      variables: { data },
+    })
+  }
+
+  const [handleSubmit, { loading, error }] = useMutation(
+    mutationDoc,
+    { update: updateClientMutationCallback },
+  )
+
+  if (loading) return <Spinner />
+  if (error) return <div style={{ color: 'red' }}>Error processing request</div>
+
+  return (
+    <TextForm
+      client={client}
+      handleSubmit={handleSubmit}
+      {...otherProps}
+    />
+  )
+}
+
+TextFormContainer.propTypes = {
   data: PropTypes.object,
   mutationDoc: PropTypes.object,
   afterMutationHook: PropTypes.func,
@@ -85,7 +89,7 @@ TextForm.propTypes = {
   additionalFormData: PropTypes.object,
 }
 
-TextForm.defaultProps = {
+TextFormContainer.defaultProps = {
   data: { description: '' },
   mutationDoc: {},
   clientMutation: {},
@@ -93,4 +97,4 @@ TextForm.defaultProps = {
   additionalFormData: {},
 }
 
-export default withApollo(TextForm)
+export default TextFormContainer
