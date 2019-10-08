@@ -33,22 +33,22 @@ const activePanelItemStyle = {
   borderLeft: '4px solid #1f6cc7',
 }
 
-const buttonGroupCallback = user => {
-  if (user.isDefault) return null
+// const buttonGroupCallback = user => {
+//   if (user.isDefault) return null
 
-  return (
-    <>
-      <UpdateButton user={user} />
-      <DeleteButton userId={user._id} />
-    </>
-  )
-}
+//   return (
+//     <>
+//       <UpdateButton user={user} />
+//       <DeleteButton userId={user._id} />
+//     </>
+//   )
+// }
 
 const panelItemConfig = {
   selectEntityMutationDoc: SELECT_USER,
   style: defaultPanelItemStyle,
   activeStyle: activePanelItemStyle,
-  buttonGroupCallback,
+  // buttonGroupCallback,
   label1Callback: ({ username }) => username,
   // ! Note: inactiveStyle not needed until hover effects differ
   // ! between active and inactive states
@@ -62,31 +62,31 @@ const panelStyle = {
   maxHeight: 'calc(100vh - 37px)',
 }
 
-const headerChildren = <CreateButton />
+// const headerChildren = <CreateButton />
 
 const UsersTab = () => (
-  <Query query={GET_SELECTED_TEAM}>
-    {
-      ({ data, loading }) => {
-        if (loading) return null
+  // <Query query={GET_SELECTED_TEAM}>
+  //   {
+  //     ({ data, loading }) => {
+  //       if (loading) return null
 
-        const { selectedTeam } = data
+  //       const { selectedTeam } = data
 
-        return (
+  //       return (
           <Panel
             style={panelStyle}
-            title={`Users for ${selectedTeam.description}`}
-            headerChildren={headerChildren}
+            // title={`Users for ${selectedTeam.description}`}
+            // headerChildren={headerChildren}
             queryDocs={{
               fetchAllQueryProps: { query: GET_TEAM_USERS },
               fetchSelectedQueryProps: { query: GET_SELECTED_USER },
             }}
             panelItemConfig={panelItemConfig}
           />
-        )
-      }
-    }
-  </Query>
+  //       )
+  //     }
+  //   }
+  // </Query>
 )
 
 export default UsersTab

@@ -30,7 +30,7 @@ const panelItemConfig = {
   // inactiveStyle: inactivePanelItemStyle,
 }
 
-const headerChildren = <CreateButton />  
+// const headerChildren = <CreateButton />
 
 const ClientsPanel = () => {
   return (
@@ -38,7 +38,7 @@ const ClientsPanel = () => {
       style={{ backgroundColor: '#0a3557' }}
       title="Clients"
       titleStyle={{ color: '#536f8d' }}
-      headerChildren={headerChildren}
+      // headerChildren={headerChildren}
       queryDocs={{
         fetchAllQueryProps: { query: GET_CLIENTS },
         fetchSelectedQueryProps: { query: GET_SELECTED_CLIENT },

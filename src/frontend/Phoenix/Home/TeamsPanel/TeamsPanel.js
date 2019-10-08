@@ -1,5 +1,5 @@
 import React from 'react'
-import { Query } from 'react-apollo'
+// import { Query } from 'react-apollo'
 
 import Panel from '../../shared/Panel'
 import CreateButton from './CreateButton'
@@ -32,54 +32,54 @@ const activePanelItemStyle = {
   borderLeft: '4px solid #1f6cc7',
 }
 
-const buttonGroupCallback = team => {
-  if (team.isDefault) return <SitemapButton teamId={team._id} />
+// const buttonGroupCallback = team => {
+//   if (team.isDefault) return <SitemapButton teamId={team._id} />
 
-  return (
-    <>
-      <UpdateButton team={team} />
-      <SitemapButton teamId={team._id} />
-      <DeleteButton teamId={team._id} />
-    </>
-  )
-}
+//   return (
+//     <>
+//       <UpdateButton team={team} />
+//       <SitemapButton teamId={team._id} />
+//       <DeleteButton teamId={team._id} />
+//     </>
+//   )
+// }
 
 const panelItemConfig = {
   selectEntityMutationDoc: SELECT_TEAM,
   style: defaultPanelItemStyle,
   activeStyle: activePanelItemStyle,
-  buttonGroupCallback,
+  // buttonGroupCallback,
   label1Callback: ({ description }) => description,
   // ! Note: inactiveStyle not needed until hover effects differ
   // ! between active and inactive states
   // inactiveStyle: inactivePanelItemStyle,
 }
 
-const headerChildren = <CreateButton />
+// const headerChildren = <CreateButton />
 
 const TeamsPanel = () => (
-  <Query query={GET_SELECTED_CLIENT}>
-    {({ data, loading }) => {
-      if (loading) return null
+  // <Query query={GET_SELECTED_CLIENT}>
+  //   {({ data, loading }) => {
+  //     if (loading) return null
 
-      const { selectedClient: { description: clientName } } = data
+  //     const { selectedClient: { description: clientName } } = data
 
-      return (
+      // return (
         <Panel
           style={{ backgroundColor: '#edf1f5' }}
-          title={`Teams for ${clientName}`}
+          // title={`Teams for ${clientName}`}
           titleStyle={{ color: '#536f8d' }}
-          headerChildren={headerChildren}
+          // headerChildren={headerChildren}
           queryDocs={{
             fetchAllQueryProps: { query: GET_CLIENT_TEAMS },
             fetchSelectedQueryProps: { query: GET_SELECTED_TEAM },
           }}
           panelItemConfig={panelItemConfig}
-          buttonGroupCallback={buttonGroupCallback}
+          // buttonGroupCallback={buttonGroupCallback}
         />
-      )
-    }}
-  </Query>
+      // )
+  //   }}
+  // </Query>
 )
 
 export default TeamsPanel

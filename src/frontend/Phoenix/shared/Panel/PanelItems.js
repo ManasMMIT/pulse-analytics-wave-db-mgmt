@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Query } from 'react-apollo'
+import { useQuery } from '@apollo/react-hooks'
 import _ from 'lodash'
 
 import PanelItem from './PanelItem'
@@ -10,47 +10,51 @@ const PanelItems = ({
   fetchSelectedQueryProps,
   panelItemConfig,
 }) => {
-  if (fetchSelectedQueryProps) {
+  const {
+    data: selectedEntityData,
+    loading,
+    error,
+  } = useQuery(fetchSelectedQueryProps.query)
+  // TODO: This may not work with Orion,
+  // which is why the commented out code still exists.
+
+  // if (fetchSelectedQueryProps) {
+    if (loading || _.isEmpty(data)) return null
+    if (error) return <div>{error}</div>
+
+
+    const firstDataKey = Object.keys(selectedEntityData)[0]
+    const selectedEntity = selectedEntityData[firstDataKey]
+
     return (
-      <Query {...fetchSelectedQueryProps}>
-        {({ data: selectedEntityData, loading }) => {
-          if (loading || _.isEmpty(selectedEntityData)) return null
-
-          const firstDataKey = Object.keys(selectedEntityData)[0]
-          const selectedEntity = selectedEntityData[firstDataKey]
-
-          return (
-            <div>
-              {
-                data.map(entity => (
-                  <PanelItem
-                    key={entity._id}
-                    selectedEntity={selectedEntity}
-                    entity={entity}
-                    panelItemConfig={panelItemConfig}
-                  />
-                ))
-              }
-            </div>
-          )
-        }}
-      </Query>
+      <div>
+        {
+          data.map(entity => (
+            <PanelItem
+              key={entity._id}
+              selectedEntity={selectedEntity}
+              entity={entity}
+              panelItemConfig={panelItemConfig}
+            />
+          ))
+        }
+      </div>
     )
-  }
+  // }
 
-  return (
-    <div>
-      {
-        data.map(entity => (
-          <PanelItem
-            key={entity._id}
-            entity={entity}
-            panelItemConfig={panelItemConfig}
-          />
-        ))
-      }
-    </div>
-  )
+  // return (
+  //   <div>
+  //     {
+  //       data.map(entity => (
+  //         <PanelItem
+  //           key={entity._id}
+  //           entity={entity}
+  //           panelItemConfig={panelItemConfig}
+  //         />
+  //       ))
+  //     }
+  //   </div>
+  // )
 }
 
 PanelItems.propTypes = {

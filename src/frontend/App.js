@@ -1,6 +1,8 @@
 import React from 'react'
 import { transparentize } from 'polished'
-import { ApolloProvider } from 'react-apollo'
+// import { ApolloProvider } from 'react-apollo' // option 1: v2, NO HOOKS, OLD
+// import { ApolloProvider } from 'react-apollo' // option 2: v3, UNRELIABLE
+import { ApolloProvider } from '@apollo/react-hooks' // option 3: react-hooks, PROB UNRELIABLE
 import ApolloClient from 'apollo-boost'
 
 import {

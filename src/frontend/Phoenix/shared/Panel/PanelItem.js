@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Mutation } from 'react-apollo'
+import { useMutation } from '@apollo/react-hooks'
 
 const PanelItem = ({
   selectedEntity,
@@ -24,35 +24,13 @@ const PanelItem = ({
     finalStyle = { ...finalStyle, ...inactiveStyle }
   }
 
-  if (selectEntityMutationDoc) {
-    return (
-      <Mutation mutation={selectEntityMutationDoc}>
-        {handleSelect => {
-          return (
-            <div
-              style={finalStyle}
-              onClick={handleSelect.bind(null, { variables: { _id: entity._id } })}
-            >
-              <div>
-                <div>{label1Callback(entity)}</div>
-
-                <div style={{ fontWeight: 300, fontStyle: 'italic' }}>
-                  {label2Callback(entity)}
-                </div>
-              </div>
-
-              <div>
-                {buttonGroupCallback(entity)}
-              </div>
-            </div>
-          )
-        }}
-      </Mutation>
-    )
-  }
+  const [handleSelect] = useMutation(selectEntityMutationDoc)
 
   return (
-    <div style={finalStyle}>
+    <div
+      style={finalStyle}
+      onClick={handleSelect.bind(null, { variables: { _id: entity._id } })}
+    >
       <div>
         <div>{label1Callback(entity)}</div>
 
@@ -66,6 +44,22 @@ const PanelItem = ({
       </div>
     </div>
   )
+
+  // return (
+  //   <div style={finalStyle}>
+  //     <div>
+  //       <div>{label1Callback(entity)}</div>
+
+  //       <div style={{ fontWeight: 300, fontStyle: 'italic' }}>
+  //         {label2Callback(entity)}
+  //       </div>
+  //     </div>
+
+  //     <div>
+  //       {buttonGroupCallback(entity)}
+  //     </div>
+  //   </div>
+  // )
 }
 
 PanelItem.propTypes = {
