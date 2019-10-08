@@ -58,17 +58,17 @@ const panelItemConfig = {
 const headerChildren = <CreateButton />
 
 const TeamsPanel = () => {
-  const { data, loading, error } = useQuery(GET_SELECTED_CLIENT)
+  // const { data, loading, error } = useQuery(GET_SELECTED_CLIENT)
 
-  if (loading || !data) return null
-  if (error) return <div>{error}</div>
+  // if (loading || !data) return null
+  // if (error) return <div>{error}</div>
 
-  const { selectedClient: { description: clientName } } = data
+  // const { selectedClient: { description: clientName } } = data
 
   return (
     <Panel
       style={{ backgroundColor: '#edf1f5' }}
-      title={`Teams for ${clientName}`}
+      // title={`Teams for ${clientName}`}
       titleStyle={{ color: '#536f8d' }}
       headerChildren={headerChildren}
       queryDocs={{

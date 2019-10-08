@@ -13,37 +13,38 @@ const teamQueryResolvers = {
 
     The mutation resolver `selectTeam` handles cache updates.
   */
-  selectedTeam: (root, args, { client, cache }) => {
-    return {
-      __typename: 'Team',
-      _id: 'initialTeam2',
-      name: 'InitialTeam2',
-      description: 'InitialTeam2',
-      isDefault: true,
-      sitemap: null,
-      client: { __typename: 'Client', _id: 'initialClient' },
-    }
-    // const { selectedTeam } = cache.readQuery({ query: GET_SELECTED_TEAM })
-    // const { selectedClient } = cache.readQuery({ query: GET_SELECTED_CLIENT })
+  selectedTeam: async (root, args, { client, cache }) => {
+    console.log('hit selectedTeam resolver');
+    // return {
+    //   __typename: 'Team',
+    //   _id: 'initialTeam2',
+    //   name: 'InitialTeam2',
+    //   description: 'InitialTeam2',
+    //   isDefault: true,
+    //   sitemap: null,
+    //   client: { __typename: 'Client', _id: 'initialClient' },
+    // }
+    const { selectedTeam } = cache.readQuery({ query: GET_SELECTED_TEAM })
+    const { selectedClient } = cache.readQuery({ query: GET_SELECTED_CLIENT })
 
-    // let result = selectedTeam
-    // if (
-    //   selectedTeam._id === 'initialTeam'
-    //   || selectedTeam.client._id !== selectedClient._id
-    // ) {
-      console.log('hit selectedTeam resolver');
+    let result = selectedTeam
+    if (
+      selectedTeam._id === 'initialTeam'
+      || selectedTeam.client._id !== selectedClient._id
+    ) {
       
-      return client.query({
+      const {
+        data: {
+          teams,
+        }
+      } = await client.query({
         query: GET_CLIENT_TEAMS, // gql query uses @export to get clientId
-      }).then(({ data: { teams } }) => {
-        debugger
-        return teams[0]
       })
 
-      // result = teams[0]
-    // }
+      result = teams[0]
+    }
 
-    // return result
+    return result
   },
 }
 
