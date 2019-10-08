@@ -55,7 +55,7 @@ const panelItemConfig = {
   // inactiveStyle: inactivePanelItemStyle,
 }
 
-// const headerChildren = <CreateButton />
+const headerChildren = <CreateButton />
 
 const TeamsPanel = () => {
   const { data, loading, error } = useQuery(GET_SELECTED_CLIENT)
@@ -69,7 +69,7 @@ const TeamsPanel = () => {
       style={{ backgroundColor: '#edf1f5' }}
       title={`Teams for ${clientName}`}
       titleStyle={{ color: '#536f8d' }}
-      // headerChildren={headerChildren}
+      headerChildren={headerChildren}
       queryDocs={{
         fetchAllQueryProps: { query: GET_CLIENT_TEAMS },
         fetchSelectedQueryProps: { query: GET_SELECTED_TEAM },
