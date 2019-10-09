@@ -1,5 +1,5 @@
 import React from 'react'
-import { Query } from 'react-apollo'
+import { useQuery } from '@apollo/react-hooks'
 
 import DeleteButton from '../../shared/DeleteButton'
 
@@ -12,21 +12,19 @@ import {
   GET_SELECTED_CLIENT,
 } from '../../../api/queries'
 
-export default ({ teamId }) => (
-  <Query query={GET_SELECTED_CLIENT}>
-    {({ data, loading }) => {
-      if (loading) return null
+export default ({ teamId }) => {
+  const { data, loading } = useQuery(GET_SELECTED_CLIENT)
 
-      const { selectedClient } = data
+  if (loading) return null
 
-      return (
-        <DeleteButton
-          itemId={teamId}
-          mutationDoc={DELETE_TEAM}
-          additionalFormData={{ clientId: selectedClient._id }}
-          clientMutation={MANAGE_DELETED_TEAM}
-        />
-      )
-    }}
-  </Query>
-)
+  const { selectedClient } = data
+
+  return (
+    <DeleteButton
+      itemId={teamId}
+      mutationDoc={DELETE_TEAM}
+      additionalFormData={{ clientId: selectedClient._id }}
+      clientMutation={MANAGE_DELETED_TEAM}
+    />
+  )
+}

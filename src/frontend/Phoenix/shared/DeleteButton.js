@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import { Mutation, withApollo } from 'react-apollo'
+import { useMutation, useApolloClient } from '@apollo/react-hooks'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faTrashAlt } from "@fortawesome/free-solid-svg-icons"
 
@@ -24,76 +24,67 @@ const buttonStyle = {
   cursor: 'pointer',
 }
 
-class DeleteButton extends React.Component {
-  state = { isModalOpen: false }
+const DeleteButton = ({
+  mutationDoc,
+  clientMutation,
+  style,
+  modalTitle,
+  modalText,
+  itemId,
+  additionalFormData,
+}) => {
+  const [isModalOpen, toggleModal] = useState(false)
+  const openModal = () => toggleModal(true)
+  const closeModal = () => toggleModal(false)
 
-  openModal = () => this.setState({ isModalOpen: true })
+  const client = useApolloClient()
 
-  closeModal = () => this.setState({ isModalOpen: false })
+  const updateClientMutationCallback = (store, { data }) => client.mutate({
+    mutation: clientMutation,
+    variables: { data }
+  })
 
-  finalDeleteHandler = _id => {
-    this.props.deleteHandler(_id).then(this.closeModal)
-  }
+  const [deleteHandler, { loading, error }] = useMutation(
+    mutationDoc,
+    { update: updateClientMutationCallback },
+  )
 
-  render() {
-    const {
-      openModal,
-      closeModal,
-      state: { isModalOpen },
-      props: {
-        style,
-        modalTitle,
-        modalText,
-        itemId,
-        mutationDoc,
-        clientMutation,
-        client,
-        additionalFormData,
-      },
-    } = this
+  if (loading) return <Spinner />
+  if (error) return <div style={{ color: 'red' }}>Error processing request</div>
 
-    const updateClientMutationCallback = (store, { data }) => client.mutate({
-      mutation: clientMutation,
-      variables: { data }
-    })
+  const finalDeleteHandler = () => deleteHandler({
+    variables: {
+      input: {
+        _id: itemId,
+        ...additionalFormData
+      }
+    }
+  }).then(closeModal)
 
-    return (
-      <>
-        <button
-          style={{ ...buttonStyle, ...style }}
-          onClick={openModal}
+  return (
+    <>
+      <button
+        style={{ ...buttonStyle, ...style }}
+        onClick={openModal}
+      >
+        {trashCan}
+      </button>
+      <Modal
+        handleClose={closeModal}
+        show={isModalOpen}
+        title={modalTitle}
+      >
+        {modalText}
+
+        <div
+          style={modalButtonStyle}
+          onClick={finalDeleteHandler}
         >
-          {trashCan}
-        </button>
-        <Modal
-          handleClose={closeModal}
-          show={isModalOpen}
-          title={modalTitle}
-        >
-          {modalText}
-
-          <Mutation
-            mutation={mutationDoc}
-            update={updateClientMutationCallback}
-          >
-            {(handleSubmit, { loading, error }) => {
-              if (loading) return <Spinner />
-              if (error) return <div style={{ color: 'red' }}>Error processing request</div>
-
-              return (
-                <div
-                  style={modalButtonStyle}
-                  onClick={() => handleSubmit({ variables: { input: { _id: itemId, ...additionalFormData } } })}
-                >
-                  Delete Forever
-                </div>
-              )
-            }}
-          </Mutation>
-        </Modal>
-      </>
-    )
-  }
+          Delete Forever
+        </div>
+      </Modal>
+    </>
+  )
 }
 
 DeleteButton.propTypes = {
@@ -107,4 +98,4 @@ DeleteButton.propTypes = {
   additionalFormData: PropTypes.object,
 }
 
-export default withApollo(DeleteButton)
+export default DeleteButton

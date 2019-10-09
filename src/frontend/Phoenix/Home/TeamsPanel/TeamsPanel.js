@@ -3,9 +3,9 @@ import { useQuery } from '@apollo/react-hooks'
 
 import Panel from '../../shared/Panel'
 import CreateButton from './CreateButton'
-import UpdateButton from './UpdateButton'
+// import UpdateButton from './UpdateButton'
 import DeleteButton from './DeleteButton'
-import SitemapButton from '../../shared/SitemapButton'
+// import SitemapButton from '../../shared/SitemapButton'
 
 import { SELECT_TEAM } from '../../../api/mutations'
 
@@ -32,23 +32,24 @@ const activePanelItemStyle = {
   borderLeft: '4px solid #1f6cc7',
 }
 
-// const buttonGroupCallback = team => {
-//   if (team.isDefault) return <SitemapButton teamId={team._id} />
+const buttonGroupCallback = team => {
+  // if (team.isDefault) return <SitemapButton teamId={team._id} />
+  if (team.isDefault) return null
 
-//   return (
-//     <>
-//       <UpdateButton team={team} />
-//       <SitemapButton teamId={team._id} />
-//       <DeleteButton teamId={team._id} />
-//     </>
-//   )
-// }
+  return (
+    <>
+      {/* <UpdateButton team={team} />
+      <SitemapButton teamId={team._id} /> */}
+      <DeleteButton teamId={team._id} />
+    </>
+  )
+}
 
 const panelItemConfig = {
   selectEntityMutationDoc: SELECT_TEAM,
   style: defaultPanelItemStyle,
   activeStyle: activePanelItemStyle,
-  // buttonGroupCallback,
+  buttonGroupCallback,
   label1Callback: ({ description }) => description,
   // ! Note: inactiveStyle not needed until hover effects differ
   // ! between active and inactive states
