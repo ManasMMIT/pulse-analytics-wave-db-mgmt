@@ -3,7 +3,7 @@ import { useQuery } from '@apollo/react-hooks'
 
 import Panel from '../../shared/Panel'
 import CreateButton from './CreateButton'
-// import UpdateButton from './UpdateButton'
+import UpdateButton from './UpdateButton'
 import DeleteButton from './DeleteButton'
 // import SitemapButton from '../../shared/SitemapButton'
 
@@ -38,8 +38,8 @@ const buttonGroupCallback = team => {
 
   return (
     <>
-      {/* <UpdateButton team={team} />
-      <SitemapButton teamId={team._id} /> */}
+      <UpdateButton team={team} />
+      {/* <SitemapButton teamId={team._id} /> */}
       <DeleteButton teamId={team._id} />
     </>
   )
@@ -76,7 +76,7 @@ const TeamsPanel = () => {
         fetchSelectedQueryProps: { query: GET_SELECTED_TEAM },
       }}
       panelItemConfig={panelItemConfig}
-    // buttonGroupCallback={buttonGroupCallback}
+      buttonGroupCallback={buttonGroupCallback}
     />
   )
 }
