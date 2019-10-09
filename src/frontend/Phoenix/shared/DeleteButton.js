@@ -49,7 +49,6 @@ const DeleteButton = ({
     { update: updateClientMutationCallback },
   )
 
-  if (loading) return <Spinner />
   if (error) return <div style={{ color: 'red' }}>Error processing request</div>
 
   const finalDeleteHandler = () => deleteHandler({
@@ -75,13 +74,18 @@ const DeleteButton = ({
         title={modalTitle}
       >
         {modalText}
-
-        <div
-          style={modalButtonStyle}
-          onClick={finalDeleteHandler}
-        >
-          Delete Forever
-        </div>
+      {
+        loading
+        ? <Spinner />
+        : (
+          <div
+            style={modalButtonStyle}
+            onClick={finalDeleteHandler}
+          >
+            Delete Forever
+          </div>
+        )
+      }
       </Modal>
     </>
   )
