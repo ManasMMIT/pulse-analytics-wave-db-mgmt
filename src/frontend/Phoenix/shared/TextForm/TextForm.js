@@ -74,7 +74,6 @@ const TextFormContainer = ({ mutationDoc, clientMutation, ...otherProps }) => {
 
   return (
     <TextForm
-      client={client}
       handleSubmit={handleSubmit}
       {...otherProps}
     />
