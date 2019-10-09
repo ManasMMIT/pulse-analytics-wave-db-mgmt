@@ -4,7 +4,7 @@ import { useQuery } from '@apollo/react-hooks'
 import _ from 'lodash'
 
 import PanelItem from './PanelItem'
-
+let wut = 0
 const PanelItems = ({
   data,
   fetchSelectedQueryProps,
@@ -14,7 +14,11 @@ const PanelItems = ({
     data: selectedEntityData,
     loading,
     error,
-  } = useQuery(fetchSelectedQueryProps.query)
+    // networkStatus
+  } = useQuery(fetchSelectedQueryProps.query,
+    // { notifyOnNetworkStatusChange: true }
+    { returnPartialData: true },
+  )
   // TODO: This may not work with Orion,
   // which is why the commented out code still exists.
 
@@ -22,10 +26,17 @@ const PanelItems = ({
     if (loading || _.isEmpty(data)) return null
     if (error) return <div>{error}</div>
 
-
     const firstDataKey = Object.keys(selectedEntityData)[0]
     const selectedEntity = selectedEntityData[firstDataKey]
 
+    if (firstDataKey === 'selectedTeam') {
+      console.log('Teams panel selected team', selectedEntity.description)
+      // console.log('NETWORK STATUS:', networkStatus);
+      wut++
+      console.log(wut);
+  
+      debugger
+    }
     return (
       <div>
         {

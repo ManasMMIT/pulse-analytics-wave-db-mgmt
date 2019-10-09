@@ -1,5 +1,6 @@
 import React from 'react'
-import { Query, useQuery } from 'react-apollo'
+import { Query } from 'react-apollo'
+import { useQuery } from '@apollo/react-hooks'
 
 import Panel from '../../shared/Panel'
 import CreateButton from './CreateButton'
@@ -62,29 +63,29 @@ const panelStyle = {
 
 // const headerChildren = <CreateButton />
 
-const UsersPanel = () => (
-  // <Query query={GET_SELECTED_TEAM}>
-  //   {
-  //     ({ data, loading }) => {
-  //       if (loading) return null
+const UsersPanel = () => {
+  debugger
+  const { data, loading, error } = useQuery(GET_SELECTED_TEAM)
+  debugger
+  console.log('Users panel selected team', data.selectedTeam.description)
+  
+  if (loading) return null
+  if (error) return <div>{error}</div>
 
-  //       const { selectedTeam } = data
+  const { selectedTeam } = data
 
-  //       return (
-          <Panel
-            style={panelStyle}
-            // title={`Users for ${selectedTeam.description}`}
-            // headerChildren={headerChildren}
-            queryDocs={{
-              fetchAllQueryProps: { query: GET_TEAM_USERS },
-              fetchSelectedQueryProps: { query: GET_SELECTED_USER },
-            }}
-            panelItemConfig={panelItemConfig}
-          />
-  //       )
-  //     }
-  //   }
-  // </Query>
-)
+  return (
+    <Panel
+      style={panelStyle}
+      title={`Users for ${selectedTeam.description}`}
+      // headerChildren={headerChildren}
+      queryDocs={{
+        fetchAllQueryProps: { query: GET_TEAM_USERS },
+        fetchSelectedQueryProps: { query: GET_SELECTED_USER },
+      }}
+      panelItemConfig={panelItemConfig}
+    />
+  )
+    }
 
 export default UsersPanel

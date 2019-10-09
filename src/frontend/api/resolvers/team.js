@@ -34,8 +34,14 @@ const teamResolvers = {
       selectedTeam = teams.find(({ _id }) => _id === teamId)
     }
 
+    debugger
+    console.log('about to write selected team in selectTeam mutation', selectedTeam.description);
+    
     client.writeQuery({ query: GET_SELECTED_TEAM, data: { selectedTeam } })
 
+    console.log('done writing selected team in selectTeam mutation');
+
+    debugger
     await client.mutate({ mutation: SELECT_USER })
 
     return selectedTeam
