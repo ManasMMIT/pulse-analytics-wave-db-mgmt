@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { useMutation, useApolloClient } from '@apollo/react-hooks'
 
 import Spinner from '../Spinner'
+
 class TextForm extends Component {
   constructor(props) {
     super(props)
