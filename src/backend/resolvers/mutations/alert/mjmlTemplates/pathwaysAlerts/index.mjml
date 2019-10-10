@@ -20,25 +20,16 @@
       </mj-column>
     </mj-section>
     <!-- Header Details -->
-    <mj-section mj-class='default-background'>
-      <mj-column>
-        <mj-text mj-class='header-text'>
-          Welcome to your {{ utils.getDate.month() }} {{ utils.getDate.year() }} Pathways update. View the latest Pathways changes in the email below 
-          or visit the Pathways tool to view more in-depth data.
-        </mj-text>
-        <mj-text align='center' padding-top='24px'>
-          <a
-            class='visit-pathways-btn'
-            href='https://pulse-tools.com/pathways/overview/pathways'
-          >
-            <span>
-              Visit Pathways Tool
-            </span>
-          </a>
-        </mj-text>
-      </mj-column>
-    </mj-section>
     {% if data | length > 0 %}
+      <mj-section mj-class='default-background no-padding header-content'>
+        <mj-column mj-class='no-padding'>
+          <mj-text mj-class='header-content-text'>
+            Welcome to your {{ utils.getDate.month() }} {{ utils.getDate.year() }} Pathways update. View the latest Pathways changes in the email below 
+            or visit the Pathways tool to view more in-depth data.
+          </mj-text>
+          {% include "./partials/shared/visitPathwaysBtn.mjml" %}
+        </mj-column>
+      </mj-section>
       <!-- Positioning Section -->
       {% if data.positioning %}
         {% include "./partials/positioning/positioningSection.mjml" %}
@@ -55,18 +46,9 @@
       {% if data.payer %}
         {% include "./partials/payer/payerSection.mjml" %}
       {% endif %}
-      <mj-section mj-class='default-background'>
+      <mj-section mj-class='default-background bottom-button'>
         <mj-column>
-          <mj-text align='center'>
-            <a
-              class='visit-pathways-btn'
-              href='https://pulse-tools.com/pathways/overview/pathways'
-            >
-              <span>
-                Visit Pathways Tool
-              </span>
-            </a>
-          </mj-text>
+          {% include "./partials/shared/visitPathwaysBtn.mjml" %}
         </mj-column>
       </mj-section>
     {% else %}
@@ -76,9 +58,13 @@
     <!-- Email Footer -->
     <mj-section mj-class='footer'>
       <mj-column>
-        <mj-text mj-class='footer-text'>
-          You're receiving this email because you have an account with Pulse Digital. If you are receiving
-          this emails in error, please contact us.
+        <mj-text mj-class='footer-text' css-class='footer-email'>
+          <span>
+            You're receiving this email because you have an account with Pulse Digital. If you are receiving 
+            this email in error or have any questions, please contact us at
+            </br>
+            <a href="mailto:support@pulse-tools.com">support@pulse-tools.com</a>.
+          </span>
         </mj-text>
         <mj-text mj-class='footer-text'>
           &copy; {{ utils.getDate.year() }} Pulse Digital

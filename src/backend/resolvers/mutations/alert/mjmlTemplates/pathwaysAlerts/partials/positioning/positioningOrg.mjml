@@ -17,9 +17,9 @@
   </mj-section>
   {% for indication, alerts in indicationData %}
     {% set lastIndication = loop.last %}
-    <mj-section mj-class='default-background no-padding'>
+    <mj-section mj-class='alert-item-category no-padding'>
       <mj-column mj-class='no-padding'>
-        <mj-text mj-class='alert-item-category'>
+        <mj-text mj-class='alert-item-category-text'>
           {{ indication }}
         </mj-text>
       </mj-column>

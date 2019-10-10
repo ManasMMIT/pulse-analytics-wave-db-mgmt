@@ -9,10 +9,12 @@ const TEMPLATE_MAP = {
   pathwaysAlerts: {
     templatePath: 'backend/resolvers/mutations/alert/mjmlTemplates/pathwaysAlerts/index.mjml',
     emailSubject: 'Pathways Latest Changes',
+    textEmail: "It looks like your email client can't display our formatted email.\n\nTo see the latest pathways changes for the previous month, please visit www.pulse-tools.com/pathways/overview/pathways."
   },
   test: {
     templatePath: 'backend/resolvers/mutations/alert/mjmlTemplates/pathwaysAlerts/index.mjml',
     emailSubject: 'Pathways Latest Changes',
+    textEmail: "It looks like your email client can't display our formatted email.\n\nTo see the latest pathways changes for the previous month, please visit www.pulse-tools.com/pathways/overview/pathways."
   }
 }
 
@@ -34,7 +36,11 @@ const sendSingleEmail = async ({ email, templateDetails, data, nunjucksEnv }) =>
     return result
   }
 
-  const { templatePath, emailSubject } = templateDetails
+  const {
+    templatePath,
+    emailSubject,
+    textEmail,
+  } = templateDetails
 
   try {
     const mjmlString = compileTemplate({ templatePath, data })
@@ -45,7 +51,7 @@ const sendSingleEmail = async ({ email, templateDetails, data, nunjucksEnv }) =>
       to: email,
       from: FROM_EMAIL,
       subject: emailSubject,
-      text: 'text email',
+      text: textEmail,
       html: htmlString
     }
 

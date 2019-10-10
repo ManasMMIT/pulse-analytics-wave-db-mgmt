@@ -4,13 +4,15 @@
   />
   <mj-class
     name='mj-body'
-    width='600px'
-    background-color='#F1F3F6'
+    width='700px'
+    background-color='#FCFCFC'
   />
   <!-- START: Shared attribute styles -->
   <mj-class 
     name='default-background'
     background-color='#EDF6FF'
+    border-left='1px solid #DFE9F3'
+    border-right='1px solid #DFE9F3'
   />
   <mj-class
     name='no-padding'
@@ -33,7 +35,7 @@
   <mj-class
     name='section-divider'
     padding='10px 0'
-    border-color='rgba(14, 37, 57, 0.07)'
+    border-color='#DFE9F3'
     border-width='1px'
   />
   <!-- END: Shared component styles -->
@@ -50,7 +52,12 @@
     padding='0px'
   />
   <mj-class
-    name='header-text'
+    name='header-content'
+    padding='32px 0'
+  />
+  <mj-class
+    name='header-content-text'
+    padding='0 16px 32px 16px'
     font-size='16px'
     line-height='24px'
     letter-spacing='-0.13px'
@@ -84,7 +91,7 @@
   />
   <mj-class
     name='body-section-title'
-    font-size='22px'
+    font-size='24px'
     font-weight='700'
     line-height='33px'
     color='#0E2539'
@@ -103,7 +110,7 @@
     name='organization-header-text'
     padding='0'
     align='center'
-    font-size='18px'
+    font-size='20px'
     line-height='27px'
     color='#0668D9'
     font-weight='700'
@@ -111,18 +118,22 @@
   <mj-class
     name='view-account-link'
     align='center'
-    padding='0 2px'
-    font-size='12px'
+    padding='4px 2px 0 2px'
+    font-size='14px'
     font-style='italic'
     line-height='18px'
   />
   <mj-class
     name='alert-item-category'
+    border='1px solid #DBE9FA'
+  />
+  <mj-class
+    name='alert-item-category-text'
     align='left'
-    padding = '0 25px' 
-    font-size='18px'
+    padding = '0 16px' 
+    font-size='16px'
     line-height='48px'
-    container-background-color='#F7FAFD'
+    container-background-color='#F0F6FC'
     color='#0E2539'
     font-weight='700'
   />
@@ -130,13 +141,16 @@
     name='alert-item-details'
     background-color='#FFFFFF'
     color='#0E2539'
+    border-left='1px solid #DBE9FA'
+    border-right='1px solid #DBE9FA'
   />
   <mj-class
     name='alert-item-row'
-    padding='0 25px'
+    padding='0 32px'
     align='left'
     font-size='14px'
     line-height='21px'
+    color='#0E2539'
   />
   <mj-class
     name='alert-item-description'
@@ -144,16 +158,22 @@
   />
   <mj-class 
     name='alert-item-last'
-    border-radius='0 0 10px 10px'
+    border-bottom='1px solid #DBE9FA'
   />
   <mj-class
     name='alert-bottom-divider'
-    padding='0 12px'
+    padding='0 32px'
     background-color='#FFFFFF'
+    border-left='1px solid #DBE9FA'
+    border-right='1px solid #DBE9FA'
   />
   <mj-class
     name='navbar-bullet'
     color='rgba(14,37,57, 0.3)'
+  />
+  <mj-class
+    name='bottom-button'
+    padding='7px 0 32px 0'
   />
 </mj-attributes>
 <mj-style inline="inline">
@@ -172,6 +192,9 @@
     display: inline-block;
     margin: 0 8px 8px 8px;
     white-space: nowrap;
+  }
+  .footer-email a {
+    color: #FFFFFF;
   }
 </mj-style>
 <mj-style>

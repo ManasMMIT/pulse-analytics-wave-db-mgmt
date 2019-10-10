@@ -1,8 +1,5 @@
 <mj-section mj-class='alert-item-details {% if loop.last %}alert-item-last{% endif %}'>
   <mj-column>
-    <mj-text mj-class='alert-item-row trans-text'>
-      {{ item.alertDate }}
-    </mj-text>
     <mj-text mj-class='alert-item-row bold-text'>
       {{ item.provider }},
       <span style='font-weight: 400; font-style: italic'>{{ item.state }}</span>
