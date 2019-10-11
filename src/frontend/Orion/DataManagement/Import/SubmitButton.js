@@ -1,5 +1,5 @@
 import React from "react"
-import { Mutation } from 'react-apollo'
+import { useMutation } from '@apollo/react-hooks'
 import styled from '@emotion/styled'
 import _ from 'lodash'
 
@@ -35,55 +35,52 @@ const SubmitButton = ({
   handleError,
   handleClick,
   clicked,
-}) => (
-  <Mutation
-    mutation={UPLOAD_COLLECTION}
-    update={handleSuccess}
-  >
-    {(handleUpload, { loading, error }) => {
-      if (loading) return <Spinner />
+}) => {
+  const [handleUpload, { loading, error }] = useMutation(
+    UPLOAD_COLLECTION,
+    { update: handleSuccess },
+  )
+  if (loading) return <Spinner />
 
-      // TODO: Make error handling less wonky
-      let errors
-      if (error && clicked) {
-        errors = error.graphQLErrors[0].extensions.exception.error
+  // TODO: Make error handling less wonky
+  let errors
+  if (error && clicked) {
+    errors = error.graphQLErrors[0].extensions.exception.error
 
-        handleError(errors)
+    handleError(errors)
+  }
+
+  const isDisabled = _.isEmpty(data) || !selectedCollection || !selectedSheet
+
+  const handleSubmit = () => {
+    handleClick(true)
+
+    handleUpload({
+      variables: {
+        input: {
+          data,
+          collectionName: selectedCollection.value,
+        }
       }
+    })
+  }
+  const StyledButton = isDisabled
+    ? DisabledButton
+    : Button
 
-      const isDisabled = _.isEmpty(data) || !selectedCollection || !selectedSheet
-
-      const handleSubmit = () => {
-        handleClick(true)
-
-        handleUpload({
-          variables: {
-            input: {
-              data,
-              collectionName: selectedCollection.value,
-            }
-          }
-        })
-      }
-      const StyledButton = isDisabled
-        ? DisabledButton
-        : Button
-
-      return (
-        <>
-          <div style={{ marginTop: 24 }}>
-            <StyledButton
-              onClick={handleSubmit}
-              disabled={isDisabled}
-            >
-              Import Sheet
-            </StyledButton>
-            {error && <span style={{ color: 'red', marginLeft: 24 }}>IMPORT FAILED</span>}
-          </div>
-        </>
-      )
-    }}
-  </Mutation>
-)
+  return (
+    <>
+      <div style={{ marginTop: 24 }}>
+        <StyledButton
+          onClick={handleSubmit}
+          disabled={isDisabled}
+        >
+          Import Sheet
+        </StyledButton>
+        {error && <span style={{ color: 'red', marginLeft: 24 }}>IMPORT FAILED</span>}
+      </div>
+    </>
+  )
+}
 
 export default SubmitButton

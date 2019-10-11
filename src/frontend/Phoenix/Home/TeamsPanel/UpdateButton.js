@@ -16,6 +16,12 @@ const editIcon = (
   />
 )
 
+const buttonStyle = {
+  border: 'none',
+  background: 'none',
+  color: '#b6b9bc',
+}
+
 const UpdateButton = ({
   team: {
     _id,
@@ -25,7 +31,7 @@ const UpdateButton = ({
   <TextFormButton
     modalTitle="Edit Team"
     buttonLabel={editIcon}
-    buttonStyle={{ border: 'none', background: 'none', color: '#b6b9bc' }}
+    buttonStyle={buttonStyle}
     data={{ description }}
     mutationDoc={UPDATE_TEAM}
     additionalFormData={{ _id }}

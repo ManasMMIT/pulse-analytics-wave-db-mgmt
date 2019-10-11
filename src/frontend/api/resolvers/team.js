@@ -18,7 +18,6 @@ const teamResolvers = {
       variables: { clientId },
     }
 
-    // TODO: make the following try...catch into a util
     let teams
     try {
       const data = cache.readQuery(queryObjForClientTeams)
@@ -123,6 +122,11 @@ const teamResolvers = {
       query: GET_CLIENT_TEAMS,
       variables: { clientId }, // needed despite @export var in query itself
       data: { teams },
+    })
+
+    client.writeQuery({
+      query: GET_SELECTED_TEAM,
+      data: { selectedTeam: editedTeam }
     })
 
     return editedTeam

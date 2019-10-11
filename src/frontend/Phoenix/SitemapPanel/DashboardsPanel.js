@@ -1,5 +1,5 @@
 import React from 'react'
-import { Query } from 'react-apollo'
+import { useQuery } from '@apollo/react-hooks'
 import { transparentize } from 'polished'
 
 import {
@@ -45,6 +45,12 @@ const DashboardsPanel = ({
   dashboardsStatus,
   handleRegBrkToggle,
 }) => {
+  const { data, loading } = useQuery(GET_SELECTED_TOOL)
+
+  if (loading) return null
+
+  const { selectedTool: { name: toolName } } = data
+
   const buttonGroupCallback = dashboard => (
     <ButtonGroup
       sourceEntity={dashboard}
@@ -68,28 +74,24 @@ const DashboardsPanel = ({
   }
 
   return (
-    <Query query={GET_SELECTED_TOOL}>
-      {({ data: { selectedTool: { name: toolName } } }) => (
-          <Panel
-            style={defaultPanelStyle}
-            headerContainerStyle={panelHeaderStyle}
-            title={`DASHBOARDS / ${toolName}`}
-            titleStyle={{ fontSize: 16 }}
-            queryDocs={{
-              fetchAllQueryProps: { query: GET_TOOL_DASHBOARDS },
-              fetchSelectedQueryProps: { query: GET_SELECTED_DASHBOARD },
-            }}
-            panelItemConfig={{
-              selectEntityMutationDoc: SELECT_DASHBOARD,
-              style: panelItemStyle,
-              activeStyle: panelItemActiveStyle,
-              buttonGroupCallback,
-              label1Callback: ({ name }) => name,
-              label2Callback,
-            }}
-          />
-      )}
-    </Query>
+    <Panel
+      style={defaultPanelStyle}
+      headerContainerStyle={panelHeaderStyle}
+      title={`DASHBOARDS / ${toolName}`}
+      titleStyle={{ fontSize: 16 }}
+      queryDocs={{
+        fetchAllQueryProps: { query: GET_TOOL_DASHBOARDS },
+        fetchSelectedQueryProps: { query: GET_SELECTED_DASHBOARD },
+      }}
+      panelItemConfig={{
+        selectEntityMutationDoc: SELECT_DASHBOARD,
+        style: panelItemStyle,
+        activeStyle: panelItemActiveStyle,
+        buttonGroupCallback,
+        label1Callback: ({ name }) => name,
+        label2Callback,
+      }}
+    />
   )
 }
 

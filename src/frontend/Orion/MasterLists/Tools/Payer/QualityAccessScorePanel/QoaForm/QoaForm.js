@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Query } from 'react-apollo'
+import { useQuery } from '@apollo/react-hooks'
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faPlusSquare } from "@fortawesome/free-solid-svg-icons"
@@ -65,49 +65,55 @@ const QoaForm = ({
       )
     })
 
+  const { data: { indications }, loading, error } = useQuery(GET_SOURCE_INDICATIONS)
+
+  let captionInputsContent
+  if (error) {
+    captionInputsContent = <div style={{ color: 'red' }}>Error processing request</div>
+  } else if (loading) {
+    captionInputsContent = <Spinner />
+  } else {
+    const availableSourceIndications = indications.filter(({ name: sourceName }) => {
+      const currentCaptionIndications = Object.keys(state.input.caption)
+
+      return !currentCaptionIndications.includes(sourceName)
+    })
+
+    const nextAvailableSourceIndication = availableSourceIndications[0].name
+
+    captionInputsContent = (
+      <>
+        <CaptionInputs
+          state={state}
+          handleChange={handleChange}
+          availableSourceIndications={availableSourceIndications}
+        />
+        <div
+          onClick={() => {
+            handleChange({
+              target: {
+                name: 'caption',
+                value: { ...state.input.caption, [nextAvailableSourceIndication]: '' }
+              }
+            })
+          }}
+        >
+          {plusIcon}
+        </div>
+      </>
+    )
+  }
+
   return (
-    <div style={{
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'space-evenly',
-    }}>
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-evenly',
+      }}
+    >
       {simpleInputs}
-      <Query query={GET_SOURCE_INDICATIONS}>
-        {({ data: { indications }, loading, error }) => {
-          if (error) return <div style={{ color: 'red' }}>Error processing request</div>
-          if (loading) return <Spinner />
-
-          const availableSourceIndications = indications.filter(({ name: sourceName }) => {
-            const currentCaptionIndications = Object.keys(state.input.caption)
-
-            return !currentCaptionIndications.includes(sourceName)
-          })
-
-          const nextAvailableSourceIndication = availableSourceIndications[0].name
-
-          return (
-            <>
-              <CaptionInputs
-                state={state}
-                handleChange={handleChange}
-                availableSourceIndications={availableSourceIndications}
-              />
-              <div
-                onClick={() => {
-                  handleChange({
-                    target: {
-                      name: 'caption',
-                      value: { ...state.input.caption, [nextAvailableSourceIndication]: '' }
-                    }
-                  })
-                }}
-              >
-                {plusIcon}
-              </div>
-            </>
-          )
-        }}
-      </Query>
+      {captionInputsContent}
     </div>
   )
 }

@@ -1,28 +1,24 @@
 import React from 'react'
-import { Query } from 'react-apollo'
-import Select from 'react-select'
-import _ from 'lodash'
 
-import Panel from '../../Phoenix/shared/Panel'
-import ModalButtonWithForm from '../shared/ModalButtonWithForm'
-import DeleteButton from '../shared/DeleteButton'
-import CopyOneOfStringButton from '../shared/CopyOneOfStringButton'
+import Panel from '../../../Phoenix/shared/Panel'
+import ModalButtonWithForm from '../../shared/ModalButtonWithForm'
+import DeleteButton from '../../shared/DeleteButton'
+import CopyOneOfStringButton from '../../shared/CopyOneOfStringButton'
+import ProductsSelect from './ProductsSelect'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faEdit } from "@fortawesome/free-solid-svg-icons"
-import Spinner from '../../Phoenix/shared/Spinner'
 
 import {
-  GET_SOURCE_PRODUCTS,
   GET_SOURCE_REGIMENS,
   GET_SOURCE_INDICATIONS,
   GET_SELECTED_REGIMENS,
-} from '../../api/queries'
+} from '../../../api/queries'
 
 import {
   CREATE_REGIMEN,
   UPDATE_SOURCE_REGIMEN,
   DELETE_SOURCE_REGIMEN,
-} from '../../api/mutations'
+} from '../../../api/mutations'
 
 const editIcon = <FontAwesomeIcon size="lg" icon={faEdit} />
 
@@ -34,13 +30,6 @@ const buttonStyle = {
   background: "#234768",
   color: 'white',
 }
-
-const formatProductStrings = products => (
-  products.map(({ _id, nameGeneric, nameBrand }) => {
-    const str = `${nameBrand} (${nameGeneric})`
-    return { value: _id, label: str }
-  })
-)
 
 const getInputFields = (state, handleChange) => {
   const products = state.input.products || []
@@ -59,35 +48,10 @@ const getInputFields = (state, handleChange) => {
 
       <div>
         <span>Products:</span>
-        <Query query={GET_SOURCE_PRODUCTS}>
-          {({ data: { products: defaultProducts }, loading, error }) => {
-            if (error) return <div style={{ color: 'red' }}>Error processing request</div>
-            if (loading) return <Spinner />
-            const productsByKey = _.keyBy(defaultProducts, '_id')
-
-            return (
-              <Select
-                defaultValue={formatProductStrings(products)}
-                isMulti
-                options={formatProductStrings(defaultProducts)}
-                className="basic-multi-select"
-                classNamePrefix="select"
-                onChange={arrOfVals => {
-                  let newProducts = arrOfVals || []
-
-                  newProducts = newProducts.map(({ value }) => {
-                    const { __typename, ...product } = productsByKey[value]
-                    return product
-                  })
-
-                  // ! HACK: Mock HTML event.target structure to get tags
-                  // ! able to written into Form's local state by handleChange
-                  handleChange({ target: { name: 'products', value: newProducts } })
-                }}
-              />
-            )
-          }}
-        </Query>
+        <ProductsSelect
+          products={products}
+          handleChange={handleChange}
+        />
       </div>
     </>
   )

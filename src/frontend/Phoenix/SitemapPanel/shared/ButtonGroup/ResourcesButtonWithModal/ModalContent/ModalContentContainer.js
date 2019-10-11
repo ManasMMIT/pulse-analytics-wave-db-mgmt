@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Query } from 'react-apollo'
+import { useQuery } from '@apollo/react-hooks'
 
 import { GET_STAGED_SITEMAP } from './../../../../../../api/queries'
 
@@ -12,23 +12,20 @@ const ModalContentContainer = ({
   handlers,
   selectedTeamNode,
 }) => {
+  const { data, loading } = useQuery(GET_STAGED_SITEMAP)
+
+  if (loading) return null
+
+  const { stagedSitemap } = data
 
   return (
-    <Query query={GET_STAGED_SITEMAP}>
-      {
-        ({ data: { stagedSitemap }, loading, error }) => {
-          return (
-            <ModalContent
-              nodeId={nodeId}
-              nodeType={nodeType}
-              handlers={handlers}
-              selectedTeamNode={selectedTeamNode}
-              teamTools={stagedSitemap.tools}
-            />
-          )
-        }
-      }
-    </Query>
+    <ModalContent
+      nodeId={nodeId}
+      nodeType={nodeType}
+      handlers={handlers}
+      selectedTeamNode={selectedTeamNode}
+      teamTools={stagedSitemap.tools}
+    />
   )
 }
 

@@ -3,12 +3,10 @@ import PropTypes from 'prop-types'
 import styled from "@emotion/styled";
 import _ from 'lodash'
 
-import { Mutation, Query, withApollo } from 'react-apollo'
+import Checkboxes from './Checkboxes'
+import SubmitButton from './SubmitButton';
 
-import Spinner from '../../../shared/Spinner'
-import { GET_CLIENT_TEAMS } from '../../../../api/queries'
-
-const UserFormContainer = styled.div({
+const UserFormWrapper = styled.div({
   display: 'flex',
   flexDirection: 'column',
   width: 300,
@@ -69,25 +67,25 @@ class UserForm extends React.Component {
     const {
       userId,
       afterSubmitHook,
-      mutationDoc,
       additionalFormData,
-      client,
+      mutationDoc,
       clientMutation,
     } = this.props
-
-    const updateMutationCallback = (
-      store,
-      { data }
-    ) => client.mutate({
-      mutation: clientMutation,
-      variables: { data },
-    })
 
     // pick out only the checked boxes and get array of ids
     const teamsToPersistOnSubmit = Object.keys(_.pickBy(checkboxesMap, value => value))
 
+    const submitData = {
+      _id: userId, // only needed for update, not create
+      username,
+      email,
+      password,
+      roles: teamsToPersistOnSubmit,
+      ...additionalFormData,
+    }
+
     return (
-      <UserFormContainer>
+      <UserFormWrapper>
         <Label>username</Label>
         <input
           type="text"
@@ -117,64 +115,18 @@ class UserForm extends React.Component {
           onChange={this.handleChange}
           autoComplete="off"
         />
-
         <Label>teams</Label>
-
-        <Query query={GET_CLIENT_TEAMS}>
-          {({ data, loading, error }) => {
-            if (_.isEmpty(data)) return <Spinner />
-
-            return (
-              <>
-                {
-                  data.teams.map(({ _id, name }) => (
-                    <div key={_id}>
-                      <label>{name}</label>
-                      <input
-                        type='checkbox'
-                        id={_id}
-                        checked={Boolean(checkboxesMap[_id])}
-                        onChange={this.handleChange}
-                      />
-                    </div>
-                  ))
-                }
-              </>
-            )
-          }}
-        </Query>
-
-        <Mutation
-          mutation={mutationDoc}
-          update={updateMutationCallback}
-        >
-          {(handleSubmit, { loading, error }) => {
-            if (loading) return <Spinner />
-            if (error) return <div style={{ color: 'red' }}>Error processing request</div>
-
-            return (
-              <button
-                style={{ marginTop: 20 }}
-                type="submit"
-                onClick={() => handleSubmit({
-                  variables: {
-                    input: {
-                      _id: userId, // only needed for update, not create
-                      username,
-                      email,
-                      password,
-                      roles: teamsToPersistOnSubmit,
-                      ...additionalFormData,
-                    }
-                  },
-                }).then(afterSubmitHook)}
-              >
-                Submit
-              </button>
-            )
-          }}
-        </Mutation>
-      </UserFormContainer>
+        <Checkboxes
+          checkboxesMap={checkboxesMap}
+          handleChange={this.handleChange}
+        />
+        <SubmitButton
+          mutationDoc={mutationDoc}
+          afterSubmitHook={afterSubmitHook}
+          clientMutation={clientMutation}
+          input={submitData}
+        />
+      </UserFormWrapper>
     )
   }
 }
@@ -186,8 +138,6 @@ UserForm.propTypes = {
   selectedTeamId: PropTypes.string,
   allTeamsUserIsOn: PropTypes.array,
   afterSubmitHook: PropTypes.func,
-  mutationDoc: PropTypes.object,
-  clientMutation: PropTypes.object,
   additionalFormData: PropTypes.object,
 }
 
@@ -198,9 +148,7 @@ UserForm.defaultProps = {
   selectedTeamId: null,
   allTeamsUserIsOn: [],
   afterSubmitHook: () => null,
-  mutationDoc: null,
-  clientMutation: null,
   additionalFormData: {},
 }
 
-export default withApollo(UserForm)
+export default UserForm

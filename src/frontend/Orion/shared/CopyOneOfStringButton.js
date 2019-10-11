@@ -1,5 +1,5 @@
 import React from 'react'
-import { Query } from 'react-apollo'
+import { useQuery } from '@apollo/react-hooks'
 import Spinner from '../../Phoenix/shared/Spinner'
 
 const buttonStyle = {
@@ -27,26 +27,24 @@ const copyToClipboard = oneOfString => {
   })
 }
 
-const CopyOneOfStringButton = ({ queryDoc, dataKey }) => (
-  <Query query={queryDoc}>
-    {({ data, loading, error }) => {
-      if (error) return <div style={{ color: 'red' }}>Error processing request</div>
-      if (loading) return <Spinner />
+const CopyOneOfStringButton = ({ queryDoc, dataKey }) => {
+  const { data, loading, error } = useQuery(queryDoc)
 
-      const targetData = data[dataKey]
+  if (error) return <div style={{ color: 'red' }}>Error processing request</div>
+  if (loading) return <Spinner />
 
-      const oneOfString = getOneOfString(targetData)
+  const targetData = data[dataKey]
 
-      return (
-        <button
-          style={buttonStyle}
-          onClick={() => copyToClipboard(oneOfString)}
-        >
-          Copy oneOf string
-        </button>
-      )
-    }}
-  </Query>
-)
+  const oneOfString = getOneOfString(targetData)
+
+  return (
+    <button
+      style={buttonStyle}
+      onClick={() => copyToClipboard(oneOfString)}
+    >
+      Copy oneOf string
+    </button>
+  )
+}
 
 export default CopyOneOfStringButton

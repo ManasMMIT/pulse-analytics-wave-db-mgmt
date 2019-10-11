@@ -1,13 +1,12 @@
 import React, { Component } from 'react'
 import { Route, Switch } from 'react-router-dom'
-import { withApollo } from 'react-apollo'
+import { useApolloClient } from '@apollo/react-hooks' // option 3: react-hooks, PROB UNRELIABLE
 
 import { GET_CLIENTS, GET_SOURCE_TOOLS } from './../api/queries'
 import { SELECT_CLIENT, SELECT_TOOL } from './../api/mutations'
 
 import Home from './Home'
 import SitemapPanel from './SitemapPanel'
-
 class Phoenix extends Component {
   state = {
     isLoading: true,
@@ -37,4 +36,9 @@ class Phoenix extends Component {
   }
 }
 
-export default withApollo(Phoenix)
+const PhoenixContainer = () => {
+  const client = useApolloClient()
+  return <Phoenix client={client} />
+}
+
+export default PhoenixContainer

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Query } from 'react-apollo'
+import { useQuery } from '@apollo/react-hooks'
 
 import { transparentize } from 'polished'
 
@@ -46,6 +46,13 @@ const PagesPanel = ({
   cardsStatus,
   handleRegBrkToggle,
 }) => {
+  const { data, loading } = useQuery(GET_SELECTED_PAGE)
+
+  if (loading) return null
+
+  let pageName = data && data.selectedPage && data.selectedPage.name
+  if (!pageName) pageName = ''
+
   const buttonGroupCallback = card => (
     <ButtonGroup
       sourceEntity={card}
@@ -69,33 +76,24 @@ const PagesPanel = ({
   }
 
   return (
-    <Query query={GET_SELECTED_PAGE}>
-      {({ data }) => {
-        let pageName = data && data.selectedPage && data.selectedPage.name
-        if (!pageName) pageName = ''
-
-        return (
-          <Panel
-            style={defaultPanelStyle}
-            headerContainerStyle={panelHeaderStyle}
-            title={`CARDS / ${pageName}`}
-            titleStyle={{ fontSize: 16 }}
-            queryDocs={{
-              fetchAllQueryProps: { query: GET_PAGE_CARDS },
-              fetchSelectedQueryProps: { query: GET_SELECTED_CARD },
-            }}
-            panelItemConfig={{
-              selectEntityMutationDoc: SELECT_CARD,
-              style: panelItemStyle,
-              activeStyle: panelItemActiveStyle,
-              buttonGroupCallback,
-              label1Callback: ({ name }) => name,
-              label2Callback,
-            }}
-          />
-        )
+    <Panel
+      style={defaultPanelStyle}
+      headerContainerStyle={panelHeaderStyle}
+      title={`CARDS / ${pageName}`}
+      titleStyle={{ fontSize: 16 }}
+      queryDocs={{
+        fetchAllQueryProps: { query: GET_PAGE_CARDS },
+        fetchSelectedQueryProps: { query: GET_SELECTED_CARD },
       }}
-    </Query>
+      panelItemConfig={{
+        selectEntityMutationDoc: SELECT_CARD,
+        style: panelItemStyle,
+        activeStyle: panelItemActiveStyle,
+        buttonGroupCallback,
+        label1Callback: ({ name }) => name,
+        label2Callback,
+      }}
+    />
   )
 }
 

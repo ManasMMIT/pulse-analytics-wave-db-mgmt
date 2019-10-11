@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import { Mutation } from 'react-apollo'
+import { useMutation } from '@apollo/react-hooks'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faTrashAlt } from "@fortawesome/free-solid-svg-icons"
 
@@ -24,71 +24,63 @@ const buttonStyle = {
   cursor: 'pointer',
 }
 
-class DeleteButton extends React.Component {
-  state = { isModalOpen: false }
+const DeleteButton = props => {
+  const {
+    style,
+    modalTitle,
+    modalText,
+    itemId,
+    mutationDoc,
+    refetchQueries,
+    afterMutationHook,
+  } = props
 
-  openModal = () => this.setState({ isModalOpen: true })
+  const [isModalOpen, toggleModal] = useState(false)
+  const openModal = () => toggleModal(true)
+  const closeModal = () => toggleModal(false)
 
-  closeModal = () => this.setState({ isModalOpen: false })
+  const [handleSubmit, { loading, error }] = useMutation(
+    mutationDoc,
+    {
+      refetchQueries,
+      update: afterMutationHook,
+    }
+  )
 
-  finalDeleteHandler = _id => {
-    this.props.deleteHandler(_id).then(this.closeModal)
-  }
-
-  render() {
-    const {
-      openModal,
-      closeModal,
-      state: { isModalOpen },
-      props: {
-        style,
-        modalTitle,
-        modalText,
-        itemId,
-        mutationDoc,
-        refetchQueries,
-        afterMutationHook,
-      },
-    } = this
-
-    return (
-      <>
-        <button
-          style={{ ...buttonStyle, ...style }}
-          onClick={openModal}
-        >
-          {trashCan}
-        </button>
-        <Modal
-          handleClose={closeModal}
-          show={isModalOpen}
-          title={modalTitle}
-        >
-          {modalText}
-
-          <Mutation
-            mutation={mutationDoc}
-            refetchQueries={refetchQueries}
-            update={afterMutationHook}
-          >
-            {(handleSubmit, { loading, error }) => {
-              if (loading) return <Spinner />
-              if (error) return <div style={{ color: 'red' }}>Error processing request</div>
-
-              return (
-                <div
-                  style={modalButtonStyle}
-                  onClick={() => handleSubmit({ variables: { input: { _id: itemId } } })}
-                >
-                  Delete Forever
-                </div>
-              )
-            }}
-          </Mutation>
-        </Modal>
-      </>
+  let buttonContent
+  if (error) {
+    buttonContent = <div style={{ color: 'red' }}>Error processing request</div>
+  } else if (loading) {
+    buttonContent = <Spinner />
+  } else {
+    buttonContent = (
+      <div
+        style={modalButtonStyle}
+        onClick={() => handleSubmit({ variables: { input: { _id: itemId } } })}
+      >
+        Delete Forever
+      </div>
     )
   }
+
+  return (
+    <>
+      <button
+        style={{ ...buttonStyle, ...style }}
+        onClick={openModal}
+      >
+        {trashCan}
+      </button>
+      <Modal
+        handleClose={closeModal}
+        show={isModalOpen}
+        title={modalTitle}
+      >
+        {modalText}
+        {buttonContent}
+      </Modal>
+    </>
+  )
 }
 
 DeleteButton.propTypes = {

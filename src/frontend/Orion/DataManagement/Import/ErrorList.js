@@ -77,7 +77,7 @@ const ErrorList = ({
         <div>
           {
             data.map(datum => {
-              const key = datum[rowConfig[0].key]
+              const key = datum[rowConfig[0].key] + datum[rowConfig[1].key]
 
               return (
                 <ProblemRowWrapper

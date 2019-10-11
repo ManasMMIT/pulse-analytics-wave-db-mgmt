@@ -1,8 +1,40 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Mutation } from 'react-apollo'
+import { useMutation } from '@apollo/react-hooks'
 
 const PanelItem = ({
+  finalStyle,
+  entity,
+  panelItemConfig: {
+    selectEntityMutationDoc,
+    buttonGroupCallback,
+    label1Callback,
+    label2Callback,
+  },
+}) => {
+  const [handleSelect] = useMutation(selectEntityMutationDoc)
+
+  return (
+    <div
+      style={finalStyle}
+      onClick={handleSelect.bind(null, { variables: { _id: entity._id } })}
+    >
+      <div>
+        <div>{label1Callback(entity)}</div>
+
+        <div style={{ fontWeight: 300, fontStyle: 'italic' }}>
+          {label2Callback(entity)}
+        </div>
+      </div>
+
+      <div>
+        {buttonGroupCallback(entity)}
+      </div>
+    </div>
+  )
+}
+
+const PanelItemContainer = ({
   selectedEntity,
   entity,
   panelItemConfig: {
@@ -24,51 +56,40 @@ const PanelItem = ({
     finalStyle = { ...finalStyle, ...inactiveStyle }
   }
 
-  if (selectEntityMutationDoc) {
+  if (!selectEntityMutationDoc) {
     return (
-      <Mutation mutation={selectEntityMutationDoc}>
-        {handleSelect => {
-          return (
-            <div
-              style={finalStyle}
-              onClick={handleSelect.bind(null, { variables: { _id: entity._id } })}
-            >
-              <div>
-                <div>{label1Callback(entity)}</div>
+      <div style={finalStyle}>
+        <div>
+          <div>{label1Callback(entity)}</div>
 
-                <div style={{ fontWeight: 300, fontStyle: 'italic' }}>
-                  {label2Callback(entity)}
-                </div>
-              </div>
+          <div style={{ fontWeight: 300, fontStyle: 'italic' }}>
+            {label2Callback(entity)}
+          </div>
+        </div>
 
-              <div>
-                {buttonGroupCallback(entity)}
-              </div>
-            </div>
-          )
-        }}
-      </Mutation>
+        <div>
+          {buttonGroupCallback(entity)}
+        </div>
+      </div>
     )
   }
 
+
   return (
-    <div style={finalStyle}>
-      <div>
-        <div>{label1Callback(entity)}</div>
-
-        <div style={{ fontWeight: 300, fontStyle: 'italic' }}>
-          {label2Callback(entity)}
-        </div>
-      </div>
-
-      <div>
-        {buttonGroupCallback(entity)}
-      </div>
-    </div>
+    <PanelItem
+      finalStyle={finalStyle}
+      entity={entity}
+      panelItemConfig={{
+        selectEntityMutationDoc,
+        buttonGroupCallback,
+        label1Callback,
+        label2Callback,
+      }}
+    />
   )
 }
 
-PanelItem.propTypes = {
+PanelItemContainer.propTypes = {
   selectedEntity: PropTypes.object,
   entity: PropTypes.object,
   panelItemConfig: PropTypes.shape({
@@ -82,7 +103,7 @@ PanelItem.propTypes = {
   }),
 }
 
-PanelItem.defaultProps = {
+PanelItemContainer.defaultProps = {
   selectedEntity: {},
   entity: {},
   panelItemConfig: {
@@ -96,4 +117,4 @@ PanelItem.defaultProps = {
   }
 }
 
-export default PanelItem
+export default PanelItemContainer

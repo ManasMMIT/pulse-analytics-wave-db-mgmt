@@ -1,80 +1,60 @@
 import React from 'react'
-import { Mutation } from 'react-apollo'
-import styled from '@emotion/styled'
+import { useQuery } from '@apollo/react-hooks'
 import PropTypes from 'prop-types'
+import _ from 'lodash'
 
+import CreateTreatmentPlansButton from './CreateTreatmentPlansButton'
 import ErrorList from './../ErrorList'
 import Spinner from './../../../../Phoenix/shared/Spinner'
 
 import {
-  BULK_CREATE_TREATMENT_PLAN,
-} from './../../../../api/mutations'
+  GET_NEW_TREATMENT_PLANS,
+} from '../../../../api/queries'
 
 const TITLE = 'NEW TREATMENT PLANS DETECTED'
-
-const SUBTITLE = `The following Treatment Plans don't exist. Create them so they can be used in the application.`
 
 const ROW_CONFIG = [
   { key: 'indication', color: 'black' },
   { key: 'regimen', color: 'black' },
 ]
 
-const Button = styled.button({
-  border: 'none',
-  background: '#006aff',
-  color: 'white',
-  fontWeight: 700,
-  padding: 6,
-  borderRadius: 3,
-  marginTop: 12,
-}, style => ({ ...style }))
+const TreatmentPlanManager = ({ indicationsWithRegimens }) => {
+  const { data, loading, error } = useQuery(
+    GET_NEW_TREATMENT_PLANS,
+    { variables: { data: indicationsWithRegimens } },
+  )
 
-const TreatmentPlanManager = ({ newTreatmentPlans }) => (
-  <Mutation mutation={BULK_CREATE_TREATMENT_PLAN}>
-    {(handleCreate, { loading, error }) => {
-      if (error) return <div style={{ color: 'red' }}>Error processing request</div>
-      if (loading) return <Spinner fill="white" />
+  if (error) {
+    return <div style={{ color: 'red' }}>Error processing request</div>
+  }
 
-      const handleSubmit = (e) => {
-        handleCreate({
-          variables: {
-            input: { data: newTreatmentPlans }
-          }
-        })
-      }
+  if (loading) return <Spinner fill="white" />
 
-      const data = Object.keys(newTreatmentPlans)
-        .reduce((flattenedTreatmentPlans, indication) => {
-        const regimens = newTreatmentPlans[indication]
+  if (_.isEmpty(data) || _.isEmpty(data.newTreatmentPlans)) return null
 
-        const treatmentPlanPairs = regimens
-          .map(regimen => ({ indication, regimen: regimen.name }))
+  const { newTreatmentPlans } = data
 
-        return flattenedTreatmentPlans.concat(treatmentPlanPairs)
-      }, [])
+  const formattedNewTreatmentPlans = Object.keys(newTreatmentPlans)
+    .reduce((flattenedTreatmentPlans, indication) => {
+      const regimens = newTreatmentPlans[indication]
 
-      const subtitle = (
-        <>
-          <div>{SUBTITLE}</div>
-          <Button onClick={handleSubmit}>Create Plans</Button>
-        </>
-      )
+      const treatmentPlanPairs = regimens
+        .map(regimen => ({ indication, regimen: regimen.name }))
 
-      return (
-        <>
-          <ErrorList
-            title={TITLE}
-            subtitle={subtitle}
-            headers={['Indication', 'Regimen']}
-            data={data}
-            rowConfig={ROW_CONFIG}
-            errorColor={'#ffff001a'}
-          />
-        </>
-      )
-    }}
-  </Mutation>
-)
+      return flattenedTreatmentPlans.concat(treatmentPlanPairs)
+    }, [])
+
+  return (
+    <ErrorList
+      title={TITLE}
+      subtitle={<CreateTreatmentPlansButton newTreatmentPlans={newTreatmentPlans} />}
+      headers={['Indication', 'Regimen']}
+      data={formattedNewTreatmentPlans}
+      rowConfig={ROW_CONFIG}
+      errorColor={'#ffff001a'}
+    />
+  )
+}
 
 TreatmentPlanManager.propTypes = {
   newTreatmentPlans: PropTypes.object,

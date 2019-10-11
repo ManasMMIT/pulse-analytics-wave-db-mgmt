@@ -22,6 +22,8 @@ const typeDefs = gql`
     name: String
     description: String
     isDefault: Boolean
+    client: Client
+    sitemap: Sitemap
   }
 
   type User {

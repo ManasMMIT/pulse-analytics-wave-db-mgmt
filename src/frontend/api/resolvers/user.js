@@ -27,17 +27,12 @@ const userResolvers = {
 
     const teamId = selectedTeam._id
 
-    // ! fetchPolicy: 'network-only` is needed because client.query
-    // ! somehow doesn't return correct data from the backend, unless we force it
-    const queryObjForTeamUsers = {
+    // `network-only` is not necessary because refreshing of
+    // `GET_TEAM_USERS is handled on user update -- see `manageUpdatedUser` writeQuery
+    const { data: { users } } = await client.query({
       query: GET_TEAM_USERS,
       variables: { teamId },
-      fetchPolicy: 'network-only',
-    }
-
-    const response = await client.query(queryObjForTeamUsers)
-
-    const { users } = response.data
+    })
 
     let selectedUser = users[0]
 
@@ -144,13 +139,18 @@ const userResolvers = {
     // ? network-only does seem to write to the cache
     // ? no-cache also seems to write to the cache,
     // ? although the docs seem to say it doesn't (9/11/19)
+
+    /*
+      This network-only fetchPolicy is being used to
+      set the cache after a user is updated, keeping the cache fresh with the latest user's teams. When the modal with the user form is opened again, the form draws on the updated cache.
+    */
     const { data: { teams } } = await client.query({
       query: GET_USER_TEAMS,
       variables: { userId: editedUser._id },
       fetchPolicy: 'network-only',
     })
 
-    if (teams.includes(teamId)) {
+    if (teams.find(({ _id }) => _id === teamId)) {
       const targetUserIdx = users.findIndex(({ _id: userId }) => userId === editedUser._id)
       users[targetUserIdx] = editedUser
       updateGetTeamUsers(users)
@@ -160,6 +160,8 @@ const userResolvers = {
       // his changed roles, if any, will be fetched
     } else {
       users = users.filter(user => user._id !== editedUser._id)
+
+      // if GET_TEAM_USERS is not written to, then the selectUser mutation will use an outdated slice of cache for selecting a default first user.
       updateGetTeamUsers(users)
 
       // the user doesn't belong to the selected role anymore; pick the first user

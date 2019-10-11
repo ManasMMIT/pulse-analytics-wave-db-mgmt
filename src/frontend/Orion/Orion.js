@@ -1,5 +1,5 @@
 import React from 'react'
-import { withApollo } from 'react-apollo'
+import { useApolloClient } from '@apollo/react-hooks'
 import { Route, Switch, Redirect } from 'react-router-dom'
 
 import { SELECT_INDICATION } from './../api/mutations'
@@ -36,4 +36,9 @@ class Orion extends React.Component {
   }
 }
 
-export default withApollo(Orion)
+const OrionContainer = () => {
+  const client = useApolloClient()
+  return <Orion client={client} />
+}
+
+export default OrionContainer

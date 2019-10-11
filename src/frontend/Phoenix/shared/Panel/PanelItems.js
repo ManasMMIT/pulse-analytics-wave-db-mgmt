@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Query } from 'react-apollo'
+import { useQuery } from '@apollo/react-hooks'
+import _ from 'lodash'
 
 import PanelItem from './PanelItem'
 
@@ -9,31 +10,19 @@ const PanelItems = ({
   fetchSelectedQueryProps,
   panelItemConfig,
 }) => {
-  if (fetchSelectedQueryProps) {
-    return (
-      <Query {...fetchSelectedQueryProps}>
-        {({ data: selectedEntityData }) => {
-          const firstDataKey = Object.keys(selectedEntityData)[0]
-          const selectedEntity = selectedEntityData[firstDataKey]
+  const {
+    data: selectedEntityData,
+    loading,
+    error,
+  } = useQuery(fetchSelectedQueryProps.query,
+    { returnPartialData: true },
+  )
 
-          return (
-            <div>
-              {
-                data.map(entity => (
-                  <PanelItem
-                    key={entity._id}
-                    selectedEntity={selectedEntity}
-                    entity={entity}
-                    panelItemConfig={panelItemConfig}
-                  />
-                ))
-              }
-            </div>
-          )
-        }}
-      </Query>
-    )
-  }
+  if (loading || _.isEmpty(data)) return null
+  if (error) return <div>{error}</div>
+
+  const firstDataKey = Object.keys(selectedEntityData)[0]
+  const selectedEntity = selectedEntityData[firstDataKey]
 
   return (
     <div>
@@ -41,6 +30,7 @@ const PanelItems = ({
         data.map(entity => (
           <PanelItem
             key={entity._id}
+            selectedEntity={selectedEntity}
             entity={entity}
             panelItemConfig={panelItemConfig}
           />
@@ -50,16 +40,46 @@ const PanelItems = ({
   )
 }
 
-PanelItems.propTypes = {
+const PanelItemsContainer = ({
+  data,
+  fetchSelectedQueryProps,
+  panelItemConfig,
+}) => {
+  if (!fetchSelectedQueryProps) {
+    return (
+      <div>
+        {
+          data.map(entity => (
+            <PanelItem
+              key={entity._id}
+              entity={entity}
+              panelItemConfig={panelItemConfig}
+            />
+          ))
+        }
+      </div>
+    )
+  }
+
+  return (
+    <PanelItems
+      data={data}
+      fetchSelectedQueryProps={fetchSelectedQueryProps}
+      panelItemConfig={panelItemConfig}
+    />
+  )
+}
+
+PanelItemsContainer.propTypes = {
   data: PropTypes.arrayOf(PropTypes.object),
   fetchSelectedQueryProps: PropTypes.object,
   panelItemConfig: PanelItem.propTypes.panelItemConfig,
 }
 
-PanelItems.defaultProps = {
+PanelItemsContainer.defaultProps = {
   data: [],
   fetchSelectedQueryProps: null,
   panelItemConfig: PanelItem.defaultProps.panelItemConfig,
 }
 
-export default PanelItems
+export default PanelItemsContainer

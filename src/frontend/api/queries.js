@@ -30,6 +30,8 @@ export const GET_CLIENT_TEAMS = gql`
       sitemap
       client {
         _id
+        name
+        description
       }
     }
     selectedClient @client {
@@ -44,6 +46,7 @@ export const GET_SELECTED_TEAM = gql`
       _id
       name
       description
+      isDefault
       sitemap
       client {
         _id

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Query } from 'react-apollo'
+import { useQuery } from '@apollo/react-hooks'
 import { transparentize } from 'polished'
 
 import {
@@ -45,6 +45,12 @@ const PagesPanel = ({
   pagesStatus,
   handleRegBrkToggle,
 }) => {
+  const { data, loading } = useQuery(GET_SELECTED_DASHBOARD)
+
+  if (loading) return null
+
+  const { selectedDashboard: { name: dashboardName } } = data
+
   const buttonGroupCallback = page => (
     <ButtonGroup
       sourceEntity={page}
@@ -68,28 +74,24 @@ const PagesPanel = ({
   }
 
   return (
-    <Query query={GET_SELECTED_DASHBOARD}>
-      {({ data: { selectedDashboard: { name: dashboardName } } }) => (
-        <Panel
-          style={defaultPanelStyle}
-          headerContainerStyle={panelHeaderStyle}
-          title={`PAGES / ${dashboardName}`}
-          titleStyle={{ fontSize: 16 }}
-          queryDocs={{
-            fetchAllQueryProps: { query: GET_DASHBOARD_PAGES },
-            fetchSelectedQueryProps: { query: GET_SELECTED_PAGE },
-          }}
-          panelItemConfig={{
-            selectEntityMutationDoc: SELECT_PAGE,
-            style: panelItemStyle,
-            activeStyle: panelItemActiveStyle,
-            buttonGroupCallback,
-            label1Callback: ({ name }) => name,
-            label2Callback,
-          }}
-        />
-      )}
-    </Query>
+    <Panel
+      style={defaultPanelStyle}
+      headerContainerStyle={panelHeaderStyle}
+      title={`PAGES / ${dashboardName}`}
+      titleStyle={{ fontSize: 16 }}
+      queryDocs={{
+        fetchAllQueryProps: { query: GET_DASHBOARD_PAGES },
+        fetchSelectedQueryProps: { query: GET_SELECTED_PAGE },
+      }}
+      panelItemConfig={{
+        selectEntityMutationDoc: SELECT_PAGE,
+        style: panelItemStyle,
+        activeStyle: panelItemActiveStyle,
+        buttonGroupCallback,
+        label1Callback: ({ name }) => name,
+        label2Callback,
+      }}
+    />
   )
 }
 

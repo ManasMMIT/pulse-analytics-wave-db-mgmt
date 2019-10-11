@@ -1,11 +1,10 @@
 import React from 'react'
 import { transparentize } from 'polished'
-import { ApolloClient } from 'apollo-client'
-import { ApolloLink } from 'apollo-link'
-import { InMemoryCache } from 'apollo-cache-inmemory'
-import { RestLink } from 'apollo-link-rest'
-import { HttpLink } from 'apollo-link-http'
-import { ApolloProvider } from 'react-apollo'
+// import { ApolloProvider } from 'react-apollo' // option 1: v2, NO HOOKS, OLD
+// import { ApolloProvider } from 'react-apollo' // option 2: v3, UNRELIABLE
+import { ApolloProvider } from '@apollo/react-hooks' // option 3: react-hooks, PROB UNRELIABLE
+import ApolloClient from 'apollo-boost'
+
 import {
   BrowserRouter as Router,
   Route,
@@ -20,21 +19,12 @@ import Phoenix from './Phoenix'
 import Orion from './Orion'
 import Delphi from './Delphi'
 
-const cache = new InMemoryCache()
-
-const restLink = new RestLink({ uri: '/api' })
-const httpLink = new HttpLink({ uri: '/api/graphql' })
-
-const link = ApolloLink.from([
-  restLink,
-  httpLink,
-]);
-
 const client = new ApolloClient({
-  cache,
-  link,
-  resolvers,
-  typeDefs,
+  uri: '/api/graphql',
+  clientState: {
+    resolvers,
+    typeDefs,
+  }
 })
 
 const sidebarStyle = {

@@ -1,14 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Query } from 'react-apollo'
 import _ from 'lodash'
 
 import TreatmentPlanManager from './TreatmentPlanManager'
-import Spinner from '../../../../Phoenix/shared/Spinner'
-
-import {
-  GET_NEW_TREATMENT_PLANS,
-} from '../../../../api/queries'
 
 const getIndicationsWithRegimens = data => {
   return data.reduce((indicationsObj, { indication, regimen }) => {
@@ -33,20 +27,9 @@ const TreatmentPlanManagerContainer = ({ data }) => {
   }
 
   return (
-    <Query query={GET_NEW_TREATMENT_PLANS} variables={{ data: indicationsWithRegimens }}>
-      {({ data: { newTreatmentPlans }, loading, error }) => {
-        if (error) return <div style={{ color: 'red' }}>Error processing request</div>
-        if (loading) return <Spinner />
-
-        if (_.isEmpty(newTreatmentPlans)) return null
-
-        return (
-          <TreatmentPlanManager
-            newTreatmentPlans={newTreatmentPlans}
-          />
-        )
-      }}
-    </Query>
+    <TreatmentPlanManager
+      indicationsWithRegimens={indicationsWithRegimens}
+    />
   )
 }
 

@@ -30,7 +30,7 @@ const panelItemConfig = {
   // inactiveStyle: inactivePanelItemStyle,
 }
 
-const headerChildren = <CreateButton />  
+const headerChildren = <CreateButton />
 
 const ClientsPanel = () => {
   return (

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Mutation } from 'react-apollo'
+import { useMutation } from '@apollo/react-hooks'
 import styled from '@emotion/styled'
 
 import Spinner from '../Phoenix/shared/Spinner'
@@ -13,49 +13,43 @@ const CodeSnippet = styled.code({
   color: 'white',
 })
 
-const Delphi = () => (
-  <Mutation
-    mutation={EMAIL_ALERTS}
-  >
-  {(emailAlerts, { loading, error }) => {
-    if (loading) return <Spinner/>
+const Delphi = () => {
+  const [emailAlerts, { loading, error }] = useMutation(EMAIL_ALERTS)
 
-    // add error alert
+  if (loading) return <Spinner />
 
-    const handleSubmit = templateType => { 
-      emailAlerts({
-        variables: {
-          input: {
-            templateType,
-          }
+  const handleSubmit = templateType => {
+    emailAlerts({
+      variables: {
+        input: {
+          templateType,
         }
-      })
-    }
+      }
+    })
+  }
 
-    return (
-      <div style={{ padding: 24 }}>
-        <h2>Follow instructions to send pathways email:</h2>
-        <section>
-          <ol>
-            <li style={{ paddingBottom: 24 }}>
-              Run <CodeSnippet>node ./prepEmailAlertsData</CodeSnippet> in wave-db-mgmt
-            </li>
-            <li style={{ paddingBottom: 24 }}>
-              Verify the appropriate emails are in the <CodeSnippet>temp.users</CodeSnippet> collection 
-              <br/>
-               <a href='https://dedhamgroup.atlassian.net/wiki/spaces/POL/pages/697237509/Delphi+email+service'>See docs.</a>
-            </li>
-            <li>
-              <button onClick={() => handleSubmit('test')}>Send Internal Test Email</button>
-              <span style={{padding: 24}}/>
-              <button onClick={() => handleSubmit('pathwaysAlerts')}>Send Pathways Email</button>
-            </li>
-          </ol>
-        </section>
-      </div>
-    )
-  }}
-</Mutation>
-)
+  return (
+    <div style={{ padding: 24 }}>
+      <h2>Follow instructions to send pathways email:</h2>
+      <section>
+        <ol>
+          <li style={{ paddingBottom: 24 }}>
+            Run <CodeSnippet>node ./prepEmailAlertsData</CodeSnippet> in wave-db-mgmt
+          </li>
+          <li style={{ paddingBottom: 24 }}>
+            Verify the appropriate emails are in the <CodeSnippet>temp.users</CodeSnippet> collection
+            <br/>
+              <a href='https://dedhamgroup.atlassian.net/wiki/spaces/POL/pages/697237509/Delphi+email+service'>See docs.</a>
+          </li>
+          <li>
+            <button onClick={() => handleSubmit('test')}>Send Internal Test Email</button>
+            <span style={{padding: 24}}/>
+            <button onClick={() => handleSubmit('pathwaysAlerts')}>Send Pathways Email</button>
+          </li>
+        </ol>
+      </section>
+    </div>
+  )
+}
 
 export default Delphi

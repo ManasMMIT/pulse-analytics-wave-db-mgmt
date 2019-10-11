@@ -2,9 +2,8 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import _ from 'lodash'
 
-import { Mutation } from 'react-apollo'
-import Spinner from '../../../Phoenix/shared/Spinner'
 import stripTypename from '../strip-typename'
+import SubmitButton from './SubmitButton'
 
 class Form extends Component {
   constructor(props) {
@@ -45,40 +44,20 @@ class Form extends Component {
       <div style={style}>
         { getInputFields(this.state, handleChange) }
 
-        <Mutation
-          mutation={mutationDoc}
+        <SubmitButton
+          state={state}
+          mutationDoc={mutationDoc}
           refetchQueries={refetchQueries}
-          update={afterMutationHook}
-        >
-          {(handleSubmit, { loading, error }) => {
-            if (loading) return <Spinner />
-            if (error) {
-              return (
-                <div style={{ color: 'red' }}>
-                  {error.message || "Error processing request"}
-                </div>
-              )
-            }
-
-            return (
-              <button
-                type="submit"
-                onClick={() => (
-                  handleSubmit({ variables: state }).then(afterSubmitHook)
-                )}
-              >
-                submit
-              </button>
-            )
-          }}
-        </Mutation>
+          afterMutationHook={afterMutationHook}
+          afterSubmitHook={afterSubmitHook}
+        />
       </div>
     );
   }
 }
 
 Form.propTypes = {
-  style: PropTypes.object, 
+  style: PropTypes.object,
   data: PropTypes.object,
   mutationDoc: PropTypes.object,
   getInputFields: PropTypes.func,

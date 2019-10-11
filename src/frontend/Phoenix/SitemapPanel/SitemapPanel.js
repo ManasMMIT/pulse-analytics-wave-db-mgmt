@@ -1,10 +1,9 @@
 import React from 'react'
 import _ from 'lodash'
 import {
-  Query,
-  graphql,
-  withApollo,
-} from 'react-apollo'
+  useQuery,
+  useApolloClient,
+} from '@apollo/react-hooks'
 
 // TODO: Grab all selected nodes at each level,
 // * to pass appropriate indications/accounts
@@ -40,8 +39,7 @@ class SitemapPanel extends React.Component {
   }
 
   getInitialState(props = this.props) {
-    const { selectedTeamQuery: { selectedTeam } } = props
-    const { sitemap } = selectedTeam
+    const { selectedTeam: { sitemap } } = props
 
     const initialState = _.mapValues(sitemap, arr => _.keyBy(arr, '_id'))
 
@@ -96,9 +94,7 @@ class SitemapPanel extends React.Component {
 
   render() {
     const {
-      selectedTeamQuery: {
-        selectedTeam: { _id: teamId },
-      }
+      selectedTeam: { _id: teamId },
     } = this.props
 
     const {
@@ -110,25 +106,12 @@ class SitemapPanel extends React.Component {
 
     return (
       <div>
-        <Query query={GET_STAGED_SITEMAP}>
-          {
-            ({ data: { stagedSitemap } }) => {
-              return (
-                <SitemapPanelHeader
-                  stagedSitemap={stagedSitemap}
-                  teamId={teamId}
-                />
-              )
-            }
-          }
-        </Query>
-
+        <SitemapPanelHeader teamId={teamId} />
         <div style={{ display: 'flex' }}>
           <ToolsPanel
             toolsStatus={tools}
             handleToggle={this.handleToggle}
           />
-
           <DashboardsPanel
             handleRegBrkToggle={this.handleRegBrkToggle}
             dashboardsStatus={dashboards}
@@ -152,7 +135,21 @@ class SitemapPanel extends React.Component {
   }
 }
 
-export default graphql(
-  GET_SELECTED_TEAM,
-  { name: 'selectedTeamQuery' },
-)(withApollo(SitemapPanel))
+const SitemapPanelContainer = props => {
+  const client = useApolloClient()
+  const { data, loading } = useQuery(GET_SELECTED_TEAM)
+
+  if (loading) return null
+
+  const { selectedTeam } = data
+
+  return (
+    <SitemapPanel
+      client={client}
+      selectedTeam={selectedTeam}
+      {...props}
+    />
+  )
+}
+
+export default SitemapPanelContainer
