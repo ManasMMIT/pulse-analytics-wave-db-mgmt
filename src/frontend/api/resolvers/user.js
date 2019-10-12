@@ -92,7 +92,11 @@ const userResolvers = {
     return createdUser
   },
   manageDeletedUser: async (_, { data: { deleteUser }}, { cache, client }) => {
-    const deletedUser = { ...deleteUser, __typename: 'User' }
+    const deletedUser = {
+      ...deleteUser,
+      __typename: 'User' // need to overwrite __typename 'DeleteUserPayload'
+    }
+
     const {
       selectedTeam: {
         _id: teamId,
@@ -117,7 +121,10 @@ const userResolvers = {
     return deletedUser
   },
   manageUpdatedUser: async (_, { data: { updateUser } }, { cache, client}) => {
-    const editedUser = { __typename: 'User', ...updateUser }
+    const editedUser = {
+      ...updateUser,
+      __typename: 'User', // need to overwrite __typename 'UpdateUserPayload'
+    }
 
     const { selectedTeam: { _id: teamId } } = cache.readQuery({ query: GET_SELECTED_TEAM })
 
