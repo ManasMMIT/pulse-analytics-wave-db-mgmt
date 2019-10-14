@@ -30,22 +30,11 @@
           {% include "./partials/shared/visitPathwaysBtn.mjml" %}
         </mj-column>
       </mj-section>
-      <!-- Positioning Section -->
-      {% if data.positioning %}
-        {% include "./partials/positioning/positioningSection.mjml" %}
-      {% endif %}
-      <!-- Influencer Section -->
-      {% if data.influencer %}
-        {% include "./partials/influencer/influencerSection.mjml" %}
-      {% endif %}
-      <!-- Providers Section -->
-      {% if data.provider %}
-        {% include "./partials/provider/providerSection.mjml" %}
-      {% endif %}
-      <!-- Payers Section -->
-      {% if data.payer %}
-        {% include "./partials/payer/payerSection.mjml" %}
-      {% endif %}
+      <!-- Organization Sections -->
+      {% set orgSlugs = utils.getOrgSlugs(data) %}
+      {% for orgName, orgAlerts in data %}
+        {% include "./partials/organization/organizationSection.mjml" %}
+      {% endfor %}
       <mj-section mj-class='default-background bottom-button'>
         <mj-column>
           {% include "./partials/shared/visitPathwaysBtn.mjml" %}

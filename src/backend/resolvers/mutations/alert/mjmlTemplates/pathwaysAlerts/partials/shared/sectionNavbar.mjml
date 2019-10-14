@@ -2,17 +2,17 @@
   <mj-column>
     <mj-divider mj-class='section-divider' />
     <mj-navbar mj-class='no-padding' css-class='on-page-link'>
-      {% for key in utils.getSortedLinks(data) %}
+      {% for orgName, slug in orgSlugs %}
         <mj-navbar-link 
           mj-class='header-navbar-link'
-          href='#{{ key | lower }}-section'
+          href='#{{ slug | lower }}-section'
         >
-          {{ key | upper }}
+          {{ orgName }}
         </mj-navbar-link>
         {% if loop.last === false %}
           <mj-navbar-link mj-class='navbar-bullet'>
             <span>
-              &bull;
+              &#x2022;
             </span>
           </mj-navbar-link>
         {% endif %}

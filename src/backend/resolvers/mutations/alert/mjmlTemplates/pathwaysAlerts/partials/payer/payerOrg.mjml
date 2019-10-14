@@ -1,21 +1,20 @@
-<mj-raw><a id='{{ orgSlug }}-payer' name='{{ orgSlug }}-payer'></a></mj-raw>
 <mj-wrapper mj-class='default-background body-content organization-section'>
   <mj-section mj-class='organization-header'>
     <mj-column>
       <mj-text mj-class='organization-header-text'>
-        {{ orgName }}
+        Payer
       </mj-text>
       <mj-text align='center' padding='2px 0' mj-class='view-account-link'>
         <a
-          href='https://pulse-tools.com/pathways/accounts/pathways/{{ orgSlug }}/adoption-reach'
+          href='https://pulse-tools.com/pathways/accounts/pathways/{{ orgSlugs[orgName] }}/adoption-reach'
           style='color: #0668D9;'
         >
-          View Account
+          View in Tool
         </a>
       </mj-text>
     </mj-column>
   </mj-section>
-  {% for item in alerts %}
+  {% for item in payerAlerts %}
     {% include "./payerAlert.mjml" %}
   {% endfor %}
 </mj-wrapper>

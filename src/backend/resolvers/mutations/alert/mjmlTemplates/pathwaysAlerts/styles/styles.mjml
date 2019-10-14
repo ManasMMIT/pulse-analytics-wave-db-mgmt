@@ -68,6 +68,8 @@
     font-size='14px'
     line-height='21px'
     color='#0668D9'
+    padding='4px 10px'
+    text-transform='capitalize'
   />
   <mj-class
     name='footer'
@@ -170,6 +172,7 @@
   <mj-class
     name='navbar-bullet'
     color='rgba(14,37,57, 0.3)'
+    padding='4px 0'
   />
   <mj-class
     name='bottom-button'

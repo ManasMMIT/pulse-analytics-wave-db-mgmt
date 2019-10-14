@@ -1,21 +1,20 @@
-<mj-raw><a id='{{ orgSlug }}-influencer' name='{{ orgSlug }}-influencer'></a></mj-raw>
 <mj-wrapper mj-class='default-background body-content organization-section'>
   <mj-section mj-class='organization-header'>
     <mj-column>
       <mj-text mj-class='organization-header-text'>
-        {{ orgName }}
+        Influencer
       </mj-text>
       <mj-text align='center' padding='2px 0' mj-class='view-account-link'>
         <a
-          href='https://pulse-tools.com/pathways/accounts/pathways/{{ orgSlug }}/influencers'
+          href='https://pulse-tools.com/pathways/accounts/pathways/{{ orgSlugs[orgName] }}/influencers'
           style='color: #0668D9;'
         >
-          View Account
+          View in Tool
         </a>
       </mj-text>
     </mj-column>
   </mj-section>
-  {% for item in alerts %}
+  {% for item in influencerAlerts %}
     {% include "./influencerAlert.mjml" %}
   {% endfor %}
 </mj-wrapper>

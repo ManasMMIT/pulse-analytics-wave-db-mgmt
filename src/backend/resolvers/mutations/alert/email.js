@@ -18,7 +18,7 @@ const TEMPLATE_MAP = {
   }
 }
 
-const FROM_EMAIL = 'claire.kim@pulsedigital.io'
+const FROM_EMAIL = 'alerts@pulsedigital.io'
 
 const PATHWAYS_ORG_TYPE = 'Pathways'
 
@@ -100,35 +100,26 @@ const filterUserAlert = ({ clientTeams, organizationType, userId }) => {
     return acc
   }, {})
 
+  // Sort at organization level by oncologistPercent
+  const sortedAlerts = Object.values(filteredAlerts).sort((a, b) => b.oncologistPercent - a.oncologistPercent)
+  const dateSort = (a, b) => (new Date(b.alertDate)).valueOf() - (new Date(a.alertDate)).valueOf()
+
   const formattedAlerts = d3.nest()
+    .key(d => d.organization)
     .key(d => (d.superAlertType).toLowerCase())
+    .sortValues(dateSort)
     .rollup(arr => {
       const { superAlertType } = arr[0]
       const isPositioning = superAlertType === 'Positioning'
-      const dateSort = ({ alertDate }) => (new Date(alertDate)).valueOf() * -1
-
-      // Sort at organization level by oncologistPercent
-      const sortedByOnco = arr.sort((a, b) => b.oncologistPercent - a.oncologistPercent)
-
-      let data =  _.groupBy(sortedByOnco, 'organization')
-
-      data = Object.entries(data).reduce((acc, arr) =>{
-        const [orgName, orgAlerts] = arr
-
-        // Positioning data sorted by indication and date. Other alerts only sorted by date
-        const sortKeys = isPositioning ? ['indication', dateSort] : [dateSort]
-
-        const sortedData = _.sortBy(orgAlerts, sortKeys)
-
-        acc[orgName] = isPositioning ? _.groupBy(sortedData, 'indication') : sortedData
-
-        return acc
-      }, {})
       
-      return data
+      if (!isPositioning) return arr
+
+      // Additional group and sort by 'indication' for Positioning alerts only
+      const sortedData = _.sortBy(arr, ['indication'])
+      return _.groupBy(sortedData, 'indication')
     })
-    .object(Object.values(filteredAlerts))
-  
+    .object(sortedAlerts)
+
   return formattedAlerts
 }
 

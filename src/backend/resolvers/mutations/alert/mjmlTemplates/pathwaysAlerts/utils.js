@@ -4,16 +4,14 @@ module.exports =  {
       month: () => (new Date()).toLocaleString('default', { month: 'long' }),
       year: () => (new Date()).getFullYear()
     },
-    getSlug: data => {
-      if (data instanceof Array) return data[0].slug
-      return Object.values(data)[0][0].slug
-    },
+    getOrgSlugs: data => Object.entries(data).reduce((acc, org) => {
+      const [orgName, orgData] = org
+      const alerts = Object.values(orgData)[0]
+      const slug = alerts instanceof Array ? alerts[0].slug : Object.values(alerts)[0][0].slug
+      acc[orgName] = slug
+      return acc
+    }, {}),
     formatInt: int => parseInt(int).toLocaleString(),
-    getSortedLinks: data => {
-      const sortOrder = ['positioning', 'influencer', 'provider', 'payer']
-      const keys = Object.keys(data)
-      return keys.sort((a, b) => sortOrder.indexOf(a) - sortOrder.indexOf(b))
-    },
     relativeAccessColors: {
       'No Pathways': '#BACDDE',
       'No Pathways Coverage': '#BACDDE',
