@@ -27,11 +27,17 @@ const userResolvers = {
 
     const teamId = selectedTeam._id
 
-    // `network-only` is not necessary because refreshing of
-    // `GET_TEAM_USERS is handled on user update -- see `manageUpdatedUser` writeQuery
+    // `network-only` is necessary because even though GET_TEAM_USERS is
+    // refreshed on user update (see `manageUpdatedUser` writeQuery), only
+    // the slice of cache resembling users(teamId: A) for then-selected Team A
+    // is updated. If that user was updated to also be associated with Team B,
+    // and Team B is then clicked on, we need to force query the backend here to
+    // make sure Team B's users are its latest associated users rather than relying
+    // on potentially outdated cache if Team B was previously clicked on.
     const { data: { users } } = await client.query({
       query: GET_TEAM_USERS,
       variables: { teamId },
+      fetchPolicy: 'network-only',
     })
 
     let selectedUser = users[0]
