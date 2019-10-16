@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import Switch from '@material-ui/core/Switch'
 
 const SitemapSwitch = ({
+  nodeType,
   sourceEntity,
   teamEntityNodes,
   handleToggle,
@@ -13,7 +14,7 @@ const SitemapSwitch = ({
     color="primary"
     onChange={e => (
       handleToggle({
-        type: `${sourceEntity.type}s`,
+        type: nodeType,
         _id: e.target.value,
         node: e.target.checked && sourceEntity,
       })

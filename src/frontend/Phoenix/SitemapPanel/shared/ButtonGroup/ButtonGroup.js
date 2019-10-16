@@ -16,6 +16,7 @@ const ButtonGroup = ({
   return (
     <>
       <SitemapSwitch
+        nodeType={nodeType}
         sourceEntity={sourceEntity}
         teamEntityNodes={teamEntityNodes}
         handleToggle={handlers.handleToggle}
