@@ -2,8 +2,24 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { useQuery } from '@apollo/react-hooks'
 import Switch from '@material-ui/core/Switch'
+import _ from 'lodash'
 
 import { GET_SELECTED_TOOL } from './../../../../../../api/queries'
+
+const regionWrapperStyle = {
+  display: 'flex',
+  flexDirection: 'column',
+}
+
+const statesWrapperStyle = {
+  display: 'flex',
+  flexDirection: 'column',
+}
+
+const contentWrapperStyle = {
+  display: 'flex',
+  justifyContent: 'space-evenly',
+}
 
 const RegionalBreakdownTabContent = ({
   nodeId,
@@ -39,8 +55,42 @@ const RegionalBreakdownTabContent = ({
     )
   }
 
-  const regionalBreakdown = selectedTeamTool.resources
-    && selectedTeamTool.resources.regionalBreakdown
+  const regionalBreakdown = selectedTeamTool.resources.regionalBreakdown
+
+  if (nodeType === 'tools') {
+    const groupedRegionalBreakdown = _.groupBy(
+      regionalBreakdown,
+      'region',
+    )
+
+    return (
+      <div style={contentWrapperStyle}>
+        {
+          Object.keys(groupedRegionalBreakdown).map(region => {
+            const stateObjsInRegion = groupedRegionalBreakdown[region]
+
+            return (
+              <div
+                key={region}
+                style={regionWrapperStyle}
+              >
+                <span style={{ fontSize: 24 }}>{region}</span>
+                <div style={statesWrapperStyle}>
+                  {
+                    stateObjsInRegion.map(stateObj => (
+                      <div key={stateObj.state}>
+                        {stateObj.stateLong}
+                      </div>
+                    ))
+                  }
+                </div>
+              </div>
+            )
+          })
+        }
+      </div>
+    )
+  }
 
   return (
     <>

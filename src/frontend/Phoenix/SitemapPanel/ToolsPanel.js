@@ -1,15 +1,14 @@
 import React from 'react'
 import { transparentize } from 'polished'
-import Switch from '@material-ui/core/Switch'
-import ToolsResourcesButton from './ToolsResourcesButton'
+import ButtonGroup from './shared/ButtonGroup'
+import Panel from '../shared/Panel'
 
-import Panel from '../../shared/Panel'
 import {
   GET_SOURCE_TOOLS,
   GET_SELECTED_TOOL,
-} from '../../../api/queries'
+} from '../../api/queries'
 
-import { SELECT_TOOL } from '../../../api/mutations'
+import { SELECT_TOOL } from '../../api/mutations'
 
 const defaultPanelStyle = {
   padding: 20,
@@ -38,41 +37,17 @@ const panelItemActiveStyle = {
   color: '#0668D9',
 }
 
-const buttonGroupWrapperStyle = {
-  display: 'flex',
-  alignItems: 'center',
-}
-
 const ToolsPanel = ({ handleToggle, toolsStatus }) => {
-  const buttonGroupCallback = tool => {
-    const teamToolResources = toolsStatus[tool._id]
-      && toolsStatus[tool._id].resources
-
-    return (
-      <div style={buttonGroupWrapperStyle}>
-        {
-          teamToolResources && (
-            <ToolsResourcesButton
-              resources={teamToolResources}
-            />
-          )
-        }
-        <Switch
-          key={tool._id}
-          checked={Boolean(toolsStatus[tool._id])}
-          color="primary"
-          onChange={e => (
-            handleToggle({
-              type: 'tools',
-              _id: e.target.value,
-              node: e.target.checked && tool,
-            })
-          )}
-          value={tool._id}
-        />
-      </div>
-    )
-  }
+  const buttonGroupCallback = tool => (
+    <ButtonGroup
+      sourceEntity={tool}
+      teamEntityNodes={toolsStatus}
+      nodeType="tools"
+      handlers={{
+        handleToggle,
+      }}
+    />
+  )
 
   const label2Callback = ({ _id, name: sourceNodeName }) => {
     const teamNode = toolsStatus[_id]
