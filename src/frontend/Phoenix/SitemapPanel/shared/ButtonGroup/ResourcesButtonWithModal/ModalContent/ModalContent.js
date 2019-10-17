@@ -3,9 +3,11 @@ import PropTypes from 'prop-types'
 
 import { UnderlinedTabs } from './../../../../../../components/Tabs'
 import RegionalBreakdownTabContent from './RegionalBreakdownTabContent'
+import AccountsTabContent from './AccountsTabContent'
+import TreatmentPlansTabContent from './TreatmentPlansTabContent'
 
-// 1. regionalBreakdown 
-// - find currently selected tool 
+// 1. regionalBreakdown
+// - find currently selected tool
 // - pluck it out of the selected team's sitemap in (needs tools slice)
 // - grab the regionalBreakdown from the tool if it's there
 // - use it to prime the toggle (if on, copy; if off, remove)
@@ -16,6 +18,12 @@ import RegionalBreakdownTabContent from './RegionalBreakdownTabContent'
 
 // 2. Every other type of resource
 // - get the resources for the node
+
+const TABS_DATA = [
+  'Regional Breakdown',
+  'Treatment Plans',
+  'Accounts',
+]
 
 const ModalContent = ({
   nodeId,
@@ -32,13 +40,18 @@ const ModalContent = ({
     : {}
 
   return (
-    <UnderlinedTabs tabsData={['Regional Breakdown']}>
+    <UnderlinedTabs tabsData={TABS_DATA}>
       <RegionalBreakdownTabContent
         nodeId={nodeId}
         nodeType={nodeType}
         handlers={handlers}
         resources={resources}
         teamTools={teamTools}
+      />
+      <AccountsTabContent
+
+      />
+      <TreatmentPlansTabContent
       />
     </UnderlinedTabs>
   )
