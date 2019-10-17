@@ -9,6 +9,7 @@ const organizations = require('./organizations')
 const qualityOfAccessScores = require('./qualityOfAccessScores')
 const collections = require('./collections')
 const newTreatmentPlans = require('./newTreatmentPlans')
+const resources = require('./resources')
 
 module.exports = {
   collections,
@@ -22,4 +23,5 @@ module.exports = {
   qualityOfAccessScores,
   newTreatmentPlans,
   ...organizations,
+  ...resources,
 }

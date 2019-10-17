@@ -14,10 +14,16 @@ const queries = gql`
     payerOrganizations: [PayerOrganization]
     pathwaysOrganizations: [PathwaysOrganization]
     apmOrganizations: [ApmOrganization]
-    
+
     qualityOfAccessScores: [QualityOfAccessScore]
     collections(type: String): [String]
     newTreatmentPlans(data: JSON): JSON
+
+    accountsDiff(
+      teamId: String,
+      nodeId: String,
+      parentId: String,
+    ): JSON
   }
 
   type Node {
