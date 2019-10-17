@@ -1,34 +1,35 @@
 import React from 'react'
-// import { Query } from 'react-apollo'
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faEdit } from "@fortawesome/free-solid-svg-icons"
 
 import Panel from '../../../../Phoenix/shared/Panel'
 import ModalButtonWithForm from '../../../shared/ModalButtonWithForm'
-// import DeleteButton from './shared/DeleteButton'
+import DeleteButton from '../../../shared/DeleteButton'
 // import CopyOneOfStringButton from '../../shared/CopyOneOfStringButton'
 
 // import Spinner from '../../../Phoenix/shared/Spinner'
 
 import {
-  UPDATE_PATHWAYS_ACCOUNT,
+  UPDATE_PATHWAYS_ORGANIZATION,
+  CREATE_PATHWAYS_ORGANIZATION,
+  DELETE_PATHWAYS_ORGANIZATION,
 } from '../../../../api/mutations'
 
 import {
-  GET_PATHWAYS_ACCOUNTS,
+  GET_PATHWAYS_ORGANIZATIONS,
 } from '../../../../api/queries'
 
 const editIcon = <FontAwesomeIcon size="lg" icon={faEdit} />
 
-// const CREATE_BUTTON_TXT = 'Create Pathways Account'
+const CREATE_BUTTON_TXT = 'Create Pathways Account'
 
-// const CREATE_MODAL_TITLE = 'Create New Account'
+const CREATE_MODAL_TITLE = 'Create New Account'
 
-// const buttonStyle = {
-//   background: "#234768",
-//   color: 'white',
-// }
+const buttonStyle = {
+  background: "#234768",
+  color: 'white',
+}
 
 const defaultPanelItemStyle = {
   display: 'flex',
@@ -78,17 +79,17 @@ const getInputFields = (state, handleChange) => {
 
 const headerChildren = (
   <div>
-    {/* <ModalButtonWithForm
+    <ModalButtonWithForm
       modalTitle={CREATE_MODAL_TITLE}
       buttonLabel={CREATE_BUTTON_TXT}
       buttonStyle={buttonStyle}
-      // mutationDoc={CREATE_PATHWAYS_ACCOUNTS}
-      // refetchQueries={[{ query: GET_PATHWAYS_ACCOUNTS }]}
+      mutationDoc={CREATE_PATHWAYS_ORGANIZATION}
+      refetchQueries={[{ query: GET_PATHWAYS_ORGANIZATIONS }]}
       getInputFields={getInputFields}
-    /> */}
+    />
 
     {/* <CopyOneOfStringButton
-      queryDoc={GET_PATHWAYS_ACCOUNTS}
+      queryDoc={GET_PATHWAYS_ORGANIZATIONS}
       dataKey='slug'
     /> */}
   </div>
@@ -101,16 +102,16 @@ const buttonGroupCallback = entity => (
       buttonLabel={editIcon}
       buttonStyle={{ border: 'none', background: 'none', color: '#b6b9bc' }}
       data={{ input: entity }}
-      mutationDoc={UPDATE_PATHWAYS_ACCOUNT}
-      refetchQueries={[{ query: GET_PATHWAYS_ACCOUNTS }]}
+      mutationDoc={UPDATE_PATHWAYS_ORGANIZATION}
+      refetchQueries={[{ query: GET_PATHWAYS_ORGANIZATIONS }]}
       getInputFields={getInputFields}
     />
 
-    {/* <DeleteButton
-      itemId={_id}
-      mutationDoc={DELETE_PATHWAYS_ACCOUNTS}
-      refetchQueries={[{ query: GET_PATHWAYS_ACCOUNTS }]}
-    /> */}
+    <DeleteButton
+      itemId={entity._id}
+      mutationDoc={DELETE_PATHWAYS_ORGANIZATION}
+      refetchQueries={[{ query: GET_PATHWAYS_ORGANIZATIONS }]}
+    />
   </>
 )
 
@@ -129,7 +130,7 @@ const PathwaysAccounts = () => (
     title="Pathways Accounts"
     headerChildren={headerChildren}
     queryDocs={{
-      fetchAllQueryProps: { query: GET_PATHWAYS_ACCOUNTS },
+      fetchAllQueryProps: { query: GET_PATHWAYS_ORGANIZATIONS },
     }}
     panelItemConfig={panelItemConfig}
   />

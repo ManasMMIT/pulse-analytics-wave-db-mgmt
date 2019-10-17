@@ -1,7 +1,7 @@
 const { gql } = require('apollo-server-express')
 
-const updateAccountTypeDefs = gql`
-  input UpdateAccountInput {
+const updateProviderOrganizationTypeDefs = gql`
+  input UpdateProviderOrganizationInput {
     _id: String!
     slug: String!
     organization: String
@@ -9,9 +9,8 @@ const updateAccountTypeDefs = gql`
     providerCancerCenter: String
   }
 
-  type UpdateAccountPayload {
+  type UpdateProviderOrganizationPayload {
     _id: String!
-    type: String
     slug: String!
     organization: String
     organizationTiny: String
@@ -19,4 +18,4 @@ const updateAccountTypeDefs = gql`
   }
 `
 
-module.exports = updateAccountTypeDefs
+module.exports = updateProviderOrganizationTypeDefs

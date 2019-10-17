@@ -337,9 +337,10 @@ export const GET_SOURCE_QUALITY_OF_ACCESS_SCORES = gql`
     }
   }
 `
-export const GET_PROVIDER_ACCOUNTS = gql`
-  query getProviderAccounts {
-    accounts(type: "provider") {
+
+export const GET_PROVIDER_ORGANIZATIONS = gql`
+  query getProviderOrganizations {
+    providerOrganizations {
       _id
       slug
       organization
@@ -349,9 +350,9 @@ export const GET_PROVIDER_ACCOUNTS = gql`
   }
 `
 
-export const GET_PAYER_ACCOUNTS = gql`
-  query getPayerAccounts {
-    accounts(type: "payer") {
+export const GET_PAYER_ORGANIZATIONS = gql`
+  query getPayerOrganizations {
+    payerOrganizations {
       _id
       slug
       organization
@@ -360,9 +361,9 @@ export const GET_PAYER_ACCOUNTS = gql`
   }
 `
 
-export const GET_PATHWAYS_ACCOUNTS = gql`
-  query getPathwaysAccounts {
-    accounts(type: "pathways") {
+export const GET_PATHWAYS_ORGANIZATIONS = gql`
+  query getPathwaysOrganizations {
+    pathwaysOrganizations {
       _id
       slug
       organization
@@ -371,9 +372,9 @@ export const GET_PATHWAYS_ACCOUNTS = gql`
   }
 `
 
-export const GET_APM_ACCOUNTS = gql`
-  query getAPMAccounts {
-    accounts(type: "apm") {
+export const GET_APM_ORGANIZATIONS = gql`
+  query getApmOrganizations {
+    apmOrganizations {
       _id
       slug
       organization

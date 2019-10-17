@@ -9,7 +9,12 @@ const queries = gql`
     indications: [Indication]
     products: [Product]
     regimens: [Regimen]
-    accounts(type: String): [Account]
+
+    providerOrganizations: [ProviderOrganization]
+    payerOrganizations: [PayerOrganization]
+    pathwaysOrganizations: [PathwaysOrganization]
+    apmOrganizations: [ApmOrganization]
+    
     qualityOfAccessScores: [QualityOfAccessScore]
     collections(type: String): [String]
     newTreatmentPlans(data: JSON): JSON
@@ -80,13 +85,37 @@ const queries = gql`
     caption: JSON
   }
 
-  type Account {
+  type ProviderOrganization {
     _id: ID!
     slug: String!
     type: String
     organization: String
     organizationTiny: String
     providerCancerCenter: String # TODO: Change to just cancerCenter or create separate tool account typedefs
+  }
+
+  type PayerOrganization {
+    _id: ID!
+    slug: String!
+    type: String
+    organization: String
+    organizationTiny: String
+  }
+
+  type PathwaysOrganization {
+    _id: ID!
+    slug: String!
+    type: String
+    organization: String
+    organizationTiny: String
+  }
+
+  type ApmOrganization {
+    _id: ID!
+    slug: String!
+    type: String
+    organization: String
+    organizationTiny: String
   }
 `
 

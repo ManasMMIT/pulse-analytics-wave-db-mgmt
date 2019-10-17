@@ -14,7 +14,7 @@ const CodeSnippet = styled.code({
 })
 
 const Delphi = () => {
-  const [emailAlerts, { loading, error }] = useMutation(EMAIL_ALERTS)
+  const [emailAlerts, { loading }] = useMutation(EMAIL_ALERTS)
 
   if (loading) return <Spinner />
 

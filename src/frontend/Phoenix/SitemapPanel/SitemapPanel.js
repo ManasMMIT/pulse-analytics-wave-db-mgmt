@@ -9,7 +9,6 @@ import {
 // * to pass appropriate indications/accounts
 import {
   GET_SELECTED_TEAM,
-  GET_STAGED_SITEMAP,
 } from '../../api/queries'
 
 import {
