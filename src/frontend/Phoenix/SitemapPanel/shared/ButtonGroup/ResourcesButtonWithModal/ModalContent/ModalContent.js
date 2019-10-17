@@ -48,11 +48,8 @@ const ModalContent = ({
         resources={resources}
         teamTools={teamTools}
       />
-      <AccountsTabContent
-
-      />
-      <TreatmentPlansTabContent
-      />
+      <TreatmentPlansTabContent />
+      <AccountsTabContent />
     </UnderlinedTabs>
   )
 }
