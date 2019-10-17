@@ -1,6 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { useQuery } from '@apollo/react-hooks'
 
+import { GET_SELECTED_TEAM } from '../../../../../../api/queries'
 import { UnderlinedTabs } from './../../../../../../components/Tabs'
 import RegionalBreakdownTabContent from './RegionalBreakdownTabContent'
 import AccountsTabContent from './AccountsTabContent'
@@ -32,7 +34,14 @@ const ModalContent = ({
   teamTools,
   selectedTeamNode,
 }) => {
+  const { data, loading, error } = useQuery(GET_SELECTED_TEAM)
 
+  if (loading || error) return null
+
+  const { selectedTeam: { _id: teamId } } = data
+
+  // THE DEPRECATED REASON THIS IS HERE: "if the team doesn't have the node in its staged sitemap,
+  // don't let anyone CRUD on the node's resources"
   if (!selectedTeamNode) return null
 
   const resources = selectedTeamNode // In case there's no resources field (which shouldn't matter when adding the first resource)
@@ -49,7 +58,11 @@ const ModalContent = ({
         teamTools={teamTools}
       />
       <TreatmentPlansTabContent />
-      <AccountsTabContent />
+      <AccountsTabContent
+        nodeId={nodeId}
+        parentId={selectedTeamNode.parentId}
+        teamId={teamId}
+      />
     </UnderlinedTabs>
   )
 }
