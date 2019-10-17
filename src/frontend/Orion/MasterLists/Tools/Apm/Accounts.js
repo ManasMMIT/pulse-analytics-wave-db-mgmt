@@ -6,29 +6,31 @@ import { faEdit } from "@fortawesome/free-solid-svg-icons"
 
 import Panel from '../../../../Phoenix/shared/Panel'
 import ModalButtonWithForm from '../../../shared/ModalButtonWithForm'
-// import DeleteButton from './shared/DeleteButton'
+import DeleteButton from '../../../shared/DeleteButton'
 // import CopyOneOfStringButton from '../../shared/CopyOneOfStringButton'
 
 // import Spinner from '../../../Phoenix/shared/Spinner'
 
 import {
-  UPDATE_APM_ACCOUNT,
+  UPDATE_APM_ORGANIZATION,
+  CREATE_APM_ORGANIZATION,
+  DELETE_APM_ORGANIZATION,
 } from '../../../../api/mutations'
 
 import {
-  GET_APM_ACCOUNTS,
+  GET_APM_ORGANIZATIONS,
 } from '../../../../api/queries'
 
 const editIcon = <FontAwesomeIcon size="lg" icon={faEdit} />
 
-// const CREATE_BUTTON_TXT = 'Create Alternative Payment Models Account'
+const CREATE_BUTTON_TXT = 'Create APM Account'
 
-// const CREATE_MODAL_TITLE = 'Create New Account'
+const CREATE_MODAL_TITLE = 'Create New Account'
 
-// const buttonStyle = {
-//   background: "#234768",
-//   color: 'white',
-// }
+const buttonStyle = {
+  background: "#234768",
+  color: 'white',
+}
 
 const defaultPanelItemStyle = {
   display: 'flex',
@@ -78,17 +80,17 @@ const getInputFields = (state, handleChange) => {
 
 const headerChildren = (
   <div>
-    {/* <ModalButtonWithForm
+    <ModalButtonWithForm
       modalTitle={CREATE_MODAL_TITLE}
       buttonLabel={CREATE_BUTTON_TXT}
       buttonStyle={buttonStyle}
-      // mutationDoc={CREATE_APM_ACCOUNTS}
-      // refetchQueries={[{ query: GET_APM_ACCOUNTS }]}
+      mutationDoc={CREATE_APM_ORGANIZATION}
+      refetchQueries={[{ query: GET_APM_ORGANIZATIONS }]}
       getInputFields={getInputFields}
-    /> */}
+    />
 
     {/* <CopyOneOfStringButton
-      queryDoc={GET_APM_ACCOUNTS}
+      queryDoc={GET_APM_ORGANIZATIONS}
       dataKey='slug'
     /> */}
   </div>
@@ -101,16 +103,16 @@ const buttonGroupCallback = entity => (
       buttonLabel={editIcon}
       buttonStyle={{ border: 'none', background: 'none', color: '#b6b9bc' }}
       data={{ input: entity }}
-      mutationDoc={UPDATE_APM_ACCOUNT}
-      refetchQueries={[{ query: GET_APM_ACCOUNTS }]}
+      mutationDoc={UPDATE_APM_ORGANIZATION}
+      refetchQueries={[{ query: GET_APM_ORGANIZATIONS }]}
       getInputFields={getInputFields}
     />
 
-    {/* <DeleteButton
-      itemId={_id}
-      mutationDoc={DELETE_APM_ACCOUNTS}
-      refetchQueries={[{ query: GET_APM_ACCOUNTS }]}
-    /> */}
+    <DeleteButton
+      itemId={entity._id}
+      mutationDoc={DELETE_APM_ORGANIZATION}
+      refetchQueries={[{ query: GET_APM_ORGANIZATIONS }]}
+    />
   </>
 )
 
@@ -129,7 +131,7 @@ const PathwaysAccounts = () => (
     title="Alternative Payment Models Accounts"
     headerChildren={headerChildren}
     queryDocs={{
-      fetchAllQueryProps: { query: GET_APM_ACCOUNTS },
+      fetchAllQueryProps: { query: GET_APM_ORGANIZATIONS },
     }}
     panelItemConfig={panelItemConfig}
   />

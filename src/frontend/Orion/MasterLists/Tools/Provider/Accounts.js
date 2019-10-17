@@ -6,29 +6,31 @@ import { faEdit } from "@fortawesome/free-solid-svg-icons"
 
 import Panel from '../../../../Phoenix/shared/Panel'
 import ModalButtonWithForm from '../../../shared/ModalButtonWithForm'
-// import DeleteButton from './shared/DeleteButton'
+import DeleteButton from '../../../shared/DeleteButton'
 // import CopyOneOfStringButton from '../../shared/CopyOneOfStringButton'
 
 // import Spinner from '../../../Phoenix/shared/Spinner'
 
 import {
-  UPDATE_PROVIDER_ACCOUNT,
+  UPDATE_PROVIDER_ORGANIZATION,
+  CREATE_PROVIDER_ORGANIZATION,
+  DELETE_PROVIDER_ORGANIZATION,
 } from '../../../../api/mutations'
 
 import {
-  GET_PROVIDER_ACCOUNTS,
+  GET_PROVIDER_ORGANIZATIONS,
 } from '../../../../api/queries'
 
 const editIcon = <FontAwesomeIcon size="lg" icon={faEdit} />
 
-// const CREATE_BUTTON_TXT = 'Create Provider Account'
+const CREATE_BUTTON_TXT = 'Create Provider Account'
 
-// const CREATE_MODAL_TITLE = 'Create New Account'
+const CREATE_MODAL_TITLE = 'Create New Account'
 
-// const buttonStyle = {
-//   background: "#234768",
-//   color: 'white',
-// }
+const buttonStyle = {
+  background: "#234768",
+  color: 'white',
+}
 
 const defaultPanelItemStyle = {
   display: 'flex',
@@ -87,17 +89,17 @@ const getInputFields = (state, handleChange) => {
 
 const headerChildren = (
   <div>
-    {/* <ModalButtonWithForm
+    <ModalButtonWithForm
       modalTitle={CREATE_MODAL_TITLE}
       buttonLabel={CREATE_BUTTON_TXT}
       buttonStyle={buttonStyle}
-      // mutationDoc={CREATE_PROVIDER_ACCOUNTS}
-      // refetchQueries={[{ query: GET_PROVIDER_ACCOUNTS }]}
+      mutationDoc={CREATE_PROVIDER_ORGANIZATION}
+      refetchQueries={[{ query: GET_PROVIDER_ORGANIZATIONS }]}
       getInputFields={getInputFields}
-    /> */}
+    />
 
     {/* <CopyOneOfStringButton
-      queryDoc={GET_PROVIDER_ACCOUNTS}
+      queryDoc={GET_PROVIDER_ORGANIZATIONS}
       dataKey='slug'
     /> */}
   </div>
@@ -110,16 +112,16 @@ const buttonGroupCallback = entity => (
       buttonLabel={editIcon}
       buttonStyle={{ border: 'none', background: 'none', color: '#b6b9bc' }}
       data={{ input: entity }}
-      mutationDoc={UPDATE_PROVIDER_ACCOUNT}
-      refetchQueries={[{ query: GET_PROVIDER_ACCOUNTS }]}
+      mutationDoc={UPDATE_PROVIDER_ORGANIZATION}
+      refetchQueries={[{ query: GET_PROVIDER_ORGANIZATIONS }]}
       getInputFields={getInputFields}
     />
 
-    {/* <DeleteButton
-      itemId={_id}
-      mutationDoc={DELETE_PROVIDER_ACCOUNTS}
-      refetchQueries={[{ query: GET_PROVIDER_ACCOUNTS }]}
-    /> */}
+    <DeleteButton
+      itemId={entity._id}
+      mutationDoc={DELETE_PROVIDER_ORGANIZATION}
+      refetchQueries={[{ query: GET_PROVIDER_ORGANIZATIONS }]}
+    />
   </>
 )
 
@@ -138,7 +140,7 @@ const ProviderAccounts = () => (
     title="Provider Accounts"
     headerChildren={headerChildren}
     queryDocs={{
-      fetchAllQueryProps: { query: GET_PROVIDER_ACCOUNTS },
+      fetchAllQueryProps: { query: GET_PROVIDER_ORGANIZATIONS },
     }}
     panelItemConfig={panelItemConfig}
   />

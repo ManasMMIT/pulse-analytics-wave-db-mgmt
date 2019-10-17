@@ -7,7 +7,7 @@ const sitemap = require('./sitemap')
 const indication = require('./indication')
 const product = require('./product')
 const regimen = require('./regimen')
-const account = require('./account')
+const organization = require('./organization')
 const qualityAccessScore = require('./qualityAccessScore')
 const collection = require('./collection')
 const alert = require('./alert')
@@ -41,7 +41,21 @@ const mutationType = gql`
     updateSourceRegimen(input: UpdateSourceRegimenInput!): UpdateSourceRegimenPayload
     deleteSourceRegimen(input: DeleteSourceRegimenInput!): DeleteSourceRegimenPayload
 
-    updateAccount(type: String, input: UpdateAccountInput!): UpdateAccountPayload
+    createProviderOrganization(input: CreateProviderOrganizationInput!): CreateProviderOrganizationPayload
+    deleteProviderOrganization(input: DeleteProviderOrganizationInput!): DeleteProviderOrganizationPayload
+    updateProviderOrganization(input: UpdateProviderOrganizationInput!): UpdateProviderOrganizationPayload
+
+    createPayerOrganization(input: CreatePayerOrganizationInput!): CreatePayerOrganizationPayload
+    deletePayerOrganization(input: DeletePayerOrganizationInput!): DeletePayerOrganizationPayload
+    updatePayerOrganization(input: UpdatePayerOrganizationInput!): UpdatePayerOrganizationPayload
+
+    createPathwaysOrganization(input: CreatePathwaysOrganizationInput!): CreatePathwaysOrganizationPayload
+    deletePathwaysOrganization(input: DeletePathwaysOrganizationInput!): DeletePathwaysOrganizationPayload
+    updatePathwaysOrganization(input: UpdatePathwaysOrganizationInput!): UpdatePathwaysOrganizationPayload
+
+    createApmOrganization(input: CreateApmOrganizationInput!): CreateApmOrganizationPayload
+    deleteApmOrganization(input: DeleteApmOrganizationInput!): DeleteApmOrganizationPayload
+    updateApmOrganization(input: UpdateApmOrganizationInput!): UpdateApmOrganizationPayload
 
     createQualityOfAccessScore(input: CreateQualityOfAccessScoreInput!): CreateQualityOfAccessScorePayload
     updateQualityOfAccessScore(input: UpdateQualityOfAccessScoreInput!): UpdateQualityOfAccessScorePayload
@@ -63,7 +77,7 @@ module.exports = [
   ...indication,
   ...product,
   ...regimen,
-  ...account,
+  ...organization,
   ...qualityAccessScore,
   ...collection,
   ...alert,

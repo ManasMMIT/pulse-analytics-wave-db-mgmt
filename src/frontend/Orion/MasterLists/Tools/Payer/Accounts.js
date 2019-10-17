@@ -6,29 +6,31 @@ import { faEdit } from "@fortawesome/free-solid-svg-icons"
 
 import Panel from '../../../../Phoenix/shared/Panel'
 import ModalButtonWithForm from '../../../shared/ModalButtonWithForm'
-// import DeleteButton from './shared/DeleteButton'
+import DeleteButton from '../../../shared/DeleteButton'
 // import CopyOneOfStringButton from '../../shared/CopyOneOfStringButton'
 
 // import Spinner from '../../../Phoenix/shared/Spinner'
 
 import {
-  UPDATE_PAYER_ACCOUNT,
+  UPDATE_PAYER_ORGANIZATION,
+  CREATE_PAYER_ORGANIZATION,
+  DELETE_PAYER_ORGANIZATION,
 } from '../../../../api/mutations'
 
 import {
-  GET_PAYER_ACCOUNTS,
+  GET_PAYER_ORGANIZATIONS,
 } from '../../../../api/queries'
 
 const editIcon = <FontAwesomeIcon size="lg" icon={faEdit} />
 
-// const CREATE_BUTTON_TXT = 'Create Payer Account'
+const CREATE_BUTTON_TXT = 'Create Payer Account'
 
-// const CREATE_MODAL_TITLE = 'Create New Account'
+const CREATE_MODAL_TITLE = 'Create New Account'
 
-// const buttonStyle = {
-//   background: "#234768",
-//   color: 'white',
-// }
+const buttonStyle = {
+  background: "#234768",
+  color: 'white',
+}
 
 const defaultPanelItemStyle = {
   display: 'flex',
@@ -78,17 +80,17 @@ const getInputFields = (state, handleChange) => {
 
 const headerChildren = (
   <div>
-    {/* <ModalButtonWithForm
+    <ModalButtonWithForm
       modalTitle={CREATE_MODAL_TITLE}
       buttonLabel={CREATE_BUTTON_TXT}
       buttonStyle={buttonStyle}
-      // mutationDoc={CREATE_PAYER_ACCOUNTS}
-      // refetchQueries={[{ query: GET_PAYER_ACCOUNTS }]}
+      mutationDoc={CREATE_PAYER_ORGANIZATION}
+      refetchQueries={[{ query: GET_PAYER_ORGANIZATIONS }]}
       getInputFields={getInputFields}
-    /> */}
+    />
 
     {/* <CopyOneOfStringButton
-      queryDoc={GET_PAYER_ACCOUNTS}
+      queryDoc={GET_PAYER_ORGANIZATIONS}
       dataKey='slug'
     /> */}
   </div>
@@ -101,16 +103,16 @@ const buttonGroupCallback = entity => (
       buttonLabel={editIcon}
       buttonStyle={{ border: 'none', background: 'none', color: '#b6b9bc' }}
       data={{ input: entity }}
-      mutationDoc={UPDATE_PAYER_ACCOUNT}
-      refetchQueries={[{ query: GET_PAYER_ACCOUNTS }]}
+      mutationDoc={UPDATE_PAYER_ORGANIZATION}
+      refetchQueries={[{ query: GET_PAYER_ORGANIZATIONS }]}
       getInputFields={getInputFields}
     />
 
-    {/* <DeleteButton
-      itemId={_id}
-      mutationDoc={DELETE_PAYER_ACCOUNTS}
-      refetchQueries={[{ query: GET_PAYER_ACCOUNTS }]}
-    /> */}
+    <DeleteButton
+      itemId={entity._id}
+      mutationDoc={DELETE_PAYER_ORGANIZATION}
+      refetchQueries={[{ query: GET_PAYER_ORGANIZATIONS }]}
+    />
   </>
 )
 
@@ -129,7 +131,7 @@ const PayerAccounts = () => (
     title="Payer Accounts"
     headerChildren={headerChildren}
     queryDocs={{
-      fetchAllQueryProps: { query: GET_PAYER_ACCOUNTS },
+      fetchAllQueryProps: { query: GET_PAYER_ORGANIZATIONS },
     }}
     panelItemConfig={panelItemConfig}
   />
