@@ -17,7 +17,7 @@ const accountsDiff = async (
 
   let targetResourceObj = resources.find(
     ({ nodeId: resourceNodeId }) => resourceNodeId === nodeId
-  )
+  ) || { nodeId }
 
   let enabledAccounts = targetResourceObj.accounts
   if (!enabledAccounts) enabledAccounts = []

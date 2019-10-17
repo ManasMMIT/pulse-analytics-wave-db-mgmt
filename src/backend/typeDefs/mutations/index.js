@@ -65,6 +65,8 @@ const mutationType = gql`
     emailAlerts(input: EmailAlertInput!): JSON
     
     bulkCreateTreatmentPlans(input: BulkCreateTreatmentPlansInput!): JSON
+
+    toggleAccount(input: JSON): JSON
   }
 `
 

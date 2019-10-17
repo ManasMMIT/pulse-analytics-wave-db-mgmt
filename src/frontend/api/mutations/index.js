@@ -90,6 +90,10 @@ import {
   BULK_CREATE_TREATMENT_PLAN,
 } from './treatmentPlan'
 
+import {
+  TOGGLE_ACCOUNT,
+} from './resources'
+
 export {
   SELECT_CLIENT,
   CREATE_CLIENT,
@@ -158,4 +162,6 @@ export {
   EMAIL_ALERTS,
   
   BULK_CREATE_TREATMENT_PLAN,
+
+  TOGGLE_ACCOUNT,
 }

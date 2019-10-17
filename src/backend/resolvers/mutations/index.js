@@ -10,6 +10,7 @@ const qualityOfAccessScoreResolvers = require('./qualityOfAccessScore')
 const collectionResolvers = require('./collection')
 const alertResolvers = require('./alert')
 const treatmentPlan = require('./treatmentPlan')
+const resourceResolvers = require('./resource')
 
 module.exports = {
   ...clientResolvers,
@@ -24,4 +25,5 @@ module.exports = {
   ...alertResolvers,
   ...treatmentPlan,
   ...organizationResolvers,
+  ...resourceResolvers,
 }
