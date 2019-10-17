@@ -394,3 +394,9 @@ export const GET_NEW_TREATMENT_PLANS = gql`
     newTreatmentPlans(data: $data)
   }
 `
+
+export const GET_ACCOUNTS_DIFF = gql`
+  query getNewTreatmentPlans($teamId: String, $nodeId: String, $parentId: String) {
+    accountsDiff(teamId: $teamId, nodeId: $nodeId, parentId: $parentId)
+  }
+`
