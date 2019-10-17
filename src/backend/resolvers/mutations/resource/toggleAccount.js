@@ -1,4 +1,4 @@
-// const _ = require('lodash')
+const _ = require('lodash')
 
 const toggleAccount = async (
   parent,
@@ -11,13 +11,13 @@ const toggleAccount = async (
 
   const team = await rolesCollection.findOne({ _id: teamId })
 
+  const resources = team.resources || [{ nodeId, accounts: [] }]
+
+  let targetResourceObj = resources.find(
+    ({ nodeId: resourceNodeId }) => resourceNodeId === nodeId
+  ) || { nodeId, accounts: [] }
+
   if (shouldBeAdded) {
-    const resources = team.resources || [{ nodeId, accounts: [] }]
-  
-    let targetResourceObj = resources.find(
-      ({ nodeId: resourceNodeId }) => resourceNodeId === nodeId
-    ) || { nodeId }
-  
     if (!targetResourceObj.accounts) {
       targetResourceObj.accounts = [account]
     } else {
@@ -31,25 +31,24 @@ const toggleAccount = async (
     idx === -1
       ? resources.push(targetResourceObj)
       : resources[idx] = targetResourceObj
-
-    await rolesCollection.updateOne(
-      { _id: teamId },
-      {
-        $set: {
-          resources,
-        }
-      },
-    )
   } else {
-    await rolesCollection.updateOne(
-      { _id: teamId, resources: { nodeId } },
-      {
-        $pull: {
-          'resources.$.accounts': { _id: account._id }
-        }
-      },
+    _.pullAllBy(targetResourceObj.accounts, [{ _id: account._id }], '_id')
+
+    const idx2 = resources.findIndex(
+      ({ nodeId: resourceNodeId }) => resourceNodeId === nodeId
     )
+    if (idx2 > -1) resources.splice(idx2, 1)
+    debugger
   }
+debugger
+  await rolesCollection.updateOne(
+    { _id: teamId },
+    {
+      $set: {
+        resources,
+      }
+    },
+  )
 }
 
 module.exports = toggleAccount
