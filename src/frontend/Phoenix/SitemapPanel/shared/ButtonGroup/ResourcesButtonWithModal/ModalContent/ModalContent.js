@@ -57,7 +57,11 @@ const ModalContent = ({
         resources={resources}
         teamTools={teamTools}
       />
-      <TreatmentPlansTabContent />
+      <TreatmentPlansTabContent
+        nodeId={nodeId}
+        parentId={selectedTeamNode.parentId}
+        teamId={teamId}
+      />
       <AccountsTabContent
         nodeId={nodeId}
         parentId={selectedTeamNode.parentId}

@@ -400,3 +400,9 @@ export const GET_ACCOUNTS_DIFF = gql`
     accountsDiff(teamId: $teamId, nodeId: $nodeId, parentId: $parentId)
   }
 `
+
+export const GET_TREATMENT_PLANS_DIFF = gql`
+  query getTreatmentPlansDiff($teamId: String, $nodeId: String, $parentId: String) {
+    treatmentPlansDiff(teamId: $teamId, nodeId: $nodeId, parentId: $parentId)
+  }
+`

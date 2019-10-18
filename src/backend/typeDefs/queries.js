@@ -24,6 +24,12 @@ const queries = gql`
       nodeId: String,
       parentId: String,
     ): JSON
+
+    treatmentPlansDiff(
+      teamId: String,
+      nodeId: String,
+      parentId: String,
+    ): JSON
   }
 
   type Node {
