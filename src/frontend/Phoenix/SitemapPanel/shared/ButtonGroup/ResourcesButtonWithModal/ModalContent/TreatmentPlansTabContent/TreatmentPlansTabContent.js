@@ -11,7 +11,7 @@ import {
 
 import {
   TOGGLE_INDICATION,
-  // TOGGLE_REGIMEN,
+  TOGGLE_REGIMEN,
 } from '../../../../../../../api/mutations'
 
 const TreatmentPlansTabContent = ({ nodeId, parentId, teamId }) => {
@@ -27,12 +27,12 @@ const TreatmentPlansTabContent = ({ nodeId, parentId, teamId }) => {
     }]
   })
 
-  // const [toggleRegimen] = useMutation(TOGGLE_REGIMEN, {
-    // refetchQueries: [{
-    //   query: GET_TREATMENT_PLANS_DIFF,
-    //   variables: { nodeId, parentId, teamId }
-    // }]
-  // })
+  const [toggleRegimen] = useMutation(TOGGLE_REGIMEN, {
+    refetchQueries: [{
+      query: GET_TREATMENT_PLANS_DIFF,
+      variables: { nodeId, parentId, teamId }
+    }]
+  })
 
   if (loading) return 'Loading...'
   if (error) return `There was an error: ${error}`
@@ -55,7 +55,6 @@ const TreatmentPlansTabContent = ({ nodeId, parentId, teamId }) => {
                   indication: ind,
                   teamId,
                   nodeId,
-                  parentId,
                 }
               }
             })
@@ -71,30 +70,44 @@ const TreatmentPlansTabContent = ({ nodeId, parentId, teamId }) => {
                 checked={reg.enabled}
                 color="primary"
                 value={reg._id}
-                // onChange={() => {
-                //   if (!ind.enabled) {
-                //     toggleIndication({
-                //       variables: {
-                //         shouldBeAdded: !ind.enabled,
-                //         indication: ind,
-                //         teamId,
-                //         nodeId,
-                //         parentId,
-                //       }
-                //     })
-                //   }
-
-                //   toggleRegimen({
-                //     variables: {
-                //       shouldBeAdded: !reg.enabled,
-                //       regimen: reg,
-                //       indicationId: ind._id,
-                //       teamId,
-                //       nodeId,
-                //       parentId,
-                //     }
-                //   })
-                // }}
+                onChange={() => {
+                  if (!ind.enabled) {
+                    toggleIndication({
+                      variables: {
+                        input: {
+                          shouldBeAdded: true,
+                          indication: ind,
+                          teamId,
+                          nodeId,
+                        }
+                      }
+                    }).then(() => {
+                      toggleRegimen({
+                        variables: {
+                          input: {
+                            shouldBeAdded: !reg.enabled,
+                            regimen: reg,
+                            indicationId: ind._id,
+                            teamId,
+                            nodeId,
+                          }
+                        }
+                      })
+                    })
+                  } else {
+                    toggleRegimen({
+                      variables: {
+                        input: {
+                          shouldBeAdded: !reg.enabled,
+                          regimen: reg,
+                          indicationId: ind._id,
+                          teamId,
+                          nodeId,
+                        }
+                      }
+                    })
+                  }
+                }}
               />
             </div>
           ))

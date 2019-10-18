@@ -1,54 +1,67 @@
+const { ObjectId } = require('mongodb')
 const _ = require('lodash')
 
-const toggleAccount = async (
+const toggleRegimen = async (
   parent,
-  { input: { teamId, nodeId, account, shouldBeAdded } },
+  {
+    input: {
+      shouldBeAdded,
+      regimen,
+      indicationId,
+      teamId,
+      nodeId,
+    }
+  },
   { pulseCoreDb },
   info
 ) => {
-  // debugger
-  // const rolesCollection = await pulseCoreDb.collection('roles')
+  // step 1: format the regimen object and ids as needed
+  regimen._id = ObjectId(regimen._id)
+  regimen = _.omit(regimen, ['enabled'])
+  indicationId = ObjectId(indicationId)
 
-  // const team = await rolesCollection.findOne({ _id: teamId })
+  // step 2: get the regimens array by traversing as follows:
+  // ! team => resources => correct resource obj => treatmentPlans arr
+  // ! => correct indication obj => regimens array
+  // ASSUMPTION: the data structure as described above will already exist
+  const rolesCollection = pulseCoreDb.collection('roles')
 
-  // const resources = team.resources || [{ nodeId, accounts: [] }]
+  const team = await rolesCollection.findOne({ _id: teamId })
 
-  // let targetResourceObj = resources.find(
-  //   ({ nodeId: resourceNodeId }) => resourceNodeId === nodeId
-  // ) || { nodeId, accounts: [] }
+  const { resources } = team
 
-  // if (shouldBeAdded) {
-  //   if (!targetResourceObj.accounts) {
-  //     targetResourceObj.accounts = [account]
-  //   } else {
-  //     targetResourceObj.accounts.push(account)
-  //   }
+  const targetResourceObj = resources.find(
+    ({ nodeId: resourceNodeId }) => resourceNodeId === nodeId
+  )
 
-  //   const idx = resources.findIndex(
-  //     ({ nodeId: resourceNodeId }) => resourceNodeId === nodeId
-  //   )
+  const { treatmentPlans } = targetResourceObj
 
-  //   idx === -1
-  //     ? resources.push(targetResourceObj)
-  //     : resources[idx] = targetResourceObj
-  // } else {
-  //   _.pullAllBy(targetResourceObj.accounts, [{ _id: account._id }], '_id')
+  const targetIndObj = treatmentPlans.find(
+    ({ _id: targetIndId }) => targetIndId.equals(indicationId)
+  )
 
-  //   const idx2 = resources.findIndex(
-  //     ({ nodeId: resourceNodeId }) => resourceNodeId === nodeId
-  //   )
-  //   if (idx2 > -1) resources.splice(idx2, 1)
-  //   debugger
-  // }
-  // debugger
-  // await rolesCollection.updateOne(
-  //   { _id: teamId },
-  //   {
-  //     $set: {
-  //       resources,
-  //     }
-  //   },
-  // )
+  const targetRegimens = targetIndObj.regimens
+
+  // step 3: edit the targetRegimens array as needed, then update the resources
+  // array accordingly to prepare it for mongodb updateOne
+  if (shouldBeAdded) {
+    targetRegimens.push(regimen)
+  } else {
+    const regimenIdx = targetRegimens.findIndex(
+      ({ _id: regimenId }) => regimenId.equals(regimen._id)
+    )
+
+    targetRegimens.splice(regimenIdx, 1)
+  }
+
+  await rolesCollection.updateOne(
+    { _id: teamId },
+    {
+      $set: {
+        resources,
+      }
+    },
+  )
 }
 
-module.exports = toggleAccount
+module.exports = toggleRegimen

@@ -3,7 +3,7 @@ const _ = require('lodash')
 
 const toggleIndication = async (
   parent,
-  { input: { teamId, nodeId, parentId, indication, shouldBeAdded } },
+  { input: { teamId, nodeId, indication, shouldBeAdded } },
   { pulseCoreDb },
   info
 ) => {
