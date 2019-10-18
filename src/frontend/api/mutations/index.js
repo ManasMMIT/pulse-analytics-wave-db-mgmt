@@ -92,6 +92,8 @@ import {
 
 import {
   TOGGLE_ACCOUNT,
+  TOGGLE_INDICATION,
+  TOGGLE_REGIMEN,
 } from './resources'
 
 export {
@@ -160,8 +162,10 @@ export {
   UPLOAD_COLLECTION,
 
   EMAIL_ALERTS,
-  
+
   BULK_CREATE_TREATMENT_PLAN,
 
   TOGGLE_ACCOUNT,
+  TOGGLE_INDICATION,
+  TOGGLE_REGIMEN,
 }

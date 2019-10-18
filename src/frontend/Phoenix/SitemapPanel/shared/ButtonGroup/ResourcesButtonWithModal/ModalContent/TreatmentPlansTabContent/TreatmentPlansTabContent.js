@@ -10,7 +10,7 @@ import {
 } from '../../../../../../../api/queries'
 
 import {
-  // TOGGLE_INDICATION,
+  TOGGLE_INDICATION,
   // TOGGLE_REGIMEN,
 } from '../../../../../../../api/mutations'
 
@@ -20,12 +20,12 @@ const TreatmentPlansTabContent = ({ nodeId, parentId, teamId }) => {
     { variables: { nodeId, parentId, teamId } }
   )
 
-  // const [toggleIndication] = useMutation(TOGGLE_INDICATION, {
-  //   refetchQueries: [{
-  //     query: GET_TREATMENT_PLANS_DIFF,
-  //     variables: { nodeId, parentId, teamId }
-  //   }]
-  // })
+  const [toggleIndication] = useMutation(TOGGLE_INDICATION, {
+    refetchQueries: [{
+      query: GET_TREATMENT_PLANS_DIFF,
+      variables: { nodeId, parentId, teamId }
+    }]
+  })
 
   // const [toggleRegimen] = useMutation(TOGGLE_REGIMEN, {
     // refetchQueries: [{
@@ -47,19 +47,19 @@ const TreatmentPlansTabContent = ({ nodeId, parentId, teamId }) => {
           checked={ind.enabled}
           color="primary"
           value={ind._id}
-          // onChange={() => {
-          //   toggleIndication({
-          //     variables: {
-          //       input: {
-          //         shouldBeAdded: !ind.enabled,
-          //         indication: ind,
-          //         teamId,
-          //         nodeId,
-          //         parentId,
-          //       }
-          //     }
-          //   })
-          // }}
+          onChange={() => {
+            toggleIndication({
+              variables: {
+                input: {
+                  shouldBeAdded: !ind.enabled,
+                  indication: ind,
+                  teamId,
+                  nodeId,
+                  parentId,
+                }
+              }
+            })
+          }}
         />
       </div>
       <div>
