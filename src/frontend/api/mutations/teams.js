@@ -87,3 +87,20 @@ export const MANAGE_UPDATED_TEAM = gql`
     }
   }
 `
+
+// update the resource obj for a selected team, for a single node
+// belonging to that team
+export const UPDATE_PERMISSIONS = gql`
+  mutation UpdatePermissions($input: UpdatePermissionsInput!) {
+    updatePermissions(input: $input) {
+      _id
+      name
+      description
+      sitemap
+      client {
+        _id
+      }
+      resources
+    }
+  }
+`

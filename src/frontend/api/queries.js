@@ -33,6 +33,7 @@ export const GET_CLIENT_TEAMS = gql`
         name
         description
       }
+      resources
     }
     selectedClient @client {
       _id @export(as: "clientId")
@@ -51,6 +52,7 @@ export const GET_SELECTED_TEAM = gql`
       client {
         _id
       }
+      resources
     }
   }
 `
@@ -380,6 +382,12 @@ export const GET_APM_ORGANIZATIONS = gql`
       organization
       organizationTiny
     }
+  }
+`
+
+export const GET_ORGANIZATIONS = gql`
+  query getOrganizations($toolId: String) {
+    organizations(toolId: $toolId)
   }
 `
 

@@ -60,6 +60,7 @@ class Modal extends React.Component {
       show,
       title,
       style,
+      disableHeader,
     } = this.props;
 
     if (!show) return null;
@@ -73,12 +74,17 @@ class Modal extends React.Component {
     return (
       <Wrapper onClick={this.handleClickAway} css={style}>
         <Main ref={node => { this.node = node }}>
-          <Header>
-            <Title>{title}</Title>
-            <button onClick={onClickCloseButton}>
-              close
-            </button>
-          </Header>
+          {
+            disableHeader || (
+              <Header>
+                <Title>{title}</Title>
+                <button onClick={onClickCloseButton}>
+                  close
+                </button>
+              </Header>
+            )
+          }
+
           {children}
         </Main>
       </Wrapper>
@@ -93,6 +99,7 @@ Modal.defaultProps = {
   show: false,
   title: null,
   style: {},
+  disableHeader: false,
 }
 
 Modal.propTypes = {
@@ -100,6 +107,7 @@ Modal.propTypes = {
   show: PropTypes.bool,
   title: PropTypes.string,
   style: PropTypes.object,
+  disableHeader: PropTypes.bool,
 }
 
 export default Modal;

@@ -13,6 +13,7 @@ const createTeamTypeDefs = gql`
     isDefault: Boolean
     sitemap: JSON
     client: Client
+    resources: JSON
   }
 `
 

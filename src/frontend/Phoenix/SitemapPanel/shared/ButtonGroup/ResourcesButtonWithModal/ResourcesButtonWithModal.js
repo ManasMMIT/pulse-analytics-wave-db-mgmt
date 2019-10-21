@@ -1,8 +1,6 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-
-import Modal from '../../../../../components/Modal'
-import ModalContent from './ModalContent'
+import ResourcesModal from './ResourcesModal'
 
 const ResourcesButton = ({
   nodeId,
@@ -19,18 +17,15 @@ const ResourcesButton = ({
       >
         resources
       </button>
-      <Modal
+
+      <ResourcesModal
         handleClose={() => setIsOpen(false)}
         show={isOpen}
-        title="Resources"
-      >
-        <ModalContent
-          nodeId={nodeId}
-          selectedTeamNode={selectedTeamNode}
-          nodeType={nodeType}
-          handlers={handlers}
-        />
-      </Modal>
+        nodeId={nodeId}
+        nodeType={nodeType}
+        handlers={handlers}
+        selectedTeamNode={selectedTeamNode}
+      />
     </>
   )
 }

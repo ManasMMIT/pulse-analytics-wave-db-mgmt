@@ -26,6 +26,7 @@ const mutationType = gql`
     deleteTeam(input: DeleteTeamInput!): DeleteTeamPayload
 
     updateRoleSitemap(input: UpdateRoleSitemapInput!): UpdateRoleSitemapPayload
+    updatePermissions(input: UpdatePermissionsInput!): UpdateTeamPayload
     pushSitemapToDev: String
     pushSitemapToProd: String
 
@@ -63,7 +64,7 @@ const mutationType = gql`
     uploadCollection(input: UploadCollectionInput!): JSON
 
     emailAlerts(input: EmailAlertInput!): JSON
-    
+
     bulkCreateTreatmentPlans(input: BulkCreateTreatmentPlansInput!): JSON
   }
 `

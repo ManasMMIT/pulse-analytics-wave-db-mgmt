@@ -16,18 +16,23 @@ const ButtonGroup = ({
   return (
     <>
       <SitemapSwitch
+        nodeType={nodeType}
         sourceEntity={sourceEntity}
         teamEntityNodes={teamEntityNodes}
         handleToggle={handlers.handleToggle}
       />
-      <ResourcesButtonWithModal
-        nodeId={nodeId}
-        nodeType={nodeType}
-        selectedTeamNode={selectedTeamNode}
-        handlers={{
-          handleRegBrkToggle: handlers.handleRegBrkToggle
-        }}
-      />
+      {
+        selectedTeamNode && (
+          <ResourcesButtonWithModal
+            nodeId={nodeId}
+            nodeType={nodeType}
+            selectedTeamNode={selectedTeamNode}
+            handlers={{
+              handleRegBrkToggle: handlers.handleRegBrkToggle
+            }}
+          />
+        )
+      }
     </>
   )
 }

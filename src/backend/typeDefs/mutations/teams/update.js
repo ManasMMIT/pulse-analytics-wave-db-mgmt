@@ -12,6 +12,7 @@ const updateTeamTypeDefs = gql`
     description: String
     sitemap: JSON
     client: Client
+    resources: JSON
   }
 `
 

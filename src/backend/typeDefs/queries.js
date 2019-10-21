@@ -10,11 +10,12 @@ const queries = gql`
     products: [Product]
     regimens: [Regimen]
 
+    organizations(toolId: String): JSON # JSON because orgs have diff schemas
     providerOrganizations: [ProviderOrganization]
     payerOrganizations: [PayerOrganization]
     pathwaysOrganizations: [PathwaysOrganization]
     apmOrganizations: [ApmOrganization]
-    
+
     qualityOfAccessScores: [QualityOfAccessScore]
     collections(type: String): [String]
     newTreatmentPlans(data: JSON): JSON
@@ -48,6 +49,7 @@ const queries = gql`
     isDefault: Boolean
     sitemap: JSON
     client: Client
+    resources: JSON
   }
 
   type User {
