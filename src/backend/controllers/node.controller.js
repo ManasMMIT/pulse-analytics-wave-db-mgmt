@@ -171,38 +171,25 @@ module.exports = ({
       await session.withTransaction(async () => {
         const updatedSourceNode = await coreNodes.findOneAndUpdate(
           { _id: nodeId },
-          { $set: { ...body } },
+          { $set: body },
           {
             returnOriginal: false,
             session
           }
         )
 
-        const rolesToUpdate = await coreRoles.find(
-          { [`sitemap.${body.type}s._id`]: nodeId },
+        const setObj = Object.keys(body).reduce((acc, key) => {
+          acc[`sitemap.${body.type}s.$.${ key }`] = body[key]
+
+          return acc
+        }, {})
+
+
+        await coreRoles.updateMany(
+          { [`sitemap.${body.type}s`]: { $elemMatch: { _id: nodeId } } },
+          { $set: setObj },
           { session }
-        ).toArray()
-
-        const pullThenPushPromiseArray = rolesToUpdate
-          .map(({ _id }) => {
-            const pullPushPromise =  async () => {
-              await coreRoles.updateOne(
-                { _id },
-                { $pull: { [`sitemap.${ body.type }s`]: { _id: nodeId } } },
-                { session }
-              )
-
-              await coreRoles.updateOne(
-                { _id },
-                { $push: { [`sitemap.${ body.type }s`]: updatedSourceNode.value } },
-                { session }
-              )
-            }
-
-            return pullPushPromise()
-          })
-
-        await Promise.all(pullThenPushPromiseArray)
+        )
 
         res.send(updatedSourceNode.value)
       })
