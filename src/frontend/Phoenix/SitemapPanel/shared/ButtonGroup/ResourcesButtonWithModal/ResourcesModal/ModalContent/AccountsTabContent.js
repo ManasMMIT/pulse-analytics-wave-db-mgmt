@@ -22,6 +22,10 @@ const AccountsTabContent = ({
     setStagedAccounts(accountsMinusRemovedAccount)
   }
 
+  const enableAllAccounts = () => setStagedAccounts(baseAccounts)
+
+  const disableAllAccounts = () => setStagedAccounts([])
+
   const accountsList = baseAccounts.map(account => {
     let checked = false
     if (enabledAccountsById[account._id]) checked = true
@@ -43,6 +47,15 @@ const AccountsTabContent = ({
 
   return (
     <div style={{ maxHeight: 600, overflow: 'auto' }}>
+      <div style={{ display: 'flex' }}>
+        <button onClick={enableAllAccounts}>
+          Toggle on All
+        </button>
+        <button onClick={disableAllAccounts}>
+          Toggle off All
+        </button>
+      </div>
+
       {accountsList}
     </div>
   )

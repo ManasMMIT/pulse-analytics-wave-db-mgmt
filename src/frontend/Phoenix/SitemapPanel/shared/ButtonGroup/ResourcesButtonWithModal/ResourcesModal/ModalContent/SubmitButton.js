@@ -5,6 +5,7 @@ import PropTypes from 'prop-types'
 import { GET_SELECTED_TEAM } from '../../../../../../../api/queries'
 import { UPDATE_PERMISSIONS } from '../../../../../../../api/mutations/teams'
 import Spinner from '../../../../../../shared/Spinner'
+import stripTypename from '../../../../../../../Orion/shared/strip-typename'
 
 const submitButtonStyle = {
   backgroundColor: '#0668D9',
@@ -21,12 +22,20 @@ const SubmitButton = ({
   updatedResources,
   afterSubmitHook,
 }) => {
+  updatedResources = stripTypename(updatedResources)
+
   const [updatePermissions, { loading, error }] = useMutation(
     UPDATE_PERMISSIONS,
     {
       variables: { input: { nodeId, teamId, updatedResources } },
       update: (cache, { data: { updatePermissions } }) => {
-        const updatedTeam = { ...updatePermissions, isDefault: null }
+        // Override __typename at this step because it comes in as `UpdatedTeamPayload`,
+        // but the selectedTeam in the cache should always be type `Team`
+        const updatedTeam = {
+          ...updatePermissions,
+          isDefault: null,
+          __typename: 'Team',
+        }
 
         cache.writeQuery({
           query: GET_SELECTED_TEAM,

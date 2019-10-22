@@ -5,10 +5,10 @@ import { UnderlinedTabs } from '../../../../../../../components/Tabs'
 import RegionalBreakdownTabContent from './RegionalBreakdownTabContent'
 import AccountsTabContent from './AccountsTabContent'
 import SubmitButton from './SubmitButton'
-// import TreatmentPlansTabContent from './TreatmentPlansTabContent'
+import TreatmentPlansTabContent from './TreatmentPlansTabContent'
 
 const TABS_DATA = [
-  // 'Treatment Plans',
+  'Treatment Plans',
   'Accounts',
   'Regional Breakdown',
 ]
@@ -35,18 +35,26 @@ const ModalContent = ({
   const [state, setState] = useState(enabledResources)
 
   const {
-    // treatmentPlans,
+    treatmentPlans,
     accounts,
     // regionalBreakdown,
   } = state
 
   const {
-    // treatmentPlans,
+    treatmentPlans: baseTreatmentPlans,
     accounts: baseAccounts,
     // regionalBreakdown,
   } = resources
 
-  const setStagedAccounts = accounts => setState({ accounts })
+  // must manually merge state to achieve old merge behavior
+  // see: https://reactjs.org/docs/hooks-faq.html#should-i-use-one-or-many-state-variables
+  const setStagedAccounts = accounts => {
+    setState(prevState => ({ ...prevState, accounts }))
+  }
+
+  const setStagedTreatmentPlans = treatmentPlans => {
+    setState(prevState => ({ ...prevState, treatmentPlans }))
+  }
 
   // TODO: Deprecate managing resources on the node itself in favor
   // of managing resources on the team level.
@@ -73,10 +81,11 @@ const ModalContent = ({
       </div>
 
       <UnderlinedTabs tabsData={TABS_DATA}>
-        {/* <TreatmentPlansTabContent
+        <TreatmentPlansTabContent
+          baseTreatmentPlans={baseTreatmentPlans}
           treatmentPlans={treatmentPlans}
-          setTreatmentPlans={setTreatmentPlans}
-        /> */}
+          setStagedTreatmentPlans={setStagedTreatmentPlans}
+        />
         <AccountsTabContent
           baseAccounts={baseAccounts}
           accounts={accounts}
