@@ -87,15 +87,17 @@ const sendSingleEmail = async ({ email, templateDetails, data, nunjucksEnv }) =>
   }
 }
 
-const filterUserAlert = ({ clientTeams, organizationType, userId }) => {
+const filterUserAlert = ({ clientTeams, organizationType, userId, year, month }) => {
   const filteredAlerts = clientTeams.reduce((acc, teamObj) => {
     const { pathwaysAlerts: pathwaysTeamAlerts } = teamObj.resources
     const teamUsersById = _.keyBy(teamObj.users, '_id')
-    
     if (!teamUsersById[userId]) return acc 
      
     pathwaysTeamAlerts.forEach(alert => {
-      const { _id, organizationType: orgType } = alert
+      const { _id, organizationType: orgType, alertDate } = alert
+      const [alertYear, alertMonth] = alertDate.split('-')
+      
+      if (!(alertYear === year && alertMonth === month)) return acc
       if (orgType && orgType !== organizationType) return acc
       if (!acc[_id]) acc[_id] = alert
     })
@@ -128,17 +130,18 @@ const filterUserAlert = ({ clientTeams, organizationType, userId }) => {
 
 const emailAlerts = async (
   parent,
-  { input: {templateType} },
+  { input: { templateType, date }},
   { pulseDevDb },
 ) => {
   const templateDetails = TEMPLATE_MAP[templateType]
   const nunjucksEnv = nunjucks.configure('src')
-
+  
   let clientsWithAlerts = await pulseDevDb.collection('temp.teams').find({ _id: 'meta'}).toArray()
   delete clientsWithAlerts[0]._id // remove the _id
 
   const failedEmails = []
   const emailsList = []
+  const [year, month] = date.split('-')
 
   for (const clientArr of Object.entries(clientsWithAlerts[0])){
     let [clientName, clientUsers] = clientArr
@@ -156,7 +159,7 @@ const emailAlerts = async (
     for (const user of clientUsers){
       const { _id, email } = user
       emailsList.push(email)
-      const filteredData = filterUserAlert({ clientTeams, organizationType: PATHWAYS_ORG_TYPE, userId: _id })
+      const filteredData = filterUserAlert({ clientTeams, organizationType: PATHWAYS_ORG_TYPE, userId: _id, year, month })
       const data = { ...utils, data: filteredData }
 
       const status = await sendSingleEmail({ email, templateDetails, data, nunjucksEnv }) 
