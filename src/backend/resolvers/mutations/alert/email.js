@@ -18,7 +18,10 @@ const TEMPLATE_MAP = {
   }
 }
 
-const FROM_EMAIL = 'alerts@pulsedigital.io'
+const FROM_EMAIL = {
+  email: 'alerts@pulse-tools.com',
+  name: 'Pulse Alerts'
+}
 
 const PATHWAYS_ORG_TYPE = 'Pathways'
 

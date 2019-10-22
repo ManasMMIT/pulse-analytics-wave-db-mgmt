@@ -53,7 +53,7 @@
   />
   <mj-class
     name='header-content'
-    padding='32px 0'
+    padding='32px 0 22px 0'
   />
   <mj-class
     name='header-content-text'
@@ -69,7 +69,7 @@
     line-height='21px'
     color='#0668D9'
     padding='4px 10px'
-    text-transform='capitalize'
+    text-transform='none'
   />
   <mj-class
     name='footer'
@@ -82,7 +82,7 @@
   />
   <mj-class
     name='body-content'
-    padding='0 16px 25px 16px'
+    padding='0 16px 16px 16px'
   />
   <mj-class
     name='body-section-date'
@@ -106,12 +106,18 @@
   <mj-class
     name='organization-header'
     background-color='#DBE9FA'
-    border-radius='10px 10px 0 0'
+    border-radius='4px 4px 0 0'
+    padding='16px 0'
+  />
+  <mj-class
+    name='organization-header-col'
+    vertical-align='middle'
+    width='50%'
   />
   <mj-class 
     name='organization-header-text'
-    padding='0'
-    align='center'
+    padding-left='16px'
+    align='left'
     font-size='20px'
     line-height='27px'
     color='#0668D9'
@@ -119,8 +125,8 @@
   />
   <mj-class
     name='view-account-link'
-    align='center'
-    padding='4px 2px 0 2px'
+    align='right'
+    padding-right='16px'
     font-size='14px'
     font-style='italic'
     line-height='18px'
@@ -132,15 +138,16 @@
   <mj-class
     name='alert-item-category-text'
     align='left'
-    padding = '0 16px' 
+    padding='8px 16px' 
     font-size='16px'
-    line-height='48px'
+    line-height='24px'
     container-background-color='#F0F6FC'
     color='#0E2539'
     font-weight='700'
   />
   <mj-class
     name='alert-item-details'
+    padding='12px 0'
     background-color='#FFFFFF'
     color='#0E2539'
     border-left='1px solid #DBE9FA'
@@ -178,8 +185,20 @@
     name='bottom-button'
     padding='7px 0 32px 0'
   />
+  <mj-class
+    name='disclaimer-text'
+    padding='32px 0 0 0'
+    align='center'
+    text-transform='uppercase'
+    color='rgba(14,37,57,0.8)'
+  />
 </mj-attributes>
 <mj-style inline="inline">
+  body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
   .visit-pathways-btn {
     border-radius: 4px;
     padding: 12px;
@@ -198,6 +217,9 @@
   }
   .footer-email a {
     color: #FFFFFF;
+  }
+  .gmail-col-fix .mj-column-per-50 {
+    width: 50% !important
   }
 </mj-style>
 <mj-style>

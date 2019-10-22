@@ -7,9 +7,8 @@
     <mj-section mj-class='header'>
       <mj-column>
         <mj-image
-          height='48px'
           width='350px'
-          src='https://res.cloudinary.com/pulsedatatools/image/upload/c_scale,q_100,w_500/v1534519813/system/logo/pulse-logo-full-white.png'
+          src='https://res.cloudinary.com/pulsedatatools/image/upload/c_scale,q_100,w_1440/v1534519813/system/logo/pulse-logo-full-white.png'
         />
         <mj-text mj-class='header-subject' font-weight='600'>
           PATHWAYS UPDATE
@@ -24,10 +23,15 @@
       <mj-section mj-class='default-background no-padding header-content'>
         <mj-column mj-class='no-padding'>
           <mj-text mj-class='header-content-text'>
-            Welcome to your {{ utils.getDate.month() }} {{ utils.getDate.year() }} Pathways update. View the latest Pathways changes in the email below 
-            or visit the Pathways tool to view more in-depth data.
+            Welcome to your {{ utils.getDate.month() }} {{ utils.getDate.year() }} 3rd Party Pathways update, 
+            prepared by The Dedham Group. View the latest Pathways changes in the email below or visit the Pathways 
+            Tool for a summary of key changes in the past 30, 60, or 90 days within the Overview page. 
+            Please go to the Pathways Tool for more in-depth information.
           </mj-text>
           {% include "./partials/shared/visitPathwaysBtn.mjml" %}
+          <mj-text mj-class='disclaimer-text'>
+            For Internal Use Only. Distribution of this email is prohibited.
+          </mj-text>
         </mj-column>
       </mj-section>
       <!-- Organization Sections -->
@@ -38,6 +42,9 @@
       <mj-section mj-class='default-background bottom-button'>
         <mj-column>
           {% include "./partials/shared/visitPathwaysBtn.mjml" %}
+          <mj-text mj-class='disclaimer-text'>
+            For Internal Use Only. Distribution of this email is prohibited.
+          </mj-text>
         </mj-column>
       </mj-section>
     {% else %}
