@@ -1,5 +1,4 @@
 const { ObjectId } = require('mongodb')
-const { PAYER_TOOL_ID } = require('./../../../../global-tool-ids')
 
 const deletePayerOrganization = async (
   parent,
@@ -14,8 +13,8 @@ const deletePayerOrganization = async (
     .updateOne(
       { _id },
       {
-        $pull: {
-          toolIds: PAYER_TOOL_ID,
+        $set: {
+          toolIds: [],
         }
       }
     )

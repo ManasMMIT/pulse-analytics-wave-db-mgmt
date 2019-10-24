@@ -10,6 +10,7 @@ const createApmAccount = async (
     .collection('organizations')
     .insertOne({
       ...input,
+      type: 'Alternative Payment Model',
       toolIds: [APM_TOOL_ID],
     })
 

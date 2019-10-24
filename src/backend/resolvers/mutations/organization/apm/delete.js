@@ -1,5 +1,4 @@
 const { ObjectId } = require('mongodb')
-const { APM_TOOL_ID } = require('./../../../../global-tool-ids')
 
 const deleteApmOrganization = async (
   parent,
@@ -14,8 +13,8 @@ const deleteApmOrganization = async (
     .updateOne(
       { _id },
       {
-        $pull: {
-          toolIds: APM_TOOL_ID,
+        $set: {
+          toolIds: [],
         }
       }
     )

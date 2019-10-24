@@ -1,4 +1,7 @@
-const { PAYER_TOOL_ID } = require('./../../../../global-tool-ids')
+const {
+  PAYER_TOOL_ID,
+  MSA_TOOL_ID,
+} = require('./../../../../global-tool-ids')
 
 const createPayerAccount = async (
   parent,
@@ -10,7 +13,8 @@ const createPayerAccount = async (
     .collection('organizations')
     .insertOne({
       ...input,
-      toolIds: [PAYER_TOOL_ID],
+      type: 'Payer',
+      toolIds: [PAYER_TOOL_ID, MSA_TOOL_ID],
     })
 
   return ops[0]

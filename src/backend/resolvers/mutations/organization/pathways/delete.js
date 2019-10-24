@@ -1,5 +1,4 @@
 const { ObjectId } = require('mongodb')
-const { PATHWAYS_TOOL_ID } = require('./../../../../global-tool-ids')
 
 const deletePathwaysOrganization = async (
   parent,
@@ -14,8 +13,8 @@ const deletePathwaysOrganization = async (
     .updateOne(
       { _id },
       {
-        $pull: {
-          toolIds: PATHWAYS_TOOL_ID,
+        $set: {
+          toolIds: [],
         }
       }
     )

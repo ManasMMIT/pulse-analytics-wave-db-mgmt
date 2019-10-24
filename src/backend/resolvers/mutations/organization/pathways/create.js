@@ -10,6 +10,7 @@ const createPathwaysAccount = async (
     .collection('organizations')
     .insertOne({
       ...input,
+      type: 'Pathways',
       toolIds: [PATHWAYS_TOOL_ID],
     })
 
