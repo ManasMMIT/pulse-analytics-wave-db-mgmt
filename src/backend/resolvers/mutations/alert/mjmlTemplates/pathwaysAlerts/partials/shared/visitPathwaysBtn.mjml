@@ -1,10 +1,7 @@
-<mj-text align='center'>
-  <a
-    class='visit-pathways-btn'
-    href='https://pulse-tools.com/pathways/overview/pathways'
-  >
-    <span>
-      Visit Pathways Tool
-    </span>
-  </a>
-</mj-text>
+<mj-button
+  mj-class='visit-tool-btn'
+  css-class='styled-button'
+  href='https://pulse-tools.com/pathways/overview/pathways'
+>
+  Visit Pathways Tool
+</mj-button>

@@ -34,7 +34,7 @@
   <!-- START: Shared component styles -->
   <mj-class
     name='section-divider'
-    padding='10px 0'
+    padding='0'
     border-color='#DFE9F3'
     border-width='1px'
   />
@@ -42,6 +42,11 @@
   <mj-class
     name='header'
     background-color='#0668D9'
+    padding='24px 0'
+  />
+  <mj-class
+    name='header-image'
+    padding='0 16px'
   />
   <mj-class 
     name='header-subject'
@@ -49,35 +54,44 @@
     font-size='16px'
     line-height='24px'
     color='#FFFFFF'
-    padding='0px'
+    padding='8px 0 0 0'
   />
   <mj-class
     name='header-content'
-    padding='32px 0 22px 0'
+    padding='32px 0 32px 0'
   />
   <mj-class
     name='header-content-text'
     padding='0 16px 32px 16px'
     font-size='16px'
     line-height='24px'
-    letter-spacing='-0.13px'
+    letter-spacing='-0.4px'
     color='rgba(14,37,57,0.8)'
+  />
+  <mj-class
+    name='header-navbar'
+    padding='32px 0 16px 0'
   />
   <mj-class
     name='header-navbar-link'
     font-size='14px'
     line-height='21px'
     color='#0668D9'
-    padding='4px 10px'
+    padding='0 10px'
     text-transform='none'
   />
   <mj-class
     name='footer'
     background-color='#0E2539'
+    padding='0 16px 16px 16px'
   />
   <mj-class
     name='footer-text'
     align='center'
+    padding='16px 0 0 0'
+    font-size='10px'
+    line-height='15px'
+    letter-spacing='-0.1px'
     color='#FFFFFF'
   />
   <mj-class
@@ -89,15 +103,17 @@
     font-size='12px'
     font-weight='600'
     line-height='18px'
-    padding='0px 16px'
+    letter-spacing='-0.4px'
+    padding='0 16px'
   />
   <mj-class
     name='body-section-title'
-    font-size='24px'
+    font-size='20px'
     font-weight='700'
-    line-height='33px'
+    line-height='30px'
+    letter-spacing='-0.4px'
     color='#0E2539'
-    padding='0px 16px'
+    padding='0 16px 16px 16px'
   />
   <mj-class
     name='organization-section'
@@ -106,30 +122,36 @@
   <mj-class
     name='organization-header'
     background-color='#DBE9FA'
-    border-radius='4px 4px 0 0'
     padding='16px 0'
   />
   <mj-class
     name='organization-header-col'
     vertical-align='middle'
     width='50%'
+    padding='0 16px'
   />
   <mj-class 
     name='organization-header-text'
-    padding-left='16px'
     align='left'
-    font-size='20px'
-    line-height='27px'
+    font-size='16px'
+    line-height='24px'
+    letter-spacing='-0.4px'
     color='#0668D9'
     font-weight='700'
   />
   <mj-class
-    name='view-account-link'
-    align='right'
-    padding-right='16px'
-    font-size='14px'
-    font-style='italic'
+    name='organization-header-subtext'
+    align='left'
+    font-size='12px'
     line-height='18px'
+    letter-spacing='-0.3px'
+    color='#0668D9'
+  />
+  <mj-class
+    name='visit-account-btn'
+    align='right'
+    inner-padding='8px 12px'
+    font-size='12px'
   />
   <mj-class
     name='alert-item-category'
@@ -138,27 +160,29 @@
   <mj-class
     name='alert-item-category-text'
     align='left'
-    padding='8px 16px' 
-    font-size='16px'
-    line-height='24px'
+    padding='16px 16px' 
+    font-size='14px'
+    line-height='21px'
+    letter-spacing='-0.3px'
     container-background-color='#F0F6FC'
-    color='#0E2539'
+    color='#0668D9'
     font-weight='700'
   />
   <mj-class
     name='alert-item-details'
-    padding='12px 0'
     background-color='#FFFFFF'
     color='#0E2539'
     border-left='1px solid #DBE9FA'
     border-right='1px solid #DBE9FA'
+    padding='16px 32px'
   />
   <mj-class
     name='alert-item-row'
-    padding='0 32px'
     align='left'
+    padding='0'
     font-size='14px'
     line-height='21px'
+    letter-spacing='-0.3px'
     color='#0E2539'
   />
   <mj-class
@@ -171,7 +195,7 @@
   />
   <mj-class
     name='alert-bottom-divider'
-    padding='0 32px'
+    padding='0 16px'
     background-color='#FFFFFF'
     border-left='1px solid #DBE9FA'
     border-right='1px solid #DBE9FA'
@@ -179,11 +203,11 @@
   <mj-class
     name='navbar-bullet'
     color='rgba(14,37,57, 0.3)'
-    padding='4px 0'
+    padding='0'
   />
   <mj-class
     name='bottom-button'
-    padding='7px 0 32px 0'
+    padding='16px 0 32px 0'
   />
   <mj-class
     name='disclaimer-text'
@@ -192,20 +216,22 @@
     text-transform='uppercase'
     color='rgba(14,37,57,0.8)'
   />
+  <mj-class
+    name='visit-tool-btn'
+    padding='0'
+    inner-padding='16px 20px'
+    border-radius='4px'
+    background-color='#0668D9'
+    color='#FFFFFF'
+    font-weight='700'
+    text-decoration='none'
+  />
 </mj-attributes>
 <mj-style inline="inline">
   body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
-  }
-  .visit-pathways-btn {
-    border-radius: 4px;
-    padding: 12px;
-    background-color: #0668D9;
-    color: #FFFFFF;
-    font-weight: 700;
-    text-decoration: none;
   }
   .section-navbar-link a {
     font-size: 14px;
@@ -218,14 +244,30 @@
   .footer-email a {
     color: #FFFFFF;
   }
-  .gmail-col-fix .mj-column-per-50 {
-    width: 50% !important
-  }
 </mj-style>
 <mj-style>
-  @media (max-width: 480px) {
+  .styled-button a:hover {
+    background-color: #3786e0 !important;
+    transition: background-color 250ms ease !important;
+  }
+  .styled-navbar:hover {
+    text-decoration: underline !important;
+  }
+  @media (max-width: 600px) {
     .on-page-link {
       display: none !important;
-    } 
+    }
+    .body-section-date {
+      padding-top: 16px !important;
+    }
+    .multi-col-break {
+      width: 100% !important;
+    }
+    .multi-col-break td {
+      text-align: left !important;
+    }
+    .breakpoint-padding {
+      padding-bottom: 12px;
+    }
   }
 </mj-style>

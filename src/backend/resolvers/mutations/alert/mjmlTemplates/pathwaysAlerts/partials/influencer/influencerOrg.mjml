@@ -1,20 +1,21 @@
 <mj-wrapper mj-class='default-background body-content organization-section'>
-  <mj-section mj-class='organization-header' css-class='gmail-col-fix'>
-    <mj-column mj-class='no-padding organization-header-col'>
-      <mj-text mj-class='no-padding organization-header-text'>
-        Influencer Changes
-      </mj-text>
-    </mj-column>
-    <mj-column mj-class='no-padding organization-header-col'>
-      <mj-text mj-class='no-padding view-account-link'>
-        <a
+  <mj-section mj-class='organization-header'>
+    <mj-group>
+      <mj-column mj-class='no-padding organization-header-col' css-class='multi-col-break breakpoint-padding'>
+        <mj-text mj-class='no-padding organization-header-text'>
+          Influencer Changes
+        </mj-text>
+      </mj-column>
+      <mj-column mj-class='no-padding organization-header-col' css-class='multi-col-break'>
+        <mj-button
+          mj-class='visit-tool-btn visit-account-btn'
+          css-class='styled-button'
           href='https://pulse-tools.com/pathways/accounts/pathways/{{ orgSlugs[orgName] }}/influencers'
-          style='color: #0668D9;'
         >
           View on Tool
-        </a>
-      </mj-text>
-    </mj-column>
+        </mj-button>
+      </mj-column>
+    </mj-group>
   </mj-section>
   {% for item in influencerAlerts %}
     {% include "./influencerAlert.mjml" %}

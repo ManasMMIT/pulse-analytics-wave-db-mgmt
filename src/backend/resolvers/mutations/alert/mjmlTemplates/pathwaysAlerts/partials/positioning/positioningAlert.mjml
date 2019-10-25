@@ -1,10 +1,7 @@
-<mj-section mj-class='alert-item-details {% if lastIndication and loop.last %}alert-item-last{% endif %}'>
-  <mj-column>
+<mj-section mj-class='no-padding alert-item-details {% if lastIndication and loop.last %}alert-item-last{% endif %}'>
+  <mj-column mj-class='no-padding'>
     <mj-text mj-class='alert-item-row bold-text'>
       {{ item.regimen }}
-    </mj-text>
-    <mj-text mj-class='alert-item-row'>
-      {{ item.alertDescription }}
     </mj-text>
   </mj-column>
 </mj-section>

@@ -9,7 +9,8 @@ const TEMPLATE_MAP = {
   pathwaysAlerts: {
     templatePath: 'backend/resolvers/mutations/alert/mjmlTemplates/pathwaysAlerts/index.mjml',
     emailSubject: 'Pathways Latest Changes',
-    textEmail: "It looks like your email client can't display our formatted email.\n\nTo see the latest pathways changes for the previous month, please visit www.pulse-tools.com/pathways/overview/pathways."
+    textEmail: "It looks like your email client can't display our formatted email.\n\nTo see the latest pathways changes for the previous month, please visit www.pulse-tools.com/pathways/overview/pathways.",
+    categories: ['alerts', 'pathwaysMonthlyEmail']
   },
   test: {
     templatePath: 'backend/resolvers/mutations/alert/mjmlTemplates/pathwaysAlerts/index.mjml',
@@ -26,7 +27,7 @@ const FROM_EMAIL = {
 const PATHWAYS_ORG_TYPE = 'Pathways'
 
 const mjmlOptions = {
-  beautify: true,
+  minify: true,
 }
 
 const sendSingleEmail = async ({ email, templateDetails, data, nunjucksEnv }) => {
@@ -43,6 +44,7 @@ const sendSingleEmail = async ({ email, templateDetails, data, nunjucksEnv }) =>
     templatePath,
     emailSubject,
     textEmail,
+    categories,
   } = templateDetails
 
   try {
@@ -55,7 +57,8 @@ const sendSingleEmail = async ({ email, templateDetails, data, nunjucksEnv }) =>
       from: FROM_EMAIL,
       subject: emailSubject,
       text: textEmail,
-      html: htmlString
+      html: htmlString,
+      categories,
     }
 
     const sgResponse = await sgMail.send(sgData)
@@ -160,7 +163,7 @@ const emailAlerts = async (
       const { _id, email } = user
       emailsList.push(email)
       const filteredData = filterUserAlert({ clientTeams, organizationType: PATHWAYS_ORG_TYPE, userId: _id, year, month })
-      const data = { ...utils, data: filteredData }
+      const data = { ...utils, data: filteredData, emailDate: { month, year } }
 
       const status = await sendSingleEmail({ email, templateDetails, data, nunjucksEnv }) 
       if (status) failedEmails.push(status)

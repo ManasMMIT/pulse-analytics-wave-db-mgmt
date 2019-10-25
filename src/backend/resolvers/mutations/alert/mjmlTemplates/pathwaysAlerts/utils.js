@@ -1,8 +1,24 @@
 module.exports =  {
   utils: {
-    getDate: {
-      month: () => (new Date()).toLocaleString('default', { month: 'long' }),
-      year: () => (new Date()).getFullYear()
+    getMonth: month => {
+      const months = [
+        'January',
+        'February',
+        'March',
+        'April',
+        'May',
+        'June',
+        'July',
+        'August',
+        'September',
+        'October',
+        'November',
+        'December'
+      ]
+      const monthInt = typeof month === 'string' ? parseInt(month) : month
+      const idx = monthInt - 1
+
+      return months[idx]
     },
     getOrgSlugs: data => Object.entries(data).reduce((acc, org) => {
       const [orgName, orgData] = org
