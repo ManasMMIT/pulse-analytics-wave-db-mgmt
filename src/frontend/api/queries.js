@@ -402,3 +402,15 @@ export const GET_NEW_TREATMENT_PLANS = gql`
     newTreatmentPlans(data: $data)
   }
 `
+
+export const GET_EMAIL_USERS = gql`
+  query getAllEmailUsers {
+    emailUsers {
+      client
+      username
+      email
+      isPulseTest
+      isTdgTest
+    }
+  }
+`

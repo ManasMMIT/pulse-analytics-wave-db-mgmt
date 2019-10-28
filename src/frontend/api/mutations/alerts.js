@@ -5,3 +5,15 @@ export const EMAIL_ALERTS = gql`
     emailAlerts(input: $input)
   }
 `
+
+export const CREATE_EMAIL_USERS = gql`
+  mutation CreateEmailUsers($input: CreateEmailUsersInput!) {
+    createEmailUsers(input: $input)
+  }
+`
+
+export const DELETE_EMAIL_USERS = gql`
+  mutation DeleteEmailUsers($input: DeleteEmailUsersInput!) {
+    deleteEmailUsers(input: $input)
+  }
+`

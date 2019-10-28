@@ -84,6 +84,8 @@ import {
 
 import {
   EMAIL_ALERTS,
+  CREATE_EMAIL_USERS,
+  DELETE_EMAIL_USERS,
 } from './alerts'
 
 import {
@@ -156,6 +158,8 @@ export {
   UPLOAD_COLLECTION,
 
   EMAIL_ALERTS,
+  CREATE_EMAIL_USERS,
+  DELETE_EMAIL_USERS,
   
   BULK_CREATE_TREATMENT_PLAN,
 }

@@ -19,6 +19,7 @@ const queries = gql`
     qualityOfAccessScores: [QualityOfAccessScore]
     collections(type: String): [String]
     newTreatmentPlans(data: JSON): JSON
+    emailUsers: [EmailUser]
   }
 
   type Node {
@@ -118,6 +119,14 @@ const queries = gql`
     type: String
     organization: String
     organizationTiny: String
+  }
+
+  type EmailUser {
+    client: String!
+    username: String!
+    email: String
+    isPulseTest: Boolean
+    isTdgTest: Boolean
   }
 `
 

@@ -10,7 +10,7 @@ import { EMAIL_ALERTS } from '../api/mutations'
 
 const ButtonsWrapper = styled.section({
   display: 'flex',
-  justifyContent:' space-evenly',
+  justifyContent: 'space-evenly',
 })
 
 const CodeSnippet = styled.code({
@@ -36,32 +36,51 @@ const EmailAlerts = () => {
         input: {
           templateType,
           date,
-        }
-      }
+        },
+      },
     })
   }
-   
+
   return (
     <Card title={'Pathways Email'}>
-      <h2 style={{ marginBlockStart: 0 }}>Follow instructions to send pathways email:</h2>
+      <h2 style={{ marginBlockStart: 0 }}>
+        Follow instructions to send pathways email:
+      </h2>
       <section>
         <ol>
           <ListItem>
-            Run <CodeSnippet>node ./prepEmailAlertsData</CodeSnippet> in wave-db-mgmt
+            Run <CodeSnippet>node ./prepEmailAlertsData</CodeSnippet> in
+            wave-db-mgmt
           </ListItem>
           <ListItem>
-            Verify the appropriate emails are in the <CodeSnippet>temp.users</CodeSnippet> collection
-            <br/>
-              <a href='https://dedhamgroup.atlassian.net/wiki/spaces/POL/pages/697237509/Delphi+email+service'>See docs.</a>
+            Verify the appropriate emails are in the{' '}
+            <CodeSnippet>temp.users</CodeSnippet> collection
+            <br />
+            <a href="https://dedhamgroup.atlassian.net/wiki/spaces/POL/pages/697237509/Delphi+email+service">
+              See docs.
+            </a>
           </ListItem>
           <ListItem>
-            Filter alerts by month:  <input type="month" value={date} onChange={e => setDate(e.target.value)} /> 
+            Filter alerts by month:  
+            <input
+              type="month"
+              value={date}
+              onChange={e => setDate(e.target.value)}
+            />
+             
           </ListItem>
         </ol>
       </section>
       <ButtonsWrapper>
-        <button onClick={() => handleSubmit('test')}>Send Internal Test Email</button>
-        <button onClick={() => handleSubmit('pathwaysAlerts')}>Send Pathways Email</button>
+        <button onClick={() => handleSubmit('isPulseTest')}>
+          Send Pulse Test Email
+        </button>
+        <button onClick={() => handleSubmit('isTdgTest')}>
+          Send TDG Test Email
+        </button>
+        <button onClick={() => handleSubmit('pathwaysAlerts')}>
+          Send Pathways Email
+        </button>
       </ButtonsWrapper>
     </Card>
   )

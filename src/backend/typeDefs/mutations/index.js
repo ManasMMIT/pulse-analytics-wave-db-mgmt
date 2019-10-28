@@ -64,6 +64,8 @@ const mutationType = gql`
     uploadCollection(input: UploadCollectionInput!): JSON
 
     emailAlerts(input: EmailAlertInput!): JSON
+    createEmailUsers(input: CreateEmailUsersInput!): JSON
+    deleteEmailUsers(input: DeleteEmailUsersInput!): JSON
 
     bulkCreateTreatmentPlans(input: BulkCreateTreatmentPlansInput!): JSON
   }
