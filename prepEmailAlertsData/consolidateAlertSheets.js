@@ -30,12 +30,17 @@ const consolidateAlertSheets = async ({ pulseDevDb, mongoConnection }) => {
   // we use the aggregation pipeline to filter pathwaysHistoricalProviderAdoption
   // by the most recently uploaded documents e.g. (year: 2019, quarter: 2)
   const [
+    pathwaysKeyEvents,
     pathwaysInfluencers,
     providers,
     protocols,
     payerLives,
     pathwaysHistoricalProviderAdoption,
   ] = await Promise.all([
+    pulseDevDb
+      .collection('pathwaysKeyEvents')
+      .find({ alertDate: { $exists: true } })
+      .toArray(),
     pulseDevDb
       .collection('pathwaysInfluencers')
       .find({ alertDate: { $exists: true } })
@@ -64,6 +69,7 @@ const consolidateAlertSheets = async ({ pulseDevDb, mongoConnection }) => {
   )
 
   const aggregatedCollections = [
+    { data: pathwaysKeyEvents, type: 'Key Event', permission: ['account'] },
     { data: pathwaysInfluencers, type: 'Influencer', permission: ['account', 'indication'] },
     { data: providers, type: 'Provider', permission: ['account'] },
     { data: protocols, type: 'Positioning', permission: ['account', 'indication', 'regimen'] },

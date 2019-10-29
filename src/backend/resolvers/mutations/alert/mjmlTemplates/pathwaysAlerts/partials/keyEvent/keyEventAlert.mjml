@@ -1,0 +1,14 @@
+<mj-section mj-class='alert-item-details {% if loop.last %}alert-item-last{% endif %}'>
+  <mj-column>
+    <mj-text mj-class='alert-item-row'>
+      {{ item.alertDescription }}
+    </mj-text>
+  </mj-column>
+</mj-section>
+{% if loop.last != true %}
+  <mj-section mj-class='alert-bottom-divider'>
+    <mj-column mj-class='no-padding'>
+        <mj-divider mj-class='section-divider no-padding' />
+    </mj-column>
+  </mj-section>
+{% endif %}

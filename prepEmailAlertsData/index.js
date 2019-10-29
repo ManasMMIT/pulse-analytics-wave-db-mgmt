@@ -8,8 +8,8 @@ const filterTeamAlertsByPermissions = require('./filterTeamAlertsByPermissions')
 /*
   * * PLAN OF ATTACK * *
   STEP 1:
-    Consolidate all of the alerts from `providers`, `protocols` and `pathwaysInfluencers`
-    sheet into the `alerts` collection
+    Consolidate all of the alerts from `pathwaysKeyEvents, `providers`, `protocols`, `payerLives`
+    and `pathwaysInfluencers` sheet into the `alerts` collection
 
   STEP 2:
     Fetch permissions from auth0 to update pathways permissions for celgene teams

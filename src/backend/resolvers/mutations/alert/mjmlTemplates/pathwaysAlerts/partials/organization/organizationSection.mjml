@@ -2,14 +2,15 @@
 {% include "../shared/sectionNavbar.mjml" %}
 <mj-section mj-class='no-padding default-background'>
   <mj-column mj-class='no-padding'>
-    <mj-text mj-class='body-section-date trans-text' css-class='body-section-date'>
-      {{ emailMonth }} {{ emailYear }}
-    </mj-text>
-    <mj-text mj-class='body-section-title'>
+    <mj-text mj-class='body-section-title' css-class='body-section-title'>
       {{ orgName }}
     </mj-text>
   </mj-column>
 </mj-section>
+{% if orgAlerts.keyEvent %}
+  {% set keyEventAlerts = orgAlerts.keyEvent %}
+  {% include "../keyEvent/keyEventOrg.mjml" %}
+{% endif %}
 {% if orgAlerts.positioning %}
   {% set positioningAlerts = orgAlerts.positioning %}
   {% include "../positioning/positioningOrg.mjml" %}

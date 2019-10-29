@@ -3,13 +3,14 @@ const _ = require('lodash')
 const mjml2html = require('mjml')
 const sgMail = require('@sendgrid/mail')
 const nunjucks = require('nunjucks')
+const format = require('date-fns/format')
 const utils = require('./mjmlTemplates/pathwaysAlerts/utils')
 
 const TEMPLATE_MAP = {
   pathwaysAlerts: {
     templatePath:
       'backend/resolvers/mutations/alert/mjmlTemplates/pathwaysAlerts/index.mjml',
-    emailSubject: 'Pathways Latest Changes',
+    emailSubject: 'TDG 3rd Party Pathways Updates',
     textEmail: "It looks like your email client can't display our formatted email.\n\nTo see the latest pathways changes for the previous month, please visit www.pulse-tools.com/pathways/overview/pathways.",
     categories: ['alerts', 'pathwaysMonthlyEmail']
   },
@@ -32,6 +33,7 @@ const sendSingleEmail = async ({
   data,
   nunjucksEnv,
   clientDescription,
+  date,
 }) => {
   const apiKey = process.env.SENDGRID_API_KEY
   sgMail.setApiKey(apiKey)
@@ -48,6 +50,9 @@ const sendSingleEmail = async ({
     categories,
   } = templateDetails
 
+  const displayDate = format( new Date(`${ date }-15`), 'MMM yyy') // Need to add a day to always return the correct month
+  const formattedSubject = `${ emailSubject } ${ displayDate } - ${ clientDescription }`
+
   try {
     const mjmlString = compileTemplate({ templatePath, data })
     const htmlOutput = mjml2html(mjmlString, mjmlOptions)
@@ -56,7 +61,7 @@ const sendSingleEmail = async ({
     const sgData = {
       to: email,
       from: FROM_EMAIL,
-      subject: emailSubject,
+      subject: formattedSubject,
       text: textEmail,
       html: htmlString,
       categories,
@@ -96,8 +101,7 @@ const filterUserAlert = ({
   clientTeams,
   organizationType,
   userId,
-  year,
-  month,
+  emailDate: { year, month }
 }) => {
   let validUser = true
   const filteredAlerts = clientTeams.reduce((acc, teamObj) => {
@@ -131,7 +135,7 @@ const filterUserAlert = ({
   const formattedAlerts = d3
     .nest()
     .key(d => d.organization)
-    .key(d => d.superAlertType.toLowerCase())
+    .key(d => _.camelCase(d.superAlertType))
     .sortValues(dateSort)
     .rollup(arr => {
       const { superAlertType } = arr[0]
@@ -165,7 +169,9 @@ const emailAlerts = async (
 
   const failedEmails = []
   const emailsList = []
+
   const [year, month] = date.split('-')
+  const emailDate = { year, month }
 
   for (const clientArr of Object.entries(clientsWithAlerts[0])) {
     const [clientName, clientUsers] = clientArr
@@ -187,8 +193,19 @@ const emailAlerts = async (
     for (const user of users) {
       const { _id, email } = user
       emailsList.push(email)
-      const filteredData = filterUserAlert({ clientTeams, organizationType: PATHWAYS_ORG_TYPE, userId: _id, year, month })
-      const data = { ...utils, data: filteredData, emailDate: { month, year } }
+
+      const filteredData = filterUserAlert({
+        clientTeams,
+        organizationType: PATHWAYS_ORG_TYPE,
+        userId: _id,
+        emailDate,
+      })
+
+      const data = { 
+        ...utils,
+        data: filteredData,
+        emailDate,
+      }
 
       if (filteredData) {
         const status = await sendSingleEmail({
@@ -197,6 +214,7 @@ const emailAlerts = async (
           data,
           nunjucksEnv,
           clientDescription,
+          date,
         })
         if (status) failedEmails.push(status)
       }

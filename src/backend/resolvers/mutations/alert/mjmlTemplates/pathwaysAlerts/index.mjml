@@ -12,6 +12,7 @@
         <mj-image
           mj-class='header-image'
           width='350px'
+          height='48px'
           src='https://res.cloudinary.com/pulsedatatools/image/upload/c_scale,q_100,w_1440/v1534519813/system/logo/pulse-logo-full-white.png'
         />
         <mj-text mj-class='header-subject' font-weight='600'>

@@ -99,14 +99,6 @@
     padding='0 16px 16px 16px'
   />
   <mj-class
-    name='body-section-date'
-    font-size='12px'
-    font-weight='600'
-    line-height='18px'
-    letter-spacing='-0.4px'
-    padding='0 16px'
-  />
-  <mj-class
     name='body-section-title'
     font-size='20px'
     font-weight='700'
@@ -195,7 +187,7 @@
   />
   <mj-class
     name='alert-bottom-divider'
-    padding='0 16px'
+    padding='0 32px'
     background-color='#FFFFFF'
     border-left='1px solid #DBE9FA'
     border-right='1px solid #DBE9FA'
@@ -257,7 +249,7 @@
     .on-page-link {
       display: none !important;
     }
-    .body-section-date {
+    .body-section-title {
       padding-top: 16px !important;
     }
     .multi-col-break {
