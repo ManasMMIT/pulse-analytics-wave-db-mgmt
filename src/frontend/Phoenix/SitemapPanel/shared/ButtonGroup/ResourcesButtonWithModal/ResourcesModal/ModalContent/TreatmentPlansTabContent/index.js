@@ -1,1 +1,1 @@
-export { default } from './TreatmentPlansTabContentContainer'
+export { default } from './TreatmentPlansTabContent'

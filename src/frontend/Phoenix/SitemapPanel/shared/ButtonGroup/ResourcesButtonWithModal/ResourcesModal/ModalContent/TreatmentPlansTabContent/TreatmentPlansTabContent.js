@@ -1,60 +1,73 @@
-import React from 'react'
-import Switch from '@material-ui/core/Switch'
+import React, { useState } from 'react'
+import _ from 'lodash'
+
+import IndicationsPanel from './IndicationsPanel'
+import RegimensPanel from './RegimensPanel'
 
 const TreatmentPlansTabContent = ({
-  enableIndication,
-  disableIndication,
-  enableRegimen,
-  disableRegimen,
   baseTreatmentPlans,
-  enabledTreatmentPlansHash,
+  treatmentPlans,
+  setStagedTreatmentPlans,
 }) => {
-  const content = baseTreatmentPlans.map(ind => (
-    <div key={ind._id} style={{ display: 'flex', borderBottom: '1px solid black' }}>
-      <div style={{ flex: 3  }}>
-        <span style={{ fontWeight: 700 }}>{ind.name}</span>
-        <Switch
-          checked={Boolean(enabledTreatmentPlansHash[ind._id])}
-          color="primary"
-          value={ind._id}
-          onChange={e => {
-            e.target.checked ? enableIndication(ind) : disableIndication(ind)
-          }}
-        />
-      </div>
-      <div style={{ flex: 1 }}></div>
-      <div style={{ flex: 3 }}>
-        {
-          ind.regimens.map(reg => {
-            const checked = Boolean(
-              enabledTreatmentPlansHash[ind._id]
-                && enabledTreatmentPlansHash[ind._id][reg._id]
-            )
+  const [selectedIndicationId, selectIndication] = useState(
+    (treatmentPlans[0] && treatmentPlans[0]._id)
+      || baseTreatmentPlans[0]._id
+  )
 
-            return (
-              <div key={reg._id} >
-                <span>{reg.name}</span>
-                <Switch
-                  checked={checked}
-                  color="primary"
-                  value={reg._id}
-                  onChange={e => {
-                    e.target.checked
-                      ? enableRegimen(ind, reg)
-                      : disableRegimen(ind, reg)
-                  }}
-                />
-              </div>
-            )
-          })
-        }
-      </div>
-    </div>
-  ))
+  const enabledTreatmentPlansHash = _.mapValues(
+    _.keyBy(treatmentPlans, '_id'),
+    ({ regimens }) => _.keyBy(regimens, '_id')
+  )
+
+  // separate base data into enabled tps from disabled tps
+  let [enabledTreatmentPlans, disabledTreatmentPlans] = _.partition(
+    baseTreatmentPlans,
+    ({ _id }) => enabledTreatmentPlansHash[_id]
+  )
+
+  // need to clone otherwise partition results holds ref to baseTreatmentPlans
+  enabledTreatmentPlans = _.cloneDeep(enabledTreatmentPlans)
+
+  // sort indications top-level in enabledTreatmentPlans
+  enabledTreatmentPlans = _.sortBy(enabledTreatmentPlans, [
+    ({ _id }) => treatmentPlans.findIndex(({ _id: indId }) => indId === _id)
+  ])
+
+  // filter + sort the regimens slice within each indObj in enabledTreatmentPlans
+  enabledTreatmentPlans.forEach(indObj => {
+    // filter regimens options down to what's in the hash
+    indObj.regimens = indObj.regimens.filter(({ _id }) => {
+      return enabledTreatmentPlansHash[indObj._id][_id]
+    })
+
+    // sort regimens options to match team's ordering
+    const indObjFromTeam = treatmentPlans.find(({ _id }) => _id === indObj._id)
+    const regimensFromTeam = indObjFromTeam.regimens
+
+    indObj.regimens = _.sortBy(indObj.regimens, [
+      ({ _id }) => regimensFromTeam.findIndex(({ _id: regId }) => regId === _id)
+    ])
+  })
 
   return (
-    <div style={{ maxHeight: 600, overflow: 'auto' }}>
-      {content}
+    <div style={{ display: 'flex' }}>
+      <IndicationsPanel
+        selectedIndicationId={selectedIndicationId}
+        selectIndication={selectIndication}
+        enabledTreatmentPlans={enabledTreatmentPlans}
+        disabledTreatmentPlans={disabledTreatmentPlans}
+        setStagedTreatmentPlans={setStagedTreatmentPlans}
+      />
+
+      <div style={{ flex: 1 }} />
+
+      <RegimensPanel
+        selectedIndicationId={selectedIndicationId}
+        baseTreatmentPlans={baseTreatmentPlans}
+        setStagedTreatmentPlans={setStagedTreatmentPlans}
+        enabledTreatmentPlansHash={enabledTreatmentPlansHash}
+        enabledTreatmentPlans={enabledTreatmentPlans}
+      />
     </div>
   )
 }

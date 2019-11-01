@@ -6,6 +6,7 @@ import RegionalBreakdownTabContent from './RegionalBreakdownTabContent'
 import AccountsTabContent from './AccountsTabContent'
 import SubmitButton from './SubmitButton'
 import TreatmentPlansTabContent from './TreatmentPlansTabContent'
+import trimTreatmentPlansToIds from './trim-treatment-plans-to-ids'
 
 const TABS_DATA = [
   'Treatment Plans',
@@ -53,6 +54,7 @@ const ModalContent = ({
   }
 
   const setStagedTreatmentPlans = treatmentPlans => {
+    treatmentPlans = trimTreatmentPlansToIds(treatmentPlans)
     setState(prevState => ({ ...prevState, treatmentPlans }))
   }
 

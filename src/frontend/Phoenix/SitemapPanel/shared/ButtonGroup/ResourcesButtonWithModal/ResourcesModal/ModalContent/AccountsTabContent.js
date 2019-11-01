@@ -10,7 +10,7 @@ const AccountsTabContent = ({
   const enabledAccountsById = _.keyBy(accounts, '_id')
 
   const enableAccount = account => {
-    const accountsPlusNewAccount = accounts.concat(account)
+    const accountsPlusNewAccount = accounts.concat({ _id: account._id })
     setStagedAccounts(accountsPlusNewAccount)
   }
 
