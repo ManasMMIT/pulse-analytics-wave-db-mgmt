@@ -28,14 +28,26 @@ const pushOps = {
     const session = mongoClient.startSession()
 
     await session.withTransaction(async () => {
-      const usersSitemapsDev = await pulseDevDb.collection('users.sitemaps')
-        .find({}, { session }).toArray()
+      const [
+        usersSitemapsDev,
+        usersNodesResourcesDev,
+      ] = await Promise.all([
+        pulseDevDb.collection('users.sitemaps')
+          .find({}, { session }).toArray(),
+        pulseDevDb.collection('users.nodes.resources')
+          .find({}, { session }).toArray(),
+        pulseProdDb.collection('users.sitemaps')
+          .deleteMany({}, { session }),
+        pulseProdDb.collection('users.nodes.resources')
+          .deleteMany({}, { session })
+      ])
 
-      await pulseProdDb.collection('users.sitemaps')
-        .deleteMany({}, { session })
-
-      await pulseProdDb.collection('users.sitemaps')
-        .insertMany(usersSitemapsDev, { session })
+      await Promise.all([
+        pulseProdDb.collection('users.sitemaps')
+          .insertMany(usersSitemapsDev, { session }),
+        pulseProdDb.collection('users.nodes.resources')
+          .insertMany(usersNodesResourcesDev, { session })
+      ])
     })
 
     return 'Sitemap push to prod successful'

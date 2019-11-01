@@ -1,9 +1,13 @@
+const objectifyResourcesIds = require('./utils/objectifyResourcesIds')
+
 const updatePermissions = async (
   parent,
   { input: { teamId, nodeId, updatedResources } },
   { mongoClient, coreRoles },
   info
 ) => {
+  objectifyResourcesIds(updatedResources)
+
   const session = mongoClient.startSession()
 
   let result

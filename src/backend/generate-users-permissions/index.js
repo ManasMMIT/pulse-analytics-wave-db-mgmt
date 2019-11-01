@@ -1,8 +1,8 @@
 /* eslint-disable no-loop-func */
-const { ObjectId } = require('mongodb')
 const _ = require('lodash')
+const generateUserPerms = require('./generateUserPerms')
 
-const generateSitemaps = async ({
+const generateUsersPermissions = async({
   mongoClient,
   pulseCoreDb,
   pulseDevDb,
@@ -17,103 +17,49 @@ const generateSitemaps = async ({
       .deleteMany({}, { session })
 
     console.log('users.nodes.resources successfully dropped')
-    
+
     const users = await coreUsers.find().toArray()
+    const masterLists = await Promise.all(
+      ['organizations', 'indications', 'regimens'].map(collectionName => {
+        return pulseCoreDb.collection(collectionName).find().toArray()
+      })
+    )
+
+    const masterListItemsById = _.keyBy(
+      _.flatten(masterLists),
+      '_id',
+    )
+
     const usersNodesResourcesPromises = users.map(async user => {
       const userTeams = await coreRoles.find(
         { 'users._id': user._id },
         { session }
       ).toArray()
 
-      const userTeamsWithResources = userTeams.filter(({ resources }) => resources)
+      const userTeamsWithResources = userTeams
+        .filter(({ resources }) => resources)
 
-      const allTeamsResources = _.flatten(userTeamsWithResources.map(({ resources }) => resources))
+      const teamsResources = _.flatten(userTeamsWithResources.map(({ resources }) => resources))
 
-      const allTeamsResourcesGroupedByNodeId = _.groupBy(allTeamsResources, 'nodeId')
+      const teamResourcesByNodeId = _.groupBy(teamsResources, 'nodeId')
 
-      const resources = []
-      for (let nodeId in allTeamsResourcesGroupedByNodeId) {
-        const allNodeResources = allTeamsResourcesGroupedByNodeId[nodeId]
+      const userPerms = generateUserPerms({
+        userId: user._id,
+        teamResourcesByNodeId,
+        masterListItemsById,
+      })
 
-        let nodeResources = {
-          nodeId: allNodeResources[0].nodeId,
-          accounts: [],
-          regionalBreakdown: [],
-          treatmentPlans: [],
-        }
-
-        for (let j = 0; j < allNodeResources.length; j++) {
-          const singleNodeResource = allNodeResources[j]
-          
-          const { accounts = [], regionalBreakdown = [], treatmentPlans = [] } = singleNodeResource
-
-          let accountIds = accounts.map(({ _id }) => ObjectId(_id))
-          // ! COMBINE ACCOUNTS
-          let masterListAccountObjects = await pulseCoreDb.collection('organizations')
-            .find({
-              _id: {
-                $in: accountIds
-              }
-            }).toArray()
-
-          masterListAccountObjects = masterListAccountObjects.map(({ _id, slug }) => ({ _id, slug }))
-
-          const combinedAccountIds = nodeResources.accounts.concat(masterListAccountObjects)
-          nodeResources.accounts = _.uniqBy(combinedAccountIds, '_id')
-
-          // ! "COMBINE" REG BRKDWN
-          nodeResources.regionalBreakdown = regionalBreakdown
-
-          // ! COMBINE TREATMENT PLANS
-
-          for (let k = 0; k < treatmentPlans.length; k++) {
-            const treatmentPlan = treatmentPlans[k];
-
-            const { _id: newId, regimens: newRegimens } = treatmentPlan
-
-            const { name } = await pulseCoreDb.collection('indications').findOne({ _id: ObjectId(newId) })
-
-            const regimenIds = newRegimens.map(({ _id }) => ObjectId(_id))
-            let masterListRegimens = await pulseCoreDb.collection('regimens')
-              .find({
-                _id: {
-                  $in: regimenIds
-                }
-              }).toArray()
-
-            masterListRegimens = masterListRegimens.map(({ _id, name }) => ({ _id: ObjectId(_id), name }))
-
-            const existingIndication = nodeResources.treatmentPlans
-              .find(({ _id: existingId }) => existingId.equals(ObjectId(newId)))
-
-            if (existingIndication) {
-              const combinedRegimens = existingIndication.regimens.concat(masterListRegimens)
-              existingIndication.regimens = _.uniqBy(combinedRegimens, '_id')
-            } else {
-              nodeResources.treatmentPlans.push({ _id: ObjectId(newId), name, regimens: masterListRegimens})
-            }
-          }
-
-        }
-
-        resources.push(nodeResources)
-      }
-
-      return { _id: user._id, resources }
+      return userPerms
     })
 
     const docs = await Promise.all(usersNodesResourcesPromises)
 
-    await pulseDevDb.collection('users.nodes.resources')
-      .insertMany(
-        docs,
-        { session },
-      )
+    await pulseDevDb
+      .collection('users.nodes.resources')
+      .insertMany(docs, { session })
 
-    console.log('User Resources have been persisted to dev')
+    console.log('users.nodes.resources successfully rebuilt')
   })
-
-  return true
 }
 
-module.exports = generateSitemaps
+module.exports = generateUsersPermissions
