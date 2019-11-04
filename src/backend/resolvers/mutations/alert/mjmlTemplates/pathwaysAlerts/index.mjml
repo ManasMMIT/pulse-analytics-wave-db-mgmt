@@ -61,13 +61,13 @@
       <mj-column mj-class='no-padding'>
         <mj-text mj-class='footer-text' css-class='footer-email'>
           <span>
-            You are receiving this email because you have an account with Pulse Digital. 
+            You are receiving this email because you have an account with <b>Pulse Analytics</b>. 
             If you are receiving this email in error or have any questions, please contact us at
             <a href="mailto:support@pulse-tools.com">support@pulse-tools.com</a>.
           </span>
         </mj-text>
         <mj-text mj-class='footer-text'>
-          &copy; {{ emailYear }} Pulse Digital
+          &copy; {{ emailYear }} Pulse Analytics
         </mj-text>
       </mj-column>
     </mj-section>
