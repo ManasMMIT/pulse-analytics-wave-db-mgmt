@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useMutation } from '@apollo/react-hooks'
 import styled from '@emotion/styled'
 import format from 'date-fns/format'
+import { darken, lighten, transparentize } from 'polished'
 
 import Spinner from '../Phoenix/shared/Spinner'
 import Card from '../components/Card'
@@ -13,15 +14,44 @@ const ButtonsWrapper = styled.section({
   justifyContent: 'space-evenly',
 })
 
+const primaryButtonColor = '#0668D9'
+const secondaryButtonColor = '#CDD8E6'
+const blackColor = '#0A2E4D'
+
+const Button = styled.button({
+  border: 'none',
+  borderRadius: 4,
+  cursor: 'pointer',
+  fontSize: 14,
+  fontWeight: 'bold',
+  padding: '12px 16px',
+  transition: '250ms ease',
+  ':active': {
+    boxShadow: `0 1px 16px 1px ${transparentize(0.9, blackColor)}`,
+  },
+  ':focus': {
+    outline: 'none',
+    boxShadow: `0 1px 16px 1px ${transparentize(0.9, blackColor)}`
+  }
+}, props => ({
+  background: props.secondary ? secondaryButtonColor : primaryButtonColor,
+  color: props.secondary ? transparentize(0.5, blackColor) : '#FFF',
+  ':hover': {
+    background: props.secondary ? darken(0.1, secondaryButtonColor) : lighten(0.1, primaryButtonColor),
+    boxShadow: `0 4px 16px 1px ${transparentize(0.75, blackColor)}`
+  },
+}))
+
 const CodeSnippet = styled.code({
-  background: 'gray',
+  background: '#EDF1F5',
+  fontSize: 13,
   padding: 4,
   borderRadius: 4,
-  color: 'white',
 })
 
 const ListItem = styled.li({
   paddingBottom: 24,
+  fontSize: 16,
 })
 
 const EmailAlerts = () => {
@@ -43,9 +73,9 @@ const EmailAlerts = () => {
 
   return (
     <Card title={'Pathways Email'}>
-      <h2 style={{ marginBlockStart: 0 }}>
-        Follow instructions to send pathways email:
-      </h2>
+      <h4 style={{ marginBlockStart: 0 }}>
+        Follow these instructions to send the pathways monthly email:
+      </h4>
       <section>
         <ol>
           <ListItem>
@@ -54,11 +84,11 @@ const EmailAlerts = () => {
           </ListItem>
           <ListItem>
             Verify the appropriate emails are in the{' '}
-            <CodeSnippet>temp.users</CodeSnippet> collection
-            <br />
-            <a href="https://dedhamgroup.atlassian.net/wiki/spaces/POL/pages/697237509/Delphi+email+service">
-              See docs.
+            <CodeSnippet>temp.users</CodeSnippet> collection.{' '}
+            <a href="https://dedhamgroup.atlassian.net/wiki/spaces/POL/pages/705593837/Delphi+Email+Service" target="_new">
+              See docs
             </a>
+            {' '} for more information.
           </ListItem>
           <ListItem>
             Filter alerts by month:  
@@ -72,15 +102,15 @@ const EmailAlerts = () => {
         </ol>
       </section>
       <ButtonsWrapper>
-        <button onClick={() => handleSubmit('isPulseTest')}>
+        <Button onClick={() => handleSubmit('isPulseTest')} secondary>
           Send Pulse Test Email
-        </button>
-        <button onClick={() => handleSubmit('isTdgTest')}>
+        </Button>
+        <Button onClick={() => handleSubmit('isTdgTest')} secondary>
           Send TDG Test Email
-        </button>
-        <button onClick={() => handleSubmit('pathwaysAlerts')}>
+        </Button>
+        <Button onClick={() => handleSubmit('pathwaysAlerts')}>
           Send Pathways Email
-        </button>
+        </Button>
       </ButtonsWrapper>
     </Card>
   )

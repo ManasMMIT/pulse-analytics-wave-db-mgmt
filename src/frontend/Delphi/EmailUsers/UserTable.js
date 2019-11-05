@@ -10,10 +10,9 @@ import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
 
 const Wrapper = styled.div({
+  borderRadius: 4,
+  background: '#F6F7F8',
   width: '70%',
-  height: 200,
-  overflow: 'auto',
-  border: '1px solid gray',
 })
 
 const TABLE_CONFIG = [
@@ -62,15 +61,15 @@ const AllUsersView = ({ config, data }) => {
   return tableRows
 }
 
-const UserTable = ({ 
-  data, 
-  removeUser, 
+const UserTable = ({
+  data,
+  removeUser,
   style,
   isTabViewUsers
 }) => {
   let clonedConfig = _.clone(TABLE_CONFIG)
   let content
-  
+
   if (isTabViewUsers){
     clonedConfig.unshift({ title: 'Client', key: 'client' })
     content = <AllUsersView config={clonedConfig} data={data} />
@@ -81,7 +80,7 @@ const UserTable = ({
 
   return (
     <Wrapper style={style}>
-      <Table>
+      <Table size="small">
         <TableHead>
           <TableRow>
             {clonedConfig.map(config => (

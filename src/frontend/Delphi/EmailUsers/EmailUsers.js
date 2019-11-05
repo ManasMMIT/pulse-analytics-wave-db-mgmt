@@ -42,7 +42,7 @@ const EmailUsers = () => {
       {isTabViewUsers ? (
         <UserTable
           data={data.emailUsers}
-          style={{ marginTop: 12, width: '100%', height: 254 }}
+          style={{ marginTop: 12, width: '100%' }}
           isTabViewUsers={isTabViewUsers}
         />
       ) : (
