@@ -32,7 +32,7 @@ const sendSingleEmail = async ({
   templateDetails,
   data,
   nunjucksEnv,
-  clientDescription,
+  description,
   date,
 }) => {
   const apiKey = process.env.SENDGRID_API_KEY
@@ -49,9 +49,9 @@ const sendSingleEmail = async ({
     textEmail,
     categories,
   } = templateDetails
-
+  
   const displayDate = format( new Date(`${ date }-15`), 'MMM yyy') // Need to add a day to always return the correct month
-  const formattedSubject = `${ emailSubject } ${ displayDate } - ${ clientDescription }`
+  const formattedSubject = `${ emailSubject } ${ displayDate } - ${ description }`
 
   try {
     const mjmlString = compileTemplate({ templatePath, data })
@@ -103,15 +103,8 @@ const filterUserAlert = ({
   userId,
   emailDate: { year, month }
 }) => {
-  let validUser = true
   const filteredAlerts = clientTeams.reduce((acc, teamObj) => {
     const { pathwaysAlerts: pathwaysTeamAlerts } = teamObj.resources
-    const teamUsersById = _.keyBy(teamObj.users, '_id')
-
-    if (!teamUsersById[userId] && !_.isEmpty(teamUsersById)) {
-      validUser = false
-      return acc
-    }
 
     pathwaysTeamAlerts.forEach(alert => {
       const { _id, organizationType: orgType, alertDate } = alert
@@ -149,9 +142,9 @@ const filterUserAlert = ({
     })
     .object(sortedAlerts)
 
-  return validUser ? formattedAlerts : null
+  return formattedAlerts
 }
-
+ 
 const emailAlerts = async (
   parent,
   { input: { templateType, date } },
@@ -166,7 +159,7 @@ const emailAlerts = async (
     .find({ _id: 'meta' })
     .toArray()
   delete clientsWithAlerts[0]._id // remove the _id
-
+  
   const failedEmails = []
   const emailsList = []
 
@@ -176,7 +169,7 @@ const emailAlerts = async (
   for (const clientArr of Object.entries(clientsWithAlerts[0])) {
     const [clientName, clientUsers] = clientArr
     let users = clientUsers.users
-
+    const { description } = clientUsers
     const clientTeams = await pulseDevDb
       .collection('temp.teams')
       .find({
@@ -188,8 +181,6 @@ const emailAlerts = async (
       users = users.filter(user => user[templateType])
     }
     
-    const clientDescription = clientTeams[0].client.description // full name of client
-
     for (const user of users) {
       const { _id, email } = user
       emailsList.push(email)
@@ -213,7 +204,7 @@ const emailAlerts = async (
           templateDetails,
           data,
           nunjucksEnv,
-          clientDescription,
+          description,
           date,
         })
         if (status) failedEmails.push(status)
