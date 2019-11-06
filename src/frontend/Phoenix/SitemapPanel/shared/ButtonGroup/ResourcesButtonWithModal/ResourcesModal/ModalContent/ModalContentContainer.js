@@ -11,56 +11,6 @@ import {
   GET_ORGANIZATIONS,
 } from '../../../../../../../api/queries'
 
-const ContainerForToolNodes = ({
-  nodeId,
-  nodeType,
-  handlers,
-  selectedTeamNode,
-  enabledResources,
-  teamId,
-  closeModal,
-}) => {
-  const {
-    data: indData,
-    loading: indLoading,
-    error: indError,
-  } = useQuery(GET_SOURCE_INDICATIONS)
-
-  const {
-    data: orgData,
-    loading: orgLoading,
-    error: orgError,
-  } = useQuery(
-    GET_ORGANIZATIONS,
-    { variables: { toolId: nodeId } },
-  )
-
-  if (indLoading || orgLoading) return 'Loading master list options...'
-  if (indError || orgError) return 'ERROR loading master list options...'
-
-  const { indications: sourceTreatmentPlans } = indData
-  const { organizations: sourceAccounts } = orgData
-
-  const sourceResources = {
-    treatmentPlans: sourceTreatmentPlans,
-    accounts: sourceAccounts,
-    // regionalBreakdown: sourceRegionalBreakdown,
-  }
-
-  return (
-    <ModalContent
-      nodeId={nodeId}
-      nodeType={nodeType}
-      handlers={handlers}
-      selectedTeamNode={selectedTeamNode}
-      enabledResources={enabledResources}
-      resources={sourceResources}
-      teamId={teamId}
-      closeModal={closeModal}
-    />
-  )
-}
-
 const ModalContentContainer = ({
   nodeId,
   nodeType,
@@ -68,16 +18,44 @@ const ModalContentContainer = ({
   selectedTeamNode,
   closeModal,
 }) => {
-  const { data, loading, error } = useQuery(GET_SELECTED_TEAM)
+  const {
+    data: selectedTeamData,
+    loading: teamLoading,
+    error: teamError,
+   } = useQuery(GET_SELECTED_TEAM)
 
-  if (loading) return null
-  if (error) return 'There was an error'
+  const {
+    data: indData,
+    loading: indLoading,
+    error: indError,
+  } = useQuery(GET_SOURCE_INDICATIONS)
+
+  // ! HACK: if it's not a tool, get ALL the organizations
+  // ! because you need them to hydrate the parent resources
+  // TODO: Make a new resolver that traverses upward and finds
+  // the appropriate toolId to filter by
+  let orgsQueryVars = {}
+  if (nodeType === 'tools') {
+    orgsQueryVars = { variables: { toolId: nodeId } }
+  }
+
+  const {
+    data: orgData,
+    loading: orgLoading,
+    error: orgError,
+  } = useQuery(
+    GET_ORGANIZATIONS,
+    orgsQueryVars,
+  )
+
+  if (teamLoading || indLoading || orgLoading) return 'Loading...'
+  if (teamError || indError || orgError) return 'Error!'
 
   // STEP 1: Isolate the resources object corresponding to
   // the selected team and its selected node.
   // If it doesn't exist or only partially exists, initialize it
   // and its parts as needed.
-  let { selectedTeam: { _id: teamId, resources } } = data
+  let { selectedTeam: { _id: teamId, resources } } = selectedTeamData
   if (!resources) resources = []
 
   let enabledResources = resources.find(
@@ -95,16 +73,28 @@ const ModalContentContainer = ({
   // STEP 2: Get all available options for every resource type.
   // If the node is a tool, its resources are compared against master lists.
   // If the node isn't a tool, its resources are compared against its parent's resources.
+  // But the parent's resourced are dehydrated so hydrate them with the master lists.
   // Leave the responsibility for diffing the resources up to the tab content
   // further down the React tree.
+
+  const { indications: sourceTreatmentPlans } = indData
+  const { organizations: sourceAccounts } = orgData
+
   if (nodeType === 'tools') {
+    const sourceResources = {
+      treatmentPlans: sourceTreatmentPlans,
+      accounts: sourceAccounts,
+      // regionalBreakdown: sourceRegionalBreakdown,
+    }
+
     return (
-      <ContainerForToolNodes
+      <ModalContent
         nodeId={nodeId}
         nodeType={nodeType}
         handlers={handlers}
         selectedTeamNode={selectedTeamNode}
         enabledResources={enabledResources}
+        resources={sourceResources}
         teamId={teamId}
         closeModal={closeModal}
       />
@@ -124,6 +114,30 @@ const ModalContentContainer = ({
     { nodeId: parentId, regionalBreakdown: [], treatmentPlans: [], accounts: [] },
     parentResources, // <-- even if this is undefined, _.merge works
   )
+
+  parentResources.treatmentPlans = parentResources.treatmentPlans.map(indObj => {
+    const sourceIndObjCopy = _.cloneDeep(
+      sourceTreatmentPlans.find(({ _id }) => _id === indObj._id)
+    )
+
+    sourceIndObjCopy.regimens = sourceIndObjCopy.regimens.filter(({ _id }) => {
+      return (
+        indObj.regimens
+          && indObj.regimens.length
+          && indObj.regimens.find(({ _id: regimenId }) => regimenId === _id)
+      )
+    })
+
+    return sourceIndObjCopy
+  })
+
+  parentResources.accounts = sourceAccounts.filter(({ _id }) => {
+    return (
+      parentResources.accounts.find(
+        ({ _id: accountId }) => accountId === _id
+      )
+    )
+  })
 
   return (
     <ModalContent

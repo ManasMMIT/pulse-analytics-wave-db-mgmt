@@ -1,7 +1,15 @@
-const organizations = async (parent, { toolId }, { pulseCoreDb }) => {
-  return await pulseCoreDb
+const organizations = (parent, { toolId }, { pulseCoreDb }) => {
+  if (toolId) {
+    return pulseCoreDb
+      .collection('organizations')
+      .find({ toolIds: toolId })
+      .sort({ organization: 1 })
+      .toArray()
+  }
+
+  return pulseCoreDb
     .collection('organizations')
-    .find({ toolIds: toolId })
+    .find()
     .sort({ organization: 1 })
     .toArray()
 }
