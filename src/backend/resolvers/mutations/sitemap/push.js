@@ -4,21 +4,17 @@ const generateUsersPermissions = require('../../../generate-users-permissions')
 const pushOps = {
   pushSitemapToDev: async (parent, args, context, info) => {
   const { mongoClient, pulseCoreDb, pulseDevDb } = context
+    await generateSitemaps({
+      mongoClient,
+      pulseCoreDb,
+      pulseDevDb,
+    })
 
-    await Promise.all(
-      [
-        generateSitemaps({
-          mongoClient,
-          pulseCoreDb,
-          pulseDevDb,
-        }),
-        generateUsersPermissions({
-          mongoClient,
-          pulseCoreDb,
-          pulseDevDb,
-        })
-      ]
-    )
+    await generateUsersPermissions({
+      mongoClient,
+      pulseCoreDb,
+      pulseDevDb,
+    })
 
     return 'Sitemap push to dev successful'
   },
