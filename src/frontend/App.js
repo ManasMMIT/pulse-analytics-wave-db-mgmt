@@ -17,6 +17,12 @@ import Phoenix from './Phoenix'
 import Orion from './Orion'
 import Delphi from './Delphi'
 
+const IconSource = {
+  PHOENIX: 'https://res.cloudinary.com/pulsedatatools/image/upload/v1573136582/polaris/icons/phoenix-1-white.svg',
+  ORION: 'https://res.cloudinary.com/pulsedatatools/image/upload/v1573136582/polaris/icons/orion-1-white.svg',
+  DELPHI: 'https://res.cloudinary.com/pulsedatatools/image/upload/v1573136582/polaris/icons/mercury-1-white.svg'
+}
+
 const client = new ApolloClient({
   uri: '/api/graphql',
   clientState: {
@@ -35,12 +41,21 @@ const sidebarStyle = {
 const linkStyle = {
   color: 'white',
   textDecoration: 'none',
-  padding: '24px 36px',
+  padding: '24px 24px',
+  borderLeft: '4px solid transparent',
+  borderRight: '4px solid transparent',
+  opacity: 0.7,
+}
+
+const iconStyle = {
+ width: 20,
+ height: 'auto',
 }
 
 const activeLinkStyle = borderColor => ({
-  borderLeft: `4px solid ${ transparentize(.3, borderColor) }`,
-  padding: '24px 36px',
+  borderLeft: `4px solid ${ borderColor }`,
+  background: transparentize(0.92, '#FFF'),
+  opacity: 1,
 })
 
 const App = () => {
@@ -52,23 +67,23 @@ const App = () => {
               <NavLink
                 to="/phoenix"
                 style={linkStyle}
-                activeStyle={activeLinkStyle('red')}
+                activeStyle={activeLinkStyle('#FE9B57')}
               >
-                P
+                <img style={iconStyle} src={IconSource.PHOENIX} />
               </NavLink>
               <NavLink
                 to="/orion"
                 style={linkStyle}
-                activeStyle={activeLinkStyle('green')}
+                activeStyle={activeLinkStyle('#38B59A')}
               >
-                O
+                <img style={iconStyle} src={IconSource.ORION} />
               </NavLink>
               <NavLink
                 to="/delphi"
                 style={linkStyle}
-                activeStyle={activeLinkStyle('lightblue')}
+                activeStyle={activeLinkStyle('#30B2DC')}
               >
-                D
+                <img style={iconStyle} src={IconSource.DELPHI} />
               </NavLink>
             </div>
             <Switch>
