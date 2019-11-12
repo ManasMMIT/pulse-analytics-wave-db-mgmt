@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import {
   useQuery,
 } from '@apollo/react-hooks'
@@ -12,17 +11,15 @@ import {
 } from '../../../../api/queries'
 
 const UserFormContainer = ({
-  user: {
-    _id: userId,
-    username,
-    email,
-  },
+  userData,
   selectedTeamId,
   afterSubmitHook,
   mutationDoc,
   clientMutation,
   additionalFormData,
 }) => {
+  const { _id: userId } = userData
+
   const { data, loading, error } = useQuery(
     GET_USER_TEAMS,
     { variables: { userId } }
@@ -30,7 +27,7 @@ const UserFormContainer = ({
 
   if (error) return <div style={{ color: 'red' }}>Error processing request</div>
   if (loading) return <Spinner />
-  
+
   // ! If data doesn't have teams, don't render form
   if (!data.teams) return null
 
@@ -49,9 +46,7 @@ const UserFormContainer = ({
     <UserForm
       mutationDoc={mutationDoc}
       clientMutation={clientMutation}
-      userId={userId}
-      username={username}
-      email={email}
+      userData={userData}
       selectedTeamId={selectedTeamId}
       allTeamsUserIsOn={data.teams}
       afterSubmitHook={afterSubmitHook}
@@ -60,23 +55,8 @@ const UserFormContainer = ({
   )
 }
 
-UserFormContainer.propTypes = {
-  user: PropTypes.object,
-  selectedTeamId: PropTypes.string,
-  allTeamsUserIsOn: PropTypes.array,
-  afterSubmitHook: PropTypes.func,
-  mutationDoc: PropTypes.object,
-  clientMutation: PropTypes.object,
-}
+UserFormContainer.propTypes = UserForm.propTypes
 
-UserFormContainer.defaultProps = {
-  user: {
-    _id: null, // undefined somehow fetches all teams
-  },
-  selectedTeamId: null,
-  afterSubmitHook: () => null,
-  mutationDoc: null,
-  clientMutation: null,
-}
+UserFormContainer.defaultProps = UserForm.defaultProps
 
 export default UserFormContainer

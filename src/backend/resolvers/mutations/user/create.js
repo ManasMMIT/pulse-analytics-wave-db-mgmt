@@ -10,6 +10,7 @@ const createUser = async (
       password,
       clientId,
       roles,
+      emailSubscriptions,
     }
   },
   {
@@ -53,8 +54,9 @@ const createUser = async (
       _id: userInAuth0.user_id,
       username,
       email,
+      emailSubscriptions,
       client,
-      schemaVersion: 'v1.1.0'
+      schemaVersion: 'v1.1.1',
     }, { session })
 
     for (const roleId of roles) {
@@ -62,7 +64,12 @@ const createUser = async (
         { _id: roleId },
         {
           $push: {
-            users: { _id: userInAuth0.user_id, username, email }
+            users: {
+              _id: userInAuth0.user_id,
+              username,
+              email,
+              emailSubscriptions,
+            }
           }
         },
         { session }

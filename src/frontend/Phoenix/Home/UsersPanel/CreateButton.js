@@ -18,7 +18,7 @@ const CreateButton = () => {
   if (error) return <div>{error}</div>
 
   const { selectedTeam } = data
-  
+
   return (
     <UserFormButton
       modalTitle="Create User"

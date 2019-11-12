@@ -9,6 +9,7 @@ const deleteUserTypeDefs = gql`
     _id: ID!
     username: String
     email: String
+    emailSubscriptions: [Subscription]
   }
 `
 

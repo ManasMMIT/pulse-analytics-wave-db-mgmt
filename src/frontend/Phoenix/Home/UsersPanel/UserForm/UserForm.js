@@ -1,10 +1,13 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import styled from "@emotion/styled";
+import styled from "@emotion/styled"
 import _ from 'lodash'
 
-import Checkboxes from './Checkboxes'
-import SubmitButton from './SubmitButton';
+import TeamCheckboxes from './TeamCheckboxes'
+import SubmitButton from './SubmitButton'
+import EmailSubscriptions from './EmailSubscriptions'
+import { pathwaysEmailSubscription } from './email-subscription-options'
+import stripTypename from '../../../../Orion/shared/strip-typename'
 
 const UserFormWrapper = styled.div({
   display: 'flex',
@@ -14,6 +17,7 @@ const UserFormWrapper = styled.div({
 
 const Label = styled.label({
   fontWeight: 700,
+  marginTop: 12,
 })
 
 class UserForm extends React.Component {
@@ -23,8 +27,11 @@ class UserForm extends React.Component {
     const {
       selectedTeamId,
       allTeamsUserIsOn,
-      username,
-      email,
+      userData: {
+        username,
+        email,
+        emailSubscriptions,
+      },
     } = props
 
     let checkboxesMap = allTeamsUserIsOn.reduce((acc, { _id }) => {
@@ -37,39 +44,60 @@ class UserForm extends React.Component {
     this.state = {
       username,
       email,
+      emailSubscriptions: emailSubscriptions || [],
       password: '',
       checkboxesMap,
     }
   }
 
-  handleChange = e => {
+  handleTextChange = e => {
+    this.setState({ [e.target.name]: e.currentTarget.value })
+  }
+
+  handleTeamCheckboxesChange = e => {
     const { checkboxesMap } = this.state
 
-    if (e.target.type === 'checkbox') {
-      const newCheckedStatus = !checkboxesMap[e.target.id]
+    const newCheckedStatus = !checkboxesMap[e.target.id]
 
-      this.setState({
-        checkboxesMap: _.merge({}, checkboxesMap, { [e.target.id]: newCheckedStatus })
-      })
+    this.setState({
+      checkboxesMap: _.merge({}, checkboxesMap, { [e.target.id]: newCheckedStatus })
+    })
+  }
+
+  handleEmailSubscriptionsChange = e => {
+    const { emailSubscriptions } = this.state
+
+    const emailSubscriptionsCopy = _.cloneDeep(emailSubscriptions)
+
+    const targetIdx = emailSubscriptionsCopy.findIndex(({ _id }) => {
+      return _id === e.target.id
+    })
+
+    if (targetIdx === -1) {
+      emailSubscriptionsCopy.push(pathwaysEmailSubscription)
     } else {
-      this.setState({ [e.target.name]: e.currentTarget.value })
+      emailSubscriptionsCopy.splice(targetIdx, 1)
     }
+
+    this.setState({ emailSubscriptions: emailSubscriptionsCopy })
   }
 
   render() {
     const {
       username,
       email,
+      emailSubscriptions,
       password,
       checkboxesMap,
     } = this.state
 
     const {
-      userId,
+      userData: { _id: userId },
       afterSubmitHook,
       additionalFormData,
       mutationDoc,
       clientMutation,
+      selectedTeamId,
     } = this.props
 
     // pick out only the checked boxes and get array of ids
@@ -81,6 +109,7 @@ class UserForm extends React.Component {
       email,
       password,
       roles: teamsToPersistOnSubmit,
+      emailSubscriptions: stripTypename(emailSubscriptions),
       ...additionalFormData,
     }
 
@@ -91,7 +120,7 @@ class UserForm extends React.Component {
           type="text"
           name="username"
           value={username}
-          onChange={this.handleChange}
+          onChange={this.handleTextChange}
           autoComplete="off"
         />
 
@@ -100,7 +129,7 @@ class UserForm extends React.Component {
           type="text"
           name="email"
           value={email}
-          onChange={this.handleChange}
+          onChange={this.handleTextChange}
           autoComplete="off"
         />
 
@@ -112,19 +141,28 @@ class UserForm extends React.Component {
           type="password"
           name="password"
           value={password}
-          onChange={this.handleChange}
+          onChange={this.handleTextChange}
           autoComplete="off"
         />
+
         <Label>teams</Label>
-        <Checkboxes
+        <TeamCheckboxes
           checkboxesMap={checkboxesMap}
-          handleChange={this.handleChange}
+          handleChange={this.handleTeamCheckboxesChange}
         />
+
+        <Label>Email Subscriptions</Label>
+        <EmailSubscriptions
+          emailSubscriptions={emailSubscriptions}
+          handleChange={this.handleEmailSubscriptionsChange}
+        />
+
         <SubmitButton
           mutationDoc={mutationDoc}
           afterSubmitHook={afterSubmitHook}
           clientMutation={clientMutation}
           input={submitData}
+          selectedTeamId={selectedTeamId}
         />
       </UserFormWrapper>
     )
@@ -132,23 +170,28 @@ class UserForm extends React.Component {
 }
 
 UserForm.propTypes = {
-  userId: PropTypes.string,
-  username: PropTypes.string,
-  email: PropTypes.string,
+  userData: PropTypes.shape({
+    _id: PropTypes.string,
+    username: PropTypes.string,
+    email: PropTypes.string,
+    emailSubscriptions: PropTypes.arrayOf(PropTypes.object),
+  }),
   selectedTeamId: PropTypes.string,
   allTeamsUserIsOn: PropTypes.array,
   afterSubmitHook: PropTypes.func,
   additionalFormData: PropTypes.object,
+  clientMutation: PropTypes.object,
 }
 
 UserForm.defaultProps = {
-  userId: null,
-  username: '',
-  email: '',
+  userData: {
+    _id: null, // for create user, _id has to be null bc undefined fetches all teams
+  },
   selectedTeamId: null,
   allTeamsUserIsOn: [],
   afterSubmitHook: () => null,
   additionalFormData: {},
+  clientMutation: null,
 }
 
 export default UserForm

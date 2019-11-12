@@ -9,7 +9,8 @@ const updateUser = async (
       username,
       email,
       password,
-      roles
+      roles,
+      emailSubscriptions,
     }
   },
   {
@@ -79,7 +80,7 @@ const updateUser = async (
     // ! rather than { returnNewDocument: true }
     const { value: updatedResult } = await coreUsers.findOneAndUpdate(
       { _id },
-      { $set: { username, email } },
+      { $set: { username, email, emailSubscriptions } },
       { returnOriginal: false, session }
     )
 
@@ -98,7 +99,7 @@ const updateUser = async (
     await coreRoles.updateMany(
       { _id: { $in: incomingRoles } }, // query all incoming roles from edit
       {
-        $push: { users: { _id, username, email } }
+        $push: { users: { _id, username, email, emailSubscriptions } }
       },
       { session }
     )

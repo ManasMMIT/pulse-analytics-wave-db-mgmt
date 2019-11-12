@@ -6,6 +6,10 @@ export const SELECT_USER = gql`
       _id
       username
       email
+      emailSubscriptions {
+        _id
+        type
+      }
     }
   }
 `
@@ -16,6 +20,10 @@ export const CREATE_USER = gql`
       _id
       username
       email
+      emailSubscriptions {
+        _id
+        type
+      }
     }
   }
 `
@@ -26,6 +34,10 @@ export const MANAGE_CREATED_USER = gql`
       _id
       username
       email
+      emailSubscriptions {
+        _id
+        type
+      }
     }
   }
 `
@@ -36,6 +48,10 @@ export const DELETE_USER = gql`
       _id
       username
       email
+      emailSubscriptions {
+        _id
+        type
+      }
     }
   }
 `
@@ -46,6 +62,10 @@ export const MANAGE_DELETED_USER = gql`
       _id
       username
       email
+      emailSubscriptions {
+        _id
+        type
+      }
     }
   }
 `
@@ -56,6 +76,10 @@ export const UPDATE_USER = gql`
       _id
       username
       email
+      emailSubscriptions {
+        _id
+        type
+      }
     }
   }
 `
@@ -66,6 +90,10 @@ export const MANAGE_UPDATED_USER = gql`
       _id
       username
       email
+      emailSubscriptions {
+        _id
+        type
+      }
     }
   }
 `

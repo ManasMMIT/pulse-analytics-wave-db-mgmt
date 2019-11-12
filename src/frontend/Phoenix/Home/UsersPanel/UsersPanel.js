@@ -40,7 +40,7 @@ const buttonGroupCallback = user => {
 
   return (
     <>
-      <UpdateButton user={user} />
+      <UpdateButton userData={user} />
       <DeleteButton userId={user._id} />
     </>
   )

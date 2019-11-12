@@ -57,6 +57,12 @@ const queries = gql`
     _id: String
     username: String
     email: String
+    emailSubscriptions: [Subscription]
+  }
+
+  type Subscription {
+    _id: ID!
+    type: String!
   }
 
   type Indication {

@@ -127,35 +127,29 @@ const userResolvers = {
     return deletedUser
   },
   manageUpdatedUser: async (_, { data: { updateUser } }, { cache, client}) => {
-    const editedUser = {
-      ...updateUser,
-      __typename: 'User', // need to overwrite __typename 'UpdateUserPayload'
-    }
+    const editedUser = updateUser
 
-    const { selectedTeam: { _id: teamId } } = cache.readQuery({ query: GET_SELECTED_TEAM })
-
-    let { users } = cache.readQuery({
-      query: GET_TEAM_USERS,
-      variables: { teamId }, // needed despite @export var in query itself
-    })
-
-    const updateGetTeamUsers = updatedUsers => (
-      client.writeQuery({
-        query: GET_TEAM_USERS,
-        variables: { teamId }, // needed despite @export var in query itself
-        data: { users: updatedUsers },
-      })
-    )
+    const {
+      selectedTeam: { _id: teamId },
+    } = cache.readQuery({ query: GET_SELECTED_TEAM })
 
     // ! https://www.apollographql.com/docs/react/api/react-hoc/#optionsfetchpolicy
     // ! The default fetchPolicy, cache-first, doesn't appear to actually write to the cache post query.
-    // ? network-only does seem to write to the cache
+    // ? network-only does seem to write to the cache so it's being used,
     // ? no-cache also seems to write to the cache,
     // ? although the docs seem to say it doesn't (9/11/19)
 
+    // Refresh the frontend cache for the selected team's users by hitting the backend
+    await client.query({
+      query: GET_TEAM_USERS,
+      variables: { teamId },
+      fetchPolicy: 'network-only',
+    })
+
     /*
-      This network-only fetchPolicy is being used to
-      set the cache after a user is updated, keeping the cache fresh with the latest user's teams. When the modal with the user form is opened again, the form draws on the updated cache.
+      Keep the cache fresh with the target user's latest teams.
+      When the modal with the user form is opened again,
+      the form draws on the updated cache.
     */
     const { data: { teams } } = await client.query({
       query: GET_USER_TEAMS,
@@ -163,22 +157,9 @@ const userResolvers = {
       fetchPolicy: 'network-only',
     })
 
-    if (teams.find(({ _id }) => _id === teamId)) {
-      const targetUserIdx = users.findIndex(({ _id: userId }) => userId === editedUser._id)
-      users[targetUserIdx] = editedUser
-      updateGetTeamUsers(users)
-
-      // if user is part of the currently selected team, there's no need
-      // to reselect the same user (when that user's edit button is clicked
-      // his changed roles, if any, will be fetched
-    } else {
-      users = users.filter(user => user._id !== editedUser._id)
-
-      // if GET_TEAM_USERS is not written to, then the selectUser mutation will use an outdated slice of cache for selecting a default first user.
-      updateGetTeamUsers(users)
-
-      // the user doesn't belong to the selected role anymore; pick the first user
-      // for the selected role
+    // If the user doesn't belong to the selected team anymore,
+    // select the first user
+    if (!teams.find(({ _id }) => _id === teamId)) {
       await client.mutate({ mutation: SELECT_USER })
     }
 

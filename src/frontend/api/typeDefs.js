@@ -12,13 +12,13 @@ const typeDefs = gql`
   }
 
   type Client {
-    _id: String
+    _id: String # why not ID type?
     name: String
     description: String
   }
 
   type Team {
-    _id: String
+    _id: String # why not ID type?
     name: String
     description: String
     isDefault: Boolean
@@ -27,13 +27,19 @@ const typeDefs = gql`
   }
 
   type User {
-    _id: String
+    _id: String # why not ID type?
     username: String
     email: String
+    emailSubscriptions: [Subscription]
+  }
+
+  type Subscription {
+    _id: ID
+    type: String
   }
 
   type Sitemap {
-    _id: String
+    _id: String # why not ID type?
     tools: JSON
     dashboards: JSON
     pages: JSON
@@ -41,7 +47,7 @@ const typeDefs = gql`
   }
 
   input SitemapInput {
-    _id: String
+    _id: String # why not ID type?
     tools: JSON
     dashboards: JSON
     pages: JSON

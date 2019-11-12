@@ -63,6 +63,10 @@ export const GET_TEAM_USERS = gql`
       _id
       username
       email
+      emailSubscriptions {
+        _id
+        type
+      }
     }
     selectedTeam @client {
       _id @export(as: "teamId")

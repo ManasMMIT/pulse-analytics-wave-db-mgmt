@@ -8,12 +8,19 @@ const createUserTypeDefs = gql`
     password: String!
     clientId: String!
     roles: [ID!]!
+    emailSubscriptions: [SubscriptionInput]
+  }
+
+  input SubscriptionInput {
+    _id: ID!
+    type: String!
   }
 
   type CreateUserPayload {
     _id: ID!
     username: String!
     email: String
+    emailSubscriptions: [Subscription]
   }
 `
 

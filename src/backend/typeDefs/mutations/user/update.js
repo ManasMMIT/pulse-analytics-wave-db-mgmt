@@ -7,6 +7,7 @@ const updateUserTypeDefs = gql`
     email: String
     password: String
     roles: [ID!]!
+    emailSubscriptions: [SubscriptionInput]
   }
 
   type UpdateUserPayload {
@@ -14,6 +15,7 @@ const updateUserTypeDefs = gql`
     username: String
     email: String
     password: String
+    emailSubscriptions: [Subscription]
   }
 `
 

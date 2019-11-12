@@ -23,7 +23,7 @@ class Button extends React.Component {
     const { isModalOpen } = this.state
 
     const {
-      user,
+      userData,
       buttonLabel,
       buttonStyle,
       modalTitle,
@@ -50,7 +50,7 @@ class Button extends React.Component {
           show={isModalOpen}
         >
           <UserForm
-            user={user}
+            userData={userData}
             selectedTeamId={selectedTeamId}
             afterSubmitHook={this.closeModal}
             mutationDoc={mutationDoc}

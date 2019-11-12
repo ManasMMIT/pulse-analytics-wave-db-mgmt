@@ -11,7 +11,7 @@ import {
 
 import Spinner from '../../../shared/Spinner'
 
-const Checkboxes = ({
+const TeamCheckboxes = ({
   checkboxesMap,
   handleChange,
 }) => {
@@ -21,7 +21,7 @@ const Checkboxes = ({
   } = useQuery(GET_CLIENT_TEAMS)
 
   if (loading || _.isEmpty(data)) return <Spinner />
-      
+
   return (
     <>
       {
@@ -41,9 +41,9 @@ const Checkboxes = ({
   )
 }
 
-Checkboxes.propTypes = {
+TeamCheckboxes.propTypes = {
   checkboxesMap: PropTypes.object,
   handleChange: PropTypes.func,
 }
 
-export default Checkboxes
+export default TeamCheckboxes

@@ -16,9 +16,9 @@ const editIcon = (
   />
 )
 
-const UpdateButton = ({ user }) => (
+const UpdateButton = ({ userData }) => (
   <UserFormButton
-    user={user}
+    userData={userData}
     modalTitle="Edit User"
     buttonLabel={editIcon}
     buttonStyle={{ border: 'none', background: 'none', color: '#b6b9bc' }}
