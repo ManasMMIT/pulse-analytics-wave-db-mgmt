@@ -27,13 +27,13 @@ const TeamCheckboxes = ({
       {
         data.teams.map(({ _id, name }) => (
           <div key={_id}>
-            <label>{name}</label>
             <input
               type='checkbox'
               id={_id}
               checked={Boolean(checkboxesMap[_id])}
               onChange={handleChange}
             />
+            <label style={{ paddingLeft: 8 }}>{name}</label>
           </div>
         ))
       }

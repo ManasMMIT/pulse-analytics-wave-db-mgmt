@@ -1,14 +1,55 @@
 import React from 'react'
 import Switch from '@material-ui/core/Switch'
+import styled from "@emotion/styled"
+import { transparentize, mix } from 'polished'
 import {
   sortableContainer,
   sortableElement,
   sortableHandle,
 } from 'react-sortable-hoc'
 
+import { Colors } from '../../../../../../../../../utils/pulseStyles'
+
 import '../sortableContainerStyles.css'
 
-const DragHandle = sortableHandle(() => <span>::</span>)
+const ListHeader = styled.div({
+  fontSize: 14,
+  fontWeight: 500,
+  textTransform: 'uppercase',
+  padding: '12px 24px',
+})
+
+const SelectedIndication = styled.span({
+  color: Colors.PRIMARY,
+  textTransform: 'normal',
+
+})
+
+const ActiveRow = styled.div({
+  background: mix(0.8, Colors.WHITE, Colors.GREEN),
+  color: Colors.GREEN,
+  padding: '8px 24px',
+  fontWeight: 600,
+  lineHeight: '18px',
+  fontSize: 10,
+  position: 'sticky',
+  top: 0,
+  zIndex: 5,
+})
+
+const InactiveRow = styled.div({
+  background: mix(0.8, Colors.WHITE, Colors.MEDIUM_GRAY_2),
+  color: Colors.MEDIUM_GRAY_2,
+  padding: '8px 24px',
+  fontWeight: 600,
+  lineHeight: '18px',
+  fontSize: 10,
+  position: 'sticky',
+  top: 0,
+  zIndex: 5,
+})
+
+const DragHandle = sortableHandle(() => <span style={{ paddingRight: 8, opacity: 0.3 }}>::</span>)
 
 const SortableItem = sortableElement(({
   reg,
@@ -18,7 +59,8 @@ const SortableItem = sortableElement(({
     <li
       style={{
         display: 'flex',
-        borderBottom: '1px solid black',
+        borderBottom: `1px solid ${transparentize(0.9, Colors.BLACK)}`,
+        marginBottom: 8,
       }}
     >
       <DragHandle />
@@ -52,9 +94,9 @@ const RegimensPanel = ({
 }) => {
   return (
     <div style={{ flex: 3, maxHeight: 600, overflow: 'auto' }}>
-      <div>Regimens for selected indication: {selectedIndicationName}</div>
+      <ListHeader>Regimens / <SelectedIndication>{selectedIndicationName}</SelectedIndication></ListHeader>
 
-      <div>ACTIVE ({enabledRegimens.length})</div>
+      <ActiveRow>ACTIVE ({enabledRegimens.length})</ActiveRow>
 
       <SortableContainer
         onSortEnd={onSortEnd}
@@ -73,7 +115,7 @@ const RegimensPanel = ({
         }
       </SortableContainer>
 
-      <div>INACTIVE ({disabledRegimens.length})</div>
+      <InactiveRow>INACTIVE ({disabledRegimens.length})</InactiveRow>
       <ul>
         {
           disabledRegimens.map(reg => {
@@ -82,7 +124,8 @@ const RegimensPanel = ({
                 key={reg._id}
                 style={{
                   display: 'flex',
-                  borderBottom: '1px solid black',
+                  borderBottom: `1px solid ${transparentize(0.9, Colors.BLACK)}`,
+                  marginBottom: 8,
                 }}
               >
                 <span>{reg.name}</span>

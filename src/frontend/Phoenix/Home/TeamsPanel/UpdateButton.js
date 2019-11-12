@@ -19,7 +19,8 @@ const editIcon = (
 const buttonStyle = {
   border: 'none',
   background: 'none',
-  color: '#b6b9bc',
+  color: '#0A2E4D',
+  opacity: 0.3,
 }
 
 const UpdateButton = ({

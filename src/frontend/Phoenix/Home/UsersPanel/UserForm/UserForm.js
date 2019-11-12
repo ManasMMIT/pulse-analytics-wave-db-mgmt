@@ -2,22 +2,46 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from "@emotion/styled"
 import _ from 'lodash'
+import { transparentize } from 'polished'
 
 import TeamCheckboxes from './TeamCheckboxes'
 import SubmitButton from './SubmitButton'
 import EmailSubscriptions from './EmailSubscriptions'
 import { pathwaysEmailSubscription } from './email-subscription-options'
 import stripTypename from '../../../../Orion/shared/strip-typename'
+import { Colors } from '../../../../utils/pulseStyles'
 
 const UserFormWrapper = styled.div({
   display: 'flex',
   flexDirection: 'column',
-  width: 300,
+  width: 320,
+})
+
+const InputSection = styled.div({
+  marginBottom: 16,
+  display: 'flex',
+  flexDirection: 'column',
 })
 
 const Label = styled.label({
-  fontWeight: 700,
-  marginTop: 12,
+  fontSize: 12,
+  lineHeight: '22px',
+  fontWeight: 600,
+  textTransform: 'capitalize'
+})
+
+const Input = styled.input({
+  background: Colors.WHITE,
+  border: `1px solid ${transparentize(0.96, Colors.BLACK)}`,
+  borderRadius: 4,
+  padding: '8px 12px',
+  ':hover': {
+    border: `1px solid ${transparentize(0.9, Colors.BLACK)}`,
+  },
+  ':focus': {
+    border: `1px solid ${transparentize(0.1, Colors.PRIMARY)}`,
+    outline: 'none',
+  }
 })
 
 class UserForm extends React.Component {
@@ -115,47 +139,57 @@ class UserForm extends React.Component {
 
     return (
       <UserFormWrapper>
-        <Label>username</Label>
-        <input
-          type="text"
-          name="username"
-          value={username}
-          onChange={this.handleTextChange}
-          autoComplete="off"
-        />
+        <InputSection>
+          <Label>username</Label>
+          <Input
+            type="text"
+            name="username"
+            value={username}
+            onChange={this.handleTextChange}
+            autoComplete="off"
+          />
+        </InputSection>
 
-        <Label>email</Label>
-        <input
-          type="text"
-          name="email"
-          value={email}
-          onChange={this.handleTextChange}
-          autoComplete="off"
-        />
+        <InputSection>
+          <Label>email</Label>
+          <Input
+            type="text"
+            name="email"
+            value={email}
+            onChange={this.handleTextChange}
+            autoComplete="off"
+          />
+        </InputSection>
 
-        <Label>password</Label>
-        <div style={{ fontSize: 10 }}>
-          (if updating user, leave blank to keep unchanged)
-        </div>
-        <input
-          type="password"
-          name="password"
-          value={password}
-          onChange={this.handleTextChange}
-          autoComplete="off"
-        />
+        <InputSection>
+          <Label>password</Label>
+          <div style={{ fontSize: 10 }}>
+            (if updating user, leave blank to keep unchanged)
+          </div>
+          <Input
+            type="password"
+            name="password"
+            value={password}
+            onChange={this.handleTextChange}
+            autoComplete="off"
+          />
+        </InputSection>
 
-        <Label>teams</Label>
-        <TeamCheckboxes
-          checkboxesMap={checkboxesMap}
-          handleChange={this.handleTeamCheckboxesChange}
-        />
+        <InputSection>
+          <Label>teams</Label>
+          <TeamCheckboxes
+            checkboxesMap={checkboxesMap}
+            handleChange={this.handleTeamCheckboxesChange}
+          />
+        </InputSection>
 
-        <Label>Email Subscriptions</Label>
-        <EmailSubscriptions
-          emailSubscriptions={emailSubscriptions}
-          handleChange={this.handleEmailSubscriptionsChange}
-        />
+        <InputSection>
+          <Label>Email Subscriptions</Label>
+          <EmailSubscriptions
+            emailSubscriptions={emailSubscriptions}
+            handleChange={this.handleEmailSubscriptionsChange}
+          />
+        </InputSection>
 
         <SubmitButton
           mutationDoc={mutationDoc}

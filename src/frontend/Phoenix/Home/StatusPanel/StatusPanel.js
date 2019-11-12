@@ -12,6 +12,7 @@ const Wrapper = styled.div({
   display: 'flex',
   alignItems: 'center',
   flexDirection: 'column',
+  maxWidth: 200
 })
 
 const StatusPanel = () => (

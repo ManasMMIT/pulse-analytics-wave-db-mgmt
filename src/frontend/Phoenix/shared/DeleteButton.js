@@ -20,8 +20,9 @@ const modalButtonStyle = {
 const buttonStyle = {
   border: 'none',
   background: 'none',
-  color: '#b6b9bc',
+  color: '#0A2E4D',
   cursor: 'pointer',
+  opacity: 0.3,
 }
 
 const DeleteButton = ({

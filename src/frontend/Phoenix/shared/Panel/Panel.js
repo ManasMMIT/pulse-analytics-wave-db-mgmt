@@ -26,7 +26,7 @@ const Panel = ({
   panelItemConfig,
 }) => {
   const { data, loading, error } = useQuery(fetchAllQueryProps.query)
-  
+
   let panelItems
   if (error) {
     return <div>Error fetching data</div>

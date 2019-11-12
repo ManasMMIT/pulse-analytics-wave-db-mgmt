@@ -1,11 +1,29 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import styled from "@emotion/styled";
 import {
   useMutation,
   useApolloClient,
 } from '@apollo/react-hooks'
+import { lighten } from 'polished'
 
 import Spinner from '../../../shared/Spinner'
+import { Colors } from '../../../../utils/pulseStyles'
+
+const Button = styled.button({
+  background: Colors.PRIMARY,
+  border: 'none',
+  borderRadius: 4,
+  color: Colors.WHITE,
+  cursor: 'pointer',
+  fontSize: 12,
+  fontWeight: 600,
+  padding: '12px 24px',
+  width: 'auto',
+  ':hover': {
+    background: lighten(0.1, Colors.PRIMARY),
+  }
+})
 
 const SubmitButton = ({
   mutationDoc,
@@ -32,15 +50,14 @@ const SubmitButton = ({
   if (error) return <div style={{ color: 'red' }}>Error processing request</div>
 
   return (
-    <button
-      style={{ marginTop: 20 }}
+    <Button
       type="submit"
       onClick={() => handleSubmit({
         variables: { input },
       }).then(afterSubmitHook)}
     >
       Submit
-    </button>
+    </Button>
   )
 }
 

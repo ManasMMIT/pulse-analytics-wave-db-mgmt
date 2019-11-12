@@ -67,7 +67,7 @@ const App = () => {
               <NavLink
                 to="/phoenix"
                 style={linkStyle}
-                activeStyle={activeLinkStyle('#FE9B57')}
+                activeStyle={activeLinkStyle('#FA8969')}
               >
                 <img style={iconStyle} src={IconSource.PHOENIX} />
               </NavLink>

@@ -12,6 +12,15 @@ export const DataColorsPrimary = {
 }
 
 export const Colors = {
+  PRIMARY: '#0668D9',
+  BLACK: '#0A2E4D',
+  WHITE: '#FFFFFF',
+  GREEN: '#22BF6B',
+  RED: '#EE5340',
+  ORANGE: '#FD9651',
+  YELLOW: '#FFDC6C',
+  PURPLE: '#7C5EFA',
+  MEDIUM_GRAY_2: '#A3BBDA',
   AppBackground: '#E8EBEC',
   AdminTeal: '#65B69A',
   Black: '#0E2539',
@@ -89,4 +98,9 @@ export const mediaQueries = {
 
 export const Transitions = {
   Normal: '250ms ease',
+}
+
+export const ZIndexes = {
+  MODAL: 1000,
+  PANEL_HEADER: 100,
 }

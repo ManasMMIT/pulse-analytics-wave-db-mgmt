@@ -1,6 +1,9 @@
 import React from "react";
 import PropTypes from "prop-types";
 import styled from "@emotion/styled";
+import { transparentize } from 'polished'
+
+import { Colors, ZIndexes } from '../utils/pulseStyles'
 
 const Wrapper = styled.div({
   position: 'fixed',
@@ -8,21 +11,23 @@ const Wrapper = styled.div({
   left: 0,
   width: '100%',
   height: '100%',
-  background: 'rgba(0, 0, 0, 0.6)',
-  zIndex: 1,
+  background: transparentize(0.3, Colors.BLACK),
+  zIndex: ZIndexes.MODAL,
   /*
     Since our modal is nested in the DOM, not at the top,
     We need to override styles that might be inherited.
   */
   cursor: 'default',
-  fontWeight: 'normal',
-  color: 'black',
+  fontWeight: 400,
+  color: Colors.BLACK,
 })
 
 const Main = styled.section({
   position: "fixed",
-  background: "white",
-  width: "80%",
+  background: '#F0F6F9',
+  borderRadius: 4,
+  boxShadow: `0 6px 24px 0 ${transparentize(0.7, Colors.BLACK)}`,
+  // width: "80%",
   height: "auto",
   top: "50%",
   left: "50%",
@@ -36,10 +41,13 @@ const Main = styled.section({
 const Header = styled.div({
   display: 'flex',
   justifyContent: 'space-between',
+  marginBottom: 24,
+  textTransform: 'uppercase',
 });
 
 const Title = styled.div({
-  color: 'black',
+  color: Colors.BLACK,
+  fontSize: 14,
   fontWeight: 700,
 });
 

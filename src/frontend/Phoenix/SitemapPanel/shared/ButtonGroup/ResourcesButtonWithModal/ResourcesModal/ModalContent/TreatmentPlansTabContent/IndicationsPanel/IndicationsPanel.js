@@ -1,5 +1,7 @@
 import React from 'react'
 import Switch from '@material-ui/core/Switch'
+import styled from "@emotion/styled"
+import { transparentize, mix } from 'polished'
 import {
   sortableContainer,
   sortableElement,
@@ -8,7 +10,40 @@ import {
 
 import '../sortableContainerStyles.css'
 
-const DragHandle = sortableHandle(() => <span>::</span>)
+import { Colors } from '../../../../../../../../../utils/pulseStyles'
+
+const ListHeader = styled.div({
+  fontSize: 14,
+  fontWeight: 500,
+  textTransform: 'uppercase',
+  padding: '12px 24px',
+})
+
+const ActiveRow = styled.div({
+  background: mix(0.8, Colors.WHITE, Colors.GREEN),
+  color: Colors.GREEN,
+  padding: '8px 24px',
+  fontWeight: 600,
+  lineHeight: '18px',
+  fontSize: 10,
+  position: 'sticky',
+  top: 0,
+  zIndex: 5,
+})
+
+const InactiveRow = styled.div({
+  background: mix(0.8, Colors.WHITE, Colors.MEDIUM_GRAY_2),
+  color: Colors.MEDIUM_GRAY_2,
+  padding: '8px 24px',
+  fontWeight: 600,
+  lineHeight: '18px',
+  fontSize: 10,
+  position: 'sticky',
+  top: 0,
+  zIndex: 5,
+})
+
+const DragHandle = sortableHandle(() => <span style={{ paddingRight: 8, opacity: 0.3 }}>::</span>)
 
 const SortableItem = sortableElement(({
   ind,
@@ -23,8 +58,9 @@ const SortableItem = sortableElement(({
       onClick={() => selectIndication(ind._id)}
       style={{
         display: 'flex',
-        borderBottom: '1px solid black',
-        backgroundColor: isSelected ? 'yellow' : 'transparent',
+        borderBottom: `1px solid ${transparentize(0.9, Colors.BLACK)}`,
+        marginBottom: 8,
+        backgroundColor: isSelected ? transparentize(0.9, Colors.PRIMARY) : 'transparent',
       }}
     >
       <DragHandle />
@@ -59,7 +95,8 @@ const IndicationsPanel = ({
 }) => {
   return (
     <div style={{ flex: 3, maxHeight: 600, overflow: 'auto' }}>
-      <div>ACTIVE ({enabledTreatmentPlans.length})</div>
+    <ListHeader>Indications</ListHeader>
+      <ActiveRow>ACTIVE ({enabledTreatmentPlans.length})</ActiveRow>
       <SortableContainer
         onSortEnd={onSortEnd}
         helperClass="sortableHelper"
@@ -79,7 +116,7 @@ const IndicationsPanel = ({
         }
       </SortableContainer>
 
-      <div>INACTIVE ({disabledTreatmentPlans.length})</div>
+      <InactiveRow>INACTIVE ({disabledTreatmentPlans.length})</InactiveRow>
       <ul>
         {
           disabledTreatmentPlans.map(ind => {
@@ -91,8 +128,9 @@ const IndicationsPanel = ({
                 onClick={() => selectIndication(ind._id)}
                 style={{
                   display: 'flex',
-                  borderBottom: '1px solid black',
-                  backgroundColor: isSelected ? 'yellow' : 'transparent',
+                  borderBottom: `1px solid ${transparentize(0.9, Colors.BLACK)}`,
+                  marginBottom: 8,
+                  backgroundColor: isSelected ? transparentize(0.9, Colors.PRIMARY) : 'transparent',
                 }}
               >
                 <span style={{ fontWeight: 700 }}>{ind.name}</span>

@@ -12,7 +12,6 @@ const EmailSubscriptions = ({
       {
         ALL_EMAIL_SUBSCRIPTIONS.map(({ type, _id }) => (
           <div key={_id}>
-            <label>{type}</label>
             <input
               type='checkbox'
               id={_id}
@@ -23,6 +22,7 @@ const EmailSubscriptions = ({
               )}
               onChange={handleChange}
             />
+            <label style={{ paddingLeft: 8 }}>{type}</label>
           </div>
         ))
       }

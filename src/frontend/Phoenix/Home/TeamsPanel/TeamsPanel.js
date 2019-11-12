@@ -8,6 +8,7 @@ import DeleteButton from './DeleteButton'
 import SitemapButton from '../../shared/SitemapButton'
 
 import { SELECT_TEAM } from '../../../api/mutations'
+import { Colors } from '../../../utils/pulseStyles'
 
 import {
   GET_SELECTED_CLIENT,
@@ -20,16 +21,20 @@ const defaultPanelItemStyle = {
   justifyContent: 'space-between',
   alignItems: 'center',
   cursor: 'pointer',
-  color: '#838c96',
+  color: Colors.BLACK,
+  fontSize: 12,
+  fontWeight: 500,
+  letterSpacing: '0.2px',
+  lineHeight: '22px',
   borderLeft: '4px solid transparent',
-  padding: 24,
+  padding: '12px 24px',
 }
 
 const activePanelItemStyle = {
   cursor: 'default',
   backgroundColor: '#f8fafb',
-  color: '#2a7ad3',
-  borderLeft: '4px solid #1f6cc7',
+  color: Colors.PRIMARY,
+  borderLeft: `4px solid ${Colors.PRIMARY}`,
 }
 
 const buttonGroupCallback = team => {
@@ -57,6 +62,8 @@ const panelItemConfig = {
 
 const headerChildren = <CreateButton />
 
+const panelBackgroundColor = '#edf1f5'
+
 const TeamsPanel = () => {
   const { data, loading, error } = useQuery(GET_SELECTED_CLIENT)
   if (loading) return null
@@ -66,10 +73,11 @@ const TeamsPanel = () => {
 
   return (
     <Panel
-      style={{ backgroundColor: '#edf1f5' }}
+      style={{ backgroundColor: panelBackgroundColor }}
       title={`Teams for ${clientName}`}
       titleStyle={{ color: '#536f8d' }}
       headerChildren={headerChildren}
+      headerContainerStyle={{ backgroundColor: panelBackgroundColor }}
       queryDocs={{
         fetchAllQueryProps: { query: GET_CLIENT_TEAMS },
         fetchSelectedQueryProps: { query: GET_SELECTED_TEAM },

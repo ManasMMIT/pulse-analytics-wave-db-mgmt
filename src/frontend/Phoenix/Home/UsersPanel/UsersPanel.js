@@ -18,42 +18,50 @@ import {
   GET_USER_TEAMS,
 } from '../../../api/queries'
 
+import { Colors } from '../../../utils/pulseStyles'
+
 const defaultPanelItemStyle = {
   display: 'flex',
   justifyContent: 'space-between',
   alignItems: 'center',
   cursor: 'pointer',
-  color: '#838c96',
+  color: Colors.BLACK,
+  fontSize: 12,
+  fontWeight: 500,
+  letterSpacing: '0.2px',
+  lineHeight: '22px',
   borderLeft: '4px solid transparent',
-  padding: 24,
+  padding: '8px 24px',
+  borderBottom: `1px solid ${transparentize(0.92, Colors.BLACK)}`
 }
 
 const activePanelItemStyle = {
   cursor: 'default',
-  backgroundColor: '#f8fafb',
-  color: '#2a7ad3',
-  borderLeft: '4px solid #1f6cc7',
+  backgroundColor: Colors.WHITE,
+  color: Colors.PRIMARY,
+  borderLeft: `4px solid ${Colors.PRIMARY}`,
 }
 
 const buttonGroupCallback = user => {
   if (user.isDefault) return null
 
   return (
-    <>
+    <div style={{ display: 'flex' }}>
       <UpdateButton userData={user} />
       <DeleteButton userId={user._id} />
-    </>
+    </div>
   )
 }
 
 const teamBoxStyle = {
-  margin: '0px 3px',
-  background: '#F6F8F9',
-  borderRadius: '3px',
-  color: transparentize(0.7, '#0E2539'),
+  margin: '0px 4px',
+  background: transparentize(0.85, Colors.MEDIUM_GRAY_2),
+  borderRadius: 2,
+  color: Colors.MEDIUM_GRAY_2,
   fontSize: '10px',
-  fontWeight: 700,
-  padding: '4px 8px',
+  fontWeight: 500,
+  lineHeight: '16px',
+  padding: '2px 4px',
 }
 
 const UserTeamsLabel = ({ userId }) => {
@@ -68,9 +76,9 @@ const UserTeamsLabel = ({ userId }) => {
   const { teams } = data
 
   const teamNames = teams.map(({ _id, description }) =>
-    <div key={_id} style={teamBoxStyle}>
+    <span key={_id} style={teamBoxStyle}>
       {description}
-    </div>
+    </span>
   )
 
   return teamNames
@@ -88,8 +96,10 @@ const panelItemConfig = {
   // inactiveStyle: inactivePanelItemStyle,
 }
 
+const panelBackgroundColor = '#f7f9fa'
+
 const panelStyle = {
-  backgroundColor: '#f7f9fa',
+  backgroundColor: panelBackgroundColor,
   height: '100vh',
 }
 
@@ -108,6 +118,7 @@ const UsersPanel = () => {
       style={panelStyle}
       title={`Users for ${selectedTeam.description}`}
       headerChildren={headerChildren}
+      headerContainerStyle={{ backgroundColor: panelBackgroundColor }}
       queryDocs={{
         fetchAllQueryProps: { query: GET_TEAM_USERS },
         fetchSelectedQueryProps: { query: GET_SELECTED_USER },

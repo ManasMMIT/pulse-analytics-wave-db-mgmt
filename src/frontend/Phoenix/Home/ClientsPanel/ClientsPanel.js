@@ -10,7 +10,11 @@ const defaultPanelItemStyle = {
   cursor: 'pointer',
   color: '#7a97b1',
   borderLeft: '4px solid transparent',
-  padding: 24,
+  fontSize: 11,
+  fontWeight: 600,
+  letterSpacing: '0.2px',
+  lineHeight: '20px',
+  padding: '12px 24px',
 }
 
 const activePanelItemStyle = {
@@ -32,13 +36,16 @@ const panelItemConfig = {
 
 const headerChildren = <CreateButton />
 
+const panelBackgroundColor = '#093357'
+
 const ClientsPanel = () => {
   return (
     <Panel
-      style={{ backgroundColor: '#0a3557' }}
+      style={{ backgroundColor: panelBackgroundColor, maxWidth: 254 }}
       title="Clients"
       titleStyle={{ color: '#536f8d' }}
       headerChildren={headerChildren}
+      headerContainerStyle={{ backgroundColor: panelBackgroundColor }}
       queryDocs={{
         fetchAllQueryProps: { query: GET_CLIENTS },
         fetchSelectedQueryProps: { query: GET_SELECTED_CLIENT },

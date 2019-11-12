@@ -21,7 +21,7 @@ const UpdateButton = ({ userData }) => (
     userData={userData}
     modalTitle="Edit User"
     buttonLabel={editIcon}
-    buttonStyle={{ border: 'none', background: 'none', color: '#b6b9bc' }}
+    buttonStyle={{ border: 'none', background: 'none', color: '#0A2E4D', opacity: 0.3 }}
     mutationDoc={UPDATE_USER}
     clientMutation={MANAGE_UPDATED_USER}
   />

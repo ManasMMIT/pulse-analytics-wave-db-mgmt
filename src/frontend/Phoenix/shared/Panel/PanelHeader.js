@@ -2,18 +2,24 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
 
+import { ZIndexes } from '../../../utils/pulseStyles'
+
 const Header = styled.div({
   display: "flex",
   justifyContent: "space-between",
   alignItems: "center",
-  marginRight: 24,
   fontWeight: 700,
+  position: 'sticky',
+  top: 0,
+  width: '100%',
+  zIndex: ZIndexes.PANEL_HEADER,
 })
 
 const Title = styled.div({
-  fontSize: 20,
+  fontSize: 12,
   fontWeight: 700,
   padding: 24,
+  textTransform: 'uppercase',
 })
 
 const PanelHeader = ({
@@ -24,8 +30,9 @@ const PanelHeader = ({
 }) => (
   <Header style={headerContainerStyle}>
     <Title style={titleStyle}>{title}</Title>
-
-    { children }
+    <div style={{paddingRight: 24}}>
+      { children }
+    </div>
   </Header>
 )
 
