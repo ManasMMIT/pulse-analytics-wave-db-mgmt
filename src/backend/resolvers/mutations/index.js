@@ -8,9 +8,11 @@ const organizationResolvers = require('./organization')
 const sitemapResolvers = require('./sitemap')
 const qualityOfAccessScoreResolvers = require('./qualityOfAccessScore')
 const collectionResolvers = require('./collection')
-const alertResolvers = require('./alert')
 const treatmentPlan = require('./treatmentPlan')
 const testEmailGroupResolvers = require('./testEmailGroup')
+
+const alertResolvers = require('./alert')
+const emailResolvers = require('./email')
 
 module.exports = {
   ...clientResolvers,
@@ -22,8 +24,11 @@ module.exports = {
   ...regimenResolvers,
   ...qualityOfAccessScoreResolvers,
   ...collectionResolvers,
-  ...alertResolvers,
   ...treatmentPlan,
   ...organizationResolvers,
+
+  ...alertResolvers,
+  ...emailResolvers,
+
   ...testEmailGroupResolvers,
 }

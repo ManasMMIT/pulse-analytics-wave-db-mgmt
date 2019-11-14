@@ -7,18 +7,12 @@ import gql from 'graphql-tag'
 import TestEmailGroup from './TestEmailGroup'
 
 import { GET_TEST_EMAIL_GROUPS } from '../../../api/queries'
+
 import {
   UPDATE_TEST_EMAIL_GROUP,
   DELETE_TEST_EMAIL_GROUP,
+  SEND_TO_TEST_GROUP,
 } from '../../../api/mutations'
-
-const DUMMY_MUTATION = gql`
-  mutation asdf($input: asdf!) {
-    asdf(input: $input) {
-      blah
-    }
-  }
-`
 
 const isEmailValid = email => {
   var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
@@ -107,7 +101,7 @@ const TestEmailGroupContainer = ({
 
   const mutationDocs = {
     deleteGroup: DELETE_TEST_EMAIL_GROUP,
-    sendEmail: DUMMY_MUTATION,
+    sendEmail: SEND_TO_TEST_GROUP,
   }
 
   return (

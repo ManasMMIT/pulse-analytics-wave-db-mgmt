@@ -84,8 +84,6 @@ const TestEmailGroup = ({
       <SendButton
         data={{
           input: {
-            _id: groupId,
-            name,
             recipients,
             emailSubscriptions,
             usersToMock,

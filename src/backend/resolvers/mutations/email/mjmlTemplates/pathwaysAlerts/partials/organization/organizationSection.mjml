@@ -1,0 +1,29 @@
+<mj-raw><a id='{{ orgSlugs[orgName] }}-section' name='{{ orgSlugs[orgName] }}-section'></a></mj-raw>
+{% include "../shared/sectionNavbar.mjml" %}
+<mj-section mj-class='no-padding default-background'>
+  <mj-column mj-class='no-padding'>
+    <mj-text mj-class='body-section-title' css-class='body-section-title'>
+      {{ orgName }}
+    </mj-text>
+  </mj-column>
+</mj-section>
+{% if orgAlerts.keyEvent %}
+  {% set keyEventAlerts = orgAlerts.keyEvent %}
+  {% include "../keyEvent/keyEventOrg.mjml" %}
+{% endif %}
+{% if orgAlerts.positioning %}
+  {% set positioningAlerts = orgAlerts.positioning %}
+  {% include "../positioning/positioningOrg.mjml" %}
+{% endif %}
+{% if orgAlerts.influencer %}
+  {% set influencerAlerts = orgAlerts.influencer %}
+  {% include "../influencer/influencerOrg.mjml" %}
+{% endif %}
+{% if orgAlerts.provider %}
+  {% set providerAlerts = orgAlerts.provider %}
+  {% include "../provider/providerOrg.mjml" %}
+{% endif %}
+{% if orgAlerts.payer %}
+  {% set payerAlerts = orgAlerts.payer %}
+  {% include "../payer/payerOrg.mjml" %}
+{% endif %}

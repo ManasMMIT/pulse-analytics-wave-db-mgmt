@@ -1,17 +1,12 @@
 import React from 'react'
-import gql from 'graphql-tag'
 
 import SendButton from '../../shared/SendButton'
 import UsersTable from './UsersTable'
 import { pathwaysEmailSubscription } from '../../../utils/email-subscription-options'
 
-const DUMMY_MUTATION = gql`
-  mutation asdf($input: asdf!) {
-    asdf(input: $input) {
-      blah
-    }
-  }
-`
+import {
+  SEND_TO_SUBSCRIBED_USERS
+} from './../../../api/mutations'
 
 const PathwaysEmailCard = () => {
   return (
@@ -25,7 +20,7 @@ const PathwaysEmailCard = () => {
               _id: pathwaysEmailSubscription._id,
             }
           }}
-          mutationDoc={DUMMY_MUTATION}
+          mutationDoc={SEND_TO_SUBSCRIBED_USERS}
         />
       </div>
 

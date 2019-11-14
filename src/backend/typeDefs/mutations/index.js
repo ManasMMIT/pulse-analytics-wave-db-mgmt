@@ -10,9 +10,11 @@ const regimen = require('./regimen')
 const organization = require('./organization')
 const qualityAccessScore = require('./qualityAccessScore')
 const collection = require('./collection')
-const alert = require('./alert')
 const treatmentPlan = require('./treatmentPlan')
 const testEmailGroup = require('./testEmailGroup')
+
+const alert = require('./alert')
+const email = require('./email')
 
 const mutationType = gql`
   type Mutation {
@@ -68,6 +70,9 @@ const mutationType = gql`
     createEmailUsers(input: CreateEmailUsersInput!): JSON
     deleteEmailUsers(input: DeleteEmailUsersInput!): JSON
 
+    sendToSubscribedUsers(input: SendToSubscribedUsersInput!): SendToSubscribedUsersPayload
+    sendToTestGroup(input: SendToTestGroupInput): SendToTestGroupPayload
+
     bulkCreateTreatmentPlans(input: BulkCreateTreatmentPlansInput!): JSON
 
     createTestEmailGroup: TestEmailGroup
@@ -88,7 +93,10 @@ module.exports = [
   ...organization,
   ...qualityAccessScore,
   ...collection,
-  ...alert,
   ...treatmentPlan,
+  
+  ...alert,
+  ...email,
+
   ...testEmailGroup,
 ]
