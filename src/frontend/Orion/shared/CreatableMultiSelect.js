@@ -62,7 +62,7 @@ class CreatableInputOnly extends React.Component {
         onChange={this.handleChange}
         onInputChange={this.handleInputChange}
         onKeyDown={this.handleKeyDown}
-        placeholder="Type a new tag and press enter..."
+        placeholder="Type a new entry and press enter..."
         value={value}
       />
     );

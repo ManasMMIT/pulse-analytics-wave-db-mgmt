@@ -5,7 +5,11 @@ const queries = gql`
     nodes(parentId: String, type: String): [Node]
     clients(_id: String): [Client]
     teams(clientId: String, userId: String): [Team]
-    users(teamId: String, clientId: String): [User]
+    users(
+      teamId: String,
+      clientId: String,
+      subscriptionId: String
+    ): [User]
     indications: [Indication]
     products: [Product]
     regimens: [Regimen]
@@ -20,6 +24,7 @@ const queries = gql`
     collections(type: String): [String]
     newTreatmentPlans(data: JSON): JSON
     emailUsers: [EmailUser]
+    testEmailGroups: [TestEmailGroup]
   }
 
   type Node {
@@ -57,6 +62,7 @@ const queries = gql`
     _id: String
     username: String
     email: String
+    client: Client
     emailSubscriptions: [Subscription]
   }
 
@@ -133,6 +139,14 @@ const queries = gql`
     email: String
     isPulseTest: Boolean
     isTdgTest: Boolean
+  }
+
+  type TestEmailGroup {
+    _id: ID!
+    name: String
+    recipients: [String]
+    usersToMock: [ID]
+    emailSubscriptions: [ID]
   }
 `
 

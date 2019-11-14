@@ -89,6 +89,12 @@ import {
 } from './alerts'
 
 import {
+  CREATE_TEST_EMAIL_GROUP,
+  UPDATE_TEST_EMAIL_GROUP,
+  DELETE_TEST_EMAIL_GROUP,
+} from './testEmailGroups'
+
+import {
   BULK_CREATE_TREATMENT_PLAN,
 } from './treatmentPlan'
 
@@ -160,6 +166,10 @@ export {
   EMAIL_ALERTS,
   CREATE_EMAIL_USERS,
   DELETE_EMAIL_USERS,
-  
+
+  CREATE_TEST_EMAIL_GROUP,
+  UPDATE_TEST_EMAIL_GROUP,
+  DELETE_TEST_EMAIL_GROUP,
+
   BULK_CREATE_TREATMENT_PLAN,
 }

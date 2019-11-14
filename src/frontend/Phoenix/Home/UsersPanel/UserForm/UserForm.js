@@ -7,7 +7,6 @@ import { transparentize } from 'polished'
 import TeamCheckboxes from './TeamCheckboxes'
 import SubmitButton from './SubmitButton'
 import EmailSubscriptions from './EmailSubscriptions'
-import { pathwaysEmailSubscription } from './email-subscription-options'
 import stripTypename from '../../../../Orion/shared/strip-typename'
 import { Colors } from '../../../../utils/pulseStyles'
 
@@ -88,17 +87,16 @@ class UserForm extends React.Component {
     })
   }
 
-  handleEmailSubscriptionsChange = e => {
+  handleEmailSubscriptionsChange = subscription => {
     const { emailSubscriptions } = this.state
-
     const emailSubscriptionsCopy = _.cloneDeep(emailSubscriptions)
 
     const targetIdx = emailSubscriptionsCopy.findIndex(({ _id }) => {
-      return _id === e.target.id
+      return _id === subscription._id
     })
 
     if (targetIdx === -1) {
-      emailSubscriptionsCopy.push(pathwaysEmailSubscription)
+      emailSubscriptionsCopy.push(subscription)
     } else {
       emailSubscriptionsCopy.splice(targetIdx, 1)
     }

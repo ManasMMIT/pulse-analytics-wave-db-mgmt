@@ -12,6 +12,7 @@ const qualityAccessScore = require('./qualityAccessScore')
 const collection = require('./collection')
 const alert = require('./alert')
 const treatmentPlan = require('./treatmentPlan')
+const testEmailGroup = require('./testEmailGroup')
 
 const mutationType = gql`
   type Mutation {
@@ -68,6 +69,10 @@ const mutationType = gql`
     deleteEmailUsers(input: DeleteEmailUsersInput!): JSON
 
     bulkCreateTreatmentPlans(input: BulkCreateTreatmentPlansInput!): JSON
+
+    createTestEmailGroup: TestEmailGroup
+    updateTestEmailGroup(input: UpdateTestEmailGroupInput!): TestEmailGroup
+    deleteTestEmailGroup(input: DeleteTestEmailGroupInput!): TestEmailGroup
   }
 `
 
@@ -85,4 +90,5 @@ module.exports = [
   ...collection,
   ...alert,
   ...treatmentPlan,
+  ...testEmailGroup,
 ]

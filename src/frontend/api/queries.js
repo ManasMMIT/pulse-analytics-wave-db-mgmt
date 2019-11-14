@@ -57,6 +57,21 @@ export const GET_SELECTED_TEAM = gql`
   }
 `
 
+export const GET_USERS = gql`
+  query getUsers($subscriptionId: String) {
+    users(subscriptionId: $subscriptionId) {
+      _id
+      username
+      email
+      client {
+        _id
+        name
+        description
+      }
+    }
+  }
+`
+
 export const GET_TEAM_USERS = gql`
   query getTeamUsers($teamId: String) {
     users(teamId: $teamId) {
@@ -415,6 +430,18 @@ export const GET_EMAIL_USERS = gql`
       email
       isPulseTest
       isTdgTest
+    }
+  }
+`
+
+export const GET_TEST_EMAIL_GROUPS = gql`
+  query getTestEmailGroups {
+    testEmailGroups {
+      _id
+      name
+      recipients
+      usersToMock
+      emailSubscriptions
     }
   }
 `

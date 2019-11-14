@@ -1,0 +1,119 @@
+import React from 'react'
+import PropTypes from 'prop-types'
+import { useQuery } from '@apollo/react-hooks'
+import _ from 'lodash'
+
+import ModalButtonWithForm from '../../Orion/shared/ModalButtonWithForm'
+import { GET_USERS } from '../../api/queries'
+
+const formStyle = {
+  display: 'flex',
+  flexDirection: 'column',
+}
+
+const buttonStyle = {
+  border: 'none',
+  height: 30,
+  borderRadius: 4,
+  fontWeight: 700,
+  cursor: 'pointer',
+  background: '#d4e2f2',
+  color: '#1d66b8',
+}
+
+const getSendButtonInputFields = (state, handleChange) => {
+  return (
+    <>
+      <span>Select month/year: </span>
+      <input
+        name="date"
+        type="month"
+        value={state.date}
+        onChange={handleChange}
+        style={{ marginBottom: 24 }}
+      />
+    </>
+  )
+}
+
+const SendButtonWithHydratedUsers = ({
+  data,
+  mutationDoc,
+}) => {
+  const { data: usersData, loading, error } = useQuery(GET_USERS)
+
+  if (loading) return 'Loading...'
+  if (error) return 'Error!'
+
+  const { users } = usersData
+  const usersById = _.keyBy(users, '_id')
+
+  const dataCopy = _.cloneDeep(data)
+
+  dataCopy.input.usersToMock = dataCopy.input.usersToMock.reduce((acc, _id) => {
+    const hydratedUserObj = usersById[_id]
+
+    // it's possible for a test group to fall behind after a user
+    // is deleted in Phoenix
+    if (!hydratedUserObj) {
+      console.error('user by id', _id, 'doesn\'t exist, skipping')
+      return acc
+    }
+
+    const { username, client } = hydratedUserObj
+    const { __typename, ...clientWithoutTypename } = client
+
+    acc.push({ _id, username, client: clientWithoutTypename })
+    return acc
+  }, [])
+
+  return (
+    <ModalButtonWithForm
+      data={dataCopy}
+      formStyle={formStyle}
+      mutationDoc={mutationDoc}
+      buttonLabel="Send Email"
+      buttonStyle={buttonStyle}
+      modalTitle="Send Email"
+      getInputFields={getSendButtonInputFields}
+    />
+  )
+}
+
+const SendButton = ({
+  data,
+  mutationDoc,
+}) => {
+  if (data.input.usersToMock) {
+    return (
+      <SendButtonWithHydratedUsers
+        data={data}
+        mutationDoc={mutationDoc}
+      />
+    )
+  }
+
+  return (
+    <ModalButtonWithForm
+      data={data}
+      formStyle={formStyle}
+      mutationDoc={mutationDoc}
+      buttonLabel="Send Email"
+      buttonStyle={buttonStyle}
+      modalTitle="Send Email"
+      getInputFields={getSendButtonInputFields}
+    />
+  )
+}
+
+SendButton.propTypes = {
+  data: PropTypes.object,
+  mutationDoc: PropTypes.object,
+}
+
+SendButton.defaultProps = {
+  data: { input: {} },
+  mutationDoc: {},
+}
+
+export default SendButton

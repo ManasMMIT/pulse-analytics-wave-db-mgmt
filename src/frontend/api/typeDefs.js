@@ -31,6 +31,7 @@ const typeDefs = gql`
     username: String
     email: String
     emailSubscriptions: [Subscription]
+    client: Client
   }
 
   type Subscription {
