@@ -9,9 +9,11 @@ const TreatmentPlansTabContent = ({
   treatmentPlans,
   setStagedTreatmentPlans,
 }) => {
+  const treatmentPlan = treatmentPlans[0] || {}
+  const baseTreatmentPlan = baseTreatmentPlans[0] || {}
+
   const [selectedIndicationId, selectIndication] = useState(
-    (treatmentPlans[0] && treatmentPlans[0]._id)
-      || baseTreatmentPlans[0]._id
+    treatmentPlan._id || baseTreatmentPlan._id
   )
 
   const enabledTreatmentPlansHash = _.mapValues(

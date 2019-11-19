@@ -11,7 +11,7 @@ const RegimensPanelContainer = ({
   enabledTreatmentPlans,
 }) => {
   const copyInd = _.cloneDeep(
-    baseTreatmentPlans.find(({ _id }) => _id === selectedIndicationId)
+    baseTreatmentPlans.find(({ _id }) => _id === selectedIndicationId) || { regimens: [] }
   )
 
   const enabledRegimensHash = enabledTreatmentPlansHash[copyInd._id]
