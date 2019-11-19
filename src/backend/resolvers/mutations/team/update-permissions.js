@@ -1,50 +1,57 @@
 const objectifyResourcesIds = require('./utils/objectifyResourcesIds')
+const cascadeUpdateResources = require('./utils/cascadeUpdateResources')
 
 const updatePermissions = async (
   parent,
   { input: { teamId, nodeId, updatedResources } },
-  { mongoClient, coreRoles },
+  { mongoClient, coreRoles, coreNodes },
   info
 ) => {
   objectifyResourcesIds(updatedResources)
+
+  const nextResources = { nodeId, ...updatedResources }
 
   const session = mongoClient.startSession()
 
   let result
   await session.withTransaction(async () => {
-    // check 1: if team doesn't have a resources array, create it
-    // along with an object corresponding to nodeId
     const team = await coreRoles.findOne({ _id: teamId }, { session })
 
-    if (!team.resources) {
-      await coreRoles.updateOne(
-        { _id: teamId },
-        { $set: { resources: [{ nodeId }] } },
-        { session },
+    // if team doesn't have a resources array, initialize it
+    // as an empty array
+    const resourcesAcrossNodes = team.resources || []
+
+    // get all the nodes because you have to recursively find all
+    // of the node's children
+    const nodes = await coreNodes.find().toArray()
+
+    // get the subset of node resource objects, update them, and
+    // return the updated subset, including the nextResources
+    const changedNodeResourcesObjs = cascadeUpdateResources({
+      nodes,
+      nextResources,
+      resourcesAcrossNodes,
+    })
+
+   // upsert changedNodeResourcesObjs into resourcesAcrossNodes
+   changedNodeResourcesObjs.forEach(nodeResourcesObj => {
+      const targetIdx = resourcesAcrossNodes.findIndex(
+        ({ nodeId: nId }) => nId === nodeResourcesObj.nodeId
       )
-    } else if (
-      // check 2: if team has a resources array, is there an obj corresponding
-      // to nodeId? obj needs to be there for the operation that follows
-      !team.resources.find(({ nodeId: resId }) => resId === nodeId)
-    ) {
-      await coreRoles.updateOne(
-        { _id: teamId },
-        { $push: { resources: { nodeId } } },
-        { session },
-      )
-    }
+
+      if (targetIdx === -1) {
+        resourcesAcrossNodes.push(nodeResourcesObj)
+      } else {
+        resourcesAcrossNodes[targetIdx] = nodeResourcesObj
+      }
+    })
 
     const {
       value: updatedTeam
     } = await coreRoles.findOneAndUpdate(
-      { _id: teamId, resources: { $elemMatch: { nodeId } } },
-      {
-        // replace a single object in the team's resources array
-        $set: {
-          'resources.$': { nodeId, ...updatedResources }
-        }
-      },
-      { returnOriginal: false, session }
+      { _id: teamId },
+      { $set: { resources: resourcesAcrossNodes } },
+      { session, returnOriginal: false },
     )
 
     result = updatedTeam
