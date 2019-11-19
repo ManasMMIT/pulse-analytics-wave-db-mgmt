@@ -1,6 +1,7 @@
 import React from 'react'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faEdit } from "@fortawesome/free-solid-svg-icons"
+import { transparentize } from 'polished'
 
 import Panel from '../../Phoenix/shared/Panel'
 import ModalButtonWithForm from '../shared/ModalButtonWithForm'
@@ -13,6 +14,8 @@ import {
   UPDATE_SOURCE_INDICATION,
   DELETE_SOURCE_INDICATION,
 } from '../../api/mutations'
+
+import { Colors, Spacing } from '../../utils/pulseStyles'
 
 const editIcon = <FontAwesomeIcon size="lg" icon={faEdit} />
 
@@ -29,25 +32,34 @@ const defaultPanelItemStyle = {
   display: 'flex',
   justifyContent: 'space-between',
   alignItems: 'center',
-  padding: '17px 20px',
-  color: '#0E2539',
+  padding: '8px 24px',
+  color: Colors.BLACK,
   fontWeight: 600,
   fontSize: 12,
-  marginTop: 10,
-  borderTop: '1px solid rgb(182, 185, 188)',
+  borderBottom: `1px solid ${transparentize(0.9, Colors.BLACK)}`,
 }
 
 const getInputFields = (state, handleChange) => {
   return (
-    <>
-      <span>name: </span>
+    <div style={{ display: 'block' }}>
+      <div
+        style={{
+          color: Colors.BLACK,
+          fontSize: 12,
+          fontWeight: 500,
+          textTransform: 'capitalize',
+          marginBottom: Spacing.SMALL,
+        }}
+      >
+        name:
+      </div>
       <input
         type="text"
         name="name"
         onChange={handleChange}
         value={state.input.name}
       />
-    </>
+    </div>
   )
 }
 
@@ -99,6 +111,10 @@ const IndicationsPanel = () => (
   <Panel
     title="Indications"
     headerChildren={headerChildren}
+    headerContainerStyle={{
+      background: Colors.WHITE,
+      borderBottom: `1px solid ${transparentize(0.9, Colors.BLACK)}`
+    }}
     queryDocs={{
       fetchAllQueryProps: { query: GET_SOURCE_INDICATIONS },
     }}

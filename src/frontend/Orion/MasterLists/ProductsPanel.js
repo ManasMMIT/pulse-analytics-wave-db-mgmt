@@ -1,6 +1,8 @@
 import React from 'react'
+import styled from '@emotion/styled'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faEdit } from "@fortawesome/free-solid-svg-icons"
+import { transparentize } from 'polished'
 
 import Panel from '../../Phoenix/shared/Panel'
 import ModalButtonWithForm from '../shared/ModalButtonWithForm'
@@ -15,11 +17,19 @@ import {
   DELETE_SOURCE_PRODUCT,
 } from '../../api/mutations'
 
+import { Colors, Spacing } from '../../utils/pulseStyles'
+
 const editIcon = <FontAwesomeIcon size="lg" icon={faEdit} />
 
 const CREATE_BUTTON_TXT = 'Create Product'
 
 const CREATE_MODAL_TITLE = 'Create New Product'
+
+const FormLabel = styled.div({
+  textTransform: 'capitalize',
+  marginBottom: Spacing.SMALL,
+  fontWeight: 700,
+})
 
 const createButtonStyle = {
   background: "#234768",
@@ -32,7 +42,7 @@ const getInputFields = (state, handleChange) => {
   return (
     <>
       <div>
-        <span>Generic Name:</span>
+        <FormLabel>Generic Name:</FormLabel>
         <input
           type="text"
           name="nameGeneric"
@@ -40,8 +50,8 @@ const getInputFields = (state, handleChange) => {
           value={state.input.nameGeneric || ''}
         />
       </div>
-      <div>
-        <span>Brand Name:</span>
+      <div style={{ marginTop: Spacing.LARGE }}>
+        <FormLabel>Brand Name:</FormLabel>
         <input
           type="text"
           name="nameBrand"
@@ -49,9 +59,8 @@ const getInputFields = (state, handleChange) => {
           value={state.input.nameBrand || ''}
         />
       </div>
-
-      <div>
-        <span>Tags:</span>
+      <div style={{ marginTop: Spacing.LARGE }}>
+        <FormLabel>Tags:</FormLabel>
         <CreatableMultiSelect
           value={tags.map(str => ({ value: str, label: str }))}
           handleChange={arrOfVals => {
@@ -111,12 +120,11 @@ const defaultPanelItemStyle = {
   display: 'flex',
   justifyContent: 'space-between',
   alignItems: 'center',
-  padding: '17px 20px',
-  color: '#0E2539',
+  padding: '8px 24px',
+  color: Colors.BLACK,
   fontWeight: 600,
   fontSize: 12,
-  marginTop: 10,
-  borderTop: '1px solid rgb(182, 185, 188)',
+  borderBottom: `1px solid ${transparentize(0.9, Colors.BLACK)}`,
 }
 
 const panelItemConfig = {
@@ -130,6 +138,10 @@ const ProductsPanel = () => (
   <Panel
     title="Products"
     headerChildren={headerChildren}
+    headerContainerStyle={{
+      background: Colors.WHITE,
+      borderBottom: `1px solid ${transparentize(0.9, Colors.BLACK)}`
+    }}
     queryDocs={{
       fetchAllQueryProps: { query: GET_SOURCE_PRODUCTS },
     }}

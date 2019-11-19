@@ -1,4 +1,5 @@
 import React from 'react'
+import styled from '@emotion/styled'
 import { transparentize } from 'polished'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faEdit } from "@fortawesome/free-solid-svg-icons"
@@ -18,30 +19,37 @@ import {
   UPDATE_SOURCE_INDICATION,
 } from '../../../api/mutations'
 
+import { Colors, Spacing } from '../../../utils/pulseStyles'
+
 const editIcon = <FontAwesomeIcon size="lg" icon={faEdit} />
 
 const defaultPanelItemStyle = {
   display: 'flex',
   justifyContent: 'space-between',
   alignItems: 'center',
-  padding: '17px 20px',
-  color: '#0E2539',
+  padding: '8px 24px',
+  color: Colors.BLACK,
   fontWeight: 600,
   fontSize: 12,
-  marginTop: 10,
-  borderTop: '1px solid rgb(182, 185, 188)',
+  borderBottom: `1px solid ${transparentize(0.9, Colors.BLACK)}`,
 }
 
 const panelItemActiveStyle = {
-  backgroundColor: transparentize(0.9, '#0668D9'),
-  color: '#0668D9',
+  backgroundColor: transparentize(0.85, Colors.PRIMARY),
+  color: Colors.PRIMARY,
 }
+
+const FormLabel = styled.div({
+  textTransform: 'capitalize',
+  marginBottom: Spacing.SMALL,
+  fontWeight: 700,
+})
 
 const getInputFields = (state, handleChange) => {
   return (
     <>
       <div>
-        <span>name: </span>
+        <FormLabel>name: </FormLabel>
         <input
           type="text"
           name="name"
@@ -50,8 +58,8 @@ const getInputFields = (state, handleChange) => {
         />
       </div>
 
-      <div>
-        <span>regimens: </span>
+      <div style={{ marginTop: Spacing.LARGE }}>
+        <FormLabel>regimens: </FormLabel>
 
         <RegimensSelect
           state={state}
@@ -67,7 +75,7 @@ const buttonGroupCallback = ({ name, _id, regimens }) => (
     <ModalButtonWithForm
       modalTitle="Edit Indication"
       buttonLabel={editIcon}
-      buttonStyle={{ border: 'none', background: 'none', color: '#b6b9bc' }}
+      buttonStyle={{ border: 'none', background: 'none', color: transparentize(0.7, Colors.BLACK) }}
       data={{ input: { name, _id, regimens } }}
       mutationDoc={UPDATE_SOURCE_INDICATION}
       refetchQueries={[{ query: GET_SOURCE_INDICATIONS }]}
@@ -102,7 +110,11 @@ const TreatmentPlans = () => (
   <div style={{ display: 'flex', flex: 1 }}>
     <Panel
       title="Indications"
-      style={{ borderRight: '1px solid black' }}
+      style={{ borderRight: `1px solid ${transparentize(0.9, Colors.BLACK)}` }}
+      headerContainerStyle={{
+        background: Colors.WHITE,
+        borderBottom: `1px solid ${transparentize(0.9, Colors.BLACK)}`
+      }}
       // headerChildren={headerChildren}
       queryDocs={{
         fetchAllQueryProps: { query: GET_SOURCE_INDICATIONS },
@@ -114,6 +126,10 @@ const TreatmentPlans = () => (
     <Panel
       title="Regimens"
       // headerChildren={regimensHeaderChildren}
+      headerContainerStyle={{
+        background: Colors.WHITE,
+        borderBottom: `1px solid ${transparentize(0.9, Colors.BLACK)}`
+      }}
       queryDocs={{
         fetchAllQueryProps: { query: GET_SELECTED_REGIMENS },
       }}

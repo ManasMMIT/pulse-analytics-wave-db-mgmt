@@ -3,6 +3,7 @@ import React from 'react'
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faEdit } from "@fortawesome/free-solid-svg-icons"
+import { transparentize } from 'polished'
 
 import Panel from '../../../../Phoenix/shared/Panel'
 import ModalButtonWithForm from '../../../shared/ModalButtonWithForm'
@@ -21,6 +22,8 @@ import {
   GET_PAYER_ORGANIZATIONS,
 } from '../../../../api/queries'
 
+import { Colors } from '../../../../utils/pulseStyles'
+
 const editIcon = <FontAwesomeIcon size="lg" icon={faEdit} />
 
 const CREATE_BUTTON_TXT = 'Create Payer Account'
@@ -36,12 +39,11 @@ const defaultPanelItemStyle = {
   display: 'flex',
   justifyContent: 'space-between',
   alignItems: 'center',
-  padding: '17px 20px',
-  color: '#0E2539',
+  padding: '8px 24px',
+  color: Colors.BLACK,
   fontWeight: 600,
   fontSize: 12,
-  marginTop: 10,
-  borderTop: '1px solid rgb(182, 185, 188)',
+  borderBottom: `1px solid ${transparentize(0.9, Colors.BLACK)}`,
 }
 
 const getInputFields = (state, handleChange) => {
@@ -130,6 +132,10 @@ const PayerAccounts = () => (
   <Panel
     title="Payer Accounts"
     headerChildren={headerChildren}
+    headerContainerStyle={{
+      background: Colors.WHITE,
+      borderBottom: `1px solid ${transparentize(0.9, Colors.BLACK)}`
+    }}
     queryDocs={{
       fetchAllQueryProps: { query: GET_PAYER_ORGANIZATIONS },
     }}

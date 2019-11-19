@@ -2,6 +2,7 @@ import React from 'react'
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faEdit } from "@fortawesome/free-solid-svg-icons"
+import { transparentize } from 'polished'
 
 import Panel from '../../../../../Phoenix/shared/Panel'
 import ModalButtonWithForm from '../../../../shared/ModalButtonWithForm'
@@ -17,6 +18,8 @@ import {
   DELETE_QUALITY_OF_ACCESS_SCORE,
 } from '../../../../../api/mutations'
 
+import { Colors } from '../../../../../utils/pulseStyles'
+
 const editIcon = <FontAwesomeIcon size="lg" icon={faEdit} />
 
 const CREATE_BUTTON_TXT = 'Create Quality of Access'
@@ -25,19 +28,18 @@ const CREATE_MODAL_TITLE = 'Create New Quality of Access'
 
 const buttonStyle = {
   background: "#234768",
-  color: 'white',
+  color: Colors.WHITE,
 }
 
 const defaultPanelItemStyle = {
   display: 'flex',
   justifyContent: 'space-between',
   alignItems: 'center',
-  padding: '17px 20px',
-  color: '#0E2539',
+  padding: '8px 24px',
+  color: Colors.BLACK,
   fontWeight: 600,
   fontSize: 12,
-  marginTop: 10,
-  borderTop: '1px solid rgb(182, 185, 188)',
+  borderBottom: `1px solid ${transparentize(0.9, Colors.BLACK)}`,
 }
 
 const formStyle = { height: 500, overflowY: 'auto', fontSize: 12 }
@@ -99,7 +101,7 @@ const buttonGroupCallback = entity => {
 const label1StyleWrapper = {
   display: 'flex',
   alignItems: 'center',
-  width: 250,
+  width: 400,
   justifyContent: 'space-between',
 }
 
@@ -108,7 +110,7 @@ const panelItemConfig = {
   buttonGroupCallback,
   label1Callback: ({ access, score, color }) => (
     <div style={label1StyleWrapper}>
-      <div style={{ fontSize: 16, fontWeight: 700 }}>
+      <div style={{ fontSize: 12, fontWeight: 700 }}>
         {access}
       </div>
       <div>
@@ -125,6 +127,10 @@ const QualityAccessScorePanel = () => (
   <Panel
     title="Quality of Access Scores"
     headerChildren={headerChildren}
+    headerContainerStyle={{
+      background: Colors.WHITE,
+      borderBottom: `1px solid ${transparentize(0.9, Colors.BLACK)}`
+    }}
     queryDocs={{
       fetchAllQueryProps: { query: GET_SOURCE_QUALITY_OF_ACCESS_SCORES },
     }}

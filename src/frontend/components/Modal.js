@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import styled from "@emotion/styled";
 import { transparentize } from 'polished'
 
-import { Colors, ZIndexes } from '../utils/pulseStyles'
+import { Colors, Spacing, Transitions, ZIndexes } from '../utils/pulseStyles'
 
 const Wrapper = styled.div({
   position: 'fixed',
@@ -27,7 +27,6 @@ const Main = styled.section({
   background: '#F0F6F9',
   borderRadius: 4,
   boxShadow: `0 6px 24px 0 ${transparentize(0.7, Colors.BLACK)}`,
-  // width: "80%",
   height: "auto",
   top: "50%",
   left: "50%",
@@ -49,7 +48,24 @@ const Title = styled.div({
   color: Colors.BLACK,
   fontSize: 14,
   fontWeight: 700,
+  marginRight: Spacing.NORMAL,
 });
+
+const CloseButton = styled.button({
+  background: transparentize(0.9, Colors.BLACK),
+  color: Colors.BLACK,
+  cursor: 'pointer',
+  border: 'none',
+  borderRadius: 4,
+  fontSize: 12,
+  fontWeight: 600,
+  padding: `${Spacing.TINY} ${Spacing.SMALL}`,
+  transition: Transitions.NORMAL,
+  textTransform: 'capitalize',
+  ':hover': {
+    background: transparentize(0.75, Colors.BLACK)
+  }
+})
 
 class Modal extends React.Component {
   // TODO: but the Create user button still gets clicked!
@@ -86,9 +102,9 @@ class Modal extends React.Component {
             disableHeader || (
               <Header>
                 <Title>{title}</Title>
-                <button onClick={onClickCloseButton}>
+                <CloseButton onClick={onClickCloseButton}>
                   close
-                </button>
+                </CloseButton>
               </Header>
             )
           }

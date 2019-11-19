@@ -2,19 +2,41 @@ import React from 'react'
 import { NavLink } from 'react-router-dom'
 import _ from 'lodash'
 import styled from '@emotion/styled'
+import { transparentize } from 'polished'
 
 import Dropdown from './shared/Dropdown'
 
+import { Colors, Spacing } from '../utils/pulseStyles'
+
+const OrionHeader = styled.div({
+  alignItems: 'center',
+  background: transparentize(0.3, Colors.BLACK),
+  color: Colors.ORION,
+  display: 'flex',
+  fontSize: 12,
+  fontWeight: 700,
+  padding: `${Spacing.MEDIUM} ${Spacing.EXTRA_LARGE}`,
+  textTransform: 'uppercase',
+  width: '100%',
+})
+
+const OrionLogo = styled.img({
+  display: 'inline',
+  marginRight: Spacing.SMALL,
+})
+
 const Header = styled.div({
-  padding: 24,
-  fontSize: 18,
+  padding: `${Spacing.LARGE} ${Spacing.EXTRA_LARGE} 0`,
+  fontSize: 10,
   fontWeight: 500,
-  color: '#4b6b89',
+  color: transparentize(0.7, Colors.WHITE),
+  textTransform: 'uppercase',
+  letterSpacing: 0.6,
 })
 
 const Wrapper = styled.div({
   width: 250,
-  backgroundColor: 'rgb(10, 53, 87)',
+  backgroundColor: Colors.TOOL_SIDEBAR,
   display: 'flex',
   flexDirection: 'column',
   overflowY: 'scroll',
@@ -22,32 +44,48 @@ const Wrapper = styled.div({
 })
 
 const sharedStyles = {
-  padding: 24,
+  margin: `0 ${Spacing.NORMAL}`,
+  borderRadius: 4,
+  padding: `${Spacing.SMALL} ${Spacing.NORMAL}`,
   textDecoration: 'none',
+  fontSize: 11,
   fontWeight: 600,
+  lineHeight: '20px',
 }
 
+const StyledNavLink = styled(NavLink)({
+  ':hover': {
+    background: transparentize(0.9, Colors.WHITE)
+  }
+})
+
+const StyledDropdown = styled(Dropdown)({
+  fontWeight: 500,
+})
+
 const inactiveLinkStyle = {
-  color: 'rgb(122, 151, 177)',
+  color: transparentize(0.4, Colors.WHITE),
   ...sharedStyles,
 }
 
 const activeLinkStyle = {
-  color: 'rgb(235, 246, 251)',
-  borderLeft: '4px solid rgb(15, 102, 208)',
+  color: Colors.WHITE,
+  background: transparentize(0.9, Colors.WHITE),
   ...sharedStyles,
 }
 
 const dropdownInactiveLinkStyle = {
   ...inactiveLinkStyle,
-  padding: '12px 24px',
+  padding: `${Spacing.SMALL} ${Spacing.NORMAL}`,
   display: 'block',
+  cursor: 'pointer',
 }
 
 const dropdownActiveLinkStyle = {
   ...activeLinkStyle,
-  padding: '12px 24px',
+  padding: `${Spacing.SMALL} ${Spacing.NORMAL}`,
   display: 'block',
+  cursor: 'pointer',
 }
 
 const ORDERED_MASTER_LIST_ITEMS = [
@@ -59,14 +97,14 @@ const ORDERED_MASTER_LIST_ITEMS = [
 ]
 
 const getNavLink = label => (
-    <NavLink
+    <StyledNavLink
       key={`nav-link:${label}`}
       style={inactiveLinkStyle}
       activeStyle={activeLinkStyle}
       to={`/orion/lists/${_.kebabCase(label)}`}
     >
       {label}
-    </NavLink>
+    </StyledNavLink>
 )
 
 const getToolItemPath = (tool, item) => {
@@ -78,16 +116,20 @@ const Sidebar = () => {
 
   return (
     <Wrapper>
+      <OrionHeader>
+        <OrionLogo src="https://res.cloudinary.com/pulsedatatools/image/upload/v1573837414/polaris/icons/orion-1-color.svg" />
+        Orion DB
+      </OrionHeader>
       <Header>
         Data Management
       </Header>
-      <NavLink
+      <StyledNavLink
         style={inactiveLinkStyle}
         activeStyle={activeLinkStyle}
         to={`/orion/data-management/import`}
       >
         Import Excel Sheets
-      </NavLink>
+      </StyledNavLink>
       <Header>
         MASTER LISTS
       </Header>
@@ -96,61 +138,61 @@ const Sidebar = () => {
         <Header>
           TOOL MASTER LISTS
         </Header>
-        <Dropdown
+        <StyledDropdown
           style={inactiveLinkStyle}
           label={'Alternative Payment Models'}
         >
-          <NavLink
+          <StyledNavLink
             style={dropdownInactiveLinkStyle}
             activeStyle={dropdownActiveLinkStyle}
             to={getToolItemPath('apm', 'accounts')}
           >
             Accounts
-          </NavLink>
-        </Dropdown>
-        <Dropdown
+          </StyledNavLink>
+        </StyledDropdown>
+        <StyledDropdown
           style={inactiveLinkStyle}
           label={'Pathways'}
         >
-          <NavLink
+          <StyledNavLink
             style={dropdownInactiveLinkStyle}
             activeStyle={dropdownActiveLinkStyle}
             to={getToolItemPath('pathways', 'accounts')}
           >
             Accounts
-          </NavLink>
-        </Dropdown>
-        <Dropdown
+          </StyledNavLink>
+        </StyledDropdown>
+        <StyledDropdown
           style={inactiveLinkStyle}
           label={'Payer Quality of Access'}
         >
-          <NavLink
+          <StyledNavLink
             style={dropdownInactiveLinkStyle}
             activeStyle={dropdownActiveLinkStyle}
             to={getToolItemPath('payer', 'accounts')}
           >
             Accounts
-          </NavLink>
-          <NavLink
+          </StyledNavLink>
+          <StyledNavLink
             style={dropdownInactiveLinkStyle}
             activeStyle={dropdownActiveLinkStyle}
             to={getToolItemPath('payer', 'scores')}
           >
             Quality of Access Scores
-          </NavLink>
-        </Dropdown>
-        <Dropdown
+          </StyledNavLink>
+        </StyledDropdown>
+        <StyledDropdown
           style={inactiveLinkStyle}
           label={'Provider Key Accounts'}
         >
-          <NavLink
+          <StyledNavLink
             style={dropdownInactiveLinkStyle}
             activeStyle={dropdownActiveLinkStyle}
             to={getToolItemPath('provider', 'accounts')}
           >
             Accounts
-          </NavLink>
-        </Dropdown>
+          </StyledNavLink>
+        </StyledDropdown>
       </div>
     </Wrapper>
   )

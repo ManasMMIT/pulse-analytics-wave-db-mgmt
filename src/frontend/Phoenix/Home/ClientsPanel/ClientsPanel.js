@@ -1,4 +1,6 @@
 import React from 'react'
+import styled from '@emotion/styled'
+import { transparentize } from 'polished'
 
 import Panel from '../../shared/Panel'
 import CreateButton from './CreateButton'
@@ -6,22 +8,40 @@ import CreateButton from './CreateButton'
 import { SELECT_CLIENT } from '../../../api/mutations'
 import { GET_CLIENTS, GET_SELECTED_CLIENT } from '../../../api/queries'
 
+import { Colors, Spacing } from '../../../utils/pulseStyles'
+
+const PhoenixHeader = styled.div({
+  alignItems: 'center',
+  background: transparentize(0.3, Colors.BLACK),
+  color: Colors.PHOENIX,
+  display: 'flex',
+  fontSize: 12,
+  fontWeight: 700,
+  padding: `${Spacing.MEDIUM} ${Spacing.EXTRA_LARGE}`,
+  textTransform: 'uppercase',
+  width: '100%',
+})
+
+const PhoenixLogo = styled.img({
+  display: 'inline',
+  marginRight: Spacing.SMALL,
+})
+
 const defaultPanelItemStyle = {
   cursor: 'pointer',
-  color: '#7a97b1',
-  borderLeft: '4px solid transparent',
+  color: transparentize(0.4, Colors.WHITE),
+  margin: `0 ${Spacing.NORMAL}`,
+  borderRadius: 4,
+  padding: `${Spacing.SMALL} ${Spacing.NORMAL}`,
+  textDecoration: 'none',
   fontSize: 11,
   fontWeight: 600,
-  letterSpacing: '0.2px',
   lineHeight: '20px',
-  padding: '12px 24px',
 }
 
 const activePanelItemStyle = {
-  cursor: 'default',
-  backgroundColor: '#1c4161',
-  color: '#ebf6fb',
-  borderLeft: '4px solid #0f66d0',
+  color: Colors.WHITE,
+  background: transparentize(0.9, Colors.WHITE),
 }
 
 const panelItemConfig = {
@@ -40,18 +60,24 @@ const panelBackgroundColor = '#093357'
 
 const ClientsPanel = () => {
   return (
-    <Panel
-      style={{ backgroundColor: panelBackgroundColor, maxWidth: 254 }}
-      title="Clients"
-      titleStyle={{ color: '#536f8d' }}
-      headerChildren={headerChildren}
-      headerContainerStyle={{ backgroundColor: panelBackgroundColor }}
-      queryDocs={{
-        fetchAllQueryProps: { query: GET_CLIENTS },
-        fetchSelectedQueryProps: { query: GET_SELECTED_CLIENT },
-      }}
-      panelItemConfig={panelItemConfig}
-    />
+    <div style={{ backgroundColor: panelBackgroundColor }}>
+      <PhoenixHeader>
+        <PhoenixLogo src="https://res.cloudinary.com/pulsedatatools/image/upload/v1573837414/polaris/icons/phoenix-1-color.svg" />
+        Phoenix
+      </PhoenixHeader>
+      <Panel
+        style={{ backgroundColor: panelBackgroundColor, maxWidth: 254, minWidth: 254, }}
+        title="Clients"
+        titleStyle={{ color: '#536f8d' }}
+        headerChildren={headerChildren}
+        headerContainerStyle={{ backgroundColor: panelBackgroundColor }}
+        queryDocs={{
+          fetchAllQueryProps: { query: GET_CLIENTS },
+          fetchSelectedQueryProps: { query: GET_SELECTED_CLIENT },
+        }}
+        panelItemConfig={panelItemConfig}
+      />
+    </div>
   )
 }
 

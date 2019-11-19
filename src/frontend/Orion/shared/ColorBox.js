@@ -1,12 +1,14 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
+import { Colors, Spacing } from '../../utils/pulseStyles'
+
 const defaultStyle = {
-  height: 12,
-  width: 12,
-  margin: 12,
-  padding: 12,
-  color: 'white',
+  padding: Spacing.SMALL,
+  borderRadius: 4,
+  fontSize: 12,
+  fontWeight: 700,
+  color: Colors.WHITE,
   textAlign: 'center',
 }
 

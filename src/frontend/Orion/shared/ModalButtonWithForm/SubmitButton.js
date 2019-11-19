@@ -1,6 +1,26 @@
 import React from 'react'
+import styled from '@emotion/styled'
+import { lighten } from 'polished'
 import { useMutation } from '@apollo/react-hooks'
 import Spinner from '../../../Phoenix/shared/Spinner'
+
+import { Colors, Spacing, Transitions } from '../../../utils/pulseStyles'
+
+const Button = styled.button({
+  background: Colors.PRIMARY,
+  border: 'none',
+  borderRadius: 4,
+  color: Colors.WHITE,
+  cursor: 'pointer',
+  fontSize: 12,
+  fontWeight: 600,
+  marginTop: Spacing.NORMAL,
+  padding: `${Spacing.SMALL} ${Spacing.NORMAL}`,
+  transition: Transitions.NORMAL,
+  ':hover': {
+    background: lighten(0.1, Colors.PRIMARY)
+  }
+})
 
 const SubmitButton = ({
   state,
@@ -24,14 +44,14 @@ const SubmitButton = ({
   }
 
   return (
-    <button
+    <Button
       type="submit"
       onClick={() => (
         handleSubmit({ variables: state }).then(afterSubmitHook)
       )}
     >
-      submit
-    </button>
+      Submit + Close
+    </Button>
   )
 }
 

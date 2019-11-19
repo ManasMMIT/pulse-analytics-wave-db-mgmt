@@ -1,6 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import styled from '@emotion/styled'
 import { useMutation } from '@apollo/react-hooks'
+import { lighten } from 'polished'
 
 import {
   GET_CLIENT_TEAMS,
@@ -12,14 +14,21 @@ import {
 
 import Spinner from '../../shared/Spinner'
 
-const submitButtonStyle = {
-  backgroundColor: '#0668D9',
-  color: 'white',
-  fontWeight: 600,
-  fontSize: 14,
-  padding: 6,
+import { Colors, Spacing } from '../../../utils/pulseStyles'
+
+const StyledButton = styled.button({
+  backgroundColor: Colors.PRIMARY,
+  border: 'none',
+  borderRadius: 4,
+  color: Colors.WHITE,
   cursor: 'pointer',
-}
+  fontSize: 12,
+  fontWeight: 600,
+  padding: `${Spacing.TINY} ${Spacing.SMALL}`,
+  ':hover': {
+    backgroundColor: lighten(0.1, Colors.PRIMARY),
+  }
+})
 
 const SubmitButton = ({
   teamId,
@@ -40,12 +49,11 @@ const SubmitButton = ({
   )
 
   return (
-    <button
+    <StyledButton
       onClick={updateRoleSitemap}
-      style={submitButtonStyle}
     >
       Submit Changes
-    </button>
+    </StyledButton>
   )
 }
 

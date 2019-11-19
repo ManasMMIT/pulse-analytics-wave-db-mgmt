@@ -21,6 +21,10 @@ export const Colors = {
   YELLOW: '#FFDC6C',
   PURPLE: '#7C5EFA',
   MEDIUM_GRAY_2: '#A3BBDA',
+  TOOL_SIDEBAR: '#093357',
+  PHOENIX: '#FA8969',
+  ORION: '#38B59A',
+  DELPHI: '#30B2DC',
   AppBackground: '#E8EBEC',
   AdminTeal: '#65B69A',
   Black: '#0E2539',
@@ -97,10 +101,22 @@ export const mediaQueries = {
 }
 
 export const Transitions = {
-  Normal: '250ms ease',
+  NORMAL: '250ms ease',
 }
 
 export const ZIndexes = {
   MODAL: 1000,
   PANEL_HEADER: 100,
+}
+
+export const Spacing = {
+  MICRO: '2px',
+  TINY: '4px',
+  SMALL: '8px',
+  NORMAL: '12px',
+  MEDIUM: '16px',
+  LARGE: '20px',
+  EXTRA_LARGE: '24px',
+  HUGE: '32px',
+  MAX: '48px',
 }
