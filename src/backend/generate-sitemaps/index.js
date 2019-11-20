@@ -33,13 +33,18 @@ const generateSitemaps = async ({
 
             const client = userRoles.length ? userRoles[0].client : null
 
+            const teams = userRoles.length
+              ? userRoles.map(({ _id, name }) => ({ _id, name }))
+              : []
+
             return DevUsers.updateOne(
               { _id: user._id },
               {
                 $set: {
                   sitemap: combinedSitemap,
+                  teams,
                   client,
-                  schemaVersion: 'v1.1.0',
+                  schemaVersion: 'v1.2.0',
                   updatedAt: new Date()
                 }
               },
@@ -59,13 +64,18 @@ const generateSitemaps = async ({
 
             const client = userRoles.length ? userRoles[0].client : null
 
+            const teams = userRoles.length
+              ? userRoles.map(({ _id, name }) => ({ _id, name }))
+              : []
+
             return DevUsers.insertOne(
               {
                 _id: user._id,
                 username: user.username,
                 client,
+                teams,
                 sitemap: combinedSitemap,
-                schemaVersion: 'v1.1.0',
+                schemaVersion: 'v1.2.0',
                 updatedAt: new Date(),
                 createdAt: new Date()
               },
