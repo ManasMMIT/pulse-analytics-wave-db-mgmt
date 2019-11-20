@@ -13,9 +13,11 @@ import {
 
 import resolvers from './api/resolvers'
 import typeDefs from './api/typeDefs'
+
 import Phoenix from './Phoenix'
 import Orion from './Orion'
 import Delphi from './Delphi'
+import Taurus from './Taurus'
 
 const IconSource = {
   PHOENIX: 'https://res.cloudinary.com/pulsedatatools/image/upload/v1573136582/polaris/icons/phoenix-1-white.svg',
@@ -85,11 +87,19 @@ const App = () => {
               >
                 <img style={iconStyle} src={IconSource.DELPHI} />
               </NavLink>
+              <NavLink
+                to="/taurus"
+                style={linkStyle}
+                activeStyle={activeLinkStyle('#30B2DC')}
+              >
+                T
+              </NavLink>
             </div>
             <Switch>
               <Route path="/phoenix" component={Phoenix} />
               <Route path="/orion" component={Orion} />
               <Route path="/delphi" component={Delphi} />
+              <Route path="/taurus" component={Taurus} />
               <Redirect to="/phoenix" />
             </Switch>
           </div>

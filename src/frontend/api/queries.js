@@ -445,3 +445,9 @@ export const GET_TEST_EMAIL_GROUPS = gql`
     }
   }
 `
+
+export const GET_QUERY_RESULTS = gql`
+  query getQueryToolResults($input: JSON) {
+    queryTool(input: $input)
+  }
+`
