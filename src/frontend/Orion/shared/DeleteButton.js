@@ -1,28 +1,40 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
+import styled from '@emotion/styled'
 import { useMutation } from '@apollo/react-hooks'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faTrashAlt } from "@fortawesome/free-solid-svg-icons"
+import { transparentize } from 'polished'
 
 import Modal from './../../components/Modal'
 import Spinner from '../../Phoenix/shared/Spinner'
 
+import { Colors, Spacing } from '../../utils/pulseStyles'
+
 const trashCan = <FontAwesomeIcon size="lg" icon={faTrashAlt} />
 
 const modalButtonStyle = {
-  background: 'red',
-  color: 'white',
-  fontWeight: 700,
-  padding: '4px 8px',
+  background: Colors.RED,
+  color: Colors.WHITE,
+  fontSize: 12,
+  fontWeight: 600,
+  cursor: 'pointer',
+  borderRadius: 4,
+  padding: Spacing.SMALL,
   textAlign: 'center',
 }
 
-const buttonStyle = {
+const StyledButton = styled.button({
   border: 'none',
+  borderRadius: 4,
   background: 'none',
-  color: '#b6b9bc',
+  color: transparentize(0.7, Colors.BLACK),
   cursor: 'pointer',
-}
+  ':hover': {
+    color: Colors.RED,
+    background: transparentize(0.9, Colors.RED),
+  }
+})
 
 const DeleteButton = props => {
   const {
@@ -65,12 +77,12 @@ const DeleteButton = props => {
 
   return (
     <>
-      <button
-        style={{ ...buttonStyle, ...style }}
+      <StyledButton
+        style={{ ...style }}
         onClick={openModal}
       >
         {trashCan}
-      </button>
+      </StyledButton>
       <Modal
         handleClose={closeModal}
         show={isModalOpen}

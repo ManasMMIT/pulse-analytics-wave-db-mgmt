@@ -1,16 +1,16 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import styled from '@emotion/styled'
 
 import Modal from '../../../components/Modal'
 import Form from './Form'
 
-const defaultButtonStyle = {
+const StyledButton = styled.button({
   border: 'none',
-  height: 30,
   borderRadius: 4,
-  fontWeight: 700,
+  fontWeight: 600,
   cursor: 'pointer',
-}
+})
 
 class Button extends React.Component {
   state = {
@@ -28,6 +28,7 @@ class Button extends React.Component {
       mutationDoc,
       buttonLabel,
       buttonStyle,
+      css,
       modalTitle,
       modalStyle,
       refetchQueries,
@@ -37,12 +38,12 @@ class Button extends React.Component {
 
     return (
       <>
-        <button
-          style={{ ...defaultButtonStyle, ...buttonStyle }}
+        <StyledButton
+          style={{  ...buttonStyle }}
           onClick={this.openModal}
         >
           {buttonLabel}
-        </button>
+        </StyledButton>
         <Modal
           style={modalStyle}
           handleClose={this.closeModal}

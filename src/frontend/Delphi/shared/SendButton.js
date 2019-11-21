@@ -1,10 +1,16 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import styled from '@emotion/styled'
+import { transparentize } from 'polished'
 import { useQuery } from '@apollo/react-hooks'
 import _ from 'lodash'
 
+import Spinner from '../../Phoenix/shared/Spinner'
+
 import ModalButtonWithForm from '../../Orion/shared/ModalButtonWithForm'
 import { GET_USERS } from '../../api/queries'
+
+import { Colors, Spacing } from '../../utils/pulseStyles'
 
 const formStyle = {
   display: 'flex',
@@ -12,13 +18,11 @@ const formStyle = {
 }
 
 const buttonStyle = {
-  border: 'none',
-  height: 30,
-  borderRadius: 4,
+  background: Colors.PRIMARY,
+  color: Colors.WHITE,
+  fontSize: 12,
   fontWeight: 700,
-  cursor: 'pointer',
-  background: '#d4e2f2',
-  color: '#1d66b8',
+  padding: `${Spacing.SMALL} ${Spacing.NORMAL}`,
 }
 
 const getSendButtonInputFields = (state, handleChange) => {
@@ -30,7 +34,7 @@ const getSendButtonInputFields = (state, handleChange) => {
         type="month"
         value={state.date}
         onChange={handleChange}
-        style={{ marginBottom: 24 }}
+        style={{ marginBottom: Spacing.LARGE }}
       />
     </>
   )
@@ -42,7 +46,7 @@ const SendButtonWithHydratedUsers = ({
 }) => {
   const { data: usersData, loading, error } = useQuery(GET_USERS)
 
-  if (loading) return 'Loading...'
+  if (loading) return <Spinner />
   if (error) return 'Error!'
 
   const { users } = usersData
@@ -72,9 +76,9 @@ const SendButtonWithHydratedUsers = ({
       data={dataCopy}
       formStyle={formStyle}
       mutationDoc={mutationDoc}
-      buttonLabel="Send Email"
+      buttonLabel="Send Test Email"
       buttonStyle={buttonStyle}
-      modalTitle="Send Email"
+      modalTitle="Send Test Email"
       getInputFields={getSendButtonInputFields}
     />
   )

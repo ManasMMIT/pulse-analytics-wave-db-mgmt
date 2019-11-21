@@ -3,6 +3,10 @@ import _ from 'lodash'
 
 import CreatableSelect from 'react-select/creatable'
 
+import { transparentize } from 'polished'
+
+import { Colors, Spacing } from '../../utils/pulseStyles'
+
 const components = {
   DropdownIndicator: null,
 };
@@ -52,6 +56,38 @@ class CreatableInputOnly extends React.Component {
   render() {
     const { inputValue, value } = this.state
 
+    const customStyles = {
+      control: (provided,) => ({
+        ...provided,
+        borderRadius: 4,
+        border: `1px solid ${transparentize(0.9, Colors.BLACK)}`,
+      }),
+      multiValue: () => ({
+        background: transparentize(0.9, Colors.BLACK),
+        borderRadius: 4,
+        display: 'flex',
+        marginRight: Spacing.SMALL
+      }),
+      multiValueLabel: () => ({
+        fontSize: 12,
+        color: Colors.BLACK,
+        marginLeft: Spacing.TINY,
+        padding: Spacing.TINY,
+      }),
+      placeholder: () => ({
+        fontSize: 12,
+        color: transparentize(0.7, Colors.BLACK),
+      }),
+      menuList: (provided) => ({
+        ...provided,
+        fontSize: 12,
+      }),
+      input: (provided) => ({
+        ...provided,
+        fontSize: 12,
+      }),
+    }
+
     return (
       <CreatableSelect
         components={components}
@@ -64,6 +100,7 @@ class CreatableInputOnly extends React.Component {
         onKeyDown={this.handleKeyDown}
         placeholder="Type a new entry and press enter..."
         value={value}
+        styles={customStyles}
       />
     );
   }

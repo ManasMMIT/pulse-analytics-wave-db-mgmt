@@ -63,7 +63,7 @@ const ClientsPanel = () => {
     <div style={{ backgroundColor: panelBackgroundColor }}>
       <PhoenixHeader>
         <PhoenixLogo src="https://res.cloudinary.com/pulsedatatools/image/upload/v1573837414/polaris/icons/phoenix-1-color.svg" />
-        Phoenix
+        Phoenix User MGMT
       </PhoenixHeader>
       <Panel
         style={{ backgroundColor: panelBackgroundColor, maxWidth: 254, minWidth: 254, }}

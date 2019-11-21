@@ -35,7 +35,7 @@ const Header = styled.div({
 })
 
 const Wrapper = styled.div({
-  width: 250,
+  width: 256,
   backgroundColor: Colors.TOOL_SIDEBAR,
   display: 'flex',
   flexDirection: 'column',

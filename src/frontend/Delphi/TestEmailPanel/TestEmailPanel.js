@@ -1,13 +1,18 @@
 import React from 'react'
 import { useQuery } from '@apollo/react-hooks'
 import styled from '@emotion/styled'
+import { lighten } from 'polished'
 
 import TestEmailGroup from './TestEmailGroup'
 import CreateTestGroupButton from './CreateTestGroupButton'
 import { GET_TEST_EMAIL_GROUPS } from '../../api/queries'
+import Spinner from '../../Phoenix/shared/Spinner'
+
+import { Colors, Spacing } from '../../utils/pulseStyles'
 
 const Wrapper = styled.div({
-  padding: 24,
+  background: lighten(0.05, Colors.LIGHT_GRAY_1),
+  padding: Spacing.EXTRA_LARGE,
   height: '100vh',
   overflow: 'auto',
   boxSizing: 'border-box',
@@ -27,8 +32,43 @@ const TestEmailPanel = () => {
     error,
   } = useQuery(GET_TEST_EMAIL_GROUPS)
 
-  if (loading) return 'Loading...'
-  if (error) return 'Error!'
+  if (loading) return (
+    <div
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: '100%',
+        height: '100vh',
+        textAlign: 'center',
+      }}
+    >
+      <div>
+        <p style={{ color: Colors.PRIMARY, fontSize: 12, fontWeight: 600,}}>
+          Loading Test Emails
+        </p>
+        <Spinner size="32" />
+      </div>
+    </div>
+  )
+  if (error) return (
+    <div
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: '100%',
+        height: '100vh',
+        textAlign: 'center',
+      }}
+    >
+      <p style={{ color: Colors.RED, fontSize: 12, fontWeight: 600, lineHeight: '22px' }}>
+        There was an error loading the Test Emails page.
+        <br />
+        Please reload the page. ⟲
+      </p>
+    </div>
+  )
 
   const { testEmailGroups } = data
 

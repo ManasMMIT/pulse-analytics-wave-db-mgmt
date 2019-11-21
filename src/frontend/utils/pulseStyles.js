@@ -20,6 +20,7 @@ export const Colors = {
   ORANGE: '#FD9651',
   YELLOW: '#FFDC6C',
   PURPLE: '#7C5EFA',
+  LIGHT_GRAY_1: '#DFE3EA',
   MEDIUM_GRAY_2: '#A3BBDA',
   TOOL_SIDEBAR: '#093357',
   PHOENIX: '#FA8969',
