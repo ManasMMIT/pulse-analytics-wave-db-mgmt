@@ -1,22 +1,26 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
+import { transparentize } from 'polished'
+
+import { Colors, Spacing } from '../utils/pulseStyles'
 
 const Wrapper = styled.div({
-  margin: 12,
-  backgroundColor: 'white',
-  borderRadius: 2,
+  margin: Spacing.NORMAL,
+  backgroundColor: Colors.WHITE,
+  borderRadius: 4,
 })
 
 const Header = styled.div({
-  fontSize: 18,
+  fontSize: 14,
   fontWeight: 700,
-  padding: 24,
-  borderBottom: '1px solid rgba(194, 196, 212, 0.2)',
+  padding: `${Spacing.NORMAL} ${Spacing.EXTRA_LARGE}`,
+  textTransform: 'uppercase',
+  borderBottom: `1px solid ${transparentize(0.9, Colors.BLACK)}`,
 })
 
 const Body = styled.div({
-  padding: 24,
+  padding: Spacing.EXTRA_LARGE,
 })
 
 const Card = ({

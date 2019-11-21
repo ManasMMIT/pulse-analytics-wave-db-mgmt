@@ -103,6 +103,10 @@ import {
   BULK_CREATE_TREATMENT_PLAN,
 } from './treatmentPlan'
 
+import {
+  FILTER_QUERY,
+} from './query'
+
 export {
   SELECT_CLIENT,
   CREATE_CLIENT,
@@ -180,4 +184,6 @@ export {
   DELETE_TEST_EMAIL_GROUP,
 
   BULK_CREATE_TREATMENT_PLAN,
+
+  FILTER_QUERY,
 }

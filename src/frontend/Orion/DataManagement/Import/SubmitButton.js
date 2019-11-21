@@ -2,6 +2,7 @@ import React from "react"
 import { useMutation } from '@apollo/react-hooks'
 import styled from '@emotion/styled'
 import _ from 'lodash'
+import { lighten, darken } from 'polished'
 
 import Spinner from '../../../Phoenix/shared/Spinner'
 
@@ -9,22 +10,33 @@ import {
   UPLOAD_COLLECTION,
 } from '../../../api/mutations'
 
-const Button = styled.button({
+import { Colors, Spacing } from '../../../utils/pulseStyles'
+
+const sharedButtonStyle = {
+  background: Colors.PRIMARY,
   border: 'none',
-  background: '#006aff',
-  color: 'white',
+  borderRadius: 4,
+  color: Colors.WHITE,
+  fontSize: 12,
   fontWeight: 700,
-  padding: 6,
-  borderRadius: 3,
+  padding: `${Spacing.SMALL} ${Spacing.NORMAL}`,
+}
+
+const Button = styled.button({
+  ...sharedButtonStyle,
+  ':hover': {
+    background: lighten(0.1, Colors.PRIMARY),
+  },
+  ':active': {
+    background: darken(0.1, Colors.PRIMARY),
+    outline: 'none',
+  }
 })
 
 const DisabledButton = styled.button({
-  border: 'none',
-  background: '#006aff0f',
-  color: '#00000033',
-  fontWeight: 700,
-  padding: 6,
-  borderRadius: 3,
+  ...sharedButtonStyle,
+  cursor: 'not-allowed',
+  opacity: 0.4,
 })
 
 const SubmitButton = ({

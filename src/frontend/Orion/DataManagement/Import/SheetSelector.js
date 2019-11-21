@@ -3,6 +3,8 @@ import PropTypes from 'prop-types'
 
 import Select from 'react-select'
 
+import ImportSelectLabel from './ImportSelectLabel'
+
 const SheetSelector = ({
   sheetNames,
   selectedSheet,
@@ -10,7 +12,7 @@ const SheetSelector = ({
 }) => (
   <>
     <div style={{ marginTop: 24 }}>
-      <p style={{ fontWeight: 700 }}>Select Sheets to Upload:</p>
+      <ImportSelectLabel label="Select Sheets to Upload:" />
       {
         <Select
           value={selectedSheet}

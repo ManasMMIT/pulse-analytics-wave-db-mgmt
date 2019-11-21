@@ -5,6 +5,8 @@ import CreatableSelect from 'react-select/creatable'
 
 import Spinner from '../../../Phoenix/shared/Spinner'
 
+import ImportSelectLabel from './ImportSelectLabel'
+
 import {
   GET_RAW_COLLECTION_NAMES,
 } from '../../../api/queries'
@@ -20,7 +22,7 @@ const CollectionSelector = ({
 
   return (
     <div style={{ marginTop: 24 }}>
-      <p style={{ fontWeight: 700 }}>Select Collection:</p>
+      <ImportSelectLabel label="Selection Collection:" />
       <CreatableSelect
         onChange={handleCollectionSelection}
         options={data.collections.map(n => ({ value: n, label: n }))}

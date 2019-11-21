@@ -14,6 +14,8 @@ const testEmailGroupResolvers = require('./testEmailGroup')
 const alertResolvers = require('./alert')
 const emailResolvers = require('./email')
 
+const queryResolvers = require('./query')
+
 module.exports = {
   ...clientResolvers,
   ...teamResolvers,
@@ -26,9 +28,11 @@ module.exports = {
   ...collectionResolvers,
   ...treatmentPlan,
   ...organizationResolvers,
-
+  
   ...alertResolvers,
-  ...emailResolvers,
 
+  ...emailResolvers,
   ...testEmailGroupResolvers,
+
+  ...queryResolvers,
 }

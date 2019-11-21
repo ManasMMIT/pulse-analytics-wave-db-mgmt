@@ -26,7 +26,7 @@ const queries = gql`
     emailUsers: [EmailUser]
     testEmailGroups: [TestEmailGroup]
 
-    queryTool(input: JSON): JSON
+    queryToolAccounts: JSON
   }
 
   type Node {

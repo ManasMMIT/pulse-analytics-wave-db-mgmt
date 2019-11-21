@@ -78,6 +78,8 @@ const mutationType = gql`
     createTestEmailGroup: TestEmailGroup
     updateTestEmailGroup(input: UpdateTestEmailGroupInput!): TestEmailGroup
     deleteTestEmailGroup(input: DeleteTestEmailGroupInput!): TestEmailGroup
+
+    filterQuery(input: JSON): JSON
   }
 `
 

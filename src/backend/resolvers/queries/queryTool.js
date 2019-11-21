@@ -1,35 +1,24 @@
-const queryTool = async (parent, args, { pulseRawDb, pulseCoreDb }, info) => {
-  const payerProvidersOCM = await pulseRawDb.collection('queryTool.phase0')
-    .find(
-      {
-        $or: [
-          { slugType1: 'Payer' },
-          { slugType1: 'Provider' },
-        ],
-        slug: 'oncology-care-model',
-      }
-    )
+const _ = require('lodash')
+
+const queryToolAccounts = async (parent, args, { pulseRawDb, pulseCoreDb }, info) => {
+  const allAccountConnections = await pulseRawDb.collection('queryTool.phase0')
+    .find()
     .toArray()
+
+  const allAccountSlugs = _.flatten(
+    allAccountConnections.map(({ slug1, slug }) => [slug1, slug])
+  )
 
   // ! Only necessary while query tool data isn't part of organizations master list
   // ? Extra 6 organizations, when matching?
-  const payerProvidersOCMWithInfo = await pulseCoreDb.collection('organizations')
-    .find(
-      {
-        $and: [
-          { slug: { $in: payerProvidersOCM.map(({ slug1 }) => slug1)} },
-          {
-            $or: [
-              { type: 'Payer' },
-              { type: 'Provider' },
-            ]
-          },
-        ]
-      }
-    )
+  const hydratedQueryResult = await pulseCoreDb.collection('organizations')
+    .find({ slug: { $in: _.uniq(allAccountSlugs) } })
     .toArray()
 
-  return payerProvidersOCMWithInfo
+  return hydratedQueryResult.map(account => ({
+    ...account,
+    organization: `${ account.organization } (${ account.type })`,
+  }))
 }
 
-module.exports = queryTool
+module.exports = queryToolAccounts

@@ -1,6 +1,7 @@
 import React from "react"
 import XLSX from 'xlsx'
 import styled from '@emotion/styled'
+import { transparentize } from 'polished'
 
 import sheetToJson from './sheetToJson'
 
@@ -14,8 +15,12 @@ import ValidationErrors from './ValidationErrors'
 
 import Card from '../../../components/Card'
 
+import { Colors, Spacing } from '../../../utils/pulseStyles'
+
+import ImportSelectLabel from './ImportSelectLabel'
+
 const Page = styled.div({
-  padding: 24,
+  padding: Spacing.EXTRA_LARGE,
   backgroundColor: '#e8ebec',
   flex: 1,
   height: '100vh',
@@ -25,13 +30,21 @@ const Page = styled.div({
 
 const ImportButton = styled.label({
   display: 'block',
-  border: '2px dotted #0076ffe6',
-  backgroundColor: '#0076ff38',
-  borderRadius: 9,
-  color: 'blue',
-  padding: '8px 0',
-  textAlign: 'center',
-  textDecoration: 'underline',
+  border: `1px dotted ${ transparentize(0.7, Colors.PRIMARY) }`,
+  backgroundColor: transparentize(0.9, Colors.PRIMARY),
+  borderRadius: 4,
+  color: Colors.PRIMARY,
+  cursor: 'pointer',
+  fontSize: 12,
+  fontWeight: 500,
+  padding: `${Spacing.SMALL}`,
+  ':hover': {
+    backgroundColor: transparentize(0.8, Colors.PRIMARY),
+    borderColor: transparentize(0.5, Colors.PRIMARY),
+  },
+  ':active': {
+    backgroundColor: transparentize(0.7, Colors.PRIMARY),
+  }
 })
 
 class Import extends React.Component {
@@ -135,9 +148,9 @@ class Import extends React.Component {
       <Page>
         {/* TODO: Figure out ref logic to pull this into FileSelector.js */}
         <div style={{ display: 'flex' }}>
-          <Card width={'50%'} title={'IMPORT SHEET'}>
+          <Card width={'50%'} title={'Import Excel Sheet'}>
             <div>
-              <p style={{ fontWeight: 'bold' }}>Upload Excel File:</p>
+              <ImportSelectLabel label="Upload Excel File:" />
               <ImportButton>
                 { fileName || 'Drag File Here or Click to Upload'}
                 <input
