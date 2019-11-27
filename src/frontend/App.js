@@ -17,13 +17,11 @@ import typeDefs from './api/typeDefs'
 import Phoenix from './Phoenix'
 import Orion from './Orion'
 import Delphi from './Delphi'
-import Taurus from './Taurus'
 
 const IconSource = {
   PHOENIX: 'https://res.cloudinary.com/pulsedatatools/image/upload/v1573136582/polaris/icons/phoenix-1-white.svg',
   ORION: 'https://res.cloudinary.com/pulsedatatools/image/upload/v1573136582/polaris/icons/orion-1-white.svg',
   DELPHI: 'https://res.cloudinary.com/pulsedatatools/image/upload/v1573136582/polaris/icons/mercury-1-white.svg',
-  TAURUS: 'https://res.cloudinary.com/pulsedatatools/image/upload/v1574189853/polaris/icons/taurus-1-white.svg'
 }
 
 const client = new ApolloClient({
@@ -88,19 +86,11 @@ const App = () => {
               >
                 <img style={iconStyle} src={IconSource.DELPHI} />
               </NavLink>
-              <NavLink
-                to="/taurus"
-                style={linkStyle}
-                activeStyle={activeLinkStyle('#3B4DF7')}
-              >
-                <img style={iconStyle} src={IconSource.TAURUS} />
-              </NavLink>
             </div>
             <Switch>
               <Route path="/phoenix" component={Phoenix} />
               <Route path="/orion" component={Orion} />
               <Route path="/delphi" component={Delphi} />
-              <Route path="/taurus" component={Taurus} />
               <Redirect to="/phoenix" />
             </Switch>
           </div>

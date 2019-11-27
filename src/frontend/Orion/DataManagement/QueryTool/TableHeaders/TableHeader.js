@@ -5,10 +5,6 @@ import PropTypes from 'prop-types'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faCaretDown, faCaretUp } from "@fortawesome/free-solid-svg-icons"
 
-const Label = styled.span({
-
-})
-
 const TableHeaderItem = styled.div({
   flex: 1,
   cursor: 'pointer',
@@ -20,48 +16,59 @@ const TableHeaderItem = styled.div({
 
 const TableHeader = ({
   label,
-  sortConfig: {
-    tableData,
-    setDataToDisplay,
-    key,
-  }
+  sortConfig,
 }) => {
+  const hasSortConfig = !_.isEmpty(sortConfig)
   const [sortOrder, handleSortOrder] = useState('asc')
 
   const arrowIcon = sortOrder === 'asc'
     ? faCaretUp
     : faCaretDown
 
-  const handleClick = () => {
-    const newSortOrder = sortOrder === 'asc'
-      ? 'desc'
-      : 'asc'
+  let handleClick = () => {
+    console.log('sort config not supplied')
+  }
 
-    const dataToDisplay = _.orderBy(
+  if (hasSortConfig) {
+    const {
       tableData,
-      [
-        datum => {
-          return datum[key]
-            ? datum[key].toLowerCase()
-            : null
-        }
-      ],
-      [newSortOrder]
-    )
+      setDataToDisplay,
+      key,
+    } = sortConfig
 
-    setDataToDisplay(dataToDisplay)
-    handleSortOrder(newSortOrder)
+    handleClick = () => {
+      const newSortOrder = sortOrder === 'asc'
+        ? 'desc'
+        : 'asc'
+  
+      const dataToDisplay = _.orderBy(
+        tableData,
+        [
+          datum => {
+            return datum[key]
+              ? datum[key].toLowerCase()
+              : null
+          }
+        ],
+        [newSortOrder]
+      )
+  
+      setDataToDisplay(dataToDisplay)
+      handleSortOrder(newSortOrder)
+    }
   }
 
   return (
-    <TableHeaderItem
-      onClick={handleClick}
-    >
-      <Label>{label}</Label>
-      <FontAwesomeIcon
-        size="lg"
-        icon={arrowIcon}
-      />
+    <TableHeaderItem onClick={handleClick} >
+      <div>{label}</div>
+      {
+        hasSortConfig && (
+          <FontAwesomeIcon
+            size="lg"
+            icon={arrowIcon}
+          />
+        )
+      }
     </TableHeaderItem>
   )
 }

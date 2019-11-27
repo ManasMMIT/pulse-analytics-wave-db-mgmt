@@ -1,94 +1,84 @@
+const { ObjectId } = require('mongodb')
 const _ = require('lodash')
+
+const getConnectionsAggPipeline = (
+  accountId,
+  orgTypes = [],
+) => [
+  {
+    '$match': {
+      '$and': [
+        {
+          'type': {
+            '$in': orgTypes
+          }
+        }, {
+          'connections': {
+            '$exists': true
+          }
+        }, {
+          'connections': {
+            '$elemMatch': {
+              'org._id': accountId
+            }
+          }
+        }
+      ]
+    }
+  }, {
+    '$unwind': {
+      'path': '$connections',
+      'preserveNullAndEmptyArrays': false
+    }
+  }, {
+    '$match': {
+      'connections.org._id': accountId
+    }
+  }
+]
 
 const filterQuery = async (parent, {
   input: { orgTypes, selectedAccount }
 }, { pulseRawDb, pulseCoreDb }, info) => {
-  const rightSideAccounts = await pulseRawDb.collection('queryTool.phase0')
-    .find({ slugType1: { $in: orgTypes } })
-    .toArray()
+  const selectedAccountId = ObjectId(selectedAccount)
+  const shouldFilterAccountsOnly = orgTypes.length && !selectedAccount
+  const shouldFilterConnections = orgTypes.length && selectedAccount
 
-  // make sure right side account's slugs are the only slug
-  let slugMatchedRightSideAccounts = _.cloneDeep(rightSideAccounts)
-  slugMatchedRightSideAccounts = slugMatchedRightSideAccounts.map(account => {
-    account.slug = account.slug1
-    account.slugType = account.slugType1
+  let result = []
+  if (shouldFilterAccountsOnly) {
+    result = await pulseRawDb.collection('queryTool.phase2')
+      .find({ type: { $in: orgTypes } })
+      .toArray()
+  } else if (shouldFilterConnections) {
+    const aggPipeline = getConnectionsAggPipeline(selectedAccountId, orgTypes)
 
-    delete account.slug1
-    delete account.slugType1
-    return account
-  })
+    result = await pulseRawDb.collection('queryTool.phase2')
+      .aggregate(aggPipeline)
+      .toArray()
 
-  const leftSideAccounts = await pulseRawDb.collection('queryTool.phase0')
-    .find({ slugType: { $in: orgTypes } })
-    .toArray()
+    const isDataFlatByState = result
+      .some(datum => datum.connections && datum.connections.state)
 
-  const combinedAccounts = slugMatchedRightSideAccounts.concat(leftSideAccounts)
+    if (isDataFlatByState) {
+      const dataGroupedByAccountId = _.groupBy(result, '_id')
 
-  const uniqAccountsBySlug = _.uniqBy(
-    combinedAccounts,
-    ({ slug, state }) => [slug, state].join(),
-  )
+      result = Object.keys(dataGroupedByAccountId).map(accountId => {
+        const flatAccountData = dataGroupedByAccountId[accountId]
+        const states = flatAccountData.reduce((acc, { connections: { state } }) => {
+          if (state) acc.push(state)
 
-  // ! Only necessary while query tool data isn't part of organizations master list
-  const masterListAccountMatches = await pulseCoreDb.collection('organizations')
-    .find(
-      {
-        $and: [
-          {
-            slug: {
-              $in: uniqAccountsBySlug.map(({ slug }) => slug)
-            }
-          },
-          { type: { $in: orgTypes } },
-        ]
-      }
-    )
-    .toArray()
+          return acc
+        }, [])
 
-  const hydratedCombinedAccounts = uniqAccountsBySlug.map(account => {
-    const masterListEquivalent = masterListAccountMatches
-      .find(({ slug }) => slug === account.slug)
-    if (!masterListEquivalent) return false
-
-    return _.merge({}, masterListEquivalent, account)
-  })
-
-  let finalCombinedAccounts = _.compact(hydratedCombinedAccounts)
-
-  if (!_.isEmpty(selectedAccount)) {
-    const combinedAccountsAgain = rightSideAccounts.concat(leftSideAccounts)
-    const selectedAccountConnections = combinedAccountsAgain.map(({
-      slug1,
-      slugType1,
-      slug,
-      slugType,
-      state,
-    }) => {
-
-      if (slug1 === selectedAccount) return { slug, slugType, state }
-      if (slug === selectedAccount) return { slug: slug1, slugType: slugType1, state}
-      else return false
-    })
-
-    const massagedConnections = _.uniqBy(
-      _.compact(selectedAccountConnections),
-      ({ slug, state }) => [slug, state].join(),
-    )
-
-    const hydratedAccountConnections = massagedConnections
-      .reduce((acc, connection) => {
-        const masterListEquivalent = masterListAccountMatches
-          .find(({ slug }) => slug === connection.slug)
-
-        if (masterListEquivalent) acc.push({ ...masterListEquivalent, ...connection})
-
-        return acc
-      }, [])
-
-    finalCombinedAccounts = hydratedAccountConnections
+        return ({
+          ...flatAccountData[0],
+          states,
+        })
+      })
+    }
   }
 
-  return _.sortBy(finalCombinedAccounts, 'slug')
+  return _.sortBy(result, 'slug')
 }
 
 module.exports = filterQuery
