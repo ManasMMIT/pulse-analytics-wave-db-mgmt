@@ -1,5 +1,5 @@
-const queryToolAccounts = async (parent, args, { pulseRawDb, pulseCoreDb }, info) => {
-  const accountsWithConnections = await pulseRawDb.collection('queryTool.phase2')
+const queryToolAccounts = async (parent, args, { pulseCoreDb }, info) => {
+  const accountsWithConnections = await pulseCoreDb.collection('organizations')
     .find({ connections: { $exists: true } })
     .toArray()
 

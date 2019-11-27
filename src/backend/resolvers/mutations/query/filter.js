@@ -39,20 +39,20 @@ const getConnectionsAggPipeline = (
 
 const filterQuery = async (parent, {
   input: { orgTypes, selectedAccount }
-}, { pulseRawDb, pulseCoreDb }, info) => {
+}, { pulseCoreDb }, info) => {
   const selectedAccountId = ObjectId(selectedAccount)
   const shouldFilterAccountsOnly = orgTypes.length && !selectedAccount
   const shouldFilterConnections = orgTypes.length && selectedAccount
 
   let result = []
   if (shouldFilterAccountsOnly) {
-    result = await pulseRawDb.collection('queryTool.phase2')
+    result = await pulseCoreDb.collection('organizations')
       .find({ type: { $in: orgTypes } })
       .toArray()
   } else if (shouldFilterConnections) {
     const aggPipeline = getConnectionsAggPipeline(selectedAccountId, orgTypes)
 
-    result = await pulseRawDb.collection('queryTool.phase2')
+    result = await pulseCoreDb.collection('organizations')
       .aggregate(aggPipeline)
       .toArray()
 
