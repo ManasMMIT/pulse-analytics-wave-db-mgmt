@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { Colors, TransColors, Transitions } from 'Utils/pulseStyles'
+import { Colors, AlphaColors, Transitions } from 'Utils/pulseStyles'
 import Tabs from './Tabs'
 
 const tabBorderRadius = '8px'
@@ -17,7 +17,7 @@ const defaultTabContainerStyle = {
 }
 
 const defaultTabsContainerStyle = {
-  backgroundColor: TransColors.Blue10,
+  backgroundColor: AlphaColors.Blue10,
   borderRadius: tabBorderRadius,
   padding: '4px',
 }
@@ -28,11 +28,11 @@ const defaultActiveTabStyle = {
 
 const defaultInactiveTabStyle = {
   backgroundColor: 'transparent',
-  color: TransColors.Black30,
+  color: AlphaColors.Black30,
   transition: `color ${ Transitions.Normal }, background-color ${ Transitions.Normal }`,
   ':hover': {
-    backgroundColor: TransColors.White50,
-    color: TransColors.Blue70
+    backgroundColor: AlphaColors.White50,
+    color: AlphaColors.Blue70
   },
 }
 

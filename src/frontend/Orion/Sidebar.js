@@ -17,7 +17,6 @@ const OrionHeader = styled.div({
   fontWeight: 700,
   padding: `${Spacing.MEDIUM} ${Spacing.EXTRA_LARGE}`,
   textTransform: 'uppercase',
-  width: '100%',
 })
 
 const OrionLogo = styled.img({
@@ -35,7 +34,8 @@ const Header = styled.div({
 })
 
 const Wrapper = styled.div({
-  width: 256,
+  width: Spacing.TOOL_SIDEBAR,
+  minWidth: Spacing.TOOL_SIDEBAR,
   backgroundColor: Colors.TOOL_SIDEBAR,
   display: 'flex',
   flexDirection: 'column',

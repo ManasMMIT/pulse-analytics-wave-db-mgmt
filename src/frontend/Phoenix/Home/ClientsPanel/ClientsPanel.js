@@ -66,7 +66,7 @@ const ClientsPanel = () => {
         Phoenix User MGMT
       </PhoenixHeader>
       <Panel
-        style={{ backgroundColor: panelBackgroundColor, maxWidth: 254, minWidth: 254, }}
+        style={{ backgroundColor: panelBackgroundColor, maxWidth: Spacing.TOOL_SIDEBAR, minWidth: Spacing.TOOL_SIDEBAR, }}
         title="Clients"
         titleStyle={{ color: '#536f8d' }}
         headerChildren={headerChildren}

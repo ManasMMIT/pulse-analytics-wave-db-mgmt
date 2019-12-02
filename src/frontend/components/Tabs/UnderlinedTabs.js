@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import _ from 'lodash'
 
-import { Colors, TransColors } from './../../utils/pulseStyles'
+import { Colors, AlphaColors } from './../../utils/pulseStyles'
 import Tabs from './Tabs'
 
 const defaultTabContainerStyle = {
@@ -21,12 +21,12 @@ const defaultActiveTabStyle = {
 
 const defaultInactiveTabStyle = {
   backgroundColor: 'transparent',
-  color: TransColors.Black30,
+  color: AlphaColors.Black30,
   transition: 'color 250ms ease, background-color 250ms ease',
   ':hover': {
-    backgroundColor: TransColors.White50,
-    color: TransColors.Black30,
-    borderBottom: `2px solid ${TransColors.Black30}`,
+    backgroundColor: AlphaColors.White50,
+    color: AlphaColors.Black30,
+    borderBottom: `2px solid ${AlphaColors.Black30}`,
   }
 }
 
