@@ -7,7 +7,6 @@ import { withRouter } from 'react-router-dom'
 
 import {
   Colors,
-  AlphaColors,
 } from './../../../../utils/pulseStyles'
 
 import Modal from '../../../../components/Modal'
@@ -52,7 +51,7 @@ const SubmitButton = styled.button({
   padding: '8px 12px',
   transition: '250ms ease',
   borderRadius: 4,
-  background: AlphaColors.GREEN,
+  background: Colors.GREEN,
   color: Colors.WHITE,
   fontWeight: 700,
 })
