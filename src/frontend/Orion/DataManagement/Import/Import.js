@@ -150,6 +150,9 @@ class Import extends React.Component {
         <div style={{ display: 'flex' }}>
           <Card width={'50%'} title={'Import Excel Sheet'}>
             <div>
+              <div style={{ marginBottom: 24, color: 'red' }}>
+                Warning: Second and third rows of sheet are always skipped.
+              </div>
               <ImportSelectLabel label="Upload Excel File:" />
               <ImportButton>
                 { fileName || 'Drag File Here or Click to Upload'}

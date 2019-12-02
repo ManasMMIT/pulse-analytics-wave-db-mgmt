@@ -6,6 +6,7 @@ const { ApolloServer } = require('apollo-server-express')
 
 const typeDefs = require('./typeDefs')
 const resolvers = require('./resolvers')
+const openChangeStreams = require('./changeStreams')
 
 const {
   getClientController,
@@ -51,6 +52,8 @@ MongoClient.connect(process.env.LOADER_URI, { useNewUrlParser: true }, (err, cli
     coreClients,
     coreNodes,
   }
+
+  openChangeStreams(twoGuysInAHorseCostume)
 
   const apolloServer = new ApolloServer({
     typeDefs,

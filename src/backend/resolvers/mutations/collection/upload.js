@@ -1,6 +1,7 @@
 const _ = require('lodash')
 const UserInputError = require('apollo-server-express').UserInputError
 const getErrorObj = require('../../../validation/getErrorObj')
+const { ObjectId } = require('mongodb')
 
 const uploadCollection = async (
   parent,
@@ -22,6 +23,20 @@ const uploadCollection = async (
   }
 
   const targetCollection = pulseRawDb.collection(collectionName)
+
+  if (collectionName === 'orgConnections') {
+    const bulkOp = targetCollection.initializeOrderedBulkOp();
+
+    data.forEach(({ _id, ...rest }) => {
+      const targetId = _id ? ObjectId(_id) : new ObjectId()
+
+      bulkOp.find({ _id: targetId }).upsert().updateOne({ $set: rest })
+    })
+
+    await bulkOp.execute()
+
+    return
+  }
 
   await targetCollection.deleteMany()
   await targetCollection.insertMany(data)

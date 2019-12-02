@@ -1,12 +1,18 @@
 import XLSX from 'xlsx'
 const _ = require('lodash')
 
+const FALSEY_VALUES = [NaN, undefined, null, '']
+
 const sanitizeKeysAndTrimData = obj => {
   const result = _.reduce(obj, (acc, value, key) => {
     const trimmedKey = key.trim() // in case the key has weird zero width unicode chars
-    if (!trimmedKey || value === '') return acc
+    if (!trimmedKey) return acc
+    if (FALSEY_VALUES.includes(value)) value = null // standardize falsey values other than false to be null
 
-    acc[_.camelCase(trimmedKey)] = typeof value === 'string' ? value.trim() : value
+    // ! Note: CAMELCASE ALL KEYS EXCEPT _id
+    const camelCasedTrimmedKey = trimmedKey === '_id' ? '_id' : _.camelCase(trimmedKey)
+
+    acc[camelCasedTrimmedKey] = typeof value === 'string' ? value.trim() : value
     return acc
   }, {})
 
@@ -22,7 +28,7 @@ const isEmptyRow = obj => {
 }
 
 const sheetToJson = sheet => {
-  const json = XLSX.utils.sheet_to_json(sheet, { blankrows: true })
+  const json = XLSX.utils.sheet_to_json(sheet, { blankrows: true, defval: null })
 
   // remove the second and third rows from the json
   const jsonWithFirstTwoRowsRemoved = json.slice(2)

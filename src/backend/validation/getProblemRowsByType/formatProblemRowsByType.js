@@ -22,7 +22,13 @@ const pushInvalidValues = ({ valueToCheck, validValues, errorArray, sheetRow }) 
 
 const formatProblemRowsByType = (validFieldsByType, data) => (
   data.reduce((acc, row, index) => {
-    const { indication, slug, regimen, access } = row
+    const {
+      indication,
+      slug,
+      slug1, // ! HACK: check this key to validate query tool seed data slug1 column
+      regimen,
+      access
+    } = row
 
     const isCSVIndications = indication && indication.split(',').length > 1
 
@@ -58,6 +64,14 @@ const formatProblemRowsByType = (validFieldsByType, data) => (
 
     pushInvalidValues({
       valueToCheck: slug,
+      validValues: validSlugs,
+      errorArray: acc.slug,
+      sheetRow,
+    })
+
+    // ! HACK: check this key to validate query tool seed data slug1 column
+    pushInvalidValues({
+      valueToCheck: slug1,
       validValues: validSlugs,
       errorArray: acc.slug,
       sheetRow,
