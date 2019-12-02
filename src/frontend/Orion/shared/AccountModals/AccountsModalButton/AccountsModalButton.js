@@ -6,15 +6,13 @@ import queryString from 'query-string'
 import { withRouter } from 'react-router-dom'
 
 import {
-  Fonts,
   Colors,
-  DataColorsPrimary,
+  AlphaColors,
 } from './../../../../utils/pulseStyles'
 
 import Modal from '../../../../components/Modal'
 
 const ButtonLabel = styled.button({
-  fontFamily: Fonts.Primary,
   border: 'none',
   background: 'none',
   color: '#b6b9bc',
@@ -24,7 +22,6 @@ const ButtonLabel = styled.button({
 }, ({ children, ...props}) => ({ ...props })) // not sure why children is here
 
 const Input = styled.input({
-  fontFamily: Fonts.Primary,
   border: 'none',
   borderRadius: 2,
   padding: '0px 12px',
@@ -55,7 +52,7 @@ const SubmitButton = styled.button({
   padding: '8px 12px',
   transition: '250ms ease',
   borderRadius: 4,
-  background: DataColorsPrimary.GREEN,
+  background: AlphaColors.GREEN,
   color: Colors.WHITE,
   fontWeight: 700,
 })
