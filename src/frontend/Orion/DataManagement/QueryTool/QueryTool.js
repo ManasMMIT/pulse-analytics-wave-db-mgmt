@@ -1,6 +1,7 @@
 import React from 'react'
 import Select from 'react-select'
 import styled from '@emotion/styled'
+import _ from 'lodash'
 
 import { Colors, Spacing } from './../../../utils/pulseStyles'
 
@@ -87,6 +88,7 @@ const QueryTool = ({
   csvConfig,
   submitHandler,
 }) => {
+  const hasStatesData = dataToDisplay.some(({ states }) => !_.isEmpty(states))
 
   return (
     <PageWrapper>
@@ -124,10 +126,10 @@ const QueryTool = ({
           </SubmitButton>
         </QuestionWrapper>
       </Card>
-      {/* <DownloadCsvButton
+      <DownloadCsvButton
         data={csvConfig.data}
         fileName={csvConfig.fileName}
-      /> */}
+      />
       {
         !!dataToDisplay.length && (
           <TableWrapper>
@@ -148,7 +150,9 @@ const QueryTool = ({
                   key: 'type',
                 }}
               />
-              { dataToDisplay[0].states && <TableHeader label={'Affiliated State(s)'} />}
+              {
+                hasStatesData && <TableHeader label={'Affiliated State(s)'} />
+              }
             </TableHeaderWrapper>
             <TableBody>
               {
@@ -167,7 +171,7 @@ const QueryTool = ({
                         {result.type}
                       </TableColumn>
                       {
-                        result.states && (
+                        hasStatesData && (
                           <TableColumn>
                             {result.states.join(', ')}
                           </TableColumn>

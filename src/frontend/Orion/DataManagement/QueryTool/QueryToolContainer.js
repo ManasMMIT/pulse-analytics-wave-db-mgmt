@@ -165,7 +165,7 @@ const QueryToolContainer = ({
       .find(({ value }) => value === UrlInput.selectedAccountId)
   }
 
-// only load filter from URL on first mount
+  // only load filter from URL on first mount
   if (!hasLoadedInitialFilter) {
     const input = {
       orgTypes: UrlOrgTypes,
@@ -184,11 +184,26 @@ const QueryToolContainer = ({
     setHasLoadedInitialFilter(true)
   }
 
-  const csvData = dataToDisplay.map(({ organization, type, state }) => ({
-    Account: organization,
-    Type: type,
-    'Affiliated State': state,
-  }))
+  let csvData = []
+  if (!_.isEmpty(selectedAccount)) {
+    csvData = _.cloneDeep(dataToDisplay).reduce((acc, org) => {
+      const getCsvObj = connection => ({
+        _id: connection._id,
+        slug: org.slug,
+        slugType: org.type,
+        affiliationType: connection.affiliationType,
+        slug1: connection.org.slug,
+        slugType1: connection.org.type,
+        state: connection.state,
+      })
+
+      const connectionsByState = org.connections.map(getCsvObj)
+
+      acc = acc.concat(connectionsByState)
+
+      return acc
+    }, [])
+  }
 
   let formattedOrgTypes = orgTypes
     ? orgTypes.map(({ value }) => value)
@@ -204,7 +219,7 @@ const QueryToolContainer = ({
     defaultValue: defaultSelectedAccount,
     selected: selectedAccount,
     filterOptions: accountFilterOptions,
-    onChangeHandler: getAccountOnChangeHandler(orgTypes, history, setSelectedAccount) 
+    onChangeHandler: getAccountOnChangeHandler(orgTypes, history, setSelectedAccount)
   }
 
   const orgTypesConfig = {
@@ -212,6 +227,20 @@ const QueryToolContainer = ({
     selected: orgTypes,
     filterOptions: orgTypeFilterOptions,
     onChangeHandler: getOrgTypesOnChangeHandler(selectedAccount, history, setOrgTypes)
+  }
+
+  const emptyRowObj = {
+    _id: undefined,
+    slug: undefined,
+    slugType: undefined,
+    affiliationType: undefined,
+    slug1: undefined,
+    slugType1: undefined,
+    state: undefined,
+  }
+
+  if (csvData && csvData.length) {
+    csvData.splice(0, 0, emptyRowObj, emptyRowObj)
   }
 
   const csvConfig = {

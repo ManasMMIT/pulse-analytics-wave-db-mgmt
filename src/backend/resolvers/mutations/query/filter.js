@@ -56,26 +56,25 @@ const filterQuery = async (parent, {
       .aggregate(aggPipeline)
       .toArray()
 
-    const isDataFlatByState = result
-      .some(datum => datum.connections && datum.connections.state)
+    const dataGroupedByAccountId = _.groupBy(result, '_id')
 
-    if (isDataFlatByState) {
-      const dataGroupedByAccountId = _.groupBy(result, '_id')
+    result = Object.keys(dataGroupedByAccountId).map(accountId => {
+      const flatAccountData = dataGroupedByAccountId[accountId]
 
-      result = Object.keys(dataGroupedByAccountId).map(accountId => {
-        const flatAccountData = dataGroupedByAccountId[accountId]
-        const states = flatAccountData.reduce((acc, { connections: { state } }) => {
-          if (state) acc.push(state)
+      const statesAndConnections = flatAccountData.reduce((acc, { connections }) => {
+        if (connections) {
+          acc.connections.push(connections)
+          if (connections.state) acc.states.push(connections.state)
+        }
 
-          return acc
-        }, [])
+        return acc
+      }, { states: [], connections: [] })
 
-        return ({
-          ...flatAccountData[0],
-          states,
-        })
+      return ({
+        ...flatAccountData[0],
+        ...statesAndConnections,
       })
-    }
+    })
   }
 
   return _.sortBy(result, 'slug')
