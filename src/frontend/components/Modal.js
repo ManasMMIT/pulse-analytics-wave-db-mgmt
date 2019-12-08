@@ -35,6 +35,7 @@ const Main = styled.section({
   flexDirection: 'column',
   justifyContent: "space-between",
   padding: 24,
+  width: '80%',
 });
 
 const Header = styled.div({
@@ -67,6 +68,10 @@ const CloseButton = styled.button({
   }
 })
 
+const ButtonWrapper = styled.div({
+  display: 'flex',
+})
+
 class Modal extends React.Component {
   // TODO: but the Create user button still gets clicked!
   handleClickAway = e => {
@@ -85,6 +90,7 @@ class Modal extends React.Component {
       title,
       style,
       disableHeader,
+      submitButton,
     } = this.props;
 
     if (!show) return null;
@@ -102,9 +108,12 @@ class Modal extends React.Component {
             disableHeader || (
               <Header>
                 <Title>{title}</Title>
-                <CloseButton onClick={onClickCloseButton}>
-                  close
-                </CloseButton>
+                <ButtonWrapper>
+                  <CloseButton onClick={onClickCloseButton}>
+                    close
+                  </CloseButton>
+                  {submitButton}
+                </ButtonWrapper>
               </Header>
             )
           }

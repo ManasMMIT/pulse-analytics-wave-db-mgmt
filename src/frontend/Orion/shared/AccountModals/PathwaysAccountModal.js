@@ -4,10 +4,13 @@ import {
   UPDATE_PATHWAYS_ORGANIZATION,
   CREATE_PATHWAYS_ORGANIZATION,
   // DELETE_PATHWAYS_ORGANIZATION,
+  CREATE_VBM_PARTICIPANT,
 } from '../../../api/mutations'
 
 import {
   GET_PATHWAYS_ORGANIZATIONS,
+  GET_PROVIDER_ORGANIZATIONS,
+  GET_PAYER_ORGANIZATIONS,
 } from '../../../api/queries'
 
 import AccountsModalButton from './AccountsModalButton'
@@ -22,13 +25,20 @@ const PathwaysAccountModal = ({
     ? UPDATE_PATHWAYS_ORGANIZATION
     : CREATE_PATHWAYS_ORGANIZATION
 
+  const refetchQueries = [
+    { query: GET_PATHWAYS_ORGANIZATIONS },
+    { query: GET_PROVIDER_ORGANIZATIONS },
+    { query: GET_PAYER_ORGANIZATIONS },
+  ]
+
   return (
     <AccountsModalButton
       account={account}
       buttonLabel={buttonLabel}
       buttonStyle={buttonStyle}
+      vbmConnectionDoc={CREATE_VBM_PARTICIPANT}
       saveMutationDoc={saveMutationDoc}
-      refetchQueries={[{ query: GET_PATHWAYS_ORGANIZATIONS }]}
+      refetchQueries={refetchQueries}
       isEditModal={isEditModal}
     />
   )

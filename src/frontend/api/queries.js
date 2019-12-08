@@ -367,6 +367,8 @@ export const GET_PROVIDER_ORGANIZATIONS = gql`
       organization
       organizationTiny
       providerCancerCenter
+      type
+      connections
     }
   }
 `
@@ -378,6 +380,8 @@ export const GET_PAYER_ORGANIZATIONS = gql`
       slug
       organization
       organizationTiny
+      type
+      connections
     }
   }
 `
@@ -389,6 +393,8 @@ export const GET_PATHWAYS_ORGANIZATIONS = gql`
       slug
       organization
       organizationTiny
+      type
+      connections
     }
   }
 `
@@ -400,6 +406,8 @@ export const GET_APM_ORGANIZATIONS = gql`
       slug
       organization
       organizationTiny
+      type
+      connections
     }
   }
 `

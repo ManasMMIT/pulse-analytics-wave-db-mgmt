@@ -80,6 +80,12 @@ const mutationType = gql`
     deleteTestEmailGroup(input: DeleteTestEmailGroupInput!): TestEmailGroup
 
     filterQuery(input: JSON): JSON
+
+    createVbmParticipant(input: CreateVbmParticipantInput!): JSON
+    createVbmParticipation(input: CreateVbmParticipationInput!): JSON
+    deleteVbmConnection(input: DeleteVbmConnectionInput!): JSON
+
+    createConnection(input: CreateConnectionInput): [Connection]
   }
 `
 

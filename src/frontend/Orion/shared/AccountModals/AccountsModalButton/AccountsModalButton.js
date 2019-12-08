@@ -4,12 +4,17 @@ import styled from '@emotion/styled'
 import { useMutation } from '@apollo/react-hooks'
 import queryString from 'query-string'
 import { withRouter } from 'react-router-dom'
+import { transparentize } from 'polished'
 
 import {
+  Spacing,
+  Transitions,
   Colors,
 } from './../../../../utils/pulseStyles'
 
 import Modal from '../../../../components/Modal'
+
+import ConnectionsSection from './ConnectionsSection'
 
 const ButtonLabel = styled.button({
   border: 'none',
@@ -48,12 +53,19 @@ const LabelText = styled.div({
 const SubmitButton = styled.button({
   placeSelf: 'flex-end',
   cursor: 'pointer',
-  padding: '8px 12px',
-  transition: '250ms ease',
+  padding: `${ Spacing.TINY } ${ Spacing.SMALL}`,
+  transition: Transitions.NORMAL,
+  textTransform: 'capitalize',
+  border: 'none',
   borderRadius: 4,
   background: Colors.GREEN,
   color: Colors.WHITE,
-  fontWeight: 700,
+  fontWeight: 600,
+  fontSize: 12,
+  marginLeft: 12,
+  ':hover': {
+    background: transparentize(0.4, Colors.PRIMARY),
+  }
 })
 
 const AccountsModalButton = ({
@@ -62,6 +74,7 @@ const AccountsModalButton = ({
   account,
   history,
   location: { search },
+  vbmConnectionDoc,
   saveMutationDoc,
   refetchQueries,
   additionalFields,
@@ -109,6 +122,12 @@ const AccountsModalButton = ({
     }
   )
 
+  const submitButton = (
+    <SubmitButton onClick={save}>
+      {'save & close'}
+    </SubmitButton>
+  )
+
   return (
     <>
       <ButtonLabel
@@ -133,6 +152,7 @@ const AccountsModalButton = ({
       </ButtonLabel>
       <Modal
         title={`Account ${ isEditModal ? 'Edit' : 'Create' }`}
+        submitButton={submitButton}
         show={isOpen}
         handleClose={() => {
           history.push({
@@ -195,9 +215,13 @@ const AccountsModalButton = ({
             </Label>
           ))
         }
-        <SubmitButton onClick={save}>
-          submit
-        </SubmitButton>
+        <ConnectionsSection
+          from={account}
+          connections={account.connections}
+          vbmConnectionDoc={vbmConnectionDoc}
+          refetchQueries={refetchQueries}
+          isEditModal={isEditModal}
+        />
       </Modal>
     </>
   )
