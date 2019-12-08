@@ -1,22 +1,22 @@
 const upsertConnection = async ({
-  mongoClient,
   fullDocument,
   organizationsCollection,
   toolIdsMap,
+  mongoClient,
 }) => {
-  const {
-    _id,
-    slug,
-    slugType,
-    affiliationType,
-    slug1,
-    slugType1,
-    state,
-  } = fullDocument
-
   const session = mongoClient.startSession()
 
   await session.withTransaction(async () => {
+    const {
+      _id,
+      slug,
+      slugType,
+      affiliationType,
+      slug1,
+      slugType1,
+      state,
+    } = fullDocument
+
     // STEP 1: Remove the existing connection in the organizations collection
     // ! Note: For insertion, there's nothing to $pull since the connection
     // ! doesn't exist yet. This step only applies to update.
@@ -33,37 +33,44 @@ const upsertConnection = async ({
     // ! a given SLUG and TYPE (provider, payer, pathways), but right now
     // ! there are dupes, so the logic takes that into account by using #find
     // ! instead of #findOne.
-    const orgsArr1 = await organizationsCollection.find(
-      {
-        slug,
-        toolIds: toolIdsMap[slugType],
-      },
-      {
-        session,
-        projection: {
-          connections: 0,
-        }
-      },
-    ).toArray()
-
-    const orgsArr2 = await organizationsCollection.find(
-      {
-        slug: slug1,
-        toolIds: toolIdsMap[slugType1],
-      },
-      {
-        session,
-        projection: {
-          connections: 0,
-        }
-      },
-    ).toArray()
+    const [
+      orgsArr1,
+      orgsArr2,
+    ] = await Promise.all([
+      organizationsCollection.find(
+        {
+          slug,
+          toolIds: toolIdsMap[slugType],
+        },
+        {
+          session,
+          projection: {
+            connections: 0,
+          }
+        },
+      ).toArray(),
+      organizationsCollection.find(
+        {
+          slug: slug1,
+          toolIds: toolIdsMap[slugType1],
+        },
+        {
+          session,
+          projection: {
+            connections: 0,
+          }
+        },
+      ).toArray()
+    ])
 
     // STEP 2b: Depending on which org is what type, set up what
     // kind of connection object to add to each and persist.
     // ! Note HACK: Logic below is very specific to VBM participation's seed data.
     // ! If orgsArr1 are (pathways or apm), then orgsArr2 must be (provider or payer);
     // ! If orgsArr1 are (provider or payer), then orgsArr2 must be (pathways or apm).
+
+    const promisesArr = []
+
     if (
       slugType === 'Pathways'
       || slugType === 'Alternative Payment Model'
@@ -76,6 +83,8 @@ const upsertConnection = async ({
           org: providerOrPayerOrg,
           category: 'Value-Based Model Participation',
           type: 'affiliated_with',
+          state,
+          affiliationType,
         }
 
         const connectionObjToAddToOrg2 = {
@@ -84,10 +93,10 @@ const upsertConnection = async ({
           category: 'Value-Based Model Participation',
           type: 'participates_in',
           state,
-          affiliationType, // this field is on this side only because it's only relevant when looking from provider/payer perspective
+          affiliationType,
         }
 
-        await Promise.all([
+        promisesArr.push(
           organizationsCollection.updateOne(
             {
               _id: orgsArr1[0]._id,
@@ -106,7 +115,7 @@ const upsertConnection = async ({
             },
             { session },
           )
-        ])
+        )
       }
     } else {
       // ! Note: This section is untested, put here in case it's not always pathways/apm on the left side
@@ -126,9 +135,11 @@ const upsertConnection = async ({
           org: providerOrPayerOrg,
           category: 'Value-Based Model Participation',
           type: 'affiliated_with',
+          state,
+          affiliationType,
         }
 
-        await Promise.all([
+        promisesArr.push(
           organizationsCollection.updateOne(
             {
               _id: orgsArr2[0]._id,
@@ -147,10 +158,14 @@ const upsertConnection = async ({
             },
             { session },
           )
-        ])
+        )
       }
     }
+
+    await Promise.all(promisesArr)
   })
+
+  return fullDocument
 }
 
 module.exports = upsertConnection
