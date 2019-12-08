@@ -98,16 +98,12 @@ const AccountsModalButton = ({
     })
   }
 
-  const resetState = () => setSubmitState(initialSubmitState)
-  const persistSubmitState = () => setSubmitState(submitState)
-
   const [save] = useMutation(
     saveMutationDoc,
     {
       variables: { input: submitState },
       refetchQueries,
       update: () => {
-        persistSubmitState()
         setIsOpen(false)
       },
     }
@@ -120,6 +116,14 @@ const AccountsModalButton = ({
         onClick={() => {
           history.push({
             search: isEditModal ? `?accountId=${ account._id }` : ''
+          })
+
+          setSubmitState({
+            _id: account._id,
+            organization: account.organization,
+            organizationTiny: account.organizationTiny,
+            slug: account.slug,
+            ...additionalFieldsForState,
           })
 
           setIsOpen(true)
@@ -135,7 +139,6 @@ const AccountsModalButton = ({
             search: ''
           })
 
-          resetState()
           setIsOpen(false)
         }}
       >
