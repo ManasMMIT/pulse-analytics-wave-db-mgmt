@@ -24,6 +24,7 @@ const ProviderAccountModal = ({
   isEditModal,
   buttonLabel,
   buttonStyle,
+  onActionHook,
 }) => {
   const saveMutationDoc = isEditModal
     ? UPDATE_PROVIDER_ORGANIZATION
@@ -45,6 +46,7 @@ const ProviderAccountModal = ({
       refetchQueries={refetchQueries}
       additionalFields={ADDITIONAL_FIELDS}
       isEditModal={isEditModal}
+      onActionHook={onActionHook}
     />
   )
 }

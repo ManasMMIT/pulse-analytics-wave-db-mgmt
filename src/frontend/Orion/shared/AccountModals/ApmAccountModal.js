@@ -20,6 +20,7 @@ const ApmAccountModal = ({
   isEditModal,
   buttonLabel,
   buttonStyle,
+  onActionHook,
 }) => {
   const saveMutationDoc = isEditModal
     ? UPDATE_APM_ORGANIZATION
@@ -40,6 +41,7 @@ const ApmAccountModal = ({
       saveMutationDoc={saveMutationDoc}
       refetchQueries={refetchQueries}
       isEditModal={isEditModal}
+      onActionHook={onActionHook}
     />
   )
 }

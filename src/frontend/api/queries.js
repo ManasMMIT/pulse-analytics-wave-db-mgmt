@@ -413,8 +413,11 @@ export const GET_APM_ORGANIZATIONS = gql`
 `
 
 export const GET_ORGANIZATIONS = gql`
-  query getOrganizations($toolId: String) {
-    organizations(toolId: $toolId)
+  query getOrganizations(
+    $toolId: String,
+    $_id: ID,
+  ) {
+    organizations(toolId: $toolId, _id: $_id)
   }
 `
 

@@ -20,6 +20,7 @@ const PayerAccountModal = ({
   isEditModal,
   buttonLabel,
   buttonStyle,
+  onActionHook,
 }) => {
   const saveMutationDoc = isEditModal
     ? UPDATE_PAYER_ORGANIZATION
@@ -40,6 +41,7 @@ const PayerAccountModal = ({
       saveMutationDoc={saveMutationDoc}
       refetchQueries={refetchQueries}
       isEditModal={isEditModal}
+      onActionHook={onActionHook}
     />
   )
 }

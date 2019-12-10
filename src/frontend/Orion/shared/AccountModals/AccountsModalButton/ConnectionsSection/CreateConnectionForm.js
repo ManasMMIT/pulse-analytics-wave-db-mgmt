@@ -60,6 +60,7 @@ const CreateConnectionForm = ({
   vbmConnectionDoc,
   refetchQueries,
   postSubmitHook,
+  onActionHook,
 }) => {
   const [
     accountFilterOptions,
@@ -111,7 +112,8 @@ const CreateConnectionForm = ({
     update: () => {
       setTo({})
       postSubmitHook()
-    }
+    },
+    onCompleted: onActionHook,
   })
 
   const hasAllRequiredFields = Object.keys(to).length

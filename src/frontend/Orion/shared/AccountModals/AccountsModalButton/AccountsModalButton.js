@@ -5,7 +5,6 @@ import { useMutation } from '@apollo/react-hooks'
 import queryString from 'query-string'
 import { withRouter } from 'react-router-dom'
 import { transparentize } from 'polished'
-import _ from 'lodash'
 
 import {
   Spacing,
@@ -80,8 +79,12 @@ const AccountsModalButton = ({
   refetchQueries,
   additionalFields,
   isEditModal,
+  onActionHook,
 }) => {
-  const { accountId } = queryString.parse(search)
+  const {
+    accountId,
+    ...restOfQueryString
+  } = queryString.parse(search)
 
   const shouldModalBeOpenOnLoad = isEditModal
     && accountId === account._id
@@ -120,6 +123,7 @@ const AccountsModalButton = ({
       update: () => {
         setIsOpen(false)
       },
+      onCompleted: onActionHook,
     }
   )
 
@@ -129,23 +133,16 @@ const AccountsModalButton = ({
     </SubmitButton>
   )
 
-  const orderedConnections = _.orderBy(
-    account.connections,
-    [
-      'org.type',
-      ({ org: { organization } }) => organization.toLowerCase(),
-      'state',
-    ]
-  )
-
   return (
     <>
       <ButtonLabel
         {...buttonStyle}
         onClick={() => {
-          history.push({
-            search: isEditModal ? `?accountId=${ account._id }` : ''
-          })
+          const search = isEditModal
+            ? queryString.stringify({ ...restOfQueryString, accountId: account._id })
+            : {}
+
+          history.push({ search })
 
           setSubmitState({
             _id: account._id,
@@ -165,9 +162,9 @@ const AccountsModalButton = ({
         submitButton={submitButton}
         show={isOpen}
         handleClose={() => {
-          history.push({
-            search: ''
-          })
+
+          const search = queryString.stringify(restOfQueryString)
+          history.push({ search })
 
           setIsOpen(false)
         }}
@@ -225,9 +222,18 @@ const AccountsModalButton = ({
             </Label>
           ))
         }
+        {/* 
+            We can't rely on account.connections in ConnectionsSection,
+              because the passed-in account may not always have the full
+              set of connections -- e.g., in the query tool, we only return
+              relevant connections, but the account modal needs to see all connections.
+
+            This decision was made to make the accounts modal more reusable,
+              independent of where it lives in the frontend.
+        */}
         <ConnectionsSection
           from={account}
-          connections={orderedConnections}
+          onActionHook={onActionHook}
           vbmConnectionDoc={vbmConnectionDoc}
           refetchQueries={refetchQueries}
           isEditModal={isEditModal}

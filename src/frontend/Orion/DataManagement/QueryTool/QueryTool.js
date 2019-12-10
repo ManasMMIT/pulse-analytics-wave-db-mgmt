@@ -9,6 +9,21 @@ import Card from './../../../components/Card'
 import TableHeader from './TableHeaders/TableHeader'
 import DownloadCsvButton from './../../../components/DownloadCsvButton'
 
+import {
+  PathwaysAccountModal,
+  ProviderAccountModal,
+  ApmAccountModal,
+  PayerAccountModal,
+} from '../../shared/AccountModals'
+
+
+const MODAL_MAP = {
+  'Provider': ProviderAccountModal,
+  'Payer': PayerAccountModal,
+  'Alternative Payment Model': ApmAccountModal,
+  'Pathways': PathwaysAccountModal,
+}
+
 const PageWrapper = styled.div({
   flex: 1,
   backgroundColor: '#e8ebec',
@@ -79,6 +94,10 @@ const QuestionWrapper = styled.div({
   marginLeft: 12,
   marginBottom: 24,
 })
+
+const accountModalButtonStyle = {
+  color: Colors.BLACK,
+}
 
 const QueryTool = ({
   dataToDisplay,
@@ -160,13 +179,20 @@ const QueryTool = ({
                 dataToDisplay.map((result, idx) => {
                   const background = idx % 2 === 0 ? '#9e9e9e33' : 'none'
 
+                  const AccountModal = MODAL_MAP[result.type]
                   return (
                     <TableRow
                       key={`${result._id} ${idx}`}
                       background={background}
                     >
                       <TableColumn>
-                        {result.organization}
+                        <AccountModal
+                          account={result}
+                          buttonLabel={result.organization}
+                          buttonStyle={accountModalButtonStyle}
+                          isEditModal
+                          onActionHook={submitHandler}
+                        />
                       </TableColumn>
                       <TableColumn>
                         {result.type}

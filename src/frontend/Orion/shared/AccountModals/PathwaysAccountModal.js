@@ -20,6 +20,7 @@ const PathwaysAccountModal = ({
   isEditModal,
   buttonLabel,
   buttonStyle,
+  onActionHook,
 }) => {
   const saveMutationDoc = isEditModal
     ? UPDATE_PATHWAYS_ORGANIZATION
@@ -40,6 +41,7 @@ const PathwaysAccountModal = ({
       saveMutationDoc={saveMutationDoc}
       refetchQueries={refetchQueries}
       isEditModal={isEditModal}
+      onActionHook={onActionHook}
     />
   )
 }

@@ -32,6 +32,7 @@ const Connection = ({
   from,
   to,
   refetchQueries,
+  onActionHook,
 }) => {
   const {
     org: {
@@ -47,6 +48,7 @@ const Connection = ({
       input: { _id: to._id }
     },
     refetchQueries,
+    onCompleted: onActionHook
   })
 
   const displayState = state ? `(${state}) ` : ''
