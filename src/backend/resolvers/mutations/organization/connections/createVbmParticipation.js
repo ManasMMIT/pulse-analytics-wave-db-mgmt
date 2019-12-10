@@ -6,13 +6,13 @@ const CATEGORY = 'Value-Based Model Participation'
 const FROM_TYPE = 'participates_in'
 const TO_TYPE = 'affiliated_with' // should likely be changed to `participant` or something more semantic
 
-const createVbmParticipant = async (
+const createVbmParticipation = async (
   parent,
   {
     input: {
       from, // always a Provider or Payer
       to, // always an APM or Pathway
-      state, // ! full set of states expected
+      state,
     }
   },
   { pulseCoreDb, mongoClient },
@@ -26,8 +26,8 @@ const createVbmParticipant = async (
   await session.withTransaction(async () => {
     const newConnectionId = ObjectId()
 
-    await organizationsCollection.findOneAndUpdate(
-      { _id: ObjectId(to._id), type: to.type },
+    const toAccOp = organizationsCollection.findOneAndUpdate(
+      { _id: ObjectId(to._id) },
       {
         $push: {
           connections: {
@@ -48,33 +48,37 @@ const createVbmParticipant = async (
       { session, returnOriginal: false }
     )
 
-    const { value: finalUpdatedFrom } = await organizationsCollection.findOneAndUpdate(
-      { _id: ObjectId(from._id), type: from.type },
-      {
-        $push: {
-          connections: {
-            _id: newConnectionId,
-            org: {
-              _id: ObjectId(to._id),
-              slug: to.slug,
-              organization: to.organization,
-              organizationTiny: to.organizationTiny,
-              type: to.type,
-            },
-            type: FROM_TYPE,
-            category: CATEGORY,
-            state,
+    const fromAccOp = async () => {
+      const { value } = await organizationsCollection.findOneAndUpdate(
+        { _id: ObjectId(from._id) },
+        {
+          $push: {
+            connections: {
+              _id: newConnectionId,
+              org: {
+                _id: ObjectId(to._id),
+                slug: to.slug,
+                organization: to.organization,
+                organizationTiny: to.organizationTiny,
+                type: to.type,
+              },
+              type: FROM_TYPE,
+              category: CATEGORY,
+              state,
+            }
           }
-        }
-      },
-      { session, returnOriginal: false }
-    )
+        },
+        { session, returnOriginal: false }
+      )
 
-    // returning just the FROM connections, since that's the modal the operation was fired on.
-    result = finalUpdatedFrom.connections
+      // returning just the FROM connections, since that's the modal the operation was fired on.
+      result = value.connections
+    }
+
+    await Promise.all([toAccOp, fromAccOp()])
   })
 
   return result
 }
 
-module.exports = createVbmParticipant
+module.exports = createVbmParticipation

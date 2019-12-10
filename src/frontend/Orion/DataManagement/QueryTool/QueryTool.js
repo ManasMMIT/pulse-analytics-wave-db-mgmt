@@ -88,7 +88,8 @@ const QueryTool = ({
   csvConfig,
   submitHandler,
 }) => {
-  const hasStatesData = dataToDisplay.some(({ states }) => !_.isEmpty(states))
+  const hasStatesData = dataToDisplay
+    .some(({ connections }) => connections.some(({ state }) => state))
 
   return (
     <PageWrapper>
@@ -173,7 +174,7 @@ const QueryTool = ({
                       {
                         hasStatesData && (
                           <TableColumn>
-                            {result.states.join(', ')}
+                            {result.connections.map(({ state }) => state).join(', ')}
                           </TableColumn>
                         )
                       }

@@ -24,30 +24,34 @@ const createVbmParticipant = async (
   await session.withTransaction(async () => {
     const newConnectionId = ObjectId()
 
-    const { value: finalUpdatedFrom } = await organizationsCollection.findOneAndUpdate(
-      { _id: ObjectId(from._id), type: from.type },
-      {
-        $push: {
-          connections: {
-            _id: newConnectionId,
-            org: {
-              _id: ObjectId(to._id),
-              slug: to.slug,
-              organization: to.organization,
-              organizationTiny: to.organizationTiny,
-              type: to.type,
+    const fromAccOp = async () => {
+      const { value: finalUpdatedFrom } = await organizationsCollection.findOneAndUpdate(
+        { _id: ObjectId(from._id) },
+        {
+          $push: {
+            connections: {
+              _id: newConnectionId,
+              org: {
+                _id: ObjectId(to._id),
+                slug: to.slug,
+                organization: to.organization,
+                organizationTiny: to.organizationTiny,
+                type: to.type,
+              },
+              state,
+              type: FROM_TYPE,
+              category: CATEGORY,
             },
-            state,
-            type: FROM_TYPE,
-            category: CATEGORY,
           },
         },
-      },
-      { session, returnOriginal: false }
-    )
+        { session, returnOriginal: false }
+      )
+      // returning just the FROM connections, since that's the modal the operation was fired on.
+      result = finalUpdatedFrom.connections
+    }
 
-    await organizationsCollection.findOneAndUpdate(
-      { _id: ObjectId(to._id), type: to.type },
+    const toAccOp = organizationsCollection.findOneAndUpdate(
+      { _id: ObjectId(to._id) },
       {
         $push: {
           connections: {
@@ -68,8 +72,7 @@ const createVbmParticipant = async (
       { session, returnOriginal: false }
     )
 
-    // returning just the FROM connections, since that's the modal the operation was fired on.
-    result = finalUpdatedFrom.connections
+    await Promise.all([fromAccOp(), toAccOp])
   })
 
   return result

@@ -5,6 +5,7 @@ import { useMutation } from '@apollo/react-hooks'
 import queryString from 'query-string'
 import { withRouter } from 'react-router-dom'
 import { transparentize } from 'polished'
+import _ from 'lodash'
 
 import {
   Spacing,
@@ -128,6 +129,15 @@ const AccountsModalButton = ({
     </SubmitButton>
   )
 
+  const orderedConnections = _.orderBy(
+    account.connections,
+    [
+      'org.type',
+      ({ org: { organization } }) => organization.toLowerCase(),
+      'state',
+    ]
+  )
+
   return (
     <>
       <ButtonLabel
@@ -217,7 +227,7 @@ const AccountsModalButton = ({
         }
         <ConnectionsSection
           from={account}
-          connections={account.connections}
+          connections={orderedConnections}
           vbmConnectionDoc={vbmConnectionDoc}
           refetchQueries={refetchQueries}
           isEditModal={isEditModal}

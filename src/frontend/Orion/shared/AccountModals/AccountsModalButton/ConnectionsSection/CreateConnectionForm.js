@@ -144,12 +144,9 @@ const CreateConnectionForm = ({
           }}
           options={accountFilterOptions}
         />
-        <div>
-
-        </div>
       </FormSection>
       <FormSection>
-        <div>Relevant States: </div>
+        <div>Relevant State: </div>
         <Select
           styles={selectStyles}
           defaultValue={null}

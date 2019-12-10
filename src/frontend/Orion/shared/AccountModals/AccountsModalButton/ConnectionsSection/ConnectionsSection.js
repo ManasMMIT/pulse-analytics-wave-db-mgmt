@@ -48,9 +48,9 @@ const ConnectionsSection = ({
       }
       <ConnectionsWrapper>
         { connections &&
-          connections.map(connection => (
+          connections.map((connection, idx) => (
               <Connection
-                key={JSON.stringify(connection)}
+                key={`${connection._id} ${ idx } ${ connection.org._id } ${ connection.state }`}
                 from={from}
                 to={connection}
                 refetchQueries={refetchQueries}

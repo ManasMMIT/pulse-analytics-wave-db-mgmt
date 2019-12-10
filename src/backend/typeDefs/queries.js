@@ -109,7 +109,7 @@ const queries = gql`
     organization: String
     organizationTiny: String
     providerCancerCenter: String # TODO: Change to just cancerCenter or create separate tool account typedefs
-    connections: JSON # can't use [Connections] because the frontend caches based on _id and the dupe _ids mess with the cache
+    connections: JSON
   }
 
   type PayerOrganization {
@@ -144,7 +144,7 @@ const queries = gql`
     org: JSON # could be various shapes, depending on how much dupe org data we want here
     category: String!
     type: String!
-    state: String # directional field: only relevant on one side of certain connections
+    state: String
   }
 
   type EmailUser {

@@ -61,18 +61,17 @@ const filterQuery = async (parent, {
     result = Object.keys(dataGroupedByAccountId).map(accountId => {
       const flatAccountData = dataGroupedByAccountId[accountId]
 
-      const statesAndConnections = flatAccountData.reduce((acc, { connections }) => {
+      const connections = flatAccountData.reduce((acc, { connections }) => {
         if (connections) {
-          acc.connections.push(connections)
-          if (connections.state) acc.states.push(connections.state)
+          acc.push(connections)
         }
 
         return acc
-      }, { states: [], connections: [] })
+      }, [])
 
       return ({
         ...flatAccountData[0],
-        ...statesAndConnections,
+        connections,
       })
     })
   }

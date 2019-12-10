@@ -84,8 +84,6 @@ const mutationType = gql`
     createVbmParticipant(input: CreateVbmParticipantInput!): JSON
     createVbmParticipation(input: CreateVbmParticipationInput!): JSON
     deleteVbmConnection(input: DeleteVbmConnectionInput!): JSON
-
-    createConnection(input: CreateConnectionInput): [Connection]
   }
 `
 

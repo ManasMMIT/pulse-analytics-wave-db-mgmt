@@ -1,6 +1,6 @@
 const { ObjectId } = require('mongodb')
 
-const deleteVbmParticipant = async (
+const deleteVbmConnection = async (
   parent,
   {
     input: {
@@ -33,4 +33,4 @@ const deleteVbmParticipant = async (
   return result
 }
 
-module.exports = deleteVbmParticipant
+module.exports = deleteVbmConnection
