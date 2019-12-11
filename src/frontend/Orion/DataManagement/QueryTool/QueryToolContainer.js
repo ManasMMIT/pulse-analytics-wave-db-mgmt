@@ -197,7 +197,7 @@ const QueryToolContainer = ({
         state: connection.state,
       })
 
-      const connectionsByState = org.connections ? org.connections.map(getCsvObj) : []
+      const connectionsByState = (org.connections || []).map(getCsvObj)
 
       acc = acc.concat(connectionsByState)
 

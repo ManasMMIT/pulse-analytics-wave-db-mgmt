@@ -107,8 +107,6 @@ const QueryTool = ({
   csvConfig,
   submitHandler,
 }) => {
-  const hasStatesData = dataToDisplay
-    .some(({ connections }) => connections.some(({ state }) => state))
 
   return (
     <PageWrapper>
@@ -170,9 +168,7 @@ const QueryTool = ({
                   key: 'type',
                 }}
               />
-              {
-                hasStatesData && <TableHeader label={'Affiliated State(s)'} />
-              }
+              <TableHeader label={'VBM Affiliated State(s)'} />
             </TableHeaderWrapper>
             <TableBody>
               {
@@ -180,6 +176,20 @@ const QueryTool = ({
                   const background = idx % 2 === 0 ? '#9e9e9e33' : 'none'
 
                   const AccountModal = MODAL_MAP[result.type]
+
+                  const formattedStates = (
+                    result.connections
+                      ? (
+                          result.connections
+                            .reduce((acc, { state }) => {
+                              if (state) acc.push(state)
+
+                              return acc
+                            }, [])
+                            .join(', ')
+                        )
+                      : ''
+                  )
                   return (
                     <TableRow
                       key={`${result._id} ${idx}`}
@@ -197,13 +207,9 @@ const QueryTool = ({
                       <TableColumn>
                         {result.type}
                       </TableColumn>
-                      {
-                        hasStatesData && (
-                          <TableColumn>
-                            {result.connections.map(({ state }) => state).join(', ')}
-                          </TableColumn>
-                        )
-                      }
+                      <TableColumn>
+                        {formattedStates}
+                      </TableColumn>
                     </TableRow>
                   )
                 })

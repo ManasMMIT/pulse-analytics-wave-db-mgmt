@@ -142,7 +142,7 @@ const AccountsModalButton = ({
             ? queryString.stringify({ ...restOfQueryString, accountId: account._id })
             : {}
 
-          history.push({ search })
+          isEditModal && history.push({ search })
 
           setSubmitState({
             _id: account._id,
@@ -158,7 +158,7 @@ const AccountsModalButton = ({
         {buttonLabel}
       </ButtonLabel>
       <Modal
-        title={`Account ${ isEditModal ? 'Edit' : 'Create' }`}
+        title={`${isEditModal ? account.type : '' } Account ${ isEditModal ? 'Edit' : 'Create' }`}
         submitButton={submitButton}
         show={isOpen}
         handleClose={() => {
