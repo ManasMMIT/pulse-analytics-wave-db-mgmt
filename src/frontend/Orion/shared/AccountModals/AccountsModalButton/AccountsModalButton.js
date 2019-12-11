@@ -1,72 +1,21 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import styled from '@emotion/styled'
 import { useMutation } from '@apollo/react-hooks'
 import queryString from 'query-string'
 import { withRouter } from 'react-router-dom'
-import { transparentize } from 'polished'
-
-import {
-  Spacing,
-  Transitions,
-  Colors,
-} from './../../../../utils/pulseStyles'
 
 import Modal from '../../../../components/Modal'
 
 import ConnectionsSection from './ConnectionsSection'
 
-const ButtonLabel = styled.button({
-  border: 'none',
-  background: 'none',
-  color: '#b6b9bc',
-  borderRadius: 4,
-  fontWeight: 600,
-  cursor: 'pointer',
-}, ({ children, ...props}) => ({ ...props })) // not sure why children is here
-
-const Input = styled.input({
-  border: 'none',
-  borderRadius: 2,
-  padding: '0px 12px',
-  overflowX: 'scroll',
-  margin: '24px 0px',
-  minWidth: 200,
-  marginTop: 6,
-  fontSize: 16,
-  ':focus': {
-    outline: 'none',
-  },
-}, props => ({ ...props }))
-
-const Label = styled.label({
-  fontSize: 16,
-  display: 'flex',
-  flexDirection: 'column',
-  width: 400,
-})
-
-const LabelText = styled.div({
-  fontWeight: 500,
-})
-
-const SubmitButton = styled.button({
-  placeSelf: 'flex-end',
-  cursor: 'pointer',
-  padding: `${ Spacing.TINY } ${ Spacing.SMALL}`,
-  transition: Transitions.NORMAL,
-  textTransform: 'capitalize',
-  border: 'none',
-  borderRadius: 4,
-  background: Colors.GREEN,
-  color: Colors.WHITE,
-  fontWeight: 600,
-  fontSize: 12,
-  marginLeft: 12,
-  ':hover': {
-    background: transparentize(0.4, Colors.PRIMARY),
-  }
-})
+import {
+  ButtonLabel,
+  Input,
+  Label,
+  LabelText,
+  SubmitButton,
+  SectionTitle,
+} from './styledAccountModalButtonComponents'
 
 const AccountsModalButton = ({
   buttonLabel,
@@ -129,7 +78,7 @@ const AccountsModalButton = ({
 
   const submitButton = (
     <SubmitButton onClick={save}>
-      {'save & close'}
+      {'save + close'}
     </SubmitButton>
   )
 
@@ -169,6 +118,7 @@ const AccountsModalButton = ({
           setIsOpen(false)
         }}
       >
+        <SectionTitle>Account Info</SectionTitle>
         <Label>
           <LabelText>name</LabelText>
           <Input
@@ -222,7 +172,7 @@ const AccountsModalButton = ({
             </Label>
           ))
         }
-        {/* 
+        {/*
             We can't rely on account.connections in ConnectionsSection,
               because the passed-in account may not always have the full
               set of connections -- e.g., in the query tool, we only return

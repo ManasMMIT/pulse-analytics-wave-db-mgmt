@@ -7,7 +7,14 @@ import {
   FILTER_QUERY,
 } from './../../../../../api/mutations'
 
+import { connectionSelectStyles } from './connectionSelectStyles'
+
 import stateAbbreviations from './utils/state-abbreviations'
+
+import {
+  ConnectionFormLabel,
+  SubmitNewConnectionButton,
+} from './styledConnectionComponents'
 
 const ALLOWED_ORG_TYPES = {
   'Provider': [
@@ -33,27 +40,6 @@ const FormSection = styled.div({
   alignItems: 'center',
   margin: '12px 0px',
 })
-
-const sharedSelectStyles = {
-  minWidth: 300,
-  fontSize: 12,
-}
-
-const selectStyles = {
-  option: provided => ({
-    ...provided,
-    ...sharedSelectStyles
-  }),
-  control: provided => ({
-    ...provided,
-    ...sharedSelectStyles,
-    marginLeft: 6,
-    border: 'none',
-    ':focus': {
-      outline: 'none !important',
-    }
-  }),
-}
 
 const CreateConnectionForm = ({
   from,
@@ -132,10 +118,10 @@ const CreateConnectionForm = ({
   return (
     <div>
       <FormSection>
-        <div>{formLanguage}</div>
+        <ConnectionFormLabel>{formLanguage}</ConnectionFormLabel>
         <Select
           isClearable
-          styles={selectStyles}
+          styles={connectionSelectStyles}
           defaultValue={null}
           onChange={(account, { action }) => {
             const to = action === 'clear'
@@ -148,9 +134,9 @@ const CreateConnectionForm = ({
         />
       </FormSection>
       <FormSection>
-        <div>Relevant State: </div>
+        <ConnectionFormLabel>Relevant State: </ConnectionFormLabel>
         <Select
-          styles={selectStyles}
+          styles={connectionSelectStyles}
           defaultValue={null}
           onChange={(state, { action }) => {
             setState(state)
@@ -161,12 +147,12 @@ const CreateConnectionForm = ({
 
         </div>
       </FormSection>
-      <button
+      <SubmitNewConnectionButton
         disabled={!hasAllRequiredFields}
         onClick={connect}
       >
         connect
-      </button>
+      </SubmitNewConnectionButton>
     </div>
   )
 }

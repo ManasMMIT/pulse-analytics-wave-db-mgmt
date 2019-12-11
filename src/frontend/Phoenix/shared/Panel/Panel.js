@@ -11,7 +11,9 @@ const Wrapper = styled.div({
   minHeight: '100vh',
   maxHeight: '100vh',
   overflowY: 'scroll',
-})
+}, props => ({
+  ...props.style,
+}))
 
 const Panel = ({
   style,

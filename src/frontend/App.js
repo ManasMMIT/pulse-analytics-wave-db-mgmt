@@ -1,4 +1,5 @@
 import React from 'react'
+import styled from '@emotion/styled'
 import { transparentize } from 'polished'
 import { ApolloProvider } from '@apollo/react-hooks'
 import ApolloClient from 'apollo-boost'
@@ -18,6 +19,8 @@ import Phoenix from './Phoenix'
 import Orion from './Orion'
 import Delphi from './Delphi'
 
+import { Colors, Spacing } from './utils/pulseStyles'
+
 const IconSource = {
   PHOENIX: 'https://res.cloudinary.com/pulsedatatools/image/upload/v1573136582/polaris/icons/phoenix-1-white.svg',
   ORION: 'https://res.cloudinary.com/pulsedatatools/image/upload/v1573136582/polaris/icons/orion-1-white.svg',
@@ -32,31 +35,36 @@ const client = new ApolloClient({
   }
 })
 
-const sidebarStyle = {
+const PolarisSidebar = styled.div({
   display: 'flex',
   flexDirection: 'column',
   backgroundColor: '#0E2539',
-  height: '100vh',
-}
-
-const linkStyle = {
-  color: 'white',
-  textDecoration: 'none',
-  padding: '24px 24px',
-  borderLeft: '4px solid transparent',
-  borderRight: '4px solid transparent',
-  opacity: 0.7,
-}
+  height: `calc(100vh - ${Spacing.SMALL})`,
+  padding: Spacing.TINY,
+})
 
 const iconStyle = {
  width: 20,
- height: 'auto',
+ height: 20,
 }
 
-const activeLinkStyle = borderColor => ({
-  borderLeft: `4px solid ${ borderColor }`,
-  background: transparentize(0.92, '#FFF'),
+const activeLinkStyle = activeColor => ({
+  background: transparentize(0.8, activeColor),
   opacity: 1,
+})
+
+const StyledNavLink = styled(NavLink)({
+  color: Colors.WHITE,
+  borderRadius: 4,
+  textDecoration: 'none',
+  padding: `${Spacing.NORMAL} ${Spacing.NORMAL} ${Spacing.SMALL}`,
+  margin: Spacing.TINY,
+  // borderLeft: '4px solid transparent',
+  // borderRight: '4px solid transparent',
+  opacity: 0.6,
+  ':hover': {
+    background: transparentize(0.92, Colors.WHITE),
+  }
 })
 
 const App = () => {
@@ -64,29 +72,26 @@ const App = () => {
     <ApolloProvider client={client}>
         <Router>
           <div style={{ display: 'flex' }}>
-            <div style={sidebarStyle}>
-              <NavLink
+            <PolarisSidebar>
+              <StyledNavLink
                 to="/phoenix"
-                style={linkStyle}
-                activeStyle={activeLinkStyle('#FA8969')}
+                activeStyle={activeLinkStyle(Colors.PHOENIX)}
               >
                 <img style={iconStyle} src={IconSource.PHOENIX} />
-              </NavLink>
-              <NavLink
+              </StyledNavLink>
+              <StyledNavLink
                 to="/orion"
-                style={linkStyle}
-                activeStyle={activeLinkStyle('#38B59A')}
+                activeStyle={activeLinkStyle(Colors.ORION)}
               >
                 <img style={iconStyle} src={IconSource.ORION} />
-              </NavLink>
-              <NavLink
+              </StyledNavLink>
+              <StyledNavLink
                 to="/delphi"
-                style={linkStyle}
-                activeStyle={activeLinkStyle('#30B2DC')}
+                activeStyle={activeLinkStyle(Colors.DELPHI)}
               >
                 <img style={iconStyle} src={IconSource.DELPHI} />
-              </NavLink>
-            </div>
+              </StyledNavLink>
+            </PolarisSidebar>
             <Switch>
               <Route path="/phoenix" component={Phoenix} />
               <Route path="/orion" component={Orion} />

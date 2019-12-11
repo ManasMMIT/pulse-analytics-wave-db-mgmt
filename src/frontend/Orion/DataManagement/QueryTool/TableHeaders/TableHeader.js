@@ -1,17 +1,31 @@
 import React, { useState } from 'react'
 import styled from '@emotion/styled'
+import {transparentize} from 'polished'
 import _ from 'lodash'
 import PropTypes from 'prop-types'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faCaretDown, faCaretUp } from "@fortawesome/free-solid-svg-icons"
 
+import { Colors } from './../../../../utils/pulseStyles'
+
 const TableHeaderItem = styled.div({
   flex: 1,
   cursor: 'pointer',
   padding: 12,
-  border: '1px solid grey',
+  borderBottom: `2px solid ${transparentize(0.7, Colors.BLACK)}`,
   display: 'flex',
   justifyContent: 'space-between',
+  ':hover': {
+    background: transparentize(0.9, Colors.PRIMARY),
+  }
+})
+
+const TableHeaderLabel = styled.div({
+  fontSize: 12,
+  color: transparentize(0.2, Colors.BLACK),
+  fontWeight: 700,
+  lineHeight: '24px',
+  letterSpacing: -0.2,
 })
 
 const TableHeader = ({
@@ -40,7 +54,7 @@ const TableHeader = ({
       const newSortOrder = sortOrder === 'asc'
         ? 'desc'
         : 'asc'
-  
+
       const dataToDisplay = _.orderBy(
         tableData,
         [
@@ -52,7 +66,7 @@ const TableHeader = ({
         ],
         [newSortOrder]
       )
-  
+
       setDataToDisplay(dataToDisplay)
       handleSortOrder(newSortOrder)
     }
@@ -60,12 +74,12 @@ const TableHeader = ({
 
   return (
     <TableHeaderItem onClick={handleClick} >
-      <div>{label}</div>
+      <TableHeaderLabel>{label}</TableHeaderLabel>
       {
         hasSortConfig && (
           <FontAwesomeIcon
-            size="lg"
             icon={arrowIcon}
+            color={Colors.PRIMARY}
           />
         )
       }

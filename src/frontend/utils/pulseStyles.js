@@ -67,6 +67,7 @@ export const Transitions = {
 export const ZIndexes = {
   MODAL: 1000,
   PANEL_HEADER: 100,
+  QUERY_CONTROLS: 1000,
 }
 
 export const Spacing = {
@@ -80,4 +81,8 @@ export const Spacing = {
   HUGE: '32px',
   MAX: '48px',
   TOOL_SIDEBAR: '256px',
+}
+
+export const FontFamily = {
+  NORMAL: 'IBM Plex Sans'
 }

@@ -34,9 +34,10 @@ const Main = styled.section({
   display: "inline-flex",
   flexDirection: 'column',
   justifyContent: "space-between",
-  padding: 24,
-  width: '80%',
-});
+  padding: 32,
+}, props => ({
+  width: props.width,
+}))
 
 const Header = styled.div({
   display: 'flex',
@@ -54,17 +55,23 @@ const Title = styled.div({
 
 const CloseButton = styled.button({
   background: transparentize(0.9, Colors.BLACK),
-  color: Colors.BLACK,
+  color: transparentize(0.2, Colors.BLACK),
   cursor: 'pointer',
   border: 'none',
   borderRadius: 4,
   fontSize: 12,
-  fontWeight: 600,
-  padding: `${Spacing.TINY} ${Spacing.SMALL}`,
+  fontWeight: 700,
+  padding: `${Spacing.SMALL} ${Spacing.NORMAL}`,
   transition: Transitions.NORMAL,
-  textTransform: 'capitalize',
+  textTransform: 'uppercase',
   ':hover': {
     background: transparentize(0.75, Colors.BLACK)
+  },
+  ':focus': {
+    outline: 'none',
+  },
+  ':active': {
+    outline: 'none',
   }
 })
 
@@ -91,6 +98,7 @@ class Modal extends React.Component {
       style,
       disableHeader,
       submitButton,
+      width
     } = this.props;
 
     if (!show) return null;
@@ -103,7 +111,7 @@ class Modal extends React.Component {
 
     return (
       <Wrapper onClick={this.handleClickAway} css={style}>
-        <Main ref={node => { this.node = node }}>
+        <Main ref={node => { this.node = node }} width={width}>
           {
             disableHeader || (
               <Header>
@@ -133,6 +141,7 @@ Modal.defaultProps = {
   title: null,
   style: {},
   disableHeader: false,
+  width: 'auto',
 }
 
 Modal.propTypes = {
@@ -141,6 +150,7 @@ Modal.propTypes = {
   title: PropTypes.string,
   style: PropTypes.object,
   disableHeader: PropTypes.bool,
+  width: PropTypes.string,
 }
 
 export default Modal;

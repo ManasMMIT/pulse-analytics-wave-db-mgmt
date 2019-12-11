@@ -10,6 +10,12 @@ import { GET_CLIENTS, GET_SELECTED_CLIENT } from '../../../api/queries'
 
 import { Colors, Spacing } from '../../../utils/pulseStyles'
 
+const phoenixLogo = "https://res.cloudinary.com/pulsedatatools/image/upload/v1573837414/polaris/icons/phoenix-1-color.svg"
+
+const ClientPanelContainer = styled.div({
+  backgroundColor: Colors.TOOL_SIDEBAR,
+})
+
 const PhoenixHeader = styled.div({
   alignItems: 'center',
   background: transparentize(0.3, Colors.BLACK),
@@ -56,28 +62,35 @@ const panelItemConfig = {
 
 const headerChildren = <CreateButton />
 
-const panelBackgroundColor = '#093357'
+const panelHeight = 'calc(100vh - 56px)'
 
 const ClientsPanel = () => {
   return (
-    <div style={{ backgroundColor: panelBackgroundColor }}>
+    <ClientPanelContainer>
       <PhoenixHeader>
-        <PhoenixLogo src="https://res.cloudinary.com/pulsedatatools/image/upload/v1573837414/polaris/icons/phoenix-1-color.svg" />
+        <PhoenixLogo src={phoenixLogo} />
         Phoenix User MGMT
       </PhoenixHeader>
       <Panel
-        style={{ backgroundColor: panelBackgroundColor, maxWidth: Spacing.TOOL_SIDEBAR, minWidth: Spacing.TOOL_SIDEBAR, }}
+        style={{
+            backgroundColor: Colors.TOOL_SIDEBAR,
+            maxWidth: Spacing.TOOL_SIDEBAR,
+            minWidth: Spacing.TOOL_SIDEBAR,
+            height: panelHeight,
+            maxHeight: panelHeight,
+            minHeight: panelHeight,
+        }}
         title="Clients"
-        titleStyle={{ color: '#536f8d' }}
+        titleStyle={{ color: transparentize(0.5, Colors.WHITE) }}
         headerChildren={headerChildren}
-        headerContainerStyle={{ backgroundColor: panelBackgroundColor }}
+        headerContainerStyle={{ backgroundColor: Colors.TOOL_SIDEBAR }}
         queryDocs={{
           fetchAllQueryProps: { query: GET_CLIENTS },
           fetchSelectedQueryProps: { query: GET_SELECTED_CLIENT },
         }}
         panelItemConfig={panelItemConfig}
       />
-    </div>
+    </ClientPanelContainer>
   )
 }
 

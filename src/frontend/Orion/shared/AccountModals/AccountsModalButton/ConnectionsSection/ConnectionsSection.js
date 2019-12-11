@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import { useQuery } from '@apollo/react-hooks'
-import styled from '@emotion/styled'
 import _ from 'lodash'
 
 import Connection from './Connection'
@@ -13,17 +12,13 @@ import {
   GET_APM_ORGANIZATIONS,
 } from '../../../../../api/queries'
 
-const SectionHeader = styled.div({
-  display: 'flex',
-  fontSize: 16,
-  fontWeight: 500,
-  textDecoration: 'underline',
-})
+import { SectionTitle } from '../styledAccountModalButtonComponents'
 
-const ConnectionsWrapper = styled.div({
-  maxHeight: 400,
-  overflowY: 'scroll',
-})
+import {
+  SectionHeader,
+  ConnectionsWrapper,
+  CreateConnectionButton,
+} from './styledConnectionComponents'
 
 const TYPE_MAP = {
   'Payer': GET_PAYER_ORGANIZATIONS,
@@ -62,12 +57,12 @@ const ConnectionsSection = ({
   return (
     <div>
       {
-        isEditModal && 
+        isEditModal &&
           <SectionHeader>
-            <span>Connections </span>
-            <button onClick={() => setShowConnectionForm(!showConnectionForm)}>
-              add
-            </button>
+            <SectionTitle>Connections</SectionTitle>
+            <CreateConnectionButton onClick={() => setShowConnectionForm(!showConnectionForm)}>
+              + Connection
+            </CreateConnectionButton>
           </SectionHeader>
       }
       {

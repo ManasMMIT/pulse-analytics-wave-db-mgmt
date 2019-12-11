@@ -10,17 +10,15 @@ const primaryColor = Colors.PRIMARY
 
 const CsvButton = styled.a({
   textDecoration: 'none',
-  background: primaryColor,
-  color: 'white',
+  background: transparentize(0.85,primaryColor),
+  color: primaryColor,
   fontSize: 12,
+  fontWeight: 700,
   padding: '8px 12px',
   borderRadius: 4,
-  fontWeight: 700,
-  margin: '12px 12px 6px 12px',
   display: 'block',
-  width: 65,
   ':hover': {
-    background: transparentize(0.3, primaryColor),
+    background: transparentize(0.65, primaryColor),
   }
 })
 

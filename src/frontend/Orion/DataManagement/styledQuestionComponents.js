@@ -5,20 +5,21 @@ import { mix, transparentize } from 'polished'
 import { Colors, Spacing, Transitions } from '../../utils/pulseStyles'
 
 export const QuestionsPageContainer = styled.div({
-  background: transparentize(0.5, Colors.LIGHT_GRAY_1),
-  padding: Spacing.NORMAL,
+  background: mix(0.3, Colors.LIGHT_GRAY_1, Colors.WHITE),
   width: '100%',
 })
 
 export const PageHeaderContainer = styled.div({
-  padding: `${Spacing.EXTRA_LARGE} ${Spacing.EXTRA_LARGE} 0`,
+  padding: `${Spacing.LARGE} ${Spacing.HUGE}`,
 })
 
-export const PageHeader = styled.div({
+export const PageHeader = styled.h1({
+  fontSize: 16,
+  letterSpacing: -0.2,
+  lineHeight: '24px',
   color: Colors.BLACK,
-  fontSize: 14,
-  fontWeight: 700,
   textTransform: 'uppercase',
+  marginBottom: Spacing.EXTRA_LARGE,
 })
 
 export const PageDescription = styled.p({
@@ -33,10 +34,10 @@ export const QuestionsListContainer = styled.div({
   padding: Spacing.NORMAL,
 })
 
-const linkColor = Colors.PRIMARY
+const linkColor = Colors.BLACK
 
 export const QuestionButtonLinkContainer = styled.div({
-  padding: `${Spacing.SMALL} ${Spacing.NORMAL}`,
+  padding: `${Spacing.NORMAL}`,
 })
 
 export const QuestionArrow = styled.span({
@@ -51,8 +52,9 @@ export const QuestionButtonLink = styled(Link)({
   color: linkColor,
   display: 'flex',
   justifyContent: 'space-between',
-  fontSize: 14,
-  fontWeight: 600,
+  fontSize: 12,
+  fontWeight: 500,
+  lineHeight: '22px',
   padding: Spacing.LARGE,
   textDecoration: 'none',
   transition: Transitions.NORMAL,

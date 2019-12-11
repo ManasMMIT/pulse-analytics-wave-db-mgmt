@@ -1,13 +1,12 @@
 import React from 'react'
 import Select from 'react-select'
-import styled from '@emotion/styled'
 import _ from 'lodash'
 
-import { Colors, Spacing } from './../../../utils/pulseStyles'
+import { Colors } from './../../../utils/pulseStyles'
 
-import Card from './../../../components/Card'
 import TableHeader from './TableHeaders/TableHeader'
 import DownloadCsvButton from './../../../components/DownloadCsvButton'
+import { customSelectStyles } from './../../../components/customSelectStyles'
 
 import {
   PathwaysAccountModal,
@@ -16,6 +15,21 @@ import {
   PayerAccountModal,
 } from '../../shared/AccountModals'
 
+import {
+  PageWrapper,
+  PageTitle,
+  QueryControlsContainer,
+  QueryControls,
+  Question,
+  Label,
+  SubmitButton,
+  ResultsContainer,
+  TableWrapper,
+  TableHeaderWrapper,
+  TableBody,
+  TableRow,
+  TableColumn,
+} from './styledQueryToolComponents'
 
 const MODAL_MAP = {
   'Provider': ProviderAccountModal,
@@ -23,77 +37,6 @@ const MODAL_MAP = {
   'Alternative Payment Model': ApmAccountModal,
   'Pathways': PathwaysAccountModal,
 }
-
-const PageWrapper = styled.div({
-  flex: 1,
-  backgroundColor: '#e8ebec',
-  padding: Spacing.EXTRA_LARGE,
-  boxSizing: 'border-box',
-  display: 'flex',
-  flexDirection: 'column',
-  height: '100vh',
-})
-
-const Question = styled.div({
-  fontWeight: 700,
-  padding: 12,
-})
-
-const Label = styled.div({
-  fontSize: 12,
-  fontWeight: 700,
-  marginBottom: 4,
-})
-
-const SubmitButton = styled.button({
-  background: Colors.PRIMARY,
-  border: 'none',
-  borderRadius: 4,
-  color: Colors.WHITE,
-  fontSize: 12,
-  fontWeight: 700,
-  marginLeft: 24,
-  padding: '8px 12px',
-  ':active': {
-    background: 'blue'
-  }
-})
-
-const TableWrapper = styled.div({
-  display: 'flex',
-  flexDirection: 'column',
-  padding: 12,
-  overflowY: 'scroll',
-})
-
-const TableHeaderWrapper = styled.div({
-  display: 'flex',
-  fontWeight: 700,
-})
-
-const TableBody = styled.div({
-  display: 'flex',
-  flexDirection: 'column',
-  overflowX: 'scroll',
-})
-
-const TableRow = styled.div({
-  display: 'flex',
-  flex: 1,
-}, ({ background }) => ({ background }))
-
-const TableColumn = styled.div({
-  flex: 1,
-  padding: 12,
-  border: '1px solid grey',
-})
-
-const QuestionWrapper = styled.div({
-  display: 'flex',
-  alignItems: 'flex-end',
-  marginLeft: 12,
-  marginBottom: 24,
-})
 
 const accountModalButtonStyle = {
   color: Colors.BLACK,
@@ -110,8 +53,9 @@ const QueryTool = ({
 
   return (
     <PageWrapper>
-      <Card title={'Query'}>
-        <QuestionWrapper>
+      <QueryControlsContainer>
+        <PageTitle>Query Tool</PageTitle>
+        <QueryControls>
           <div style={{ width: 360 }}>
             <Label>
               Account Type(s)
@@ -121,6 +65,7 @@ const QueryTool = ({
               defaultValue={orgTypesConfig.defaultValue}
               onChange={orgTypesConfig.onChangeHandler}
               options={orgTypesConfig.filterOptions}
+              styles={customSelectStyles}
             />
           </div>
           <Question>
@@ -137,85 +82,88 @@ const QueryTool = ({
               defaultValue={accountConfig.defaultValue}
               onChange={accountConfig.onChangeHandler}
               options={accountConfig.filterOptions}
+              styles={customSelectStyles}
             />
           </div>
           <SubmitButton onClick={submitHandler}>
             Submit
           </SubmitButton>
-        </QuestionWrapper>
-      </Card>
-      <DownloadCsvButton
-        data={csvConfig.data}
-        fileName={csvConfig.fileName}
-      />
+          <DownloadCsvButton
+            data={csvConfig.data}
+            fileName={csvConfig.fileName}
+          />
+        </QueryControls>
+      </QueryControlsContainer>
       {
         !!dataToDisplay.length && (
-          <TableWrapper>
-            <TableHeaderWrapper>
-              <TableHeader
-                label={'Account'}
-                sortConfig={{
-                  tableData: dataToDisplay,
-                  setDataToDisplay,
-                  key: 'organization',
-                }}
-              />
-              <TableHeader
-                label={'Type'}
-                sortConfig={{
-                  tableData: dataToDisplay,
-                  setDataToDisplay,
-                  key: 'type',
-                }}
-              />
-              <TableHeader label={'VBM Affiliated State(s)'} />
-            </TableHeaderWrapper>
-            <TableBody>
-              {
-                dataToDisplay.map((result, idx) => {
-                  const background = idx % 2 === 0 ? '#9e9e9e33' : 'none'
+          <ResultsContainer>
+            <TableWrapper>
+              <TableHeaderWrapper>
+                <TableHeader
+                  label={'Account'}
+                  sortConfig={{
+                    tableData: dataToDisplay,
+                    setDataToDisplay,
+                    key: 'organization',
+                  }}
+                />
+                <TableHeader
+                  label={'Type'}
+                  sortConfig={{
+                    tableData: dataToDisplay,
+                    setDataToDisplay,
+                    key: 'type',
+                  }}
+                />
+                <TableHeader label={'VBM Affiliated State(s)'} />
+              </TableHeaderWrapper>
+              <TableBody>
+                {
+                  dataToDisplay.map((result, idx) => {
+                    const background = idx % 2 === 0 ? '#9e9e9e33' : 'none'
 
-                  const AccountModal = MODAL_MAP[result.type]
+                    const AccountModal = MODAL_MAP[result.type]
 
-                  const formattedStates = (
-                    result.connections
-                      ? (
-                          result.connections
-                            .reduce((acc, { state }) => {
-                              if (state) acc.push(state)
+                    const formattedStates = (
+                      result.connections
+                        ? (
+                            result.connections
+                              .reduce((acc, { state }) => {
+                                if (state) acc.push(state)
 
-                              return acc
-                            }, [])
-                            .join(', ')
-                        )
-                      : ''
-                  )
-                  return (
-                    <TableRow
-                      key={`${result._id} ${idx}`}
-                      background={background}
-                    >
-                      <TableColumn>
-                        <AccountModal
-                          account={result}
-                          buttonLabel={result.organization}
-                          buttonStyle={accountModalButtonStyle}
-                          isEditModal
-                          onActionHook={submitHandler}
-                        />
-                      </TableColumn>
-                      <TableColumn>
-                        {result.type}
-                      </TableColumn>
-                      <TableColumn>
-                        {formattedStates}
-                      </TableColumn>
-                    </TableRow>
-                  )
-                })
-              }
-            </TableBody>
-          </TableWrapper>
+                                return acc
+                              }, [])
+                              .join(', ')
+                          )
+                        : ''
+                    )
+                    return (
+                      <TableRow
+                        key={`${result._id} ${idx}`}
+                        background={background}
+                      >
+                        <TableColumn>
+                          <AccountModal
+                            account={result}
+                            buttonLabel={result.organization}
+                            buttonStyle={accountModalButtonStyle}
+                            isEditModal
+                            onActionHook={submitHandler}
+                          />
+                        </TableColumn>
+                        <TableColumn>
+                          {result.type}
+                        </TableColumn>
+                        <TableColumn>
+                          {formattedStates}
+                        </TableColumn>
+                      </TableRow>
+                    )
+                  })
+                }
+              </TableBody>
+            </TableWrapper>
+          </ResultsContainer>
         )
       }
     </PageWrapper>
