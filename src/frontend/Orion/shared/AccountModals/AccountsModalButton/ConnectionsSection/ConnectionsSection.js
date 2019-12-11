@@ -7,7 +7,10 @@ import Connection from './Connection'
 import CreateConnectionForm from './CreateConnectionForm'
 
 import {
-  GET_ORGANIZATIONS,
+  GET_PAYER_ORGANIZATIONS,
+  GET_PATHWAYS_ORGANIZATIONS,
+  GET_PROVIDER_ORGANIZATIONS,
+  GET_APM_ORGANIZATIONS,
 } from '../../../../../api/queries'
 
 const SectionHeader = styled.div({
@@ -22,6 +25,13 @@ const ConnectionsWrapper = styled.div({
   overflowY: 'scroll',
 })
 
+const TYPE_MAP = {
+  'Payer': GET_PAYER_ORGANIZATIONS,
+  'Pathways': GET_PATHWAYS_ORGANIZATIONS,
+  'Provider': GET_PROVIDER_ORGANIZATIONS,
+  'Alternative Payment Model': GET_APM_ORGANIZATIONS,
+}
+
 const ConnectionsSection = ({
   from,
   vbmConnectionDoc,
@@ -31,18 +41,14 @@ const ConnectionsSection = ({
 }) => {
   const [showConnectionForm, setShowConnectionForm] = useState(false)
 
-  refetchQueries.push({
-    query: GET_ORGANIZATIONS,
-    variables: { _id: from._id }
-  })
+  const { data, loading } = useQuery(TYPE_MAP[from.type])
 
-  const { data, loading } = useQuery(GET_ORGANIZATIONS, {
-    variables: { _id: from._id }
-  })
+  let connections = []
+  if (!loading) {
+    const masterListFromAccount = Object.values(data)[0].find(account => account._id === from._id)
 
-  const connections = loading
-    ? []
-    : data.organizations.connections || []
+    connections = masterListFromAccount.connections
+  }
 
   const orderedConnections = _.orderBy(
     connections,
