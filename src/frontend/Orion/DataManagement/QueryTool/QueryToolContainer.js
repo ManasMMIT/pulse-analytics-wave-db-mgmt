@@ -110,7 +110,7 @@ const QueryToolContainer = ({
     hasLoadedInitialFilter,
     setHasLoadedInitialFilter,
   ] = useState(false)
-
+  const [showCsvButton, setShowCsvButton] = useState(false)
   const [dataToDisplay, setDataToDisplay] = useState([])
   const [orgTypes, setOrgTypes] = useState([])
   const [selectedAccount, setSelectedAccount] = useState('')
@@ -122,6 +122,14 @@ const QueryToolContainer = ({
     {
       onCompleted: ({ filterQuery: result }) => {
         setDataToDisplay(result)
+        const shouldNotDisplayData = (
+          _.isEmpty(result)
+            || _.isEmpty(selectedAccount)
+            || _.isEmpty(orgTypes)
+        )
+
+        if (shouldNotDisplayData) setShowCsvButton(false)
+        else setShowCsvButton(true)
       }
     }
   )
@@ -246,6 +254,7 @@ const QueryToolContainer = ({
   const csvConfig = {
     data: csvData,
     fileName: csvFileName,
+    shouldShow: showCsvButton,
   }
 
   const submitHandler = getSubmitHandler(

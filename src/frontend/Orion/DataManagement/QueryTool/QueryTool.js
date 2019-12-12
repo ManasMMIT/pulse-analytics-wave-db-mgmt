@@ -89,6 +89,7 @@ const QueryTool = ({
             Submit
           </SubmitButton>
           <DownloadCsvButton
+            show={csvConfig.shouldShow}
             data={csvConfig.data}
             fileName={csvConfig.fileName}
           />

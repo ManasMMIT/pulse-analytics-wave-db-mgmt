@@ -25,10 +25,11 @@ const CsvButton = styled.a({
 const DownloadCsvButton = ({
   data,
   fileName,
+  show,
 }) => {
   const [csv, setCsv] = useState('')
 
-  if (!data || !data.length) return null
+  if (!show) return null
 
   parseAsync(data, { includeEmptyRows: true }).then(setCsv)
 
@@ -49,11 +50,13 @@ const DownloadCsvButton = ({
 DownloadCsvButton.propTypes = {
   data: PropTypes.array, // JSON
   fileName: PropTypes.string,
+  show: PropTypes.bool,
 }
 
 DownloadCsvButton.defaultProps = {
   data: [],
   fileName: '',
+  show: true,
 }
 
 export default DownloadCsvButton
