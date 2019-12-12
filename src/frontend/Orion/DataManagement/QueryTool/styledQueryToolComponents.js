@@ -19,6 +19,7 @@ export const QueryControlsContainer = styled.div({
   position: 'sticky',
   top: 0,
   width: '100%',
+  boxSizing: 'border-box',
   zIndex: ZIndexes.QUERY_CONTROLS,
 })
 
@@ -76,7 +77,8 @@ export const SubmitButton = styled.button({
 })
 
 export const ResultsContainer = styled.div({
-  position: 'relative'
+  flex: '1 1 0%',
+  overflowY: 'auto',
 })
 
 export const TableWrapper = styled.div({
@@ -86,13 +88,13 @@ export const TableWrapper = styled.div({
   flexDirection: 'column',
   padding: `0 ${Spacing.HUGE}`,
   overflowY: 'scroll',
-  height: 'calc(100vh - 174px)',
 })
 
 export const TableHeaderWrapper = styled.div({
   backgroundColor: Colors.WHITE,
   display: 'flex',
   position: 'sticky',
+  margin: '0px 32px',
 })
 
 export const TableBody = styled.div({
