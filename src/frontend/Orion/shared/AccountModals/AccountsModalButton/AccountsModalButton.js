@@ -71,6 +71,8 @@ const AccountsModalButton = ({
       variables: { input: submitState },
       refetchQueries,
       update: () => {
+        const search = queryString.stringify(restOfQueryString)
+        history.push({ search })
         setIsOpen(false)
       },
       onCompleted: onActionHook,
