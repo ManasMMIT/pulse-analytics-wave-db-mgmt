@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
+import _ from 'lodash'
 import { useMutation } from '@apollo/react-hooks'
 import queryString from 'query-string'
 import { withRouter } from 'react-router-dom'
@@ -181,13 +182,17 @@ const AccountsModalButton = ({
             This decision was made to make the accounts modal more reusable,
               independent of where it lives in the frontend.
         */}
-        <ConnectionsSection
-          from={account}
-          onActionHook={onActionHook}
-          vbmConnectionDoc={vbmConnectionDoc}
-          refetchQueries={refetchQueries}
-          isEditModal={isEditModal}
-        />
+        {
+          !_.isEmpty(account) && (
+            <ConnectionsSection
+              from={account}
+              onActionHook={onActionHook}
+              vbmConnectionDoc={vbmConnectionDoc}
+              refetchQueries={refetchQueries}
+              isEditModal={isEditModal}
+            />
+          )
+        }
       </Modal>
     </>
   )
