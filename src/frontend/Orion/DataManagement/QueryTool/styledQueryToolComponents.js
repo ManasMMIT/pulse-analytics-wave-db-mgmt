@@ -129,3 +129,9 @@ export const TableColumn = styled.div({
   flex: 1,
   padding: `${Spacing.TINY} ${Spacing.NORMAL}`,
 })
+
+export const HeaderWrapper = styled.div({
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+})

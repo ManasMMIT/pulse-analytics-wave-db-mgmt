@@ -263,6 +263,11 @@ const QueryToolContainer = ({
     filterQuery,
   )
 
+  const resetHandler = () => {
+    history.push({ search: '' })
+    window.location.reload(false)
+  }
+
   return (
     <QueryTool
       dataToDisplay={dataToDisplay}
@@ -271,6 +276,7 @@ const QueryToolContainer = ({
       orgTypesConfig={orgTypesConfig}
       csvConfig={csvConfig}
       submitHandler={submitHandler}
+      resetHandler={resetHandler}
     />
   )
 }

@@ -1,6 +1,7 @@
 import React from 'react'
 import Select from 'react-select'
-import _ from 'lodash'
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faSyncAlt } from "@fortawesome/free-solid-svg-icons"
 
 import { Colors } from './../../../utils/pulseStyles'
 
@@ -29,6 +30,7 @@ import {
   TableBody,
   TableRow,
   TableColumn,
+  HeaderWrapper,
 } from './styledQueryToolComponents'
 
 const MODAL_MAP = {
@@ -49,12 +51,21 @@ const QueryTool = ({
   orgTypesConfig,
   csvConfig,
   submitHandler,
+  resetHandler,
 }) => {
 
   return (
     <PageWrapper>
       <QueryControlsContainer>
-        <PageTitle>Query Tool</PageTitle>
+        <HeaderWrapper>
+          <PageTitle>Query Tool</PageTitle>
+          <FontAwesomeIcon
+            style={{ cursor: 'pointer' }}
+            onClick={resetHandler}
+            icon={faSyncAlt}
+            color={Colors.PRIMARY}
+          />
+        </HeaderWrapper>
         <QueryControls>
           <div style={{ width: 360 }}>
             <Label>
