@@ -24,26 +24,30 @@ const pushOps = {
     const session = mongoClient.startSession()
 
     await session.withTransaction(async () => {
-      const [
-        usersSitemapsDev,
-        usersNodesResourcesDev,
-      ] = await Promise.all([
+      const [usersSitemapsDev] = await Promise.all([
         pulseDevDb.collection('users.sitemaps')
-          .find({}, { session }).toArray(),
-        pulseDevDb.collection('users.nodes.resources')
           .find({}, { session }).toArray(),
         pulseProdDb.collection('users.sitemaps')
           .deleteMany({}, { session }),
-        pulseProdDb.collection('users.nodes.resources')
-          .deleteMany({}, { session })
       ])
 
-      await Promise.all([
-        pulseProdDb.collection('users.sitemaps')
-          .insertMany(usersSitemapsDev, { session }),
+
+      await pulseProdDb.collection('users.sitemaps')
+        .insertMany(usersSitemapsDev, { session })
+    })
+
+    const sessionTwo = mongoClient.startSession()
+
+    await sessionTwo.withTransaction(async () => {
+      const [usersNodesResourcesDev] = await Promise.all([
+        pulseDevDb.collection('users.nodes.resources')
+          .find({}, { session: sessionTwo }).toArray(),
         pulseProdDb.collection('users.nodes.resources')
-          .insertMany(usersNodesResourcesDev, { session })
+          .deleteMany({}, { session: sessionTwo })
       ])
+
+      await pulseProdDb.collection('users.nodes.resources')
+        .insertMany(usersNodesResourcesDev, { session: sessionTwo })
     })
 
     return 'Sitemap push to prod successful'
