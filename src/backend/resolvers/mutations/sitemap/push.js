@@ -23,31 +23,41 @@ const pushOps = {
 
     const session = mongoClient.startSession()
 
+    const [
+      usersSitemapsDev,
+      usersNodesResourcesDev,
+    ] = await Promise.all([
+      pulseDevDb.collection('users.sitemaps')
+        .find().toArray(),
+      pulseDevDb.collection('users.nodes.resources')
+        .find().toArray(),
+      pulseProdDb.collection('TEMP_users.sitemaps')
+        .deleteMany(),
+      pulseProdDb.collection('TEMP_users.nodes.resources')
+        .deleteMany(),
+    ])
+
+    await Promise.all([
+      pulseProdDb.collection('TEMP_users.sitemaps')
+        .insertMany(usersSitemapsDev),
+      pulseProdDb.collection('TEMP_users.nodes.resources')
+        .insertMany(usersNodesResourcesDev),
+    ])
+
     await session.withTransaction(async () => {
-      const [usersSitemapsDev] = await Promise.all([
-        pulseDevDb.collection('users.sitemaps')
-          .find({}, { session }).toArray(),
-        pulseProdDb.collection('users.sitemaps')
-          .deleteMany({}, { session }),
+      // await Promise.all([
+      //   pulseProdDb.collection('users.sitemaps')
+      //     .renameCollection('random1', { session }),
+      //   pulseProdDb.collection('users.nodes.resources')
+      //     .renameCollection('random2', { session })
+      // ])
+
+      await Promise.all([
+        pulseProdDb.collection('TEMP_users.sitemaps')
+          .rename('users.sitemaps', { session, dropTarget: true }),
+        pulseProdDb.collection('TEMP_users.nodes.resources')
+          .rename('users.nodes.resources', { session, dropTarget: true })
       ])
-
-
-      await pulseProdDb.collection('users.sitemaps')
-        .insertMany(usersSitemapsDev, { session })
-    })
-
-    const sessionTwo = mongoClient.startSession()
-
-    await sessionTwo.withTransaction(async () => {
-      const [usersNodesResourcesDev] = await Promise.all([
-        pulseDevDb.collection('users.nodes.resources')
-          .find({}, { session: sessionTwo }).toArray(),
-        pulseProdDb.collection('users.nodes.resources')
-          .deleteMany({}, { session: sessionTwo })
-      ])
-
-      await pulseProdDb.collection('users.nodes.resources')
-        .insertMany(usersNodesResourcesDev, { session: sessionTwo })
     })
 
     return 'Sitemap push to prod successful'
