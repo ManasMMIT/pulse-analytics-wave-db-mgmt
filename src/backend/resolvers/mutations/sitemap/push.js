@@ -3,7 +3,7 @@ const generateUsersPermissions = require('../../../generate-users-permissions')
 
 const pushOps = {
   pushSitemapToDev: async (parent, args, context, info) => {
-  const { mongoClient, pulseCoreDb, pulseDevDb } = context
+    const { mongoClient, pulseCoreDb, pulseDevDb } = context
     await generateSitemaps({
       mongoClient,
       pulseCoreDb,
@@ -19,36 +19,33 @@ const pushOps = {
     return 'Sitemap push to dev successful'
   },
   pushSitemapToProd: async (parent, args, context, info) => {
-    const { mongoClient, pulseDevDb, pulseProdDb } = context
+    const { pulseDevDb, pulseProdDb } = context
 
-    const session = mongoClient.startSession()
+    const [
+      usersSitemapsDev,
+      usersNodesResourcesDev,
+    ] = await Promise.all([
+      pulseDevDb.collection('users.sitemaps')
+        .find().toArray(),
+      pulseDevDb.collection('users.nodes.resources')
+        .find().toArray(),
+      pulseProdDb.collection('users.sitemaps')
+        .deleteMany(),
+      pulseProdDb.collection('users.nodes.resources')
+        .deleteMany(),
+    ])
 
-    await session.withTransaction(async () => {
-      const [usersSitemapsDev] = await Promise.all([
-        pulseDevDb.collection('users.sitemaps')
-          .find({}, { session }).toArray(),
-        pulseProdDb.collection('users.sitemaps')
-          .deleteMany({}, { session }),
-      ])
+    console.log('latest DEV sitemaps and nodes.resources has been READ')
+    console.log('old PROD sitemaps and nodes.resources DELETED')
 
+    await Promise.all([
+      pulseProdDb.collection('users.sitemaps')
+        .insertMany(usersSitemapsDev),
+      pulseProdDb.collection('users.nodes.resources')
+        .insertMany(usersNodesResourcesDev)
+    ])
 
-      await pulseProdDb.collection('users.sitemaps')
-        .insertMany(usersSitemapsDev, { session })
-    })
-
-    const sessionTwo = mongoClient.startSession()
-
-    await sessionTwo.withTransaction(async () => {
-      const [usersNodesResourcesDev] = await Promise.all([
-        pulseDevDb.collection('users.nodes.resources')
-          .find({}, { session: sessionTwo }).toArray(),
-        pulseProdDb.collection('users.nodes.resources')
-          .deleteMany({}, { session: sessionTwo })
-      ])
-
-      await pulseProdDb.collection('users.nodes.resources')
-        .insertMany(usersNodesResourcesDev, { session: sessionTwo })
-    })
+    console.log('new PROD sitemaps and nodes.resources INSERTED')
 
     return 'Sitemap push to prod successful'
   },
