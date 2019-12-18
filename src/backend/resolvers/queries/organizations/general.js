@@ -3,6 +3,7 @@ const organizations = (parent, { toolId }, { pulseCoreDb }) => {
     return pulseCoreDb
       .collection('organizations')
       .find({ toolIds: toolId })
+      .collation({ locale: 'en' })
       .sort({ organization: 1 })
       .toArray()
   }
@@ -10,6 +11,7 @@ const organizations = (parent, { toolId }, { pulseCoreDb }) => {
   return pulseCoreDb
     .collection('organizations')
     .find()
+    .collation({ locale: 'en' })
     .sort({ organization: 1 })
     .toArray()
 }

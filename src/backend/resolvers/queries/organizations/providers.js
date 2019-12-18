@@ -4,6 +4,8 @@ const providerOrganizations = async (parent, args, { pulseCoreDb }) => {
   return await pulseCoreDb
     .collection('organizations')
     .find({ toolIds: PROVIDER_TOOL_ID })
+    .collation({ locale: 'en' })
+    .sort({ organization: 1 })
     .toArray()
 }
 
