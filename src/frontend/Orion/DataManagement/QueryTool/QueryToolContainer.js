@@ -13,6 +13,8 @@ import {
 
 import QueryTool from './QueryTool'
 
+const CSV_FILENAME = `Query-Tool-Results`
+
 const ACCOUNT_TYPE_OPTIONS = [
   'Payer',
   'Provider',
@@ -24,7 +26,7 @@ const getAccountOnChangeHandler = (
   orgTypes,
   history,
   setSelectedAccount,
-) => (account, actionType) => {
+) => account => {
   const accountQueryStrings = _.isEmpty(account)
     ? {}
     : { selectedAccountId: account.value }
@@ -38,15 +40,9 @@ const getAccountOnChangeHandler = (
     ...accountQueryStrings,
   })
 
-  if (actionType === 'clear') {
-    history.push({
-      search: '',
-    })
-  } else {
-    history.push({
-      search: newQueryStrings,
-    })
-  }
+  history.push({
+    search: newQueryStrings,
+  })
 
   setSelectedAccount(account)
 }
@@ -74,7 +70,7 @@ const getOrgTypesOnChangeHandler = (
   selectedAccount,
   history,
   setOrgTypes,
-) => (orgTypes, actionType) => {
+) => orgTypes => {
   const orgTypesObj = orgTypes
     ? { orgTypes: orgTypes.map(({ value }) => value) }
     : {}
@@ -88,15 +84,9 @@ const getOrgTypesOnChangeHandler = (
     ...selectedAccountObj,
   })
 
-  if (actionType === 'clear') {
-    history.push({
-      search: '',
-    })
-  } else {
-    history.push({
-      search: newQueryStrings
-    })
-  }
+  history.push({
+    search: newQueryStrings
+  })
 
   setOrgTypes(orgTypes)
 }
@@ -193,7 +183,7 @@ const QueryToolContainer = ({
   }
 
   let csvData = []
-  if (!_.isEmpty(selectedAccount)) {
+  if (showCsvButton) {
     csvData = _.cloneDeep(dataToDisplay).reduce((acc, org) => {
       const getCsvObj = connection => ({
         _id: connection._id,
@@ -216,12 +206,6 @@ const QueryToolContainer = ({
   let formattedOrgTypes = orgTypes
     ? orgTypes.map(({ value }) => value)
     : []
-
-  let selectedAccountLabel = selectedAccount
-    ? selectedAccount.label
-    : ''
-
-  const csvFileName = `${ formattedOrgTypes.join('-') }-affiliated-with-${ selectedAccountLabel }`
 
   const accountConfig = {
     defaultValue: defaultSelectedAccount,
@@ -253,7 +237,7 @@ const QueryToolContainer = ({
 
   const csvConfig = {
     data: csvData,
-    fileName: csvFileName,
+    fileName: CSV_FILENAME,
     shouldShow: showCsvButton,
   }
 
