@@ -13,7 +13,7 @@
         <mj-button
           mj-class='visit-tool-btn visit-account-btn'
           css-class='styled-button'
-          href='https://pulse-tools.com/pathways/accounts/pathways/{{ orgSlugs[orgName] }}/positioning'
+          href='https://pulse-tools.com/pathways/accounts/{{ orgSlugs[orgName] }}/positioning'
         >
           View on Tool
         </mj-button>
