@@ -1,11 +1,17 @@
 const objectifyResourcesIds = require('./utils/objectifyResourcesIds')
 const cascadeUpdateResources = require('./utils/cascadeUpdateResources')
+const upsertUsersPermissions = require('./../../../generate-users-permissions/upsertUsersPermissions')
 
 const updatePermissions = async (
   parent,
   { input: { teamId, nodeId, updatedResources } },
-  { mongoClient, coreRoles, coreNodes },
-  info
+  { mongoClient,
+    coreRoles,
+    coreNodes,
+    pulseCoreDb,
+    pulseDevDb
+  },
+  // info
 ) => {
   objectifyResourcesIds(updatedResources)
 
@@ -15,6 +21,10 @@ const updatePermissions = async (
 
   let result
   await session.withTransaction(async () => {
+    /*
+      Step 1: Update team resources
+    */
+
     const team = await coreRoles.findOne({ _id: teamId }, { session })
 
     // if team doesn't have a resources array, initialize it
@@ -33,8 +43,8 @@ const updatePermissions = async (
       resourcesAcrossNodes,
     })
 
-   // upsert changedNodeResourcesObjs into resourcesAcrossNodes
-   changedNodeResourcesObjs.forEach(nodeResourcesObj => {
+    // upsert changedNodeResourcesObjs into resourcesAcrossNodes
+    changedNodeResourcesObjs.forEach(nodeResourcesObj => {
       const targetIdx = resourcesAcrossNodes.findIndex(
         ({ nodeId: nId }) => nId === nodeResourcesObj.nodeId
       )
@@ -53,8 +63,20 @@ const updatePermissions = async (
       { $set: { resources: resourcesAcrossNodes } },
       { session, returnOriginal: false },
     )
+    console.log(`\n${updatedTeam.name}'s resources have been updated`)
 
     result = updatedTeam
+
+    /*
+      Step 2: Update team user's nodes resources
+    */
+
+    await upsertUsersPermissions({
+      users: updatedTeam.users,
+      pulseCoreDb,
+      pulseDevDb,
+      session,
+    })
   })
 
   return result

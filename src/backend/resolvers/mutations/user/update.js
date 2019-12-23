@@ -1,5 +1,8 @@
 const _ = require('lodash')
+
 const wait = require('./../../../../utils/wait')
+const upsertUsersPermissions = require('./../../../generate-users-permissions/upsertUsersPermissions')
+const upsertUsersSitemaps = require('./../sitemap/upsertUsersSitemaps')
 
 const updateUser = async (
   parent,
@@ -18,6 +21,8 @@ const updateUser = async (
     coreRoles,
     coreUsers,
     auth0,
+    pulseDevDb,
+    pulseCoreDb,
   },
   info,
 ) => {
@@ -103,6 +108,21 @@ const updateUser = async (
       },
       { session }
     )
+
+    // 4. Update a user's sitemap and resources docs
+    await upsertUsersPermissions({
+      users: [updatedResult],
+      pulseDevDb,
+      pulseCoreDb,
+      session,
+    })
+
+    await upsertUsersSitemaps({
+      users: [updatedResult],
+      session,
+      pulseDevDb,
+      pulseCoreDb,
+    })
   })
 
   return updatedMongoUser

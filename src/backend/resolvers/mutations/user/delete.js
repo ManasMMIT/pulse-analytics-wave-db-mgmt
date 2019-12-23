@@ -6,6 +6,7 @@ const deleteUser = async (
     mongoClient,
     coreRoles,
     coreUsers,
+    pulseDevDb,
     auth0,
   },
   info,
@@ -18,16 +19,38 @@ const deleteUser = async (
 
   let deletedUser = null
   await session.withTransaction(async () => {
+    deletedUser = await coreUsers.findOne(
+      { _id }
+    )
+
     // pull user out of all its roles
+    console.log(`\nbeginning process to delete ${ deletedUser.username }`)
+    
     await coreRoles.updateMany(
       { users: { $elemMatch: { _id } } },
       { $pull: { users: { _id } } },
       { session }
     )
 
+    console.log('user removed from their team(s)')
+    
+    await pulseDevDb.collection('users.sitemaps').deleteOne(
+      { _id },
+      { session }
+    )
+
+    await pulseDevDb.collection('users.nodes.resources').deleteOne(
+      { _id },
+      { session }
+    )
+
+    console.log('user no longer has sitemap or resources access')
+    
     // delete user from source collection
-    deletedUser = await coreUsers.findOne({ _id })
+
     await coreUsers.findOneAndDelete({ _id }, { session })
+
+    console.log(`${ deleteUser.username } successfully deleted\n`)
   })
 
   return deletedUser

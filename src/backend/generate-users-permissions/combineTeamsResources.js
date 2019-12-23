@@ -1,22 +1,16 @@
 const _ = require('lodash')
 
-/*
-  generateUserPerms combines all userTeams' resources
-  then uses master lists to match resources to actionable
-  fields for filtering such as `slug` or `name`.
-
-  Expected return value is `{ _id: user._id, resources }`,
-  which will be persisted directly to `users.nodes.resources`
-  in `pulse-dev`. The 'username' field is purposely excluded
-  to avoid needing to update the username if it's
-  changed in Phoenix.
-*/
-
-module.exports = ({
-  userId,
-  teamResourcesByNodeId,
+const combineTeamsResources = ({
+  teams,
   masterListItemsById,
 }) => {
+  const userTeamsWithResources = teams
+    .filter(({ resources }) => resources)
+
+  const teamsResources = _.flatten(userTeamsWithResources.map(({ resources }) => resources))
+
+  const teamResourcesByNodeId = _.groupBy(teamsResources, 'nodeId')
+
   const resources = []
   Object.keys(teamResourcesByNodeId).forEach(nodeId => {
     const allNodeResources = teamResourcesByNodeId[nodeId]
@@ -84,8 +78,7 @@ module.exports = ({
     resources.push(nodeResources)
   })
 
-  return ({
-    _id: userId,
-    resources,
-  })
+  return resources
 }
+
+module.exports = combineTeamsResources

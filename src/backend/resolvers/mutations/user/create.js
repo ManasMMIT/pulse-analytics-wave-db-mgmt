@@ -1,5 +1,8 @@
 const _ = require('lodash')
+
 const wait = require('./../../../../utils/wait')
+const upsertUsersSitemaps = require('./../sitemap/upsertUsersSitemaps')
+const upsertUsersPermissions = require('./../../../generate-users-permissions/upsertUsersPermissions')
 
 const createUser = async (
   parent,
@@ -16,9 +19,9 @@ const createUser = async (
   {
     mongoClient,
     coreClients,
-    coreRoles,
-    coreUsers,
     auth0,
+    pulseCoreDb,
+    pulseDevDb,
   },
   info,
 ) => {
@@ -46,40 +49,78 @@ const createUser = async (
   // ! mongodb
   const session = mongoClient.startSession()
 
-  let result = null
+  let newUser = null
   await session.withTransaction(async () => {
-    const client = await coreClients.findOne({ _id: clientId }, { session })
+    // Step 1: Insert user into users collection
 
-    const user = await coreUsers.insertOne({
-      _id: userInAuth0.user_id,
-      username,
-      email,
-      emailSubscriptions,
-      client,
-      schemaVersion: 'v1.1.1',
-    }, { session })
+    const client = await coreClients
+      .findOne({ _id: clientId }, { session })
 
+    const user = await pulseCoreDb
+      .collection('users')
+      .insertOne({
+        _id: userInAuth0.user_id,
+        username,
+        email,
+        emailSubscriptions,
+        client,
+        schemaVersion: 'v1.1.1',
+      }, { session })
+
+    newUser = user.ops[0]
+
+    console.log(`\n${ newUser.username } created`)
+    
+    // Step 2: Add user to selected team's users
+
+    const userTeams = []
     for (const roleId of roles) {
-      await coreRoles.findOneAndUpdate(
-        { _id: roleId },
-        {
-          $push: {
-            users: {
-              _id: userInAuth0.user_id,
-              username,
-              email,
-              emailSubscriptions,
+      const { value: team } = await pulseCoreDb
+        .collection('roles')
+        .findOneAndUpdate(
+          { _id: roleId },
+          {
+            $push: {
+              users: {
+                _id: userInAuth0.user_id,
+                username,
+                email,
+                emailSubscriptions,
+              }
             }
-          }
-        },
-        { session }
-      )
+          },
+          { session }
+        )
+      userTeams.push(team)
     }
 
-    result = user.ops[0]
+    console.log(`${newUser.username} added to ${ userTeams.length } teams`)
+
+    // Step 3: Create a sitemap and resources doc for user
+
+    const sitemapOp = upsertUsersSitemaps({
+      users: [newUser],
+      session,
+      pulseCoreDb,
+      pulseDevDb,
+    })
+
+    const nodesResourcesOp = upsertUsersPermissions({
+      users: [newUser],
+      pulseCoreDb,
+      pulseDevDb,
+      session,
+    })
+
+    await Promise.all([
+      sitemapOp,
+      nodesResourcesOp,
+    ])
+
+    console.log(`${ newUser.username } now has sitemap and resource access\n`)
   })
 
-  return result
+  return newUser
 }
 
 module.exports = createUser

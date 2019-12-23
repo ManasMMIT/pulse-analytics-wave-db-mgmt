@@ -1,13 +1,12 @@
 /* eslint-disable no-loop-func */
 const _ = require('lodash')
-const generateUserPerms = require('./generateUserPerms')
+const upsertUserPerms = require('./upsertUserPerms')
 
 const generateUsersPermissions = async({
   mongoClient,
   pulseCoreDb,
   pulseDevDb,
 }) => {
-  const coreRoles = pulseCoreDb.collection('roles')
   const coreUsers = pulseCoreDb.collection('users')
 
   const session = mongoClient.startSession()
@@ -30,27 +29,15 @@ const generateUsersPermissions = async({
       '_id',
     )
 
-    const usersNodesResourcesPromises = users.map(async user => {
-      const userTeams = await coreRoles.find(
-        { 'users._id': user._id },
-        { session }
-      ).toArray()
-
-      const userTeamsWithResources = userTeams
-        .filter(({ resources }) => resources)
-
-      const teamsResources = _.flatten(userTeamsWithResources.map(({ resources }) => resources))
-
-      const teamResourcesByNodeId = _.groupBy(teamsResources, 'nodeId')
-
-      const userPerms = generateUserPerms({
+    const usersNodesResourcesPromises = users.map(user => (
+      upsertUserPerms({
         userId: user._id,
-        teamResourcesByNodeId,
+        pulseDevDb,
+        pulseCoreDb,
         masterListItemsById,
+        session,
       })
-
-      return userPerms
-    })
+    ))
 
     const docs = await Promise.all(usersNodesResourcesPromises)
 

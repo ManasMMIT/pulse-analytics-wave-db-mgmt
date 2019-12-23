@@ -1,6 +1,6 @@
 const createTeam = require('./create')
 const updateTeam = require('./update')
-const updatePermissions = require('./update-permissions')
+const updatePermissions = require('./updatePermissions')
 const deleteTeam = require('./delete')
 
 module.exports = {

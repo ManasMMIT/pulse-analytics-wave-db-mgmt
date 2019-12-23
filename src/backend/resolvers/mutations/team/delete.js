@@ -1,8 +1,16 @@
+const upsertUsersSitemaps = require('../sitemap/upsertUsersSitemaps')
+const upsertUsersPermissions = require('../../../generate-users-permissions/upsertUsersPermissions')
+
 const deleteTeam = async (
   parent,
   { input: { _id, clientId } },
-  { coreRoles, auth0 },
-  info
+  {
+    mongoClient,
+    pulseCoreDb,
+    pulseDevDb,
+    auth0,
+  },
+  // info
 ) => {
   if (!Boolean(clientId)) {
     throw Error('must specify clientId')
@@ -11,13 +19,43 @@ const deleteTeam = async (
   // ! auth0
   await auth0.roles.delete({ id: _id, clientId })
 
-  // ! mongodb
-  const roleToDelete = await coreRoles
-    .findOne({ _id })
+  let result
 
-  await coreRoles.findOneAndDelete({ _id })
+  const session = mongoClient.startSession()
 
-  return roleToDelete
+  await session.withTransaction(async () => {
+    // Step 1: Delete Team
+    
+    const {
+      value: deletedTeam
+    } = await pulseCoreDb
+      .collection('roles')
+      .findOneAndDelete({ _id }, { session })
+  
+    console.log(`${ deletedTeam.name } was successfully deleted`)
+    
+    // Step 2a: Regen all team users sitemaps
+    // Step 2b: Regen all team users resources
+    
+    await Promise.all([
+      upsertUsersSitemaps({
+        users: deletedTeam.users,
+        session,
+        pulseCoreDb,
+        pulseDevDb,
+      }),
+      upsertUsersPermissions({
+        users: deletedTeam.users,
+        pulseCoreDb,
+        pulseDevDb,
+        session,
+      })
+    ])
+
+    result = deletedTeam
+  })
+
+  return result
 }
 
 module.exports = deleteTeam

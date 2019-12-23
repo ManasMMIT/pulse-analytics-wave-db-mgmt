@@ -1,7 +1,12 @@
+/*
+  ? The PushToDevButton will likely be brought back for admin use,
+    ? so it has not been removed, only commented out.
+*/
+
 import React from 'react'
 import styled from '@emotion/styled'
 
-import PushToDevButton from './PushToDevButton'
+// import PushToDevButton from './PushToDevButton'
 import PushToProdButton from './PushToProdButton'
 
 const Wrapper = styled.div({
@@ -17,7 +22,7 @@ const Wrapper = styled.div({
 
 const StatusPanel = () => (
   <Wrapper>
-    <PushToDevButton />
+    {/* <PushToDevButton /> */}
     <PushToProdButton />
   </Wrapper>
 )
