@@ -6,7 +6,7 @@ import PropTypes from 'prop-types'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faCaretDown, faCaretUp } from "@fortawesome/free-solid-svg-icons"
 
-import { Colors } from './../../../../utils/pulseStyles'
+import { Colors } from '../../../utils/pulseStyles'
 
 const TableHeaderItem = styled.div({
   flex: 1,
