@@ -24,4 +24,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   3) makes it faster to update permissions/sitemaps (now that writes are smaller).
 
 ### Removed
+- `Polaris Backend`: removed old `client`, `role`, and `user` controllers.
 - `Phoenix`: `push to dev` button has been commented out, until there's a discussion on managing admin features.

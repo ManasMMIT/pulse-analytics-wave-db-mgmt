@@ -8,9 +8,6 @@ const typeDefs = require('./typeDefs')
 const resolvers = require('./resolvers')
 
 const {
-  getClientController,
-  getRoleController,
-  getUserController,
   getNodeController,
 } = require('./controllers')
 
@@ -60,14 +57,8 @@ MongoClient.connect(process.env.LOADER_URI, { useNewUrlParser: true }, (err, cli
 
   apolloServer.applyMiddleware({ app: subApp })
 
-  const clientController = getClientController(twoGuysInAHorseCostume)
-  const roleController = getRoleController(twoGuysInAHorseCostume)
-  const userController = getUserController(twoGuysInAHorseCostume)
   const nodeController = getNodeController(twoGuysInAHorseCostume)
 
-  subApp.use('/clients', clientController)
-  subApp.use('/roles', roleController)
-  subApp.use('/users', userController)
   subApp.use('/nodes', nodeController)
 
   subApp.use('/collections', async (req, res) => {
