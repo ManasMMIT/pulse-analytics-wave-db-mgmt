@@ -25,8 +25,6 @@ const queries = gql`
     newTreatmentPlans(data: JSON): JSON
     emailUsers: [EmailUser]
     testEmailGroups: [TestEmailGroup]
-
-    queryToolAccounts: JSON
   }
 
   type Node {

@@ -453,11 +453,3 @@ export const GET_TEST_EMAIL_GROUPS = gql`
     }
   }
 `
-
-// ! This is only need, as long as we are working with flat, query seed data, and not the master lists
-// ! Only used to populate options in the account filter for the query tool
-export const GET_QUERY_ACCOUNTS = gql`
-  query getQueryToolAccounts {
-    queryToolAccounts
-  }
-`

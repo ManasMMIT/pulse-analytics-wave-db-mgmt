@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useMutation, useQuery } from '@apollo/react-hooks'
+import { useMutation } from '@apollo/react-hooks'
 import _ from 'lodash'
 import queryString from 'query-string'
 
@@ -7,9 +7,7 @@ import {
   FILTER_QUERY,
 } from './../../../api/mutations'
 
-import {
-  GET_QUERY_ACCOUNTS,
-} from './../../../api/queries'
+import useQueryTool from './useQueryTool'
 
 import QueryTool from './QueryTool'
 
@@ -105,7 +103,7 @@ const QueryToolContainer = ({
   const [orgTypes, setOrgTypes] = useState([])
   const [selectedAccount, setSelectedAccount] = useState('')
 
-  const { data, loading } = useQuery(GET_QUERY_ACCOUNTS)
+  const { data, loading } = useQueryTool()
 
   const [filterQuery] = useMutation(
     FILTER_QUERY,
@@ -129,9 +127,9 @@ const QueryToolContainer = ({
   const { queryToolAccounts } = data
 
   const accountFilterOptions = queryToolAccounts
-    .map(({ _id, organization }) => ({
+    .map(({ _id, organization, type }) => ({
       value: _id,
-      label: organization,
+      label: `${ organization } (${ type })`,
     }))
 
   const UrlInput = queryString.parse(search)
