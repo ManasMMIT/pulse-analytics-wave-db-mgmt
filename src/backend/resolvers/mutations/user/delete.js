@@ -1,4 +1,3 @@
-// TODO: Delete user's association to role GROUP in auth0
 const deleteUser = async (
   parent,
   { input: { _id } },
@@ -50,7 +49,7 @@ const deleteUser = async (
 
     await coreUsers.findOneAndDelete({ _id }, { session })
 
-    console.log(`${ deleteUser.username } successfully deleted\n`)
+    console.log(`${ deletedUser.username } successfully deleted\n`)
   })
 
   return deletedUser

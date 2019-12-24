@@ -8,16 +8,12 @@ const deleteTeam = async (
     mongoClient,
     pulseCoreDb,
     pulseDevDb,
-    auth0,
   },
   // info
 ) => {
   if (!Boolean(clientId)) {
     throw Error('must specify clientId')
   }
-
-  // ! auth0
-  await auth0.roles.delete({ id: _id, clientId })
 
   let result
 

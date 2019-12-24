@@ -1,6 +1,5 @@
 const _ = require('lodash')
 
-const wait = require('./../../../../utils/wait')
 const upsertUsersSitemaps = require('./../sitemap/upsertUsersSitemaps')
 const upsertUsersPermissions = require('./../../../generate-users-permissions/upsertUsersPermissions')
 
@@ -37,14 +36,6 @@ const createUser = async (
 
   // ! auth0
   const userInAuth0 = await auth0.users.create({ username, email, password })
-
-  await wait()
-  await auth0.authClient.addGroupMember(clientId, userInAuth0.user_id)
-
-  for (const roleId of roles) {
-    await wait()
-    await auth0.authClient.addGroupMember(roleId, userInAuth0.user_id)
-  }
 
   // ! mongodb
   const session = mongoClient.startSession()

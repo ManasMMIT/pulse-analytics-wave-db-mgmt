@@ -1,6 +1,5 @@
 const _ = require('lodash')
 
-const wait = require('./../../../../utils/wait')
 const upsertUsersPermissions = require('./../../../generate-users-permissions/upsertUsersPermissions')
 const upsertUsersSitemaps = require('./../sitemap/upsertUsersSitemaps')
 
@@ -38,39 +37,6 @@ const updateUser = async (
   if (!Array.isArray(incomingRoles)) incomingRoles = [incomingRoles]
 
   // ! auth0
-  const groupsInAuth0 = await auth0.authClient.getUserGroups(_id, false)
-
-  // TODO: Don't use hyphen to determine whether a group is a client group
-  // filter out the CLIENT group to only keep the role groups
-  // and map to get just the id strings
-  const roleGroupsInAuth0 = groupsInAuth0
-    .filter(({ name }) => name.includes('-'))
-    .map(({ _id }) => _id)
-
-  const doRolesNeedUpdate = _.xor(incomingRoles, roleGroupsInAuth0).length > 0
-
-  let rolesToLink
-  if (doRolesNeedUpdate) {
-    const rolesToDelink = roleGroupsInAuth0.filter(
-      currentRoleId => !incomingRoles.includes(currentRoleId)
-    )
-
-    rolesToLink = incomingRoles.filter(
-      incomingRoleId => !roleGroupsInAuth0.includes(incomingRoleId)
-    )
-
-    for (const roleToDelink of rolesToDelink) {
-      await wait()
-      await auth0.authClient.removeGroupMember(roleToDelink, _id)
-    }
-
-    for (const roleToLink of rolesToLink) {
-      await wait()
-      await auth0.authClient.addGroupMember(roleToLink, _id)
-    }
-  }
-
-  await wait()
   await auth0.users.update({ id: _id, username, email, password })
 
   // ! mongodb
