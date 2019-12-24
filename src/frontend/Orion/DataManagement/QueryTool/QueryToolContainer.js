@@ -1,24 +1,13 @@
 import React, { useState } from 'react'
-import { useMutation } from '@apollo/react-hooks'
 import _ from 'lodash'
 import queryString from 'query-string'
 
-import {
-  FILTER_QUERY,
-} from './../../../api/mutations'
-
 import useQueryTool from './useQueryTool'
+import useFilterOptions from './useFilterOptions'
 
 import QueryTool from './QueryTool'
 
 const CSV_FILENAME = `Query-Tool-Results`
-
-const ACCOUNT_TYPE_OPTIONS = [
-  'Payer',
-  'Provider',
-  'Pathways',
-  'Alternative Payment Model',
-]
 
 const getAccountOnChangeHandler = (
   orgTypes,
@@ -43,25 +32,6 @@ const getAccountOnChangeHandler = (
   })
 
   setSelectedAccount(account)
-}
-
-const getSubmitHandler = (
-  selectedAccount,
-  formattedOrgTypes,
-  filterQuery,
-) => () => {
-  let selectedAccountObj = selectedAccount
-    ? { selectedAccount: selectedAccount.value }
-    : {}
-
-  filterQuery({
-    variables: {
-      input: {
-        orgTypes: formattedOrgTypes,
-        ...selectedAccountObj,
-      }
-    },
-  })
 }
 
 const getOrgTypesOnChangeHandler = (
@@ -98,44 +68,30 @@ const QueryToolContainer = ({
     hasLoadedInitialFilter,
     setHasLoadedInitialFilter,
   ] = useState(false)
-  const [showCsvButton, setShowCsvButton] = useState(false)
-  const [dataToDisplay, setDataToDisplay] = useState([])
+
   const [orgTypes, setOrgTypes] = useState([])
   const [selectedAccount, setSelectedAccount] = useState('')
 
-  const { data, loading } = useQueryTool()
+  const {
+    showCsvButton,
+    dataToDisplay,
+    filterQuery,
+    setDataToDisplay,
+  } = useQueryTool({
+    orgTypes,
+    selectedAccount,
+  })
 
-  const [filterQuery] = useMutation(
-    FILTER_QUERY,
-    {
-      onCompleted: ({ filterQuery: result }) => {
-        setDataToDisplay(result)
-        const shouldNotDisplayData = (
-          _.isEmpty(result)
-            || _.isEmpty(selectedAccount)
-            || _.isEmpty(orgTypes)
-        )
-
-        if (shouldNotDisplayData) setShowCsvButton(false)
-        else setShowCsvButton(true)
-      }
-    }
-  )
+  const { data, loading } = useFilterOptions()
 
   if (loading) return null
 
-  const { queryToolAccounts } = data
-
-  const accountFilterOptions = queryToolAccounts
-    .map(({ _id, organization, type }) => ({
-      value: _id,
-      label: `${ organization } (${ type })`,
-    }))
+  const {
+    accountFilterOptions,
+    orgTypeFilterOptions,
+  } = data
 
   const UrlInput = queryString.parse(search)
-
-  const orgTypeFilterOptions = ACCOUNT_TYPE_OPTIONS
-    .map(accountType => ({ value: accountType, label: accountType }))
 
   let defaultOrgTypes = Object.keys(
     _.groupBy(dataToDisplay, 'slugType')
@@ -169,13 +125,19 @@ const QueryToolContainer = ({
     }
 
     const formattedUrlOrgTypes = UrlOrgTypes
-      .map(orgType => ({ label: orgType, value: orgType }))
+      .map(orgType => ({
+        label: orgType,
+        value: orgType,
+      }))
 
     setOrgTypes(formattedUrlOrgTypes)
 
     setSelectedAccount(defaultSelectedAccount)
 
-    filterQuery({ variables: { input }, fetchPolicy: 'no-cache' })
+    filterQuery({
+      variables: { input },
+      fetchPolicy: 'no-cache',
+    })
 
     setHasLoadedInitialFilter(true)
   }
@@ -200,10 +162,6 @@ const QueryToolContainer = ({
       return acc
     }, [])
   }
-
-  let formattedOrgTypes = orgTypes
-    ? orgTypes.map(({ value }) => value)
-    : []
 
   const accountConfig = {
     defaultValue: defaultSelectedAccount,
@@ -239,12 +197,6 @@ const QueryToolContainer = ({
     shouldShow: showCsvButton,
   }
 
-  const submitHandler = getSubmitHandler(
-    selectedAccount,
-    formattedOrgTypes,
-    filterQuery,
-  )
-
   const resetHandler = () => {
     history.push({ search: '' })
     window.location.reload(false)
@@ -257,7 +209,7 @@ const QueryToolContainer = ({
       accountConfig={accountConfig}
       orgTypesConfig={orgTypesConfig}
       csvConfig={csvConfig}
-      submitHandler={submitHandler}
+      submitHandler={filterQuery}
       resetHandler={resetHandler}
     />
   )
