@@ -4,7 +4,7 @@ const _ = require('lodash')
 const updateOrganization = async (
   parent,
   { input: { _id: stringId, ...body } },
-  { pulseCoreDb, mongoClient },
+  { pulseCoreDb, pulseDevDb, mongoClient },
   info,
 ) => {
   const _id = ObjectId(stringId)
@@ -23,6 +23,8 @@ const updateOrganization = async (
   let result
 
   await session.withTransaction(async () => {
+
+    // Step 1: update org in organizations collection
     const { value } = await pulseCoreDb
       .collection('organizations')
       .findOneAndUpdate(
@@ -35,6 +37,7 @@ const updateOrganization = async (
 
     const { connections, ...updatedOrg } = result
 
+    // Step 2: update org data in all org.connections
     await pulseCoreDb
       .collection('organizations')
       .updateMany(
@@ -51,6 +54,24 @@ const updateOrganization = async (
           session,
         },
       )
+    
+    // Step 3: update org.slug in all users.nodes.resources
+    await pulseDevDb.collection('users.nodes.resources')
+        .updateMany(
+          { 'resources.accounts._id': _id },
+          {
+            $set: {
+              'resources.$[resource].accounts.$[el].slug': updatedOrg.slug,
+            }
+          },
+          {
+            arrayFilters: [
+              { 'resource.accounts': { $exists: true } },
+              { 'el._id': _id }
+            ],
+            session,
+          }
+        )
   })
 
   return result
