@@ -1,61 +1,58 @@
-/*
-  ! The eventual purpose of this custom hook is to
-    ! handle most (if not all) query tool hook logic for
-    ! a more consistent hook API.
-    
-  ! The current logic will be moved into a sub-hook
-    ! something like 'useAllAccounts`
-*/
+// ? useQueryToolData
 
-import { useQuery } from '@apollo/react-hooks'
+import { useState } from 'react'
+import { useMutation } from '@apollo/react-hooks'
+import _ from 'lodash'
 
 import {
-  GET_APM_ORGANIZATIONS,
-  GET_PATHWAYS_ORGANIZATIONS,
-  GET_PAYER_ORGANIZATIONS,
-  GET_PROVIDER_ORGANIZATIONS,
-} from '../../../api/queries'
+  FILTER_QUERY,
+} from '../../../api/mutations'
 
-export default () => {
-  const {
-    data: ApmData,
-    loading: ApmLoading,
-  } = useQuery(GET_APM_ORGANIZATIONS)
+export default ({
+  orgTypes,
+  selectedAccount,
+}) => {
+  const [showCsvButton, setShowCsvButton] = useState(false)
+  const [dataToDisplay, setDataToDisplay] = useState([])
 
-  const {
-    data: PathwaysData,
-    loading: PathwaysLoading,
-  } = useQuery(GET_PATHWAYS_ORGANIZATIONS)
+  const formattedOrgTypes = orgTypes
+    ? orgTypes.map(({ value }) => value)
+    : []
 
-  const {
-    data: PayerData,
-    loading: PayerLoading,
-  } = useQuery(GET_PAYER_ORGANIZATIONS)
-  
-  const {
-    data: ProviderData,
-    loading: ProviderLoading,
-  } = useQuery(GET_PROVIDER_ORGANIZATIONS)
+  const selectedAccountObj = selectedAccount
+    ? {
+        selectedAccount: selectedAccount.value
+      }
+    : {}
 
-  const loading = [
-    ApmLoading,
-    PathwaysLoading,
-    PayerLoading,
-    ProviderLoading,
-  ].some(loading => loading)
+  const [filterQuery] = useMutation(
+    FILTER_QUERY,
+    {
+      variables: {
+        input: {
+          orgTypes: formattedOrgTypes,
+          ...selectedAccountObj,
+        }
+      },
+      onCompleted: ({ filterQuery: result }) => {
+        setDataToDisplay(result)
 
-  let data = {}
-  if (!loading) {
-    data.queryToolAccounts = [
-      ...ApmData.apmOrganizations,
-      ...PathwaysData.pathwaysOrganizations,
-      ...PayerData.payerOrganizations,
-      ...ProviderData.providerOrganizations,
-    ]
-  }
+        const shouldNotDisplayData = (
+          _.isEmpty(result)
+          || _.isEmpty(selectedAccount)
+          || _.isEmpty(orgTypes)
+        )
+
+        if (shouldNotDisplayData) setShowCsvButton(false)
+        else setShowCsvButton(true)
+      }
+    }
+  )
 
   return ({
-    loading,
-    data
+    showCsvButton,
+    dataToDisplay,
+    filterQuery,
+    setDataToDisplay,
   })
 }
