@@ -3,31 +3,6 @@ const assessFilterParams = require('./assessFilterParams')
 // * global indications that are available to ALL users
 const GLOBAL_INDICATIONS = ['General', 'N/A']
 
-const PROVIDER_AGG_PIPELINE = [
-  {
-    $group: {
-      _id: {
-        year: '$year',
-        quarter: '$quarter',
-      },
-      data: { $push: '$$ROOT' },
-    },
-  },
-  {
-    $sort: {
-      '_id.year': -1,
-      '_id.quarter': -1,
-    },
-  },
-  { $limit: 1 },
-  { $unwind: '$data' },
-  {
-    $replaceRoot: {
-      newRoot: '$data',
-    },
-  },
-]
-
 const getIndicationRegimenMatchExpression = treatmentPlans => {
   const combosArr = treatmentPlans.reduce((acc, { name: indication, regimens }) => {
     const indicationRegimenCombos = regimens.map(({ name }) => ({
@@ -64,7 +39,10 @@ const getRegimenMatchExpression = treatmentPlans => {
   return { $or: matchArr }
 }
 
-const getAggPipeline = (collectionName, resources, alertDate) => {
+const getAggPipeline = (
+  collectionName,
+  resources,
+) => {
   const {
     accounts,
     treatmentPlans,
@@ -161,25 +139,6 @@ const getAggPipeline = (collectionName, resources, alertDate) => {
           slug: { $in: slugs },
         }
       },
-    ]
-  }
-
-  if (
-    collectionName === `pathwaysHistoricalProviderAdoption`
-  ) {
-    result = [...result, ...PROVIDER_AGG_PIPELINE]
-  } else {
-    // ! NOTE: this part of the logic might cause us problems when we
-    // ! move onto payer data if that doesn't depend on alertDate
-    result = [
-      {
-        $match: {
-          alertDate: {
-            $exists: true,
-          }
-        }
-      },
-      ...result,
     ]
   }
 

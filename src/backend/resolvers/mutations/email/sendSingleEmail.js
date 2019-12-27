@@ -38,6 +38,7 @@ const sendSingleEmail = async ({
     new Date(`${date}-15`),  // Need to add a day to always return the correct month
     'MMM yyy'
   )
+
   const formattedSubject = `${emailSubject} ${displayDate} - ${description}`
 
   try {

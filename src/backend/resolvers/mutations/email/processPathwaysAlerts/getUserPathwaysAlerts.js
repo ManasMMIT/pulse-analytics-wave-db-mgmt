@@ -8,8 +8,9 @@ const ALERT_COLLECTIONS = [
   'providers',
   'protocols',
   'payerLives',
-  'pathwaysHistoricalProviderAdoption',
 ]
+
+const NON_ALERT_COLLECTION = 'pathwaysHistoricalProviderAdoption'
 
 const PROVIDER_AGG_PIPELINE = [
   {
@@ -40,22 +41,45 @@ const getUserPathwaysAlerts = async ({
   pulseDevDb,
   subscriptionId,
   userNodesResources,
-  date,
 }) => {
-  // ! NOTE: Looks like getAggPipeline.js later suffers from special-casing
-  // ! due to not wanting break up this map function below to special case for
-  // ! pathwaysHistoricalProviderAdoption vs the other collections.
-  // ! See related note in filter-user-data-utils/getAggPipeline.js
   const filteredCollectionPromises = ALERT_COLLECTIONS
-    .map(collectionName => (
-      getFilteredData({
+    .map(collectionName => {
+      const postMatchAggregationPipeline = [
+        {
+          $match: {
+            alertDate: {
+              $exists: true,
+            }
+          }
+        }
+      ]
+
+      return getFilteredData({
         db: pulseDevDb,
         collectionName,
         subscriptionId,
         userNodesResources,
-        date,
+        query: {
+          dbQuery: {
+            postMatchAggregationPipeline,
+          }
+        },
       })
-    ))
+    })
+
+  filteredCollectionPromises.push(
+    getFilteredData({
+      db: pulseDevDb,
+      collectionName: NON_ALERT_COLLECTION,
+      subscriptionId,
+      userNodesResources,
+      query: {
+        dbQuery: {
+          postMatchAggregationPipeline: PROVIDER_AGG_PIPELINE,
+        }
+      },
+    })
+  )
 
   // we use the aggregation pipeline to filter pathwaysHistoricalProviderAdoption
   // by the most recently uploaded documents e.g. (year: 2019, quarter: 2)

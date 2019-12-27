@@ -1,7 +1,7 @@
 const nunjucks = require('nunjucks')
 
-const TEMPLATE_MAP = require('./template-map')
-const getUserPathwaysEmailData = require('./getUserPathwaysEmailData')
+const SUBSCRIPTION_MAP = require('./subscription-map')
+const getUserEmailData = require('./getUserEmailData')
 const sendSingleEmail = require('./sendSingleEmail')
 
 const sendToSubscribedUsers = async (
@@ -9,8 +9,7 @@ const sendToSubscribedUsers = async (
   { input: { _id: subscriptionId, date } },
   { pulseDevDb, pulseCoreDb }
 ) => {
-  const templateDetails = TEMPLATE_MAP[subscriptionId]
-    || TEMPLATE_MAP['pathwaysAlerts']
+  const { templateDetails } = SUBSCRIPTION_MAP[subscriptionId]
 
   const nunjucksEnv = nunjucks.configure('src')
 
@@ -23,7 +22,7 @@ const sendToSubscribedUsers = async (
   // into a more general function that will route data processing
   // as needed depending on the subscriptionId
   const dataPromises = users.map(user => (
-    getUserPathwaysEmailData(
+    getUserEmailData(
       user,
       subscriptionId,
       pulseDevDb,
