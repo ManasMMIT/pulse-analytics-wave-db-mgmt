@@ -44,7 +44,6 @@ const panelItemActiveStyle = {
 const PagesPanel = ({
   handleToggle,
   cardsStatus,
-  handleRegBrkToggle,
 }) => {
   const { data, loading } = useQuery(GET_SELECTED_PAGE)
 
@@ -58,10 +57,7 @@ const PagesPanel = ({
       sourceEntity={card}
       teamEntityNodes={cardsStatus}
       nodeType="cards"
-      handlers={{
-        handleRegBrkToggle,
-        handleToggle,
-      }}
+      handleToggle={handleToggle}
     />
   )
 

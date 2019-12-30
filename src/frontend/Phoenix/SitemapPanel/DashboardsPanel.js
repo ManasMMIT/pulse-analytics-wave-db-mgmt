@@ -43,7 +43,6 @@ const panelItemActiveStyle = {
 const DashboardsPanel = ({
   handleToggle,
   dashboardsStatus,
-  handleRegBrkToggle,
 }) => {
   const { data, loading } = useQuery(GET_SELECTED_TOOL)
 
@@ -56,10 +55,7 @@ const DashboardsPanel = ({
       sourceEntity={dashboard}
       teamEntityNodes={dashboardsStatus}
       nodeType="dashboards"
-      handlers={{
-        handleRegBrkToggle,
-        handleToggle,
-      }}
+      handleToggle={handleToggle}
     />
   )
 

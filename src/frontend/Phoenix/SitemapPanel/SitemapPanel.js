@@ -67,30 +67,6 @@ class SitemapPanel extends React.Component {
     this.setState(newState)
   }
 
-  handleRegBrkToggle = ({
-    nodeType,
-    nodeId,
-    regionalBreakdown,
-    checked,
-  }) => {
-    const newState = _.merge({}, this.state)
-    const { resources: currentResources } = newState[nodeType][nodeId]
-
-    if (checked) {
-      newState[nodeType][nodeId].resources = _.merge(
-        currentResources,
-        { regionalBreakdown }
-      )
-    } else {
-      delete newState[nodeType][nodeId]
-        .resources.regionalBreakdown
-    }
-
-    this.setStagedSitemapCache(newState)
-
-    this.setState(newState)
-  }
-
   render() {
     const {
       selectedTeam: { _id: teamId },
@@ -112,19 +88,16 @@ class SitemapPanel extends React.Component {
             handleToggle={this.handleToggle}
           />
           <DashboardsPanel
-            handleRegBrkToggle={this.handleRegBrkToggle}
             dashboardsStatus={dashboards}
             handleToggle={this.handleToggle}
           />
 
           <PagesPanel
-            handleRegBrkToggle={this.handleRegBrkToggle}
             pagesStatus={pages}
             handleToggle={this.handleToggle}
           />
 
           <CardsPanel
-            handleRegBrkToggle={this.handleRegBrkToggle}
             cardsStatus={cards}
             handleToggle={this.handleToggle}
           />

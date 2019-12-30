@@ -8,7 +8,6 @@ const ResourcesModal = ({
   show,
   nodeId,
   nodeType,
-  handlers,
   selectedTeamNode,
 }) => (
   <Modal
@@ -20,7 +19,6 @@ const ResourcesModal = ({
       nodeId={nodeId}
       selectedTeamNode={selectedTeamNode}
       nodeType={nodeType}
-      handlers={handlers}
       closeModal={handleClose}
     />
   </Modal>

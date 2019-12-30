@@ -9,12 +9,12 @@ import {
   GET_SELECTED_TEAM,
   GET_SOURCE_INDICATIONS,
   GET_ORGANIZATIONS,
+  GET_SELECTED_TOOL,
 } from '../../../../../../../api/queries'
 
 const ModalContentContainer = ({
   nodeId,
   nodeType,
-  handlers,
   selectedTeamNode,
   closeModal,
 }) => {
@@ -29,6 +29,11 @@ const ModalContentContainer = ({
     loading: indLoading,
     error: indError,
   } = useQuery(GET_SOURCE_INDICATIONS)
+
+  const {
+    data: selectedToolData,
+    loading: selectedToolLoading,
+  } = useQuery(GET_SELECTED_TOOL)
 
   // ! HACK: if it's not a tool, get ALL the organizations
   // ! because you need them to hydrate the parent resources
@@ -48,7 +53,7 @@ const ModalContentContainer = ({
     orgsQueryVars,
   )
 
-  if (teamLoading || indLoading || orgLoading) return 'Loading...'
+  if (teamLoading || indLoading || orgLoading || selectedToolLoading) return 'Loading...'
   if (teamError || indError || orgError) return 'Error!'
 
   // STEP 1: Isolate the resources object corresponding to
@@ -61,6 +66,14 @@ const ModalContentContainer = ({
   let enabledResources = resources.find(
     ({ nodeId: resourcesObjNodeId }) => resourcesObjNodeId === nodeId
   )
+
+  const { selectedTool } = selectedToolData
+
+  const selectedToolResources = resources.find(
+    ({ nodeId: resourcesObjNodeId }) => resourcesObjNodeId === selectedTool._id
+  ) || {}
+
+  const toolRegionalBreakdown = selectedToolResources.regionalBreakdown
 
   // if nodeId and/or any resource type keys don't exist on
   // enabledResources, initialize them.
@@ -84,16 +97,14 @@ const ModalContentContainer = ({
     const sourceResources = {
       treatmentPlans: sourceTreatmentPlans,
       accounts: sourceAccounts,
-      // regionalBreakdown: sourceRegionalBreakdown,
     }
 
     return (
       <ModalContent
         nodeId={nodeId}
         nodeType={nodeType}
-        handlers={handlers}
-        selectedTeamNode={selectedTeamNode}
         enabledResources={enabledResources}
+        toolRegionalBreakdown={toolRegionalBreakdown}
         resources={sourceResources}
         teamId={teamId}
         closeModal={closeModal}
@@ -143,9 +154,8 @@ const ModalContentContainer = ({
     <ModalContent
       nodeId={nodeId}
       nodeType={nodeType}
-      handlers={handlers}
-      selectedTeamNode={selectedTeamNode}
       enabledResources={enabledResources}
+      toolRegionalBreakdown={toolRegionalBreakdown}
       resources={parentResources}
       teamId={teamId}
       closeModal={closeModal}
@@ -156,17 +166,12 @@ const ModalContentContainer = ({
 ModalContentContainer.propTypes = {
   nodeId: PropTypes.string,
   nodeType: PropTypes.string,
-  handlers: PropTypes.object,
   selectedTeamNode: PropTypes.object,
   closeModal: PropTypes.func,
 }
 
 ModalContentContainer.defaultProps = {
-  nodeId: null,
-  nodeType: null,
-  handlers: {},
   selectedTeamNode: {},
-  closeModal: null,
 }
 
 export default ModalContentContainer

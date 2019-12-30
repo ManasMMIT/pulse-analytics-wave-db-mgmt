@@ -43,9 +43,7 @@ const ToolsPanel = ({ handleToggle, toolsStatus }) => {
       sourceEntity={tool}
       teamEntityNodes={toolsStatus}
       nodeType="tools"
-      handlers={{
-        handleToggle,
-      }}
+      handleToggle={handleToggle}
     />
   )
 

@@ -43,7 +43,6 @@ const panelItemActiveStyle = {
 const PagesPanel = ({
   handleToggle,
   pagesStatus,
-  handleRegBrkToggle,
 }) => {
   const { data, loading } = useQuery(GET_SELECTED_DASHBOARD)
 
@@ -56,10 +55,7 @@ const PagesPanel = ({
       sourceEntity={page}
       teamEntityNodes={pagesStatus}
       nodeType="pages"
-      handlers={{
-        handleRegBrkToggle,
-        handleToggle,
-      }}
+      handleToggle={handleToggle}
     />
   )
 
