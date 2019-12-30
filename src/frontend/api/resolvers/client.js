@@ -58,7 +58,22 @@ const clientResolvers = {
     })
 
     return createdClient
-  }
+  },
+  manageDeletedClient: async (parent, { data: { deleteClient } }, { client, cache }) => {
+    const { clients } = cache.readQuery({ query: GET_CLIENTS })
+
+    const clientsMinusDeletedClient = clients
+      .filter(({ _id }) => deleteClient._id !== _id)
+
+    client.writeQuery({
+      query: GET_CLIENTS,
+      data: { clients: clientsMinusDeletedClient },
+    })
+
+    await client.mutate({ mutation: SELECT_CLIENT })
+
+    return deleteClient
+  },
 }
 
 export default clientResolvers

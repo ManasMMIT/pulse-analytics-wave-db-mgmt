@@ -23,6 +23,8 @@ const mutationType = gql`
     deleteUser(input: DeleteUserInput!): DeleteUserPayload
 
     createClient(input: CreateClientInput!): CreateClientPayload
+    deleteClient(input: DeleteClientInput!): DeleteClientPayload
+    updateClient(input: UpdateClientInput!): UpdateClientPayload
 
     createTeam(input: CreateTeamInput!): CreateTeamPayload
     updateTeam(input: UpdateTeamInput!): UpdateTeamPayload

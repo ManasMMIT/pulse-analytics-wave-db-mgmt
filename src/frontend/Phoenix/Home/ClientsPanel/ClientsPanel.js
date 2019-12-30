@@ -4,9 +4,16 @@ import { transparentize } from 'polished'
 
 import Panel from '../../shared/Panel'
 import CreateButton from './CreateButton'
+// import DeleteButton from './DeleteButton'
+import UpdateButton from './UpdateButton'
 
-import { SELECT_CLIENT } from '../../../api/mutations'
-import { GET_CLIENTS, GET_SELECTED_CLIENT } from '../../../api/queries'
+import {
+  SELECT_CLIENT,
+} from '../../../api/mutations'
+import {
+  GET_CLIENTS,
+  GET_SELECTED_CLIENT,
+} from '../../../api/queries'
 
 import { Colors, Spacing } from '../../../utils/pulseStyles'
 
@@ -43,6 +50,9 @@ const defaultPanelItemStyle = {
   fontSize: 11,
   fontWeight: 600,
   lineHeight: '20px',
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'center',
 }
 
 const activePanelItemStyle = {
@@ -50,10 +60,18 @@ const activePanelItemStyle = {
   background: transparentize(0.9, Colors.WHITE),
 }
 
+const buttonGroupCallback = client => (
+  <div style={{ display: 'flex' }}>
+    <UpdateButton client={client} />
+    {/* <DeleteButton clientId={client._id} /> */}
+  </div>
+)
+
 const panelItemConfig = {
   selectEntityMutationDoc: SELECT_CLIENT,
   style: defaultPanelItemStyle,
   activeStyle: activePanelItemStyle,
+  buttonGroupCallback,
   label1Callback: ({ description }) => description,
   // ! Note: inactiveStyle not needed until hover effects differ
   // ! between active and inactive states
