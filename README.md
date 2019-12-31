@@ -6,11 +6,10 @@ This repo is meant to eventually become Pulse's primary internal database manage
         1. [Importing Payer Project Historical Data](#importing-payer-project-historical-data)
         2. [Importing Payer Lives](#importing-payer-lives)
 2. [Uploading listsConfig JSONs to pulse-dev](#2-uploading-listsconfig-jsons)
-3. [Uploading a CSV of provider indication/regimen combos for admin hub to source from](#3-uploading-provider-ind/reg-combos-for-admin-hub)
-4. [Updating Dashboards Permissions Prototype Collection on Dev](#4-updating-dashboards-permissions-prototype-on-dev)
-5. [Exporting Novartis CSV Data](#5-exporting-novartis-csv-data)
-6. [Phoenix](#6-phoenix)
-7. [Prep Email Alerts Data](#7-prep-email-alerts-data)
+3. [Updating Dashboards Permissions Prototype Collection on Dev](#3-updating-dashboards-permissions-prototype-on-dev)
+4. [Exporting Novartis CSV Data](#4-exporting-novartis-csv-data)
+5. [Phoenix](#5-phoenix)
+6. [Prep Email Alerts Data](#6-prep-email-alerts-data)
 
 # Before you do anything else
 
@@ -133,25 +132,7 @@ The listsConfig script does the following when it's executed:
 4. Replaces an existing (or creates a new) collection that corresponds one-to-one to the JSON (a raw data collection). This is done by dropping the existing collection if it exists and creating a new collection with the same name with the new data
 5. Updates the master `listsConfig` collection in the database by replacing the old subset of data affiliated with the given `dashboardTool` with the new data
 
-#  3. Uploading Provider Ind/Reg Combos for Admin Hub
-
-Export the master list sheet from the Excel workbook as a CSV file.
-
-Edit the CSV file so it looks like the below (no empty rows between the headers and the data).
-
-The column headers should be "indication" and "regimen," all lowercased.
-
-| indication | regimen |
-|---|---|---|
-| AML | cytarabine+daunomycin+cladribine |
-| Breast Cancer | Abraxane |
-
-Run the following command in your terminal.
-```
-node ./importAdminProviderIndRegCombos --filepath ~/Desktop/providerIndRegCombos.csv
-```
-
-#  4. Updating Dashboards Permissions Prototype on Dev
+#  3. Updating Dashboards Permissions Prototype on Dev
 
 Run the following command in your terminal after navigating to this repository's root directory.
 ```
@@ -225,7 +206,7 @@ Here's an example of the output:
 }
 ```
 
-# 5. Exporting Novartis CSV Data
+# 4. Exporting Novartis CSV Data
 
 Run the following command in terminal:
 
@@ -237,7 +218,7 @@ That will output a CSV file in the format `NOVARTIS_KYMRIAH_${DATE}.csv` within 
 
 Refer to [this Conf doc for specs](https://dedhamgroup.atlassian.net/wiki/spaces/PAD/pages/659521555/Kymriah+CSV+Export).
 
-# 6. Phoenix
+# 5. Phoenix
 Phoenix controls and manages all permissions in the Pulse Analytics application. It is the 2nd iteration of permission management. The pervious version was Admin Hub delivered in March 2018.
 
 ## Starting Phoenix Locally
@@ -250,7 +231,7 @@ Start the front-end app:
 yarn start
 ```
 
-# 7. Prep Email Alerts Data
+# 6. Prep Email Alerts Data
 Run the following command in terminal: 
 ```
 node ./prepEmailAlertsData
