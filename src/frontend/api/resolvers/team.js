@@ -2,6 +2,8 @@ import {
   GET_SELECTED_CLIENT,
   GET_CLIENT_TEAMS,
   GET_SELECTED_TEAM,
+  GET_TEAM_USERS,
+  GET_USER_TEAMS,
 } from '../queries'
 
 import {
@@ -67,6 +69,37 @@ const teamResolvers = {
     return createTeam
   },
   manageDeletedTeam: async (parent, { data: { deleteTeam }}, { client, cache }) => {
+    const {
+      users,
+    } = cache.readQuery({
+      query: GET_TEAM_USERS,
+      variables: {
+        teamId: deleteTeam._id
+      }
+    })
+
+    // for all team users, refresh their user teams query
+    users.forEach(user => {
+      const { teams } = client.readQuery({
+        query: GET_USER_TEAMS,
+        variables: {
+          userId: user._id,
+        }
+      })
+
+      const updatedTeams = teams.filter(({ _id }) => _id !== deleteTeam._id)
+
+      client.writeQuery({
+        query: GET_USER_TEAMS,
+        variables: {
+          userId: user._id,
+        },
+        data: {
+          teams: updatedTeams,
+        }
+      })
+    })
+
     const {
       selectedClient: {
         _id: clientId
