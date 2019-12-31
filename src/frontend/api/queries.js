@@ -412,12 +412,6 @@ export const GET_APM_ORGANIZATIONS = gql`
   }
 `
 
-export const GET_ORGANIZATIONS = gql`
-  query getOrganizations($toolId: String) {
-    organizations(toolId: $toolId)
-  }
-`
-
 export const GET_RAW_COLLECTION_NAMES = gql`
   query getRawCollectionNames {
     collections(type: "raw")

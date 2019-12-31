@@ -27,10 +27,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   1) guards against transaction failure when writes exceed 16MB 
   2) improves UX (involves less steps) for `Polaris` users to update permissions/sitemaps
   3) makes it faster to update permissions/sitemaps (now that writes are smaller).
+- `Phoenix`: Resources Modal: query for organizations using tool-id-to-query-doc map for getting orgs by org type rather than all organizations
 
 ### Removed
 - `Polaris Backend`: removed old `client`, `role`, and `user` controllers.
 - `Phoenix`: `push to dev` button has been commented out, until there's a discussion on managing admin features.
+- `Phoenix`: Removed general organizations query endpoint in favor of leaving organization querying broken up by type of organization 
 - `Delphi`: Removed old approach code including standlone email prep node script and deprecated mutations, resolvers, typeDefs, queries
 
 ### Fixed

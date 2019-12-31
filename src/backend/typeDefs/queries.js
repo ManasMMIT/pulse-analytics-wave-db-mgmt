@@ -14,7 +14,6 @@ const queries = gql`
     products: [Product]
     regimens: [Regimen]
 
-    organizations(toolId: String): JSON # JSON because orgs have diff schemas
     providerOrganizations: [ProviderOrganization]
     payerOrganizations: [PayerOrganization]
     pathwaysOrganizations: [PathwaysOrganization]
