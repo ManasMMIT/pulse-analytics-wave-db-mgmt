@@ -21,7 +21,12 @@ const formatUserForReactSelect = ({ _id, username, client }) => {
 }
 
 const UsersToMock = ({ usersToMock, handleChange }) => {
-  const { data, loading, error } = useQuery(GET_USERS)
+  const { data, loading, error } = useQuery(
+    GET_USERS,
+    {
+      fetchPolicy: 'network-only'
+    }
+  )
 
   if (loading) return (
     <div style={{ display: 'flex', alignItems: 'center' }}>

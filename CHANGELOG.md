@@ -36,6 +36,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `Delphi`: Removed old approach code including standlone email prep node script and deprecated mutations, resolvers, typeDefs, queries
 
 ### Fixed
+- `Delphi`: hotfix implemented for test email user dropdown, making it network-only for freshest users to mock.
 - `Orion`: Query Tool account dropdown now displays updated data, when accounts are CUD'd on anywhere in Orion.
 - `Phoenix`: added logic to `manageDeletedTeam` frontend resolver to keep user team labels fresh.
 - `Phoenix`: removed the Auth0 Authorization Extension Client from the backend, leaving only the core Auth0 functionality (Auth0 Management Client) for user CRUD
