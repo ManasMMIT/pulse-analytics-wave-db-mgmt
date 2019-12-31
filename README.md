@@ -9,7 +9,6 @@ This repo is meant to eventually become Pulse's primary internal database manage
 3. [Updating Dashboards Permissions Prototype Collection on Dev](#3-updating-dashboards-permissions-prototype-on-dev)
 4. [Exporting Novartis CSV Data](#4-exporting-novartis-csv-data)
 5. [Phoenix](#5-phoenix)
-6. [Prep Email Alerts Data](#6-prep-email-alerts-data)
 
 # Before you do anything else
 
@@ -230,18 +229,3 @@ Start the front-end app:
 ```
 yarn start
 ```
-
-# 6. Prep Email Alerts Data
-Run the following command in terminal: 
-```
-node ./prepEmailAlertsData
-```
-
-This script is in meant to prep the alerts data and should always be run before an email is sent. 
-The following three things happen when this script is run: 
-1. The aggregated `alerts` collection is updated
-2. The `temp.teams` collection is updated with the latest permissions sourced from auth0 for celgene teams 
-3. The `temp.teams` collection is updated with the latest filtered alerts for celgene teams
-
-
-Refer to [this Conf doc](https://dedhamgroup.atlassian.net/wiki/spaces/POL/pages/699334658/Consolidate+Alerts+Sheet+Script)

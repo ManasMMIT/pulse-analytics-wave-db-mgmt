@@ -13,7 +13,6 @@ const collection = require('./collection')
 const treatmentPlan = require('./treatmentPlan')
 const testEmailGroup = require('./testEmailGroup')
 
-const alert = require('./alert')
 const email = require('./email')
 
 const mutationType = gql`
@@ -68,10 +67,6 @@ const mutationType = gql`
     deleteQualityOfAccessScore(input: DeleteQualityOfAccessScoreInput!): DeleteQualityOfAccessScorePayload
     uploadCollection(input: UploadCollectionInput!): JSON
 
-    emailAlerts(input: EmailAlertInput!): JSON
-    createEmailUsers(input: CreateEmailUsersInput!): JSON
-    deleteEmailUsers(input: DeleteEmailUsersInput!): JSON
-
     sendToSubscribedUsers(input: SendToSubscribedUsersInput!): SendToSubscribedUsersPayload
     sendToTestGroup(input: SendToTestGroupInput): SendToTestGroupPayload
 
@@ -103,7 +98,6 @@ module.exports = [
   ...collection,
   ...treatmentPlan,
   
-  ...alert,
   ...email,
 
   ...testEmailGroup,

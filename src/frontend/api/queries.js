@@ -430,18 +430,6 @@ export const GET_NEW_TREATMENT_PLANS = gql`
   }
 `
 
-export const GET_EMAIL_USERS = gql`
-  query getAllEmailUsers {
-    emailUsers {
-      client
-      username
-      email
-      isPulseTest
-      isTdgTest
-    }
-  }
-`
-
 export const GET_TEST_EMAIL_GROUPS = gql`
   query getTestEmailGroups {
     testEmailGroups {

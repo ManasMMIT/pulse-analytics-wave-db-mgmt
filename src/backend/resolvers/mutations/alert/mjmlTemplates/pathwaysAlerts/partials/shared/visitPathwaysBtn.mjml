@@ -1,7 +1,0 @@
-<mj-button
-  mj-class='visit-tool-btn'
-  css-class='styled-button'
-  href='https://pulse-tools.com/pathways/overview/'
->
-  Visit Pathways Tool
-</mj-button>

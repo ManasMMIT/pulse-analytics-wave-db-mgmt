@@ -23,7 +23,7 @@ const queries = gql`
     qualityOfAccessScores: [QualityOfAccessScore]
     collections(type: String): [String]
     newTreatmentPlans(data: JSON): JSON
-    emailUsers: [EmailUser]
+
     testEmailGroups: [TestEmailGroup]
   }
 

@@ -31,6 +31,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 - `Polaris Backend`: removed old `client`, `role`, and `user` controllers.
 - `Phoenix`: `push to dev` button has been commented out, until there's a discussion on managing admin features.
+- `Delphi`: Removed old approach code including standlone email prep node script and deprecated mutations, resolvers, typeDefs, queries
 
 ### Fixed
 - `Orion`: Query Tool account dropdown now displays updated data, when accounts are CUD'd on anywhere in Orion.

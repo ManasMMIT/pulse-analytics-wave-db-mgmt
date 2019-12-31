@@ -92,12 +92,6 @@ import {
 } from './collection'
 
 import {
-  EMAIL_ALERTS,
-  CREATE_EMAIL_USERS,
-  DELETE_EMAIL_USERS,
-} from './alerts'
-
-import {
   SEND_TO_SUBSCRIBED_USERS,
   SEND_TO_TEST_GROUP,
 } from './emails'
@@ -183,10 +177,6 @@ export {
   DELETE_QUALITY_OF_ACCESS_SCORE,
 
   UPLOAD_COLLECTION,
-
-  EMAIL_ALERTS,
-  CREATE_EMAIL_USERS,
-  DELETE_EMAIL_USERS,
 
   SEND_TO_SUBSCRIBED_USERS,
   SEND_TO_TEST_GROUP,
