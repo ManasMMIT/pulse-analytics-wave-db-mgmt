@@ -28,7 +28,28 @@ const updateOrganization = async (
 
     const { connections, ...updatedOrg } = result
 
-    // Step 2: update org data in all org.connections
+    // Step 2: update state in connections
+
+    const connectionsWithNewState = (connections || []).map(connection => ({
+      ...connection,
+      state: body.state,
+    }))
+
+    await pulseCoreDb
+      .collection('organizations')
+      .updateOne(
+        { _id },
+        {
+          $set: {
+            connections: connectionsWithNewState,
+          }
+        },
+        {
+          session,
+        }
+      )
+
+    // Step 3: update org data in all org.connections
     await pulseCoreDb
       .collection('organizations')
       .updateMany(
@@ -36,17 +57,18 @@ const updateOrganization = async (
         {
           $set: {
             'connections.$[el].org': updatedOrg,
+            'connections.$[el].state': body.state,
           }
         },
         {
           arrayFilters: [
-            { 'el.org._id': _id }
+            { 'el.org._id': _id },
           ],
           session,
         },
       )
     
-    // Step 3: update org.slug in all users.nodes.resources
+    // Step 4: update org.slug in all users.nodes.resources
     await pulseDevDb.collection('users.nodes.resources')
         .updateMany(
           { 'resources.accounts._id': _id },
