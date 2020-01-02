@@ -7,6 +7,9 @@ const updateProviderOrganizationTypeDefs = gql`
     organization: String
     organizationTiny: String
     providerCancerCenter: String
+    state: String
+    city: String
+    oncologistsCount: Int
   }
 
   type UpdateProviderOrganizationPayload {
@@ -15,6 +18,9 @@ const updateProviderOrganizationTypeDefs = gql`
     organization: String
     organizationTiny: String
     providerCancerCenter: String
+    state: String
+    city: String
+    oncologistsCount: Int
   }
 `
 

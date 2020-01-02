@@ -16,7 +16,10 @@ import {
 import AccountsModalButton from './AccountsModalButton'
 
 const ADDITIONAL_FIELDS = [
-  { label: 'cancer center', key: 'providerCancerCenter' }
+  { label: 'city', key: 'city' },
+  { label: 'state', key: 'state' },
+  { label: 'oncologists #', key: 'oncologistsCount', type: 'number' },
+  { label: 'cancer center', key: 'providerCancerCenter' },
 ]
 
 const ProviderAccountModal = ({

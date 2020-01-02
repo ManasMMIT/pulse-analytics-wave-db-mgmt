@@ -35,6 +35,8 @@ const Main = styled.section({
   flexDirection: 'column',
   justifyContent: "space-between",
   padding: 32,
+  overflowY: 'auto',
+  maxHeight: '80vh',
 }, props => ({
   width: props.width,
 }))

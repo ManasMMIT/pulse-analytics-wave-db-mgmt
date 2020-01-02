@@ -42,8 +42,10 @@ const AccountsModalButton = ({
   const [isOpen, setIsOpen] = useState(shouldModalBeOpenOnLoad)
 
   const additionalFieldsForState = additionalFields
-    .reduce((acc, { key }) => {
-      acc[key] = account[key]
+    .reduce((acc, { key, type }) => {
+      acc[key] = type === 'number'
+        ? parseInt(account[key])
+        : account[key]
 
       return acc
     }, {})
@@ -167,8 +169,12 @@ const AccountsModalButton = ({
                 type={type || "text"}
                 value={submitState[key]}
                 onChange={e => {
+                  const value = type === 'number'
+                    ? parseInt(e.target.value)
+                    : e.target.value
+
                   safelySetSubmitState({
-                    [key]: e.target.value
+                    [key]: value
                   })
                 }}
               />

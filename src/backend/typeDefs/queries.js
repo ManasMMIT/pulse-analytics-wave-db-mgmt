@@ -107,6 +107,9 @@ const queries = gql`
     organizationTiny: String
     providerCancerCenter: String # TODO: Change to just cancerCenter or create separate tool account typedefs
     connections: JSON
+    state: String
+    city: String
+    oncologistsCount: Int
   }
 
   type PayerOrganization {

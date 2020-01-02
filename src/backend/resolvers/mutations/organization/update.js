@@ -9,15 +9,6 @@ const updateOrganization = async (
 ) => {
   const _id = ObjectId(stringId)
 
-  // cleanup body
-  Object.keys(body).forEach(key => {
-    // remove white spaces
-    body[key] = _.trim(body[key])
-
-    // if empty remove from object
-    if (_.isEmpty(body[key])) delete body[key]
-  })
-
   const session = mongoClient.startSession()
 
   let result

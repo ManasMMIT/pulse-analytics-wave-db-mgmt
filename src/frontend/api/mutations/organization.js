@@ -8,6 +8,9 @@ export const CREATE_PROVIDER_ORGANIZATION = gql`
       organization
       organizationTiny
       providerCancerCenter
+      state
+      city
+      oncologistsCount
     }
   }
 `
@@ -20,6 +23,9 @@ export const DELETE_PROVIDER_ORGANIZATION = gql`
       organization
       organizationTiny
       providerCancerCenter
+      state
+      city
+      oncologistsCount
     }
   }
 `
@@ -32,6 +38,9 @@ export const UPDATE_PROVIDER_ORGANIZATION = gql`
       organization
       organizationTiny
       providerCancerCenter
+      state
+      city
+      oncologistsCount
     }
   }
 `

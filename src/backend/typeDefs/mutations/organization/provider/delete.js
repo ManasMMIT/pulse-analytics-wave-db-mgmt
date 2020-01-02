@@ -11,6 +11,9 @@ const deleteProviderOrganizationTypeDefs = gql`
     organization: String
     organizationTiny: String
     providerCancerCenter: String
+    state: String
+    city: String
+    oncologistsCount: Int
   }
 `
 

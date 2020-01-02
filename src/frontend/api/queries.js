@@ -369,6 +369,9 @@ export const GET_PROVIDER_ORGANIZATIONS = gql`
       providerCancerCenter
       type
       connections
+      state
+      city
+      oncologistsCount
     }
   }
 `
