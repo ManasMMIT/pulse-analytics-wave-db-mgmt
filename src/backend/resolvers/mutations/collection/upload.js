@@ -24,22 +24,11 @@ const uploadCollection = async (
   }
 
   const targetCollection = pulseRawDb.collection(collectionName)
-
+  
+  // ! HACK exception: If target is 'orgConnections', upsert into pulse-core 'organizations' collection
   if (collectionName === 'orgConnections') {
-    // STEP 1: Upsert into pulse-raw 'orgConnections' collection
-    // (this doesn't do anything other than make sure a queryable,
-    // JSONified version of the sheet in pulse-raw is kept up to date)
-    const bulkOp = targetCollection.initializeOrderedBulkOp();
-
-    data.forEach(row => {
-      row._id = row._id ? ObjectId(row._id) : new ObjectId()
-      const { _id, ...rest } = row
-      bulkOp.find({ _id }).upsert().updateOne({ $set: rest })
-    })
-
-    await bulkOp.execute()
-
-    // STEP 2: Upsert into pulse-core 'organizations' collection
+    data.forEach(row => { row._id = row._id ? ObjectId(row._id) : new ObjectId() })
+    
     await upsertConnections({
       pulseCoreDb,
       mongoClient,

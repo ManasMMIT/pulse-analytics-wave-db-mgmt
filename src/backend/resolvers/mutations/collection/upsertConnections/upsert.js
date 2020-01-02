@@ -21,7 +21,7 @@ const upsertConnection = async ({
     // ! Note: For insertion, there's nothing to $pull since the connection
     // ! doesn't exist yet. This step only applies to update.
     await organizationsCollection.updateMany(
-      { connections: { $elemMatch: { _id } } },
+      { 'connections._id': _id },
       { $pull: { connections: { _id } } },
       { session },
     )
@@ -29,15 +29,11 @@ const upsertConnection = async ({
     // STEP 2: Insert the connection everywhere it's needed.
 
     // STEP 2a: Get the organization objects without connections slice.
-    // ! Note: There eventually shouldn't be more than one organization for
-    // ! a given SLUG and TYPE (provider, payer, pathways), but right now
-    // ! there are dupes, so the logic takes that into account by using #find
-    // ! instead of #findOne.
     const [
-      orgsArr1,
-      orgsArr2,
+      org1,
+      org2,
     ] = await Promise.all([
-      organizationsCollection.find(
+      organizationsCollection.findOne(
         {
           slug,
           toolIds: toolIdsMap[slugType],
@@ -48,8 +44,8 @@ const upsertConnection = async ({
             connections: 0,
           }
         },
-      ).toArray(),
-      organizationsCollection.find(
+      ),
+      organizationsCollection.findOne(
         {
           slug: slug1,
           toolIds: toolIdsMap[slugType1],
@@ -60,14 +56,14 @@ const upsertConnection = async ({
             connections: 0,
           }
         },
-      ).toArray()
+      ),
     ])
 
     // STEP 2b: Depending on which org is what type, set up what
     // kind of connection object to add to each and persist.
     // ! Note HACK: Logic below is very specific to VBM participation's seed data.
-    // ! If orgsArr1 are (pathways or apm), then orgsArr2 must be (provider or payer);
-    // ! If orgsArr1 are (provider or payer), then orgsArr2 must be (pathways or apm).
+    // ! If org1 is (pathways or apm), then org2 must be (provider or payer);
+    // ! If org2 is (provider or payer), then org1 must be (pathways or apm).
 
     const promisesArr = []
 
@@ -75,91 +71,83 @@ const upsertConnection = async ({
       slugType === 'Pathways'
       || slugType === 'Alternative Payment Model'
     ) {
-      // ! Note: There are only dupes in the DB for provider and payer right now, so
-      // ! we only iterate over orgsArr2 and persist bilateral connections for each dupe
-      for (const providerOrPayerOrg of orgsArr2) {
-        const connectionObjToAddToOrg1 = {
-          _id,
-          org: providerOrPayerOrg,
-          category: 'Value-Based Model Participation',
-          type: 'affiliated_with',
-          state,
-          affiliationType,
-        }
-
-        const connectionObjToAddToOrg2 = {
-          _id,
-          org: orgsArr1[0],
-          category: 'Value-Based Model Participation',
-          type: 'participates_in',
-          state,
-          affiliationType,
-        }
-
-        promisesArr.push(
-          organizationsCollection.updateOne(
-            {
-              _id: orgsArr1[0]._id,
-            },
-            {
-              $push: { connections: connectionObjToAddToOrg1 }
-            },
-            { session },
-          ),
-          organizationsCollection.updateOne(
-            {
-              _id: providerOrPayerOrg._id
-            },
-            {
-              $push: { connections: connectionObjToAddToOrg2 }
-            },
-            { session },
-          )
-        )
+      const connectionObjToAddToOrg1 = {
+        _id,
+        org: org2,
+        category: 'Value-Based Model Participation',
+        type: 'affiliated_with',
+        state,
+        affiliationType,
       }
+
+      const connectionObjToAddToOrg2 = {
+        _id,
+        org: org1,
+        category: 'Value-Based Model Participation',
+        type: 'participates_in',
+        state,
+        affiliationType,
+      }
+
+      promisesArr.push(
+        organizationsCollection.updateOne(
+          {
+            _id: org1._id,
+          },
+          {
+            $push: { connections: connectionObjToAddToOrg1 }
+          },
+          { session },
+        ),
+        organizationsCollection.updateOne(
+          {
+            _id: org2._id
+          },
+          {
+            $push: { connections: connectionObjToAddToOrg2 }
+          },
+          { session },
+        )
+      )
     } else {
-      // ! Note: This section is untested, put here in case it's not always pathways/apm on the left side
-      // ! and providers/payers on the right side of the raw seed data sheet.
-      for (const providerOrPayerOrg of orgsArr1) {
-        const connectionObjToAddToOrg1 = {
-          _id,
-          org: orgsArr2[0],
-          category: 'Value-Based Model Participation',
-          type: 'participates_in',
-          state,
-          affiliationType,
-        }
-
-        const connectionObjToAddToOrg2 = {
-          _id,
-          org: providerOrPayerOrg,
-          category: 'Value-Based Model Participation',
-          type: 'affiliated_with',
-          state,
-          affiliationType,
-        }
-
-        promisesArr.push(
-          organizationsCollection.updateOne(
-            {
-              _id: orgsArr2[0]._id,
-            },
-            {
-              $push: { connections: connectionObjToAddToOrg2 }
-            },
-            { session },
-          ),
-          organizationsCollection.updateOne(
-            {
-              _id: providerOrPayerOrg._id
-            },
-            {
-              $push: { connections: connectionObjToAddToOrg1 }
-            },
-            { session },
-          )
-        )
+      const connectionObjToAddToOrg1 = {
+        _id,
+        org: org2,
+        category: 'Value-Based Model Participation',
+        type: 'participates_in',
+        state,
+        affiliationType,
       }
+
+      const connectionObjToAddToOrg2 = {
+        _id,
+        org: org1,
+        category: 'Value-Based Model Participation',
+        type: 'affiliated_with',
+        state,
+        affiliationType,
+      }
+
+      promisesArr.push(
+        organizationsCollection.updateOne(
+          {
+            _id: org2._id,
+          },
+          {
+            $push: { connections: connectionObjToAddToOrg2 }
+          },
+          { session },
+        ),
+        organizationsCollection.updateOne(
+          {
+            _id: org1._id
+          },
+          {
+            $push: { connections: connectionObjToAddToOrg1 }
+          },
+          { session },
+        )
+      )
     }
 
     await Promise.all(promisesArr)
