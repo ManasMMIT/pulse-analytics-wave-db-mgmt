@@ -16,6 +16,8 @@ const createVbmParticipant = async (
   { pulseCoreDb, mongoClient },
   info,
 ) => {
+  const { __typename, connections, ...toOrgFieldsToInclude } = to
+
   const organizationsCollection = pulseCoreDb.collection('organizations')
 
   const session = mongoClient.startSession()
@@ -32,11 +34,8 @@ const createVbmParticipant = async (
             connections: {
               _id: newConnectionId,
               org: {
+                ...toOrgFieldsToInclude,
                 _id: ObjectId(to._id),
-                slug: to.slug,
-                organization: to.organization,
-                organizationTiny: to.organizationTiny,
-                type: to.type,
               },
               state,
               type: FROM_TYPE,

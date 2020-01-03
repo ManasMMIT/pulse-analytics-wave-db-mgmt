@@ -16,6 +16,8 @@ import {
   SubmitNewConnectionButton,
 } from './styledConnectionComponents'
 
+const STATE_FILTER_OPTIONS = stateAbbreviations.map(state => ({ label: state, value: state }))
+
 const ALLOWED_ORG_TYPES = {
   'Provider': [
     'Pathways',
@@ -51,19 +53,21 @@ const CreateConnectionForm = ({
   const [
     accountFilterOptions,
     setAccountFilterOptions,
-  ] = useState(null)
+  ] = useState([])
 
   const [
     to,
     setTo,
   ] = useState({})
 
+  let providerStateOverride
+  if (from.type === 'Provider') providerStateOverride = from.state
+
   const [
     state,
     setState,
-  ] = useState({})
+  ] = useState({ label: providerStateOverride, value: providerStateOverride })
 
-  const stateFilterOptions = stateAbbreviations.map(state => ({ label: state, value: state }))
   const [getAllowedOrgTypes] = useMutation(FILTER_QUERY)
 
   useEffect(() => {
@@ -126,27 +130,39 @@ const CreateConnectionForm = ({
           onChange={(account, { action }) => {
             const to = action === 'clear'
               ? {}
-              : account
+              : account // this is a nested { label: X, value: Y } structure
 
             setTo(to)
+
+            if (to.value.type === 'Provider') {
+              setState({ label: to.value.state, value: to.value.state })
+            }
           }}
           options={accountFilterOptions}
         />
       </FormSection>
+
       <FormSection>
         <ConnectionFormLabel>Relevant State: </ConnectionFormLabel>
         <Select
+          // ! Note: If user is allowed to put in random state connections for provider, then when the provider's  
+          // ! name, slug, state, or any other profile data changes, all the state fields on all the connections
+          // ! related to the provider will be overridden due to update org resolver logic. To avoid this chaos,
+          // ! DISABLE the "affiliated state" feature for provider connections. Plus we have to rethink "affiliated state"
+          // ! versus "headquarters location" anyway from a data modeling perspective.
+          isDisabled={Boolean(
+            from.type === 'Provider' || (to.value && to.value.type === 'Provider')
+          )}
           styles={connectionSelectStyles}
-          defaultValue={null}
+          defaultValue={state}
+          value={state}
           onChange={(state, { action }) => {
             setState(state)
           }}
-          options={stateFilterOptions}
+          options={STATE_FILTER_OPTIONS}
         />
-        <div>
-
-        </div>
       </FormSection>
+
       <SubmitNewConnectionButton
         disabled={!hasAllRequiredFields}
         onClick={connect}
