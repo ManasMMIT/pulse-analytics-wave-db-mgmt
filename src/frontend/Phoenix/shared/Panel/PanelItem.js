@@ -1,7 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { useMutation } from '@apollo/react-hooks'
+import styled from '@emotion/styled'
 
+const Wrapper = styled.div(
+  {},
+  ({ style }) => style,
+)
 const PanelItem = ({
   finalStyle,
   entity,
@@ -15,8 +20,7 @@ const PanelItem = ({
   const [handleSelect] = useMutation(selectEntityMutationDoc)
 
   return (
-    <div
-      style={finalStyle}
+    <Wrapper style={finalStyle}
       onClick={handleSelect.bind(null, { variables: { _id: entity._id } })}
     >
       <div>
@@ -30,7 +34,7 @@ const PanelItem = ({
       <div>
         {buttonGroupCallback(entity)}
       </div>
-    </div>
+    </Wrapper>
   )
 }
 
@@ -58,7 +62,7 @@ const PanelItemContainer = ({
 
   if (!selectEntityMutationDoc) {
     return (
-      <div style={finalStyle}>
+      <Wrapper style={finalStyle}>
         <div>
           <div>{label1Callback(entity)}</div>
 
@@ -70,7 +74,7 @@ const PanelItemContainer = ({
         <div>
           {buttonGroupCallback(entity)}
         </div>
-      </div>
+      </Wrapper>
     )
   }
 

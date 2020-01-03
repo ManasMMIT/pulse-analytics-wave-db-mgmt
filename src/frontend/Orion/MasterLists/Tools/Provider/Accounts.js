@@ -36,6 +36,9 @@ const defaultPanelItemStyle = {
   fontWeight: 600,
   fontSize: 12,
   borderBottom: `1px solid ${transparentize(0.9, Colors.BLACK)}`,
+  ':hover': {
+    background: transparentize(0.95, Colors.BLACK),
+  }
 }
 
 const headerChildren = (
