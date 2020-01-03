@@ -6,7 +6,7 @@ import PropTypes from 'prop-types'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faCaretDown, faCaretUp } from "@fortawesome/free-solid-svg-icons"
 
-import { Colors } from './../../../../utils/pulseStyles'
+import { Colors } from '../../../utils/pulseStyles'
 
 const TableHeaderItem = styled.div({
   flex: 1,
@@ -59,9 +59,14 @@ const TableHeader = ({
         tableData,
         [
           datum => {
-            return datum[key]
-              ? datum[key].toLowerCase()
-              : null
+            const value = datum[key]
+            if (!value) {
+              return null
+            } else if (typeof value === 'number') {
+              return value
+            } else if (typeof value === 'string') {
+              return value.toLowerCase()
+            }
           }
         ],
         [newSortOrder]

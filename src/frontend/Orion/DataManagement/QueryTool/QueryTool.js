@@ -5,7 +5,7 @@ import { faSyncAlt } from "@fortawesome/free-solid-svg-icons"
 
 import { Colors } from './../../../utils/pulseStyles'
 
-import TableHeader from './TableHeaders/TableHeader'
+import TableHeader from './TableHeader'
 import DownloadCsvButton from './../../../components/DownloadCsvButton'
 import { customSelectStyles } from './../../../components/customSelectStyles'
 
@@ -126,6 +126,14 @@ const QueryTool = ({
                   key: 'type',
                 }}
               />
+              <TableHeader
+                label={'Oncologists'}
+                sortConfig={{
+                  tableData: dataToDisplay,
+                  setDataToDisplay,
+                  key: 'oncologistsCount',
+                }}
+              />
               <TableHeader label={'VBM Affiliated State(s)'} />
             </TableHeaderWrapper>
             <ResultsContainer>
@@ -166,6 +174,9 @@ const QueryTool = ({
                           </TableColumn>
                           <TableColumn>
                             {result.type}
+                          </TableColumn>
+                          <TableColumn>
+                            {result.oncologistsCount}
                           </TableColumn>
                           <TableColumn>
                             {formattedStates}
