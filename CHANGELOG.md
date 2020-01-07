@@ -22,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `Phoenix`: Add Client update functionality (and build out delete functionality but leave it hidden)
 
 ### Changed
+- `Polaris Backend`: fixed/optimized payer historical data import by aggregating, deleting, and inserting for a single project.
 - `Delphi`: refactored backend to be more flexible with less hard-coding for Pathways subscription.
 - `Orion`: added additional fields to Provider Acc Modal: `state`, `city`, and `oncologistsCount`, and persist organization state changes on both sides of connections. 
   - Also lock every provider's connections' states to be tied to that provider's headquarters's state ([link](https://github.com/pulse-data/wave-db-mgmt/pull/274)).

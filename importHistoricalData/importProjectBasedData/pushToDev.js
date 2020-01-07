@@ -1,38 +1,45 @@
-const getLatestMonthYearProjectPipeline = require('./latest-month-year-project')
+const getSingleProjectLatestMonthYearPipeline = require('./getSingleProjectLatestMonthYearPipeline')
 const consolidatePayerData = require('../consolidate-payer-data')
 
 const pushToDev = async ({
   collectionName,
   pulseCoreDb,
   pulseDevDb,
-  terminateScript
+  terminateScript,
+  projectName,
 }) => {
   const coreCollection = pulseCoreDb.collection(collectionName)
 
-  const latestSixMonthsDataPromise = coreCollection.aggregate(
-    getLatestMonthYearProjectPipeline(6), { allowDiskUse: true }
+  const latestSingleProjectSixMonthsDataPromise = coreCollection.aggregate(
+    getSingleProjectLatestMonthYearPipeline(projectName, 6), { allowDiskUse: true }
   ).toArray()
 
-  const latestMonthYearDataPromise = coreCollection.aggregate(
-    getLatestMonthYearProjectPipeline(1), { allowDiskUse: true }
+  const latestSingleProjectMonthYearDataPromise = coreCollection.aggregate(
+    getSingleProjectLatestMonthYearPipeline(projectName, 1), { allowDiskUse: true }
   ).toArray()
 
   try {
     const [
-      latestSixMonthsData,
-      latestMonthYearData,
+      latestSingleProjectSixMonthsData,
+      latestSingleProjectMonthYearData,
     ] = await Promise.all([
-      latestSixMonthsDataPromise,
-      latestMonthYearDataPromise,
+      latestSingleProjectSixMonthsDataPromise,
+      latestSingleProjectMonthYearDataPromise,
     ])
 
-    await pulseDevDb.collection(collectionName).deleteMany()
-    await pulseDevDb.collection(collectionName).insertMany(latestMonthYearData)
-    console.log(`pulse-dev collection '${collectionName}' updated`)
+    await pulseDevDb.collection(collectionName).deleteMany({
+      project: projectName,
+    })
 
-    await pulseDevDb.collection(`${collectionName}Ht`).deleteMany()
-    await pulseDevDb.collection(`${collectionName}Ht`).insertMany(latestSixMonthsData)
-    console.log(`pulse-dev collection '${collectionName}Ht' updated`)
+    await pulseDevDb.collection(collectionName).insertMany(latestSingleProjectMonthYearData)
+    console.log(`pulse-dev collection '${collectionName}' updated for project ${projectName}`)
+
+    await pulseDevDb.collection(`${collectionName}Ht`).deleteMany({
+      project: projectName,
+    })
+
+    await pulseDevDb.collection(`${collectionName}Ht`).insertMany(latestSingleProjectSixMonthsData)
+    console.log(`pulse-dev collection '${collectionName}Ht' updated for project ${projectName}`)
 
     await consolidatePayerData({ pulseDevDb, pulseCoreDb, terminateScript })
   } catch(e) {

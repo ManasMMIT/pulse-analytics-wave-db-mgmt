@@ -95,7 +95,8 @@ const importProjectBasedData = async filepath => {
     collectionName,
     pulseCoreDb,
     pulseDevDb,
-    terminateScript
+    terminateScript,
+    projectName,
   })
 }
 
