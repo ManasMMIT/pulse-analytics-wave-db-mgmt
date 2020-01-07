@@ -1,5 +1,5 @@
-const upsertUsersSitemaps = require('../sitemap/upsertUsersSitemaps')
-const upsertUsersPermissions = require('../../../generate-users-permissions/upsertUsersPermissions')
+const upsertUsersSitemaps = require('../sitemap/sitemaps-upsertion/upsertUsersSitemaps')
+const upsertUsersPermissions = require('../sitemap/permissions-upsertion/upsertUsersPermissions')
 
 const deleteTeam = async (
   parent,

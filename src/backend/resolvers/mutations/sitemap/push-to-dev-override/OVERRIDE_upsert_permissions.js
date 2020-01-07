@@ -1,7 +1,7 @@
 /* eslint-disable no-loop-func */
-const upsertUsersPermissions = require('./upsertUsersPermissions')
+const upsertUsersPermissions = require('../permissions-upsertion/upsertUsersPermissions')
 
-const generateUsersPermissions = async({
+const overrideUpsertPermissions = async ({
   pulseCoreDb,
   pulseDevDb,
 }) => {
@@ -14,13 +14,13 @@ const generateUsersPermissions = async({
 
   const users = await coreUsers.find().toArray()
 
-  await upsertUsersPermissions({ 
-    users, 
-    pulseCoreDb, 
-    pulseDevDb, 
+  await upsertUsersPermissions({
+    users,
+    pulseCoreDb,
+    pulseDevDb,
   })
-  
+
   console.log('users.nodes.resources successfully rebuilt')
 }
 
-module.exports = generateUsersPermissions
+module.exports = overrideUpsertPermissions

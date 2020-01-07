@@ -1,4 +1,4 @@
-const upsertUsersSitemaps = require('./upsertUsersSitemaps')
+const upsertUsersSitemaps = require('./sitemaps-upsertion/upsertUsersSitemaps')
 
 const updateRoleSitemap = async (
   parent,

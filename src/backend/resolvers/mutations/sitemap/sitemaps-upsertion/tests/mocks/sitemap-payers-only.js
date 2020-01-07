@@ -7,32 +7,6 @@ module.exports = {
         "name": "ResourcesTestRole",
         "order": 0,
         "componentPath": null,
-        "resources": {
-          "regionalBreakdown": [
-            {
-              region: "North",
-              id: 2,
-              state: "BAR",
-              stateLong: "Bartenderia"
-            },
-            {
-              region: "South",
-              id: 3,
-              state: "GA",
-              stateLong: "Gygaxia"
-            }
-          ],
-          "indications": [
-            { _id: '1b', name: 'blue eyes white dragon' },
-            { _id: '2b', name: 'dark magician' },
-            { _id: '3b', name: 'Yugi\'s hair' },
-          ],
-          "accounts": [
-            { _id: '1b', name: 'just salad' },
-            { _id: '2b', name: 'hummus pita co' },
-            { _id: '3a', name: 'bandai' },
-          ],
-        }
       },
       {
         "_id": "a3f419de-ca7d-4498-94dd-04fb9f6b8777",

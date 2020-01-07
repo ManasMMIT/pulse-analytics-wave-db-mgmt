@@ -1,6 +1,6 @@
 const objectifyResourcesIds = require('./utils/objectifyResourcesIds')
 const cascadeUpdateResources = require('./utils/cascadeUpdateResources')
-const upsertUsersPermissions = require('./../../../generate-users-permissions/upsertUsersPermissions')
+const upsertUsersPermissions = require('../sitemap/permissions-upsertion/upsertUsersPermissions')
 
 const updatePermissions = async (
   parent,
@@ -68,7 +68,7 @@ const updatePermissions = async (
     result = updatedTeam
 
     /*
-      Step 2: Update team user's nodes resources
+      Step 2: Update team's users' nodes resources
     */
 
     await upsertUsersPermissions({

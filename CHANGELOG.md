@@ -32,6 +32,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   2) improves UX (involves less steps) for `Polaris` users to update permissions/sitemaps
   3) makes it faster to update permissions/sitemaps (now that writes are smaller).
 - `Phoenix`: Resources Modal: query for organizations using tool-id-to-query-doc map for getting orgs by org type rather than all organizations
+- `Phoenix`: Make sure override push sitemaps to dev button works
+- `Phoenix`: Refactor and move around upsertion logic related to `users.sitemaps` and `users.nodes.resources`
 
 ### Removed
 - `Polaris Backend`: removed old `client`, `role`, and `user` controllers.
@@ -46,3 +48,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `Phoenix`: removed the Auth0 Authorization Extension Client from the backend, leaving only the core Auth0 functionality (Auth0 Management Client) for user CRUD
   - Team and Client resolvers now only operate on MongoDB; where auth0 was depended on to generate a `uuid` for teams and clients, we now generate our own using the `uuid` library
   - User resolvers operate on MongoDB and Auth0 core but no longer do anything related to auth0 ext linking/delinking of teams
+- `Phoenix`: Fix combineResources util mock data after removing resources from users.sitemap logic

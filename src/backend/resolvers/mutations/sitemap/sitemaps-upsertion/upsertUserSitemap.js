@@ -1,4 +1,4 @@
-const getCombinedSitemaps = require('./../../../generate-sitemaps/getCombinedSitemaps')
+const getCombinedSitemaps = require('./getCombinedSitemaps')
 
 const upsertUserSitemap = async ({
   user,

@@ -1,7 +1,7 @@
 /* eslint-disable no-loop-func */
-const upsertUsersSitemaps = require('../resolvers/mutations/sitemap/upsertUsersSitemaps')
+const upsertUsersSitemaps = require('../sitemaps-upsertion/upsertUsersSitemaps')
 
-const generateSitemaps = async ({
+const overrideUpsertSitemaps = async ({
   pulseCoreDb,
   pulseDevDb,
 }) => {
@@ -23,4 +23,4 @@ const generateSitemaps = async ({
   return true
 }
 
-module.exports = generateSitemaps
+module.exports = overrideUpsertSitemaps
