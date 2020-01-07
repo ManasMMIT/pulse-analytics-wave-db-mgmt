@@ -3,13 +3,20 @@ const formattedProblemRowsByType = {
     {
       "sheetRow": 4,
       "value": "aahahahah",
-      "suggestion": "Esophageal"
+      "suggestion": "Kymriah"
     },
     {
       "sheetRow": 5,
       "value": "no",
-      "suggestion": "Melanoma"
+      "suggestion": "irinotecan"
     }
+  ],
+  "access": [
+    {
+      "sheetRow": 5,
+      "suggestion": "valid",
+      "value": "invalid",
+    },
   ],
   "indication": [
     {
@@ -27,12 +34,12 @@ const formattedProblemRowsByType = {
     {
       "sheetRow": 4,
       "value": "woo-hhooo",
-      "suggestion": "Lymphoma"
+      "suggestion": "city-hope"
     },
     {
       "sheetRow": 5,
       "value": "what",
-      "suggestion": "Pancreatic"
+      "suggestion": "alohacare"
     }
   ]
 }
