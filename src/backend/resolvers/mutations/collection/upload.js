@@ -3,6 +3,9 @@ const UserInputError = require('apollo-server-express').UserInputError
 const getErrorObj = require('../../../validation/getErrorObj')
 const { ObjectId } = require('mongodb')
 const upsertConnections = require('./upsertConnections')
+const uploadScraperData = require('./uploadScraperData')
+
+const SCRAPER_COLLECTIONS = ['merckKeytruda', 'regeneronDupixent']
 
 const uploadCollection = async (
   parent,
@@ -24,7 +27,17 @@ const uploadCollection = async (
   }
 
   const targetCollection = pulseRawDb.collection(collectionName)
-  
+
+  const isScraperData = SCRAPER_COLLECTIONS.includes(collectionName)
+  if (isScraperData) {
+    const collectionList = await pulseRawDb.listCollections({ name: collectionName }).toArray()
+    const doesCollectionExist = collectionList.length > 0
+
+    uploadScraperData({ targetCollection, data, doesCollectionExist })
+    return
+
+  }
+
   // ! HACK exception: If target is 'orgConnections', upsert into pulse-core 'organizations' collection
   if (collectionName === 'orgConnections') {
     data.forEach(row => { row._id = row._id ? ObjectId(row._id) : new ObjectId() })
