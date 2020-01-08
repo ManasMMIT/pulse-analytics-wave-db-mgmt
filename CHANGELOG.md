@@ -19,7 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `Orion`: oncologists column in query tool
 - `Phoenix`: `upsertUsersPermissions` and `upsertUsersSitemaps` utils for persisting user access directly to `dev`
 - `Phoenix`: `getUser` method was added to Auth0 Management Client and used in `auth0/index.js` instead of the method in Auth0 Extension Client to pave way for auth0 ext client's removal
-- `Phoenix`: Add Client update functionality (and build out delete functionality but leave it hidden)
+- `Phoenix`: Build out Client update and delete functionality but leave both hidden
 - `Orion`: can import collections for the policy scraper through `uploadScraperData` util
 
 ### Changed

@@ -5,7 +5,7 @@ import { transparentize } from 'polished'
 import Panel from '../../shared/Panel'
 import CreateButton from './CreateButton'
 // import DeleteButton from './DeleteButton'
-import UpdateButton from './UpdateButton'
+// import UpdateButton from './UpdateButton'
 
 import {
   SELECT_CLIENT,
@@ -62,7 +62,7 @@ const activePanelItemStyle = {
 
 const buttonGroupCallback = client => (
   <div style={{ display: 'flex' }}>
-    <UpdateButton client={client} />
+    {/* <UpdateButton client={client} /> */}
     {/* <DeleteButton clientId={client._id} /> */}
   </div>
 )
