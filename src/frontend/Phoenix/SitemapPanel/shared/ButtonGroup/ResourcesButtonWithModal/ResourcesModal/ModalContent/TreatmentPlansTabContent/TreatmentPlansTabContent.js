@@ -8,6 +8,8 @@ const TreatmentPlansTabContent = ({
   baseTreatmentPlans,
   treatmentPlans,
   setStagedTreatmentPlans,
+  stageAllTreatmentPlans,
+  unstageAllTreatmentPlans,
 }) => {
   const treatmentPlan = treatmentPlans[0] || {}
   const baseTreatmentPlan = baseTreatmentPlans[0] || {}
@@ -52,24 +54,38 @@ const TreatmentPlansTabContent = ({
   })
 
   return (
-    <div style={{ display: 'flex' }}>
-      <IndicationsPanel
-        selectedIndicationId={selectedIndicationId}
-        selectIndication={selectIndication}
-        enabledTreatmentPlans={enabledTreatmentPlans}
-        disabledTreatmentPlans={disabledTreatmentPlans}
-        setStagedTreatmentPlans={setStagedTreatmentPlans}
-      />
+    <div>
+      <div style={{ display: 'flex' }}>
+        <button
+          onClick={stageAllTreatmentPlans}
+        >
+          Toggle on All
+        </button>
+        <button
+          onClick={unstageAllTreatmentPlans}
+        >
+          Toggle off All
+        </button>
+      </div>
+      <div style={{ display: 'flex' }}>
+        <IndicationsPanel
+          selectedIndicationId={selectedIndicationId}
+          selectIndication={selectIndication}
+          enabledTreatmentPlans={enabledTreatmentPlans}
+          disabledTreatmentPlans={disabledTreatmentPlans}
+          setStagedTreatmentPlans={setStagedTreatmentPlans}
+        />
 
-      <div style={{ flex: 1 }} />
+        <div style={{ flex: 1 }} />
 
-      <RegimensPanel
-        selectedIndicationId={selectedIndicationId}
-        baseTreatmentPlans={baseTreatmentPlans}
-        setStagedTreatmentPlans={setStagedTreatmentPlans}
-        enabledTreatmentPlansHash={enabledTreatmentPlansHash}
-        enabledTreatmentPlans={enabledTreatmentPlans}
-      />
+        <RegimensPanel
+          selectedIndicationId={selectedIndicationId}
+          baseTreatmentPlans={baseTreatmentPlans}
+          setStagedTreatmentPlans={setStagedTreatmentPlans}
+          enabledTreatmentPlansHash={enabledTreatmentPlansHash}
+          enabledTreatmentPlans={enabledTreatmentPlans}
+        />
+      </div>
     </div>
   )
 }

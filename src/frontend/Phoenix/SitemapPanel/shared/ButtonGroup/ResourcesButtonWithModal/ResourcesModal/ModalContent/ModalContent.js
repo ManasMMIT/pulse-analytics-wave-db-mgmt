@@ -60,6 +60,10 @@ const ModalContent = ({
     setState(prevState => ({ ...prevState, regionalBreakdown }))
   }
 
+  const stageAllTreatmentPlans = () => setStagedTreatmentPlans(baseTreatmentPlans)
+
+  const unstageAllTreatmentPlans = () => setStagedTreatmentPlans([])
+
   return (
     <>
       <div style={{ marginLeft: 'auto' }}>
@@ -80,6 +84,8 @@ const ModalContent = ({
 
       <UnderlinedTabs tabsData={TABS_DATA}>
         <TreatmentPlansTabContent
+          stageAllTreatmentPlans={stageAllTreatmentPlans}
+          unstageAllTreatmentPlans={unstageAllTreatmentPlans}
           baseTreatmentPlans={baseTreatmentPlans}
           treatmentPlans={treatmentPlans}
           setStagedTreatmentPlans={setStagedTreatmentPlans}
