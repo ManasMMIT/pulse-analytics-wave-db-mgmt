@@ -7,6 +7,7 @@ const pushToDev = async ({
   pulseDevDb,
   terminateScript,
   projectName,
+  ignoreConsolidatePayerData,
 }) => {
   const coreCollection = pulseCoreDb.collection(collectionName)
 
@@ -41,7 +42,9 @@ const pushToDev = async ({
     await pulseDevDb.collection(`${collectionName}Ht`).insertMany(latestSingleProjectSixMonthsData)
     console.log(`pulse-dev collection '${collectionName}Ht' updated for project ${projectName}`)
 
-    await consolidatePayerData({ pulseDevDb, pulseCoreDb, terminateScript })
+    if (!ignoreConsolidatePayerData) {
+      await consolidatePayerData({ pulseDevDb, pulseCoreDb, terminateScript })
+    }
   } catch(e) {
     console.error(e)
   } finally {

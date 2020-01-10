@@ -22,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `Phoenix`: `getUser` method was added to Auth0 Management Client and used in `auth0/index.js` instead of the method in Auth0 Extension Client to pave way for auth0 ext client's removal
 - `Phoenix`: Build out Client update and delete functionality but leave both hidden
 - `Orion`: can import collections for the policy scraper through `uploadScraperData` util
+- `Node Scripts`: for importing payer historical project-based data, you can now add a flag `--ignoreConsolidatePayerData` to the terminal command to avoid that costly step until you're at the last CSV that needs to be imported
 
 ### Changed
 - `Polaris Backend`: fixed/optimized payer historical data import by aggregating, deleting, and inserting for a single project.

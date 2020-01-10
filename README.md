@@ -30,6 +30,8 @@ Sheets affected:
 Run the following command: `node ./importHistoricalData --filepath replaceWithLocalFilepath`
 **Note: It takes several minutes to import each sheet.**
 
+If you're importing multiple CSVs and you don't need to consolidate payer data (the most time-costly step) until the last CSV, then add the flag `--ignoreConsolidatePayerData` to the end of the terminal command to avoid that step. And then when you're about to import the last CSV, take the flag off so the consolidation can happen.
+
 ###  Importing Payer Lives
 Sheets affected:
 * payerHistoricalDrgNationalLives
@@ -66,6 +68,9 @@ Replace the filepath with the filepath to the appropriate CSV file on your own c
 ```
 node ./importHistoricalData --filepath "/Users/jonlin/Desktop/Egnyte/Shared/Pulse Analytics/Data/Payer/Payer Historical Data/Project-Based/MerckAntiemetics/6-2018/MerckAntiemetics-QualityAccess-6-2018.csv"
 ```
+
+Adding the flag `--ignoreConsolidatePayerData` will result in skipping the payer data consolidation step used to keep the regional targeting feature's data up to date. 
+
 ### Importing Payer Lives Data (and other older non-project-based historical data)
 
 If you're importing data such as `payerHistoricalMmitStateLives`, `payerHistoricalDrgNationalLives`, or other historical data that isn't
