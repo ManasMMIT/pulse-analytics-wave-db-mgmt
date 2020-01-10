@@ -20,6 +20,7 @@ const ADDITIONAL_FIELDS = [
   { label: 'state', key: 'state' },
   { label: 'oncologists #', key: 'oncologistsCount', type: 'number' },
   { label: 'cancer center', key: 'providerCancerCenter' },
+  { label: 'sites #', key: 'sitesCount', type: 'number' },
 ]
 
 const ProviderAccountModal = ({

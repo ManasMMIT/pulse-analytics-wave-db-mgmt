@@ -110,6 +110,7 @@ const queries = gql`
     state: String
     city: String
     oncologistsCount: Int
+    sitesCount: Int
   }
 
   type PayerOrganization {

@@ -10,6 +10,7 @@ const updateProviderOrganizationTypeDefs = gql`
     state: String
     city: String
     oncologistsCount: Int
+    sitesCount: Int
   }
 
   type UpdateProviderOrganizationPayload {
@@ -21,6 +22,7 @@ const updateProviderOrganizationTypeDefs = gql`
     state: String
     city: String
     oncologistsCount: Int
+    sitesCount: Int
   }
 `
 

@@ -372,6 +372,7 @@ export const GET_PROVIDER_ORGANIZATIONS = gql`
       state
       city
       oncologistsCount
+      sitesCount
     }
   }
 `

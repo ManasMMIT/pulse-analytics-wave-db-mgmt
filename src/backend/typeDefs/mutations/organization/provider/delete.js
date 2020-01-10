@@ -14,6 +14,7 @@ const deleteProviderOrganizationTypeDefs = gql`
     state: String
     city: String
     oncologistsCount: Int
+    sitesCount: Int
   }
 `
 
