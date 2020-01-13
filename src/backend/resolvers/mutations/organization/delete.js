@@ -3,7 +3,7 @@ const { ObjectId } = require('mongodb')
 const deleteOrganization = async (
   parent,
   { input: { _id: stringId } },
-  { pulseCoreDb, coreRoles, mongoClient },
+  { pulseDevDb, pulseCoreDb, coreRoles, mongoClient },
   info,
 ) => {
   const _id = ObjectId(stringId)
@@ -24,9 +24,9 @@ const deleteOrganization = async (
     deletedOrg = value
 
     // STEP 2: Delete the org across all teams' resources' accounts
-    // ! Note: After this deletion, we still have to push sitemaps to dev,
-    // ! and then dev to prod (thereby dropping and replacing permissions)
-    // ! to actually disable the deleted permissions on the live app
+    // ! Note: After this deletion, we still have to push dev to prod 
+    // ! (thereby dropping and replacing permissions) to actually 
+    // ! disable the deleted permissions on the live app
     await coreRoles.updateMany(
       {
         'resources.accounts._id': _id,
@@ -42,7 +42,7 @@ const deleteOrganization = async (
     const connectionIds = (deletedOrg.connections || [])
       .map(({ _id }) => _id)
 
-    // STEP 3: Remove the org's connections' twins
+    // ! STEP 3: TO DEPRECATE: Remove the org's connections' twins
     await pulseCoreDb
       .collection('organizations')
       .updateMany(
@@ -56,6 +56,34 @@ const deleteOrganization = async (
             },
           }
         },
+        { session },
+      )
+
+    // STEP 4: Remove the org from pulse-core connections and pulse-dev providers collection
+    const connectionDocs = await pulseCoreDb
+        .collection('organizations.connections')
+        .find(
+          { orgs: _id },
+          { session },
+        )
+        .toArray()
+
+    const connectionIdsToRemove = connectionDocs.map(({ _id }) => _id)
+
+    // if one or more connections targeted for deletion are between a payer and a VBM,
+    // that's fine because those deletion ops will merely do nothing to the
+    // providers collection in dev (since that only has provider/VBM connections)
+    await pulseDevDb
+      .collection('newProviders')
+      .deleteMany(
+        { _id: { $in: connectionIdsToRemove } },
+        { session },
+      )
+    
+    await pulseCoreDb
+      .collection('organizations.connections')
+      .deleteMany(
+        { orgs: _id },
         { session },
       )
   })

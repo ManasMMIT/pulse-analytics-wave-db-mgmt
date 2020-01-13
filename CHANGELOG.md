@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `Phoenix`: Build out Client update and delete functionality but leave both hidden
 - `Orion`: can import collections for the policy scraper through `uploadScraperData` util
 - `Node Scripts`: for importing payer historical project-based data, you can now add a flag `--ignoreConsolidatePayerData` to the terminal command to avoid that costly step until you're at the last CSV that needs to be imported
+- `Orion`: When deleting an organization, its connections are deleted from the soon-to-be-official connections collection AS WELL AS newProviders collection in pulse-dev
 
 ### Changed
 - `Polaris Backend`: fixed/optimized payer historical data import by aggregating, deleting, and inserting for a single project.
@@ -53,3 +54,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Team and Client resolvers now only operate on MongoDB; where auth0 was depended on to generate a `uuid` for teams and clients, we now generate our own using the `uuid` library
   - User resolvers operate on MongoDB and Auth0 core but no longer do anything related to auth0 ext linking/delinking of teams
 - `Phoenix`: Fix combineResources util mock data after removing resources from users.sitemap logic
+- `Orion`: When updating a non-provider-type org, the state field on all of that org's connections is no longer accidentally erased 
