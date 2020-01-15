@@ -10,7 +10,7 @@
         <mj-button
           mj-class='visit-tool-btn visit-account-btn'
           css-class='styled-button'
-          href='https://pulse-tools.com/pathways/accounts/pathways/{{ orgSlugs[orgName] }}/adoption-reach'
+          href='https://pulse-tools.com/pathways/accounts/{{ orgSlugs[orgName] }}/adoption-reach'
         >
           View on Tool
         </mj-button>
