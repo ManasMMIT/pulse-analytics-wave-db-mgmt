@@ -20,46 +20,103 @@ const TYPE_TOOL_ID_MAP = {
 
 const getConnectionsAggPipeline = (
   accountId,
-  toolIdMatchArray = [],
+  toolIds = [],
 ) => [
-  {
-    '$match': {
-      '$and': [
-        {
-          $or: toolIdMatchArray
-        }, {
-          'connections': {
-            '$exists': true
+    {
+      '$match': {
+        '_id': accountId
+      }
+    }, {
+      '$lookup': {
+        'from': 'organizations.connections',
+        'localField': '_id',
+        'foreignField': 'orgs',
+        'as': 'connections'
+      }
+    }, {
+      '$unwind': '$connections'
+    }, {
+      '$lookup': {
+        'from': 'organizations',
+        'localField': 'connections.orgs',
+        'foreignField': '_id',
+        'as': 'connections.orgs'
+      }
+    }, {
+      '$project': {
+        'connections.orgs.connections': 0
+      }
+    }, {
+      '$project': {
+        'slug': 1,
+        'type': 1,
+        'organization': 1,
+        'organizationTiny': 1,
+        'toolIds': 1,
+        'connections': {
+          '_id': 1,
+          'category': 1,
+          'state': 1,
+          'org': {
+            '$arrayElemAt': [
+              {
+                '$filter': {
+                  'input': '$connections.orgs',
+                  'cond': {
+                    '$ne': [
+                      '$$this._id', '$_id'
+                    ]
+                  }
+                }
+              }, 0
+            ]
           }
-        }, {
-          'connections': {
-            '$elemMatch': {
-              'org._id': accountId
+        }
+      }
+    }, {
+      '$group': {
+        '_id': {
+          '_id': '$_id',
+          'slug': '$slug',
+          'type': '$type',
+          'organization': '$organization',
+          'organizationTiny': '$organizationTiny',
+          'toolIds': '$toolIds'
+        },
+        'connections': {
+          '$push': '$connections'
+        }
+      }
+    }, {
+    '$project': {
+        _id: '$_id._id',
+        slug: '$_id.slug',
+        type: '$_id.type',
+        organization: '$_id.organization',
+        organizationTiny: '$_id.organizationTiny',
+        toolIds: '$_id.toolIds',
+        connections: {
+          '$filter': {
+            'input': '$connections',
+            'as': 'connection',
+            'cond': {
+              $size: {
+                $setIntersection: [
+                  '$$connection.org.toolIds',
+                  toolIds,
+                ]
+              }
             }
           }
         }
-      ]
-    }
-  }, {
-    '$unwind': {
-      'path': '$connections',
-      'preserveNullAndEmptyArrays': false
-    }
-  }, {
-    '$match': {
-      'connections.org._id': accountId
-    }
-  }
-]
+      }
+    },
+  ]
 
 const filterQuery = async (parent, {
   input: { orgTypes, selectedAccount }
 }, { pulseCoreDb }, info) => {
-  const toolIdMatchArray = orgTypes.map(type => {
-    const toolId = TYPE_TOOL_ID_MAP[type]
-
-    return { toolIds: toolId }
-  })
+  const toolIdsArray = orgTypes.map(type => TYPE_TOOL_ID_MAP[type])
 
   const selectedAccountId = ObjectId(selectedAccount)
 
@@ -69,33 +126,34 @@ const filterQuery = async (parent, {
   let result = []
   if (shouldFilterAccountsOnly) {
     result = await pulseCoreDb.collection('organizations')
-      .find({ $or: toolIdMatchArray })
+      .find({ toolIds: { $in: toolIdsArray } })
       .toArray()
   } else if (shouldFilterConnections) {
-    const aggPipeline = getConnectionsAggPipeline(selectedAccountId, toolIdMatchArray)
+    const aggPipeline = getConnectionsAggPipeline(selectedAccountId, toolIdsArray)
 
-    result = await pulseCoreDb.collection('organizations')
+    const selectedAccountConnections = await pulseCoreDb.collection('organizations')
       .aggregate(aggPipeline)
       .toArray()
 
-    const dataGroupedByAccountId = _.groupBy(result, '_id')
+    const { connections, ...selectedAccount } = selectedAccountConnections[0]
 
-    result = Object.keys(dataGroupedByAccountId).map(accountId => {
-      const flatAccountData = dataGroupedByAccountId[accountId]
+    // ! The below code is to keep the frontend Query Tool stable for now
+    // ! Once we refactor the frontend to be more dynamic, this code will have to
+    // ! be changed, as well
+    const connectionsGroupedByOrgId = _.groupBy(connections, 'org._id')
 
-      const connections = flatAccountData.reduce((acc, { connections }) => {
-        if (connections) {
-          acc.push(connections)
+    result = Object.values(connectionsGroupedByOrgId)
+      .map(orgConnections => {
+        const connections = orgConnections.map(({ org, ...rest }) => ({
+          ...rest,
+          org: selectedAccount,
+        }))
+
+        return {
+          ...orgConnections[0].org,
+          connections,
         }
-
-        return acc
-      }, [])
-
-      return ({
-        ...flatAccountData[0],
-        connections,
       })
-    })
   }
 
   return _.sortBy(result, 'slug')

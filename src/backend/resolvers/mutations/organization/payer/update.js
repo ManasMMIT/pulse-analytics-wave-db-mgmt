@@ -8,6 +8,11 @@ const updatePayerOrganization = async (
 ) => {
   const _id = ObjectId(stringId)
 
+  const {
+    connections: newConnections,
+    ...setObj
+  } = body
+
   const session = mongoClient.startSession()
 
   let result
@@ -19,13 +24,24 @@ const updatePayerOrganization = async (
       .collection('organizations')
       .findOneAndUpdate(
         { _id },
-        { $set: body },
+        { $set: setObj },
         { returnOriginal: false, session },
       )
 
     result = value
 
+    // ! deprecate pulling out connections, when it's no
+    // longer persisted to `organizations`
     const { connections, ...updatedOrg } = result
+
+    const connectionsWithIds = (newConnections || []).map(connection => ({
+      ...connection,
+      _id: connection._id
+        ? ObjectId(connection._id)
+        : new ObjectId(),
+    }))
+
+    result.connections = connectionsWithIds
 
     // Step 2: update org data in all org.connections
     await pulseCoreDb
@@ -62,6 +78,32 @@ const updatePayerOrganization = async (
           session,
         }
       )
+
+    // Step 4: clear all old connections from orgs.connections
+    await pulseCoreDb.collection('organizations.connections')
+      .deleteMany(
+        { orgs: _id },
+        { session }
+      )
+    
+    // Step 5: insert new docs into orgs.connections
+    const orgConnectionsDocs = connectionsWithIds.map(connection => ({
+      _id: connection._id,
+      orgs: [
+        _id,
+        ObjectId(connection.org._id),
+      ],
+      category: connection.category,
+      state: connection.state,
+    }))
+  
+    if (orgConnectionsDocs.length) {
+      await pulseCoreDb.collection('organizations.connections')
+        .insertMany(
+          orgConnectionsDocs,
+          { session },
+        )
+    }
   })
 
   return result

@@ -45,10 +45,7 @@ const FormSection = styled.div({
 
 const CreateConnectionForm = ({
   from,
-  vbmConnectionDoc,
-  refetchQueries,
-  postSubmitHook,
-  onActionHook,
+  addConnection,
 }) => {
   const [
     accountFilterOptions,
@@ -64,8 +61,8 @@ const CreateConnectionForm = ({
   if (from.type === 'Provider') providerStateOverride = from.state
 
   const [
-    state,
-    setState,
+    usState,
+    setUsState,
   ] = useState({ label: providerStateOverride, value: providerStateOverride })
 
   const [getAllowedOrgTypes] = useMutation(FILTER_QUERY)
@@ -89,22 +86,6 @@ const CreateConnectionForm = ({
         setAccountFilterOptions(accountFilterOptions)
       })
   }, [])
-
-  const [connect] = useMutation(vbmConnectionDoc, {
-    variables: {
-      input: {
-        from,
-        to: to.value,
-        state: state.value,
-      },
-    },
-    refetchQueries,
-    update: () => {
-      setTo({})
-      postSubmitHook()
-    },
-    onCompleted: onActionHook,
-  })
 
   const hasAllRequiredFields = Object.keys(to).length
 
@@ -134,8 +115,8 @@ const CreateConnectionForm = ({
 
             setTo(to)
 
-            if (to.value.type === 'Provider') {
-              setState({ label: to.value.state, value: to.value.state })
+            if (to.value && to.value.type === 'Provider') {
+              setUsState({ label: to.value.state, value: to.value.state })
             }
           }}
           options={accountFilterOptions}
@@ -154,10 +135,10 @@ const CreateConnectionForm = ({
             from.type === 'Provider' || (to.value && to.value.type === 'Provider')
           )}
           styles={connectionSelectStyles}
-          defaultValue={state}
-          value={state}
-          onChange={(state, { action }) => {
-            setState(state)
+          defaultValue={usState}
+          value={usState}
+          onChange={(usState, { action }) => {
+            setUsState(usState)
           }}
           options={STATE_FILTER_OPTIONS}
         />
@@ -165,7 +146,15 @@ const CreateConnectionForm = ({
 
       <SubmitNewConnectionButton
         disabled={!hasAllRequiredFields}
-        onClick={connect}
+        onClick={() => {
+          const connection = {
+            org: to.value,
+            state: usState.value,
+            category: "Value-Based Model Participation",
+          }
+
+          addConnection(connection)
+        }}
       >
         connect
       </SubmitNewConnectionButton>

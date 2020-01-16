@@ -1,5 +1,7 @@
 const { ObjectId } = require('mongodb')
 
+const updateProvidersCollection = require('./../utils/updateProvidersCollection')
+
 const updateProviderOrganization = async (
   parent,
   { input: { _id: stringId, ...body } },
@@ -7,6 +9,11 @@ const updateProviderOrganization = async (
   info,
 ) => {
   const _id = ObjectId(stringId)
+
+  const {
+    connections: newConnections,
+    ...setObj
+  } = body
 
   const session = mongoClient.startSession()
 
@@ -19,27 +26,35 @@ const updateProviderOrganization = async (
       .collection('organizations')
       .findOneAndUpdate(
         { _id },
-        { $set: body },
+        { $set: setObj },
         { returnOriginal: false, session },
       )
 
     result = value
 
+    // ! deprecate pulling out connections, when it's no
+    // longer persisted to `organizations`
     const { connections, ...updatedOrg } = result
 
     // Step 2: update state in connections
-    const connectionsWithNewState = (connections || []).map(connection => ({
+    const connectionsWithNewState = (newConnections || []).map(connection => ({
       ...connection,
+      _id: connection._id
+        ? ObjectId(connection._id)
+        : new ObjectId(),
       state: body.state,
     }))
 
+    result.connections = connectionsWithNewState
+
+    // ! TO DEPRECATE
     await pulseCoreDb
       .collection('organizations')
       .updateOne(
         { _id },
         {
           $set: {
-            connections: connectionsWithNewState,
+            connections: connectionsWithNewState, // ! may have unexpected schema difference from before
           }
         },
         {
@@ -47,6 +62,7 @@ const updateProviderOrganization = async (
         }
       )
 
+    // ! TO DEPRECATE
     // Step 3: update org data in all org.connections
     await pulseCoreDb
       .collection('organizations')
@@ -83,6 +99,48 @@ const updateProviderOrganization = async (
           session,
         }
       )
+
+    // Step 5: clear all connections from orgs.connections
+
+    // ! make sure to grab old connections for providers collection work later
+    const oldConnections = await pulseCoreDb
+      .collection('organizations.connections')
+      .find({ orgs: _id }, { session })
+      .toArray()
+
+    await pulseCoreDb.collection('organizations.connections')
+      .deleteMany(
+        { orgs: _id },
+        { session }
+      )
+
+    // Step 6: insert new docs into orgs.connections
+    const orgConnectionDocs = connectionsWithNewState.map(connection => ({
+      _id: connection._id,
+      orgs: [
+        _id,
+        ObjectId(connection.org._id),
+      ],
+      category: connection.category,
+      state: connection.state,
+    }))
+
+    if (orgConnectionDocs.length) {
+      await pulseCoreDb.collection('organizations.connections')
+        .insertMany(
+          orgConnectionDocs,
+          { session },
+        )
+    }
+
+    // Step 7: rebuild provider collection docs for account
+    await updateProvidersCollection({
+      db: pulseDevDb,
+      account: result,
+      oldConnections: oldConnections,
+      newConnections: connectionsWithNewState,
+      session,
+    })
   })
 
   return result

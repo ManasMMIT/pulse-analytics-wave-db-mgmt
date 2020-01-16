@@ -6,6 +6,8 @@ const updatePayerOrganizationTypeDefs = gql`
     slug: String!
     organization: String
     organizationTiny: String
+    connections: JSON
+    type: String
   }
 
   type UpdatePayerOrganizationPayload {
@@ -13,6 +15,8 @@ const updatePayerOrganizationTypeDefs = gql`
     slug: String!
     organization: String
     organizationTiny: String
+    connections: JSON
+    type: String
   }
 `
 

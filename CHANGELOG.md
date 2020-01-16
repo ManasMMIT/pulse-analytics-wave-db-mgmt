@@ -26,6 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `Orion`: When deleting an organization, its connections are deleted from the soon-to-be-official connections collection AS WELL AS newProviders collection in pulse-dev
 
 ### Changed
+- `Orion`: refactor all connections logic, front- and back-end, for new connections collection ([link](https://github.com/pulse-data/wave-db-mgmt/pull/294))
 - `Polaris Backend`: fixed/optimized payer historical data import by aggregating, deleting, and inserting for a single project.
 - `Delphi`: refactored backend to be more flexible with less hard-coding for Pathways subscription.
 - `Orion`: added additional fields to Provider Acc Modal: `state`, `city`, and `oncologistsCount`, and persist organization state changes on both sides of connections. 
@@ -47,6 +48,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `Delphi`: Removed old approach code including standlone email prep node script and deprecated mutations, resolvers, typeDefs, queries
 
 ### Fixed
+- `Orion`: delete account modal no longer stutters, and all relevant connections are scrubbed from cache ([link](https://github.com/pulse-data/wave-db-mgmt/pull/292))
 - `Delphi`: hotfix implemented for test email user dropdown, making it network-only for freshest users to mock.
 - `Orion`: Query Tool account dropdown now displays updated data, when accounts are CUD'd on anywhere in Orion.
 - `Phoenix`: added logic to `manageDeletedTeam` frontend resolver to keep user team labels fresh.

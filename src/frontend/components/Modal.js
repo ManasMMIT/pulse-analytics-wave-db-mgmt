@@ -127,7 +127,6 @@ class Modal extends React.Component {
               </Header>
             )
           }
-
           {children}
         </Main>
       </Wrapper>

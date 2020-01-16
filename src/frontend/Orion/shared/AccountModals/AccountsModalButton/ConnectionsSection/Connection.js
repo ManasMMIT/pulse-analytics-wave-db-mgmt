@@ -1,9 +1,4 @@
 import React from 'react'
-import { useMutation } from '@apollo/react-hooks'
-
-import {
-  DELETE_VBM_CONNECTION,
-} from './../../../../../api/mutations'
 
 import {
   ConnectionCard,
@@ -18,43 +13,34 @@ import {
 
 const Connection = ({
   from,
-  to,
-  refetchQueries,
-  onActionHook,
+  data,
+  removeConnection,
 }) => {
   const {
     org: {
-      organization: toOrg,
-      type: toType,
+      organization: dataOrg,
+      type: dataType,
     },
     state,
     category,
-  } = to
-
-  const [deleteVbmConnection] = useMutation(DELETE_VBM_CONNECTION, {
-    variables: {
-      input: { _id: to._id }
-    },
-    refetchQueries,
-    onCompleted: onActionHook
-  })
+  } = data
 
   const displayState = state ? `(${state}) ` : ''
 
-  // `${ from.organization } ${ displayState }participates in ${ toOrg } (${ toType }).`
+  // `${ from.organization } ${ displayState }participates in ${ dataOrg } (${ dataType }).`
 
   const language = from.type === 'Payer' || from.type === 'Provider'
     ? (
       <div>
-        <ConnectionAccount>{ toOrg } </ConnectionAccount>
-        <ConnectionTypeTag>{ toType }</ConnectionTypeTag>
+        <ConnectionAccount>{ dataOrg } </ConnectionAccount>
+        <ConnectionTypeTag>{ dataType }</ConnectionTypeTag>
         <ConnectionText> is affiliated with </ConnectionText>
         <ConnectionAccount>{ from.organization } { displayState }</ConnectionAccount>
       </div>
     ) : (
       <div>
-        <ConnectionAccount>{ toOrg } { displayState }</ConnectionAccount>
-        <ConnectionText><ConnectionTypeTag>{ toType }</ConnectionTypeTag> participates in </ConnectionText>
+        <ConnectionAccount>{ dataOrg } { displayState }</ConnectionAccount>
+        <ConnectionText><ConnectionTypeTag>{ dataType }</ConnectionTypeTag> participates in </ConnectionText>
         <ConnectionAccount>{ from.organization }</ConnectionAccount>
       </div>
     )
@@ -66,7 +52,7 @@ const Connection = ({
         <ConnectionLanguage>{ language } </ConnectionLanguage>
       </ConnectionCategory>
       <RemoveConnectionButton
-        onClick={deleteVbmConnection}
+        onClick={() => removeConnection(data)}
       >
         ×
       </RemoveConnectionButton>

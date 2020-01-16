@@ -41,6 +41,7 @@ export const UPDATE_PROVIDER_ORGANIZATION = gql`
       state
       city
       oncologistsCount
+      connections
     }
   }
 `
@@ -74,6 +75,7 @@ export const UPDATE_PAYER_ORGANIZATION = gql`
       slug
       organization
       organizationTiny
+      connections
     }
   }
 `
@@ -107,6 +109,7 @@ export const UPDATE_PATHWAYS_ORGANIZATION = gql`
       slug
       organization
       organizationTiny
+      connections
     }
   }
 `
@@ -140,6 +143,7 @@ export const UPDATE_APM_ORGANIZATION = gql`
       slug
       organization
       organizationTiny
+      connections
     }
   }
 `
