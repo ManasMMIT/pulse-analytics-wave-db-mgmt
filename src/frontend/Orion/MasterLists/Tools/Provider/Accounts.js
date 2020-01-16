@@ -14,6 +14,8 @@ import {
 
 import {
   GET_PROVIDER_ORGANIZATIONS,
+  GET_PATHWAYS_ORGANIZATIONS,
+  GET_APM_ORGANIZATIONS,
 } from '../../../../api/queries'
 
 import { Colors } from '../../../../utils/pulseStyles'
@@ -61,7 +63,11 @@ const buttonGroupCallback = entity => (
     <DeleteButton
       itemId={entity._id}
       mutationDoc={DELETE_PROVIDER_ORGANIZATION}
-      refetchQueries={[{ query: GET_PROVIDER_ORGANIZATIONS }]}
+      refetchQueries={[
+        { query: GET_PROVIDER_ORGANIZATIONS },
+        { query: GET_PATHWAYS_ORGANIZATIONS },
+        { query: GET_APM_ORGANIZATIONS },
+      ]}
     />
   </>
 )

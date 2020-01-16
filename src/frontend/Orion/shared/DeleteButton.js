@@ -54,8 +54,13 @@ const DeleteButton = props => {
   const [handleSubmit, { loading, error }] = useMutation(
     mutationDoc,
     {
+      awaitRefetchQueries: true,
       refetchQueries,
-      update: afterMutationHook,
+      // the account modals don't need to pass closing the modal into afterMutationHook 
+      // because when refetchQueries are done, the account itself is no longer a list item
+      // in the master list, meaning the list item completely unmounts and all of its children,
+      // including its DeleteButton instantiation and the modal it wraps, also unmount
+      update: afterMutationHook, 
     }
   )
 

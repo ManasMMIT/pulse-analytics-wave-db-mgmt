@@ -16,6 +16,8 @@ import {
 
 import {
   GET_PAYER_ORGANIZATIONS,
+  GET_PATHWAYS_ORGANIZATIONS,
+  GET_APM_ORGANIZATIONS,
 } from '../../../../api/queries'
 
 import { Colors } from '../../../../utils/pulseStyles'
@@ -63,7 +65,11 @@ const buttonGroupCallback = entity => (
     <DeleteButton
       itemId={entity._id}
       mutationDoc={DELETE_PAYER_ORGANIZATION}
-      refetchQueries={[{ query: GET_PAYER_ORGANIZATIONS }]}
+      refetchQueries={[
+        { query: GET_PAYER_ORGANIZATIONS },
+        { query: GET_PATHWAYS_ORGANIZATIONS },
+        { query: GET_APM_ORGANIZATIONS },
+      ]}
     />
   </>
 )
