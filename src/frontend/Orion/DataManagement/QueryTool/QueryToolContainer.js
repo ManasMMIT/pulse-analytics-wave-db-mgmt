@@ -116,8 +116,8 @@ const QueryToolContainer = ({
             || _.isEmpty(orgTypes)
         )
 
-        if (shouldNotDisplayData) setShowCsvButton(false)
-        else setShowCsvButton(true)
+        // if (shouldNotDisplayData) setShowCsvButton(false)
+        // else setShowCsvButton(true)
       }
     }
   )

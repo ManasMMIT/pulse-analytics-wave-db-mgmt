@@ -38,18 +38,18 @@ const uploadCollection = async (
 
   }
 
-  // ! HACK exception: If target is 'orgConnections', upsert into pulse-core 'organizations' collection
-  if (collectionName === 'orgConnections') {
-    data.forEach(row => { row._id = row._id ? ObjectId(row._id) : new ObjectId() })
+  // // ! HACK exception: If target is 'orgConnections', upsert into pulse-core 'organizations' collection
+  // if (collectionName === 'orgConnections') {
+  //   data.forEach(row => { row._id = row._id ? ObjectId(row._id) : new ObjectId() })
     
-    await upsertConnections({
-      pulseCoreDb,
-      mongoClient,
-      data,
-    })
+  //   await upsertConnections({
+  //     pulseCoreDb,
+  //     mongoClient,
+  //     data,
+  //   })
 
-    return
-  }
+  //   return
+  // }
 
   await targetCollection.deleteMany()
   await targetCollection.insertMany(data)

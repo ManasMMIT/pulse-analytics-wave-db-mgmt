@@ -44,10 +44,6 @@ const getConnectionsAggPipeline = (
       }
     }, {
       '$project': {
-        'connections.orgs.connections': 0
-      }
-    }, {
-      '$project': {
         'slug': 1,
         'type': 1,
         'organization': 1,

@@ -30,10 +30,6 @@ const updatePayerOrganization = async (
 
     result = value
 
-    // ! deprecate pulling out connections, when it's no
-    // longer persisted to `organizations`
-    const { connections, ...updatedOrg } = result
-
     const connectionsWithIds = (newConnections || []).map(connection => ({
       ...connection,
       _id: connection._id
@@ -43,31 +39,13 @@ const updatePayerOrganization = async (
 
     result.connections = connectionsWithIds
 
-    // Step 2: update org data in all org.connections
-    await pulseCoreDb
-      .collection('organizations')
-      .updateMany(
-        { 'connections.org._id': _id },
-        {
-          $set: {
-            'connections.$[el].org': updatedOrg,
-          }
-        },
-        {
-          arrayFilters: [
-            { 'el.org._id': _id },
-          ],
-          session,
-        },
-      )
-
-    // Step 3: update org.slug in all users.nodes.resources
+    // Step 2: update org.slug in all users.nodes.resources
     await pulseDevDb.collection('users.nodes.resources')
       .updateMany(
         { 'resources.accounts._id': _id },
         {
           $set: {
-            'resources.$[resource].accounts.$[el].slug': updatedOrg.slug,
+            'resources.$[resource].accounts.$[el].slug': result.slug,
           }
         },
         {
@@ -79,14 +57,14 @@ const updatePayerOrganization = async (
         }
       )
 
-    // Step 4: clear all old connections from orgs.connections
+    // Step 3: clear all old connections from orgs.connections
     await pulseCoreDb.collection('organizations.connections')
       .deleteMany(
         { orgs: _id },
         { session }
       )
     
-    // Step 5: insert new docs into orgs.connections
+    // Step 4: insert new docs into orgs.connections
     const orgConnectionsDocs = connectionsWithIds.map(connection => ({
       _id: connection._id,
       orgs: [

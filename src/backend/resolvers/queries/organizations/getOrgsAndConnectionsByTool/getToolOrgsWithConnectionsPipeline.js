@@ -24,10 +24,6 @@ module.exports = (toolId, extraProjectionFields) => [
       'foreignField': '_id',
       'as': 'connections.orgs'
     }
-  }, { // ! TO DEPRECATE: after connections is deleted from organizations collection
-    '$project': {
-      'connections.orgs.connections': 0
-    }
   }, {
     '$project': {
       'slug': 1,

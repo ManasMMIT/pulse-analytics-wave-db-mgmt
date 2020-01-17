@@ -32,10 +32,6 @@ const updateProviderOrganization = async (
 
     result = value
 
-    // ! deprecate pulling out connections, when it's no
-    // longer persisted to `organizations`
-    const { connections, ...updatedOrg } = result
-
     // Step 2: update state in connections
     const connectionsWithNewState = (newConnections || []).map(connection => ({
       ...connection,
@@ -47,48 +43,13 @@ const updateProviderOrganization = async (
 
     result.connections = connectionsWithNewState
 
-    // ! TO DEPRECATE
-    await pulseCoreDb
-      .collection('organizations')
-      .updateOne(
-        { _id },
-        {
-          $set: {
-            connections: connectionsWithNewState, // ! may have unexpected schema difference from before
-          }
-        },
-        {
-          session,
-        }
-      )
-
-    // ! TO DEPRECATE
-    // Step 3: update org data in all org.connections
-    await pulseCoreDb
-      .collection('organizations')
-      .updateMany(
-        { 'connections.org._id': _id },
-        {
-          $set: {
-            'connections.$[el].org': updatedOrg,
-            'connections.$[el].state': body.state,
-          }
-        },
-        {
-          arrayFilters: [
-            { 'el.org._id': _id },
-          ],
-          session,
-        },
-      )
-
-    // Step 4: update org.slug in all users.nodes.resources
+    // Step 3: update org.slug in all users.nodes.resources
     await pulseDevDb.collection('users.nodes.resources')
       .updateMany(
         { 'resources.accounts._id': _id },
         {
           $set: {
-            'resources.$[resource].accounts.$[el].slug': updatedOrg.slug,
+            'resources.$[resource].accounts.$[el].slug': result.slug,
           }
         },
         {
@@ -100,7 +61,7 @@ const updateProviderOrganization = async (
         }
       )
 
-    // Step 5: clear all connections from orgs.connections
+    // Step 4: clear all connections from orgs.connections
 
     // ! make sure to grab old connections for providers collection work later
     const oldConnections = await pulseCoreDb
@@ -114,7 +75,7 @@ const updateProviderOrganization = async (
         { session }
       )
 
-    // Step 6: insert new docs into orgs.connections
+    // Step 5: insert new docs into orgs.connections
     const orgConnectionDocs = connectionsWithNewState.map(connection => ({
       _id: connection._id,
       orgs: [
@@ -133,7 +94,7 @@ const updateProviderOrganization = async (
         )
     }
 
-    // Step 7: rebuild provider collection docs for account
+    // Step 6: rebuild provider collection docs for account
     await updateProvidersCollection({
       db: pulseDevDb,
       account: result,
