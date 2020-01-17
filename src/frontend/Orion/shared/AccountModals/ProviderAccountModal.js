@@ -13,7 +13,7 @@ import {
   GET_APM_ORGANIZATIONS,
 } from '../../../api/queries'
 
-import AccountsModalButton from './AccountsModalButton'
+import AccountModalButton from './AccountModalButton'
 
 const ADDITIONAL_FIELDS = [
   { label: 'city', key: 'city' },
@@ -41,7 +41,7 @@ const ProviderAccountModal = ({
   ]
 
   return (
-    <AccountsModalButton
+    <AccountModalButton
       account={account}
       buttonLabel={buttonLabel}
       buttonStyle={buttonStyle}

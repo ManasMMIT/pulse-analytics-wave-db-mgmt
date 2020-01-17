@@ -1,6 +1,6 @@
 import { transparentize } from 'polished'
 
-import { Colors, Spacing } from '../../../../../utils/pulseStyles'
+import { Colors, Spacing } from '../../../../../../utils/pulseStyles'
 
 export const connectionSelectStyles = {
   control: (provided,) => ({

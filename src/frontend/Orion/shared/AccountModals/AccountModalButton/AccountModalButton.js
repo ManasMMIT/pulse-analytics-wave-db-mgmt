@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import _ from 'lodash'
 import queryString from 'query-string'
 import { withRouter } from 'react-router-dom'
 
@@ -10,7 +9,7 @@ import {
   ButtonLabel,
 } from './styledAccountModalButtonComponents'
 
-const AccountsModalButton = ({
+const AccountModalButton = ({
   buttonLabel,
   buttonStyle,
   account, // ! needs to have at least _id and type
@@ -68,7 +67,7 @@ const AccountsModalButton = ({
   )
 }
 
-AccountsModalButton.propTypes = {
+AccountModalButton.propTypes = {
   buttonLabel: PropTypes.any,
   buttonStyle: PropTypes.object,
   account: PropTypes.object,
@@ -81,10 +80,10 @@ AccountsModalButton.propTypes = {
   onActionHook: PropTypes.func,
 }
 
-AccountsModalButton.defaultProps = {
+AccountModalButton.defaultProps = {
   account: {},
   additionalFields: [],
   onActionHook: () => {},
 }
 
-export default withRouter(AccountsModalButton)
+export default withRouter(AccountModalButton)

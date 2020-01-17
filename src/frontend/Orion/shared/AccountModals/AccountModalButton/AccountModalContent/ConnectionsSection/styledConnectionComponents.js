@@ -1,14 +1,14 @@
 import styled from '@emotion/styled'
 import { transparentize } from 'polished'
 
-import { Colors, Spacing } from '../../../../../utils/pulseStyles'
+import { Colors, Spacing } from '../../../../../../utils/pulseStyles'
 
 export const SectionHeader = styled.div({
-  borderTop: `1px solid ${transparentize(0.9, Colors.BLACK)}`,
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'space-between',
+  borderBottom: `1px solid ${transparentize(0.9, Colors.BLACK)}`,
   width: '100%',
+  display: 'flex',
+  justifyContent: 'space-between',
+  padding: '0px 12px 12px 12px',
 })
 
 export const CreateConnectionButton = styled.button({
@@ -36,7 +36,6 @@ export const ConnectionsWrapper = styled.div({
   maxHeight: 400,
   overflowY: 'scroll',
 })
-
 
 export const ConnectionCard = styled.div({
   alignItems: 'flex-end',

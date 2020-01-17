@@ -6,7 +6,7 @@ import {
   Transitions,
   Colors,
   FontFamily,
-} from './../../../../utils/pulseStyles'
+} from '../../../../utils/pulseStyles'
 
 export const ButtonLabel = styled.button({
   background: 'none',

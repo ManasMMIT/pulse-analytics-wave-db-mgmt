@@ -1,26 +1,24 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import _ from 'lodash'
-
-import { withRouter } from 'react-router-dom'
-
-import ConnectionsSection from './ConnectionsSection'
 
 import {
   Input,
   Label,
   LabelText,
   SectionTitle,
-} from './styledAccountModalButtonComponents'
+} from '../styledAccountModalButtonComponents'
 
-const AccountsModalContent = ({
+const wrapperStyle = {
+  padding: '0 24px',
+}
+
+const AccountProfileSection = ({
   additionalFields,
   formState,
-  isEditModal,
   safelySetFormState,
 }) => {
   return (
-    <div>
+    <div style={wrapperStyle}>
       <SectionTitle>Account Info</SectionTitle>
       <Label>
         <LabelText>name</LabelText>
@@ -79,28 +77,19 @@ const AccountsModalContent = ({
           </Label>
         ))
       }
-      {
-        isEditModal && (
-          <ConnectionsSection
-            from={formState}
-            safelySetFormState={safelySetFormState}
-          />
-        )
-      }
     </div>
   )
 }
 
-AccountsModalContent.propTypes = {
+AccountProfileSection.propTypes = {
   formState: PropTypes.object,
   additionalFields: PropTypes.array,
-  isEditModal: PropTypes.bool,
   safelySetFormState: PropTypes.func,
 }
 
-AccountsModalContent.defaultProps = {
+AccountProfileSection.defaultProps = {
   accountType: 'Pathways', // stop create modal breakage
   additionalFields: [],
 }
 
-export default withRouter(AccountsModalContent)
+export default AccountProfileSection

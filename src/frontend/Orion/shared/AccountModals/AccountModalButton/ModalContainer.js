@@ -6,14 +6,14 @@ import queryString from 'query-string'
 import { withRouter } from 'react-router-dom'
 
 import Modal from '../../../../components/Modal'
-import AccountsModalContent from './AccountsModalContent'
+import AccountModalContent from './AccountModalContent'
 
 import {
   GET_PROVIDER_ORGANIZATIONS,
   GET_PAYER_ORGANIZATIONS,
   GET_PATHWAYS_ORGANIZATIONS,
   GET_APM_ORGANIZATIONS,
-} from './../../../../api/queries'
+} from '../../../../api/queries'
 
 import {
   SubmitButton,
@@ -116,6 +116,7 @@ const ModalContainer = ({
   return (
     <Modal
       show
+      noClickAway
       title={`${isEditModal ? accountType : ''} Account ${isEditModal ? 'Edit' : 'Create'}`}
       submitButton={submitButton}
       handleClose={() => {
@@ -125,7 +126,7 @@ const ModalContainer = ({
         setIsOpen(false)
       }}
     >
-      <AccountsModalContent
+      <AccountModalContent
         accountId={accountId}
         additionalFields={additionalFields}
         formState={formState}

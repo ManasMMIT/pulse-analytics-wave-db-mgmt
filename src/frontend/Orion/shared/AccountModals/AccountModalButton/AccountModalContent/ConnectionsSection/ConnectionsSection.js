@@ -4,13 +4,19 @@ import _ from 'lodash'
 import Connection from './Connection'
 import CreateConnectionForm from './CreateConnectionForm'
 
-import { SectionTitle } from '../styledAccountModalButtonComponents'
+import { SectionTitle } from '../../styledAccountModalButtonComponents'
 
 import {
   SectionHeader,
   ConnectionsWrapper,
   CreateConnectionButton,
 } from './styledConnectionComponents'
+
+const wrapperStyle = {
+  padding: '0 24px',
+  minWidth: 400,
+  minHeight: 300,
+}
 
 const ConnectionsSection = ({
   from,
@@ -50,7 +56,7 @@ const ConnectionsSection = ({
   }
 
   return (
-    <div>
+    <div style={wrapperStyle}>
       <SectionHeader>
         <SectionTitle>Connections</SectionTitle>
         <CreateConnectionButton onClick={() => setShowConnectionForm(!showConnectionForm)}>

@@ -5,7 +5,7 @@ import styled from '@emotion/styled'
 
 import {
   FILTER_QUERY,
-} from './../../../../../api/mutations'
+} from '../../../../../../api/mutations'
 
 import { connectionSelectStyles } from './connectionSelectStyles'
 
@@ -37,9 +37,15 @@ const ALLOWED_ORG_TYPES = {
   ],
 }
 
+const wrapperStyle = {
+  width: 'inherit',
+  position: 'absolute',
+  background: '#F0F6F9',
+  padding: 24,
+  boxShadow: `0 6px 24px 0 #0000001c`,
+}
+
 const FormSection = styled.div({
-  display: 'flex',
-  alignItems: 'center',
   margin: '12px 0px',
 })
 
@@ -101,7 +107,7 @@ const CreateConnectionForm = ({
     : 'Add participant:'
 
   return (
-    <div>
+    <div style={wrapperStyle}>
       <FormSection>
         <ConnectionFormLabel>{formLanguage}</ConnectionFormLabel>
         <Select
