@@ -64,7 +64,7 @@ module.exports = [
             },
             {
               case: { $eq: ['$book', 'FFS Medicaid'] },
-              then: 'State Fee-for-Service Medicaid',
+              then: 'State Medicaid',
             },
           ],
           default: '$book'
