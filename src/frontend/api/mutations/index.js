@@ -110,6 +110,10 @@ import {
   FILTER_QUERY,
 } from './query'
 
+import {
+  RUN_PIPE_DELIMITED_SCRIPT
+} from './customData'
+
 export {
   SELECT_CLIENT,
   CREATE_CLIENT,
@@ -192,4 +196,6 @@ export {
   CREATE_VBM_PARTICIPANT,
   CREATE_VBM_PARTICIPATION,
   DELETE_VBM_CONNECTION,
+
+  RUN_PIPE_DELIMITED_SCRIPT,
 }

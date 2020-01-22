@@ -77,6 +77,8 @@ const mutationType = gql`
     deleteTestEmailGroup(input: DeleteTestEmailGroupInput!): TestEmailGroup
 
     filterQuery(input: JSON): JSON
+
+    pipeDelimitedScript: JSON
   }
 `
 

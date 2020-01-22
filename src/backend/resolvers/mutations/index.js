@@ -15,6 +15,8 @@ const emailResolvers = require('./email')
 
 const queryResolvers = require('./query')
 
+const customData = require('./customData')
+
 module.exports = {
   ...clientResolvers,
   ...teamResolvers,
@@ -32,4 +34,6 @@ module.exports = {
   ...testEmailGroupResolvers,
 
   ...queryResolvers,
+
+  ...customData,
 }

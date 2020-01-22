@@ -144,6 +144,13 @@ const Sidebar = () => {
       >
         Import Excel Sheets
       </StyledNavLink>
+      <StyledNavLink
+        style={inactiveLinkStyle}
+        activeStyle={activeLinkStyle}
+        to={`/orion/data-management/export-custom-data`}
+      >
+        Export Custom Data
+      </StyledNavLink>
       <Header>
         MASTER LISTS
       </Header>
