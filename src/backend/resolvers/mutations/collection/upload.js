@@ -30,12 +30,19 @@ const uploadCollection = async (
 
   const isScraperData = SCRAPER_COLLECTIONS.includes(collectionName)
   if (isScraperData) {
+    const pulseScraperDb = mongoClient.db('pulse-scraper')
     const collectionList = await pulseRawDb.listCollections({ name: collectionName }).toArray()
     const doesCollectionExist = collectionList.length > 0
+    
+    uploadScraperData({ 
+      collectionName, 
+      data, 
+      doesCollectionExist,
+      pulseRawDb,
+      pulseScraperDb,
+    })
 
-    uploadScraperData({ targetCollection, data, doesCollectionExist })
     return
-
   }
 
   // // ! HACK exception: If target is 'orgConnections', upsert into pulse-core 'organizations' collection

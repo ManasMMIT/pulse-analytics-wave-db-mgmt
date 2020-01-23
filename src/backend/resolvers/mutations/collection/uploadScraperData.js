@@ -4,25 +4,33 @@ const { ObjectId } = require('mongodb')
 const getComparisonData = ({
   _id,
   medicalLinkStatus,
+  medicalContents,
+  medicalGistId,
   pharmacyLinkStatus,
+  pharmacyContents,
+  pharmacyGistId,
   formularyLinkStatus,
+  formularyContents,
+  formularyGistId,
   paFormLinkStatus,
-  empty,
-  empty1,
-  empty2,
+  paFormContents,
+  paFormGistId,
   ...dataToCompare
 }) => dataToCompare
 
 const uploadScraperData = async ({
-  targetCollection,
+  collectionName,
   data,
   doesCollectionExist,
+  pulseRawDb,
+  pulseScraperDb,
 }) => {
-  const { collectionName } = targetCollection
+  const targetCollection = pulseScraperDb.collection(collectionName)
+
   const idFieldExists = Boolean(data[0]._id)
 
   console.log(`--------- Beginning uploadScraperData script for ${collectionName} ---------`)
-
+  
   // Check for edge case
   if (!idFieldExists && doesCollectionExist) {
     console.log(`--------- Collection exists but _id column is missing. Are you trying to re-import seed data? ---------`)
@@ -33,6 +41,10 @@ const uploadScraperData = async ({
   if (!idFieldExists && !doesCollectionExist) {
     console.log(`--------- Collection ${collectionName} does not exist; creating collection ---------`)
     
+    // create dummy collection in pulseRaw
+    await pulseRawDb.createCollection(collectionName)
+
+    // create and dump data into pulseScraper 
     await targetCollection.deleteMany()
     await targetCollection.insertMany(data)
     
@@ -69,7 +81,7 @@ const uploadScraperData = async ({
       const dataToCompare = getComparisonData(currentData)
 
       const isDataEqual = _.isEqual(importRowData, dataToCompare)
-
+      
       if (!isDataEqual) {
         console.log(`--------- Adding operation to update document of _id: ${_id} ---------`)
         mongoOps.push(
@@ -77,7 +89,7 @@ const uploadScraperData = async ({
         )
       }
     })
-
+    
     console.log(`--------- Writing ${mongoOps.length} collection updates to mongo ---------`)
     await Promise.all(mongoOps)
     console.log(`--------- Collection successfully updated ---------`)
