@@ -1,22 +1,23 @@
 const _ = require('lodash')
 const { ObjectId } = require('mongodb')
 
-const getComparisonData = ({
-  _id,
-  medicalLinkStatus,
-  medicalContents,
-  medicalGistId,
-  pharmacyLinkStatus,
-  pharmacyContents,
-  pharmacyGistId,
-  formularyLinkStatus,
-  formularyContents,
-  formularyGistId,
-  paFormLinkStatus,
-  paFormContents,
-  paFormGistId,
-  ...dataToCompare
-}) => dataToCompare
+
+const getComparisonData = data =>  _.pick(data, [
+  'organization',
+  'regimenKey',
+  'note',
+  'medicalLinkType',
+  'medicalLink',
+  'medicalLinkNote',
+  'pharmacyLinkType',
+  'pharmacyLink',
+  'pharmacyLinkNote',
+  'formularyLinkType',
+  'formularyLinkNote',
+  'paFormLinkType',
+  'paFormLink',
+]) 
+
 
 const uploadScraperData = async ({
   collectionName,
@@ -81,7 +82,7 @@ const uploadScraperData = async ({
       const dataToCompare = getComparisonData(currentData)
 
       const isDataEqual = _.isEqual(importRowData, dataToCompare)
-      
+
       if (!isDataEqual) {
         console.log(`--------- Adding operation to update document of _id: ${_id} ---------`)
         mongoOps.push(
