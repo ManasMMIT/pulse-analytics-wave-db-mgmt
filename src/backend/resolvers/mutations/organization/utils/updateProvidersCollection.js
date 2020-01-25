@@ -1,4 +1,6 @@
 const { ObjectId } = require('mongodb')
+const isValidAlert = require('./isValidAlert')
+const format = require('date-fns/format')
 
 const isValidConnection = (accOne, accTwo) => {
   const hasVbm = [accOne.type, accTwo.type].includes('Pathways')
@@ -39,7 +41,13 @@ const updateProvidersCollection = async ({
 
     const provider = [account, connection.org]
       .find(({ type }) => type === 'Provider')
-    
+
+    // TODO: later consider storing alertDate across all pathways latest changes collections to date or time type rather than string below
+    // But until then, keep the format consistent across all those collections.
+    const alertFields = isValidAlert(connection.alert)
+      ? { ...connection.alert, alertDate: format(new Date(connection.alert.alertDate), 'yyyy-MM-dd') }
+      : {}
+
     const providerDoc = {
       _id: ObjectId(connection._id),
       organization: Vbm.organization,
@@ -50,8 +58,8 @@ const updateProvidersCollection = async ({
       state: provider.state,
       oncologists: provider.oncologistsCount,
       sites: provider.sitesCount,
-      utilization: connection.utilization,
-      // ! alerts data might have to go here, too
+      utilization: connection.note,
+      ...alertFields,
     }
 
     acc.push(providerDoc)

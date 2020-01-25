@@ -1,6 +1,7 @@
 const { ObjectId } = require('mongodb')
 
 const updateProvidersCollection = require('./../utils/updateProvidersCollection')
+const updateConnectionsAndAlerts = require('./../utils/updateConnectionsAndAlerts')
 
 const updateProviderOrganization = async (
   parent,
@@ -32,18 +33,7 @@ const updateProviderOrganization = async (
 
     result = value
 
-    // Step 2: update state in connections
-    const connectionsWithNewState = (newConnections || []).map(connection => ({
-      ...connection,
-      _id: connection._id
-        ? ObjectId(connection._id)
-        : new ObjectId(),
-      state: body.state,
-    }))
-
-    result.connections = connectionsWithNewState
-
-    // Step 3: update org.slug in all users.nodes.resources
+    // Step 2: update org.slug in all users.nodes.resources
     await pulseDevDb.collection('users.nodes.resources')
       .updateMany(
         { 'resources.accounts._id': _id },
@@ -61,47 +51,43 @@ const updateProviderOrganization = async (
         }
       )
 
-    // Step 4: clear all connections from orgs.connections
-
-    // ! make sure to grab old connections for providers collection work later
+    // Step 3: Rebuild connections and connection alerts
     const oldConnections = await pulseCoreDb
       .collection('organizations.connections')
       .find({ orgs: _id }, { session })
       .toArray()
 
-    await pulseCoreDb.collection('organizations.connections')
-      .deleteMany(
-        { orgs: _id },
-        { session }
-      )
-
-    // Step 5: insert new docs into orgs.connections
-    const orgConnectionDocs = connectionsWithNewState.map(connection => ({
-      _id: connection._id,
-      orgs: [
-        _id,
-        ObjectId(connection.org._id),
-      ],
-      category: connection.category,
-      state: connection.state,
+    const connectionsWithNewState = (newConnections || []).map(connection => ({
+      ...connection,
+      _id: connection._id
+        ? ObjectId(connection._id)
+        : new ObjectId(),
+      state: body.state,
     }))
 
-    if (orgConnectionDocs.length) {
-      await pulseCoreDb.collection('organizations.connections')
-        .insertMany(
-          orgConnectionDocs,
-          { session },
-        )
-    }
+    result.connections = connectionsWithNewState
 
-    // Step 6: rebuild provider collection docs for account
-    await updateProvidersCollection({
+    const insertConnectionsAndAlertsOps = updateConnectionsAndAlerts({
+      db: pulseCoreDb,
+      orgId: _id,
+      oldConnections,
+      newConnections: connectionsWithNewState,
+      session,
+    })
+
+    // Step 4: rebuild provider collection docs for account
+    const updateProvidersCollectionOp = updateProvidersCollection({
       db: pulseDevDb,
       account: result,
       oldConnections: oldConnections,
       newConnections: connectionsWithNewState,
       session,
     })
+
+    await Promise.all([
+      insertConnectionsAndAlertsOps,
+      updateProvidersCollectionOp,
+    ])
   })
 
   return result

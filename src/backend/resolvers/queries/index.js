@@ -10,6 +10,7 @@ const qualityOfAccessScores = require('./qualityOfAccessScores')
 const collections = require('./collections')
 const newTreatmentPlans = require('./newTreatmentPlans')
 const testEmailGroups = require('./testEmailGroups')
+const alert = require('./alert')
 
 module.exports = {
   collections,
@@ -24,4 +25,5 @@ module.exports = {
   newTreatmentPlans,
   ...organizations,
   testEmailGroups,
+  alert,
 }

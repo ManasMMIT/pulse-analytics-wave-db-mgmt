@@ -1,5 +1,7 @@
 import React from 'react'
 
+import AlertSection from './AlertSection'
+
 import {
   ConnectionCard,
   ConnectionCategory,
@@ -15,6 +17,7 @@ const Connection = ({
   from,
   data,
   removeConnection,
+  hydrateConnectionAlert,
 }) => {
   const {
     org: {
@@ -23,6 +26,8 @@ const Connection = ({
     },
     state,
     category,
+    alert,
+    note,
   } = data
 
   const displayState = state ? `(${state}) ` : ''
@@ -48,8 +53,24 @@ const Connection = ({
   return (
     <ConnectionCard>
       <ConnectionCategory>
-        <ConnectionCategoryLabel>{category}</ConnectionCategoryLabel>
+        <ConnectionCategoryLabel>
+          <div>
+            {category}
+          </div>
+        </ConnectionCategoryLabel>
         <ConnectionLanguage>{ language } </ConnectionLanguage>
+        {
+          note && (
+            <div style={{ marginTop: 12, fontSize: 10 }}>
+              Note: {note}
+            </div>
+          )
+        }
+        <AlertSection
+          alert={alert}
+          connection={data}
+          hydrateConnectionAlert={hydrateConnectionAlert}
+        />
       </ConnectionCategory>
       <RemoveConnectionButton
         onClick={() => removeConnection(data)}

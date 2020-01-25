@@ -24,6 +24,8 @@ const queries = gql`
     newTreatmentPlans(data: JSON): JSON
 
     testEmailGroups: [TestEmailGroup]
+
+    alert(_id: ID): Alert
   }
 
   type Node {
@@ -162,6 +164,13 @@ const queries = gql`
     recipients: [String]
     usersToMock: [ID]
     emailSubscriptions: [ID]
+  }
+
+  type Alert {
+    _id: ID!
+    type: String
+    date: Date
+    description: String
   }
 `
 

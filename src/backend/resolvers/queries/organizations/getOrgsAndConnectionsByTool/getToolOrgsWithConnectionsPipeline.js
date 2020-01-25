@@ -36,6 +36,8 @@ module.exports = (toolId, extraProjectionFields) => [
         '_id': 1,
         'category': 1,
         'state': 1,
+        'alert': 1,
+        'note': 1,
         'org': {
           '$arrayElemAt': [
             {

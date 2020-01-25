@@ -49,9 +49,21 @@ const ConnectionsSection = ({
   }
 
   const removeConnection = connection => {
+    safelySetFormState({
+      connections: connections.filter(obj => !_.isEqual(obj, connection)), // ! HACK: or feature? it removes duped staged (non-id'ed) connections if there were any 
+    })
+  }
+
+  // use this setState func after the alerts, if any, finish loading within any given connection placard
+  const hydrateConnectionAlert = (connection, alert) => {
+    const clonedConnections = _.cloneDeep(connections)
+
+    const targetConnection = clonedConnections.find(obj => _.isEqual(obj, connection))
+    
+    targetConnection.alert = alert
 
     safelySetFormState({
-      connections: connections.filter(obj => !_.isEqual(obj, connection)),
+      connections: clonedConnections,
     })
   }
 
@@ -78,6 +90,7 @@ const ConnectionsSection = ({
                 from={from}
                 data={connection}
                 removeConnection={removeConnection}
+                hydrateConnectionAlert={hydrateConnectionAlert}
               />
             )
           )

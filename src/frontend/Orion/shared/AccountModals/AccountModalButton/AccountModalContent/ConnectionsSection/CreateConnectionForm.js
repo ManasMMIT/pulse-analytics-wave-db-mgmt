@@ -63,6 +63,18 @@ const CreateConnectionForm = ({
     setTo,
   ] = useState({})
 
+  const [
+    note,
+    setNote,
+  ] = useState(null)
+
+  const [
+    alertData,
+    setAlertData,
+  ] = useState({
+    alertType: 'Provider',
+  })
+
   let providerStateOverride
   if (from.type === 'Provider') providerStateOverride = from.state
 
@@ -143,12 +155,64 @@ const CreateConnectionForm = ({
           styles={connectionSelectStyles}
           defaultValue={usState}
           value={usState}
-          onChange={(usState, { action }) => {
+          onChange={(usState) => {
             setUsState(usState)
           }}
           options={STATE_FILTER_OPTIONS}
         />
+
       </FormSection>
+
+      <FormSection>
+        <ConnectionFormLabel>Note: </ConnectionFormLabel>
+        <textArea
+          onChange={e => {
+            const newConnectionNote = e.target.value
+
+            setNote(newConnectionNote)
+          }}
+        />
+      </FormSection>
+
+      <FormSection>
+        <ConnectionFormLabel>Alert Date: </ConnectionFormLabel>
+        <input
+          type="date"
+          value={alertData.alertDate || null}
+          onChange={e => {
+            const newAlertDate = e.target.value
+
+            setAlertData({
+              ...alertData,
+              alertDate: newAlertDate,
+            })
+          }}
+        />
+      </FormSection>
+      <FormSection>
+        <ConnectionFormLabel>Alert Description: </ConnectionFormLabel>
+        <textArea
+          onChange={e => {
+            const newAlertDescription = e.target.value
+
+            setAlertData({
+              ...alertData,
+              alertDescription: newAlertDescription,
+            })
+          }}
+        />
+      </FormSection>
+      <FormSection>
+        <ConnectionFormLabel>Alert Type: </ConnectionFormLabel>
+        <Select
+          isDisabled
+          styles={connectionSelectStyles}
+          defaultValue={{ label: 'Provider', value: 'Provider'}}
+          value={{ label: 'Provider', value: 'Provider'}}
+          options={[{ label: 'Provider', value: 'Provider' }]}
+        />
+      </FormSection>
+
 
       <SubmitNewConnectionButton
         disabled={!hasAllRequiredFields}
@@ -157,6 +221,8 @@ const CreateConnectionForm = ({
             org: to.value,
             state: usState.value,
             category: "Value-Based Model Participation",
+            note,
+            alert: alertData,
           }
 
           addConnection(connection)

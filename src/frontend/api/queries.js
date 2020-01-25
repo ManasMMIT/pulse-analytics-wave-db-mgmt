@@ -439,3 +439,14 @@ export const GET_TEST_EMAIL_GROUPS = gql`
     }
   }
 `
+
+export const GET_ALERT = gql`
+  query getAlert($_id: ID) {
+    alert(_id: $_id) {
+      _id
+      date
+      type
+      description
+    }
+  }
+`
