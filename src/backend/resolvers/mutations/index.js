@@ -17,6 +17,8 @@ const queryResolvers = require('./query')
 
 const customData = require('./customData')
 
+const polaris = require('./polaris')
+
 module.exports = {
   ...clientResolvers,
   ...teamResolvers,
@@ -36,4 +38,6 @@ module.exports = {
   ...queryResolvers,
 
   ...customData,
+
+  ...polaris,
 }

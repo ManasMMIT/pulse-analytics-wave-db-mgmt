@@ -14,6 +14,7 @@ const treatmentPlan = require('./treatmentPlan')
 const testEmailGroup = require('./testEmailGroup')
 
 const email = require('./email')
+const polaris = require('./polaris')
 
 const mutationType = gql`
   type Mutation {
@@ -79,6 +80,8 @@ const mutationType = gql`
     filterQuery(input: JSON): JSON
 
     pipeDelimitedScript: JSON
+
+    trackUserAction(input: TrackUserActionInput!): TrackUserActionPayload
   }
 `
 
@@ -95,8 +98,7 @@ module.exports = [
   ...qualityAccessScore,
   ...collection,
   ...treatmentPlan,
-  
   ...email,
-
   ...testEmailGroup,
+  ...polaris,
 ]

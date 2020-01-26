@@ -172,6 +172,12 @@ const queries = gql`
     date: Date
     description: String
   }
+
+  type UserAction {
+    userId: ID!
+    action: String!
+    createdAt: Date
+  }
 `
 
 module.exports = [
