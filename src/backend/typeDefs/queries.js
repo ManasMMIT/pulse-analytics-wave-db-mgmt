@@ -176,7 +176,7 @@ const queries = gql`
   }
 
   type UserAction {
-    userId: ID!
+    user: JSON!
     action: String!
     createdAt: Date
   }

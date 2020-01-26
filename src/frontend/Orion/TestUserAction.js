@@ -21,8 +21,7 @@ export default () => {
         {
           history.map(({ action, user, createdAt }, idx) => (
               <div key={`${action}${createdAt}${idx}`}>
-                <div>{user}</div>
-                <div>{user}</div>
+                <div>{user.nickname}</div>
                 <div>{createdAt}</div>
               </div>
             ))
