@@ -8,7 +8,6 @@ const trackUserActionTypeDefs = gql`
   }
 
   type TrackUserActionPayload {
-    latest: UserAction
     history: [UserAction]
   }
 `
