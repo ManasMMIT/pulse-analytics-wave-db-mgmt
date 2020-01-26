@@ -26,6 +26,8 @@ const queries = gql`
     testEmailGroups: [TestEmailGroup]
 
     alert(_id: ID): Alert
+
+    actionTracker(action: String!, limit: Int): [UserAction]
   }
 
   type Node {
