@@ -1,3 +1,30 @@
+const getAggPipeline = (action, limit) => [
+  {
+    $match: { action }
+  },
+  {
+    $sort: { createdAt: -1 }
+  },
+  {
+    $limit: limit
+  },
+  {
+    $lookup: {
+      from: 'polaris.users',
+      localField: 'userId',
+      foreignField: '_id',
+      as: 'user'
+    }
+  },
+  {
+    $project: {
+      action: 1,
+      createdAt: 1,
+      user: { $arrayElemAt: ['$user', 0] }
+    }
+  },
+]
+
 const trackUserAction = async (
   parent,
   { input: { user, action, limit = 1 } },
@@ -32,14 +59,11 @@ const trackUserAction = async (
 
   // Step 3: Retrieve docs for action, up to limit
   const history = await pulseCoreDb.collection('polaris.users.actions')
-    .find({ action })
-    .limit(limit + 1)
-    .sort({ createdAt: 1 })
+    .aggregate(getAggPipeline(action, limit))
     .toArray()
 
   return {
-    latest: userActionDoc,
-    history,
+    history
   }
 }
 
