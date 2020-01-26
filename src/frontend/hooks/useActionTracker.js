@@ -1,4 +1,8 @@
 import {
+  useState
+} from 'react'
+
+import {
   useQuery,
   useMutation,
 } from '@apollo/react-hooks'
@@ -11,28 +15,39 @@ import {
   TRACK_USER_ACTION,
 } from './../api/mutations'
 
-export default (action, limit) => {
+export default ({
+  action,
+  limit,
+}) => {
+  const [history, setHistory] = useState([])
+
+  useQuery(GET_POLARIS_USER_ACTIONS, {
+    variables: {
+      action,
+      limit,
+    },
+    onCompleted: ({ actionTracker }) => setHistory(actionTracker)
+  })
+
+
   const [trackUserActionMutation] = useMutation(TRACK_USER_ACTION)
 
   const trackUserAction = user => trackUserActionMutation({
     variables: {
       input: {
-        userId: user.userId,
+        user,
         action,
         limit,
       }
-    }
-  })
-
-  const { data: actionHistory, loading } = useQuery(GET_POLARIS_USER_ACTIONS, {
-    variables: {
-      action,
-      limit,
-    }
+    },
+    update: (
+      cache,
+      { data: { trackUserAction: { history } } }
+    ) => setHistory(history)
   })
 
   return {
     trackUserAction,
-    actionHistory: loading ? {} : actionHistory,
+    history,
   }
 }
