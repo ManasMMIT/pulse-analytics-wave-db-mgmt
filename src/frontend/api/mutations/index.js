@@ -114,6 +114,10 @@ import {
   RUN_PIPE_DELIMITED_SCRIPT
 } from './customData'
 
+import {
+  TRACK_USER_ACTION,
+} from './polaris'
+
 export {
   SELECT_CLIENT,
   CREATE_CLIENT,
@@ -198,4 +202,5 @@ export {
   DELETE_VBM_CONNECTION,
 
   RUN_PIPE_DELIMITED_SCRIPT,
+  TRACK_USER_ACTION,
 }
