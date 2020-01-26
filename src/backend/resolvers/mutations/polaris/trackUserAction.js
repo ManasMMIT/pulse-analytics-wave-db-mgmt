@@ -4,18 +4,19 @@ const trackUserAction = async (
   { pulseCoreDb },
   info,
 ) => {
-  debugger
   // Step 1: Upsert into polaris.users, so we have up-to-date user info to reference 
   const upsertPolarisUserOp = pulseCoreDb.collection('polaris.users')
     .updateOne(
-      { _id: user.userId },
-      user,
+      { _id: user.sub },
+      {
+        $set: {...user}
+      },
       { upsert: true }
     )
 
   // Step 2: Insert polaris.users.action doc
   const userActionDoc = {
-    userId: user.userId,
+    userId: user.sub,
     action,
     createdAt: new Date(),
   }
@@ -30,17 +31,15 @@ const trackUserAction = async (
   ])
 
   // Step 3: Retrieve docs for action, up to limit
-  const actionDocs = await pulseCoreDb.collection('polaris.users.actions')
+  const history = await pulseCoreDb.collection('polaris.users.actions')
     .find({ action })
     .limit(limit + 1)
+    .sort({ createdAt: 1 })
     .toArray()
-
-  // Step 4: Form then return data object
-  const actionHistory = actionDocs.slice(1)
 
   return {
     latest: userActionDoc,
-    history: actionHistory,
+    history,
   }
 }
 
