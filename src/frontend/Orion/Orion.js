@@ -8,6 +8,8 @@ import DataManagement from './DataManagement'
 import MasterLists from './MasterLists'
 import Sidebar from './Sidebar'
 
+import TestUserAction from './TestUserAction'
+
 class Orion extends React.Component {
   state = {
     isLoading: true,
@@ -27,6 +29,7 @@ class Orion extends React.Component {
       <div style={{ display: 'flex', flex: 1 }}>
         <Sidebar />
         <Switch>
+          <Route path="/orion/data-management/TEST_USER_ACTION" component={TestUserAction} />
           <Route path="/orion/data-management" component={DataManagement} />
           <Route path="/orion/lists" component={MasterLists} />
           <Redirect to={'/orion/data-management/query'} />
