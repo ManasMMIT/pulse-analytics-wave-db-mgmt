@@ -1,7 +1,7 @@
 import gql from 'graphql-tag'
 
 export const GET_POLARIS_USER_ACTIONS = gql`
-  query actionTracker($action: String, $limit: Int) {
+  query actionTracker($action: String!, $limit: Int) {
     actionTracker(action: $action, limit: $limit) {
       userId
       action
