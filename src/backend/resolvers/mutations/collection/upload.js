@@ -5,7 +5,7 @@ const { ObjectId } = require('mongodb')
 const upsertConnections = require('./upsertConnections')
 const uploadScraperData = require('./uploadScraperData')
 
-const SCRAPER_COLLECTIONS = ['merckKeytruda', 'regeneronDupixent', 'novartisKymriah']
+const SCRAPER_COLLECTIONS = ['merckKeytruda', 'regeneronDupixent', 'novartisKymriah', 'daiichiTgct', 'merckBiosimilars']
 
 const uploadCollection = async (
   parent,
