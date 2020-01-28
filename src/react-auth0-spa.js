@@ -38,6 +38,7 @@ export const Auth0Provider = ({
         const user = await auth0FromHook.getUser();
         const idTokenClaims = await auth0FromHook.getIdTokenClaims()
         const accessToken = idTokenClaims.__raw
+        localStorage.setItem('user', JSON.stringify(user))
         localStorage.setItem('access_token', accessToken)
         setUser(user);
       }

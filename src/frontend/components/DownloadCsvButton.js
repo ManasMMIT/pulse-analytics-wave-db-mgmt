@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
-import { parseAsync } from 'json2csv'
+import { parse } from 'json2csv'
 import { transparentize } from 'polished'
 
 import { Colors } from './../utils/pulseStyles'
@@ -20,18 +20,26 @@ const CsvButton = styled.a({
   ':hover': {
     background: transparentize(0.65, primaryColor),
   }
+}, ({ isDisabled }) => {
+  return isDisabled
+    ? {
+      background: transparentize(0.85, Colors.MEDIUM_GRAY_2),
+      pointerEvents: 'none', // ! not supported on IE<11
+      color: 'grey',
+    }
+    : {}
 })
 
 const DownloadCsvButton = ({
   data,
   fileName,
-  show,
+  isDisabled,
 }) => {
-  const [csv, setCsv] = useState('')
+  let csv = ''
 
-  if (!show) return null
-
-  parseAsync(data, { includeEmptyRows: true }).then(setCsv)
+  if (data.length) {
+    csv = parse(data, { includeEmptyRows: true })
+  }
 
   const csvContent = "data:text/csv;charset=utf-8," + csv
 
@@ -39,6 +47,7 @@ const DownloadCsvButton = ({
 
   return (
     <CsvButton
+      isDisabled={isDisabled}
       href={encodedUri}
       download={`${ fileName }.csv`}
     >
@@ -50,13 +59,13 @@ const DownloadCsvButton = ({
 DownloadCsvButton.propTypes = {
   data: PropTypes.array, // JSON
   fileName: PropTypes.string,
-  show: PropTypes.bool,
+  isDisabled: PropTypes.bool,
 }
 
 DownloadCsvButton.defaultProps = {
   data: [],
   fileName: '',
-  show: true,
+  isDisabled: false,
 }
 
 export default DownloadCsvButton

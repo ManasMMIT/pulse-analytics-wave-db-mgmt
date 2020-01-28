@@ -6,7 +6,6 @@ import { faSyncAlt } from "@fortawesome/free-solid-svg-icons"
 import { Colors } from './../../../utils/pulseStyles'
 
 import TableHeader from './TableHeader'
-import DownloadCsvButton from './../../../components/DownloadCsvButton'
 import { customSelectStyles } from './../../../components/customSelectStyles'
 
 import {
@@ -49,7 +48,6 @@ const QueryTool = ({
   setDataToDisplay,
   accountConfig,
   orgTypesConfig,
-  csvConfig,
   submitHandler,
   resetHandler,
 }) => {
@@ -99,11 +97,6 @@ const QueryTool = ({
           <SubmitButton onClick={submitHandler}>
             Submit
           </SubmitButton>
-          <DownloadCsvButton
-            show={csvConfig.shouldShow}
-            data={csvConfig.data}
-            fileName={csvConfig.fileName}
-          />
         </QueryControls>
       </QueryControlsContainer>
       {

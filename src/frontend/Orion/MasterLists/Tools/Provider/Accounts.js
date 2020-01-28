@@ -7,6 +7,7 @@ import { transparentize } from 'polished'
 import Panel from '../../../../Phoenix/shared/Panel'
 import { ProviderAccountModal } from '../../../shared/AccountModals'
 import DeleteButton from '../../../shared/DeleteButton'
+import DownloadCsvButton from './../../../../components/DownloadCsvButton'
 
 import {
   DELETE_PROVIDER_ORGANIZATION,
@@ -27,6 +28,7 @@ const CREATE_BUTTON_TXT = 'Create Provider Account'
 const buttonStyle = {
   background: "#234768",
   color: 'white',
+  margin: '0px 12px',
 }
 
 const defaultPanelItemStyle = {
@@ -43,14 +45,30 @@ const defaultPanelItemStyle = {
   }
 }
 
-const headerChildren = (
-  <div>
-    <ProviderAccountModal
-      buttonLabel={CREATE_BUTTON_TXT}
-      buttonStyle={buttonStyle}
-    />
-  </div>
-)
+const headerChildren = data => {
+  const now = new Date().toISOString()
+
+  const { sub: userId } = JSON.parse(localStorage.getItem('user'))
+
+  const csvData = data
+    .map(({ __typename, connections, ...datum }) => datum)
+
+  if (csvData.length) csvData.splice(0, 0, {}, {})
+
+  return (
+    <div style={{ display: 'flex' }}>
+      <ProviderAccountModal
+        buttonLabel={CREATE_BUTTON_TXT}
+        buttonStyle={buttonStyle}
+      />
+      <DownloadCsvButton
+        fileName={`providers-master-list-${now}-${userId}`}
+        isDisabled={!csvData.length}
+        data={csvData}
+      />
+    </div>
+  )
+} 
 
 const buttonGroupCallback = entity => (
   <>

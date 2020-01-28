@@ -11,8 +11,6 @@ import useQueryTool from './useQueryTool'
 
 import QueryTool from './QueryTool'
 
-const CSV_FILENAME = `Query-Tool-Results`
-
 const ACCOUNT_TYPE_OPTIONS = [
   'Payer',
   'Provider',
@@ -98,7 +96,6 @@ const QueryToolContainer = ({
     hasLoadedInitialFilter,
     setHasLoadedInitialFilter,
   ] = useState(false)
-  const [showCsvButton, setShowCsvButton] = useState(false)
   const [dataToDisplay, setDataToDisplay] = useState([])
   const [orgTypes, setOrgTypes] = useState([])
   const [selectedAccount, setSelectedAccount] = useState('')
@@ -115,9 +112,6 @@ const QueryToolContainer = ({
             || _.isEmpty(selectedAccount)
             || _.isEmpty(orgTypes)
         )
-
-        // if (shouldNotDisplayData) setShowCsvButton(false)
-        // else setShowCsvButton(true)
       }
     }
   )
@@ -180,27 +174,6 @@ const QueryToolContainer = ({
     setHasLoadedInitialFilter(true)
   }
 
-  let csvData = []
-  if (showCsvButton) {
-    csvData = _.cloneDeep(dataToDisplay).reduce((acc, org) => {
-      const getCsvObj = connection => ({
-        _id: connection._id,
-        slug: org.slug,
-        slugType: org.type,
-        affiliationType: connection.affiliationType,
-        slug1: connection.org.slug,
-        slugType1: connection.org.type,
-        state: connection.state,
-      })
-
-      const connectionsByState = (org.connections || []).map(getCsvObj)
-
-      acc = acc.concat(connectionsByState)
-
-      return acc
-    }, [])
-  }
-
   let formattedOrgTypes = orgTypes
     ? orgTypes.map(({ value }) => value)
     : []
@@ -217,26 +190,6 @@ const QueryToolContainer = ({
     selected: orgTypes,
     filterOptions: orgTypeFilterOptions,
     onChangeHandler: getOrgTypesOnChangeHandler(selectedAccount, history, setOrgTypes)
-  }
-
-  const emptyRowObj = {
-    _id: undefined,
-    slug: undefined,
-    slugType: undefined,
-    affiliationType: undefined,
-    slug1: undefined,
-    slugType1: undefined,
-    state: undefined,
-  }
-
-  if (csvData && csvData.length) {
-    csvData.splice(0, 0, emptyRowObj, emptyRowObj)
-  }
-
-  const csvConfig = {
-    data: csvData,
-    fileName: CSV_FILENAME,
-    shouldShow: showCsvButton,
   }
 
   const submitHandler = getSubmitHandler(
@@ -256,7 +209,6 @@ const QueryToolContainer = ({
       setDataToDisplay={setDataToDisplay}
       accountConfig={accountConfig}
       orgTypesConfig={orgTypesConfig}
-      csvConfig={csvConfig}
       submitHandler={submitHandler}
       resetHandler={resetHandler}
     />

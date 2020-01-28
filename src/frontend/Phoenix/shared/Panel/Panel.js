@@ -30,12 +30,12 @@ const Panel = ({
   const { data, loading, error } = useQuery(fetchAllQueryProps.query)
 
   let panelItems
+  let extractedData = []
   if (error) {
     return <div>Error fetching data</div>
   } else if (loading) {
     panelItems = null
   } else {
-    let extractedData = []
     if (data) {
       const firstKey = Object.keys(data)[0]
       extractedData = data[firstKey]
@@ -57,7 +57,11 @@ const Panel = ({
         title={title}
         titleStyle={titleStyle}
       >
-        {headerChildren}
+        {
+          typeof headerChildren === 'function'
+            ? headerChildren(extractedData)
+            : headerChildren
+        }
       </PanelHeader>
       {panelItems}
     </Wrapper>
@@ -68,7 +72,7 @@ const Panel = ({
 Panel.propTypes = {
   style: PropTypes.object,
   ...PanelHeader.propTypes,
-  headerChildren: PropTypes.node,
+  headerChildren: PropTypes.oneOfType([PropTypes.node, PropTypes.func]),
   queryDocs: PropTypes.shape({
     fetchAllQueryProps: PropTypes.object,
     fetchSelectedQueryProps: PropTypes.object,
@@ -79,7 +83,6 @@ Panel.propTypes = {
 Panel.defaultProps = {
   style: {},
   ...PanelHeader.defaultProps,
-  headerChildren: null,
   queryDocs: {
     fetchAllQueryProps: null,
     fetchSelectedQueryProps: null,
