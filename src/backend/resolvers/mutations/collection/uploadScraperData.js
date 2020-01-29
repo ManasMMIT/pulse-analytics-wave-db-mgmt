@@ -1,10 +1,12 @@
 const _ = require('lodash')
 const { ObjectId } = require('mongodb')
 
-
 const getComparisonData = data =>  _.pick(data, [
+  'slug',
   'organization',
+  'book',
   'regimenKey',
+  'project',
   'note',
   'medicalLinkType',
   'medicalLink',
@@ -17,7 +19,6 @@ const getComparisonData = data =>  _.pick(data, [
   'paFormLinkType',
   'paFormLink',
 ]) 
-
 
 const uploadScraperData = async ({
   collectionName,
@@ -44,10 +45,13 @@ const uploadScraperData = async ({
     
     // create dummy collection in pulseRaw
     await pulseRawDb.createCollection(collectionName)
+    
+    // filter row data for only relevant keys
+    const filteredData = data.map(item => getComparisonData(item))
 
     // create and dump data into pulseScraper 
     await targetCollection.deleteMany()
-    await targetCollection.insertMany(data)
+    await targetCollection.insertMany(filteredData)
     
     console.log(`--------- Collection successfully created ---------`)
     return
@@ -80,7 +84,7 @@ const uploadScraperData = async ({
 
       const currentData = collectionById[_id]
       const dataToCompare = getComparisonData(currentData)
-
+      
       const isDataEqual = _.isEqual(importRowData, dataToCompare)
 
       if (!isDataEqual) {
