@@ -88,6 +88,7 @@ import {
 } from './qualityOfAccessScores'
 
 import {
+  BACKUP_EXPORT,
   UPLOAD_COLLECTION,
 } from './collection'
 
@@ -180,6 +181,7 @@ export {
   UPDATE_QUALITY_OF_ACCESS_SCORE,
   DELETE_QUALITY_OF_ACCESS_SCORE,
 
+  BACKUP_EXPORT,
   UPLOAD_COLLECTION,
 
   SEND_TO_SUBSCRIBED_USERS,

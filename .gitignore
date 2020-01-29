@@ -47,4 +47,4 @@ yarn-error.log*
 .pnp.js
 
 src/backend/resolvers/mutations/customData/pipeDelimitedScript/exports/
-
+exports-backups/

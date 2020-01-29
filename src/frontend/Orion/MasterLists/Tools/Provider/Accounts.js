@@ -46,10 +46,6 @@ const defaultPanelItemStyle = {
 }
 
 const headerChildren = data => {
-  const now = new Date().toISOString()
-
-  const { sub: userId } = JSON.parse(localStorage.getItem('user'))
-
   const csvData = data
     .map(({ __typename, connections, ...datum }) => datum)
 
@@ -62,7 +58,8 @@ const headerChildren = data => {
         buttonStyle={buttonStyle}
       />
       <DownloadCsvButton
-        fileName={`providers-master-list-${now}-${userId}`}
+        createBackup
+        filename={`providers-master-list`}
         isDisabled={!csvData.length}
         data={csvData}
       />
