@@ -1,8 +1,10 @@
 const express = require('express')
 const bodyParser = require('body-parser')
+const fs = require('fs')
+const path = require('path')
 const jwt = require('express-jwt')
 const jwksRsa = require('jwks-rsa')
-
+const morgan = require('morgan')
 const routes = require('./routes')
 
 const app = express()
@@ -22,6 +24,18 @@ var checkJwt = jwt({
   algorithms: ['RS256']
 })
 
+const accessLogStream = fs.createWriteStream(
+  path.join(__dirname, 'api.log'), 
+  { flags: 'a' },
+)
+
+// Custom morgan token inspired by https://github.com/expressjs/morgan/issues/116
+morgan.token('graphql-query', (req) => {
+  const { sub } = req.user
+  const { operationName, variables } = req.body
+  return `User: ${sub} / GraphQL Operation: ${operationName} / Variables: ${JSON.stringify(variables)}`
+})
+
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }))
 app.use(bodyParser.json({ limit: '50mb' }))
 
@@ -35,7 +49,15 @@ app.use(
       next()
     }
   },
-  routes,
+  morgan(
+    '[:date[iso]] :graphql-query\n', 
+    { 
+      // skip any query that isn't a mutation
+      skip: req => req.body && req.body.query && !req.body.query.match(/mutation/),
+      stream: accessLogStream,
+    }
+  ), 
+  routes
 )
 
 app.listen(port, () => console.log(`PHOENIX ONLINE. PORT ${port}!`))
