@@ -15,7 +15,9 @@ var checkJwt = jwt({
     jwksRequestsPerMinute: 5,
     jwksUri: 'https://pulse-polaris.auth0.com/.well-known/jwks.json'
   }),
-  // audience: 'https://polaris-api.com/', // ! unclear what audience is supposed to be
+  // ! not sure what audience line is needed for; 
+  // ! initializing auth0 client on frontend with audience gets tokens that expire as expected without this line in the backend
+  audience: 'https://polaris-api.com/',
   issuer: 'https://pulse-polaris.auth0.com/',
   algorithms: ['RS256']
 })
@@ -23,6 +25,17 @@ var checkJwt = jwt({
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }))
 app.use(bodyParser.json({ limit: '50mb' }))
 
-app.use('/api', checkJwt, routes)
+app.use(
+  '/api', 
+  checkJwt, 
+  (err, req, res, next) => {
+    if (err.name === 'UnauthorizedError') {
+      res.status(401).json(err)
+    } else {
+      next()
+    }
+  },
+  routes,
+)
 
 app.listen(port, () => console.log(`PHOENIX ONLINE. PORT ${port}!`))

@@ -15,6 +15,7 @@ export const Auth0Provider = ({
 }) => {
   const [isAuthenticated, setIsAuthenticated] = useState();
   const [user, setUser] = useState();
+  const [accessToken, setAccessToken] = useState();
   const [auth0Client, setAuth0] = useState();
   const [loading, setLoading] = useState(true);
   const [popupOpen, setPopupOpen] = useState(false);
@@ -36,11 +37,11 @@ export const Auth0Provider = ({
 
       if (isAuthenticated) {
         const user = await auth0FromHook.getUser();
-        const idTokenClaims = await auth0FromHook.getIdTokenClaims()
-        const accessToken = idTokenClaims.__raw
         localStorage.setItem('user', JSON.stringify(user))
-        localStorage.setItem('access_token', accessToken)
         setUser(user);
+        
+        const accessToken = await auth0FromHook.getTokenSilently()
+        setAccessToken(accessToken);
       }
 
       setLoading(false);
@@ -80,6 +81,7 @@ export const Auth0Provider = ({
         popupOpen,
         loginWithPopup,
         handleRedirectCallback,
+        accessToken,
         getIdTokenClaims: (...p) => auth0Client.getIdTokenClaims(...p),
         loginWithRedirect: (...p) => auth0Client.loginWithRedirect(...p),
         getTokenSilently: (...p) => auth0Client.getTokenSilently(...p),

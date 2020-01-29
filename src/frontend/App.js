@@ -31,23 +31,6 @@ const IconSource = {
   DELPHI: 'https://res.cloudinary.com/pulsedatatools/image/upload/v1573136582/polaris/icons/mercury-1-white.svg',
 }
 
-const client = new ApolloClient({
-  uri: '/api/graphql',
-  clientState: {
-    resolvers,
-    typeDefs,
-  },
-  request: operation => {
-    operation.setContext(context => ({
-      headers: {
-          ...context.headers,
-          Authorization: `Bearer ${localStorage.getItem('access_token')}` || null,
-        },
-      })
-    );
-  },
-})
-
 const PolarisSidebar = styled.div({
   display: 'flex',
   flexDirection: 'column',
@@ -95,7 +78,7 @@ const logoutButtonStyle = {
 }
 
 const App = () => {
-  const { loading, isAuthenticated, loginWithRedirect, logout } = useAuth0();
+  const { loading, isAuthenticated, loginWithRedirect, logout, accessToken } = useAuth0()
 
   if (loading) return null
 
@@ -104,6 +87,35 @@ const App = () => {
     loginWithRedirect({ appState: { targetUrl: pathname + search } })
     return
   }
+
+  const client = new ApolloClient({
+    uri: '/api/graphql',
+    clientState: {
+      resolvers,
+      typeDefs,
+    },
+    request: operation => {
+      operation.setContext(context => ({
+        headers: {
+          ...context.headers,
+          Authorization: `Bearer ${accessToken}` || null,
+        },
+      })
+      );
+    },
+    onError: errors => {
+      const { networkError } = errors
+
+      if (
+        networkError
+        && networkError.result
+        && networkError.result.message === 'jwt expired'
+      ) {
+        localStorage.clear()
+        client.clearStore().then(logout)
+      }
+    }
+  })
 
   return (
     <ApolloProvider client={client}>
