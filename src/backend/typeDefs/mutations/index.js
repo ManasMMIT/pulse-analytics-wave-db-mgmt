@@ -49,6 +49,7 @@ const mutationType = gql`
     createProviderOrganization(input: CreateProviderOrganizationInput!): CreateProviderOrganizationPayload
     deleteProviderOrganization(input: DeleteProviderOrganizationInput!): DeleteProviderOrganizationPayload
     updateProviderOrganization(input: UpdateProviderOrganizationInput!): UpdateProviderOrganizationPayload
+    bulkImportProviderOrganizations(data: JSON): JSON
 
     createPayerOrganization(input: CreatePayerOrganizationInput!): CreatePayerOrganizationPayload
     deletePayerOrganization(input: DeletePayerOrganizationInput!): DeletePayerOrganizationPayload

@@ -17,41 +17,49 @@ const DownloadCsvButtonContainer = ({
   createBackup,
   children,
 }) => {
-  const [backupExport, { loading: isBackingUp, called, error }] = useMutation(BACKUP_EXPORT)
   const [finalFilename, setFinalFilename] = useState(filename)
 
-  const { sub: userId } = JSON.parse(localStorage.getItem('user'))
-
-  const backupExportWithTimestamp = () => {
-
-    const finalFileName = `${filename}-${new Date().toISOString()}-${userId}`
-
-    setFinalFilename(finalFileName)
-    backupExport({
-      variables: {
-        input: {
-          filename: finalFileName,
-          data,
-        }
-      }
-    })
-}
   const csv = data.length
     ? parse(data, { includeEmptyRows: true })
     : ''
 
   const encodedUri = encodeURI("data:text/csv;charset=utf-8," + csv)
 
+  const [backupExport, { loading: isBackingUp, error }] = useMutation(BACKUP_EXPORT, {
+    onCompleted: () => {
+      const link = document.createElement("a")
+      link.href = encodedUri
+      link.download = `${finalFilename}.csv`
+
+      link.click()
+      link.remove() // ! never actually appended to DOM, so probably doesn't do anything
+    }
+  })
+
+  const { sub: userId } = JSON.parse(localStorage.getItem('user'))
+
+  const backupExportWithTimestamp = () => {
+    const finalFileName = `${filename}-${new Date().toISOString()}-${userId}`
+
+    setFinalFilename(finalFileName)
+
+    backupExport({
+      variables: {
+        input: {
+          filename: finalFileName,
+          data,
+        }
+      },
+    })
+  }
+
   const onClick = createBackup ? backupExportWithTimestamp : undefined
 
   return (
     <div>
       <DownloadCsvButton
-        uri={encodedUri}
-        filename={finalFilename}
         isDisabled={isDisabled}
         onClick={onClick}
-        shouldDownload={called && !isBackingUp && !error}
       >
         {
           isBackingUp

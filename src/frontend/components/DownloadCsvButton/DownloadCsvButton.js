@@ -29,22 +29,10 @@ const CsvButton = styled.button({
 })
 
 const DownloadCsvButton = ({
-  uri,
-  filename,
   isDisabled,
   onClick,
   children,
-  shouldDownload,
 }) => {
-  if (!isDisabled && shouldDownload) {
-    const link = document.createElement("a")
-    link.href = uri
-    link.download = `${ filename }.csv`
-
-    link.click()
-    link.remove() // ! never actually appended to DOM, so probably doesn't do anything
-  }
-
   return (
     <CsvButton
       disabled={isDisabled}
@@ -56,21 +44,15 @@ const DownloadCsvButton = ({
 }
 
 DownloadCsvButton.propTypes = {
-  uri: PropTypes.string, 
-  filename: PropTypes.string,
   isDisabled: PropTypes.bool,
   children: PropTypes.any,
   onClick: PropTypes.func,
-  shouldDownload: PropTypes.bool,
 }
 
 DownloadCsvButton.defaultProps = {
-  uri: '#',
-  filename: '',
   isDisabled: false,
   children: 'Export CSV',
   onClick: () => {},
-  shouldDownload: true,
 }
 
 export default DownloadCsvButton

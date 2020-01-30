@@ -1,5 +1,11 @@
 import gql from 'graphql-tag'
 
+export const BULK_IMPORT_PROVIDER_ORGANIZATIONS = gql`
+  mutation BulkImportProviderOrganizations($data: JSON) {
+    bulkImportProviderOrganizations(data: $data)
+  }
+`
+
 export const CREATE_PROVIDER_ORGANIZATION = gql`
   mutation CreateProviderOrganization($input: CreateProviderOrganizationInput!) {
     createProviderOrganization(input: $input) {

@@ -8,6 +8,7 @@ import Panel from '../../../../Phoenix/shared/Panel'
 import { ProviderAccountModal } from '../../../shared/AccountModals'
 import DeleteButton from '../../../shared/DeleteButton'
 import DownloadCsvButton from './../../../../components/DownloadCsvButton'
+import ProviderImportButton from './ProviderImportButton'
 
 import {
   DELETE_PROVIDER_ORGANIZATION,
@@ -63,6 +64,7 @@ const headerChildren = data => {
         isDisabled={!csvData.length}
         data={csvData}
       />
+      <ProviderImportButton />
     </div>
   )
 } 
