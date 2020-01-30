@@ -12,7 +12,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Fixed** for any bug fixes.
 - **Security** in case of vulnerabilities.
 
-## [Unreleased] - Started: 12-23-19
+## [Unreleased] - Started: 1-30-20
+
+## [1.0.0] - Started: 12-23-19
 
 ### Added
 - `Polaris Backend`: moved entire `pipe-delimited-script` into `Polaris
@@ -26,6 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `Orion`: can import collections for the policy scraper through `uploadScraperData` util
 - `Node Scripts`: for importing payer historical project-based data, you can now add a flag `--ignoreConsolidatePayerData` to the terminal command to avoid that costly step until you're at the last CSV that needs to be imported
 - `Orion`: When deleting an organization, its connections are deleted from the soon-to-be-official connections collection AS WELL AS newProviders collection in pulse-dev
+- `Polaris`: Build out basic auth0 layer and tweak server code for production
 
 ### Changed
 - `Orion`: refactor all connections logic, front- and back-end, for new connections collection ([link](https://github.com/pulse-data/wave-db-mgmt/pull/294))
