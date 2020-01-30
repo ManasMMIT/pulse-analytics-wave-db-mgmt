@@ -1,7 +1,8 @@
+require('dotenv').load()
 const express = require('express')
+const path = require('path')
 const bodyParser = require('body-parser')
 const fs = require('fs')
-const path = require('path')
 const jwt = require('express-jwt')
 const jwksRsa = require('jwks-rsa')
 const morgan = require('morgan')
@@ -35,6 +36,14 @@ morgan.token('graphql-query', (req) => {
   const { operationName, variables } = req.body
   return `User: ${sub} / GraphQL Operation: ${operationName} / Variables: ${JSON.stringify(variables)}`
 })
+
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.join(process.cwd(), 'build')));
+
+  app.get('/*', (req, res) => {
+    res.sendFile(path.join(process.cwd(), 'build', 'index.html'));
+  })
+}
 
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }))
 app.use(bodyParser.json({ limit: '50mb' }))

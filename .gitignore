@@ -48,3 +48,5 @@ yarn-error.log*
 
 src/backend/resolvers/mutations/customData/pipeDelimitedScript/exports/
 exports-backups/
+
+ecosystem.config.js
