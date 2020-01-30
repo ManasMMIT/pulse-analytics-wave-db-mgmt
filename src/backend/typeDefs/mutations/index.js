@@ -13,7 +13,6 @@ const collection = require('./collection')
 const treatmentPlan = require('./treatmentPlan')
 const testEmailGroup = require('./testEmailGroup')
 
-const alert = require('./alert')
 const email = require('./email')
 
 const mutationType = gql`
@@ -23,6 +22,8 @@ const mutationType = gql`
     deleteUser(input: DeleteUserInput!): DeleteUserPayload
 
     createClient(input: CreateClientInput!): CreateClientPayload
+    deleteClient(input: DeleteClientInput!): DeleteClientPayload
+    updateClient(input: UpdateClientInput!): UpdateClientPayload
 
     createTeam(input: CreateTeamInput!): CreateTeamPayload
     updateTeam(input: UpdateTeamInput!): UpdateTeamPayload
@@ -48,6 +49,7 @@ const mutationType = gql`
     createProviderOrganization(input: CreateProviderOrganizationInput!): CreateProviderOrganizationPayload
     deleteProviderOrganization(input: DeleteProviderOrganizationInput!): DeleteProviderOrganizationPayload
     updateProviderOrganization(input: UpdateProviderOrganizationInput!): UpdateProviderOrganizationPayload
+    bulkImportProviderOrganizations(data: JSON): JSON
 
     createPayerOrganization(input: CreatePayerOrganizationInput!): CreatePayerOrganizationPayload
     deletePayerOrganization(input: DeletePayerOrganizationInput!): DeletePayerOrganizationPayload
@@ -64,11 +66,9 @@ const mutationType = gql`
     createQualityOfAccessScore(input: CreateQualityOfAccessScoreInput!): CreateQualityOfAccessScorePayload
     updateQualityOfAccessScore(input: UpdateQualityOfAccessScoreInput!): UpdateQualityOfAccessScorePayload
     deleteQualityOfAccessScore(input: DeleteQualityOfAccessScoreInput!): DeleteQualityOfAccessScorePayload
-    uploadCollection(input: UploadCollectionInput!): JSON
 
-    emailAlerts(input: EmailAlertInput!): JSON
-    createEmailUsers(input: CreateEmailUsersInput!): JSON
-    deleteEmailUsers(input: DeleteEmailUsersInput!): JSON
+    uploadCollection(input: UploadCollectionInput!): JSON
+    backupExport(input: BackupExportInput!): String
 
     sendToSubscribedUsers(input: SendToSubscribedUsersInput!): SendToSubscribedUsersPayload
     sendToTestGroup(input: SendToTestGroupInput): SendToTestGroupPayload
@@ -81,9 +81,7 @@ const mutationType = gql`
 
     filterQuery(input: JSON): JSON
 
-    createVbmParticipant(input: CreateVbmParticipantInput!): JSON
-    createVbmParticipation(input: CreateVbmParticipationInput!): JSON
-    deleteVbmConnection(input: DeleteVbmConnectionInput!): JSON
+    pipeDelimitedScript: JSON
   }
 `
 
@@ -101,7 +99,6 @@ module.exports = [
   ...collection,
   ...treatmentPlan,
   
-  ...alert,
   ...email,
 
   ...testEmailGroup,

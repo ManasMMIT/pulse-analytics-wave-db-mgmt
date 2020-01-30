@@ -1,5 +1,15 @@
 const _ = require('lodash')
 
+/*
+  ! This sheetMap is a stepping stone to a more robust
+    ! Sheet Management system, where we're tracking fields and target
+    ! collections for each sheet.
+  
+  ! Any new collections needed in the email alerts system
+    ! should be added to this map, so that they
+    ! can be properly validated for each user 
+*/
+
 const sheetMap = require('./TEMP-sheet-management-mocks')
 
 const sheetMapByCollection = _.keyBy(sheetMap, 'collection')

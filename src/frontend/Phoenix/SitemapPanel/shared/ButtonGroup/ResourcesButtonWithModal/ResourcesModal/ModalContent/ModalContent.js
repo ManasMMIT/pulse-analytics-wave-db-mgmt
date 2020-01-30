@@ -27,9 +27,8 @@ const ModalContent = ({
   teamId,
   nodeId,
   nodeType,
-  handlers,
-  selectedTeamNode,
   enabledResources,
+  toolRegionalBreakdown,
   resources, // available treatment plans and accounts to diff against
   closeModal,
 }) => {
@@ -38,13 +37,12 @@ const ModalContent = ({
   const {
     treatmentPlans,
     accounts,
-    // regionalBreakdown,
+    regionalBreakdown,
   } = state
 
   const {
     treatmentPlans: baseTreatmentPlans,
     accounts: baseAccounts,
-    // regionalBreakdown,
   } = resources
 
   // must manually merge state to achieve old merge behavior
@@ -58,11 +56,13 @@ const ModalContent = ({
     setState(prevState => ({ ...prevState, treatmentPlans }))
   }
 
-  // TODO: Deprecate managing resources on the node itself in favor
-  // of managing resources on the team level.
-  const regionalBreakdownResources = selectedTeamNode
-    ? selectedTeamNode.resources
-    : {}
+  const setStagedRegionalBreakdown = regionalBreakdown => {
+    setState(prevState => ({ ...prevState, regionalBreakdown }))
+  }
+
+  const stageAllTreatmentPlans = () => setStagedTreatmentPlans(baseTreatmentPlans)
+
+  const unstageAllTreatmentPlans = () => setStagedTreatmentPlans([])
 
   return (
     <>
@@ -84,6 +84,8 @@ const ModalContent = ({
 
       <UnderlinedTabs tabsData={TABS_DATA}>
         <TreatmentPlansTabContent
+          stageAllTreatmentPlans={stageAllTreatmentPlans}
+          unstageAllTreatmentPlans={unstageAllTreatmentPlans}
           baseTreatmentPlans={baseTreatmentPlans}
           treatmentPlans={treatmentPlans}
           setStagedTreatmentPlans={setStagedTreatmentPlans}
@@ -96,8 +98,9 @@ const ModalContent = ({
         <RegionalBreakdownTabContent
           nodeId={nodeId}
           nodeType={nodeType}
-          handlers={handlers}
-          resources={regionalBreakdownResources}
+          toolRegionalBreakdown={toolRegionalBreakdown}
+          setStagedRegionalBreakdown={setStagedRegionalBreakdown}
+          regionalBreakdown={regionalBreakdown}
         />
       </UnderlinedTabs>
     </>
@@ -107,17 +110,14 @@ const ModalContent = ({
 ModalContent.propTypes = {
   nodeId: PropTypes.string,
   nodeType: PropTypes.string,
-  handlers: PropTypes.object,
-  selectedTeamNode: PropTypes.object,
   resources: PropTypes.object,
+  toolRegionalBreakdown: PropTypes.array,
   closeModal: PropTypes.func,
 }
 
 ModalContent.defaultProps = {
   nodeId: null,
   nodeType: null,
-  handlers: {},
-  selectedTeamNode: {},
   resources: {},
   closeModal: null,
 }

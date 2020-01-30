@@ -6,6 +6,8 @@ const updatePathwaysOrganizationTypeDefs = gql`
     slug: String!
     organization: String
     organizationTiny: String
+    connections: JSON
+    type: String
   }
 
   type UpdatePathwaysOrganizationPayload {
@@ -13,6 +15,8 @@ const updatePathwaysOrganizationTypeDefs = gql`
     slug: String!
     organization: String
     organizationTiny: String
+    connections: JSON
+    type: String
   }
 `
 

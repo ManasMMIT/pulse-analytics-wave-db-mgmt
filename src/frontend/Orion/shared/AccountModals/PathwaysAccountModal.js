@@ -13,7 +13,7 @@ import {
   GET_PAYER_ORGANIZATIONS,
 } from '../../../api/queries'
 
-import AccountsModalButton from './AccountsModalButton'
+import AccountModalButton from './AccountModalButton'
 
 const PathwaysAccountModal = ({
   account,
@@ -33,7 +33,7 @@ const PathwaysAccountModal = ({
   ]
 
   return (
-    <AccountsModalButton
+    <AccountModalButton
       account={account}
       buttonLabel={buttonLabel}
       buttonStyle={buttonStyle}

@@ -5,6 +5,7 @@ const mutations = require('./mutations')
 
 module.exports = [
   gql`scalar JSON`,
+  gql`scalar Date`,
   ...queries,
   ...mutations,
 ]

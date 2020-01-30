@@ -5,8 +5,7 @@ import { faSyncAlt } from "@fortawesome/free-solid-svg-icons"
 
 import { Colors } from './../../../utils/pulseStyles'
 
-import TableHeader from './TableHeaders/TableHeader'
-import DownloadCsvButton from './../../../components/DownloadCsvButton'
+import TableHeader from './TableHeader'
 import { customSelectStyles } from './../../../components/customSelectStyles'
 
 import {
@@ -49,7 +48,6 @@ const QueryTool = ({
   setDataToDisplay,
   accountConfig,
   orgTypesConfig,
-  csvConfig,
   submitHandler,
   resetHandler,
 }) => {
@@ -99,11 +97,6 @@ const QueryTool = ({
           <SubmitButton onClick={submitHandler}>
             Submit
           </SubmitButton>
-          <DownloadCsvButton
-            show={csvConfig.shouldShow}
-            data={csvConfig.data}
-            fileName={csvConfig.fileName}
-          />
         </QueryControls>
       </QueryControlsContainer>
       {
@@ -124,6 +117,14 @@ const QueryTool = ({
                   tableData: dataToDisplay,
                   setDataToDisplay,
                   key: 'type',
+                }}
+              />
+              <TableHeader
+                label={'Oncologists'}
+                sortConfig={{
+                  tableData: dataToDisplay,
+                  setDataToDisplay,
+                  key: 'oncologistsCount',
                 }}
               />
               <TableHeader label={'VBM Affiliated State(s)'} />
@@ -166,6 +167,9 @@ const QueryTool = ({
                           </TableColumn>
                           <TableColumn>
                             {result.type}
+                          </TableColumn>
+                          <TableColumn>
+                            {result.oncologistsCount}
                           </TableColumn>
                           <TableColumn>
                             {formattedStates}

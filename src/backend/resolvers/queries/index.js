@@ -9,9 +9,8 @@ const organizations = require('./organizations')
 const qualityOfAccessScores = require('./qualityOfAccessScores')
 const collections = require('./collections')
 const newTreatmentPlans = require('./newTreatmentPlans')
-const emailUsers = require('./emailUsers')
 const testEmailGroups = require('./testEmailGroups')
-const queryToolAccounts = require('./queryTool')
+const alert = require('./alert')
 
 module.exports = {
   collections,
@@ -24,8 +23,7 @@ module.exports = {
   regimens,
   qualityOfAccessScores,
   newTreatmentPlans,
-  emailUsers,
   ...organizations,
   testEmailGroups,
-  queryToolAccounts,
+  alert,
 }

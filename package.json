@@ -7,6 +7,7 @@
   "license": "MIT",
   "dependencies": {
     "@apollo/react-hooks": "^3.1.2",
+    "@auth0/auth0-spa-js": "^1.6.2",
     "@emotion/core": "^10.0.14",
     "@emotion/styled": "^10.0.14",
     "@fortawesome/fontawesome-svg-core": "^1.2.19",
@@ -21,16 +22,21 @@
     "date-fns": "^2.6.0",
     "dotenv": "^6.2.0",
     "express": "^4.17.1",
+    "express-jwt": "^5.3.1",
     "glamor": "^2.20.40",
     "glamorous": "^5.0.0",
     "graphql": "^14.4.2",
     "graphql-anywhere": "^4.2.4",
+    "graphql-iso-date": "^3.6.1",
     "graphql-tag": "^2.10.1",
     "graphql-type-json": "^0.3.0",
     "json2csv": "^4.5.4",
+    "jwks-rsa": "^1.6.2",
     "lodash": "^4.17.11",
     "mjml": "^4.5.0",
+    "moment": "^2.24.0",
     "mongodb": "^3.1.13",
+    "morgan": "^1.9.1",
     "node-fetch": "^2.4.1",
     "nodemon": "^1.19.1",
     "nunjucks": "^3.2.0",
@@ -59,7 +65,8 @@
     "repl": "node --inspect=127.0.0.1:2000 ./pulse-core-psql/sequelizeConsole.js",
     "phoenix": "nodemon --inspect=127.0.0.1:2000 ./src/backend",
     "test": "jest",
-    "test:debug": "node --inspect node_modules/.bin/jest --runInBand"
+    "test:debug": "node --inspect node_modules/.bin/jest --runInBand",
+    "start:prod": "NODE_ENV=production node ./src/backend"
   },
   "eslintConfig": {
     "extends": "react-app"

@@ -4,7 +4,7 @@ const importProjectBasedData = require('./importProjectBasedData')
 const fs = require('fs')
 
 const args = require('yargs')
-  .usage('Usage: $0 --filepath [string] --ignoreProjects [boolean]')
+  .usage('Usage: $0 --filepath [string] --ignoreProjects [boolean] --ignoreConsolidatePayerData [boolean]')
   .demandOption(['filepath'])
   .argv
 
@@ -27,5 +27,5 @@ if (!fileExists(filepath)) {
 if (args.ignoreProjects) {
   importNonProjectBasedData(filepath)
 } else {
-  importProjectBasedData(filepath)
+  importProjectBasedData(filepath, args.ignoreConsolidatePayerData)
 }

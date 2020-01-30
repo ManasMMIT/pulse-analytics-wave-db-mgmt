@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useMutation, useQuery } from '@apollo/react-hooks'
+import { useMutation } from '@apollo/react-hooks'
 import _ from 'lodash'
 import queryString from 'query-string'
 
@@ -7,9 +7,7 @@ import {
   FILTER_QUERY,
 } from './../../../api/mutations'
 
-import {
-  GET_QUERY_ACCOUNTS,
-} from './../../../api/queries'
+import useQueryTool from './useQueryTool'
 
 import QueryTool from './QueryTool'
 
@@ -24,7 +22,7 @@ const getAccountOnChangeHandler = (
   orgTypes,
   history,
   setSelectedAccount,
-) => (account, actionType) => {
+) => account => {
   const accountQueryStrings = _.isEmpty(account)
     ? {}
     : { selectedAccountId: account.value }
@@ -38,15 +36,9 @@ const getAccountOnChangeHandler = (
     ...accountQueryStrings,
   })
 
-  if (actionType === 'clear') {
-    history.push({
-      search: '',
-    })
-  } else {
-    history.push({
-      search: newQueryStrings,
-    })
-  }
+  history.push({
+    search: newQueryStrings,
+  })
 
   setSelectedAccount(account)
 }
@@ -74,7 +66,7 @@ const getOrgTypesOnChangeHandler = (
   selectedAccount,
   history,
   setOrgTypes,
-) => (orgTypes, actionType) => {
+) => orgTypes => {
   const orgTypesObj = orgTypes
     ? { orgTypes: orgTypes.map(({ value }) => value) }
     : {}
@@ -88,15 +80,9 @@ const getOrgTypesOnChangeHandler = (
     ...selectedAccountObj,
   })
 
-  if (actionType === 'clear') {
-    history.push({
-      search: '',
-    })
-  } else {
-    history.push({
-      search: newQueryStrings
-    })
-  }
+  history.push({
+    search: newQueryStrings
+  })
 
   setOrgTypes(orgTypes)
 }
@@ -110,12 +96,11 @@ const QueryToolContainer = ({
     hasLoadedInitialFilter,
     setHasLoadedInitialFilter,
   ] = useState(false)
-  const [showCsvButton, setShowCsvButton] = useState(false)
   const [dataToDisplay, setDataToDisplay] = useState([])
   const [orgTypes, setOrgTypes] = useState([])
   const [selectedAccount, setSelectedAccount] = useState('')
 
-  const { data, loading } = useQuery(GET_QUERY_ACCOUNTS)
+  const { data, loading } = useQueryTool()
 
   const [filterQuery] = useMutation(
     FILTER_QUERY,
@@ -127,9 +112,6 @@ const QueryToolContainer = ({
             || _.isEmpty(selectedAccount)
             || _.isEmpty(orgTypes)
         )
-
-        if (shouldNotDisplayData) setShowCsvButton(false)
-        else setShowCsvButton(true)
       }
     }
   )
@@ -139,9 +121,9 @@ const QueryToolContainer = ({
   const { queryToolAccounts } = data
 
   const accountFilterOptions = queryToolAccounts
-    .map(({ _id, organization }) => ({
+    .map(({ _id, organization, type }) => ({
       value: _id,
-      label: organization,
+      label: `${ organization } (${ type })`,
     }))
 
   const UrlInput = queryString.parse(search)
@@ -192,36 +174,9 @@ const QueryToolContainer = ({
     setHasLoadedInitialFilter(true)
   }
 
-  let csvData = []
-  if (!_.isEmpty(selectedAccount)) {
-    csvData = _.cloneDeep(dataToDisplay).reduce((acc, org) => {
-      const getCsvObj = connection => ({
-        _id: connection._id,
-        slug: org.slug,
-        slugType: org.type,
-        affiliationType: connection.affiliationType,
-        slug1: connection.org.slug,
-        slugType1: connection.org.type,
-        state: connection.state,
-      })
-
-      const connectionsByState = (org.connections || []).map(getCsvObj)
-
-      acc = acc.concat(connectionsByState)
-
-      return acc
-    }, [])
-  }
-
   let formattedOrgTypes = orgTypes
     ? orgTypes.map(({ value }) => value)
     : []
-
-  let selectedAccountLabel = selectedAccount
-    ? selectedAccount.label
-    : ''
-
-  const csvFileName = `${ formattedOrgTypes.join('-') }-affiliated-with-${ selectedAccountLabel }`
 
   const accountConfig = {
     defaultValue: defaultSelectedAccount,
@@ -235,26 +190,6 @@ const QueryToolContainer = ({
     selected: orgTypes,
     filterOptions: orgTypeFilterOptions,
     onChangeHandler: getOrgTypesOnChangeHandler(selectedAccount, history, setOrgTypes)
-  }
-
-  const emptyRowObj = {
-    _id: undefined,
-    slug: undefined,
-    slugType: undefined,
-    affiliationType: undefined,
-    slug1: undefined,
-    slugType1: undefined,
-    state: undefined,
-  }
-
-  if (csvData && csvData.length) {
-    csvData.splice(0, 0, emptyRowObj, emptyRowObj)
-  }
-
-  const csvConfig = {
-    data: csvData,
-    fileName: csvFileName,
-    shouldShow: showCsvButton,
   }
 
   const submitHandler = getSubmitHandler(
@@ -274,7 +209,6 @@ const QueryToolContainer = ({
       setDataToDisplay={setDataToDisplay}
       accountConfig={accountConfig}
       orgTypesConfig={orgTypesConfig}
-      csvConfig={csvConfig}
       submitHandler={submitHandler}
       resetHandler={resetHandler}
     />

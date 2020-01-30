@@ -8,15 +8,17 @@ import ModalContent from './ModalContent'
 import {
   GET_SELECTED_TEAM,
   GET_SOURCE_INDICATIONS,
-  GET_ORGANIZATIONS,
+  GET_SELECTED_TOOL,
 } from '../../../../../../../api/queries'
+
+import { TOOL_ID_TO_ORG_QUERY_MAP } from './toolId-to-org-query-map'
 
 const ModalContentContainer = ({
   nodeId,
   nodeType,
-  handlers,
   selectedTeamNode,
   closeModal,
+  selectedToolId, // ! HACK: gotten from ANOTHER container wrapping this component because it's needed in org query
 }) => {
   const {
     data: selectedTeamData,
@@ -30,26 +32,17 @@ const ModalContentContainer = ({
     error: indError,
   } = useQuery(GET_SOURCE_INDICATIONS)
 
-  // ! HACK: if it's not a tool, get ALL the organizations
-  // ! because you need them to hydrate the parent resources
-  // TODO: Make a new resolver that traverses upward and finds
-  // the appropriate toolId to filter by
-  let orgsQueryVars = {}
-  if (nodeType === 'tools') {
-    orgsQueryVars = { variables: { toolId: nodeId } }
-  }
-
+  // For organizations, use selectedToolId and TOOL_ID_TO_ORG_QUERY_MAP to execute the
+  // appropriate query doc for organizations (a tool's child node should only have a subset of
+  // a tool's accounts)
   const {
     data: orgData,
     loading: orgLoading,
     error: orgError,
-  } = useQuery(
-    GET_ORGANIZATIONS,
-    orgsQueryVars,
-  )
+  } = useQuery(TOOL_ID_TO_ORG_QUERY_MAP[selectedToolId])
 
-  if (teamLoading || indLoading || orgLoading) return 'Loading...'
-  if (teamError || indError || orgError) return 'Error!'
+  if (teamLoading || orgLoading || indLoading) return 'Loading...'
+  if (teamError || orgError || indError) return 'Error!'
 
   // STEP 1: Isolate the resources object corresponding to
   // the selected team and its selected node.
@@ -70,30 +63,39 @@ const ModalContentContainer = ({
     enabledResources, // <-- even if this is undefined, _.merge works
   )
 
-  // STEP 2: Get all available options for every resource type.
+  // STEP 2: Grab the regionalBreakdown for the selectedTool (regardless of 
+  // whether the modal is open for the tool itself or a child node) to
+  // ready it for copying for when user toggles on regional breakdown for a child node
+  const selectedToolResources = resources.find(
+    ({ nodeId: resourcesObjNodeId }) => resourcesObjNodeId === selectedToolId
+  ) || {}
+
+  const toolRegionalBreakdown = selectedToolResources.regionalBreakdown
+
+  // STEP 3: Time to use the master lists.
   // If the node is a tool, its resources are compared against master lists.
   // If the node isn't a tool, its resources are compared against its parent's resources.
-  // But the parent's resourced are dehydrated so hydrate them with the master lists.
+  // But the parent's resources are dehydrated so hydrate them with the master lists.
   // Leave the responsibility for diffing the resources up to the tab content
   // further down the React tree.
-
   const { indications: sourceTreatmentPlans } = indData
-  const { organizations: sourceAccounts } = orgData
+  
+  // ! HACK: Need to do below line because orgData comes back as object with variable key of
+  // ! 'payerOrganizations', 'pathwaysOrganizations', etc.
+  const sourceAccounts = orgData[Object.keys(orgData)[0]]
 
   if (nodeType === 'tools') {
     const sourceResources = {
       treatmentPlans: sourceTreatmentPlans,
       accounts: sourceAccounts,
-      // regionalBreakdown: sourceRegionalBreakdown,
     }
 
     return (
       <ModalContent
         nodeId={nodeId}
         nodeType={nodeType}
-        handlers={handlers}
-        selectedTeamNode={selectedTeamNode}
         enabledResources={enabledResources}
+        toolRegionalBreakdown={toolRegionalBreakdown}
         resources={sourceResources}
         teamId={teamId}
         closeModal={closeModal}
@@ -143,9 +145,8 @@ const ModalContentContainer = ({
     <ModalContent
       nodeId={nodeId}
       nodeType={nodeType}
-      handlers={handlers}
-      selectedTeamNode={selectedTeamNode}
       enabledResources={enabledResources}
+      toolRegionalBreakdown={toolRegionalBreakdown}
       resources={parentResources}
       teamId={teamId}
       closeModal={closeModal}
@@ -153,20 +154,30 @@ const ModalContentContainer = ({
   )
 }
 
-ModalContentContainer.propTypes = {
+const ModalOuterContentContainer = props => {
+  const {
+    data: selectedToolData,
+    loading: selectedToolLoading,
+    error: toolError,
+  } = useQuery(GET_SELECTED_TOOL)
+
+  if (selectedToolLoading) return 'Loading...'
+  if (toolError) return 'Error!'
+
+  const { selectedTool: { _id: selectedToolId } } = selectedToolData
+
+  return <ModalContentContainer {...props} selectedToolId={selectedToolId} />
+}
+
+ModalOuterContentContainer.propTypes = {
   nodeId: PropTypes.string,
   nodeType: PropTypes.string,
-  handlers: PropTypes.object,
   selectedTeamNode: PropTypes.object,
   closeModal: PropTypes.func,
 }
 
-ModalContentContainer.defaultProps = {
-  nodeId: null,
-  nodeType: null,
-  handlers: {},
+ModalOuterContentContainer.defaultProps = {
   selectedTeamNode: {},
-  closeModal: null,
 }
 
-export default ModalContentContainer
+export default ModalOuterContentContainer

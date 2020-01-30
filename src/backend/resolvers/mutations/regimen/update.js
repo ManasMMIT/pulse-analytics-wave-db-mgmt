@@ -4,7 +4,7 @@ const _ = require('lodash')
 const updateSourceRegimen = async (
   parent,
   { input: { _id: regimenId, products, name } },
-  { mongoClient, pulseCoreDb },
+  { mongoClient, pulseCoreDb, pulseDevDb },
   info,
 ) => {
   if (_.isEmpty(products)) throw Error(`'products' field can't be empty`)
@@ -43,6 +43,24 @@ const updateSourceRegimen = async (
       { session },
     )
   })
+
+  await pulseDevDb.collection('users.nodes.resources')
+    .updateMany(
+      { 'resources.treatmentPlans.regimens._id': _id },
+      {
+        $set: {
+          'resources.$[resource].treatmentPlans.$[treatmentPlan].regimens.$[regimen].name': name,
+        }
+      },
+      {
+        arrayFilters: [
+          { 'resource.treatmentPlans': { $exists: true } },
+          { 'treatmentPlan.regimens': { $exists: true } },
+          { 'regimen._id': _id },
+        ],
+        session
+      }
+    )
 
   return result
 }

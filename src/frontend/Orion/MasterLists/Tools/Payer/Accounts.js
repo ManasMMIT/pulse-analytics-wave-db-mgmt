@@ -16,6 +16,8 @@ import {
 
 import {
   GET_PAYER_ORGANIZATIONS,
+  GET_PATHWAYS_ORGANIZATIONS,
+  GET_APM_ORGANIZATIONS,
 } from '../../../../api/queries'
 
 import { Colors } from '../../../../utils/pulseStyles'
@@ -38,6 +40,9 @@ const defaultPanelItemStyle = {
   fontWeight: 600,
   fontSize: 12,
   borderBottom: `1px solid ${transparentize(0.9, Colors.BLACK)}`,
+  ':hover': {
+    background: transparentize(0.95, Colors.BLACK),
+  }
 }
 
 const headerChildren = (
@@ -60,7 +65,11 @@ const buttonGroupCallback = entity => (
     <DeleteButton
       itemId={entity._id}
       mutationDoc={DELETE_PAYER_ORGANIZATION}
-      refetchQueries={[{ query: GET_PAYER_ORGANIZATIONS }]}
+      refetchQueries={[
+        { query: GET_PAYER_ORGANIZATIONS },
+        { query: GET_PATHWAYS_ORGANIZATIONS },
+        { query: GET_APM_ORGANIZATIONS },
+      ]}
     />
   </>
 )

@@ -31,6 +31,7 @@ class Button extends React.Component {
       modalStyle,
       clientMutation,
       additionalFormData,
+      refetchQueries,
     } = this.props
 
     return (
@@ -53,6 +54,7 @@ class Button extends React.Component {
             additionalFormData={additionalFormData}
             clientMutation={clientMutation}
             afterSubmitHook={this.closeModal}
+            refetchQueries={refetchQueries}
           />
         </Modal>
       </>

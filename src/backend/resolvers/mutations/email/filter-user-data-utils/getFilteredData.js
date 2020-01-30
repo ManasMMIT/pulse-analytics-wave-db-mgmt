@@ -6,7 +6,6 @@ module.exports = async ({
   collectionName,
   subscriptionId,
   userNodesResources,
-  date,
   query = {},
 }) => {
   const subscriptionNodeId = subscriptionNodeIdMap[subscriptionId]
@@ -15,7 +14,10 @@ module.exports = async ({
     .find(({ nodeId }) => nodeId === subscriptionNodeId)
       || { accounts: [], treatmentPlans: [] }
 
-  const aggPipeline = getAggPipeline(collectionName, resources, date)
+  const aggPipeline = getAggPipeline(
+    collectionName,
+    resources,
+  )
 
   // By Pulse convention, dbQuery is a JSON sometimes passed as arg from the frontend.
   // TODO: Devise deprecation plan for dbQuery special-casing.

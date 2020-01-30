@@ -1,20 +1,22 @@
-const generateSitemaps = require('../../../generate-sitemaps')
-const generateUsersPermissions = require('../../../generate-users-permissions')
+const overrideUpsertSitemaps = require('./push-to-dev-override/OVERRIDE_upsert_sitemaps')
+const overrideUpsertPermissions = require('./push-to-dev-override/OVERRIDE_upsert_permissions')
 
 const pushOps = {
   pushSitemapToDev: async (parent, args, context, info) => {
     const { mongoClient, pulseCoreDb, pulseDevDb } = context
-    await generateSitemaps({
-      mongoClient,
-      pulseCoreDb,
-      pulseDevDb,
-    })
 
-    await generateUsersPermissions({
-      mongoClient,
-      pulseCoreDb,
-      pulseDevDb,
-    })
+    await Promise.all([
+      overrideUpsertSitemaps({
+        mongoClient,
+        pulseCoreDb,
+        pulseDevDb,
+      }),
+      overrideUpsertPermissions({
+        mongoClient,
+        pulseCoreDb,
+        pulseDevDb,
+      })
+    ])
 
     return 'Sitemap push to dev successful'
   },

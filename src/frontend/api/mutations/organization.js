@@ -1,5 +1,11 @@
 import gql from 'graphql-tag'
 
+export const BULK_IMPORT_PROVIDER_ORGANIZATIONS = gql`
+  mutation BulkImportProviderOrganizations($data: JSON) {
+    bulkImportProviderOrganizations(data: $data)
+  }
+`
+
 export const CREATE_PROVIDER_ORGANIZATION = gql`
   mutation CreateProviderOrganization($input: CreateProviderOrganizationInput!) {
     createProviderOrganization(input: $input) {
@@ -8,6 +14,9 @@ export const CREATE_PROVIDER_ORGANIZATION = gql`
       organization
       organizationTiny
       providerCancerCenter
+      state
+      city
+      oncologistsCount
     }
   }
 `
@@ -20,6 +29,9 @@ export const DELETE_PROVIDER_ORGANIZATION = gql`
       organization
       organizationTiny
       providerCancerCenter
+      state
+      city
+      oncologistsCount
     }
   }
 `
@@ -32,6 +44,10 @@ export const UPDATE_PROVIDER_ORGANIZATION = gql`
       organization
       organizationTiny
       providerCancerCenter
+      state
+      city
+      oncologistsCount
+      connections
     }
   }
 `
@@ -65,6 +81,7 @@ export const UPDATE_PAYER_ORGANIZATION = gql`
       slug
       organization
       organizationTiny
+      connections
     }
   }
 `
@@ -98,6 +115,7 @@ export const UPDATE_PATHWAYS_ORGANIZATION = gql`
       slug
       organization
       organizationTiny
+      connections
     }
   }
 `
@@ -131,6 +149,7 @@ export const UPDATE_APM_ORGANIZATION = gql`
       slug
       organization
       organizationTiny
+      connections
     }
   }
 `

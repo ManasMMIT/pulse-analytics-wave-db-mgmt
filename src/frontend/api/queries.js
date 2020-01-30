@@ -369,6 +369,10 @@ export const GET_PROVIDER_ORGANIZATIONS = gql`
       providerCancerCenter
       type
       connections
+      state
+      city
+      oncologistsCount
+      sitesCount
     }
   }
 `
@@ -412,12 +416,6 @@ export const GET_APM_ORGANIZATIONS = gql`
   }
 `
 
-export const GET_ORGANIZATIONS = gql`
-  query getOrganizations($toolId: String) {
-    organizations(toolId: $toolId)
-  }
-`
-
 export const GET_RAW_COLLECTION_NAMES = gql`
   query getRawCollectionNames {
     collections(type: "raw")
@@ -427,18 +425,6 @@ export const GET_RAW_COLLECTION_NAMES = gql`
 export const GET_NEW_TREATMENT_PLANS = gql`
   query getNewTreatmentPlans($data: JSON) {
     newTreatmentPlans(data: $data)
-  }
-`
-
-export const GET_EMAIL_USERS = gql`
-  query getAllEmailUsers {
-    emailUsers {
-      client
-      username
-      email
-      isPulseTest
-      isTdgTest
-    }
   }
 `
 
@@ -454,10 +440,13 @@ export const GET_TEST_EMAIL_GROUPS = gql`
   }
 `
 
-// ! This is only need, as long as we are working with flat, query seed data, and not the master lists
-// ! Only used to populate options in the account filter for the query tool
-export const GET_QUERY_ACCOUNTS = gql`
-  query getQueryToolAccounts {
-    queryToolAccounts
+export const GET_ALERT = gql`
+  query getAlert($_id: ID) {
+    alert(_id: $_id) {
+      _id
+      date
+      type
+      description
+    }
   }
 `

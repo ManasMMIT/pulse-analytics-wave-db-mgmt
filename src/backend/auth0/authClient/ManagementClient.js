@@ -68,6 +68,21 @@ module.exports = class {
     }
   }
 
+  getUser(id) {
+    return this.authenticate()
+      .then(() =>
+        fetch(`${this.audience}users/${id}`, {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${this.accessToken}`,
+            'Content-Type': 'application/json'
+          },
+        })
+      )
+      .then(checkStatus)
+      .then(response => response.json())
+  }
+
   getUsers() {
     const paginateUserRequest = async () => {
       let users = []

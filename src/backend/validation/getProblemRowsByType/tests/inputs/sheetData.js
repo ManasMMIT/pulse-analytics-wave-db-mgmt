@@ -2,12 +2,14 @@ const data = [
   {
     "indication": "beast catcer",
     "regimen": "aahahahah",
-    "slug": "woo-hhooo"
+    "slug": "woo-hhooo",
+    "access": 'valid',
   },
   {
     "indication": "best canter",
     "regimen": "no",
-    "slug": "what"
+    "slug": "what",
+    "access": 'invalid',
   }
 ]
 

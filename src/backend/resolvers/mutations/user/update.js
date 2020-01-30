@@ -1,5 +1,7 @@
 const _ = require('lodash')
-const wait = require('./../../../../utils/wait')
+
+const upsertUsersPermissions = require('../sitemap/permissions-upsertion/upsertUsersPermissions')
+const upsertUsersSitemaps = require('../sitemap/sitemaps-upsertion/upsertUsersSitemaps')
 
 const updateUser = async (
   parent,
@@ -18,6 +20,8 @@ const updateUser = async (
     coreRoles,
     coreUsers,
     auth0,
+    pulseDevDb,
+    pulseCoreDb,
   },
   info,
 ) => {
@@ -33,39 +37,6 @@ const updateUser = async (
   if (!Array.isArray(incomingRoles)) incomingRoles = [incomingRoles]
 
   // ! auth0
-  const groupsInAuth0 = await auth0.authClient.getUserGroups(_id, false)
-
-  // TODO: Don't use hyphen to determine whether a group is a client group
-  // filter out the CLIENT group to only keep the role groups
-  // and map to get just the id strings
-  const roleGroupsInAuth0 = groupsInAuth0
-    .filter(({ name }) => name.includes('-'))
-    .map(({ _id }) => _id)
-
-  const doRolesNeedUpdate = _.xor(incomingRoles, roleGroupsInAuth0).length > 0
-
-  let rolesToLink
-  if (doRolesNeedUpdate) {
-    const rolesToDelink = roleGroupsInAuth0.filter(
-      currentRoleId => !incomingRoles.includes(currentRoleId)
-    )
-
-    rolesToLink = incomingRoles.filter(
-      incomingRoleId => !roleGroupsInAuth0.includes(incomingRoleId)
-    )
-
-    for (const roleToDelink of rolesToDelink) {
-      await wait()
-      await auth0.authClient.removeGroupMember(roleToDelink, _id)
-    }
-
-    for (const roleToLink of rolesToLink) {
-      await wait()
-      await auth0.authClient.addGroupMember(roleToLink, _id)
-    }
-  }
-
-  await wait()
   await auth0.users.update({ id: _id, username, email, password })
 
   // ! mongodb
@@ -103,6 +74,21 @@ const updateUser = async (
       },
       { session }
     )
+
+    // 4. Update a user's sitemap and resources docs
+    await upsertUsersPermissions({
+      users: [updatedResult],
+      pulseDevDb,
+      pulseCoreDb,
+      session,
+    })
+
+    await upsertUsersSitemaps({
+      users: [updatedResult],
+      session,
+      pulseDevDb,
+      pulseCoreDb,
+    })
   })
 
   return updatedMongoUser

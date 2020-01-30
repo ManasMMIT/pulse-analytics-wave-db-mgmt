@@ -8,7 +8,7 @@ const {
   verifyCollectionExists
 } = require('../../utils')
 
-const importProjectBasedData = async filepath => {
+const importProjectBasedData = async (filepath, ignoreConsolidatePayerData) => {
   // Extract project, filename, month, year based on filepath
   const filePathArr = filepath.split('/')
   const filenameWithExtension = filePathArr[filePathArr.length - 1]
@@ -95,7 +95,9 @@ const importProjectBasedData = async filepath => {
     collectionName,
     pulseCoreDb,
     pulseDevDb,
-    terminateScript
+    terminateScript,
+    projectName,
+    ignoreConsolidatePayerData,
   })
 }
 

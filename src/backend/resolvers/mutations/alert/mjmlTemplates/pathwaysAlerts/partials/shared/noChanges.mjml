@@ -1,8 +1,0 @@
-<mj-section mj-class='default-background'>
-  <mj-column>
-    <mj-text mj-class='header-content-text'>
-      Pathways have remained stable in the past month and no changes have been identified. Please visit the tool to view the latest pathways trends.
-    </mj-text>
-    {% include "./visitPathwaysBtn.mjml" %}
-  </mj-column>
-</mj-section>

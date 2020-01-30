@@ -27,7 +27,7 @@ const buttonStyle = {
 
 const DeleteButton = ({
   mutationDoc,
-  clientMutation,
+  clientMutation, // TODO: Change var name; confusing because this has nothing to do with Client business object, refers to frontend resolver mutation doc
   style,
   modalTitle,
   modalText,

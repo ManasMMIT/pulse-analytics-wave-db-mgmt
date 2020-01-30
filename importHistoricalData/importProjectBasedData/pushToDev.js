@@ -1,71 +1,50 @@
-const getLatestMonthYearProjectPipeline = require('./latest-month-year-project')
+const getSingleProjectLatestMonthYearPipeline = require('./getSingleProjectLatestMonthYearPipeline')
 const consolidatePayerData = require('../consolidate-payer-data')
 
 const pushToDev = async ({
   collectionName,
   pulseCoreDb,
   pulseDevDb,
-  terminateScript
+  terminateScript,
+  projectName,
+  ignoreConsolidatePayerData,
 }) => {
   const coreCollection = pulseCoreDb.collection(collectionName)
 
-  let adminHubPayerIndRegCombosPromise = null
-
-  // only execute this parallel aggregation if the collection is qoa data
-  if (collectionName === 'payerHistoricalQualityAccess') {
-    adminHubPayerIndRegCombosPromise = coreCollection.aggregate([
-      {
-        $group: {
-          _id: '$indication',
-          regimen: {
-            $addToSet: '$regimen'
-          }
-        }
-      },
-      {
-        $project: {
-          _id: 0,
-          indication: '$_id',
-          regimen: 1
-        }
-      }
-    ]).toArray()
-  }
-
-  const latestSixMonthsDataPromise = coreCollection.aggregate(
-    getLatestMonthYearProjectPipeline(6), { allowDiskUse: true }
+  const latestSingleProjectSixMonthsDataPromise = coreCollection.aggregate(
+    getSingleProjectLatestMonthYearPipeline(projectName, 6), { allowDiskUse: true }
   ).toArray()
 
-  const latestMonthYearDataPromise = coreCollection.aggregate(
-    getLatestMonthYearProjectPipeline(1), { allowDiskUse: true }
+  const latestSingleProjectMonthYearDataPromise = coreCollection.aggregate(
+    getSingleProjectLatestMonthYearPipeline(projectName, 1), { allowDiskUse: true }
   ).toArray()
 
   try {
     const [
-      adminHubPayerIndRegCombos,
-      latestSixMonthsData,
-      latestMonthYearData,
+      latestSingleProjectSixMonthsData,
+      latestSingleProjectMonthYearData,
     ] = await Promise.all([
-      adminHubPayerIndRegCombosPromise,
-      latestSixMonthsDataPromise,
-      latestMonthYearDataPromise,
+      latestSingleProjectSixMonthsDataPromise,
+      latestSingleProjectMonthYearDataPromise,
     ])
 
-    if (adminHubPayerIndRegCombos) {
-      await pulseDevDb.collection('adminHubPayerIndRegCombos').deleteMany()
-      await pulseDevDb.collection('adminHubPayerIndRegCombos').insertMany(adminHubPayerIndRegCombos)
-      console.log(`pulse-dev collection 'adminHubPayerIndRegCombos' updated`)
+    await pulseDevDb.collection(collectionName).deleteMany({
+      project: projectName,
+    })
+
+    await pulseDevDb.collection(collectionName).insertMany(latestSingleProjectMonthYearData)
+    console.log(`pulse-dev collection '${collectionName}' updated for project ${projectName}`)
+
+    await pulseDevDb.collection(`${collectionName}Ht`).deleteMany({
+      project: projectName,
+    })
+
+    await pulseDevDb.collection(`${collectionName}Ht`).insertMany(latestSingleProjectSixMonthsData)
+    console.log(`pulse-dev collection '${collectionName}Ht' updated for project ${projectName}`)
+
+    if (!ignoreConsolidatePayerData) {
+      await consolidatePayerData({ pulseDevDb, pulseCoreDb, terminateScript })
     }
-
-    await pulseDevDb.collection(collectionName).deleteMany()
-    await pulseDevDb.collection(collectionName).insertMany(latestMonthYearData)
-    console.log(`pulse-dev collection '${collectionName}' updated`)
-
-    await pulseDevDb.collection(`${collectionName}Ht`).deleteMany()
-    await pulseDevDb.collection(`${collectionName}Ht`).insertMany(latestSixMonthsData)
-    console.log(`pulse-dev collection '${collectionName}Ht' updated`)
-
-    await consolidatePayerData({ pulseDevDb, pulseCoreDb, terminateScript })
   } catch(e) {
     console.error(e)
   } finally {

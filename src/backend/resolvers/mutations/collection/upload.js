@@ -3,6 +3,16 @@ const UserInputError = require('apollo-server-express').UserInputError
 const getErrorObj = require('../../../validation/getErrorObj')
 const { ObjectId } = require('mongodb')
 const upsertConnections = require('./upsertConnections')
+const uploadScraperData = require('./uploadScraperData')
+
+const SCRAPER_COLLECTIONS = [
+  'merckKeytruda', 
+  'regeneronDupixent', 
+  'novartisKymriah', 
+  'daiichiTgct', 
+  'merckBiosimilars',
+  'merckKeytruda',
+]
 
 const uploadCollection = async (
   parent,
@@ -25,29 +35,35 @@ const uploadCollection = async (
 
   const targetCollection = pulseRawDb.collection(collectionName)
 
-  if (collectionName === 'orgConnections') {
-    // STEP 1: Upsert into pulse-raw 'orgConnections' collection
-    // (this doesn't do anything other than make sure a queryable,
-    // JSONified version of the sheet in pulse-raw is kept up to date)
-    const bulkOp = targetCollection.initializeOrderedBulkOp();
-
-    data.forEach(row => {
-      row._id = row._id ? ObjectId(row._id) : new ObjectId()
-      const { _id, ...rest } = row
-      bulkOp.find({ _id }).upsert().updateOne({ $set: rest })
-    })
-
-    await bulkOp.execute()
-
-    // STEP 2: Upsert into pulse-core 'organizations' collection
-    await upsertConnections({
-      pulseCoreDb,
-      mongoClient,
-      data,
+  const isScraperData = SCRAPER_COLLECTIONS.includes(collectionName)
+  if (isScraperData) {
+    const pulseScraperDb = mongoClient.db('pulse-scraper')
+    const collectionList = await pulseRawDb.listCollections({ name: collectionName }).toArray()
+    const doesCollectionExist = collectionList.length > 0
+    
+    uploadScraperData({ 
+      collectionName, 
+      data, 
+      doesCollectionExist,
+      pulseRawDb,
+      pulseScraperDb,
     })
 
     return
   }
+
+  // // ! HACK exception: If target is 'orgConnections', upsert into pulse-core 'organizations' collection
+  // if (collectionName === 'orgConnections') {
+  //   data.forEach(row => { row._id = row._id ? ObjectId(row._id) : new ObjectId() })
+    
+  //   await upsertConnections({
+  //     pulseCoreDb,
+  //     mongoClient,
+  //     data,
+  //   })
+
+  //   return
+  // }
 
   await targetCollection.deleteMany()
   await targetCollection.insertMany(data)

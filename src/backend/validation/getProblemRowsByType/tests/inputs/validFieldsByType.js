@@ -1,4 +1,7 @@
 const validFieldsByType = {
+  "access": [
+    "valid",
+  ],
   "indication": [
     "TNBC",
     "T-cell Lymphoma (Systemic anaplastic large cell lymphoma [sALCL])",

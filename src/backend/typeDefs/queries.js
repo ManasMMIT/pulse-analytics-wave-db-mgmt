@@ -14,7 +14,6 @@ const queries = gql`
     products: [Product]
     regimens: [Regimen]
 
-    organizations(toolId: String): JSON # JSON because orgs have diff schemas
     providerOrganizations: [ProviderOrganization]
     payerOrganizations: [PayerOrganization]
     pathwaysOrganizations: [PathwaysOrganization]
@@ -23,10 +22,10 @@ const queries = gql`
     qualityOfAccessScores: [QualityOfAccessScore]
     collections(type: String): [String]
     newTreatmentPlans(data: JSON): JSON
-    emailUsers: [EmailUser]
+
     testEmailGroups: [TestEmailGroup]
 
-    queryToolAccounts: JSON
+    alert(_id: ID): Alert
   }
 
   type Node {
@@ -110,6 +109,10 @@ const queries = gql`
     organizationTiny: String
     providerCancerCenter: String # TODO: Change to just cancerCenter or create separate tool account typedefs
     connections: JSON
+    state: String
+    city: String
+    oncologistsCount: Int
+    sitesCount: Int
   }
 
   type PayerOrganization {
@@ -161,6 +164,13 @@ const queries = gql`
     recipients: [String]
     usersToMock: [ID]
     emailSubscriptions: [ID]
+  }
+
+  type Alert {
+    _id: ID!
+    type: String
+    date: Date
+    description: String
   }
 `
 

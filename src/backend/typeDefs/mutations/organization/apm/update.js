@@ -6,6 +6,8 @@ const updateApmOrganizationTypeDefs = gql`
     slug: String!
     organization: String
     organizationTiny: String
+    connections: JSON
+    type: String
   }
 
   type UpdateApmOrganizationPayload {
@@ -13,6 +15,8 @@ const updateApmOrganizationTypeDefs = gql`
     slug: String!
     organization: String
     organizationTiny: String
+    connections: JSON
+    type: String
   }
 `
 

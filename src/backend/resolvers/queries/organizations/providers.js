@@ -1,12 +1,18 @@
 const { PROVIDER_TOOL_ID } = require('../../../global-tool-ids')
+const getOrgsAndConnectionsByTool = require('./getOrgsAndConnectionsByTool')
 
-const providerOrganizations = async (parent, args, { pulseCoreDb }) => {
-  return await pulseCoreDb
-    .collection('organizations')
-    .find({ toolIds: PROVIDER_TOOL_ID })
-    .collation({ locale: 'en' })
-    .sort({ organization: 1 })
-    .toArray()
+const extraProjectionFields = {
+  providerCancerCenter: '$providerCancerCenter',
+  state: '$state',
+  city: '$city',
+  oncologistsCount: '$oncologistsCount',
+  sitesCount: '$sitesCount',
 }
+
+const providerOrganizations = async (
+  parent,
+  args,
+  { pulseCoreDb }
+) => getOrgsAndConnectionsByTool({ db: pulseCoreDb, toolId: PROVIDER_TOOL_ID, extraProjectionFields })
 
 module.exports = providerOrganizations

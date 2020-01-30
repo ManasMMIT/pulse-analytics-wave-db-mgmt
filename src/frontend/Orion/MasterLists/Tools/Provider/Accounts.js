@@ -7,6 +7,8 @@ import { transparentize } from 'polished'
 import Panel from '../../../../Phoenix/shared/Panel'
 import { ProviderAccountModal } from '../../../shared/AccountModals'
 import DeleteButton from '../../../shared/DeleteButton'
+import DownloadCsvButton from './../../../../components/DownloadCsvButton'
+import ProviderImportButton from './ProviderImportButton'
 
 import {
   DELETE_PROVIDER_ORGANIZATION,
@@ -14,6 +16,8 @@ import {
 
 import {
   GET_PROVIDER_ORGANIZATIONS,
+  GET_PATHWAYS_ORGANIZATIONS,
+  GET_APM_ORGANIZATIONS,
 } from '../../../../api/queries'
 
 import { Colors } from '../../../../utils/pulseStyles'
@@ -25,6 +29,7 @@ const CREATE_BUTTON_TXT = 'Create Provider Account'
 const buttonStyle = {
   background: "#234768",
   color: 'white',
+  margin: '0px 12px',
 }
 
 const defaultPanelItemStyle = {
@@ -36,16 +41,33 @@ const defaultPanelItemStyle = {
   fontWeight: 600,
   fontSize: 12,
   borderBottom: `1px solid ${transparentize(0.9, Colors.BLACK)}`,
+  ':hover': {
+    background: transparentize(0.95, Colors.BLACK),
+  }
 }
 
-const headerChildren = (
-  <div>
-    <ProviderAccountModal
-      buttonLabel={CREATE_BUTTON_TXT}
-      buttonStyle={buttonStyle}
-    />
-  </div>
-)
+const headerChildren = data => {
+  const csvData = data
+    .map(({ __typename, connections, ...datum }) => datum)
+
+  if (csvData.length) csvData.splice(0, 0, {}, {})
+
+  return (
+    <div style={{ display: 'flex' }}>
+      <ProviderAccountModal
+        buttonLabel={CREATE_BUTTON_TXT}
+        buttonStyle={buttonStyle}
+      />
+      <DownloadCsvButton
+        createBackup
+        filename={`providers-master-list`}
+        isDisabled={!csvData.length}
+        data={csvData}
+      />
+      <ProviderImportButton />
+    </div>
+  )
+} 
 
 const buttonGroupCallback = entity => (
   <>
@@ -58,7 +80,11 @@ const buttonGroupCallback = entity => (
     <DeleteButton
       itemId={entity._id}
       mutationDoc={DELETE_PROVIDER_ORGANIZATION}
-      refetchQueries={[{ query: GET_PROVIDER_ORGANIZATIONS }]}
+      refetchQueries={[
+        { query: GET_PROVIDER_ORGANIZATIONS },
+        { query: GET_PATHWAYS_ORGANIZATIONS },
+        { query: GET_APM_ORGANIZATIONS },
+      ]}
     />
   </>
 )

@@ -6,6 +6,10 @@ const createProviderOrganizationTypeDefs = gql`
     organization: String
     organizationTiny: String
     providerCancerCenter: String
+    state: String
+    city: String
+    oncologistsCount: Int
+    sitesCount: Int
   }
 
   type CreateProviderOrganizationPayload {
@@ -14,6 +18,10 @@ const createProviderOrganizationTypeDefs = gql`
     organization: String
     organizationTiny: String
     providerCancerCenter: String
+    state: String
+    city: String
+    oncologistsCount: Int
+    sitesCount: Int
   }
 `
 

@@ -1,7 +1,9 @@
+const uuid = require('uuid/v4')
+
 const createTeam = async (
   parent,
   { input: { description, clientId } },
-  { mongoClient, coreClients, coreRoles, auth0 },
+  { mongoClient, coreClients, coreRoles },
   info,
 ) => {
   if (!Boolean(description)) {
@@ -10,35 +12,23 @@ const createTeam = async (
     throw Error('clientId must be specified')
   }
 
-  // ! auth0
-  const { name: clientName } = await auth0.clients.find(clientId)
-
-  const dataObjForAuth0 = {
-    clientId,
-    name: `${clientName}-${description}`,
-    description,
-  }
-
-  const roleCreatedInAuth0 = await auth0.roles
-    .create(dataObjForAuth0)
-
-  // ! mongodb
   const session = mongoClient.startSession()
 
   let result = null
+
   await session.withTransaction(async () => {
     const client = await coreClients.findOne({ _id: clientId }, { session })
 
     const role = await coreRoles.insertOne({
-      _id: roleCreatedInAuth0._id,
-      name: roleCreatedInAuth0.name,
-      description: roleCreatedInAuth0.description,
+      _id: uuid(),
+      name: description,
+      description,
       client,
       sitemap: {
         tools: [],
         dashboards: [],
         pages: [],
-        cards: []
+        cards: [],
       },
       users: [],
       schemaVersion: 'v1.1.0'

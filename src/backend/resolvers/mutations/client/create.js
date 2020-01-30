@@ -1,39 +1,32 @@
+const uuid = require('uuid/v4')
+
 const createClient = async (
   parent,
   { input: { description } },
-  { mongoClient, coreClients, coreRoles, auth0 },
+  { mongoClient, coreClients, coreRoles },
   info
 ) => {
   if (!Boolean(description)) {
     throw Error('text field invalid')
   }
 
-  // ! auth0
-  // write to auth0, which autogenerates a UUID for client
-  const clientInAuth0 = await auth0.clients
-    .create({ name: description, description })
+  const mongoClientObj = {
+    _id: uuid(),
+    name: description,
+    description,
+  }
 
-  // the create roles method in roles DAO creates both auth0 group and role
+  // TODO: this convention for default admin role's 'name' and 'description' 
+  // is being kept for now; it's still depended on in src/backend/resolvers/queries/teams.js;
+  // CONSIDER not creating a default role at all; this is stg that had to be done back when
+  // we didn't want admin hub 1.0 to break
   const defaultRoleName = `${description}-admin`
   const defaultRoleDescrip = 'admin'
 
-  const roleInAuth0 = await auth0.roles.create({
-    clientId: clientInAuth0._id,
+  const defaultMongoRole = {
+    _id: uuid(),
     name: defaultRoleName,
     description: defaultRoleDescrip,
-  })
-
-  // ! mongodb
-  const mongoClientObj = {
-    _id: clientInAuth0._id,
-    name: clientInAuth0.name,
-    description: clientInAuth0.description,
-  }
-
-  const defaultMongoRole = {
-    _id: roleInAuth0._id,
-    name: roleInAuth0.name,
-    description: roleInAuth0.description,
     client: mongoClientObj,
     sitemap: {
       tools: [],

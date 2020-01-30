@@ -1,12 +1,10 @@
 const nunjucks = require('nunjucks')
 
-const getUserPathwaysEmailData = require('./getUserPathwaysEmailData')
+const getUserEmailData = require('./getUserEmailData')
 const sendSingleEmail = require('./sendSingleEmail')
-const TEMPLATE_MAP = require('./template-map')
+const SUBSCRIPTION_MAP = require('./subscription-map')
 
-const PATHWAYS_ALERTS_SUB_ID = 'c89a5624-c3e1-45fd-8e7f-615256f3b2f2'
-
-const sendToSubscribedUsers = async (
+const sendToTestGroup = async (
   parent,
   {
     input: {
@@ -28,26 +26,26 @@ const sendToSubscribedUsers = async (
         - send mock user's subscription email
   */
   emailSubscriptions.map(async subscription => {
-    const templateDetails = TEMPLATE_MAP[subscription]
+    const { templateDetails } = SUBSCRIPTION_MAP[subscription]
 
-    let userDataForEmails
-    if (subscription === PATHWAYS_ALERTS_SUB_ID) {
-      const dataPromises = usersToMock.map(user => (
-        getUserPathwaysEmailData(
-          user,
-          subscription,
-          pulseDevDb,
-          date,
-        )
-      ))
+    const dataPromises = usersToMock.map(user => (
+      getUserEmailData(
+        user,
+        subscription,
+        pulseDevDb,
+        date,
+      )
+    ))
 
-      userDataForEmails = await Promise.all(dataPromises)
-    }
+    const userDataForEmails = await Promise.all(dataPromises)
 
     const sendMockSubEmailsPromises = []
 
     recipients.forEach(email => {
-      userDataForEmails.forEach(({ data, client: { description } }) => {
+      userDataForEmails.forEach(({
+        data,
+        client: { description }
+      }) => {
         if (data.data) {
           sendMockSubEmailsPromises.push(
             sendSingleEmail({
@@ -75,4 +73,4 @@ const sendToSubscribedUsers = async (
   return { message: 'success' }
 }
 
-module.exports = sendToSubscribedUsers
+module.exports = sendToTestGroup

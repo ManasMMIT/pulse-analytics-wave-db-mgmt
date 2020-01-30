@@ -1,6 +1,6 @@
-import React from "react";
-import PropTypes from "prop-types";
-import styled from "@emotion/styled";
+import React from "react"
+import PropTypes from "prop-types"
+import styled from "@emotion/styled"
 import { transparentize } from 'polished'
 
 import { Colors, Spacing, Transitions, ZIndexes } from '../utils/pulseStyles'
@@ -35,6 +35,8 @@ const Main = styled.section({
   flexDirection: 'column',
   justifyContent: "space-between",
   padding: 32,
+  overflowY: 'auto',
+  maxHeight: '80vh',
 }, props => ({
   width: props.width,
 }))
@@ -44,14 +46,14 @@ const Header = styled.div({
   justifyContent: 'space-between',
   marginBottom: 24,
   textTransform: 'uppercase',
-});
+})
 
 const Title = styled.div({
   color: Colors.BLACK,
   fontSize: 14,
   fontWeight: 700,
   marginRight: Spacing.NORMAL,
-});
+})
 
 const CloseButton = styled.button({
   background: transparentize(0.9, Colors.BLACK),
@@ -84,8 +86,8 @@ class Modal extends React.Component {
   handleClickAway = e => {
     e.stopPropagation()
 
-    if (!this.node.contains(e.target)) {
-      this.props.handleClose();
+    if (!this.node.contains(e.target) && !this.props.noClickAway) {
+      this.props.handleClose()
     }
   }
 
@@ -99,9 +101,9 @@ class Modal extends React.Component {
       disableHeader,
       submitButton,
       width
-    } = this.props;
+    } = this.props
 
-    if (!show) return null;
+    if (!show) return null
 
     // TODO: but the Create user button still gets clicked!
     const onClickCloseButton = e => {
@@ -125,11 +127,10 @@ class Modal extends React.Component {
               </Header>
             )
           }
-
           {children}
         </Main>
       </Wrapper>
-    );
+    )
   }
 }
 
@@ -142,6 +143,7 @@ Modal.defaultProps = {
   style: {},
   disableHeader: false,
   width: 'auto',
+  noClickAway: false,
 }
 
 Modal.propTypes = {
@@ -151,6 +153,7 @@ Modal.propTypes = {
   style: PropTypes.object,
   disableHeader: PropTypes.bool,
   width: PropTypes.string,
+  noClickAway: PropTypes.bool,
 }
 
-export default Modal;
+export default Modal

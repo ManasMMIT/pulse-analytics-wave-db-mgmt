@@ -1,8 +1,12 @@
 import React from 'react'
 import styled from '@emotion/styled'
+import { useAuth0 } from "../react-auth0-spa";
 import { transparentize } from 'polished'
 import { ApolloProvider } from '@apollo/react-hooks'
 import ApolloClient from 'apollo-boost'
+import UserProfile from './UserProfile'
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faSignOutAlt } from "@fortawesome/free-solid-svg-icons"
 
 import {
   BrowserRouter as Router,
@@ -26,14 +30,6 @@ const IconSource = {
   ORION: 'https://res.cloudinary.com/pulsedatatools/image/upload/v1573136582/polaris/icons/orion-1-white.svg',
   DELPHI: 'https://res.cloudinary.com/pulsedatatools/image/upload/v1573136582/polaris/icons/mercury-1-white.svg',
 }
-
-const client = new ApolloClient({
-  uri: '/api/graphql',
-  clientState: {
-    resolvers,
-    typeDefs,
-  }
-})
 
 const PolarisSidebar = styled.div({
   display: 'flex',
@@ -67,7 +63,60 @@ const StyledNavLink = styled(NavLink)({
   }
 })
 
+const sidebarBottomSectionStyle = { 
+  marginTop: 'auto', 
+  display: 'flex', 
+  flexDirection: 'column', 
+  alignItems: 'center'
+}
+
+const logoutButtonStyle = {
+  cursor: 'pointer',
+  padding: `${Spacing.NORMAL} ${Spacing.NORMAL} ${Spacing.SMALL}`,
+  marginBottom: 12,
+  marginTop: 12,
+}
+
 const App = () => {
+  const { loading, isAuthenticated, loginWithRedirect, logout, accessToken } = useAuth0()
+
+  if (loading) return null
+
+  if (!isAuthenticated) {
+    const { location: { pathname, search } } = window
+    loginWithRedirect({ appState: { targetUrl: pathname + search } })
+    return
+  }
+
+  const client = new ApolloClient({
+    uri: '/api/graphql',
+    clientState: {
+      resolvers,
+      typeDefs,
+    },
+    request: operation => {
+      operation.setContext(context => ({
+        headers: {
+          ...context.headers,
+          Authorization: `Bearer ${accessToken}` || null,
+        },
+      })
+      );
+    },
+    onError: errors => {
+      const { networkError } = errors
+
+      if (
+        networkError
+        && networkError.result
+        && networkError.result.message === 'jwt expired'
+      ) {
+        localStorage.clear()
+        client.clearStore().then(logout)
+      }
+    }
+  })
+
   return (
     <ApolloProvider client={client}>
         <Router>
@@ -89,8 +138,23 @@ const App = () => {
                 to="/delphi"
                 activeStyle={activeLinkStyle(Colors.DELPHI)}
               >
-                <img style={iconStyle} src={IconSource.DELPHI} />
+                <img style={iconStyle} src={IconSource. DELPHI} />
               </StyledNavLink>
+
+              <div style={sidebarBottomSectionStyle}>
+                <UserProfile />
+
+                <FontAwesomeIcon
+                  style={logoutButtonStyle}
+                  onClick={() => {
+                    localStorage.clear()
+                    client.clearStore().then(logout)
+                  }}
+                  icon={faSignOutAlt}
+                  color={Colors.WHITE}
+                  size="lg"
+                />
+              </div>
             </PolarisSidebar>
             <Switch>
               <Route path="/phoenix" component={Phoenix} />

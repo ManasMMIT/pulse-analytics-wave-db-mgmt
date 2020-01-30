@@ -6,7 +6,7 @@ import ResourcesButtonWithModal from './ResourcesButtonWithModal'
 
 const ButtonGroup = ({
   sourceEntity,
-  handlers,
+  handleToggle,
   nodeType,
   teamEntityNodes,
 }) => {
@@ -19,7 +19,7 @@ const ButtonGroup = ({
         nodeType={nodeType}
         sourceEntity={sourceEntity}
         teamEntityNodes={teamEntityNodes}
-        handleToggle={handlers.handleToggle}
+        handleToggle={handleToggle}
       />
       {
         selectedTeamNode && (
@@ -27,9 +27,6 @@ const ButtonGroup = ({
             nodeId={nodeId}
             nodeType={nodeType}
             selectedTeamNode={selectedTeamNode}
-            handlers={{
-              handleRegBrkToggle: handlers.handleRegBrkToggle
-            }}
           />
         )
       }
@@ -40,7 +37,7 @@ const ButtonGroup = ({
 ButtonGroup.propTypes = {
   sourceEntity: PropTypes.object,
   teamEntityNodes: PropTypes.object,
-  handlers: PropTypes.object,
+  handleToggle: PropTypes.func,
   resources: PropTypes.object,
   nodeType: PropTypes.string,
 }

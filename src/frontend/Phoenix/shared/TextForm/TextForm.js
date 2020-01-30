@@ -55,19 +55,29 @@ class TextForm extends Component {
   }
 }
 
-const TextFormContainer = ({ mutationDoc, clientMutation, ...otherProps }) => {
+const TextFormContainer = ({ 
+  mutationDoc, 
+  clientMutation,
+  refetchQueries,
+  ...otherProps 
+}) => {
   const client = useApolloClient()
 
-  const updateClientMutationCallback = (cache, { data }) => {
-    client.mutate({
-      mutation: clientMutation,
-      variables: { data },
-    })
-  }
+  const updateClientMutationCallback = clientMutation
+    ? (cache, { data }) => {
+      client.mutate({
+        mutation: clientMutation,
+        variables: { data },
+      })
+    }
+    : () => {}
 
   const [handleSubmit, { loading, error }] = useMutation(
     mutationDoc,
-    { update: updateClientMutationCallback },
+    { 
+      update: updateClientMutationCallback,
+      refetchQueries,
+    },
   )
 
   if (loading) return <Spinner />
@@ -87,14 +97,16 @@ TextFormContainer.propTypes = {
   afterMutationHook: PropTypes.func,
   clientMutation: PropTypes.object,
   additionalFormData: PropTypes.object,
+  refetchQueries: PropTypes.array,
 }
 
 TextFormContainer.defaultProps = {
   data: { description: '' },
   mutationDoc: {},
-  clientMutation: {},
+  clientMutation: null,
   afterMutationHook: () => null,
   additionalFormData: {},
+  refetchQueries: [],
 }
 
 export default TextFormContainer
