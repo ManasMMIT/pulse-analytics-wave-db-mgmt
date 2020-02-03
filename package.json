@@ -64,6 +64,7 @@
     "eject": "react-scripts eject",
     "repl": "node --inspect=127.0.0.1:2000 ./pulse-core-psql/sequelizeConsole.js",
     "phoenix": "nodemon --inspect=127.0.0.1:2000 ./src/backend",
+    "phoenix-prod": "node --inspect=127.0.0.1:2000 ./src/backend",
     "test": "jest",
     "test:debug": "node --inspect node_modules/.bin/jest --runInBand",
     "start:prod": "NODE_ENV=production node ./src/backend"

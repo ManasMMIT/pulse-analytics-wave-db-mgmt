@@ -1,5 +1,6 @@
 const { ObjectId } = require('mongodb')
 
+const getSanitizedData = require('./../../collection/getSanitizedData')
 const updateProvidersCollection = require('./../utils/updateProvidersCollection')
 const updateConnectionsAndAlerts = require('./../utils/updateConnectionsAndAlerts')
 
@@ -16,6 +17,8 @@ const updateProviderOrganization = async (
     ...setObj
   } = body
 
+  const cleanSetObj = getSanitizedData([setObj])[0]
+
   const session = mongoClient.startSession()
 
   let result
@@ -27,7 +30,7 @@ const updateProviderOrganization = async (
       .collection('organizations')
       .findOneAndUpdate(
         { _id },
-        { $set: setObj },
+        { $set: cleanSetObj },
         { returnOriginal: false, session },
       )
 

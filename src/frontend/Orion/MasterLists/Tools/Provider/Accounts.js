@@ -29,7 +29,7 @@ const CREATE_BUTTON_TXT = 'Create Provider Account'
 const buttonStyle = {
   background: "#234768",
   color: 'white',
-  margin: '0px 12px',
+  marginTop: 12,
 }
 
 const defaultPanelItemStyle = {
@@ -53,18 +53,24 @@ const headerChildren = data => {
   if (csvData.length) csvData.splice(0, 0, {}, {})
 
   return (
-    <div style={{ display: 'flex' }}>
-      <ProviderAccountModal
-        buttonLabel={CREATE_BUTTON_TXT}
-        buttonStyle={buttonStyle}
-      />
-      <DownloadCsvButton
-        createBackup
-        filename={`providers-master-list`}
-        isDisabled={!csvData.length}
-        data={csvData}
-      />
-      <ProviderImportButton />
+    <div style={{ display: 'flex', alignItems: 'center' }}>
+      <div style={{ padding: 12 }}>
+
+        <h3>Import/Export Data</h3>
+        <div style={{ border: `1px solid ${transparentize(0.9, Colors.BLACK)}`, padding: 12, minHeight: 92 }}>
+          <ProviderImportButton />
+          <DownloadCsvButton
+            createBackup
+            filename={`providers-master-list`}
+            isDisabled={!csvData.length}
+            data={csvData}
+          />
+        </div>
+        <ProviderAccountModal
+          buttonLabel={CREATE_BUTTON_TXT}
+          buttonStyle={buttonStyle}
+        />
+      </div>
     </div>
   )
 } 

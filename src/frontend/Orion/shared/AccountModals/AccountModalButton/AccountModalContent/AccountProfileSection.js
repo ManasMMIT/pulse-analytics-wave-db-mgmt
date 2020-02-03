@@ -8,6 +8,8 @@ import {
   SectionTitle,
 } from '../styledAccountModalButtonComponents'
 
+import AccountMetaData from './AccountMetaData'
+
 const wrapperStyle = {
   padding: '0 24px',
 }
@@ -19,7 +21,10 @@ const AccountProfileSection = ({
 }) => {
   return (
     <div style={wrapperStyle}>
-      <SectionTitle>Account Info</SectionTitle>
+      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <SectionTitle>Account Info</SectionTitle>
+        <AccountMetaData accountId={formState._id} />
+      </div>
       <Label>
         <LabelText>name</LabelText>
         <Input

@@ -1,8 +1,13 @@
 import React, { useState } from 'react'
+import { useMutation } from '@apollo/react-hooks'
 import PropTypes from 'prop-types'
 import XLSX from 'xlsx'
 
 import Spinner from './../Phoenix/shared/Spinner'
+
+import {
+  UPSERT_ORGANIZATION_META,
+} from './../api/mutations'
 
 const onFileAdded = (e, setData) => {
   const file = e.currentTarget.files[0]
@@ -34,6 +39,15 @@ const CsvImportButton = ({
   const [data, setData] = useState(null)
   const [isImportingData, setIsImportingData]= useState(false)
 
+  const [writeMetaData] = useMutation(UPSERT_ORGANIZATION_META, {
+    variables: {
+      input: {
+        action: 'import',
+        _ids: (data || []).map(({ _id }) => _id),
+      }
+    }
+  })
+
   return (
     <div>
       <input
@@ -47,6 +61,7 @@ const CsvImportButton = ({
         onChange={e => onFileAdded(e, setData)}
       />
       <button
+        style={{ margin: '12px 0px' }}
         disabled={!data}
         onClick={() => {
           setIsImportingData(true)
@@ -55,6 +70,9 @@ const CsvImportButton = ({
             const input = document.querySelector('#provider-csv-input')
   
             input.value = null
+
+            writeMetaData()
+
             setData(null)
             setIsImportingData(false)
           })

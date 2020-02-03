@@ -1,4 +1,5 @@
 const fs = require('fs')
+const getSanitizedData = require('./getSanitizedData')
 
 const backupExport = (
   parent,
@@ -6,7 +7,9 @@ const backupExport = (
   context,
   info
 ) => {
-  const jsonString = JSON.stringify(data)
+  const cleanData = getSanitizedData(data)
+
+  const jsonString = JSON.stringify(cleanData)
 
   fs.mkdirSync('./exports-backups', { recursive: true })
 

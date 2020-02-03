@@ -16,6 +16,10 @@ import {
 } from '../../../../api/queries'
 
 import {
+  UPSERT_ORGANIZATION_META,
+} from '../../../../api/mutations'
+
+import {
   SubmitButton,
 } from './styledAccountModalButtonComponents'
 import Spinner from '../../../../Phoenix/shared/Spinner'
@@ -76,12 +80,23 @@ const ModalContainer = ({
     }
   }, [isAccountLoading])
 
+  const [writeMetaData] = useMutation(UPSERT_ORGANIZATION_META, {
+    variables: {
+      input: {
+        action: 'update',
+        _ids: [accountId],
+      }
+    }
+  })
+
   const [save, { loading }] = useMutation(
     saveMutationDoc,
     {
       variables: { input: formState },
       refetchQueries,
       onCompleted: () => {
+        writeMetaData()
+
         const search = queryString.stringify(restOfQueryString)
         history.push({ search })
 

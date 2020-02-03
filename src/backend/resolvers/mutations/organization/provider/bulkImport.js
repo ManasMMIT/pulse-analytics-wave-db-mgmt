@@ -1,5 +1,5 @@
 const { ObjectId } = require('mongodb')
-const _ = require('lodash')
+const getSanitizedData = require('./../../collection/getSanitizedData')
 
 const {
   PROVIDER_TOOL_ID,
@@ -13,9 +13,16 @@ const bulkImport = async (
   { pulseCoreDb, mongoClient, pulseDevDb },
   info,
 ) => {
+  const cleanData = getSanitizedData(data)
+
+  // chunkify data and strip out potential meta data fields
   let splitData = []
-  while (data.length > 0) {
-    splitData.push(data.splice(0, 200))
+  while (cleanData.length > 0) {
+    const chunk = cleanData.splice(0, 200).map(
+      ({ updatedAt, exportedAt, updater, exporter, ...rest }) => rest
+    )
+
+    splitData.push(chunk)
   }
 
   const session = mongoClient.startSession()

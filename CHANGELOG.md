@@ -14,6 +14,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased] - Started: 1-30-20
 
+### Added
+- `Orion`: bulk export and import on organization master lists (currently only on Providers), and organization meta data on account modal.
+
 ## [1.0.0] - Started: 12-23-19
 
 ### Added
