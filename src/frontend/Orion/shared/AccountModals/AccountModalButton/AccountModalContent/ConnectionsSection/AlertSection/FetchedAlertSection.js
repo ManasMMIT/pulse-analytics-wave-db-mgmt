@@ -1,6 +1,5 @@
 import React from 'react'
 import { useQuery } from '@apollo/react-hooks'
-import moment from 'moment'
 
 import {
   GET_ALERT,
@@ -26,10 +25,8 @@ const FetchedAlertSection = ({ alertId, connection, hydrateConnectionAlert }) =>
   if (!loading) {
     const { date, description, type } = data.alert
 
-    const formattedDate = moment(date).format('L')
-
     alertData = {
-      alertDate: formattedDate,
+      alertDate: date,
       alertDescription: description,
       alertType: type,
     }

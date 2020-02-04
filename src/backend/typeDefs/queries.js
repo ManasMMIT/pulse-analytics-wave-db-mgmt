@@ -178,9 +178,9 @@ const queries = gql`
   type OrganizationMeta {
     _id: ID!
     accountId: ID
-    exportedAt: Date
+    exportedAt: DateTime
     exporter: JSON
-    updatedAt: Date
+    updatedAt: DateTime
     updater: JSON
   }
 `

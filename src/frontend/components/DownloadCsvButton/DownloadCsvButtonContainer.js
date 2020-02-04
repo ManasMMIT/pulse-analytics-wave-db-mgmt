@@ -4,6 +4,11 @@ import PropTypes from 'prop-types'
 import { parse } from 'json2csv'
 import _ from 'lodash'
 
+import Spinner from '../../Phoenix/shared/Spinner'
+import DownloadCsvButton from './DownloadCsvButton'
+
+import { formatDateTime } from '../../utils/formatDate'
+
 import {
   BACKUP_EXPORT,
   UPSERT_ORGANIZATION_META,
@@ -13,8 +18,36 @@ import {
   GET_ORGANIZATION_META,
 } from './../../api/queries'
 
-import Spinner from '../../Phoenix/shared/Spinner'
-import DownloadCsvButton from './DownloadCsvButton'
+// ! needs to be pulled out to make this component more reusable
+const getOrgsWithMetaData = (data, metaData) => {
+  const metaDataGroupedByOrgId = _.groupBy(metaData, 'accountId')
+
+  const clonedData = _.cloneDeep(data)
+
+  const dataWithMetaFields = clonedData.map(clonedDatum => {
+    const metaFields = metaDataGroupedByOrgId[clonedDatum._id]
+      ? metaDataGroupedByOrgId[clonedDatum._id][0]
+      : {}
+
+    const { exportedAt, exporter, updatedAt, updater } = metaFields
+
+    const metaFieldObj = metaFields
+      ? {
+        exportedAt: exportedAt ? formatDateTime(exportedAt) : null,
+        exporter: exporter ? exporter.name : null,
+        updatedAt: updatedAt ? formatDateTime(updatedAt) : null,
+        updater: updater ? updater.name : null,
+      }
+      : {}
+
+    return {
+      ...clonedDatum,
+      ...metaFieldObj,
+    }
+  })
+
+  return dataWithMetaFields
+}
 
 const DownloadCsvButtonContainer = ({
   data,
@@ -23,53 +56,31 @@ const DownloadCsvButtonContainer = ({
   createBackup,
   children,
 }) => {
-  const [dataToExport, setDataToExport] = useState(data)
-
-  const dataIds = dataToExport.reduce((acc, { _id }) => {
+  const dataIds = data.reduce((acc, { _id }) => {
     // ? data comes in with empty rows
     if (_id) acc.push(_id)
 
     return acc
   }, [])
 
-  useQuery(
+  const {
+    data: metaData,
+    loading: isMetaDataLoading,
+  } = useQuery(
     GET_ORGANIZATION_META,
-    {
-      variables: { _ids: dataIds },
-      onCompleted: ({ organizationMeta }) => {
-        const metaDataGroupedByOrgId = _.groupBy(organizationMeta, 'accountId')
-
-        const clonedData = _.cloneDeep(dataToExport)
-
-        const dataWithMetaFields = clonedData.map(clonedDatum => {
-          const metaFields = metaDataGroupedByOrgId[clonedDatum._id]
-            ? metaDataGroupedByOrgId[clonedDatum._id][0]
-            : {}
-
-          const metaFieldObj = metaFields
-            ? {
-              exportedAt: metaFields.exportedAt,
-              exporter: metaFields.exporter ? metaFields.exporter.name : null,
-              updatedAt: metaFields.updatedAt,
-              updater: metaFields.updater ? metaFields.updater.name : null,
-            }
-            : {}
-
-          return {
-            ...clonedDatum,
-            ...metaFieldObj,
-          }
-        })
-
-        setDataToExport(dataWithMetaFields)
-      }
-    }
+    { variables: { _ids: dataIds } }
   )
+
+  let dataWithMetaFields = data
+  if (!isMetaDataLoading) {
+    const { organizationMeta } = metaData
+    dataWithMetaFields = getOrgsWithMetaData(data, organizationMeta)
+  }
 
   const [finalFilename, setFinalFilename] = useState(filename)
 
-  const csv = dataToExport.length
-    ? parse(dataToExport, { includeEmptyRows: true })
+  const csv = dataWithMetaFields.length
+    ? parse(dataWithMetaFields, { includeEmptyRows: true })
     : ''
 
   const encodedUri = encodeURI("data:text/csv;charset=utf-8," + csv)
@@ -80,19 +91,26 @@ const DownloadCsvButtonContainer = ({
         action: 'export',
         _ids: dataIds,
       }
-    }
+    },
   })
 
   const [backupExport, { loading: isBackingUp, error }] = useMutation(BACKUP_EXPORT, {
-    onCompleted: async () => {
+    onCompleted: () => {
       const link = document.createElement("a")
       link.href = encodedUri
       link.download = `${finalFilename}.csv`
-
-      await writeMetaData()
-
       link.click()
       link.remove() // ! never actually appended to DOM, so probably doesn't do anything
+
+      writeMetaData({
+        refetchQueries: [
+          { query: GET_ORGANIZATION_META, variables: { _ids: dataIds } },
+          // ! Note: the below isn't needed but we don't understand why
+          // ...dataIds.map(dataId => ({
+          //   query: GET_ORGANIZATION_META, variables: { _ids: [dataId] }
+          // }))
+        ]
+      })
     }
   })
 
@@ -107,7 +125,7 @@ const DownloadCsvButtonContainer = ({
       variables: {
         input: {
           filename: finalFileName,
-          data: dataToExport,
+          data: dataWithMetaFields,
         }
       },
     })

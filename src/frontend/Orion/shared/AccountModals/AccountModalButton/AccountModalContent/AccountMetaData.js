@@ -1,12 +1,12 @@
 import React from 'react'
 import { useQuery } from '@apollo/react-hooks'
-import moment from 'moment'
 
 import {
   GET_ORGANIZATION_META,
 } from './../../../../../api/queries'
 
 import { AlphaColors } from './../../../../../utils/pulseStyles'
+import { formatDateTime } from '../../../../../utils/formatDate'
 
 const dataStyle = {
   fontSize: 12,
@@ -19,7 +19,7 @@ const AccountMetaData = ({
   accountId,
 }) => {
   const { data } = useQuery(GET_ORGANIZATION_META, {
-    variables: { _ids: [accountId] }
+    variables: { _ids: [accountId] },
   })
 
   if (!data || !data.organizationMeta.length) return null
@@ -31,22 +31,31 @@ const AccountMetaData = ({
     exporter,
   } = data.organizationMeta[0]
 
-  const formattedUpdatedDate = updatedAt
-    ? moment(updatedAt).format('L')
-    : null
+  const formattedUpdatedDate = updatedAt ? formatDateTime(updatedAt) : null
+  const formattedExportedDate = exportedAt ? formatDateTime(exportedAt) : null
 
-  const formattedExportedDate = exportedAt
-    ? moment(exportedAt).format('L')
-    : null
-
-  return (
-    <div>
+  let updatedAtNode = null
+  if (formattedUpdatedDate) {
+    updatedAtNode = (
       <div style={dataStyle}>
         Last Updated: {formattedUpdatedDate} by {updater.name}
       </div>
+    )
+  }
+
+  let exportedAtNode = null
+  if (formattedExportedDate) {
+    exportedAtNode = (
       <div style={dataStyle}>
         Last Exported: {formattedExportedDate} by {exporter.name}
       </div>
+    )
+  }
+
+  return (
+    <div>
+      {updatedAtNode}
+      {exportedAtNode}
     </div>
   )
 }

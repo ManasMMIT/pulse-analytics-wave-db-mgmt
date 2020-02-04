@@ -1,4 +1,5 @@
 const { ObjectId } = require('mongodb')
+const _ = require('lodash')
 
 module.exports = async (
   parent,
@@ -6,7 +7,9 @@ module.exports = async (
   { pulseCoreDb, user },
   info,
 ) => {
-  const actualIds = _ids.map(_id => ObjectId(_id))
+  const isIdsArrInvalid = _.isEmpty(_.compact(_ids)) // ! _ids can come in as [null] when you're creating an org
+
+  const actualIds = isIdsArrInvalid ? [] : _ids.map(_id => ObjectId(_id))
 
   const metaDocs = []
   const upsertMetaDocs = actualIds.map(async _id => {
