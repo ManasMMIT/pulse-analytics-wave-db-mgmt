@@ -12,6 +12,7 @@ const SCRAPER_COLLECTIONS = [
   'daiichiTgct', 
   'merckBiosimilars',
   'merckKeytruda',
+  'merckRenflexis',
 ]
 
 const uploadCollection = async (
