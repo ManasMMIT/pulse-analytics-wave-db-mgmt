@@ -7,7 +7,7 @@ import { transparentize } from 'polished'
 import Panel from '../../../../Phoenix/shared/Panel'
 import { ProviderAccountModal } from '../../../shared/AccountModals'
 import DeleteButton from '../../../shared/DeleteButton'
-import DownloadCsvButton from './../../../../components/DownloadCsvButton'
+import ExportExcelButton from '../../../../components/ExportExcelButton'
 import ProviderImportButton from './ProviderImportButton'
 
 import {
@@ -29,7 +29,6 @@ const CREATE_BUTTON_TXT = 'Create Provider Account'
 const buttonStyle = {
   background: "#234768",
   color: 'white',
-  marginTop: 12,
 }
 
 const defaultPanelItemStyle = {
@@ -47,30 +46,26 @@ const defaultPanelItemStyle = {
 }
 
 const headerChildren = data => {
-  const csvData = data
-    .map(({ __typename, connections, ...datum }) => datum)
+  const exportData = data
+    .map(({ __typename, connections, ...datum }) => datum) 
 
-  if (csvData.length) csvData.splice(0, 0, {}, {})
+  const { name } = JSON.parse(localStorage.getItem('user'))
 
   return (
-    <div style={{ display: 'flex', alignItems: 'center' }}>
-      <div style={{ padding: 12 }}>
-
-        <h3>Import/Export Data</h3>
-        <div style={{ border: `1px solid ${transparentize(0.9, Colors.BLACK)}`, padding: 12, minHeight: 92 }}>
-          <ProviderImportButton />
-          <DownloadCsvButton
-            createBackup
-            filename={`providers-master-list`}
-            isDisabled={!csvData.length}
-            data={csvData}
-          />
-        </div>
+    <div>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around', margin: 24 }}>
         <ProviderAccountModal
           buttonLabel={CREATE_BUTTON_TXT}
           buttonStyle={buttonStyle}
         />
+        <ExportExcelButton
+          createBackup
+          filename={`providers-master-list`}
+          isDisabled={!exportData.length}
+          data={exportData}
+        />
       </div>
+      { name === 'admin' && <ProviderImportButton /> }
     </div>
   )
 } 

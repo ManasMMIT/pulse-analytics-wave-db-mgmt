@@ -1,22 +1,33 @@
 import React, { useState } from 'react'
 import { useMutation, useQuery } from '@apollo/react-hooks'
 import PropTypes from 'prop-types'
-import { parse } from 'json2csv'
 import _ from 'lodash'
-
-import Spinner from '../../Phoenix/shared/Spinner'
-import DownloadCsvButton from './DownloadCsvButton'
-
-import { formatDateTime } from '../../utils/formatDate'
+import XLSX from 'xlsx'
+import { saveAs } from 'file-saver'
 
 import {
   BACKUP_EXPORT,
   UPSERT_ORGANIZATION_META,
-} from './../../api/mutations'
+} from '../../api/mutations'
 
 import {
   GET_ORGANIZATION_META,
-} from './../../api/queries'
+} from '../../api/queries'
+
+import Spinner from '../../Phoenix/shared/Spinner'
+import ExportExcelButton from './ExportExcelButton'
+import {
+  formatDateTime,
+  formatDateTimeDotted,
+} from '../../utils/formatDate'
+
+// taken from https://redstapler.co/sheetjs-tutorial-create-xlsx/
+const s2ab = s => {
+  var buf = new ArrayBuffer(s.length);
+  var view = new Uint8Array(buf);
+  for (var i = 0; i !== s.length; ++i) view[i] = s.charCodeAt(i) & 0xFF;
+  return buf;
+}
 
 // ! needs to be pulled out to make this component more reusable
 const getOrgsWithMetaData = (data, metaData) => {
@@ -49,13 +60,15 @@ const getOrgsWithMetaData = (data, metaData) => {
   return dataWithMetaFields
 }
 
-const DownloadCsvButtonContainer = ({
+const ExportExcelButtonContainer = ({
   data,
   filename,
   isDisabled,
   createBackup,
   children,
 }) => {
+  const [finalFilename, setFinalFilename] = useState(filename)
+
   const dataIds = data.reduce((acc, { _id }) => {
     // ? data comes in with empty rows
     if (_id) acc.push(_id)
@@ -68,7 +81,9 @@ const DownloadCsvButtonContainer = ({
     loading: isMetaDataLoading,
   } = useQuery(
     GET_ORGANIZATION_META,
-    { variables: { _ids: dataIds } }
+    {
+      variables: { _ids: dataIds },
+    }
   )
 
   let dataWithMetaFields = data
@@ -77,13 +92,12 @@ const DownloadCsvButtonContainer = ({
     dataWithMetaFields = getOrgsWithMetaData(data, organizationMeta)
   }
 
-  const [finalFilename, setFinalFilename] = useState(filename)
+  /* convert from json to workbook */
+  const worksheet = XLSX.utils.json_to_sheet(dataWithMetaFields)
+  const workbook = XLSX.utils.book_new()
+  XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet1')
 
-  const csv = dataWithMetaFields.length
-    ? parse(dataWithMetaFields, { includeEmptyRows: true })
-    : ''
-
-  const encodedUri = encodeURI("data:text/csv;charset=utf-8," + csv)
+  const wbOut = XLSX.write(workbook, { bookType: 'xlsx', type: 'binary' })
 
   const [writeMetaData] = useMutation(UPSERT_ORGANIZATION_META, {
     variables: {
@@ -95,12 +109,15 @@ const DownloadCsvButtonContainer = ({
   })
 
   const [backupExport, { loading: isBackingUp, error }] = useMutation(BACKUP_EXPORT, {
-    onCompleted: () => {
-      const link = document.createElement("a")
-      link.href = encodedUri
-      link.download = `${finalFilename}.csv`
-      link.click()
-      link.remove() // ! never actually appended to DOM, so probably doesn't do anything
+    onCompleted: async () => {
+      const blob = new Blob(
+        [s2ab(wbOut)],
+        {
+          type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        }
+      )
+      
+      saveAs(blob, finalFilename + '.xlsx')
 
       writeMetaData({
         refetchQueries: [
@@ -114,10 +131,12 @@ const DownloadCsvButtonContainer = ({
     }
   })
 
-  const { sub: userId } = JSON.parse(localStorage.getItem('user'))
+  const user = JSON.parse(localStorage.getItem('user'))
+
+  const formattedDate = formatDateTimeDotted(new Date())
 
   const backupExportWithTimestamp = () => {
-    const finalFileName = `${filename}-${new Date().toISOString()}-${userId}`
+    const finalFileName = `${filename}_${formattedDate}_${user.name}`
 
     setFinalFilename(finalFileName)
 
@@ -135,16 +154,16 @@ const DownloadCsvButtonContainer = ({
 
   return (
     <div>
-      <DownloadCsvButton
+      <ExportExcelButton
         isDisabled={isDisabled}
         onClick={onClick}
       >
-      {
-        isBackingUp
-          ? <Spinner />
-          : children
-      }
-      </DownloadCsvButton>
+        {
+          isBackingUp
+            ? <Spinner />
+            : children
+        }
+      </ExportExcelButton>
       {
         error && <div style={{ color: 'red', fontSize: 10, padding: 4 }}>Export Failed</div>
       }
@@ -152,22 +171,26 @@ const DownloadCsvButtonContainer = ({
   )
 }
 
-DownloadCsvButtonContainer.propTypes = {
+ExportExcelButtonContainer.propTypes = {
   data: PropTypes.array, // JSON
   createBackup: PropTypes.bool,
-  ...DownloadCsvButton.propTypes,
+  ...ExportExcelButton.propTypes,
 }
 
-DownloadCsvButtonContainer.defaultProps = {
+ExportExcelButtonContainer.defaultProps = {
   data: [],
   createBackup: false,
-  ...DownloadCsvButton.defaultProps,
+  ...ExportExcelButton.defaultProps,
 }
 
-const DownloadCsvButtonSuperContainer = props => {
-  if (!props.data.length) return null
+const ExportExcelButtonSuperContainer = props => {
+  if (!props.data.length) return (
+    <ExportExcelButton isDisabled={true}>
+      {props.children}
+    </ExportExcelButton>
+  )
 
-  return <DownloadCsvButtonContainer {...props} />
+  return <ExportExcelButtonContainer {...props} />
 }
 
-export default DownloadCsvButtonSuperContainer
+export default ExportExcelButtonSuperContainer

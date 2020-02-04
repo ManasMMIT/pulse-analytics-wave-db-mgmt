@@ -3,11 +3,11 @@ import { useMutation } from '@apollo/react-hooks'
 import PropTypes from 'prop-types'
 import XLSX from 'xlsx'
 
-import Spinner from './../Phoenix/shared/Spinner'
+import Spinner from '../Phoenix/shared/Spinner'
 
 import {
   UPSERT_ORGANIZATION_META,
-} from './../api/mutations'
+} from '../api/mutations'
 
 const onFileAdded = (e, setData) => {
   const file = e.currentTarget.files[0]
@@ -33,7 +33,7 @@ const onFileAdded = (e, setData) => {
   reader.readAsArrayBuffer(file)
 }
 
-const CsvImportButton = ({
+const ImportButton = ({
   onClick,
 }) => {
   const [data, setData] = useState(null)
@@ -49,7 +49,7 @@ const CsvImportButton = ({
   })
 
   return (
-    <div>
+    <div style={{ display: 'flex', margin: 12, alignItems: 'center' }}>
       <input
         id="provider-csv-input"
         style={{ display: 'block' }}
@@ -61,14 +61,14 @@ const CsvImportButton = ({
         onChange={e => onFileAdded(e, setData)}
       />
       <button
-        style={{ margin: '12px 0px' }}
+        style={{ margin: 12 }}
         disabled={!data}
         onClick={() => {
           setIsImportingData(true)
 
           onClick(data).then(() => {
             const input = document.querySelector('#provider-csv-input')
-  
+
             input.value = null
 
             writeMetaData()
@@ -76,29 +76,28 @@ const CsvImportButton = ({
             setData(null)
             setIsImportingData(false)
           })
-          .catch(err => {
-            setIsImportingData(false)
-            console.error(err)
-          })
+            .catch(err => {
+              setIsImportingData(false)
+              console.error(err)
+            })
         }}
       >
-        Import File
+        {
+          isImportingData
+            ? <Spinner />
+            : 'Import File'
+        }
       </button>
-      {
-        isImportingData
-          ? <Spinner />
-          : null
-      }
     </div>
   )
 }
 
-CsvImportButton.propTypes = {
+ImportButton.propTypes = {
   onClick: PropTypes.func,
 }
 
-CsvImportButton.defaultProps = {
+ImportButton.defaultProps = {
   onClick: () => {},
 }
 
-export default CsvImportButton
+export default ImportButton
