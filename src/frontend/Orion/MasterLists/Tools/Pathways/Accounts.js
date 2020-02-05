@@ -5,7 +5,7 @@ import { transparentize } from 'polished'
 
 import Panel from '../../../../Phoenix/shared/Panel'
 
-import { PathwaysAccountModal } from '../../../shared/AccountModals'
+import { PathwaysAccountModalButton } from '../../../shared/AccountModals'
 
 import DeleteButton from '../../../shared/DeleteButton'
 
@@ -47,7 +47,7 @@ const defaultPanelItemStyle = {
 
 const headerChildren = (
   <div>
-    <PathwaysAccountModal
+    <PathwaysAccountModalButton
       buttonLabel={CREATE_BUTTON_TXT}
       buttonStyle={buttonStyle}
     />
@@ -56,7 +56,7 @@ const headerChildren = (
 
 const buttonGroupCallback = entity => (
   <>
-    <PathwaysAccountModal
+    <PathwaysAccountModalButton
       account={entity}
       buttonLabel={editIcon}
       isEditModal

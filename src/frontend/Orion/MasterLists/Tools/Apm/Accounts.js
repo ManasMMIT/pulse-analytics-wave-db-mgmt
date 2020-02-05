@@ -6,7 +6,7 @@ import { transparentize } from 'polished'
 
 import Panel from '../../../../Phoenix/shared/Panel'
 
-import { ApmAccountModal } from './../../../shared/AccountModals'
+import { ApmAccountModalButton } from './../../../shared/AccountModals'
 import DeleteButton from '../../../shared/DeleteButton'
 
 import {
@@ -46,7 +46,7 @@ const defaultPanelItemStyle = {
 
 const headerChildren = (
   <div>
-    <ApmAccountModal
+    <ApmAccountModalButton
       buttonLabel={CREATE_BUTTON_TXT}
       buttonStyle={buttonStyle}
     />
@@ -55,7 +55,7 @@ const headerChildren = (
 
 const buttonGroupCallback = entity => (
   <>
-    <ApmAccountModal
+    <ApmAccountModalButton
       account={entity}
       buttonLabel={editIcon}
       isEditModal

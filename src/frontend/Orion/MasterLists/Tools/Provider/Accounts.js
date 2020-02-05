@@ -5,7 +5,7 @@ import { faEdit } from "@fortawesome/free-solid-svg-icons"
 import { transparentize } from 'polished'
 
 import Panel from '../../../../Phoenix/shared/Panel'
-import { ProviderAccountModal } from '../../../shared/AccountModals'
+import { ProviderAccountModalButton } from '../../../shared/AccountModals'
 import DeleteButton from '../../../shared/DeleteButton'
 import ExportExcelButton from '../../../../components/ExportExcelButton'
 import ProviderImportButton from './ProviderImportButton'
@@ -54,7 +54,7 @@ const headerChildren = data => {
   return (
     <div>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around', margin: 24 }}>
-        <ProviderAccountModal
+        <ProviderAccountModalButton
           buttonLabel={CREATE_BUTTON_TXT}
           buttonStyle={buttonStyle}
         />
@@ -72,7 +72,7 @@ const headerChildren = data => {
 
 const buttonGroupCallback = entity => (
   <>
-    <ProviderAccountModal
+    <ProviderAccountModalButton
       account={entity}
       buttonLabel={editIcon}
       isEditModal

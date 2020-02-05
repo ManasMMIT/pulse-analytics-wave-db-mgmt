@@ -1,11 +1,11 @@
-import PathwaysAccountModal from './PathwaysAccountModal'
-import ProviderAccountModal from './ProviderAccountModal'
-import ApmAccountModal from './ApmAccountModal'
-import PayerAccountModal from './PayerAccountModal'
+import PathwaysAccountModalButton from './PathwaysAccountModalButton'
+import ProviderAccountModalButton from './ProviderAccountModalButton'
+import ApmAccountModalButton from './ApmAccountModalButton'
+import PayerAccountModalButton from './PayerAccountModalButton'
 
 export {
-  PathwaysAccountModal,
-  ProviderAccountModal,
-  ApmAccountModal,
-  PayerAccountModal,
+  PathwaysAccountModalButton,
+  ProviderAccountModalButton,
+  ApmAccountModalButton,
+  PayerAccountModalButton,
 }
