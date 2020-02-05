@@ -2,6 +2,7 @@ const { latestMonthYearPipeline } = require('../../utils')
 const persistStateLivesTotals = require('./persist-state-lives-totals')
 const persistNationalLivesTotal = require('./persist-national-lives-totals')
 const consolidatePayerData = require('../consolidate-payer-data')
+const appendLivesPercentData = require('./append-percent-lives')
 
 const pushToDev = async ({
   collectionName,
@@ -37,6 +38,7 @@ const pushToDev = async ({
 
     if (isNationalLivesCollection) {
       await persistNationalLivesTotal({ latestMonthYearData, collectionName, pulseCoreDb })
+      await appendLivesPercentData({ pulseDevDb, pulseCoreDb, terminateScript })
     }
 
     await consolidatePayerData({ pulseDevDb, pulseCoreDb, terminateScript })

@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - `Orion`: bulk export and import on organization master lists (currently only on Providers), and organization meta data on account modal.
+- `Node Scripts`: added `append-percent-lives.js` which appends a `structuredLives` field to `payerHistoricalDrgNationalLives` and `payerHistoricalMmitNationalLives` on `pulse-dev`
 
 ## [1.0.0] - Started: 12-23-19
 
