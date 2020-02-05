@@ -7,6 +7,7 @@ const jwt = require('express-jwt')
 const jwksRsa = require('jwks-rsa')
 const morgan = require('morgan')
 const api = require('./api')
+const pql = require('./pql')
 
 const app = express()
 const port = 1337
@@ -67,6 +68,19 @@ app.use(
     }
   ), 
   api
+)
+
+app.use(
+  '/pql',
+  checkJwt,
+  (err, req, res, next) => {
+    if (err.name === 'UnauthorizedError') {
+      res.status(401).json(err)
+    } else {
+      next()
+    }
+  },
+  pql
 )
 
 app.listen(port, () => console.log(`PHOENIX ONLINE. PORT ${port}!`))
