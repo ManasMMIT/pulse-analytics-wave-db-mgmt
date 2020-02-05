@@ -22,6 +22,8 @@ import {
 
 import { Colors } from '../../../../utils/pulseStyles'
 
+import Test from './../../../Test'
+
 const editIcon = <FontAwesomeIcon size="lg" icon={faEdit} />
 
 const CREATE_BUTTON_TXT = 'Create Provider Account'
@@ -101,6 +103,8 @@ const panelItemConfig = {
 }
 
 const ProviderAccounts = () => (
+  <>
+  <Test />
   <Panel
     title="Provider Accounts"
     headerChildren={headerChildren}
@@ -113,6 +117,7 @@ const ProviderAccounts = () => (
     }}
     panelItemConfig={panelItemConfig}
   />
+  </>
 )
 
 export default ProviderAccounts
