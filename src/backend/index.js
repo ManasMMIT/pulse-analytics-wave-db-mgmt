@@ -6,7 +6,7 @@ const fs = require('fs')
 const jwt = require('express-jwt')
 const jwksRsa = require('jwks-rsa')
 const morgan = require('morgan')
-const routes = require('./routes')
+const api = require('./api')
 
 const app = express()
 const port = 1337
@@ -66,7 +66,7 @@ app.use(
       stream: accessLogStream,
     }
   ), 
-  routes
+  api
 )
 
 app.listen(port, () => console.log(`PHOENIX ONLINE. PORT ${port}!`))
