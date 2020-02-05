@@ -12,7 +12,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Fixed** for any bug fixes.
 - **Security** in case of vulnerabilities.
 
-## [Unreleased] - Started: 1-30-20
+## [Unreleased] - Started: 2-5-20
+
+## [1.1.0] - Started: 1-30-20
+
+### Added
+- `Orion`: bulk export and import on organization master lists (currently only on Providers), and organization meta data on account modal
+  - Add hardcoded conditional logic to hide bulk import on Provider master list except for `admin` user
+  - Install `file-saver` library to support Excel export of Provider master list
+  - Add data sanitization for organization import/export to strip unicode characters
+- `Orion`: Add `updatedAt` timestamping to all organizations, and also `exportedAt` to all providers; revised AccountModal to show that meta information
+  - Add new scalar type `GraphQLDateTime` to the GraphQL system using existing `graphql-iso-date` library
+- `Polaris Backend`: Add user profile info to access token sent to the backend by leveraging Auth0 rule; add that user info to GraphQL resolver context so all resolvers can access it
+- `Node Scripts`: added `append-percent-lives.js` which appends a `structuredLives` field to `payerHistoricalDrgNationalLives` and `payerHistoricalMmitNationalLives` on `pulse-dev`
+
+### Changed
+- `Phoenix`: Show user password on input instead of dots
+
+### Removed
+- Uninstall `moment` package in favor of only using `date-fns` for now
+- Uninstall `json-to-csv` package
 
 ## [1.0.0] - Started: 12-23-19
 

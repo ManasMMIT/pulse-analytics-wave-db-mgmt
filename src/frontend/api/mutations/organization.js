@@ -1,5 +1,18 @@
 import gql from 'graphql-tag'
 
+export const UPSERT_ORGANIZATION_META = gql`
+  mutation UpsertOrganizationMeta($input: UpsertOrganizationMetaInput!) {
+    upsertOrganizationMeta(input: $input) {
+      _id
+      accountId
+      exportedAt
+      exporter
+      updatedAt
+      updater
+    }
+  }
+`
+
 export const BULK_IMPORT_PROVIDER_ORGANIZATIONS = gql`
   mutation BulkImportProviderOrganizations($data: JSON) {
     bulkImportProviderOrganizations(data: $data)

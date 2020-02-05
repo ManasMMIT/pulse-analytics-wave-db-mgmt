@@ -1,8 +1,9 @@
 import React from 'react'
-import moment from 'moment'
 
 import AlertSection from './AlertSection'
 import FetchedAlertSection from './FetchedAlertSection'
+
+import { formatDayMonthYearShort } from '../../../../../../../utils/formatDate'
 
 const AlertSectionContainer = ({ alert, connection, hydrateConnectionAlert }) => {
   if (typeof alert === 'string') {
@@ -13,13 +14,13 @@ const AlertSectionContainer = ({ alert, connection, hydrateConnectionAlert }) =>
         hydrateConnectionAlert={hydrateConnectionAlert}
       />
     )
-  } else if (!alert || !alert.alertDate) { // ! guard against alertDate undefined when creating connection because moment will make that today's date
+  } else if (!alert || !alert.alertDate) {
     return null
   }
 
   return (
     <AlertSection
-      alertDate={moment(alert.alertDate).format('L')}
+      alertDate={formatDayMonthYearShort(alert.alertDate)} // alertDate should always stored be stored in React local state in ISO format but we want it displayed differently 
       alertDescription={alert.alertDescription}
       alertType={alert.alertType}  
     />

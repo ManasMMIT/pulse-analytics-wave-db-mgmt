@@ -5,9 +5,9 @@ import { faEdit } from "@fortawesome/free-solid-svg-icons"
 import { transparentize } from 'polished'
 
 import Panel from '../../../../Phoenix/shared/Panel'
-import { ProviderAccountModal } from '../../../shared/AccountModals'
+import { ProviderAccountModalButton } from '../../../shared/AccountModals'
 import DeleteButton from '../../../shared/DeleteButton'
-import DownloadCsvButton from './../../../../components/DownloadCsvButton'
+import ExportExcelButton from '../../../../components/ExportExcelButton'
 import ProviderImportButton from './ProviderImportButton'
 
 import {
@@ -29,7 +29,6 @@ const CREATE_BUTTON_TXT = 'Create Provider Account'
 const buttonStyle = {
   background: "#234768",
   color: 'white',
-  margin: '0px 12px',
 }
 
 const defaultPanelItemStyle = {
@@ -47,31 +46,33 @@ const defaultPanelItemStyle = {
 }
 
 const headerChildren = data => {
-  const csvData = data
-    .map(({ __typename, connections, ...datum }) => datum)
+  const exportData = data
+    .map(({ __typename, connections, ...datum }) => datum) 
 
-  if (csvData.length) csvData.splice(0, 0, {}, {})
+  const { name } = JSON.parse(localStorage.getItem('user'))
 
   return (
-    <div style={{ display: 'flex' }}>
-      <ProviderAccountModal
-        buttonLabel={CREATE_BUTTON_TXT}
-        buttonStyle={buttonStyle}
-      />
-      <DownloadCsvButton
-        createBackup
-        filename={`providers-master-list`}
-        isDisabled={!csvData.length}
-        data={csvData}
-      />
-      <ProviderImportButton />
+    <div>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around', margin: 24 }}>
+        <ProviderAccountModalButton
+          buttonLabel={CREATE_BUTTON_TXT}
+          buttonStyle={buttonStyle}
+        />
+        <ExportExcelButton
+          createBackup
+          filename={`providers-master-list`}
+          isDisabled={!exportData.length}
+          data={exportData}
+        />
+      </div>
+      { name === 'admin' && <ProviderImportButton /> }
     </div>
   )
 } 
 
 const buttonGroupCallback = entity => (
   <>
-    <ProviderAccountModal
+    <ProviderAccountModalButton
       account={entity}
       buttonLabel={editIcon}
       isEditModal

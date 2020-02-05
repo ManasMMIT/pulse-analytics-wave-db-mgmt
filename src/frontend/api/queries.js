@@ -1,5 +1,18 @@
 import gql from 'graphql-tag'
 
+export const GET_ORGANIZATION_META = gql`
+  query getOrganizationMeta($_ids: [ID]) {
+    organizationMeta(_ids: $_ids) {
+      _id
+      accountId
+      exportedAt
+      exporter
+      updatedAt
+      updater
+    }
+  }
+`
+
 export const GET_CLIENTS = gql`
   query getClients {
     clients {

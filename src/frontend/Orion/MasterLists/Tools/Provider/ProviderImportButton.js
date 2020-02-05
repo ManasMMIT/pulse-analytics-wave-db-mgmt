@@ -11,7 +11,7 @@ import {
   GET_APM_ORGANIZATIONS,
 } from '../../../../api/queries'
 
-import CsvImportButton from './../../../../components/CsvImportButton'
+import ImportButton from '../../../../components/ImportButton'
 
 const ProviderImportButton = () => {
   const [bulkImportProviderOrganizations] = useMutation(BULK_IMPORT_PROVIDER_ORGANIZATIONS)
@@ -26,7 +26,7 @@ const ProviderImportButton = () => {
   })
 
   return (
-    <CsvImportButton
+    <ImportButton
       onClick={bulkImportOnClick}
     />
   )

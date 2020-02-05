@@ -9,10 +9,10 @@ import TableHeader from './TableHeader'
 import { customSelectStyles } from './../../../components/customSelectStyles'
 
 import {
-  PathwaysAccountModal,
-  ProviderAccountModal,
-  ApmAccountModal,
-  PayerAccountModal,
+  PathwaysAccountModalButton,
+  ProviderAccountModalButton,
+  ApmAccountModalButton,
+  PayerAccountModalButton,
 } from '../../shared/AccountModals'
 
 import {
@@ -33,10 +33,10 @@ import {
 } from './styledQueryToolComponents'
 
 const MODAL_MAP = {
-  'Provider': ProviderAccountModal,
-  'Payer': PayerAccountModal,
-  'Alternative Payment Model': ApmAccountModal,
-  'Pathways': PathwaysAccountModal,
+  'Provider': ProviderAccountModalButton,
+  'Payer': PayerAccountModalButton,
+  'Alternative Payment Model': ApmAccountModalButton,
+  'Pathways': PathwaysAccountModalButton,
 }
 
 const accountModalButtonStyle = {
@@ -136,7 +136,7 @@ const QueryTool = ({
                     dataToDisplay.map((result, idx) => {
                       const background = idx % 2 === 0 ? '#9e9e9e33' : 'none'
 
-                      const AccountModal = MODAL_MAP[result.type]
+                      const AccountModalButton = MODAL_MAP[result.type]
 
                       const formattedStates = (
                         result.connections
@@ -151,13 +151,14 @@ const QueryTool = ({
                             )
                           : ''
                       )
+
                       return (
                         <TableRow
                           key={`${result._id} ${idx}`}
                           background={background}
                         >
                           <TableColumn>
-                            <AccountModal
+                            <AccountModalButton
                               account={result}
                               buttonLabel={result.organization}
                               buttonStyle={accountModalButtonStyle}

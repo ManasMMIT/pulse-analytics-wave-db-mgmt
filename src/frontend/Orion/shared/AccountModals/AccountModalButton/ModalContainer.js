@@ -13,7 +13,12 @@ import {
   GET_PAYER_ORGANIZATIONS,
   GET_PATHWAYS_ORGANIZATIONS,
   GET_APM_ORGANIZATIONS,
+  GET_ORGANIZATION_META,
 } from '../../../../api/queries'
+
+import {
+  UPSERT_ORGANIZATION_META,
+} from '../../../../api/mutations'
 
 import {
   SubmitButton,
@@ -46,6 +51,7 @@ const ModalContainer = ({
 
   const [formState, setFormState] = useState({})
   const [shouldShow, setShouldShow] = useState(false)
+  const [allAccounts, setAllAccounts] = useState([])
 
   useEffect(() => {
     if (!isAccountLoading) {
@@ -73,15 +79,53 @@ const ModalContainer = ({
 
       setFormState(initialFormState)
       setShouldShow(true)
+      setAllAccounts(accounts)
     }
   }, [isAccountLoading])
+
+  const [
+    writeMetaData,
+    {
+      loading: isWritingMetaData,
+    }
+  ] = useMutation(UPSERT_ORGANIZATION_META, {
+    variables: {
+      input: {
+        action: 'update',
+        _ids: [accountId],
+      }
+    }
+  })
+
+  const writeMetaDataRefetchQueries = [
+    // refetch across all orgs of this type to make sure
+    // the CSV export side's query for meta data is retriggered
+    // (even tho you've only updated on account)
+    { 
+      query: GET_ORGANIZATION_META,
+      variables: { _ids: allAccounts.map(({ _id }) => _id) }
+    },
+  ]
+
+  // ! Note: refetching for a single account doesn't appear needed (the bigger refetch above covers this case)
+  // ! but we don't understand why
+  if (accountId) {
+    // refetch single org's meta data to refresh cache for the header
+    // of the targeted account's modal 
+    writeMetaDataRefetchQueries.push({ 
+      query: GET_ORGANIZATION_META,
+      variables: { _ids: [accountId] }
+    })
+  }
 
   const [save, { loading }] = useMutation(
     saveMutationDoc,
     {
       variables: { input: formState },
       refetchQueries,
-      onCompleted: () => {
+      onCompleted: async () => {
+        await writeMetaData({ refetchQueries: writeMetaDataRefetchQueries })
+
         const search = queryString.stringify(restOfQueryString)
         history.push({ search })
 
@@ -95,7 +139,7 @@ const ModalContainer = ({
 
   if (isAccountLoading || !shouldShow) return null
 
-  const submitButton = loading
+  const submitButton = loading || isWritingMetaData
     ? (
       <SubmitButton>
         <Spinner />

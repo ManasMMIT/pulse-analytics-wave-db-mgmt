@@ -165,7 +165,7 @@ class UserForm extends React.Component {
             (if updating user, leave blank to keep unchanged)
           </div>
           <Input
-            type="password"
+            type="text"
             name="password"
             value={password}
             onChange={this.handleTextChange}

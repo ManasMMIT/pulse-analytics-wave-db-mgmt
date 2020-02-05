@@ -1,13 +1,13 @@
-import React, { useState } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
 import { transparentize } from 'polished'
 
-import { Colors } from './../../utils/pulseStyles'
+import { Colors } from '../../utils/pulseStyles'
 
 const primaryColor = Colors.PRIMARY
 
-const CsvButton = styled.button({
+const ExportButton = styled.button({
   background: transparentize(0.85,primaryColor),
   color: primaryColor,
   fontSize: 12,
@@ -15,6 +15,7 @@ const CsvButton = styled.button({
   padding: '8px 12px',
   borderRadius: 4,
   cursor: 'pointer',
+  marginLeft: 24,
   ':hover': {
     background: transparentize(0.65, primaryColor),
   }
@@ -28,31 +29,31 @@ const CsvButton = styled.button({
     : {}
 })
 
-const DownloadCsvButton = ({
+const ExportExcelButton = ({
   isDisabled,
   onClick,
   children,
 }) => {
   return (
-    <CsvButton
+    <ExportButton
       disabled={isDisabled}
       onClick={onClick}
     >
       {children}
-    </CsvButton>
+    </ExportButton>
   )
 }
 
-DownloadCsvButton.propTypes = {
+ExportExcelButton.propTypes = {
   isDisabled: PropTypes.bool,
   children: PropTypes.any,
   onClick: PropTypes.func,
 }
 
-DownloadCsvButton.defaultProps = {
+ExportExcelButton.defaultProps = {
   isDisabled: false,
-  children: 'Export CSV',
+  children: 'Export to Excel',
   onClick: () => {},
 }
 
-export default DownloadCsvButton
+export default ExportExcelButton

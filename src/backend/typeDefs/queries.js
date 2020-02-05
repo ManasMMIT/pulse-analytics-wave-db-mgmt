@@ -26,6 +26,8 @@ const queries = gql`
     testEmailGroups: [TestEmailGroup]
 
     alert(_id: ID): Alert
+
+    organizationMeta(_ids: [ID]): [OrganizationMeta]
   }
 
   type Node {
@@ -171,6 +173,15 @@ const queries = gql`
     type: String
     date: Date
     description: String
+  }
+
+  type OrganizationMeta {
+    _id: ID!
+    accountId: ID
+    exportedAt: DateTime
+    exporter: JSON
+    updatedAt: DateTime
+    updater: JSON
   }
 `
 

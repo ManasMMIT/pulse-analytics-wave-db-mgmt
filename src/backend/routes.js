@@ -52,7 +52,14 @@ MongoClient.connect(process.env.LOADER_URI, { useNewUrlParser: true }, (err, cli
   const apolloServer = new ApolloServer({
     typeDefs,
     resolvers,
-    context: () => twoGuysInAHorseCostume,
+    context: ({ req }) => { // req/res comes in here https://www.apollographql.com/docs/apollo-server/api/apollo-server/#apolloserver
+      const user = req.user['https://random-url-for-extra-user-info']
+
+      return {
+        ...twoGuysInAHorseCostume,
+        user,
+      }
+    },
   })
 
   apolloServer.applyMiddleware({ app: subApp })
