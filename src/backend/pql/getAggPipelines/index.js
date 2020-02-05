@@ -6,14 +6,15 @@ const {
   fieldMatchMaker,
 } = require('./match-makers')
 
-const EQUALITY_REG_EX = /(\w*) = \(?\w*[,-\w]*\)?/gi
+const parser = require('./parser')
 
 module.exports = pql => {
-  const parsedString = pql.match(EQUALITY_REG_EX)
+  // 1. parse string
+  const parsedString = parser(pql)
 
   const subArrays = parsedString.map(str => str.split(' = '))
 
-  // 1. Group by collection
+  // 2. Group by collection
   const groupedByCollection = _.groupBy(
     subArrays,
     subArr => {
@@ -21,7 +22,7 @@ module.exports = pql => {
       return collectionMatchMaker(key)
     })
 
-  // 2. remove garbage values not caught by matchMakers
+  // 3. remove garbage values not caught by matchMakers
   delete groupedByCollection.null
 
   Object.keys(groupedByCollection)
