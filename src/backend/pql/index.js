@@ -7,6 +7,8 @@ const MongoClient = require('mongodb').MongoClient
 
 const subApp = express()
 
+const getPqlResult = require('./getPqlResult')
+
 MongoClient.connect(process.env.LOADER_URI, { useNewUrlParser: true }, (err, client) => {
   if (err) throw err;
   const mongoClient = client
@@ -23,8 +25,6 @@ MongoClient.connect(process.env.LOADER_URI, { useNewUrlParser: true }, (err, cli
   console.log(`PQL Connected to MongoDB: ${process.env.LOADER_URI}`)
 
   const mongoStuff = {
-
-    // Torso/Backside
     mongoClient,
     pulseRawDb,
     pulseDevDb,
@@ -37,14 +37,10 @@ MongoClient.connect(process.env.LOADER_URI, { useNewUrlParser: true }, (err, cli
     coreNodes,
   }
 
-  subApp.get('/', async (req, res, next) => {
+  subApp.get('/', async ({ body: { pql } }, res, next) => {
+    const result = await getPqlResult(pql, mongoStuff)
 
-    const user = req.user['https://random-url-for-extra-user-info']
-
-    // const result = await getPqlResult({ req, res, next }, { user, ...mongoStuff })
-
-    // res.json(result)
-    res.send('works')
+    res.json(result)
   })
 })
 
