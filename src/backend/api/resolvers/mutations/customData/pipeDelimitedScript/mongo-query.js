@@ -61,10 +61,10 @@ const mongoQuery = db => {
       const date = new Date()
       const formattedDate = date.toJSON().substring(0, 10).replace(/[-]/g, '')
 
-      fs.mkdirSync('./src/backend/resolvers/mutations/customData/pipeDelimitedScript/exports/', { recursive: true })
+      fs.mkdirSync('./src/backend/api/resolvers/mutations/customData/pipeDelimitedScript/exports/', { recursive: true })
 
-      const csvPromise = promisify(`./src/backend/resolvers/mutations/customData/pipeDelimitedScript/exports/DEDHAM_PYR_ACCESS_${formattedDate}.csv`, csv)
-      const psvPromise = promisify(`./src/backend/resolvers/mutations/customData/pipeDelimitedScript/exports/DEDHAM_PYR_ACCESS_${formattedDate}.txt`, psv)
+      const csvPromise = promisify(`./src/backend/api/resolvers/mutations/customData/pipeDelimitedScript/exports/DEDHAM_PYR_ACCESS_${formattedDate}.csv`, csv)
+      const psvPromise = promisify(`./src/backend/api/resolvers/mutations/customData/pipeDelimitedScript/exports/DEDHAM_PYR_ACCESS_${formattedDate}.txt`, psv)
 
       return Promise.all([csvPromise, psvPromise]).then(() => mergedData)
   })
