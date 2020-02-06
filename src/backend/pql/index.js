@@ -37,7 +37,7 @@ MongoClient.connect(process.env.LOADER_URI, { useNewUrlParser: true }, (err, cli
     coreNodes,
   }
 
-  subApp.get('/', async ({ body: { pql } }, res, next) => {
+  subApp.post('/', async ({ body: { pql } }, res, next) => {
     const result = await getPqlResult(pql, mongoStuff)
 
     res.json(result)

@@ -15,7 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased] - Started: 2-5-20
 
 ### Added
-- `Orion`: pql v1.0.0 backend
+- `Orion`: pql proof of concept backend and frontend
 
 ## [1.1.0] - Started: 1-30-20
 
