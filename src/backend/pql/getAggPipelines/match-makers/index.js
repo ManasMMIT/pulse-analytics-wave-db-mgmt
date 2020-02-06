@@ -1,5 +1,7 @@
 const collectionMatchMaker = require('./collectionMatchMaker')
 const fieldMatchMaker = require('./fieldMatchMaker')
+const conjunctionMatchMaker = require('./conjunctionMatchMaker')
+const verbMatchMaker = require('./verbMatchMaker')
 
 /*
   The matching step is meant to add a small amount
@@ -11,4 +13,6 @@ const fieldMatchMaker = require('./fieldMatchMaker')
 module.exports = {
   collectionMatchMaker,
   fieldMatchMaker,
+  conjunctionMatchMaker,
+  verbMatchMaker,
 }

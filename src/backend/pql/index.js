@@ -1,5 +1,4 @@
 require('dotenv').load()
-const _ = require('lodash')
 
 const express = require('express')
 
@@ -38,9 +37,13 @@ MongoClient.connect(process.env.LOADER_URI, { useNewUrlParser: true }, (err, cli
   }
 
   subApp.post('/', async ({ body: { pql } }, res, next) => {
-    const result = await getPqlResult(pql, mongoStuff)
-
-    res.json(result)
+    try {
+      const result = await getPqlResult(pql, mongoStuff)
+  
+      res.json(result)
+    } catch(e) {
+      res.json({ error: e.toString()})
+    }
   })
 })
 
