@@ -17,6 +17,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - `Orion`: pql proof of concept backend and frontend
 
+### Fixed
+- `Polaris Frontend`: Logging out now redirects user to `window.location.origin` as it should instead of `localhost:3000`
+
 ## [1.1.0] - Started: 1-30-20
 
 ### Added
