@@ -80,6 +80,10 @@ const logoutButtonStyle = {
 const App = () => {
   const { loading, isAuthenticated, loginWithRedirect, logout, accessToken } = useAuth0()
 
+  const logoutWithRedirect = () => logout({
+    returnTo: window.location.origin
+  })
+
   if (loading) return null
 
   if (!isAuthenticated) {
@@ -112,7 +116,7 @@ const App = () => {
         && networkError.result.message === 'jwt expired'
       ) {
         localStorage.clear()
-        client.clearStore().then(logout)
+        client.clearStore().then(logoutWithRedirect)
       }
     }
   })
@@ -148,7 +152,7 @@ const App = () => {
                   style={logoutButtonStyle}
                   onClick={() => {
                     localStorage.clear()
-                    client.clearStore().then(logout)
+                    client.clearStore().then(logoutWithRedirect)
                   }}
                   icon={faSignOutAlt}
                   color={Colors.WHITE}
