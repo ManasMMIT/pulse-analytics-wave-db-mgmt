@@ -48,7 +48,10 @@ const PagesPanel = ({
 
   if (loading) return null
 
-  const { selectedDashboard: { name: dashboardName } } = data
+  let dashboardName = ''
+  if (data.selectedDashboard) {
+    dashboardName = data.selectedDashboard.name
+  }
 
   const buttonGroupCallback = page => (
     <ButtonGroup

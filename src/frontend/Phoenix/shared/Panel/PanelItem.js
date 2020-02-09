@@ -51,7 +51,7 @@ const PanelItemContainer = ({
     label2Callback = () => null,
   },
 }) => {
-  const isSelected = entity._id === selectedEntity._id
+  const isSelected = selectedEntity ? entity._id === selectedEntity._id : false
 
   let finalStyle = style
   if (isSelected) {

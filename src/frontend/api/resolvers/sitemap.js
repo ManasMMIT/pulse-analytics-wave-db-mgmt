@@ -49,19 +49,46 @@ const sitemapResolvers = {
       selectedDashboard = toolDashboards.find(({ _id }) => _id === dashboardId)
     }
 
+  if (selectedDashboard) {
     client.writeQuery({ query: GET_SELECTED_DASHBOARD, data: { selectedDashboard } })
+
+    await client.query({
+      query: GET_DASHBOARD_PAGES,
+      variables: { parentId: dashboardId },
+      fetchPolicy: 'network-only',
+    })
+  } else {
+    const { selectedDashboard: { _id: dashboardId } } = cache.readQuery({ query: GET_SELECTED_DASHBOARD })
+    client.writeQuery({
+      query: GET_SELECTED_DASHBOARD,
+      variables: { _id: dashboardId },
+      data: { selectedDashboard: null },
+    })
+
+    client.writeQuery({
+      query: GET_DASHBOARD_PAGES,
+      variables: { parentId: dashboardId },
+      data: { nodes: [] },
+    })
+  }
 
     await client.mutate({ mutation: SELECT_PAGE })
 
     return selectedDashboard
   },
   selectPage: async (_, { _id: pageId }, { cache, client }) => {
-    const { selectedDashboard: { _id: dashboardId } } = cache.readQuery({ query: GET_SELECTED_DASHBOARD })
+    const { selectedDashboard } = cache.readQuery({ query: GET_SELECTED_DASHBOARD })
+    let dashboardId = selectedDashboard ? selectedDashboard._id : null
 
-    const { data: { nodes: dashboardPages } } = await client.query({
-      query: GET_DASHBOARD_PAGES,
-      variables: { parentId: dashboardId }
-    })
+    let dashboardPages = []
+    if (dashboardId) {
+      const result = await client.query({
+        query: GET_DASHBOARD_PAGES,
+        variables: { parentId: dashboardId }
+      })
+
+      dashboardPages = result.data.nodes
+    }
 
     let selectedPage = dashboardPages[0]
 
@@ -69,23 +96,47 @@ const sitemapResolvers = {
       selectedPage = dashboardPages.find(({ _id }) => _id === pageId)
     }
 
-    client.writeQuery({ query: GET_SELECTED_PAGE, data: { selectedPage } })
+    if (selectedPage) {
+      client.writeQuery({ query: GET_SELECTED_PAGE, data: { selectedPage } })
 
-    try {
-      await client.mutate({ mutation: SELECT_CARD })
-    } catch (e) {
-      console.error('Maybe no page exists for dashboard?')
+      await client.query({
+        query: GET_PAGE_CARDS,
+        variables: { parentId: pageId },
+        fetchPolicy: 'network-only',
+      })
+    } else {
+      const { selectedPage: { _id: pageId } } = cache.readQuery({ query: GET_SELECTED_PAGE })
+      
+      client.writeQuery({
+        query: GET_SELECTED_PAGE,
+        variables: { _id: pageId },
+        data: { selectedPage: null },
+      })
+
+      client.writeQuery({
+        query: GET_PAGE_CARDS,
+        variables: { parentId: pageId },
+        data: { nodes: [] },
+      })
     }
+
+    await client.mutate({ mutation: SELECT_CARD })
 
     return selectedPage
   },
   selectCard: async (_, { _id: cardId }, { cache, client }) => {
-    const { selectedPage: { _id: pageId } } = cache.readQuery({ query: GET_SELECTED_PAGE })
+    const { selectedPage } = cache.readQuery({ query: GET_SELECTED_PAGE })
+    let pageId = selectedPage ? selectedPage._id : null
 
-    const { data: { nodes: pageCards } } = await client.query({
-      query: GET_PAGE_CARDS,
-      variables: { parentId: pageId }
-    })
+    let pageCards = []
+    if (pageId) {
+      const result = await client.query({
+        query: GET_PAGE_CARDS,
+        variables: { parentId: pageId }
+      })
+
+      pageCards = result.data.nodes
+    }
 
     let selectedCard = pageCards[0]
 
