@@ -123,7 +123,7 @@ class Modal extends React.Component {
                 <Title>{title}</Title>
                 <ButtonWrapper>
                   <CloseButton onClick={onClickCloseButton}>
-                    close
+                    Cancel + Close
                   </CloseButton>
                   {submitButton}
                 </ButtonWrapper>
