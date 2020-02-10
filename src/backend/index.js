@@ -32,10 +32,11 @@ const accessLogStream = fs.createWriteStream(
 )
 
 // Custom morgan token inspired by https://github.com/expressjs/morgan/issues/116
-morgan.token('graphql-query', (req) => {
-  const { sub } = req.user
+morgan.token('graphql-query', req => {
+  const user = req.user['https://random-url-for-extra-user-info']
+  const { user_id, username } = user
   const { operationName, variables } = req.body
-  return `User: ${sub} / GraphQL Operation: ${operationName} / Variables: ${JSON.stringify(variables)}`
+  return `username: ${username} / userId: ${user_id} / operationName: ${operationName} / operationVariables: ${JSON.stringify(variables)}`
 })
 
 if (process.env.NODE_ENV === 'production') {

@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - `Orion`: pql proof of concept backend and frontend
+- `Phoenix`: oplog in StatusPanel showing what's changed since the last push to prod
 
 ### Fixed
 - `Phoenix`: Team Permissions sitemap bug, where unselected tool's dashes/pages/cards would display whenever a tool without a full sitemap was selected

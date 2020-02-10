@@ -11,6 +11,7 @@ import { Colors, Spacing } from '../../../utils/pulseStyles'
 
 // import PushToDevButton from './PushToDevButton'
 import PushToProdButton from './PushToProdButton'
+import OpLog from './OpLog'
 import StatusHeaderIcon from './StatusHeaderIcon'
 
 const wrapperPadding = Spacing.LARGE
@@ -89,6 +90,8 @@ const StatusPanel = () => (
     </div>
     {/* <PushToDevButton /> */}
     <PushToProdButton />
+
+    { process.env.NODE_ENV === 'production' && <OpLog /> }
   </Wrapper>
 )
 

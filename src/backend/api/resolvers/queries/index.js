@@ -11,6 +11,7 @@ const collections = require('./collections')
 const newTreatmentPlans = require('./newTreatmentPlans')
 const testEmailGroups = require('./testEmailGroups')
 const alert = require('./alert')
+const opLogs = require('./opLogs')
 
 module.exports = {
   collections,
@@ -26,4 +27,5 @@ module.exports = {
   ...organizations,
   testEmailGroups,
   alert,
+  opLogs,
 }
