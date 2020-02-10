@@ -58,18 +58,23 @@ const sitemapResolvers = {
       fetchPolicy: 'network-only',
     })
   } else {
-    const { selectedDashboard: { _id: dashboardId } } = cache.readQuery({ query: GET_SELECTED_DASHBOARD })
-    client.writeQuery({
-      query: GET_SELECTED_DASHBOARD,
-      variables: { _id: dashboardId },
-      data: { selectedDashboard: null },
-    })
+    const selectedDashboardQuery = cache.readQuery({ query: GET_SELECTED_DASHBOARD })
 
-    client.writeQuery({
-      query: GET_DASHBOARD_PAGES,
-      variables: { parentId: dashboardId },
-      data: { nodes: [] },
-    })
+    if (selectedDashboardQuery.selectedDashboard) {
+      const dashboardId = selectedDashboardQuery.selectedDashboard._id
+
+      client.writeQuery({
+        query: GET_SELECTED_DASHBOARD,
+        variables: { _id: dashboardId },
+        data: { selectedDashboard: null },
+      })
+  
+      client.writeQuery({
+        query: GET_DASHBOARD_PAGES,
+        variables: { parentId: dashboardId },
+        data: { nodes: [] },
+      })
+    }
   }
 
     await client.mutate({ mutation: SELECT_PAGE })
@@ -105,19 +110,23 @@ const sitemapResolvers = {
         fetchPolicy: 'network-only',
       })
     } else {
-      const { selectedPage: { _id: pageId } } = cache.readQuery({ query: GET_SELECTED_PAGE })
-      
-      client.writeQuery({
-        query: GET_SELECTED_PAGE,
-        variables: { _id: pageId },
-        data: { selectedPage: null },
-      })
+      const selectedPageQuery = cache.readQuery({ query: GET_SELECTED_PAGE })
 
-      client.writeQuery({
-        query: GET_PAGE_CARDS,
-        variables: { parentId: pageId },
-        data: { nodes: [] },
-      })
+      if (selectedPageQuery.selectedPage) {
+        const pageId = selectedPageQuery.selectedPage._id
+        
+        client.writeQuery({
+          query: GET_SELECTED_PAGE,
+          variables: { _id: pageId },
+          data: { selectedPage: null },
+        })
+  
+        client.writeQuery({
+          query: GET_PAGE_CARDS,
+          variables: { parentId: pageId },
+          data: { nodes: [] },
+        })
+      }
     }
 
     await client.mutate({ mutation: SELECT_CARD })

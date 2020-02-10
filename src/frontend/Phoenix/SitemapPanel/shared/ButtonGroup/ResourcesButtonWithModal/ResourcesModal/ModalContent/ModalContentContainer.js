@@ -124,6 +124,7 @@ const ModalContentContainer = ({
   const sourceAccounts = orgData[Object.keys(orgData)[0]]
 
   const currentNode = flatSelectedNodes.find(({ _id }) => _id === nodeId) || { text: { title: 'loading' }}
+
   const parentNode = flatSelectedNodes.find(({ _id }) => _id === currentNode.parentId) || currentNode
   if (nodeType === 'tools') {
     const sourceResources = {
@@ -259,7 +260,7 @@ const ModalOuterContentContainer = props => {
     <ModalContentContainer
       {...props}
       selectedToolId={selectedToolId}
-      flatSelectedNodes={flatSelectedNodes}
+      flatSelectedNodes={_.compact(flatSelectedNodes)}
     />
   )
 }

@@ -16,7 +16,10 @@ const Spinner = ({ fill, size }) => (
 
 Spinner.propTypes = {
   fill: PropTypes.string,
-  size: PropTypes.string,
+  size: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number,
+  ]),
 }
 
 Spinner.defaultProps = {
