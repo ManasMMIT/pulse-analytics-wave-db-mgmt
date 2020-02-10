@@ -12,5 +12,6 @@ export default ({ userId }) => (
     itemId={userId}
     mutationDoc={DELETE_USER}
     clientMutation={MANAGE_DELETED_USER}
+    modalTitle="Delete User"
   />
 )

@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import glamorous from 'glamorous'
+import styled from '@emotion/styled'
 
 import { Colors } from '../../utils/pulseStyles'
 
@@ -9,8 +9,6 @@ const tabContainerCallback = ({
   activeStyle,
   inactiveStyle
 }) => (isSelected ? activeStyle : inactiveStyle)
-
-const TabContainer = glamorous.span({}, tabContainerCallback)
 
 const Tab = ({
   tabContent,
@@ -30,6 +28,8 @@ const Tab = ({
 
   const activeStyle = { cursor: 'default', color: Colors.PulseBlue, ...activeTabStyle }
   const inactiveStyle = { cursor: 'pointer', ...inactiveTabStyle }
+  
+  const TabContainer = styled.span(tabContainerStyle, tabContainerCallback)
 
   return (
     <TabContainer

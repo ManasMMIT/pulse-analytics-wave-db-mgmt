@@ -11,22 +11,22 @@ const defaultTabContainerStyle = {
   fontSize: 12,
   fontWeight: 700,
   letterSpacing: -0.3,
-  textAlign: 'center'
+  textAlign: 'center',
 }
 
 const defaultActiveTabStyle = {
-  backgroundColor: Colors.White,
-  borderBottom: `2px solid ${Colors.PulseBlue}`,
+  backgroundColor: 'transparent',
+  borderBottom: `2px solid ${Colors.PRIMARY}`,
 }
 
 const defaultInactiveTabStyle = {
   backgroundColor: 'transparent',
+  borderBottom: '2px solid transparent',
   color: AlphaColors.Black30,
   transition: 'color 250ms ease, background-color 250ms ease',
   ':hover': {
-    backgroundColor: AlphaColors.White50,
-    color: AlphaColors.Black30,
-    borderBottom: `2px solid ${AlphaColors.Black30}`,
+    color: AlphaColors.Black50,
+    borderBottom: `2px solid ${AlphaColors.Black50}`,
   }
 }
 

@@ -1,8 +1,41 @@
 import React, { useState } from 'react'
 import _ from 'lodash'
+import styled from '@emotion/styled'
+import { transparentize } from 'polished'
 
 import IndicationsPanel from './IndicationsPanel'
 import RegimensPanel from './RegimensPanel'
+
+import { Colors, Spacing } from '../../../../../../../../utils/pulseStyles'
+
+const ToggleButtonContainer = styled.div({
+  display: 'flex',
+  justifyContent: 'flex-end',
+  padding: `${Spacing.SMALL} ${Spacing.LARGE}`,
+  borderBottom: `1px solid ${transparentize(0.9, Colors.BLACK)}`
+})
+
+const ToggleButton = styled.button({
+  border: 'none',
+  borderRadius: 4,
+  cursor: 'pointer',
+  fontSize: 10,
+  fontWeight: 700,
+  padding: `${Spacing.SMALL} ${Spacing.NORMAL}`,
+  textTransform: 'uppercase',
+  ':active': {
+    outline: 'none'
+  },
+  ':focus': {
+    outline: 'none'
+  },
+}, props => ({
+  color: props.color,
+  background: transparentize(0.85, props.color),
+  ':hover': {
+    background: transparentize(0.7, props.color),
+  },
+}))
 
 const TreatmentPlansTabContent = ({
   baseTreatmentPlans,
@@ -55,18 +88,21 @@ const TreatmentPlansTabContent = ({
 
   return (
     <div>
-      <div style={{ display: 'flex' }}>
-        <button
+      <ToggleButtonContainer>
+        <ToggleButton
           onClick={stageAllTreatmentPlans}
+          color={Colors.GREEN}
+          style={{ marginRight: Spacing.LARGE }}
         >
-          Toggle on All
-        </button>
-        <button
+          Toggle on All Indications + Regimens
+        </ToggleButton>
+        <ToggleButton
           onClick={unstageAllTreatmentPlans}
+          color={Colors.MEDIUM_GRAY_2}
         >
-          Toggle off All
-        </button>
-      </div>
+          Toggle off All Indications + Regimens
+        </ToggleButton>
+      </ToggleButtonContainer>
       <div style={{ display: 'flex' }}>
         <IndicationsPanel
           selectedIndicationId={selectedIndicationId}

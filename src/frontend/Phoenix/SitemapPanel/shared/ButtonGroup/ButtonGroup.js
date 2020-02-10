@@ -1,8 +1,14 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import styled from '@emotion/styled'
 
 import SitemapSwitch from './SitemapSwitch'
 import ResourcesButtonWithModal from './ResourcesButtonWithModal'
+
+const Container = styled.div({
+  display: 'flex',
+  alignItems: 'center',
+})
 
 const ButtonGroup = ({
   sourceEntity,
@@ -14,7 +20,7 @@ const ButtonGroup = ({
   const selectedTeamNode = teamEntityNodes[nodeId]
 
   return (
-    <>
+    <Container>
       <SitemapSwitch
         nodeType={nodeType}
         sourceEntity={sourceEntity}
@@ -30,7 +36,7 @@ const ButtonGroup = ({
           />
         )
       }
-    </>
+    </Container>
   )
 }
 

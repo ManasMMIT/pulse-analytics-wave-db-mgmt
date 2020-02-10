@@ -1,19 +1,35 @@
 import React from 'react'
+import styled from '@emotion/styled'
 import { useMutation } from '@apollo/react-hooks'
 import PropTypes from 'prop-types'
+import { transparentize } from 'polished'
 
 import { GET_SELECTED_TEAM } from '../../../../../../../api/queries'
 import { UPDATE_PERMISSIONS } from '../../../../../../../api/mutations/teams'
 import Spinner from '../../../../../../shared/Spinner'
 
-const submitButtonStyle = {
-  backgroundColor: '#0668D9',
-  color: 'white',
-  fontWeight: 600,
-  fontSize: 14,
-  padding: 6,
+import { Colors, Spacing } from '../../../../../../../utils/pulseStyles'
+
+const StyledSubmitButton = styled.button({
+  background: transparentize(0.85, Colors.PRIMARY),
+  border: 'none',
+  borderRadius: 4,
+  color: Colors.PRIMARY,
   cursor: 'pointer',
-}
+  fontSize: 12,
+  fontWeight: 700,
+  padding: `${Spacing.SMALL} ${Spacing.NORMAL}`,
+  textTransform: 'uppercase',
+  ':hover': {
+    background: transparentize(0.7, Colors.PRIMARY),
+  },
+  ':active': {
+    outline: 'none'
+  },
+  ':focus': {
+    outline: 'none'
+  }
+})
 
 const SubmitButton = ({
   nodeId,
@@ -43,16 +59,35 @@ const SubmitButton = ({
     },
   )
 
-  if (loading) return <Spinner />
+  if (loading) return (
+    <div
+      style={{
+        diplay: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}
+    >
+      <Spinner />
+      <span
+        style={{
+          color: Colors.PRIMARY,
+          fontSize: 9,
+          fontWeight: 700,
+          paddingLeft: 12,
+        }}
+      >
+        SAVING
+      </span>
+    </div>
+  )
   if (error) return 'Failed to save'
 
   return (
-    <button
+    <StyledSubmitButton
       onClick={updatePermissions}
-      style={submitButtonStyle}
     >
       Save + Close
-    </button>
+    </StyledSubmitButton>
   )
 }
 

@@ -1,5 +1,12 @@
 import React from "react"
+import styled from '@emotion/styled'
 import { useAuth0 } from "../react-auth0-spa"
+
+const Avatar = styled.img({
+  clipPath: `circle(20px at center)`,
+  width: 40,
+
+})
 
 const UserProfile = () => {
   const { loading, user } = useAuth0()
@@ -7,9 +14,8 @@ const UserProfile = () => {
   if (loading || !user) return null
 
   return (
-    <img 
-      src={user.picture} 
-      style={{ width: 30 }} 
+    <Avatar
+      src={user.picture}
       alt="Profile"
       title={user.name}
     />

@@ -55,27 +55,33 @@ const StyledNavLink = styled(NavLink)({
   textDecoration: 'none',
   padding: `${Spacing.NORMAL} ${Spacing.NORMAL} ${Spacing.SMALL}`,
   margin: Spacing.TINY,
-  // borderLeft: '4px solid transparent',
-  // borderRight: '4px solid transparent',
   opacity: 0.6,
   ':hover': {
     background: transparentize(0.92, Colors.WHITE),
   }
 })
 
-const sidebarBottomSectionStyle = { 
-  marginTop: 'auto', 
-  display: 'flex', 
-  flexDirection: 'column', 
+const sidebarBottomSectionStyle = {
+  marginTop: 'auto',
+  display: 'flex',
+  flexDirection: 'column',
   alignItems: 'center'
 }
 
 const logoutButtonStyle = {
   cursor: 'pointer',
-  padding: `${Spacing.NORMAL} ${Spacing.NORMAL} ${Spacing.SMALL}`,
-  marginBottom: 12,
-  marginTop: 12,
+  padding: Spacing.NORMAL,
 }
+
+const LogoutContainer = styled.div({
+  borderRadius: 4,
+  margin: `${Spacing.NORMAL} ${Spacing.TINY} ${Spacing.TINY}`,
+  opacity: 0.6,
+  ':hover': {
+    background: transparentize(0.92, Colors.WHITE),
+    opacity: 1,
+  }
+})
 
 const App = () => {
   const { loading, isAuthenticated, loginWithRedirect, logout, accessToken } = useAuth0()
@@ -147,17 +153,17 @@ const App = () => {
 
               <div style={sidebarBottomSectionStyle}>
                 <UserProfile />
-
-                <FontAwesomeIcon
-                  style={logoutButtonStyle}
-                  onClick={() => {
-                    localStorage.clear()
-                    client.clearStore().then(logoutWithRedirect)
-                  }}
-                  icon={faSignOutAlt}
-                  color={Colors.WHITE}
-                  size="lg"
-                />
+                <LogoutContainer>
+                  <FontAwesomeIcon
+                    style={logoutButtonStyle}
+                    onClick={() => {
+                      localStorage.clear()
+                      client.clearStore().then(logoutWithRedirect)
+                    }}
+                    icon={faSignOutAlt}
+                    color={Colors.WHITE}
+                  />
+                </LogoutContainer>
               </div>
             </PolarisSidebar>
             <Switch>

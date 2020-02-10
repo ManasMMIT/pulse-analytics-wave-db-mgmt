@@ -1,6 +1,5 @@
 import React from 'react'
 import { useQuery } from '@apollo/react-hooks'
-import { transparentize } from 'polished'
 
 import {
   GET_DASHBOARD_PAGES,
@@ -13,32 +12,13 @@ import { SELECT_PAGE } from '../../api/mutations'
 import Panel from '../shared/Panel'
 import ButtonGroup from './shared/ButtonGroup'
 
-const defaultPanelStyle = {
-  padding: 20,
-}
-
-const panelHeaderStyle = {
-  color: '#0E2539',
-  fontWeight: 600,
-}
-
-const panelItemStyle = {
-  display: 'flex',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-  padding: '17px 20px',
-  color: '#0E2539',
-  fontWeight: 600,
-  fontSize: 12,
-  backgroundColor: transparentize(0.95, '#0E2539'),
-  marginTop: 10,
-  cursor: 'pointer',
-}
-
-const panelItemActiveStyle = {
-  backgroundColor: transparentize(0.9, '#0668D9'),
-  color: '#0668D9',
-}
+import {
+  panelItemStyle,
+  panelItemActiveStyle,
+  panelHeaderStyle,
+  panelTitleStyle,
+  defaultPanelStyle,
+} from './shared/panelStyles'
 
 const PagesPanel = ({
   handleToggle,
@@ -77,7 +57,7 @@ const PagesPanel = ({
       style={defaultPanelStyle}
       headerContainerStyle={panelHeaderStyle}
       title={`PAGES / ${dashboardName}`}
-      titleStyle={{ fontSize: 16 }}
+      titleStyle={panelTitleStyle}
       queryDocs={{
         fetchAllQueryProps: { query: GET_DASHBOARD_PAGES },
         fetchSelectedQueryProps: { query: GET_SELECTED_PAGE },

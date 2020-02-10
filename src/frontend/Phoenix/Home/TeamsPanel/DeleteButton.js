@@ -25,6 +25,7 @@ export default ({ teamId }) => {
       mutationDoc={DELETE_TEAM}
       additionalFormData={{ clientId: selectedClient._id }}
       clientMutation={MANAGE_DELETED_TEAM}
+      modalTitle="Delete Team"
     />
   )
 }

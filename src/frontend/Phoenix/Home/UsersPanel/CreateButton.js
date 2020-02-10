@@ -3,6 +3,8 @@ import { useQuery } from '@apollo/react-hooks'
 
 import UserFormButton from './UserForm/Button'
 
+import { Colors } from '../../../utils/pulseStyles'
+
 import {
   CREATE_USER,
   MANAGE_CREATED_USER,
@@ -23,7 +25,7 @@ const CreateButton = () => {
     <UserFormButton
       modalTitle="Create User"
       buttonLabel="Create User"
-      buttonStyle={{ background: '#d4e2f2', color: '#1d66b8' }}
+      buttonColor={Colors.PRIMARY}
       selectedTeamId={selectedTeam._id}
       mutationDoc={CREATE_USER}
       additionalFormData={{ clientId: selectedTeam.client._id }}

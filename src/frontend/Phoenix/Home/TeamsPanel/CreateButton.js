@@ -12,10 +12,7 @@ import {
   GET_SELECTED_CLIENT,
 } from '../../../api/queries'
 
-const createButtonStyle = {
-  background: '#d4e2f2',
-  color: '#1d66b8',
-}
+import { Colors } from '../../../utils/pulseStyles'
 
 const CreateButton = () => {
   const { data, loading } = useQuery(GET_SELECTED_CLIENT)
@@ -28,7 +25,7 @@ const CreateButton = () => {
       modalTitle="Create Team"
       buttonLabel="Create Team"
       additionalFormData={{ clientId }}
-      buttonStyle={createButtonStyle}
+      buttonColor={Colors.PRIMARY}
       mutationDoc={CREATE_TEAM}
       clientMutation={MANAGE_CREATED_TEAM}
     />

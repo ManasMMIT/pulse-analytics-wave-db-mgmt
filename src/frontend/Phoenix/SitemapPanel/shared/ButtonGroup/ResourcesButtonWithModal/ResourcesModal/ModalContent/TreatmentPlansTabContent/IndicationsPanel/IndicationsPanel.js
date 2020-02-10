@@ -1,7 +1,10 @@
 import React from 'react'
 import Switch from '@material-ui/core/Switch'
 import styled from "@emotion/styled"
+import { withStyles } from '@material-ui/core/styles';
 import { transparentize, mix } from 'polished'
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faArrowsAltV } from "@fortawesome/free-solid-svg-icons"
 import {
   sortableContainer,
   sortableElement,
@@ -10,40 +13,69 @@ import {
 
 import '../sortableContainerStyles.css'
 
-import { Colors } from '../../../../../../../../../utils/pulseStyles'
+import { Colors, Spacing } from '../../../../../../../../../utils/pulseStyles'
 
-const ListHeader = styled.div({
-  fontSize: 14,
-  fontWeight: 500,
-  textTransform: 'uppercase',
-  padding: '12px 24px',
+import {
+  IndicationPanelContainer,
+  ListHeader,
+  ActiveRow,
+  InactiveRow,
+  UnorderedList,
+} from '../styledComponents'
+
+const ListRow = styled.li({
+  alignItems: 'center',
+  borderBottom: `1px solid ${transparentize(0.9, Colors.BLACK)}`,
+  borderRadius: 4,
+  display: 'flex',
+  justifyContent: 'space-between',
+  marginBottom: 8,
+  padding: `${Spacing.TINY} 0`,
+  cursor: 'pointer',
+}, ({ isSelected }) => {
+
+  return {
+    backgroundColor: isSelected ? transparentize(0.9, Colors.PRIMARY) : 'transparent',
+    color: isSelected ? Colors.PRIMARY : Colors.BLACK,
+    ':hover': {
+      backgroundColor: isSelected ? transparentize(0.9, Colors.PRIMARY) : transparentize(0.92, Colors.BLACK),
+    }
+  }
 })
 
-const ActiveRow = styled.div({
-  background: mix(0.8, Colors.WHITE, Colors.GREEN),
-  color: Colors.GREEN,
-  padding: '8px 24px',
-  fontWeight: 600,
-  lineHeight: '18px',
-  fontSize: 10,
-  position: 'sticky',
-  top: 0,
-  zIndex: 5,
-})
+const DragHandle = sortableHandle(() => (
+  <span
+    style={{
+      padding: `${Spacing.SMALL} ${Spacing.NORMAL}`,
+      opacity: 0.3,
+      fontSize: 16,
+    }}
+  >
+    <FontAwesomeIcon
+      icon={faArrowsAltV}
+      color={Colors.BLACK}
+    />
+  </span>
+))
 
-const InactiveRow = styled.div({
-  background: mix(0.8, Colors.WHITE, Colors.MEDIUM_GRAY_2),
-  color: Colors.MEDIUM_GRAY_2,
-  padding: '8px 24px',
-  fontWeight: 600,
-  lineHeight: '18px',
-  fontSize: 10,
-  position: 'sticky',
-  top: 0,
-  zIndex: 5,
-})
+const switchColor = Colors.GREEN
 
-const DragHandle = sortableHandle(() => <span style={{ paddingRight: 8, opacity: 0.3 }}>::</span>)
+// Material UI Custom Switch Styling
+const PhoenixSwitch = withStyles({
+  switchBase: {
+    color: mix(0.4, Colors.BLACK, Colors.WHITE),
+    '&$checked': {
+      color: switchColor,
+    },
+    '&$checked + $track': {
+      backgroundColor: switchColor,
+    },
+  },
+  checked: {},
+  track: {
+    backgroundColor: transparentize(0.7, Colors.BLACK),
+  },
+})(Switch)
 
 const SortableItem = sortableElement(({
   ind,
@@ -54,33 +86,28 @@ const SortableItem = sortableElement(({
   const isSelected = ind._id === selectedIndicationId
 
   return (
-    <li
+    <ListRow
+      isSelected={isSelected}
       onClick={() => selectIndication(ind._id)}
-      style={{
-        display: 'flex',
-        borderBottom: `1px solid ${transparentize(0.9, Colors.BLACK)}`,
-        marginBottom: 8,
-        backgroundColor: isSelected ? transparentize(0.9, Colors.PRIMARY) : 'transparent',
-      }}
     >
-      <DragHandle />
-
-      <span style={{ fontWeight: 700 }}>{ind.name}</span>
-      <Switch
+      <div>
+        <DragHandle />
+        <span style={{ fontWeight: isSelected ? 700 : 500 }}>{ind.name}</span>
+      </div>
+      <PhoenixSwitch
         checked
-        color="primary"
         value={ind._id}
         onChange={() => disableIndication(ind)}
       />
-    </li>
+    </ListRow>
   )
 })
 
 const SortableContainer = sortableContainer(({ children }) => {
   return (
-    <ul>
+    <UnorderedList>
       {children}
-    </ul>
+    </UnorderedList>
   )
 })
 
@@ -94,58 +121,67 @@ const IndicationsPanel = ({
   onSortEnd,
 }) => {
   return (
-    <div style={{ flex: 3, maxHeight: 600, overflow: 'auto' }}>
-    <ListHeader>Indications</ListHeader>
-      <ActiveRow>ACTIVE ({enabledTreatmentPlans.length})</ActiveRow>
-      <SortableContainer
-        onSortEnd={onSortEnd}
-        helperClass="sortableHelper"
-        useDragHandle
-      >
-        {
-          enabledTreatmentPlans.map((ind, index) => (
-            <SortableItem
-              key={ind._id}
-              index={index}
-              ind={ind}
-              disableIndication={disableIndication}
-              selectedIndicationId={selectedIndicationId}
-              selectIndication={selectIndication}
-            />
-          ))
-        }
-      </SortableContainer>
-
-      <InactiveRow>INACTIVE ({disabledTreatmentPlans.length})</InactiveRow>
-      <ul>
-        {
-          disabledTreatmentPlans.map(ind => {
-            const isSelected = ind._id === selectedIndicationId
-
-            return (
-              <li
+    <IndicationPanelContainer>
+      <ListHeader>Indications</ListHeader>
+        <ActiveRow>ACTIVE ({enabledTreatmentPlans.length})</ActiveRow>
+        <SortableContainer
+          onSortEnd={onSortEnd}
+          helperClass="sortableHelper"
+          useDragHandle
+        >
+          {
+            enabledTreatmentPlans.map((ind, index) => (
+              <SortableItem
                 key={ind._id}
-                onClick={() => selectIndication(ind._id)}
-                style={{
-                  display: 'flex',
-                  borderBottom: `1px solid ${transparentize(0.9, Colors.BLACK)}`,
-                  marginBottom: 8,
-                  backgroundColor: isSelected ? transparentize(0.9, Colors.PRIMARY) : 'transparent',
-                }}
-              >
-                <span style={{ fontWeight: 700 }}>{ind.name}</span>
-                <Switch
-                  checked={false}
-                  color="primary"
-                  value={ind._id}
-                  onChange={() => enableIndication(ind)}
-                />
-              </li>
-            )
-        })
-        }
-      </ul>
-    </div>
+                index={index}
+                ind={ind}
+                disableIndication={disableIndication}
+                selectedIndicationId={selectedIndicationId}
+                selectIndication={selectIndication}
+              />
+            ))
+          }
+        </SortableContainer>
+
+        <InactiveRow>INACTIVE ({disabledTreatmentPlans.length})</InactiveRow>
+        <UnorderedList>
+          {
+            disabledTreatmentPlans.map(ind => {
+              const isSelected = ind._id === selectedIndicationId
+
+              const ListRow = styled.li({
+                alignItems: 'center',
+                backgroundColor: isSelected ? transparentize(0.9, Colors.PRIMARY) : 'transparent',
+                borderBottom: `1px solid ${transparentize(0.9, Colors.BLACK)}`,
+                borderRadius: 4,
+                color: Colors.BLACK,
+                display: 'flex',
+                justifyContent: 'space-between',
+                marginBottom: 8,
+                padding: `${Spacing.TINY} 0 ${Spacing.TINY} ${Spacing.NORMAL}`,
+                cursor: 'pointer',
+                ':hover': {
+                  backgroundColor: isSelected ? transparentize(0.7, Colors.MEDIUM_GRAY_2) : transparentize(0.92, Colors.BLACK),
+                }
+              })
+
+              return (
+                <ListRow
+                  key={ind._id}
+                  onClick={() => selectIndication(ind._id)}
+                >
+                  <span style={{ ffontWeight: isSelected ? 700 : 50 }}>{ind.name}</span>
+                  <PhoenixSwitch
+                    checked={false}
+                    value={ind._id}
+                    onChange={() => enableIndication(ind)}
+                  />
+                </ListRow>
+              )
+            })
+          }
+        </UnorderedList>
+    </IndicationPanelContainer>
   )
 }
 

@@ -80,9 +80,9 @@ class SitemapPanel extends React.Component {
     } = this.state
 
     return (
-      <div>
+      <div style={{ height: '100vh', display: 'flex', flexDirection: 'column', }}>
         <SitemapPanelHeader teamId={teamId} />
-        <div style={{ display: 'flex' }}>
+        <div style={{ display: 'flex', height: '100%', alignItems: 'stretch' }}>
           <ToolsPanel
             toolsStatus={tools}
             handleToggle={this.handleToggle}
