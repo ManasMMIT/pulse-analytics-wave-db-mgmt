@@ -14,6 +14,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased] - Started: 2-11-20
 
+## [1.2.1] - Started: 2-11-20
+
+### Fixed
+- `Phoenix`: Fixed OpLog bug where on polling refresh, the last push to prod would disappear
+- `Phoenix`: Conditionally render OpLog to only show in production environment
+
 ## [1.2.0] - Started: 2-5-20
 
 ### Added
