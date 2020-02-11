@@ -64,8 +64,7 @@ const StatusPanel = () => (
     {/* <PushToDevButton /> */}
     <PushToProdButton />
 
-    {/* { process.env.NODE_ENV === 'production' && <OpLog /> }*/}
-    <OpLog />
+    { process.env.NODE_ENV === 'production' && <OpLog /> }
   </Wrapper>
 )
 
