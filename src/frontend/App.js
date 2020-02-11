@@ -6,7 +6,7 @@ import { ApolloProvider } from '@apollo/react-hooks'
 import ApolloClient from 'apollo-boost'
 import UserProfile from './UserProfile'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faSignOutAlt } from "@fortawesome/free-solid-svg-icons"
+import { faSignOutAlt, faQuestionCircle } from "@fortawesome/free-solid-svg-icons"
 
 import {
   BrowserRouter as Router,
@@ -75,7 +75,17 @@ const logoutButtonStyle = {
 
 const LogoutContainer = styled.div({
   borderRadius: 4,
-  margin: `${Spacing.NORMAL} ${Spacing.TINY} ${Spacing.TINY}`,
+  margin: `${Spacing.NORMAL} ${Spacing.TINY} 0`,
+  opacity: 0.6,
+  ':hover': {
+    background: transparentize(0.92, Colors.WHITE),
+    opacity: 1,
+  }
+})
+
+const SupportDocumentationContainer = styled.a({
+  borderRadius: 4,
+  margin: `0 ${Spacing.TINY} ${Spacing.TINY}`,
   opacity: 0.6,
   ':hover': {
     background: transparentize(0.92, Colors.WHITE),
@@ -153,7 +163,7 @@ const App = () => {
 
               <div style={sidebarBottomSectionStyle}>
                 <UserProfile />
-                <LogoutContainer>
+                <LogoutContainer title="Log Out">
                   <FontAwesomeIcon
                     style={logoutButtonStyle}
                     onClick={() => {
@@ -164,6 +174,17 @@ const App = () => {
                     color={Colors.WHITE}
                   />
                 </LogoutContainer>
+                <SupportDocumentationContainer
+                  href="https://dedhamgroup.atlassian.net/servicedesk/customer/portal/2/topic/6163d9cf-df29-498b-9c5a-40300462eb76"
+                  target="_blank"
+                  title="Polaris Support Documentation for TDG"
+                >
+                  <FontAwesomeIcon
+                    style={logoutButtonStyle}
+                    icon={faQuestionCircle}
+                    color={Colors.WHITE}
+                  />
+                </SupportDocumentationContainer>
               </div>
             </PolarisSidebar>
             <Switch>

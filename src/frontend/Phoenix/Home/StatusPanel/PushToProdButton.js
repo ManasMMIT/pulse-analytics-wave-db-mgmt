@@ -25,6 +25,7 @@ const StyledButton = styled.button({
   background: transparentize(0.9, Colors.WHITE),
   color: Colors.WHITE,
   transition: Transitions.NORMAL,
+  width: '100%',
   ':hover': {
     background: Colors.WHITE,
     color: Colors.TOOL_SIDEBAR,
@@ -104,7 +105,7 @@ const PushToProdButton = () => {
   )
 
   return (
-    <div style={{ marginTop: 24 }}>
+    <div style={{ width: '100%' }}>
       <StyledButton onClick={handleSubmit}>
         DEPLOY PERMISSIONS
       </StyledButton>

@@ -12,31 +12,25 @@ import { Colors, Spacing } from '../../../utils/pulseStyles'
 // import PushToDevButton from './PushToDevButton'
 import PushToProdButton from './PushToProdButton'
 import OpLog from './OpLog'
-import StatusHeaderIcon from './StatusHeaderIcon'
 
 const wrapperPadding = Spacing.LARGE
 
 const Wrapper = styled.div({
-  flex: 1,
-  padding: wrapperPadding,
-  overflowY: 'scroll',
   backgroundColor: Colors.TOOL_SIDEBAR,
   display: 'flex',
-  alignItems: 'center',
+  flex: 1,
   flexDirection: 'column',
-  maxWidth: 200
-})
-
-const IconContainer = styled.div({
-  display: 'flex',
-  justifyContent: 'center',
-  marginBottom: Spacing.LARGE,
+  maxWidth: 256,
+  overflowY: 'scroll',
+  padding: wrapperPadding,
+  textAlign: 'left',
 })
 
 const Header = styled.h3({
   color: Colors.WHITE,
   fontWeight: 600,
   fontSize: 14,
+  marginTop: 0,
 })
 
 const paragraphStyle = {
@@ -58,40 +52,20 @@ const TextLink = styled.a({
   }
 })
 
-const List = styled.ul({
-  listStylePosition: 'outside',
-  paddingInlineStart: wrapperPadding,
-})
-
-const ListItem = styled.li({
-  ...paragraphStyle,
-  marginBottom: Spacing.NORMAL,
-})
-
 const StatusPanel = () => (
   <Wrapper>
     <div>
-      <IconContainer>
-        <StatusHeaderIcon />
-      </IconContainer>
-      <Header>Deploying Changes to Prod</Header>
+      <Header>Deploying Changes to Production</Header>
       <Paragraph>
-        By default, changes made on Phoenix automatically appear
-        on <TextLink href="https://dev.pulse-tools.com/" target="_blank">dev.pulse-tools.com</TextLink> when you refresh the page.
+        By default, changes automatically appear
+        on <TextLink href="https://dev.pulse-tools.com/" target="_blank">dev.pulse-tools.com</TextLink> after you refresh the Pulse Analytics webapp. For clients to see the changes, click the button below to deploy the changes to production. <TextLink href="https://dedhamgroup.atlassian.net/servicedesk/customer/portal/2/topic/1397ae15-c128-4695-a8f6-da5ffaca7f9d" target="_blank">See guide for help.</TextLink>
       </Paragraph>
-      <Paragraph>
-        Deploy permission changes to the production site via the button below if you have done any of the following actions:
-      </Paragraph>
-      <List>
-        <ListItem>Create, edit, or delete a user, including modifying their team(s)</ListItem>
-        <ListItem>Create, edit, or delete a team</ListItem>
-        <ListItem>Edit team's permissions</ListItem>
-      </List>
     </div>
     {/* <PushToDevButton /> */}
     <PushToProdButton />
 
-    { process.env.NODE_ENV === 'production' && <OpLog /> }
+    {/* { process.env.NODE_ENV === 'production' && <OpLog /> }*/}
+    <OpLog />
   </Wrapper>
 )
 

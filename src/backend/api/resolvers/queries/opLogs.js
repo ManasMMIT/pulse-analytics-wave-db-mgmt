@@ -86,13 +86,16 @@ const opLogs = async (parent, args, { coreNodes, coreRoles }, info) => {
               }
             }
 
-            ops.push({
-              timestamp,
-              username,
-              userId,
-              operationName,
-              operationVariables,
-            })
+            // ! ignore 'FilterQuery' mutations that aren't actually CUD (and also are going to be deprecated)
+            if (operationName !== 'FilterQuery') { 
+              ops.push({
+                timestamp,
+                username,
+                userId,
+                operationName,
+                operationVariables,
+              })
+            }
           }
 
           // Stop reading the file from the end either when you reach last line or when you
