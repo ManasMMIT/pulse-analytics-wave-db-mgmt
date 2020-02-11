@@ -14,6 +14,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased] - Started: 2-11-20
 
+## [1.2.2] - Started: 2-11-20
+
+### Fixed
+- `Phoenix`: Make sure OpLog always refetches log on remount 
+
 ## [1.2.1] - Started: 2-11-20
 
 ### Fixed
