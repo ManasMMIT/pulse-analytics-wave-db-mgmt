@@ -15,7 +15,7 @@ import CancelButton from './CancelButton'
 import SubmitButton from './SubmitButton'
 
 const Wrapper = styled.div({
-  flexGrow: 1,
+  flex: 0,
   backgroundColor: '#EDF1F5',
   padding: 20,
   display: 'flex',
@@ -68,7 +68,7 @@ const SitemapPanelHeader = ({ teamId }) => {
   return (
     <Wrapper>
       <div>
-        <span style={span1Style}>EDITING VIEW CONTROL / </span>
+        <span style={span1Style}>EDITING TEAM PERMISSIONS / </span>
         <SelectedEntityDescription
           style={span1Style}
           queryDoc={GET_SELECTED_CLIENT}
@@ -79,7 +79,12 @@ const SitemapPanelHeader = ({ teamId }) => {
           queryDoc={GET_SELECTED_TEAM}
         />
       </div>
-      <div>
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+        }}
+      >
         <CancelButton />
         <SubmitButton
           teamId={teamId}

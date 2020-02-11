@@ -1,8 +1,56 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import styled from "@emotion/styled"
 import { useMutation, useApolloClient } from '@apollo/react-hooks'
+import { transparentize, lighten } from 'polished'
 
 import Spinner from '../Spinner'
+
+import { Colors, Spacing, FontFamily } from '../../../utils/pulseStyles'
+
+const TeamFormWrapper = styled.div({
+  display: 'flex',
+  flexDirection: 'column',
+  width: 320,
+})
+
+const Label = styled.label({
+  fontSize: 12,
+  lineHeight: '22px',
+  fontWeight: 600,
+  textTransform: 'capitalize'
+})
+
+const Input = styled.input({
+  background: Colors.WHITE,
+  border: `1px solid ${transparentize(0.96, Colors.BLACK)}`,
+  borderRadius: 4,
+  padding: '8px 12px',
+  ':hover': {
+    border: `1px solid ${transparentize(0.9, Colors.BLACK)}`,
+  },
+  ':focus': {
+    border: `1px solid ${transparentize(0.1, Colors.PRIMARY)}`,
+    outline: 'none',
+  }
+})
+
+const Button = styled.button({
+  background: Colors.PRIMARY,
+  border: 'none',
+  borderRadius: 4,
+  color: Colors.WHITE,
+  cursor: 'pointer',
+  fontFamily: FontFamily.NORMAL,
+  fontSize: 12,
+  fontWeight: 600,
+  padding: `${Spacing.NORMAL} ${Spacing.LARGE}`,
+  textTransform: 'uppercase',
+  marginTop: Spacing.LARGE,
+  ':hover': {
+    background: lighten(0.1, Colors.PRIMARY),
+  }
+})
 
 class TextForm extends Component {
   constructor(props) {
@@ -37,29 +85,30 @@ class TextForm extends Component {
     } = this
 
     return (
-      <div>
-        <input
+      <TeamFormWrapper>
+        <Label>Name</Label>
+        <Input
           type="text"
           name={"description"}
           onChange={handleChange}
           value={state.description}
         />
-        <button
+        <Button
           type="submit"
           onClick={() => handleSubmit({ variables: { input: state } }).then(afterSubmitHook)}
         >
           submit
-        </button>
-      </div>
+        </Button>
+      </TeamFormWrapper>
     );
   }
 }
 
-const TextFormContainer = ({ 
-  mutationDoc, 
+const TextFormContainer = ({
+  mutationDoc,
   clientMutation,
   refetchQueries,
-  ...otherProps 
+  ...otherProps
 }) => {
   const client = useApolloClient()
 
@@ -74,7 +123,7 @@ const TextFormContainer = ({
 
   const [handleSubmit, { loading, error }] = useMutation(
     mutationDoc,
-    { 
+    {
       update: updateClientMutationCallback,
       refetchQueries,
     },

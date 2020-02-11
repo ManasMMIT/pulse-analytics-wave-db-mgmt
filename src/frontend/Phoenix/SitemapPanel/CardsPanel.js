@@ -1,8 +1,6 @@
 import React from 'react'
 import { useQuery } from '@apollo/react-hooks'
 
-import { transparentize } from 'polished'
-
 import {
   GET_PAGE_CARDS,
   GET_SELECTED_CARD,
@@ -14,32 +12,13 @@ import { SELECT_CARD } from '../../api/mutations'
 import Panel from '../shared/Panel'
 import ButtonGroup from './shared/ButtonGroup'
 
-const defaultPanelStyle = {
-  padding: 20,
-}
-
-const panelHeaderStyle = {
-  color: '#0E2539',
-  fontWeight: 600,
-}
-
-const panelItemStyle = {
-  display: 'flex',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-  padding: '17px 20px',
-  color: '#0E2539',
-  fontWeight: 600,
-  fontSize: 12,
-  backgroundColor: transparentize(0.95, '#0E2539'),
-  marginTop: 10,
-  cursor: 'pointer',
-}
-
-const panelItemActiveStyle = {
-  backgroundColor: transparentize(0.9, '#0668D9'),
-  color: '#0668D9',
-}
+import {
+  panelItemStyle,
+  panelItemActiveStyle,
+  panelHeaderStyle,
+  panelTitleStyle,
+  defaultPanelStyle,
+} from './shared/panelStyles'
 
 const PagesPanel = ({
   handleToggle,
@@ -75,8 +54,8 @@ const PagesPanel = ({
     <Panel
       style={defaultPanelStyle}
       headerContainerStyle={panelHeaderStyle}
+      titleStyle={panelTitleStyle}
       title={`CARDS / ${pageName}`}
-      titleStyle={{ fontSize: 16 }}
       queryDocs={{
         fetchAllQueryProps: { query: GET_PAGE_CARDS },
         fetchSelectedQueryProps: { query: GET_SELECTED_CARD },

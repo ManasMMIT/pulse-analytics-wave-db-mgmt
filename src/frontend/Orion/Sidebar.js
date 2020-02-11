@@ -133,6 +133,13 @@ const Sidebar = () => {
       <StyledNavLink
         style={inactiveLinkStyle}
         activeStyle={activeLinkStyle}
+        to={`/orion/data-management/new-query`}
+      >
+        New Query Tool
+      </StyledNavLink>
+      <StyledNavLink
+        style={inactiveLinkStyle}
+        activeStyle={activeLinkStyle}
         to={`/orion/data-management/questions`}
       >
         Suggested Questions

@@ -12,7 +12,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Fixed** for any bug fixes.
 - **Security** in case of vulnerabilities.
 
-## [Unreleased] - Started: 2-5-20
+## [Unreleased] - Started: 2-11-20
+
+## [1.2.0] - Started: 2-5-20
+
+### Added
+- `Orion`: pql proof of concept backend and frontend
+- `Phoenix`: oplog in StatusPanel showing what's changed since the last push to prod
+
+### Fixed
+- `Phoenix`: Team Permissions sitemap bug, where unselected tool's dashes/pages/cards would display whenever a tool without a full sitemap was selected
+- `Polaris Frontend`: Logging out now redirects user to `window.location.origin` as it should, instead of `localhost:3000`
+
+### Changed
+- `Phoenix`: Styling upgrade in preparation for handoff to consultants
 
 ## [1.1.0] - Started: 1-30-20
 

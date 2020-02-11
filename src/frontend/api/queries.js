@@ -463,3 +463,15 @@ export const GET_ALERT = gql`
     }
   }
 `
+
+export const GET_OP_LOG = gql`
+  query getOpLog {
+    opLogs {
+      timestamp
+      username
+      userId
+      operationName
+      operationVariables
+    }
+  }
+`

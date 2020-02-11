@@ -6,7 +6,8 @@ const fs = require('fs')
 const jwt = require('express-jwt')
 const jwksRsa = require('jwks-rsa')
 const morgan = require('morgan')
-const routes = require('./routes')
+const api = require('./api')
+const pql = require('./pql')
 
 const app = express()
 const port = 1337
@@ -31,10 +32,11 @@ const accessLogStream = fs.createWriteStream(
 )
 
 // Custom morgan token inspired by https://github.com/expressjs/morgan/issues/116
-morgan.token('graphql-query', (req) => {
-  const { sub } = req.user
+morgan.token('graphql-query', req => {
+  const user = req.user['https://random-url-for-extra-user-info']
+  const { user_id, username } = user
   const { operationName, variables } = req.body
-  return `User: ${sub} / GraphQL Operation: ${operationName} / Variables: ${JSON.stringify(variables)}`
+  return `username: ${username} / userId: ${user_id} / operationName: ${operationName} / operationVariables: ${JSON.stringify(variables)}`
 })
 
 if (process.env.NODE_ENV === 'production') {
@@ -66,7 +68,20 @@ app.use(
       stream: accessLogStream,
     }
   ), 
-  routes
+  api
+)
+
+app.use(
+  '/pql',
+  checkJwt,
+  (err, req, res, next) => {
+    if (err.name === 'UnauthorizedError') {
+      res.status(401).json(err)
+    } else {
+      next()
+    }
+  },
+  pql
 )
 
 app.listen(port, () => console.log(`PHOENIX ONLINE. PORT ${port}!`))

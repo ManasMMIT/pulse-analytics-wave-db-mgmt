@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
+import styled from '@emotion/styled'
+import { transparentize, lighten } from 'polished'
 import { useMutation, useApolloClient } from '@apollo/react-hooks'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faTrashAlt } from "@fortawesome/free-solid-svg-icons"
@@ -7,22 +9,39 @@ import { faTrashAlt } from "@fortawesome/free-solid-svg-icons"
 import Modal from './../../components/Modal'
 import Spinner from './Spinner'
 
+import { Colors, Spacing, Transitions } from '../../utils/pulseStyles'
+
 const trashCan = <FontAwesomeIcon size="lg" icon={faTrashAlt} />
 
-const modalButtonStyle = {
-  background: 'red',
-  color: 'white',
-  fontWeight: 700,
-  padding: '4px 8px',
-  textAlign: 'center',
-}
-
-const buttonStyle = {
+const StyledButton = styled.button({
   border: 'none',
   background: 'none',
-  color: '#0A2E4D',
+  color: transparentize(0.7, Colors.BLACK),
   cursor: 'pointer',
-  opacity: 0.3,
+  marginLeft: Spacing.TINY,
+  ':hover': {
+    color: Colors.RED,
+  }
+})
+
+const DeleteForeverButton = styled.button({
+  borderRadius: 4,
+  border: 'none',
+  background: Colors.RED,
+  color: Colors.WHITE,
+  fontSize: 12,
+  fontWeight: 700,
+  padding: `${Spacing.SMALL} ${Spacing.NORMAL}`,
+  textTransform: 'uppercase',
+  cursor: 'pointer',
+  transition: `background ${Transitions.NORMAL}`,
+  ':hover': {
+    background: lighten(0.1, Colors.RED),
+  }
+})
+
+const modalButtonStyle = {
+
 }
 
 const DeleteButton = ({
@@ -63,12 +82,12 @@ const DeleteButton = ({
 
   return (
     <>
-      <button
-        style={{ ...buttonStyle, ...style }}
+      <StyledButton
+        style={{ ...style }}
         onClick={openModal}
       >
         {trashCan}
-      </button>
+      </StyledButton>
       <Modal
         handleClose={closeModal}
         show={isModalOpen}
@@ -79,12 +98,12 @@ const DeleteButton = ({
         loading
         ? <Spinner />
         : (
-          <div
+          <DeleteForeverButton
             style={modalButtonStyle}
             onClick={finalDeleteHandler}
           >
             Delete Forever
-          </div>
+          </DeleteForeverButton>
         )
       }
       </Modal>

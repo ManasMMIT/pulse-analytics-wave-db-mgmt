@@ -34,11 +34,12 @@ const Main = styled.section({
   display: "inline-flex",
   flexDirection: 'column',
   justifyContent: "space-between",
-  padding: 32,
   overflowY: 'auto',
-  maxHeight: '80vh',
+  maxHeight: '90vh',
+  margin: 32,
 }, props => ({
   width: props.width,
+  padding: props.padding,
 }))
 
 const Header = styled.div({
@@ -100,7 +101,9 @@ class Modal extends React.Component {
       style,
       disableHeader,
       submitButton,
-      width
+      padding,
+      width,
+      modalStyle
     } = this.props
 
     if (!show) return null
@@ -112,15 +115,15 @@ class Modal extends React.Component {
     }
 
     return (
-      <Wrapper onClick={this.handleClickAway} css={style}>
-        <Main ref={node => { this.node = node }} width={width}>
+      <Wrapper onClick={this.handleClickAway} style={style}>
+        <Main ref={node => { this.node = node }} width={width} padding={padding} style={modalStyle}>
           {
             disableHeader || (
               <Header>
                 <Title>{title}</Title>
                 <ButtonWrapper>
                   <CloseButton onClick={onClickCloseButton}>
-                    close
+                    Cancel + Close
                   </CloseButton>
                   {submitButton}
                 </ButtonWrapper>
@@ -141,8 +144,10 @@ Modal.defaultProps = {
   show: false,
   title: null,
   style: {},
+  modalStyle: {},
   disableHeader: false,
   width: 'auto',
+  padding: 32,
   noClickAway: false,
 }
 
@@ -151,6 +156,8 @@ Modal.propTypes = {
   show: PropTypes.bool,
   title: PropTypes.string,
   style: PropTypes.object,
+  modalStyle: PropTypes.object,
+  padding: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   disableHeader: PropTypes.bool,
   width: PropTypes.string,
   noClickAway: PropTypes.bool,

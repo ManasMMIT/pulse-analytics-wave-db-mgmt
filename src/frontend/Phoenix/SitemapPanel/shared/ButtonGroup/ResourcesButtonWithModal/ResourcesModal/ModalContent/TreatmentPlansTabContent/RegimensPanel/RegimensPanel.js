@@ -1,86 +1,106 @@
 import React from 'react'
 import Switch from '@material-ui/core/Switch'
 import styled from "@emotion/styled"
+import { withStyles } from '@material-ui/core/styles';
 import { transparentize, mix } from 'polished'
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faArrowsAltV } from "@fortawesome/free-solid-svg-icons"
 import {
   sortableContainer,
   sortableElement,
   sortableHandle,
 } from 'react-sortable-hoc'
 
-import { Colors } from '../../../../../../../../../utils/pulseStyles'
+import { Colors, Spacing } from '../../../../../../../../../utils/pulseStyles'
 
 import '../sortableContainerStyles.css'
 
-const ListHeader = styled.div({
-  fontSize: 14,
-  fontWeight: 500,
-  textTransform: 'uppercase',
-  padding: '12px 24px',
-})
+import {
+  IndicationPanelContainer,
+  ListHeader,
+  ActiveRow,
+  InactiveRow,
+  UnorderedList,
+} from '../styledComponents'
 
 const SelectedIndication = styled.span({
   color: Colors.PRIMARY,
   textTransform: 'normal',
-
 })
 
-const ActiveRow = styled.div({
-  background: mix(0.8, Colors.WHITE, Colors.GREEN),
-  color: Colors.GREEN,
-  padding: '8px 24px',
-  fontWeight: 600,
-  lineHeight: '18px',
-  fontSize: 10,
-  position: 'sticky',
-  top: 0,
-  zIndex: 5,
+const ListRow = styled.li({
+  alignItems: 'center',
+  backgroundColor: 'transparent',
+  borderBottom: `1px solid ${transparentize(0.9, Colors.BLACK)}`,
+  borderRadius: 4,
+  color: Colors.BLACK,
+  display: 'flex',
+  justifyContent: 'space-between',
+  marginBottom: 8,
+  padding: `${Spacing.TINY} 0`,
+  ':hover': {
+    backgroundColor: transparentize(0.92, Colors.BLACK),
+  }
 })
 
-const InactiveRow = styled.div({
-  background: mix(0.8, Colors.WHITE, Colors.MEDIUM_GRAY_2),
-  color: Colors.MEDIUM_GRAY_2,
-  padding: '8px 24px',
-  fontWeight: 600,
-  lineHeight: '18px',
-  fontSize: 10,
-  position: 'sticky',
-  top: 0,
-  zIndex: 5,
-})
+const DragHandle = sortableHandle(() => (
+  <span
+    style={{
+      padding: `${Spacing.SMALL} ${Spacing.NORMAL}`,
+      opacity: 0.3,
+      fontSize: 16,
+    }}
+  >
+    <FontAwesomeIcon
+      icon={faArrowsAltV}
+      color={Colors.BLACK}
+    />
+  </span>
+))
 
-const DragHandle = sortableHandle(() => <span style={{ paddingRight: 8, opacity: 0.3 }}>::</span>)
+const switchColor = Colors.GREEN
+
+// Material UI Custom Switch Styling
+const PhoenixSwitch = withStyles({
+  switchBase: {
+    color: mix(0.4, Colors.BLACK, Colors.WHITE),
+    '&$checked': {
+      color: switchColor,
+    },
+    '&$checked + $track': {
+      backgroundColor: switchColor,
+    },
+  },
+  checked: {},
+  track: {
+    backgroundColor: transparentize(0.7, Colors.BLACK),
+  },
+})(Switch)
 
 const SortableItem = sortableElement(({
   reg,
   disableRegimen,
 }) => {
   return (
-    <li
-      style={{
-        display: 'flex',
-        borderBottom: `1px solid ${transparentize(0.9, Colors.BLACK)}`,
-        marginBottom: 8,
-      }}
-    >
-      <DragHandle />
-
-      <span>{reg.name}</span>
-      <Switch
+    <ListRow>
+      <div>
+        <DragHandle />
+        <span style={{ fontWeight: 500 }}>{reg.name}</span>
+      </div>
+      <PhoenixSwitch
         checked
-        color="primary"
         value={reg._id}
         onChange={() => disableRegimen(reg)}
       />
-    </li>
+    </ListRow>
   )
 })
 
 const SortableContainer = sortableContainer(({ children }) => {
   return (
-    <ul>
+    <UnorderedList>
       {children}
-    </ul>
+    </UnorderedList>
   )
 })
 
@@ -93,7 +113,7 @@ const RegimensPanel = ({
   onSortEnd,
 }) => {
   return (
-    <div style={{ flex: 3, maxHeight: 600, overflow: 'auto' }}>
+    <IndicationPanelContainer>
       <ListHeader>Regimens / <SelectedIndication>{selectedIndicationName}</SelectedIndication></ListHeader>
 
       <ActiveRow>ACTIVE ({enabledRegimens.length})</ActiveRow>
@@ -116,31 +136,24 @@ const RegimensPanel = ({
       </SortableContainer>
 
       <InactiveRow>INACTIVE ({disabledRegimens.length})</InactiveRow>
-      <ul>
+      <SortableContainer>
         {
           disabledRegimens.map(reg => {
             return (
-              <li
-                key={reg._id}
-                style={{
-                  display: 'flex',
-                  borderBottom: `1px solid ${transparentize(0.9, Colors.BLACK)}`,
-                  marginBottom: 8,
-                }}
-              >
-                <span>{reg.name}</span>
-                <Switch
+              <ListRow key={reg._id}>
+                <span style={{ fontWeight: 500 }}>{reg.name}</span>
+                <PhoenixSwitch
                   checked={false}
                   color="primary"
                   value={reg._id}
                   onChange={() => enableRegimen(reg)}
                 />
-              </li>
+              </ListRow>
             )
           })
         }
-      </ul>
-    </div>
+      </SortableContainer>
+    </IndicationPanelContainer>
   )
 }
 

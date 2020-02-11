@@ -1,6 +1,71 @@
 import React from 'react'
 import _ from 'lodash'
+import styled from "@emotion/styled"
 import Switch from '@material-ui/core/Switch'
+import { withStyles } from '@material-ui/core/styles';
+import { transparentize, mix } from 'polished'
+
+import { Colors, Spacing } from '../../../../../../../utils/pulseStyles'
+
+const ToggleButtonContainer = styled.div({
+  display: 'flex',
+  justifyContent: 'flex-end',
+  position: 'sticky',
+  top: 0,
+  padding: `${Spacing.SMALL} ${Spacing.LARGE}`,
+  background: '#F0F6F9',
+  borderBottom: `2px solid ${transparentize(0.9, Colors.BLACK)}`,
+  zIndex: 100,
+})
+
+const ToggleButton = styled.button({
+  border: 'none',
+  borderRadius: 4,
+  cursor: 'pointer',
+  fontSize: 10,
+  fontWeight: 700,
+  padding: `${Spacing.SMALL} ${Spacing.NORMAL}`,
+  textTransform: 'uppercase',
+  ':active': {
+    outline: 'none'
+  },
+  ':focus': {
+    outline: 'none'
+  },
+}, props => ({
+  color: props.color,
+  background: transparentize(0.85, props.color),
+  ':hover': {
+    background: transparentize(0.7, props.color),
+  },
+}))
+
+const AccountRowItem = styled.div({
+  borderBottom: `1px solid ${transparentize(0.9, Colors.BLACK)}`,
+  paddingLeft: Spacing.NORMAL,
+  ':hover': {
+    background: transparentize(0.92, Colors.BLACK),
+  }
+})
+
+const switchColor = Colors.GREEN
+
+// Material UI Custom Switch Styling
+const PhoenixSwitch = withStyles({
+  switchBase: {
+    color: mix(0.4, Colors.BLACK, Colors.WHITE),
+    '&$checked': {
+      color: switchColor,
+    },
+    '&$checked + $track': {
+      backgroundColor: switchColor,
+    },
+  },
+  checked: {},
+  track: {
+    backgroundColor: transparentize(0.7, Colors.BLACK),
+  },
+})(Switch)
 
 const AccountsTabContent = ({
   baseAccounts,
@@ -31,30 +96,36 @@ const AccountsTabContent = ({
     if (enabledAccountsById[account._id]) checked = true
 
     return (
-      <div key={account._id}>
-        <span>{account.organization}</span>
-        <Switch
+      <AccountRowItem key={account._id}>
+        <PhoenixSwitch
           checked={checked}
           onChange={e => {
             e.target.checked ? enableAccount(account) : disableAccount(account)
           }}
-          color="primary"
           value={account._id}
         />
-      </div>
+        <span style={{ fontWeight: 500 }}>{account.organization}</span>
+      </AccountRowItem>
     )
   })
 
   return (
-    <div style={{ maxHeight: 600, overflow: 'auto' }}>
-      <div style={{ display: 'flex' }}>
-        <button onClick={enableAllAccounts}>
-          Toggle on All
-        </button>
-        <button onClick={disableAllAccounts}>
-          Toggle off All
-        </button>
-      </div>
+    <div style={{ maxHeight: 700, overflow: 'auto', background: Colors.WHITE }}>
+      <ToggleButtonContainer>
+        <ToggleButton
+          onClick={enableAllAccounts}
+          color={Colors.GREEN}
+          style={{ marginRight: Spacing.LARGE }}
+        >
+          Toggle on All Accounts
+        </ToggleButton>
+        <ToggleButton
+          onClick={disableAllAccounts}
+          color={Colors.MEDIUM_GRAY_2}
+        >
+          Toggle off All Accounts
+        </ToggleButton>
+      </ToggleButtonContainer>
 
       {accountsList}
     </div>

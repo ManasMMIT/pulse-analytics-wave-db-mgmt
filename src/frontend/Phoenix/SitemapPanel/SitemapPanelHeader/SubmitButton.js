@@ -23,8 +23,9 @@ const StyledButton = styled.button({
   color: Colors.WHITE,
   cursor: 'pointer',
   fontSize: 12,
-  fontWeight: 600,
-  padding: `${Spacing.TINY} ${Spacing.SMALL}`,
+  fontWeight: 700,
+  padding: `${Spacing.SMALL} ${Spacing.NORMAL}`,
+  textTransform: 'uppercase',
   ':hover': {
     backgroundColor: lighten(0.1, Colors.PRIMARY),
   }
@@ -41,9 +42,29 @@ const SubmitButton = ({
     }
   )
 
-  if (loading) return <Spinner />
+  if (loading) return (
+    <div
+      style={{
+        diplay: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}
+    >
+      <Spinner />
+      <span
+        style={{
+          color: Colors.PRIMARY,
+          fontSize: 9,
+          fontWeight: 700,
+          paddingLeft: 12,
+        }}
+      >
+        LOADING
+      </span>
+    </div>
+  )
   if (error) return (
-    <div style={{ color: 'red' }}>
+    <div style={{ color: Colors.RED }}>
       Error processing request
     </div>
   )

@@ -14,10 +14,11 @@ const StyledLink = styled(Link)({
   background: transparentize(0.9, Colors.PRIMARY),
   borderRadius: 4,
   color: Colors.PRIMARY,
-  fontWeight: 600,
+  fontWeight: 700,
   fontSize: 12,
   marginRight: Spacing.NORMAL,
-  padding: `${Spacing.TINY} ${Spacing.SMALL}`,
+  padding: `${Spacing.SMALL} ${Spacing.NORMAL}`,
+  textTransform: 'uppercase',
   textDecoration: 'none',
   ':hover': {
     background: transparentize(0.75, Colors.PRIMARY)

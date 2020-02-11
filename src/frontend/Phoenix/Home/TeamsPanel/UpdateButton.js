@@ -1,6 +1,8 @@
 import React from 'react'
+import styled from '@emotion/styled'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faEdit } from "@fortawesome/free-solid-svg-icons"
+import { transparentize } from 'polished'
 
 import {
   UPDATE_TEAM,
@@ -9,19 +11,23 @@ import {
 
 import TextFormButton from '../../shared/TextForm/Button'
 
+import { Colors } from '../../../utils/pulseStyles'
+
+const EditIcon = styled(FontAwesomeIcon)({
+  border: 'none',
+  background: 'none',
+  color: transparentize(0.7, Colors.BLACK),
+  ':hover': {
+    color: Colors.PRIMARY,
+  },
+})
+
 const editIcon = (
-  <FontAwesomeIcon
+  <EditIcon
     size="lg"
     icon={faEdit}
   />
 )
-
-const buttonStyle = {
-  border: 'none',
-  background: 'none',
-  color: '#0A2E4D',
-  opacity: 0.3,
-}
 
 const UpdateButton = ({
   team: {
@@ -32,7 +38,7 @@ const UpdateButton = ({
   <TextFormButton
     modalTitle="Edit Team"
     buttonLabel={editIcon}
-    buttonStyle={buttonStyle}
+    buttonStyle={{ border: 'none', background: 'none' }}
     data={{ description }}
     mutationDoc={UPDATE_TEAM}
     additionalFormData={{ _id }}

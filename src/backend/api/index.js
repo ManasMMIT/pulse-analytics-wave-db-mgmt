@@ -30,7 +30,7 @@ MongoClient.connect(process.env.LOADER_URI, { useNewUrlParser: true }, (err, cli
   const coreNodes = pulseCoreDb.collection('nodes')
   const coreClients = pulseCoreDb.collection('clients')
 
-  console.log(`Connected to MongoDB: ${process.env.LOADER_URI}`)
+  console.log(`API Connected to MongoDB: ${process.env.LOADER_URI}`)
 
   const twoGuysInAHorseCostume = {
     // Head + front-hooves

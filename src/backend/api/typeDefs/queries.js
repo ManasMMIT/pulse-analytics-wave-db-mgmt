@@ -28,6 +28,8 @@ const queries = gql`
     alert(_id: ID): Alert
 
     organizationMeta(_ids: [ID]): [OrganizationMeta]
+
+    opLogs: [OpLog]
   }
 
   type Node {
@@ -182,6 +184,14 @@ const queries = gql`
     exporter: JSON
     updatedAt: DateTime
     updater: JSON
+  }
+  
+  type OpLog {
+    timestamp: DateTime
+    username: String
+    userId: String
+    operationName: String
+    operationVariables: JSON
   }
 `
 
