@@ -30,6 +30,7 @@ const OpLog = () => {
   const { loading, error, data } = useQuery(GET_OP_LOG, {
     pollInterval: 60000,
     notifyOnNetworkStatusChange: true,
+    fetchPolicy: 'network-only',
   })
 
   if (loading) return (
