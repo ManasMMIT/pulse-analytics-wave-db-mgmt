@@ -43,15 +43,14 @@ const OpLog = () => {
 
   if (error) return <span style={{ color: 'red' }}>Error processing request</span>
 
-  const { opLogs } = data
-
-  const pushToProdLogIdx = opLogs.findIndex(
-    ({ operationName }) => operationName === 'PushSitemapToProd'
-  )
+  let { opLogs } = data
 
   let pushToProdLog
-  if (pushToProdLogIdx > -1) {
-    pushToProdLog = opLogs.splice(pushToProdLogIdx, 1)[0]
+  if (!_.isEmpty(opLogs)) {
+    if (opLogs[opLogs.length - 1].operationName === 'PushSitemapToProd') {
+      pushToProdLog = opLogs[opLogs.length - 1]
+      opLogs = opLogs.slice(0, opLogs.length - 1)
+    }
   }
 
   return (
