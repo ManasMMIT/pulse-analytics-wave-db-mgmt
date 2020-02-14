@@ -49,12 +49,17 @@ MongoClient.connect(process.env.LOADER_URI, { useNewUrlParser: true }, (err, cli
     coreNodes,
   }
 
+  let brokenTopLevelReq
   const apolloServer = new ApolloServer({
     typeDefs,
     resolvers,
+    formatError: (err) => {
+      brokenTopLevelReq.errors = err
+    },
     context: ({ req }) => { // req/res comes in here https://www.apollographql.com/docs/apollo-server/api/apollo-server/#apolloserver
       const user = req.user['https://random-url-for-extra-user-info']
 
+      brokenTopLevelReq = req
       return {
         ...twoGuysInAHorseCostume,
         user,
