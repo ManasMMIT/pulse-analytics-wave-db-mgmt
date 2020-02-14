@@ -1,5 +1,5 @@
 require('dotenv').load()
-
+const util = require('util')
 const _ = require('lodash')
 const express = require('express')
 const path = require('path')
@@ -47,6 +47,10 @@ morgan.token('graphql-query', req => {
   return `username: ${username} / userId: ${user_id} / operationName: ${operationName} / operationVariables: ${JSON.stringify(copyOfVariables)}`
 })
 
+morgan.token('dump_res_on_error', function (req, res) {
+  return res.statusCode !== 200 ? util.inspect({ status: res.statusCode, errors: req.errors }) : undefined
+})
+
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(process.cwd(), 'build')));
 
@@ -69,7 +73,7 @@ app.use(
     }
   },
   morgan(
-    '[:date[iso]] :graphql-query\n', 
+    '[:date[iso]] :graphql-query\n:dump_res_on_error\n', 
     { 
       // skip any query that isn't a mutation
       skip: req => req.body && req.body.query && !req.body.query.match(/mutation/),
