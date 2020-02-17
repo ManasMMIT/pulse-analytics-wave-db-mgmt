@@ -14,6 +14,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased] - Started: 2-11-20
 
+### Fixed
+- `Phoenix`: Trim empty spaces on user's username and email on create/update
+
 ## [1.2.2] - Started: 2-11-20
 
 ### Fixed
