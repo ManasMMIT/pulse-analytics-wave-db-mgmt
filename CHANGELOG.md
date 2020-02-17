@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Security** in case of vulnerabilities.
 
 ## [Unreleased] - Started: 2-11-20
+- `Phoenix`: Show team and client names for Update Role Sitemap operation in OpLog
 
 ### Fixed
 - `Phoenix`: Trim empty spaces on user's username and email on create/update

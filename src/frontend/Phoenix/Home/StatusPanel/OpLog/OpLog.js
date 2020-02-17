@@ -80,7 +80,7 @@ const OpLog = () => {
                 </TimeUserContainer>
                 <ActionContainer>
                   {
-                    operationName === 'UpdatePermissions' && (
+                    ['UpdatePermissions', 'UpdateRoleSitemap'].includes(operationName) && (
                       <Client>
                         [
                           <span>{operationVariables.input.team.clientName}</span>
