@@ -15,10 +15,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased] - Started: 2-11-20
 
 ### Added
-- `Orion`: Built out `useBom` (business object modal) hook.
+- `Orion`: Build out custom hook `useAquila` to make interfacing w/ `Aquila-js` api easier.
+- `Orion`: Built out custom hook `useBom` (business object modal).
 
 ### Changed
 - `Phoenix`: Show team and client names for Update Role Sitemap operation in OpLog
+- `Polaris`: Upgrade `react-router-dom` and `react-router` to gain access to useLocation and useHistory hooks.
 
 ### Fixed
 - `Phoenix`: Trim empty spaces on user's username and email on create/update
