@@ -13,6 +13,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Security** in case of vulnerabilities.
 
 ## [Unreleased] - Started: 2-11-20
+
+### Added
+- `Orion`: Built out `useBom` (business object modal) hook.
+
+### Changed
 - `Phoenix`: Show team and client names for Update Role Sitemap operation in OpLog
 
 ### Fixed

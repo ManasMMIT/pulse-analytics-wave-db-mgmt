@@ -39,7 +39,7 @@ const AccountProfileSection = ({
         />
       </Label>
       <Label>
-        <LabelText>alias</LabelText>
+        <LabelText>short name</LabelText>
         <Input
           type="text"
           value={formState.organizationTiny}
