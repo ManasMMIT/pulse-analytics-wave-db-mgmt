@@ -58,7 +58,7 @@ const StatusPanel = () => (
       <Header>Deploying Changes to Production</Header>
       <Paragraph>
         By default, changes automatically appear
-        on <TextLink href="https://dev.pulse-tools.com/" target="_blank">dev.pulse-tools.com</TextLink> after you refresh the Pulse Analytics webapp. For clients to see the changes, click the button below to deploy the changes to production. <TextLink href="https://dedhamgroup.atlassian.net/servicedesk/customer/portal/2/topic/1397ae15-c128-4695-a8f6-da5ffaca7f9d" target="_blank">See guide for help.</TextLink>
+        on <TextLink href="https://dev.pulse-tools.com/" target="_blank">dev.pulse-tools.com</TextLink> after you refresh the Pulse Analytics webapp. For clients to see the changes, click the button below to deploy the changes to production. <TextLink href="https://dedhamgroup.atlassian.net/wiki/spaces/TDG/pages/713129985/Phoenix+User+MGMT#Status-Panel" target="_blank">See guide for help.</TextLink>
       </Paragraph>
     </div>
     {/* <PushToDevButton /> */}

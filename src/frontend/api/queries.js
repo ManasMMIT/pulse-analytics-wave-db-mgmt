@@ -1,5 +1,14 @@
 import gql from 'graphql-tag'
 
+export const GET_BOM_SCHEMA = gql`
+  query getBomSchema($boid: ID) {
+    bomSchema(boid: $boid) {
+      tag
+      fields
+    }
+  }
+`
+
 export const GET_ORGANIZATION_META = gql`
   query getOrganizationMeta($_ids: [ID]) {
     organizationMeta(_ids: $_ids) {

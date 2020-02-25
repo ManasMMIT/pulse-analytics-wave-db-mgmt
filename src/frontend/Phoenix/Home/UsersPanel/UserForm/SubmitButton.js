@@ -47,7 +47,14 @@ const SubmitButton = ({
   ] = useMutation(mutationDoc, { update: updateMutationCallback })
 
   if (loading) return <Spinner />
-  if (error) return <div style={{ color: 'red' }}>Error processing request</div>
+  
+  if (error) {
+    return (
+      <div style={{ color: 'red' }}>
+        Error: {error.message}
+      </div>
+    )
+  }
 
   return (
     <Button

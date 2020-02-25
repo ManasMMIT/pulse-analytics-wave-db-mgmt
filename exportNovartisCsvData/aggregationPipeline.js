@@ -71,7 +71,7 @@ module.exports = [
         }
       },
       INDICATION: '$indication',
-      URL_TO_PA_Policy: { $ifNull: [ "$siteLink", "Not Available" ] },
+      URL_to_PA_Policy: { $ifNull: [ "$siteLink", "Not Available" ] },
       RESTRICTION_CODE: {
         $switch: {
           branches: [

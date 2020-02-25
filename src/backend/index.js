@@ -1,4 +1,6 @@
 require('dotenv').load()
+
+const _ = require('lodash')
 const express = require('express')
 const path = require('path')
 const bodyParser = require('body-parser')
@@ -36,7 +38,16 @@ morgan.token('graphql-query', req => {
   const user = req.user['https://random-url-for-extra-user-info']
   const { user_id, username } = user
   const { operationName, variables } = req.body
-  return `username: ${username} / userId: ${user_id} / operationName: ${operationName} / operationVariables: ${JSON.stringify(variables)}`
+
+  const copyOfVariables = _.cloneDeep(variables)
+
+  // ! Don't persist passwords in nested input
+  if (
+    copyOfVariables.input
+    && copyOfVariables.input.password
+  ) copyOfVariables.input.password = true
+
+  return `username: ${username} / userId: ${user_id} / operationName: ${operationName} / operationVariables: ${JSON.stringify(copyOfVariables)}`
 })
 
 if (process.env.NODE_ENV === 'production') {
@@ -52,7 +63,7 @@ app.use(bodyParser.json({ limit: '50mb' }))
 
 app.use(
   '/api', 
-  checkJwt, 
+  checkJwt,
   (err, req, res, next) => {
     if (err.name === 'UnauthorizedError') {
       res.status(401).json(err)
@@ -63,11 +74,15 @@ app.use(
   morgan(
     '[:date[iso]] :graphql-query\n', 
     { 
-      // skip any query that isn't a mutation
-      skip: req => req.body && req.body.query && !req.body.query.match(/mutation/),
+      // skip any query that doesn't have a body, body.query, or whose body.query isn't a mutation
+      skip: req => {
+        if (!req.body) return true
+        if (!req.body.query) return true 
+        if (!req.body.query.match(/mutation/)) return true
+      },
       stream: accessLogStream,
     }
-  ), 
+  ),
   api
 )
 

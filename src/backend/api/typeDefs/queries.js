@@ -30,6 +30,8 @@ const queries = gql`
     organizationMeta(_ids: [ID]): [OrganizationMeta]
 
     opLogs: [OpLog]
+
+    bomSchema(boid: ID): [BomTagFields]
   }
 
   type Node {
@@ -192,6 +194,11 @@ const queries = gql`
     userId: String
     operationName: String
     operationVariables: JSON
+  }
+
+  type BomTagFields {
+    tag: String!
+    fields: JSON # not stable enough yet
   }
 `
 

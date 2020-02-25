@@ -1,38 +1,22 @@
-import React, { useState } from 'react'
+import React from 'react'
+import _ from 'lodash'
 import Inspector from 'react-inspector'
 
-import { useAuth0 } from '../../../react-auth0-spa'
+import useAquila from './../../hooks/useAquila'
+
 import Spinner from './../../Phoenix/shared/Spinner'
 
-const PQL_URL = 'http://localhost:3000/pql'
-
-const submitPQL = (accessToken, pql, setData, setLoading) => {
-  setLoading(true)
-
-  fetch(
-    PQL_URL,
-    {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json; charset=utf-8',
-        Authorization: `Bearer ${accessToken}`,
-      },
-      body: JSON.stringify({ pql })
-    }
-  )
-    .then(res => res.json())
-    .then(res => {
-      setData(res)
-      setLoading(false)
-    })
-}
-
 const NewQueryTool = () => {
-  const [data, setData] = useState([])
-  const [pql, setPql] = useState('')
-  const [loading, setLoading] = useState(false)
-
-  const { accessToken } = useAuth0()
+  const {
+    setPql,
+    data: {
+      pql,
+      results,
+      filterOptions
+    },
+    loading,
+    submitPql,
+  } = useAquila()
 
   return (
     <div style={{ margin: 12 }}>
@@ -50,7 +34,7 @@ const NewQueryTool = () => {
           style={{ width: '5%', padding: 8 }}
           onClick={e => {
             e.preventDefault()
-            submitPQL(accessToken, pql, setData, setLoading)
+            submitPql(pql)
           }}
         >
           Submit
@@ -60,14 +44,14 @@ const NewQueryTool = () => {
         loading && <Spinner />
       }
       {
-        data.error && <span style={{ color: 'red' }}>{data.error}</span>
+        results.error && <span style={{ color: 'red' }}>{results.error}</span>
       }
       <div style={{ padding: 12 }}>
-        <h2>Results</h2>
+        <h2>Results (Randomized Sample -- Limit 50)</h2>
         <Inspector
           table
           theme="chromeDark"
-          data={data.error ? [] : data}
+          data={results.error ? [] : results}
         />
       </div>
     </div>

@@ -25,12 +25,19 @@ const updateUser = async (
   },
   info,
 ) => {
-  if (!username || !email || _.isEmpty(roles)) {
-    throw Error('Error: required fields were left blank')
+  username = username.trim()
+  email = email.trim()
+
+  if (!Boolean(username) || !Boolean(email)) {
+    throw Error('username and/or email fields can\'t be blank')
+  } else if (username.includes(' ') || email.includes(' ')) {
+    throw Error('username and/or email cannot have spaces')
   } else if (username.includes('@')) {
     // TODO: make validation against email address more stringent
     // ! Note: without this check, auth0 will silently fail to update the username
     throw Error('Error: auth0 can\'t accept email address as username')
+  } else if (_.isEmpty(roles) || !Array.isArray(roles)) {
+    throw Error('must specify at least one role in an array')
   }
 
   let incomingRoles = roles

@@ -8,6 +8,7 @@ import { Colors, Spacing, Transitions } from '../../../utils/pulseStyles'
 
 import StatusHeaderIcon from './StatusHeaderIcon'
 
+import { GET_OP_LOG } from '../../../api/queries'
 import {
   PUSH_SITEMAP_TO_PROD,
 } from '../../../api/mutations'
@@ -89,7 +90,11 @@ const ErrorMessage = styled.p({
 
 
 const PushToProdButton = () => {
-  const [handleSubmit, { loading, error }] = useMutation(PUSH_SITEMAP_TO_PROD)
+  const [handleSubmit, { loading, error }] = useMutation(
+    PUSH_SITEMAP_TO_PROD,
+    { refetchQueries: [{ query: GET_OP_LOG }] }
+  )
+
   if (error) return (
     <ErrorContainer>
       <StatusHeaderIcon size={16} color={Colors.RED} />

@@ -24,12 +24,17 @@ const createUser = async (
   },
   info,
 ) => {
-  if (!Boolean(username)) {
-    throw Error('username field invalid')
-  } else if (username.includes(' ')) {
-    throw Error ('username cannot have spaces')
-  } else if (!Boolean(email)) {
-    throw Error('email field invalid')
+  username = username.trim()
+  email = email.trim()
+
+  if (!Boolean(username) || !Boolean(email)) {
+    throw Error('username and/or email fields can\'t be blank')
+  } else if (username.includes(' ') || email.includes(' ')) {
+    throw Error ('username and/or email cannot have spaces')
+  } else if (username.includes('@')) {
+    // TODO: make validation against email address more stringent
+    // ! Note: without this check, auth0 will silently fail to update the username
+    throw Error('Error: auth0 can\'t accept email address as username')
   } else if (_.isEmpty(roles) || !Array.isArray(roles)) {
     throw Error('must specify at least one role in an array')
   }

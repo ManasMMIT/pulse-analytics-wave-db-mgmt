@@ -77,11 +77,23 @@ const opLogs = async (parent, args, { coreNodes, coreRoles }, info) => {
               const { name: nodeName, type: nodeType } = nodes[nodeId]
               const { name: teamName, client: { name: clientName } } = teams[teamId]
               
+              // reassigning operationVariables here gets rid of massive 'updatedResources' part
               operationVariables = {
                 input: {
                   node: { nodeName, nodeType },
                   team: { teamName, clientName },
-                  // updatedResources: 'HIDDEN', // don't bother including massive updatedResources part
+                }
+              }
+            }
+
+            // reassigning operationVariables here gets rid of unneeded 'updatedResources' part
+            if (operationName === 'UpdateRoleSitemap') {
+              const { teamId } = operationVariables.input
+              const { name: teamName, client: { name: clientName } } = teams[teamId]
+
+              operationVariables = {
+                input: {
+                  team: { teamName, clientName },
                 }
               }
             }

@@ -37,7 +37,7 @@ const connectToMongoAndWriteCsv = async () => {
     'INDICATION',
     'DW_INS_DT',
     'PA_URL',
-    'URL_TO_PA_Policy',
+    'URL_to_PA_Policy',
     'RESTRICTION_CODE',
     'RESTRICTION_DETAIL_TEXT',
     'PROD_NAME',
