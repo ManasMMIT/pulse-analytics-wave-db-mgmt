@@ -25,7 +25,6 @@ const NewQueryTool = () => {
       <form style={{ margin: 12, boxSizing: 'border-box' }}>
         <input
           style={{ width: '94%', height: 20, padding: 4 }}
-          placeholder="Example: orgType=(Payer,Provider)"
           type="text"
           value={pql}
           onChange={e => setPql(e.target.value)}
