@@ -1,6 +1,6 @@
 {
   "name": "wave-db-mgmt",
-  "version": "1.0.0",
+  "version": "1.2.3",
   "description": "A repository for managing data into Pulse databases.",
   "repository": "https://github.com/pulse-data/wave-db-mgmt.git",
   "proxy": "http://localhost:1337/",
