@@ -12,7 +12,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Fixed** for any bug fixes.
 - **Security** in case of vulnerabilities.
 
-## [Unreleased] - Started: 2-11-20
+## [Unreleased] - Started: 2-25-20
+
+## [1.2.3] - Started: 2-11-20
 
 ### Added
 - `Orion`: Build out custom hook `useAquila` to make interfacing w/ `Aquila-js` api easier.
@@ -24,6 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - `Phoenix`: Trim empty spaces on user's username and email on create/update
+- `Phoenix`: Prevent plain text passwords from being logged to api.log file
 
 ## [1.2.2] - Started: 2-11-20
 
