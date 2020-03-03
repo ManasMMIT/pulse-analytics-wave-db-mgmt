@@ -1,7 +1,8 @@
 const connectToMongoDb = require('../connect-to-mongodb')
 
-const seedBooks = require('./seedBooks')
-const seedTdgProjectsCollection = require('./seedTdgProjectsCollection')
+// const seedBooks = require('./seedBooks')
+const seedLines = require('./seedLines')
+// const seedTdgProjectsCollection = require('./seedTdgProjectsCollection')
 
 const runSeedScripts = async () => {
   const dbs = await connectToMongoDb()
@@ -22,20 +23,27 @@ const runSeedScripts = async () => {
     .find({})
     .toArray()
 
-  await seedBooks({
+  // await seedBooks({
+  //   pulseCore,
+  //   payerHistoricalQualityAccess,
+  //   payerHistoricalAdditionalCriteria,
+  //   payerHistoricalPolicyLinks,
+  // })
+
+  seedLines({
     pulseCore,
     payerHistoricalQualityAccess,
     payerHistoricalAdditionalCriteria,
     payerHistoricalPolicyLinks,
   })
 
-  await seedTdgProjectsCollection({
-    dbs,
-    pulseCore,
-    payerHistoricalQualityAccess,
-    payerHistoricalAdditionalCriteria,
-    payerHistoricalPolicyLinks,
-  })
+  // await seedTdgProjectsCollection({
+  //   dbs,
+  //   pulseCore,
+  //   payerHistoricalQualityAccess,
+  //   payerHistoricalAdditionalCriteria,
+  //   payerHistoricalPolicyLinks,
+  // })
 
   dbs.close()
 }
