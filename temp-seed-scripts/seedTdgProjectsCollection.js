@@ -88,18 +88,12 @@ const ENRICH_TP_FIELDS_PIPELINE = [
   }
 ]
 
-const beginScript = async dbs => {
+const beginScript = async ({
+  dbs,
+  payerHistoricalQualityAccess,
+  payerHistoricalAdditionalCriteria,
+}) => {
   const pulseCore = dbs.db('pulse-core');
-
-  const payerHistoricalQualityAccess = await pulseCore
-    .collection('payerHistoricalQualityAccess')
-    .find({})
-    .toArray()
-
-  const payerHistoricalAdditionalCriteria = await pulseCore
-    .collection('payerHistoricalAdditionalCriteria')
-    .find({})
-    .toArray()
 
   const organizations = await pulseCore.collection('organizations')
     .find({}).toArray()
