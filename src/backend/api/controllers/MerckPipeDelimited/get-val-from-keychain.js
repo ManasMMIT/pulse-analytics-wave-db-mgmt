@@ -27,22 +27,22 @@ const getVal = (object, objKeys, defaultVal) => {
     const keyThatBroke = objKeys[i]
     const workingKeysString = workingKeys.map(key => `'${ key }'`).join(' ⟶ ')
     const keyStack = `${ workingKeysString } -/-> '${ keyThatBroke }'`
-    console.error(
-      'Keychain broke as follows:', keyStack,
-      // 'for following object:', object
-    )
+    // console.error(
+    //   'Keychain broke as follows:', keyStack,
+    //   // 'for following object:', object
+    // )
     return defaultVal
   }
 
   // in cases where the last key in the keychain returns
   // undefined, log the potential problem and return defaultVal
   if (typeof temp === 'undefined') {
-    console.error(
-      'Warning: Default value being used because array\'s last key',
-      `'${ workingKeys[workingKeys.length - 1] }'`,
-      'returned undefined'
-       // for following object:, object
-    )
+    // console.error(
+    //   'Warning: Default value being used because array\'s last key',
+    //   `'${ workingKeys[workingKeys.length - 1] }'`,
+    //   'returned undefined'
+    //    // for following object:, object
+    // )
     return defaultVal
   }
 
