@@ -4,6 +4,8 @@ module.exports = async ({
   payerHistoricalAdditionalCriteria,
   payerHistoricalPolicyLinks,
 }) => {
+  await pulseCore.collection('lines-2').deleteMany()
+
   const combinedHistoricalData = [
     ...payerHistoricalQualityAccess,
     ...payerHistoricalAdditionalCriteria,
