@@ -134,6 +134,11 @@ class MerckPipeDelimitedController {
     }
   }
 
+  async createCSVFile() {
+    const { csv } = await this.getCSVandPSVData()
+
+  }
+
   async createFiles() {
       const { csv, psv } = await this.getCSVandPSVData()
 
@@ -161,14 +166,15 @@ class MerckPipeDelimitedController {
   async apiDownloadFiles(req, res) {
     try {
       const {
-        psvFilePath,
+        // psvFilePath,
         csvFileName,
         csvFilePath
       } = await this.createFiles()
 
       res.writeHead(200, {
         'Content-Type': 'text/csv',
-        'Content-disposition': `attachment; filename=${ csvFileName }`
+        'Content-disposition': `attachment; filename=${ csvFileName }`,
+        'Access-Control-Expose-Headers': 'Content-Disposition',
       })
 
       const readStream = fs.createReadStream(csvFilePath)
@@ -191,6 +197,14 @@ class MerckPipeDelimitedController {
       res.sendStatus(500)
     }
   }
+
+  // async apiGetCSVFile(req, res) {
+  //   const {
+  //     csvFileName,
+  //     csvFilePath
+  //   } = await this.createFiles()
+
+  // }
 
 
 }
