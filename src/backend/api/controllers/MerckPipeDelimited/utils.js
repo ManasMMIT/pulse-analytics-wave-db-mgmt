@@ -19,7 +19,7 @@ const usePlaceholderIfNeeded = value => value || ''
 const medicareToMedicareAdvantage = book => book.includes('Medicare') ? 'Medicare Advantage Plan' : book
 
 const deleteFile = file => { 
-  console.log('deleting file')
+  console.log(`Deleting file: ${ file }`)
   fs.unlink(file, function(err) {
       if (err) {
         console.error(err.toString());

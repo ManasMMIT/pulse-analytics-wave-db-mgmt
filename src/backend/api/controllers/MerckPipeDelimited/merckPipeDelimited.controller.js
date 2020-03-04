@@ -145,7 +145,7 @@ class MerckPipeDelimitedController {
         .generateNodeStream({ type:'nodebuffer', streamFiles: true })
         .pipe(fs.createWriteStream(zipFilePath))
         .on('finish', () => {
-          console.log('zip file written')
+          console.log('Zip File Written.')
           resolve()
         })
         .on('error', (err) => {

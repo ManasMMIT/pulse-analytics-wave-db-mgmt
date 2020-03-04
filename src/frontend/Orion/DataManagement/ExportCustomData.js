@@ -9,7 +9,6 @@ class ExportCustomData extends React.Component {
   downloadCSVFile = (e) => {
     e.preventDefault()
     const { accessToken } = this.context
-
     fetch('/api/merck-pipe-delimited-file', {
       method: 'POST',
       headers: {
