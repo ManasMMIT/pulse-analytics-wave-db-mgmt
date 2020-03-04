@@ -4,12 +4,11 @@ module.exports = async ({
   pulseCore,
   payerHistoricalQualityAccess,
   payerHistoricalAdditionalCriteria,
-  payerHistoricalPolicyLinks,
 }) => {
   await pulseCore.collection('treatmentPlans-2').deleteMany()
 
   // setup hashes
-  const indications = await pulseCore.collection('indicationsFromHistoricalData').find({}).toArray()
+  const indications = await pulseCore.collection('indications').find({}).toArray()
 
   const indicationsIdMap = indications.reduce((acc, { name, _id }) => {
     acc[name] = _id
@@ -17,7 +16,7 @@ module.exports = async ({
     return acc
   }, {})
 
-  const regimens = await pulseCore.collection('regimensFromHistoricalData').find({}).toArray()
+  const regimens = await pulseCore.collection('regimens').find({}).toArray()
 
   const regimensIdMap = regimens.reduce((acc, { name, _id }) => {
     acc[name] = _id
@@ -61,21 +60,26 @@ module.exports = async ({
   const allTheThings = [
     ...payerHistoricalQualityAccess,
     ...payerHistoricalAdditionalCriteria,
-    ...payerHistoricalPolicyLinks,
   ]
 
-  const onlyTreatmentPlanDocs = allTheThings.filter(thing => (
-    thing.indication
-    && thing.regimen
-    && thing.line
-    && thing.population
-    && thing.book
-    && thing.coverage
-  ))
+  const onlyTreatmentPlanDocs = allTheThings.filter(thing => {
+    const isValid = (
+      indicationsIdMap[thing.indication]
+      && regimensIdMap[thing.regimen]
+      && thing.line
+      && thing.population
+      && thing.book
+      && thing.coverage
+    )
+
+    if (!isValid) console.log(thing._id)
+
+    return isValid
+  })
 
   const uniqTpsDocs = _.uniqBy(
     onlyTreatmentPlanDocs,
-    thing => thing.indication + thing.regimen + thing.line + thing.population + thing.book + thing.coverage
+    thing => [thing.indication, thing.regimen, thing.line, thing.population, thing.book, thing.coverage].join('|')
   )
 
   const ops = uniqTpsDocs

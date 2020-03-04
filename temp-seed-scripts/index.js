@@ -4,8 +4,8 @@ const seedBooks = require('./seedBooks')
 const seedLines = require('./seedLines')
 const seedPopulations = require('./seedPopulation')
 const seedCoverages = require('./seedCoverages')
-const seedNewIndications = require('./seedNewIndications')
-const seedNewRegimens = require('./seedNewRegimens')
+// const seedNewIndications = require('./seedNewIndications')
+// const seedNewRegimens = require('./seedNewRegimens')
 
 const seedTreatmentPlans = require('./seedTreatmentPlans')
 
@@ -57,8 +57,8 @@ const runSeedScripts = async () => {
     seedLines(seedParameters),
     seedPopulations(seedParameters),
     seedCoverages(seedParameters),
-    seedNewIndications(seedParameters),
-    seedNewRegimens(seedParameters),
+    // seedNewIndications(seedParameters),
+    // seedNewRegimens(seedParameters),
   ])
 
   // 2. seed actual treatment plan combos

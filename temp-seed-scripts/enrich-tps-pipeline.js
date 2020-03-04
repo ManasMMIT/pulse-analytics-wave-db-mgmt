@@ -1,14 +1,14 @@
 module.exports = [
   {
     '$lookup': {
-      'from': 'indicationsFromHistoricalData',
+      'from': 'indications',
       'localField': 'indication',
       'foreignField': '_id',
       'as': 'indication'
     }
   }, {
     '$lookup': {
-      'from': 'regimensFromHistoricalData',
+      'from': 'regimens',
       'localField': 'regimen',
       'foreignField': '_id',
       'as': 'regimen'

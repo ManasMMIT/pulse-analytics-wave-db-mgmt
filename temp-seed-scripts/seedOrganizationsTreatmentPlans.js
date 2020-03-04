@@ -13,11 +13,7 @@ module.exports = async ({
 
   const orgs = await pulseCore.collection('organizations').find({}).toArray()
 
-  const orgsIdMap = orgs.reduce((acc, { slug, _id }) => {
-    acc[slug] = _id
-
-    return acc
-  }, {})
+  const orgsBySlug = _.groupBy(orgs, 'slug')
 
   const allTheThings = [
     ...payerHistoricalQualityAccess,
@@ -37,7 +33,7 @@ module.exports = async ({
 
   const uniqOrgTpsDocs = _.uniqBy(
     onlyTreatmentPlanDocsWithOrgs,
-    thing => thing.slug + thing.indication + thing.regimen + thing.line + thing.population + thing.book + thing.coverage
+    thing => [thing.slug, thing.indication, thing.regimen, thing.line, thing.population, thing.book, thing.coverage].join('|')
   )
 
   const enrichedTreatmentPlan = await pulseCore.collection('treatmentPlans-2')
@@ -46,34 +42,28 @@ module.exports = async ({
 
   const hashedTps = _.groupBy(
     enrichedTreatmentPlan,
-    thing => thing.indication + thing.regimen + thing.line + thing.population + thing.book + thing.coverage,
+    thing => [thing.indication, thing.regimen, thing.line, thing.population, thing.book, thing.coverage].join('|'),
   )
 
-  const ops = uniqOrgTpsDocs
-    .map(async ({ slug, indication, regimen, population, line, book, coverage }) => {
+  const organizationTreatmentPlanDocs = uniqOrgTpsDocs
+    .reduce((acc, { slug, indication, regimen, population, line, book, coverage }) => {
       // need to all be _ids
-      const stringHash = indication + regimen + line + population + book + coverage
-      const treatmentPlan = hashedTps[stringHash] || [{}]
+      const stringHash = [indication, regimen, line, population, book, coverage].join('|')
+      const treatmentPlan = hashedTps[stringHash]
+      const organization = orgsBySlug[slug]
 
-      return {
+      if (!treatmentPlan || !organization) return acc
+
+      acc.push({
         treatmentPlanId: treatmentPlan[0]._id,
-        organizationId: orgsIdMap[slug],
-      }
-    })
+        organizationId: organization[0]._id,
+      })
 
-  const organizationTreatmentPlanDocs = await Promise.all(ops)
+      return acc
+    }, [])
 
   await pulseCore.collection('organizations.treatmentPlans-2')
     .insertMany(organizationTreatmentPlanDocs)
-
-  // ! any slugs that are missing from master list are null
-  await pulseCore.collection('organizations.treatmentPlans-2')
-    .deleteMany({
-      $or: [
-        { organizationId: null },
-        { treatmentPlanId: null },
-      ]
-    })
 
   console.log('`organizations.treatmentPlans` seeded');
 }

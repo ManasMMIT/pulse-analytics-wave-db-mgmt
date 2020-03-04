@@ -33,7 +33,7 @@ module.exports = async ({
   // create hashes of all collections
   const groupedOrgTpsMonthYearDocs = _.groupBy(
     onlyTreatmentPlanDocsWithOrgsMonthYear,
-    thing => thing.slug + thing.indication + thing.regimen + thing.line + thing.population + thing.book + thing.coverage + thing.month + thing.year
+    thing => [thing.slug, thing.indication, thing.regimen, thing.line, thing.population, thing.book, thing.coverage, thing.month, thing.year].join('|')
   )
 
   const onlyPolicyLinksWithAllFields = payerHistoricalPolicyLinks.filter(thing => (
@@ -47,7 +47,7 @@ module.exports = async ({
 
   const policyLinksGroupedbyTpParts = _.groupBy(
     onlyPolicyLinksWithAllFields,
-    thing => thing.slug + thing.regimen + thing.book + thing.coverage + thing.month + thing.year
+    thing => [thing.slug, thing.regimen, thing.book, thing.coverage, thing.month, thing.year].join('|')
   )
 
   const organizations = await pulseCore.collection('organizations')
@@ -66,7 +66,7 @@ module.exports = async ({
 
   const hashedTps = _.groupBy(
     enrichedTreatmentPlan,
-    thing => thing.indication + thing.regimen + thing.line + thing.population + thing.book + thing.coverage,
+    thing => [thing.indication, thing.regimen, thing.line, thing.population, thing.book, thing.coverage].join('|'),
   )
 
   const docs = []
@@ -75,7 +75,7 @@ module.exports = async ({
 
     const flatDoc = Object.assign({}, ...comboDocs)
 
-    const policyLinkHash = flatDoc.slug + flatDoc.regimen + flatDoc.book + flatDoc.coverage + flatDoc.month + flatDoc.year
+    const policyLinkHash = [flatDoc.slug, flatDoc.regimen, flatDoc.book, flatDoc.coverage, flatDoc.month, flatDoc.year].join('|')
     const policyLinkData = policyLinksGroupedbyTpParts[policyLinkHash] || []
 
     const links = policyLinkData[0]
@@ -88,15 +88,19 @@ module.exports = async ({
       }
       : null
 
-    const hashForTps = flatDoc.indication + flatDoc.regimen + flatDoc.line + flatDoc.population + flatDoc.book + flatDoc.coverage
+    const hashForTps = [flatDoc.indication, flatDoc.regimen, flatDoc.line, flatDoc.population, flatDoc.book, flatDoc.coverage].join('|')
 
-    const treatmentPlan = hashedTps[hashForTps] || []
+    const treatmentPlan = hashedTps[hashForTps]
+
+    if (!treatmentPlan) continue
 
     const treatmentPlanId = treatmentPlan[0]
       ? treatmentPlan[0]._id
       : null
 
-    const organization = orgsBySlug[flatDoc.slug] || []
+    const organization = orgsBySlug[flatDoc.slug]
+
+    if (!organization) continue
 
     const organizationId = organization[0]
       ? organization[0]._id
@@ -132,15 +136,6 @@ module.exports = async ({
 
   await pulseCore.collection('organizations.treatmentPlans.history-2')
     .insertMany(docs)
-
-  // ! any slugs or tps that are missing from master list are null
-  await pulseCore.collection('organizations.treatmentPlans.history-2')
-    .deleteMany({
-      $or: [
-        { organizationId: null },
-        { treatmentPlanId: null },
-      ]
-    })
 
   console.log('`organizations.treatmentPlans.history` seeded')
 }
