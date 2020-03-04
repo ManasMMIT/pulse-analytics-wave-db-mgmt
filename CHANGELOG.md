@@ -14,6 +14,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased] - Started: 2-25-20
 
+### Added
+- `Polaris`: Temporary seed scripts for treatment plan and org.treatmentPlan collections.
+
 ## [1.2.3] - Started: 2-11-20
 
 ### Added
