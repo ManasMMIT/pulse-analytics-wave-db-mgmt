@@ -1,40 +1,21 @@
-require("dotenv").load();
-const mongoDB = require("mongodb");
 const _ = require('lodash')
 
-const MongoClient = mongoDB.MongoClient;
+module.exports = async ({
+  pulseCore,
+  payerHistoricalQualityAccess,
+  payerHistoricalAdditionalCriteria,
+  payerHistoricalPolicyLinks,
+}) => {
+  await pulseCore.collection('organizations.treatmentPlans-2')
+    .deleteMany()
 
-const LOADER_URI = process.env.LOADER_URI;
+  const orgs = await pulseCore.collection('organizations').find({}).toArray()
 
-const beginMongoWork = async () => {
-  console.log("----------Mongo Connect-----------");
+  const orgsIdMap = orgs.reduce((acc, { slug, _id }) => {
+    acc[slug] = _id
 
-  const dbs = await MongoClient.connect(LOADER_URI, { useNewUrlParser: true }).catch(err => {
-    console.error(err);
-    process.exit();
-  });
-
-  console.log("Connected to MongoDB successfully...");
-
-  const pulseCore = dbs.db('pulse-core');
-  const pulseDev = dbs.db('pulse-dev');
-  const pulseProd = dbs.db('pulse-prod');
-
-  // Get all historical collections and combine them
-  const payerHistoricalQualityAccess = await pulseCore
-    .collection('payerHistoricalQualityAccess')
-    .find({})
-    .toArray()
-
-  const payerHistoricalAdditionalCriteria = await pulseCore
-    .collection('payerHistoricalAdditionalCriteria')
-    .find({})
-    .toArray()
-
-  const payerHistoricalPolicyLinks = await pulseCore
-    .collection('payerHistoricalPolicyLinks')
-    .find({})
-    .toArray()
+    return acc
+  }, {})
 
   const allTheThings = [
     ...payerHistoricalQualityAccess,
@@ -57,92 +38,129 @@ const beginMongoWork = async () => {
     thing => thing.slug + thing.indication + thing.regimen + thing.line + thing.population + thing.book + thing.coverage
   )
 
-  const indications = await pulseCore.collection('indications').find({}).toArray()
+  const enrichedTreatmentPlan = await pulseCore.collection('treatmentPlans-2')
+    .aggregate(ENRICH_TP_FIELDS_PIPELINE)
+    .toArray()
 
-  const indicationsIdMap = indications.reduce((acc, { name, _id }) => {
-    acc[name] = _id
-
-    return acc
-  }, {})
-
-  const regimens = await pulseCore.collection('regimens').find({}).toArray()
-
-  const regimensIdMap = regimens.reduce((acc, { name, _id }) => {
-    acc[name] = _id
-
-    return acc
-  }, {})
-
-  const lines = await pulseCore.collection('lines').find({}).toArray()
-
-  const linesIdMap = lines.reduce((acc, { name, _id }) => {
-    acc[name] = _id
-
-    return acc
-  }, {})
-
-  const populations = await pulseCore.collection('populations').find({}).toArray()
-
-  const populationsIdMap = populations.reduce((acc, { name, _id }) => {
-    acc[name] = _id
-
-    return acc
-  }, {})
-
-  const books = await pulseCore.collection('books').find({}).toArray()
-
-  const booksIdMap = books.reduce((acc, { name, _id }) => {
-    acc[name] = _id
-
-    return acc
-  }, {})
-
-  const coverages = await pulseCore.collection('coverages').find({}).toArray()
-
-  const coveragesIdMap = coverages.reduce((acc, { name, _id }) => {
-    acc[name] = _id
-
-    return acc
-  }, {})
-
-  const orgs = await pulseCore.collection('organizations').find({}).toArray()
-
-  const orgsIdMap = orgs.reduce((acc, { slug, _id }) => {
-    acc[slug] = _id
-
-    return acc
-  }, {})
+  const hashedTps = _.groupBy(
+    enrichedTreatmentPlan,
+    thing => thing.indication + thing.regimen + thing.line + thing.population + thing.book + thing.coverage,
+  )
 
   const ops = uniqOrgTpsDocs
     .map(async ({ slug, indication, regimen, population, line, book, coverage }) => {
-
-      const treatmentPlan = await pulseCore.collection('treatmentPlans')
-        .findOne({
-          indication: indicationsIdMap[indication],
-          regimen: regimensIdMap[regimen],
-          population: populationsIdMap[population],
-          line: linesIdMap[line],
-          book: booksIdMap[book],
-          coverage: coveragesIdMap[coverage],
-        })
+      // need to all be _ids
+      const stringHash = indication + regimen + line + population + book + coverage
+      const treatmentPlan = hashedTps[stringHash] || [{}]
 
       return {
-        treatmentPlanId: treatmentPlan._id,
+        treatmentPlanId: treatmentPlan[0]._id,
         organizationId: orgsIdMap[slug],
       }
     })
 
   const organizationTreatmentPlanDocs = await Promise.all(ops)
-
-  await pulseCore.collection('organizations.treatmentPlans')
+debugger
+  await pulseCore.collection('organizations.treatmentPlans-2')
     .insertMany(organizationTreatmentPlanDocs)
 
-  await pulseCore.collection('organizations.treatmentPlans')
-    .deleteMany({ organizationId: null })
+  // ! any slugs that are missing from master list are null
+  await pulseCore.collection('organizations.treatmentPlans-2')
+    .deleteMany({
+      $or: [
+        { organizationId: null },
+        { treatmentPlanId: null },
+      ]
+    })
 
-  console.log('DONEZO');
+  console.log('`organizations.treatmentPlans` seeded');
+}
 
-  dbs.close();
-};
 
-beginMongoWork();
+const ENRICH_TP_FIELDS_PIPELINE = [
+  {
+    '$lookup': {
+      'from': 'indicationsFromHistoricalData',
+      'localField': 'indication',
+      'foreignField': '_id',
+      'as': 'indication'
+    }
+  }, {
+    '$lookup': {
+      'from': 'regimensFromHistoricalData',
+      'localField': 'regimen',
+      'foreignField': '_id',
+      'as': 'regimen'
+    }
+  }, {
+    '$lookup': {
+      'from': 'lines-2',
+      'localField': 'line',
+      'foreignField': '_id',
+      'as': 'line'
+    }
+  }, {
+    '$lookup': {
+      'from': 'populations-2',
+      'localField': 'population',
+      'foreignField': '_id',
+      'as': 'population'
+    }
+  }, {
+    '$lookup': {
+      'from': 'books-2',
+      'localField': 'book',
+      'foreignField': '_id',
+      'as': 'book'
+    }
+  }, {
+    '$lookup': {
+      'from': 'coverages-2',
+      'localField': 'coverage',
+      'foreignField': '_id',
+      'as': 'coverage'
+    }
+  }, {
+    '$project': {
+      'indication': {
+        '$arrayElemAt': [
+          '$indication', 0
+        ]
+      },
+      'regimen': {
+        '$arrayElemAt': [
+          '$regimen', 0
+        ]
+      },
+      'population': {
+        '$arrayElemAt': [
+          '$population', 0
+        ]
+      },
+      'line': {
+        '$arrayElemAt': [
+          '$line', 0
+        ]
+      },
+      'book': {
+        '$arrayElemAt': [
+          '$book', 0
+        ]
+      },
+      'coverage': {
+        '$arrayElemAt': [
+          '$coverage', 0
+        ]
+      }
+    }
+  }, {
+    '$project': {
+      'indication': '$indication.name',
+      'regimen': '$regimen.name',
+      'population': '$population.name',
+      'line': '$line.name',
+      'book': '$book.name',
+      'coverage': '$coverage.name'
+    }
+  }
+]

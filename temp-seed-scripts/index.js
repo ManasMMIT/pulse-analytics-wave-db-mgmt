@@ -9,6 +9,8 @@ const seedNewRegimens = require('./seedNewRegimens')
 
 const seedTreatmentPlans = require('./seedTreatmentPlans')
 
+const seedOrganizationsTreatmentPlans = require('./seedOrganizationsTreatmentPlans')
+
 // const seedTdgProjectsCollection = require('./seedTdgProjectsCollection')
 
 const runSeedScripts = async () => {
@@ -61,6 +63,7 @@ const runSeedScripts = async () => {
   // 2. seed actual treatment plan combos
   await seedTreatmentPlans(seedParameters)
 
+  await seedOrganizationsTreatmentPlans(seedParameters)
   // await seedTdgProjectsCollection({
   //   dbs,
   //   pulseCore,
