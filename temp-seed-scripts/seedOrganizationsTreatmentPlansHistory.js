@@ -69,6 +69,14 @@ module.exports = async ({
     thing => [thing.indication, thing.regimen, thing.line, thing.population, thing.book, thing.coverage].join('|'),
   )
 
+  const orgTreatmentPlanDocs = await pulseCore.collection('organizations.treatmentPlans-2')
+    .find().toArray()
+
+  const hashedOrgTpDocs = _.groupBy(
+    orgTreatmentPlanDocs,
+    doc => [doc.organizationId, doc.treatmentPlanId].join('|')
+  )
+
   const docs = []
   for (let uniqOrgTpTimeString in groupedOrgTpsMonthYearDocs) {
     const comboDocs = groupedOrgTpsMonthYearDocs[uniqOrgTpTimeString]
@@ -110,7 +118,10 @@ module.exports = async ({
 
     const timestamp = new Date(`${flatDoc.month}/1/${flatDoc.year}`)
 
+    const orgTpIdHash = [organizationId, treatmentPlanId].join('|')
+
     const doc = {
+      orgTpId: hashedOrgTpDocs[orgTpIdHash][0]._id,
       organizationId,
       treatmentPlanId,
       accessData: accessScore[0],
