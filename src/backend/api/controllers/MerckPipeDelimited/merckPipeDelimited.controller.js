@@ -1,10 +1,14 @@
 const _ = require('lodash')
 const Papa = require('papaparse')
-const { promisify } = require('./util')
+const util = require('util')
 const path = require('path')
+const fs = require('fs')
+const {
+  deleteFile
+} = require('./utils')
 
-const renflexisDataManipulation = require('./utils/renflexis-data-manipulation')
-const merckDataManipulation = require('./utils/merck-data-manipulation')
+const renflexisDataManipulation = require('./data-manipulation/renflexis-data-manipulation')
+const merckDataManipulation = require('./data-manipulation/merck-data-manipulation')
 
 const PAYER_TOOL_ID = 'a3f419de-ca7d-4498-94dd-04fb9f6b8777'
 const MERCK_PIPE_SCRIPT_USER = 'auth0|5e287871544fad0f3bf5f421'
@@ -22,7 +26,8 @@ class MerckPipeDelimitedController {
     this.getMergedData = this.getMergedData.bind(this)
     this.getCSVandPSVData = this.getCSVandPSVData.bind(this)
 
-    this.apiCreateFiles = this.apiCreateFiles.bind(this)
+    this.createFiles = this.createFiles.bind(this)
+    this.apiDownloadFiles = this.apiDownloadFiles.bind(this)
   }
 
   async getRenflexisData() {
@@ -129,27 +134,65 @@ class MerckPipeDelimitedController {
     }
   }
 
-  async apiCreateFiles(req, res) {
-    try {
+  async createFiles() {
       const { csv, psv } = await this.getCSVandPSVData()
 
       const date = new Date()
       const formattedDate = date.toJSON().substring(0, 10).replace(/[-]/g, '')
+      const csvFileName = `DEDHAM_PYR_ACCESS_${formattedDate}.csv`
+      const psvFileName = `DEDHAM_PYR_ACCESS_${formattedDate}.txt`
 
-      const csvFilePath = getFilePath(`DEDHAM_PYR_ACCESS_${formattedDate}.csv`)
-      const psvFilePath = getFilePath(`DEDHAM_PYR_ACCESS_${formattedDate}.txt`)
+      const csvFilePath = getFilePath(csvFileName)
+      const psvFilePath = getFilePath(psvFileName)
 
-      const csvFile = await promisify(csvFilePath, csv)
-      const psvFile = await promisify(psvFilePath, psv)
+      const writeFile = util.promisify(fs.writeFile)
 
-      console.log('file created')
+      await writeFile(csvFilePath, csv)
+      // await writeFile(psvFilePath, psv)
 
-      res.sendStatus(200)
+      return {
+        psvFilePath,
+        psvFileName,
+        csvFilePath,
+        csvFileName
+      }
+  }
+
+  async apiDownloadFiles(req, res) {
+    try {
+      const {
+        psvFilePath,
+        csvFileName,
+        csvFilePath
+      } = await this.createFiles()
+
+      res.writeHead(200, {
+        'Content-Type': 'text/csv',
+        'Content-disposition': `attachment; filename=${ csvFileName }`
+      })
+
+      const readStream = fs.createReadStream(csvFilePath)
+
+      // This will wait until we know the readable stream is actually valid before piping
+      readStream.on('open', () => {
+        readStream.pipe(res)
+      })
+
+      readStream.on('close', () => {
+        readStream.destroy()
+        deleteFile(csvFilePath)
+      })
+    
+      readStream.on('error', err => {
+        res.end(err)
+      })
+
     } catch (e) {
-      console.log(e)
       res.sendStatus(500)
     }
   }
+
+
 }
 
 module.exports = MerckPipeDelimitedController

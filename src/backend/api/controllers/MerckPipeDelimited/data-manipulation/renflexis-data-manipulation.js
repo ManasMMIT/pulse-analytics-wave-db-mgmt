@@ -1,5 +1,5 @@
-const { livesFilterToKey, usePlaceholderIfNeeded, medicareToMedicareAdvantage } = require('../util')
-const getVal = require('../get-val-from-keychain')
+const { livesFilterToKey, usePlaceholderIfNeeded, medicareToMedicareAdvantage } = require('../utils')
+const getVal = require('./get-val-from-keychain')
 
 const renflexisDataManipulation = (nationalLivesData, renflexisData) => {
   const productKeysToName = [

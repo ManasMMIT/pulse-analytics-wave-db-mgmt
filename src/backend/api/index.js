@@ -71,7 +71,7 @@ MongoClient.connect(process.env.LOADER_URI, { useNewUrlParser: true }, (err, cli
 
   const merckPipeDelimitedCtrl = new MerckPipeDelimitedCtrl(pulseDevDb)
 
-  subApp.post('/merck-pipe-delimited-file', merckPipeDelimitedCtrl.apiCreateFiles)
+  subApp.post('/merck-pipe-delimited-file', merckPipeDelimitedCtrl.apiDownloadFiles)
 
   subApp.use('/collections', async (req, res) => {
     const collections = await pulseRawDb.listCollections().toArray()
