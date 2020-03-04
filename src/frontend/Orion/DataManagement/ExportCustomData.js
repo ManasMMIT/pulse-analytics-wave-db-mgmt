@@ -1,4 +1,5 @@
 import React from 'react'
+import Button from '@material-ui/core/Button'
 import Spinner from './../../Phoenix/shared/Spinner'
 
 import { Auth0Context } from '../../../react-auth0-spa'
@@ -39,9 +40,9 @@ class ExportCustomData extends React.Component {
         <h1>Export Custom Data</h1>
         <div>
           <p>Pressing this button will save files to the server, which can then be grabbed.</p>
-          <button onClick={this.downloadCSVFile}>
-            Download Merck Pipe Delimited CSV File
-          </button>
+          <Button variant="outlined" color="primary" onClick={this.downloadCSVFile}>
+            Download Merck Pipe Delimited CSV and PSV Files
+          </Button>
         </div>
       </div>
     )
