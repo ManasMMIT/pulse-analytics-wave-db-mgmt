@@ -1,11 +1,8 @@
 import gql from 'graphql-tag'
 
 export const GET_BOM_SCHEMA = gql`
-  query getBomSchema($boid: ID) {
-    bomSchema(boid: $boid) {
-      tag
-      fields
-    }
+  query getBomSchema($boId: ID) {
+    bomSchema(boId: $boId)
   }
 `
 
