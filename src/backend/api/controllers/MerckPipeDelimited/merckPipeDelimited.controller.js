@@ -6,6 +6,7 @@ const fs = require('fs')
 const {
   deleteFile
 } = require('./utils')
+const JSZip = require('jszip')
 
 const renflexisDataManipulation = require('./data-manipulation/renflexis-data-manipulation')
 const merckDataManipulation = require('./data-manipulation/merck-data-manipulation')
@@ -27,6 +28,7 @@ class MerckPipeDelimitedController {
     this.getCSVandPSVData = this.getCSVandPSVData.bind(this)
 
     this.createFiles = this.createFiles.bind(this)
+    this.zipFiles = this.zipFiles.bind(this)
     this.apiDownloadFiles = this.apiDownloadFiles.bind(this)
   }
 
@@ -134,50 +136,62 @@ class MerckPipeDelimitedController {
     }
   }
 
-  async createCSVFile() {
-    const { csv } = await this.getCSVandPSVData()
-
+  zipFiles({ csv, psv, csvFileName, psvFileName, zipFilePath }) {
+    const zip = new JSZip()
+    return new Promise((resolve, reject) => {
+      zip.folder('tmp')
+        .file(csvFileName, csv)
+        .file(psvFileName, psv)
+        .generateNodeStream({ type:'nodebuffer', streamFiles: true })
+        .pipe(fs.createWriteStream(zipFilePath))
+        .on('finish', () => {
+          console.log('zip file written')
+          resolve()
+        })
+        .on('error', (err) => {
+          console.err(err)
+          reject()
+        })
+      })
   }
 
   async createFiles() {
-      const { csv, psv } = await this.getCSVandPSVData()
+    const { csv, psv } = await this.getCSVandPSVData()
 
-      const date = new Date()
-      const formattedDate = date.toJSON().substring(0, 10).replace(/[-]/g, '')
-      const csvFileName = `DEDHAM_PYR_ACCESS_${formattedDate}.csv`
-      const psvFileName = `DEDHAM_PYR_ACCESS_${formattedDate}.txt`
+    const date = new Date()
+    const zipFileName = 'pipe_delimited_file.zip'
 
-      const csvFilePath = getFilePath(csvFileName)
-      const psvFilePath = getFilePath(psvFileName)
+    const formattedDate = date.toJSON().substring(0, 10).replace(/[-]/g, '')
+    const csvFileName = `DEDHAM_PYR_ACCESS_${formattedDate}.csv`
+    const psvFileName = `DEDHAM_PYR_ACCESS_${formattedDate}.txt`
 
-      const writeFile = util.promisify(fs.writeFile)
+    const zipFilePath = getFilePath(zipFileName)
 
-      await writeFile(csvFilePath, csv)
-      // await writeFile(psvFilePath, psv)
+    await this.zipFiles({
+      csv,
+      psv,
+      csvFileName,
+      psvFileName,
+      zipFilePath
+    })
 
-      return {
-        psvFilePath,
-        psvFileName,
-        csvFilePath,
-        csvFileName
-      }
+    return {
+      zipFileName,
+      zipFilePath
+    }
   }
 
   async apiDownloadFiles(req, res) {
     try {
-      const {
-        // psvFilePath,
-        csvFileName,
-        csvFilePath
-      } = await this.createFiles()
+      const { zipFileName, zipFilePath } = await this.createFiles()
 
       res.writeHead(200, {
-        'Content-Type': 'text/csv',
-        'Content-disposition': `attachment; filename=${ csvFileName }`,
+        'Content-Type': 'application/zip',
+        'Content-disposition': `attachment; filename=${ zipFileName }`,
         'Access-Control-Expose-Headers': 'Content-Disposition',
       })
 
-      const readStream = fs.createReadStream(csvFilePath)
+      const readStream = fs.createReadStream(zipFilePath)
 
       // This will wait until we know the readable stream is actually valid before piping
       readStream.on('open', () => {
@@ -186,27 +200,16 @@ class MerckPipeDelimitedController {
 
       readStream.on('close', () => {
         readStream.destroy()
-        deleteFile(csvFilePath)
+        deleteFile(zipFilePath)
       })
     
       readStream.on('error', err => {
         res.end(err)
       })
-
     } catch (e) {
       res.sendStatus(500)
     }
   }
-
-  // async apiGetCSVFile(req, res) {
-  //   const {
-  //     csvFileName,
-  //     csvFilePath
-  //   } = await this.createFiles()
-
-  // }
-
-
 }
 
 module.exports = MerckPipeDelimitedController
