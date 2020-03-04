@@ -72,8 +72,6 @@ module.exports = async ({
       && thing.coverage
     )
 
-    if (!isValid) console.log(thing._id)
-
     return isValid
   })
 
