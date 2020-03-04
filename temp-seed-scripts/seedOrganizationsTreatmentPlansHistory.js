@@ -117,7 +117,7 @@ module.exports = async ({
         lineOfTherapy: flatDoc.lineOfTherapy,
       }
     }
-debugger
+
     docs.push(doc)
   }
 
