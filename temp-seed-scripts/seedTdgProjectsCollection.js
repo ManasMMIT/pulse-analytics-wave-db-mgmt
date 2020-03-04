@@ -1,104 +1,20 @@
 const _ = require('lodash')
 
-const ENRICH_TP_FIELDS_PIPELINE = [
-  {
-    '$lookup': {
-      'from': 'indications',
-      'localField': 'indication',
-      'foreignField': '_id',
-      'as': 'indication'
-    }
-  }, {
-    '$lookup': {
-      'from': 'regimens',
-      'localField': 'regimen',
-      'foreignField': '_id',
-      'as': 'regimen'
-    }
-  }, {
-    '$lookup': {
-      'from': 'lines',
-      'localField': 'line',
-      'foreignField': '_id',
-      'as': 'line'
-    }
-  }, {
-    '$lookup': {
-      'from': 'populations',
-      'localField': 'population',
-      'foreignField': '_id',
-      'as': 'population'
-    }
-  }, {
-    '$lookup': {
-      'from': 'books',
-      'localField': 'book',
-      'foreignField': '_id',
-      'as': 'book'
-    }
-  }, {
-    '$lookup': {
-      'from': 'coverages',
-      'localField': 'coverage',
-      'foreignField': '_id',
-      'as': 'coverage'
-    }
-  }, {
-    '$project': {
-      'indication': {
-        '$arrayElemAt': [
-          '$indication', 0
-        ]
-      },
-      'regimen': {
-        '$arrayElemAt': [
-          '$regimen', 0
-        ]
-      },
-      'population': {
-        '$arrayElemAt': [
-          '$population', 0
-        ]
-      },
-      'line': {
-        '$arrayElemAt': [
-          '$line', 0
-        ]
-      },
-      'book': {
-        '$arrayElemAt': [
-          '$book', 0
-        ]
-      },
-      'coverage': {
-        '$arrayElemAt': [
-          '$coverage', 0
-        ]
-      }
-    }
-  }, {
-    '$project': {
-      'indication': '$indication.name',
-      'regimen': '$regimen.name',
-      'population': '$population.name',
-      'line': '$line.name',
-      'book': '$book.name',
-      'coverage': '$coverage.name'
-    }
-  }
-]
+const ENRICH_TP_FIELDS_PIPELINE = require('./enrich-tps-pipeline')
 
-const beginScript = async ({
+module.exports = async ({
   pulseCore,
   payerHistoricalQualityAccess,
   payerHistoricalAdditionalCriteria,
 }) => {
+  await pulseCore.collection('tdgProjects-2').deleteMany()
+
   const organizations = await pulseCore.collection('organizations')
     .find({}).toArray()
 
   const orgsBySlug = _.groupBy(organizations, 'slug')
 
-  const enrichedTreatmentPlan = await pulseCore.collection('treatmentPlans')
+  const enrichedTreatmentPlan = await pulseCore.collection('treatmentPlans-2')
     .aggregate(ENRICH_TP_FIELDS_PIPELINE)
     .toArray()
 
@@ -107,7 +23,7 @@ const beginScript = async ({
     thing => thing.indication + thing.regimen + thing.line + thing.population + thing.book + thing.coverage,
   )
 
-  const orgTps = await pulseCore.collection('organizations.treatmentPlans')
+  const orgTps = await pulseCore.collection('organizations.treatmentPlans-2')
     .find({}).toArray()
 
   const orgTpsByRefs = _.groupBy(
@@ -157,7 +73,7 @@ const beginScript = async ({
 
         let orgTpId
         if (!orgTp) {
-          const { ops } = await pulseCore.collection('organizations.treatmentPlans')
+          const { ops } = await pulseCore.collection('organizations.treatmentPlans-2')
             .insertOne({
               organizationId,
               treatmentPlanId,
@@ -187,5 +103,3 @@ const beginScript = async ({
 
   console.log('`tdgProjects` collection seeded/n')
 }
-
-beginScript()
