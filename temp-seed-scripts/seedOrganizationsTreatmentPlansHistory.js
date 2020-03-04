@@ -36,8 +36,17 @@ module.exports = async ({
     thing => thing.slug + thing.indication + thing.regimen + thing.line + thing.population + thing.book + thing.coverage + thing.month + thing.year
   )
 
+  const onlyPolicyLinksWithAllFields = payerHistoricalPolicyLinks.filter(thing => (
+    thing.slug
+    && thing.regimen
+    && thing.book
+    && thing.coverage
+    && thing.month
+    && thing.year
+  ))
+
   const policyLinksGroupedbyTpParts = _.groupBy(
-    payerHistoricalPolicyLinks,
+    onlyPolicyLinksWithAllFields,
     thing => thing.slug + thing.regimen + thing.book + thing.coverage + thing.month + thing.year
   )
 
@@ -123,6 +132,15 @@ module.exports = async ({
 
   await pulseCore.collection('organizations.treatmentPlans.history-2')
     .insertMany(docs)
+
+  // ! any slugs or tps that are missing from master list are null
+  await pulseCore.collection('organizations.treatmentPlans.history-2')
+    .deleteMany({
+      $or: [
+        { organizationId: null },
+        { treatmentPlanId: null },
+      ]
+    })
 
   console.log('`organizations.treatmentPlans.history` seeded')
 }
