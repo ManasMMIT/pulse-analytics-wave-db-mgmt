@@ -1,4 +1,5 @@
 const connectToMongoDb = require('../connect-to-mongodb')
+const _ = require('lodash')
 
 const seedBooks = require('./seedBooks')
 const seedLines = require('./seedLines')
@@ -12,7 +13,7 @@ const seedTreatmentPlans = require('./seedTreatmentPlans')
 const seedOrganizationsTreatmentPlans = require('./seedOrganizationsTreatmentPlans')
 const seedOrganizationsTreatmentPlansHistory = require('./seedOrganizationsTreatmentPlansHistory')
 
-// const seedTdgProjectsCollection = require('./seedTdgProjectsCollection')
+const seedTdgProjectsCollection = require('./seedTdgProjectsCollection')
 
 const runSeedScripts = async () => {
   const dbs = await connectToMongoDb()
@@ -20,12 +21,6 @@ const runSeedScripts = async () => {
   
   const pulseCore = dbs.db('pulse-core')
 
-  // check missing ind and reg btwn master lists and historical data
-  // const historicalRegimens = await pulseCore.collection('regimensFromHistoricalData').find().toArray()
-  // const historicalIndications = await pulseCore.collection('indicationsFromHistoricalData').find().toArray()
-
-  // const masterListRegimens = await pulseCore.collection('regimens').find().toArray()
-  // const masterListIndications = await pulseCore.collection('indications').find().toArray()
 
   const payerHistoricalQualityAccess = await pulseCore
     .collection('payerHistoricalQualityAccess')
@@ -52,28 +47,20 @@ const runSeedScripts = async () => {
   console.log(`Historical docs loaded\nBeginning seeding\n`);
   
   // 1. seed all treatment plan parts
-  await Promise.all([
-    seedBooks(seedParameters),
-    seedLines(seedParameters),
-    seedPopulations(seedParameters),
-    seedCoverages(seedParameters),
-    // seedNewIndications(seedParameters),
-    // seedNewRegimens(seedParameters),
-  ])
+  // await Promise.all([
+  //   seedBooks(seedParameters),
+  //   seedLines(seedParameters),
+  //   seedPopulations(seedParameters),
+  //   seedCoverages(seedParameters),
+  // ])
 
-  // 2. seed actual treatment plan combos
-  await seedTreatmentPlans(seedParameters)
+  // // 2. seed actual treatment plan combos
+  // await seedTreatmentPlans(seedParameters)
 
-  await seedOrganizationsTreatmentPlans(seedParameters)
-  await seedOrganizationsTreatmentPlansHistory(seedParameters)
+  // await seedOrganizationsTreatmentPlans(seedParameters)
+  // await seedOrganizationsTreatmentPlansHistory(seedParameters)
 
-  // await seedTdgProjectsCollection({
-  //   dbs,
-  //   pulseCore,
-  //   payerHistoricalQualityAccess,
-  //   payerHistoricalAdditionalCriteria,
-  //   payerHistoricalPolicyLinks,
-  // })
+  await seedTdgProjectsCollection(seedParameters)
 
   dbs.close()
 }
