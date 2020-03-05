@@ -14,6 +14,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased] - Started: 2-25-20
 
+### Added
+- `Polaris`: Temporary seed scripts for treatment plan and org.treatmentPlan collections.
+
 ### Changed
 - `Orion`: Update payer quality of access throughout history and disable quality of access panel delete button.
 - `Orion`: Whenever an `indication` or `regimen` is deleted, delete docs from `treatmentPlans`, `organizations.treatmentPlans`, `organization.treatmentPlans.history` (trash not delete) collections.
