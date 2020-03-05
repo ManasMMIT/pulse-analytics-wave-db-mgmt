@@ -6,7 +6,6 @@ module.exports = async ({
   pulseCore,
   payerHistoricalQualityAccess,
   payerHistoricalAdditionalCriteria,
-  payerHistoricalPolicyLinks,
 }) => {
   await pulseCore.collection('organizations.treatmentPlans')
     .deleteMany()
@@ -18,7 +17,6 @@ module.exports = async ({
   const allTheThings = [
     ...payerHistoricalQualityAccess,
     ...payerHistoricalAdditionalCriteria,
-    ...payerHistoricalPolicyLinks,
   ]
 
   const onlyTreatmentPlanDocsWithOrgs = allTheThings.filter(thing => (
