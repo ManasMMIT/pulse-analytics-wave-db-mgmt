@@ -1,5 +1,5 @@
-const { usePlaceholderIfNeeded, livesFilterToKey, medicareToMedicareAdvantage  } = require('../util')
-const getVal = require('../get-val-from-keychain')
+const { usePlaceholderIfNeeded, livesFilterToKey, medicareToMedicareAdvantage  } = require('../utils')
+const getVal = require('./get-val-from-keychain')
 // const MERCK_KEYTRUDA_MARKET = 'Immuno Oncology'
 
 // Map project field from payerHistoricalQualityAccess to corresponding market

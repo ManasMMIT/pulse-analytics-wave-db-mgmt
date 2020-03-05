@@ -16,25 +16,22 @@ const livesFilterToKey = (filterOption = '') => {
 
 const usePlaceholderIfNeeded = value => value || ''
 
-const promisify = (filename, input) => {
-  return new Promise((resolve, reject) => {
-    fs.writeFile(filename, input, err => {
+const medicareToMedicareAdvantage = book => book.includes('Medicare') ? 'Medicare Advantage Plan' : book
+
+const deleteFile = file => { 
+  console.log(`Deleting file: ${ file }`)
+  fs.unlink(file, err => {
       if (err) {
-        console.log(`Error writing to ${filename}`)
-        reject(err)
+        console.error(err.toString());
       } else {
-        console.log(`Successfully written to ${filename}`)
-        resolve()
+        console.warn(file + ' deleted');
       }
-    })
   })
 }
-
-const medicareToMedicareAdvantage = book => book.includes('Medicare') ? 'Medicare Advantage Plan' : book
 
 module.exports = {
   livesFilterToKey,
   usePlaceholderIfNeeded,
-  promisify,
   medicareToMedicareAdvantage,
+  deleteFile,
 }

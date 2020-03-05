@@ -1,30 +1,44 @@
-import React from 'react'
-import { useMutation } from '@apollo/react-hooks'
+import React, { useState } from 'react'
+import Button from '@material-ui/core/Button'
 import Spinner from './../../Phoenix/shared/Spinner'
-
-import {
-  RUN_PIPE_DELIMITED_SCRIPT,
-} from './../../api/mutations'
+import { useAuth0 } from '../../../react-auth0-spa'
+import FileSaver from 'file-saver'
 
 const ExportCustomData = () => {
-  const [runPipeDelimitedScript, { loading }] = useMutation(RUN_PIPE_DELIMITED_SCRIPT)
+  const { accessToken } = useAuth0()
+  const [loading, setLoadingStatus] = useState(false)
+
+  const clickHandler = async (e) => {
+    e.preventDefault()
+    setLoadingStatus(true)
+
+    await fetch('/api/merck-pipe-delimited-file', {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${ accessToken }`,
+          'Content-Type': 'application/json'
+        },
+      })
+      .then(async response => ({
+        blob: await response.blob(),
+        filename: response.headers.get('Content-Disposition').split("filename=")[1]
+      }))
+      .then(({ blob, filename }) => {
+        FileSaver.saveAs(blob, filename)
+      })
+      .catch(console.error)
+
+      setLoadingStatus(false)
+  }
 
   return (
     <div style={{ padding: 24 }}>
       <h1>Export Custom Data</h1>
       <div>
-        <p>Pressing this button will save files to the server, which can then be grabbed.</p>
-        {
-          loading
-            ? <Spinner />
-            : (
-              <button
-                onClick={runPipeDelimitedScript}
-              >
-                Pipe Delimited Script
-              </button>
-            )
-        }
+        <Button variant="outlined" color="primary" onClick={clickHandler}>
+          <span style={{ marginRight: 8 }}>Download Merck Pipe Delimited CSV and TXT Files</span>
+          { loading && <Spinner />}
+        </Button>
       </div>
     </div>
   )
