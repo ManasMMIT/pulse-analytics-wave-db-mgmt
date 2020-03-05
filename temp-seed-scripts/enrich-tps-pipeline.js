@@ -15,7 +15,7 @@ module.exports = [
     }
   }, {
     '$lookup': {
-      'from': 'lines-2',
+      'from': 'lines',
       'localField': 'line',
       'foreignField': '_id',
       'as': 'line'
