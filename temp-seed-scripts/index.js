@@ -15,6 +15,9 @@ const seedOrganizationsTreatmentPlansHistory = require('./seedOrganizationsTreat
 
 const seedTdgProjectsCollection = require('./seedTdgProjectsCollection')
 
+const seedLivesCollection = require('./seedLivesCollection')
+// const addLivesToOrgTpHistory = require('./addLivesToOrgTpHistory')
+
 const runSeedScripts = async () => {
   const dbs = await connectToMongoDb()
   console.log(`Loading historical docs\n`);
@@ -52,10 +55,14 @@ const runSeedScripts = async () => {
   await seedTreatmentPlans(seedParameters)
 
   await seedOrganizationsTreatmentPlans(seedParameters)
+
+  await seedLivesCollection(pulseCore)
+
   await seedOrganizationsTreatmentPlansHistory(seedParameters)
-
+  
   await seedTdgProjectsCollection(seedParameters)
-
+  
+  // await addLivesToOrgTpHistory(pulseCore)
   dbs.close()
 }
 
