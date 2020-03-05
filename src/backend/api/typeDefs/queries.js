@@ -31,6 +31,7 @@ const queries = gql`
 
     opLogs: [OpLog]
 
+    workbooks: [Workbook]
     bomSchema(boId: ID): JSON
   }
 
@@ -194,6 +195,25 @@ const queries = gql`
     userId: String
     operationName: String
     operationVariables: JSON
+  }
+
+  type Workbook {
+    _id: ID!
+    workbook: String!
+    sheets: [Sheet]!
+  }
+
+  type Sheet {
+    _id: ID!
+    sheet: String!
+    fields: [Field]
+  }
+
+  type Field {
+    _id: ID!
+    field: String!
+    type: String!
+    oneOf: [String]
   }
 `
 

@@ -147,6 +147,13 @@ const Sidebar = () => {
       <StyledNavLink
         style={inactiveLinkStyle}
         activeStyle={activeLinkStyle}
+        to={`/orion/data-management/sheet-management`}
+      >
+        Sheet Management
+      </StyledNavLink>
+      <StyledNavLink
+        style={inactiveLinkStyle}
+        activeStyle={activeLinkStyle}
         to={`/orion/data-management/import`}
       >
         Import Excel Sheets
