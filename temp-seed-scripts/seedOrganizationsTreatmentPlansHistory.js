@@ -117,10 +117,17 @@ module.exports = async ({
 
     const timestamp = new Date(`${flatDoc.month}/1/${flatDoc.year}`)
 
-    const orgTpIdHash = [organizationId, treatmentPlanId].join('|')
+    const orgTpIdHashKey = [organizationId, treatmentPlanId].join('|')
+    const orgTpIdHashVal = hashedOrgTpDocs[orgTpIdHashKey]
+
+    if (!orgTpIdHashVal) continue 
+
+    const orgTpId = orgTpIdHashVal[0]
+      ? orgTpIdHashVal[0]._id
+      : null
 
     const doc = {
-      orgTpId: hashedOrgTpDocs[orgTpIdHash][0]._id,
+      orgTpId,
       organizationId,
       treatmentPlanId,
       accessData: accessScore[0] || null,
