@@ -7,14 +7,14 @@ module.exports = async ({
   payerHistoricalQualityAccess,
   payerHistoricalAdditionalCriteria,
 }) => {
-  await pulseCore.collection('tdgProjects-2').deleteMany()
+  await pulseCore.collection('tdgProjects').deleteMany()
 
   const organizations = await pulseCore.collection('organizations')
     .find({}).toArray()
 
   const orgsBySlug = _.groupBy(organizations, 'slug')
 
-  const enrichedTreatmentPlan = await pulseCore.collection('treatmentPlans-2')
+  const enrichedTreatmentPlan = await pulseCore.collection('treatmentPlans')
     .aggregate(ENRICH_TP_FIELDS_PIPELINE)
     .toArray()
 
@@ -23,7 +23,7 @@ module.exports = async ({
     thing => thing.indication + thing.regimen + thing.line + thing.population + thing.book + thing.coverage,
   )
 
-  const orgTps = await pulseCore.collection('organizations.treatmentPlans-2')
+  const orgTps = await pulseCore.collection('organizations.treatmentPlans')
     .find({}).toArray()
 
   const orgTpsByRefs = _.groupBy(
@@ -73,7 +73,7 @@ module.exports = async ({
 
         let orgTpId
         if (!orgTp) {
-          const { ops } = await pulseCore.collection('organizations.treatmentPlans-2')
+          const { ops } = await pulseCore.collection('organizations.treatmentPlans')
             .insertOne({
               organizationId,
               treatmentPlanId,
@@ -99,7 +99,7 @@ module.exports = async ({
 
   const tdgProjects = await Promise.all(tdgProjectsDocOps)
 
-  await pulseCore.collection('tdgProjects-2').insertMany(tdgProjects)
+  await pulseCore.collection('tdgProjects').insertMany(tdgProjects)
 
   console.log('`tdgProjects` collection seeded/n')
 }

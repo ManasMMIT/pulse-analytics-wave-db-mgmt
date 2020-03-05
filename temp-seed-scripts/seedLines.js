@@ -4,7 +4,7 @@ module.exports = async ({
   payerHistoricalAdditionalCriteria,
   payerHistoricalPolicyLinks,
 }) => {
-  await pulseCore.collection('lines-2').deleteMany()
+  await pulseCore.collection('lines').deleteMany()
 
   const combinedHistoricalData = [
     ...payerHistoricalQualityAccess,
@@ -23,7 +23,7 @@ module.exports = async ({
 
   const linesDocs = Object.keys(linesObj).map(name => ({ name }))
 
-  await pulseCore.collection('lines-2').insertMany(linesDocs)
+  await pulseCore.collection('lines').insertMany(linesDocs)
 
   console.log('`lines` collection seeded')
 }

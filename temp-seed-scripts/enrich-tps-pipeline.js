@@ -22,21 +22,21 @@ module.exports = [
     }
   }, {
     '$lookup': {
-      'from': 'populations-2',
+      'from': 'populations',
       'localField': 'population',
       'foreignField': '_id',
       'as': 'population'
     }
   }, {
     '$lookup': {
-      'from': 'books-2',
+      'from': 'books',
       'localField': 'book',
       'foreignField': '_id',
       'as': 'book'
     }
   }, {
     '$lookup': {
-      'from': 'coverages-2',
+      'from': 'coverages',
       'localField': 'coverage',
       'foreignField': '_id',
       'as': 'coverage'

@@ -5,7 +5,7 @@ module.exports = async ({
   payerHistoricalQualityAccess,
   payerHistoricalAdditionalCriteria,
 }) => {
-  await pulseCore.collection('treatmentPlans-2').deleteMany()
+  await pulseCore.collection('treatmentPlans').deleteMany()
 
   // setup hashes
   const indications = await pulseCore.collection('indications').find({}).toArray()
@@ -24,7 +24,7 @@ module.exports = async ({
     return acc
   }, {})
 
-  const lines = await pulseCore.collection('lines-2').find({}).toArray()
+  const lines = await pulseCore.collection('lines').find({}).toArray()
 
   const linesIdMap = lines.reduce((acc, { name, _id }) => {
     acc[name] = _id
@@ -32,7 +32,7 @@ module.exports = async ({
     return acc
   }, {})
 
-  const populations = await pulseCore.collection('populations-2').find({}).toArray()
+  const populations = await pulseCore.collection('populations').find({}).toArray()
 
   const populationsIdMap = populations.reduce((acc, { name, _id }) => {
     acc[name] = _id
@@ -40,7 +40,7 @@ module.exports = async ({
     return acc
   }, {})
 
-  const books = await pulseCore.collection('books-2').find({}).toArray()
+  const books = await pulseCore.collection('books').find({}).toArray()
 
   const booksIdMap = books.reduce((acc, { name, _id }) => {
     acc[name] = _id
@@ -48,7 +48,7 @@ module.exports = async ({
     return acc
   }, {})
 
-  const coverages = await pulseCore.collection('coverages-2').find({}).toArray()
+  const coverages = await pulseCore.collection('coverages').find({}).toArray()
 
   const coveragesIdMap = coverages.reduce((acc, { name, _id }) => {
     acc[name] = _id
@@ -83,7 +83,7 @@ module.exports = async ({
   const ops = uniqTpsDocs
     .map(async ({ indication, regimen, population, line, book, coverage }) => (
       pulseCore
-        .collection('treatmentPlans-2')
+        .collection('treatmentPlans')
         .insertOne({
           indication: indicationsIdMap[indication] || indication,
           regimen: regimensIdMap[regimen] || regimen,

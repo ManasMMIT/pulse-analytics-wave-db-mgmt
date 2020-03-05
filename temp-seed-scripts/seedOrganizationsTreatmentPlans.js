@@ -8,7 +8,7 @@ module.exports = async ({
   payerHistoricalAdditionalCriteria,
   payerHistoricalPolicyLinks,
 }) => {
-  await pulseCore.collection('organizations.treatmentPlans-2')
+  await pulseCore.collection('organizations.treatmentPlans')
     .deleteMany()
 
   const orgs = await pulseCore.collection('organizations').find({}).toArray()
@@ -36,7 +36,7 @@ module.exports = async ({
     thing => [thing.slug, thing.indication, thing.regimen, thing.line, thing.population, thing.book, thing.coverage].join('|')
   )
 
-  const enrichedTreatmentPlan = await pulseCore.collection('treatmentPlans-2')
+  const enrichedTreatmentPlan = await pulseCore.collection('treatmentPlans')
     .aggregate(ENRICH_TP_FIELDS_PIPELINE)
     .toArray()
 
@@ -62,7 +62,7 @@ module.exports = async ({
       return acc
     }, [])
 
-  await pulseCore.collection('organizations.treatmentPlans-2')
+  await pulseCore.collection('organizations.treatmentPlans')
     .insertMany(organizationTreatmentPlanDocs)
 
   console.log('`organizations.treatmentPlans` seeded');

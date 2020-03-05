@@ -1,5 +1,5 @@
 const connectToMongoDb = require('../connect-to-mongodb')
-const _ = require('lodash')
+// const _ = require('lodash')
 
 const seedBooks = require('./seedBooks')
 const seedLines = require('./seedLines')
@@ -20,7 +20,6 @@ const runSeedScripts = async () => {
   console.log(`Loading historical docs\n`);
   
   const pulseCore = dbs.db('pulse-core')
-
 
   const payerHistoricalQualityAccess = await pulseCore
     .collection('payerHistoricalQualityAccess')
@@ -47,18 +46,18 @@ const runSeedScripts = async () => {
   console.log(`Historical docs loaded\nBeginning seeding\n`);
   
   // 1. seed all treatment plan parts
-  // await Promise.all([
-  //   seedBooks(seedParameters),
-  //   seedLines(seedParameters),
-  //   seedPopulations(seedParameters),
-  //   seedCoverages(seedParameters),
-  // ])
+  await Promise.all([
+    seedBooks(seedParameters),
+    seedLines(seedParameters),
+    seedPopulations(seedParameters),
+    seedCoverages(seedParameters),
+  ])
 
-  // // 2. seed actual treatment plan combos
-  // await seedTreatmentPlans(seedParameters)
+  // 2. seed actual treatment plan combos
+  await seedTreatmentPlans(seedParameters)
 
-  // await seedOrganizationsTreatmentPlans(seedParameters)
-  // await seedOrganizationsTreatmentPlansHistory(seedParameters)
+  await seedOrganizationsTreatmentPlans(seedParameters)
+  await seedOrganizationsTreatmentPlansHistory(seedParameters)
 
   await seedTdgProjectsCollection(seedParameters)
 
