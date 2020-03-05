@@ -9,7 +9,7 @@ const ExportCustomData = () => {
   const [loading, setLoadingStatus] = useState(false)
 
   const clickHandler = async (e) => {
-    e.preventDefault();
+    e.preventDefault()
     setLoadingStatus(true)
 
     await fetch('/api/merck-pipe-delimited-file', {
@@ -23,7 +23,6 @@ const ExportCustomData = () => {
         blob: await response.blob(),
         filename: response.headers.get('Content-Disposition').split("filename=")[1]
       }))
-
       .then(({ blob, filename }) => {
         FileSaver.saveAs(blob, filename)
       })
