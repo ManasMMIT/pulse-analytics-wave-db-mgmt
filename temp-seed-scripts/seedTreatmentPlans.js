@@ -66,10 +66,10 @@ module.exports = async ({
     const isValid = (
       indicationsIdMap[thing.indication]
       && regimensIdMap[thing.regimen]
-      && thing.line
-      && thing.population
-      && thing.book
-      && thing.coverage
+      && linesIdMap[thing.line]
+      && populationsIdMap[thing.population]
+      && booksIdMap[thing.book]
+      && coveragesIdMap[thing.coverage]
     )
 
     return isValid
@@ -85,12 +85,12 @@ module.exports = async ({
       pulseCore
         .collection('treatmentPlans')
         .insertOne({
-          indication: indicationsIdMap[indication] || indication,
-          regimen: regimensIdMap[regimen] || regimen,
-          population: populationsIdMap[population] || population,
-          line: linesIdMap[line] || line,
-          book: booksIdMap[book] || book,
-          coverage: coveragesIdMap[coverage] || coverage,
+          indication: indicationsIdMap[indication], 
+          regimen: regimensIdMap[regimen], 
+          line: linesIdMap[line], 
+          population: populationsIdMap[population], 
+          book: booksIdMap[book], 
+          coverage: coveragesIdMap[coverage], 
         })
     ))
 
