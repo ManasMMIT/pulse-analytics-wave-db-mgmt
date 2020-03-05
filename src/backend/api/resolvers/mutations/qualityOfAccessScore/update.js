@@ -16,11 +16,15 @@ const updateQualityAccessScore = async (
   { pulseCoreDb, pulseDevDb, mongoClient },
   info
 ) => {
+  _id = ObjectId(_id)
+  score = parseInt(score)
+  sortOrder = parseInt(sortOrder)
+
   const updateAccessScoreObj = {
     access,
     accessTiny,
-    score: parseInt(score),
-    sortOrder: parseInt(sortOrder),
+    score,
+    sortOrder,
     color,
     caption,
   }
@@ -31,13 +35,13 @@ const updateQualityAccessScore = async (
   await session.withTransaction(async () => {
     const newAccessScore = await pulseCoreDb.collection('qualityOfAccessScore')
       .findOneAndUpdate(
-      { _id: ObjectId(_id) },
+      { _id },
       { $set: { ...updateAccessScoreObj } },
       { returnOriginal: false, session }
     )
 
     await pulseDevDb.collection('qualityOfAccessScore').updateOne(
-      { _id: ObjectId(_id) },
+      { _id },
       {
         $set: {
           ...updateAccessScoreObj
@@ -45,6 +49,22 @@ const updateQualityAccessScore = async (
       },
       { session }
     )
+
+    await pulseCoreDb.collection('organizations.treatmentPlans.history')
+      .updateMany(
+        { 'accessData._id': _id },
+        {
+          $set: {
+            'accessData.access': access,
+            'accessData.accessTiny': accessTiny,
+            'accessData.score': score,
+            'accessData.sortOrder': sortOrder,
+            'accessData.color': color,
+            'accessData.caption': caption,
+          }
+        },
+        { session }
+      )
   
     result = newAccessScore.value
   })

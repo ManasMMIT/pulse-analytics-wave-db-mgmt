@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased] - Started: 2-25-20
 
 ### Changed
+- `Orion`: Update payer quality of access throughout history and disable quality of access panel delete button.
 - `Orion`: Whenever an `indication` or `regimen` is deleted, delete docs from `treatmentPlans`, `organizations.treatmentPlans`, `organization.treatmentPlans.history` (trash not delete) collections.
 - `Orion`: Deleting an organization now deletes docs on `organization.treatmentPlans` and `organization.treatmentPlans.history`.
 
