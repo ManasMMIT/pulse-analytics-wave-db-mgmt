@@ -3,9 +3,9 @@ const _ = require('lodash')
 const getHistoricalDocs = require('./getHistoricalDocs')
 
 module.exports = async pulseCore => {
-  await pulseCore.collection('lives').deleteMany()
+  await pulseCore.collection('lives.history').deleteMany()
   
-  console.log('`lives` Collection Data Deleted\n')
+  console.log('`lives.history` Collection Data Deleted\n')
   
   console.log('Loading Historical Lives Data\n')
   
@@ -52,7 +52,7 @@ module.exports = async pulseCore => {
   
   console.log('Seeding Lives Data\n')
   
-  await pulseCore.collection('lives').insertMany(allLivesDocs)
+  await pulseCore.collection('lives.history').insertMany(allLivesDocs)
   
-  console.log('`lives` Collection Finished Seeding\n')
+  console.log('`lives.history` Collection Finished Seeding\n')
 }
