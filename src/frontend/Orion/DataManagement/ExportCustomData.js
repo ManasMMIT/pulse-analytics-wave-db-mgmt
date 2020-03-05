@@ -1,20 +1,22 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Button from '@material-ui/core/Button'
 import Spinner from './../../Phoenix/shared/Spinner'
+import { useAuth0 } from '../../../react-auth0-spa'
 
-import { Auth0Context } from '../../../react-auth0-spa'
+const ExportCustomData = () => {
+  const { accessToken } = useAuth0()
+  const [loading, setLoadingStatus] = useState(false)
 
-class ExportCustomData extends React.Component {
+  const clickHandler = async (e) => {
+    e.preventDefault();
+    setLoadingStatus(true)
 
-  downloadCSVFile = (e) => {
-    e.preventDefault()
-    const { accessToken } = this.context
-    fetch('/api/merck-pipe-delimited-file', {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${ accessToken }`,
-        'Content-Type': 'application/json'
-      },
+    await fetch('/api/merck-pipe-delimited-file', {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${ accessToken }`,
+          'Content-Type': 'application/json'
+        },
       })
       .then(async response => ({
         blob: await response.blob(),
@@ -31,23 +33,21 @@ class ExportCustomData extends React.Component {
         a.remove()  //afterwards we remove the element again 
       })
       .catch(err => console.err)
+
+      setLoadingStatus(false)
   }
 
-  render() {
-    return (
-      <div style={{ padding: 24 }}>
-        <h1>Export Custom Data</h1>
-        <div>
-          <p>Pressing this button will save files to the server, which can then be grabbed.</p>
-          <Button variant="outlined" color="primary" onClick={this.downloadCSVFile}>
-            Download Merck Pipe Delimited CSV and PSV Files
-          </Button>
-        </div>
+  return (
+    <div style={{ padding: 24 }}>
+      <h1>Export Custom Data</h1>
+      <div>
+        <Button variant="outlined" color="primary" onClick={clickHandler}>
+          <span style={{ marginRight: 8 }}>Download Merck Pipe Delimited CSV and TXT Files</span>
+          { loading && <Spinner />}
+        </Button>
       </div>
-    )
-  }
+    </div>
+  )
 }
-
-ExportCustomData.contextType = Auth0Context
 
 export default ExportCustomData

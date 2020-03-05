@@ -20,7 +20,7 @@ const medicareToMedicareAdvantage = book => book.includes('Medicare') ? 'Medicar
 
 const deleteFile = file => { 
   console.log(`Deleting file: ${ file }`)
-  fs.unlink(file, function(err) {
+  fs.unlink(file, err => {
       if (err) {
         console.error(err.toString());
       } else {
