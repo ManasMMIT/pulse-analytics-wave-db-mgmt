@@ -50,18 +50,18 @@ module.exports = async ({
 
   const groupedByProject = _.groupBy(onlyOrgTreatmentPlanDocs, 'project')
 
-  Object.keys(groupedByProject).forEach(group => {
-    groupedByProject[group] = _.uniqBy(
-      groupedByProject[group],
+  Object.keys(groupedByProject).forEach(project => {
+    groupedByProject[project] = _.uniqBy(
+      groupedByProject[project],
       ({ indication, regimen, line, population, book, coverage, slug }) => [indication, regimen, line, population, book, coverage, slug].join('|')
     )
   })
 
-  const tdgProjectsDocOps = Object.keys(groupedByProject).map(async group => {
-    const historicalDocsInGroup = groupedByProject[group]
+  const tdgProjects = Object.keys(groupedByProject).map(project => {
+    const historicalDocsInProject = groupedByProject[project]
 
-    const getOrgTpIdsOps = historicalDocsInGroup
-      .map(async ({ indication, regimen, line, population, book, coverage, slug }) => {
+    let orgTps = historicalDocsInProject
+      .map(({ indication, regimen, line, population, book, coverage, slug }) => {
         const { _id: organizationId } = orgsBySlug[slug] ? orgsBySlug[slug][0] : {}
 
         const tpHashStr = [indication, regimen, line, population, book, coverage].join('|')
@@ -69,35 +69,22 @@ module.exports = async ({
 
         if (!organizationId || !treatmentPlanId) return null
 
-        const orgTp = orgTpsByRefs[organizationId.toString() + treatmentPlanId.toString()]
-
-        let orgTpId
-        if (!orgTp) {
-          const { ops } = await pulseCore.collection('organizations.treatmentPlans')
-            .insertOne({
-              organizationId,
-              treatmentPlanId,
-            })
-
-          orgTpId = ops[0]._id
-        } else {
-          orgTpId = orgTp[0]._id
-        }
-
+        const orgTpKey = [organizationId, treatmentPlanId].join('|')
+        const orgTp = orgTpsByRefs[orgTpKey]
+        
+        if (!orgTp) return null
+        
+        const orgTpId = orgTp[0]._id
         return orgTpId
       })
-
-    let orgTps = await Promise.all(getOrgTpIdsOps)
 
     orgTps = _.compact(orgTps)
 
     return {
-      name: group,
+      name: project,
       orgTpIds: orgTps
     }
   })
-
-  const tdgProjects = await Promise.all(tdgProjectsDocOps)
 
   await pulseCore.collection('tdgProjects').insertMany(tdgProjects)
 
