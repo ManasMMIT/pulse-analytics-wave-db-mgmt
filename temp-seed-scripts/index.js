@@ -21,20 +21,15 @@ const runSeedScripts = async () => {
   
   const pulseCore = dbs.db('pulse-core')
 
-  const payerHistoricalQualityAccess = await pulseCore
-    .collection('payerHistoricalQualityAccess')
-    .find({})
-    .toArray()
-
-  const payerHistoricalAdditionalCriteria = await pulseCore
-    .collection('payerHistoricalAdditionalCriteria')
-    .find({})
-    .toArray()
-
-  const payerHistoricalPolicyLinks = await pulseCore
-    .collection('payerHistoricalPolicyLinks')
-    .find({})
-    .toArray()
+  const [
+    payerHistoricalQualityAccess,
+    payerHistoricalAdditionalCriteria,
+    payerHistoricalPolicyLinks,
+  ] = await Promise.all([
+    pulseCore.collection('payerHistoricalQualityAccess').find({}).toArray(),
+    pulseCore.collection('payerHistoricalAdditionalCriteria').find({}).toArray(),
+    pulseCore.collection('payerHistoricalPolicyLinks').find({}).toArray(),
+  ])
 
   const seedParameters = {
     pulseCore,
