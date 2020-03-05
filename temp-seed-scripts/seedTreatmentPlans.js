@@ -80,21 +80,18 @@ module.exports = async ({
     thing => [thing.indication, thing.regimen, thing.line, thing.population, thing.book, thing.coverage].join('|')
   )
 
-  const ops = uniqTpsDocs
-    .map(async ({ indication, regimen, population, line, book, coverage }) => (
-      pulseCore
-        .collection('treatmentPlans')
-        .insertOne({
-          indication: indicationsIdMap[indication], 
-          regimen: regimensIdMap[regimen], 
-          line: linesIdMap[line], 
-          population: populationsIdMap[population], 
-          book: booksIdMap[book], 
-          coverage: coveragesIdMap[coverage], 
-        })
-    ))
+  const docsToInsert = uniqTpsDocs
+    .map(({ indication, regimen, population, line, book, coverage }) => ({
+      indication: indicationsIdMap[indication],
+      regimen: regimensIdMap[regimen],
+      line: linesIdMap[line],
+      population: populationsIdMap[population],
+      book: booksIdMap[book],
+      coverage: coveragesIdMap[coverage],
+    }))
 
-  await Promise.all(ops)
+  await pulseCore.collection('treatmentPlans')
+    .insertMany(docsToInsert)
 
   console.log('`treatmentPlan combos seeded`');
 };
