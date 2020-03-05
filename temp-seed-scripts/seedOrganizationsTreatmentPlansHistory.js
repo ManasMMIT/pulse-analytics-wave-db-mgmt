@@ -14,7 +14,6 @@ module.exports = async ({
   const allTheThings = [
     ...payerHistoricalQualityAccess,
     ...payerHistoricalAdditionalCriteria,
-    // ...payerHistoricalPolicyLinks,
   ]
 
   // only deal with docs that have all required fields for this historic collection
