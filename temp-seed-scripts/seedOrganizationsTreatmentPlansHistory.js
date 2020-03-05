@@ -123,7 +123,7 @@ module.exports = async ({
       orgTpId: hashedOrgTpDocs[orgTpIdHash][0]._id,
       organizationId,
       treatmentPlanId,
-      accessData: accessScore[0],
+      accessData: accessScore[0] || null,
       tierData: {
         tier: flatDoc.tier,
         tierRating: flatDoc.tierRating,
