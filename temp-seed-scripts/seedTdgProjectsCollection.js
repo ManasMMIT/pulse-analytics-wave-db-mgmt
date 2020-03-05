@@ -20,7 +20,7 @@ module.exports = async ({
 
   const hashedTps = _.groupBy(
     enrichedTreatmentPlan,
-    thing => thing.indication + thing.regimen + thing.line + thing.population + thing.book + thing.coverage,
+    thing => [thing.indication, thing.regimen, thing.line, thing.population, thing.book, thing.coverage].join('|'),
   )
 
   const orgTps = await pulseCore.collection('organizations.treatmentPlans')
@@ -28,7 +28,7 @@ module.exports = async ({
 
   const orgTpsByRefs = _.groupBy(
     orgTps,
-    ({ organizationId, treatmentPlanId }) => organizationId + treatmentPlanId
+    ({ organizationId, treatmentPlanId }) => [organizationId, treatmentPlanId].join('|')
   )
 
   const allTheThings = [
@@ -53,7 +53,7 @@ module.exports = async ({
   Object.keys(groupedByProject).forEach(group => {
     groupedByProject[group] = _.uniqBy(
       groupedByProject[group],
-      ({ indication, regimen, line, population, book, coverage, slug }) => indication + regimen + line + population + book + coverage + slug
+      ({ indication, regimen, line, population, book, coverage, slug }) => [indication, regimen, line, population, book, coverage, slug].join('|')
     )
   })
 
@@ -64,7 +64,7 @@ module.exports = async ({
       .map(async ({ indication, regimen, line, population, book, coverage, slug }) => {
         const { _id: organizationId } = orgsBySlug[slug] ? orgsBySlug[slug][0] : {}
 
-        const tpHashStr = indication + regimen + line + population + book + coverage
+        const tpHashStr = [indication, regimen, line, population, book, coverage].join('|')
         const { _id: treatmentPlanId } = hashedTps[tpHashStr] ? hashedTps[tpHashStr][0] : {}
 
         if (!organizationId || !treatmentPlanId) return null
