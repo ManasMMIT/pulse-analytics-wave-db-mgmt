@@ -1,5 +1,7 @@
 const { ObjectId } = require('mongodb')
 
+const deleteTreatmentPlanConnectionsAndHistory = require('./utils/deleteTreatmentPlanConnectionsAndHistory')
+
 const deleteOrganization = async (
   parent,
   { input: { _id: stringId } },
@@ -13,6 +15,13 @@ const deleteOrganization = async (
   let deletedOrg
 
   await session.withTransaction(async () => {
+    // STEP 0: Delete all org-treatmentPlans connections and trash historical docs
+    await deleteTreatmentPlanConnectionsAndHistory({
+      db: pulseCoreDb,
+      session,
+      organizationId: _id,
+    })
+
     // STEP 1: delete the org from organizations collection
     const { value } = await pulseCoreDb
       .collection('organizations')
