@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import Button from '@material-ui/core/Button'
 import Spinner from './../../Phoenix/shared/Spinner'
 import { useAuth0 } from '../../../react-auth0-spa'
+import FileSaver from 'file-saver'
 
 const ExportCustomData = () => {
   const { accessToken } = useAuth0()
@@ -24,13 +25,7 @@ const ExportCustomData = () => {
       }))
 
       .then(({ blob, filename }) => {
-        const url = window.URL.createObjectURL(blob)
-        const a = document.createElement('a')
-        a.href = url
-        a.download = filename
-        document.body.appendChild(a) // we need to append the element to the dom -> otherwise it will not work in firefox
-        a.click()    
-        a.remove()  //afterwards we remove the element again 
+        FileSaver.saveAs(blob, filename)
       })
       .catch(err => console.err)
 

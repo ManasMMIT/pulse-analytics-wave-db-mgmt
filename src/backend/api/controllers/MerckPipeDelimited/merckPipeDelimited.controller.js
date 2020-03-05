@@ -32,7 +32,7 @@ class MerckPipeDelimitedController {
     this.apiDownloadFiles = this.apiDownloadFiles.bind(this)
   }
 
-  async getRenflexisData() {
+  getRenflexisData() {
     return this.db.collection('renflexisRelativeQoa')
     .find({ coverage: 'Medical' })
     .toArray()
@@ -76,7 +76,7 @@ class MerckPipeDelimitedController {
     return { merckKeytrudaData }
   }
 
-  async getPayerLivesData() {
+  getPayerLivesData() {
     return this.db
       .collection('payerHistoricalDrgNationalLives')
       .find()
