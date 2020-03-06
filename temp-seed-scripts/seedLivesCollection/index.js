@@ -2,6 +2,7 @@ const _ = require('lodash')
 
 const getHistoricalDocs = require('./getHistoricalDocs')
 
+// ! MSA lives are NOT handled by this script and are being ignored for now
 module.exports = async pulseCore => {
   await pulseCore.collection('lives.history').deleteMany()
   
