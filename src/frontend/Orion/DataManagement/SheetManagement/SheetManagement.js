@@ -2,7 +2,6 @@ import React from 'react'
 import WorkbooksPanel from './WorkbooksPanel'
 import SheetsPanel from './SheetsPanel'
 import FieldsPanel from './FieldsPanel'
-import EditFieldPanel from './EditFieldPanel/EditFieldPanel'
 
 const SheetManagement = () => {
   return (
@@ -10,7 +9,6 @@ const SheetManagement = () => {
       <WorkbooksPanel />
       <SheetsPanel />
       <FieldsPanel />
-      <EditFieldPanel />
     </div>
   )
 }
