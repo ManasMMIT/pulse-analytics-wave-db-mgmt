@@ -13,9 +13,13 @@ const Form = ({
 }) => {
   const [stagedSheetName, setSheetName] = useState(data.name)
 
-  const [saveWorkbook] = useMutation(mutationDoc, {
+  const [saveSheet] = useMutation(mutationDoc, {
     variables: {
-      input: { ...mutationVars, sheetId: data._id, name: stagedSheetName }
+      input: { 
+        ...mutationVars, 
+        sheetId: data._id, 
+        name: stagedSheetName 
+      }
     },
     refetchQueries: [{ query: GET_WORKBOOKS }],
     onCompleted: result => {
@@ -43,7 +47,7 @@ const Form = ({
         onChange={handleChange}
       />
 
-      <button onClick={saveWorkbook}>submit</button>
+      <button onClick={saveSheet}>submit</button>
     </div>
   )
 }
