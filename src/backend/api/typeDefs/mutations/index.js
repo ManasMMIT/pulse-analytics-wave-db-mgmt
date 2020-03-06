@@ -88,11 +88,11 @@ const mutationType = gql`
     
     createSheet(input: CreateSheetInput!): Sheet
     updateSheet(input: UpdateSheetInput!): Sheet
-    deleteSheet(input: DeleteSheetInput!): DeleteWorkbookPayload
+    deleteSheet(input: DeleteSheetInput!): Sheet
 
     createSheetField(input: CreateSheetFieldInput!): Field
     updateSheetField(input: UpdateSheetFieldInput!): Field
-    deleteSheetField(input: DeleteSheetFieldInput!): DeleteWorkbookPayload
+    deleteSheetField(input: DeleteSheetFieldInput!): Field
 
     filterQuery(input: JSON): JSON
 

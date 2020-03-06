@@ -9,18 +9,20 @@ const deleteSheet = async (
   workbookId = ObjectId(workbookId)
   sheetId = ObjectId(sheetId)
 
-  const { value } = await pulseCoreDb.collection('workbooksConfig')
+  const { value: workbook } = await pulseCoreDb.collection('workbooksConfig')
     .findOneAndUpdate(
       { _id: workbookId },
       {
         $pull: {
-          'sheets._id': sheetId
+          sheets: { _id: sheetId }
         }
       },
-      { returnOriginal: false }
+      // { returnOriginal: false } // get the original to return what was deleted
     )
 
-  return value
+  const deletedSheet = workbook.sheets.find(({ _id }) => _id.equals(sheetId))
+
+  return deletedSheet
 }
 
 module.exports = deleteSheet
