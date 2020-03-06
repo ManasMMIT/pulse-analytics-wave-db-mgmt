@@ -14,7 +14,7 @@ const deleteSheetField = async (
       { _id: workbookId },
       {
         $pull: {
-          'sheets.$[sheet].fields._id': fieldId
+          'sheets.$[sheet].fields': { _id: fieldId }
         }
       },
       {
