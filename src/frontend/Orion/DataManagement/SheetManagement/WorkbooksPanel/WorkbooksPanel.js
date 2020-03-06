@@ -82,6 +82,7 @@ const WorkbooksPanel = () => {
                 buttonLabel="Edit" 
                 data={_.omit(workbookObj, ['sheets', '__typename'])}
                 mutationDoc={UPDATE_WORKBOOK}
+                afterMutationHook={handleClick}
               />
 
               <DeleteButton
