@@ -5,7 +5,9 @@ import queryString from 'query-string'
 import _ from 'lodash'
 
 import SheetPanelItem from './SheetPanelItem'
-import EditButton from './EditButton'
+import ModalButtonWithForm from './ModalButtonWithForm'
+
+import { CREATE_SHEET, UPDATE_SHEET } from '../../../../api/mutations'
 import { GET_WORKBOOKS } from '../../../../api/queries'
 
 const getSheetFieldIds = sheetObj => {
@@ -52,23 +54,35 @@ const SheetsPanel = () => {
   const sheets = selectedWorkbook ? selectedWorkbook.sheets : []
 
   return (
-    <ul style={{ listStyle: 'none' }}>
-      {
-        sheets.map(sheetObj => (
-          <SheetPanelItem
-            key={sheetObj._id}
-            isSelected={sheetObj._id === selectedSheetId}
-            sheetName={sheetObj.name}
-            handleClick={() => handleClick(sheetObj)}
-          >
-            <EditButton 
-              buttonLabel="Edit"
-              data={_.omit(sheetObj, ['fields', '__typename'])}
-            />
-          </SheetPanelItem>
-        ))
-      }
-    </ul>
+    <div>
+      <ModalButtonWithForm
+        buttonLabel="Create Sheet"
+        mutationDoc={CREATE_SHEET}
+        mutationVars={{ workbookId: selectedWorkbookId }}
+        afterMutationHook={handleClick}
+      />
+
+      <ul style={{ listStyle: 'none' }}>
+        {
+          sheets.map(sheetObj => (
+            <SheetPanelItem
+              key={sheetObj._id}
+              isSelected={sheetObj._id === selectedSheetId}
+              sheetName={sheetObj.name}
+              handleClick={() => handleClick(sheetObj)}
+            >
+              <ModalButtonWithForm 
+                buttonLabel="Edit"
+                data={_.omit(sheetObj, ['fields', '__typename'])}
+                mutationDoc={UPDATE_SHEET}
+                mutationVars={{ workbookId: selectedWorkbookId }}
+                afterMutationHook={handleClick}
+              />
+            </SheetPanelItem>
+          ))
+        }
+      </ul>
+    </div>
   )
 }
 
