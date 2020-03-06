@@ -6,8 +6,14 @@ import _ from 'lodash'
 
 import SheetPanelItem from './SheetPanelItem'
 import ModalButtonWithForm from './ModalButtonWithForm'
+import DeleteButton from '../shared/DeleteButton'
 
-import { CREATE_SHEET, UPDATE_SHEET } from '../../../../api/mutations'
+import { 
+  CREATE_SHEET, 
+  UPDATE_SHEET,
+  DELETE_SHEET,
+} from '../../../../api/mutations'
+
 import { GET_WORKBOOKS } from '../../../../api/queries'
 
 const getSheetFieldIds = sheetObj => {
@@ -77,6 +83,17 @@ const SheetsPanel = () => {
                 mutationDoc={UPDATE_SHEET}
                 mutationVars={{ workbookId: selectedWorkbookId }}
                 afterMutationHook={handleClick}
+              />
+
+              <DeleteButton
+                mutationVars={{ workbookId: selectedWorkbookId, sheetId: sheetObj._id }}
+                mutationDoc={DELETE_SHEET}
+                afterMutationHook={() => {
+                  const targetWorkbook = data.workbooks.find(({ _id }) => _id === selectedWorkbookId)
+                  const nextSheetSelection = targetWorkbook.sheets.find(({ _id }) => _id !== sheetObj._id)
+
+                  handleClick(nextSheetSelection)
+                }}
               />
             </SheetPanelItem>
           ))
