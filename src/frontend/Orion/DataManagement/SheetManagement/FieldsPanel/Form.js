@@ -17,9 +17,7 @@ const Form = ({
   data, 
   afterMutationHook,
   mutationDoc,
-  fieldId,
-  sheetId, 
-  workbookId,
+  mutationVars,
   closeModal,
 }) => {
   const [stagedFieldName, setFieldName] = useState(data.name)
@@ -29,9 +27,7 @@ const Form = ({
   const [saveField] = useMutation(mutationDoc, {
     variables: {
       input: { 
-        fieldId,
-        sheetId,
-        workbookId, 
+        ...mutationVars,
         name: stagedFieldName,
         type: stagedType,
         oneOf: stagedOneOf, 
@@ -105,9 +101,7 @@ Form.propTypes = {
   mutationDoc: PropTypes.object,
   afterMutationHook: PropTypes.func,
   closeModal: PropTypes.func,
-  fieldId: PropTypes.string,
-  sheetId: PropTypes.string,
-  workbookId: PropTypes.string,
+  mutationVars: PropTypes.object,
 }
 
 Form.defaultProps = {
