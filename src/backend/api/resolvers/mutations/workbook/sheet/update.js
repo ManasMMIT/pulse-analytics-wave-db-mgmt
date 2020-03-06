@@ -2,7 +2,7 @@ const { ObjectId } = require('mongodb')
 
 const updateSheet = async (
   parent,
-  { input: { workbookId, sheetId, ...body } },
+  { input: { workbookId, sheetId, name } },
   { pulseCoreDb },
   info,
 ) => {
@@ -17,7 +17,7 @@ const updateSheet = async (
       },
       {
         $set: {
-          'sheets.$': body
+          'sheets.$.name': name // if you only use $ without dotting further, op will replace the whole subdoc
         }
       },
       { returnOriginal: false }
