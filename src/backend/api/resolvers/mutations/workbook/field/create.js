@@ -8,12 +8,14 @@ const createSheetField = async (
   workbookId = ObjectId(workbookId)
   sheetId = ObjectId(sheetId)
 
-  const { value } = await pulseCoreDb.collection('workbooksConfig')
+  const newFieldId = ObjectId()
+
+  const { value: workbook } = await pulseCoreDb.collection('workbooksConfig')
     .findOneAndUpdate(
       { _id: workbookId },
       {
         $push: {
-          'sheets.$[sheet].fields': { _id: ObjectId(), ...body }
+          'sheets.$[sheet].fields': { _id: newFieldId, ...body }
         }
       },
       {
@@ -24,7 +26,10 @@ const createSheetField = async (
       },
     )
 
-  return value
+  const targetSheet = workbook.sheets.find(({ _id }) => _id.equals(sheetId))
+  const newField = targetSheet.fields.find(({ _id }) => _id.equals(newFieldId))
+
+  return newField
 }
 
 module.exports = createSheetField

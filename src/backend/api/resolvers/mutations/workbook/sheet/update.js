@@ -9,7 +9,7 @@ const updateSheet = async (
   workbookId = ObjectId(workbookId)
   sheetId = ObjectId(sheetId)
 
-  const { value } = await pulseCoreDb.collection('workbooksConfig')
+  const { value: workbook } = await pulseCoreDb.collection('workbooksConfig')
     .findOneAndUpdate(
       { 
         _id: workbookId, 
@@ -23,7 +23,9 @@ const updateSheet = async (
       { returnOriginal: false }
     )
 
-  return value
+  const updatedSheet = workbook.sheets.find(({ _id }) => _id.equals(sheetId))
+
+  return updatedSheet
 }
 
 module.exports = updateSheet

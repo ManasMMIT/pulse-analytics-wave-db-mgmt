@@ -7,13 +7,15 @@ const createSheet = async (
 ) => {
   workbookId = ObjectId(workbookId)
 
-  const { value } = await pulseCoreDb.collection('workbooksConfig')
+  const newSheetId = ObjectId()
+
+  const { value: workbook } = await pulseCoreDb.collection('workbooksConfig')
     .findOneAndUpdate(
       { _id: workbookId },
       {
         $push: {
           'sheets': { 
-            _id: ObjectId(), 
+            _id: newSheetId, 
             fields: [
               {
                 _id: ObjectId(),
@@ -31,7 +33,9 @@ const createSheet = async (
       }
     )
 
-    return value
+  const newSheet = workbook.sheets.find(({ _id }) => _id.equals(newSheetId))
+
+  return newSheet
 }
 
 module.exports = createSheet

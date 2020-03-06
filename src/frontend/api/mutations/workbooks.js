@@ -61,15 +61,11 @@ export const CREATE_SHEET = gql`
     createSheet(input: $input) {
       _id
       name
-      sheets {
+      fields {
         _id
         name
-        fields {
-          _id
-          name
-          type
-          oneOf
-        }
+        type
+        oneOf
       }
     }
   }
@@ -80,15 +76,11 @@ export const UPDATE_SHEET = gql`
     updateSheet(input: $input) {
       _id
       name
-      sheets {
+      fields {
         _id
         name
-        fields {
-          _id
-          name
-          type
-          oneOf
-        }
+        type
+        oneOf
       }
     }
   }
@@ -99,15 +91,11 @@ export const DELETE_SHEET = gql`
     deleteSheet(input: $input) {
       _id
       name
-      sheets {
+      fields {
         _id
         name
-        fields {
-          _id
-          name
-          type
-          oneOf
-        }
+        type
+        oneOf
       }
     }
   }
@@ -118,16 +106,8 @@ export const CREATE_SHEET_FIELD = gql`
     createSheetField(input: $input) {
       _id
       name
-      sheets {
-        _id
-        name
-        fields {
-          _id
-          name
-          type
-          oneOf
-        }
-      }
+      type
+      oneOf
     }
   }
 `
@@ -137,16 +117,8 @@ export const UPDATE_SHEET_FIELD = gql`
     updateSheetField(input: $input) {
       _id
       name
-      sheets {
-        _id
-        name
-        fields {
-          _id
-          name
-          type
-          oneOf
-        }
-      }
+      type
+      oneOf
     }
   }
 `
@@ -156,16 +128,8 @@ export const DELETE_SHEET_FIELD = gql`
     deleteSheetField(input: $input) {
       _id
       name
-      sheets {
-        _id
-        name
-        fields {
-          _id
-          name
-          type
-          oneOf
-        }
-      }
+      type
+      oneOf
     }
   }
 `
