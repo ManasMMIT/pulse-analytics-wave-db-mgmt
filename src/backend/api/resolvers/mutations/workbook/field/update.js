@@ -14,15 +14,16 @@ const updateSheetField = async (
       { _id: workbookId },
       {
         $set: {
-          'sheets.$[sheet].fields.$[field]': body
+          'sheets.$[sheet].fields.$[field]': {
+            _id: fieldId,
+            ...body,
+          }
         }
       },
       {
         arrayFilters: [
-          { 
-            'sheet._id': sheetId,
-            'field._id': fieldId,
-          },
+          { 'sheet._id': sheetId },
+          { 'field._id': fieldId },
         ],
         returnOriginal: false,
       },
