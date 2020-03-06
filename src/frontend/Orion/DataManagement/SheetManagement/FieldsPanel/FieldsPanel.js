@@ -6,6 +6,7 @@ import queryString from 'query-string'
 import FieldPanelItem from './FieldPanelItem'
 import UpdateForm from './Form'
 import CreateButtonWithForm from './CreateButtonWithForm'
+import DeleteButton from '../shared/DeleteButton'
 
 import { GET_WORKBOOKS } from '../../../../api/queries'
 
@@ -77,7 +78,23 @@ const FieldsPanel = () => {
                 isSelected={fieldObj._id === selectedFieldId}
                 fieldName={fieldObj.name}
                 handleClick={() => handleClick(fieldObj)}
-              />
+              >
+                <DeleteButton
+                  mutationDoc={DELETE_SHEET_FIELD}
+                  mutationVars={{
+                    fieldId: selectedFieldId,
+                    sheetId: selectedSheetId,
+                    workbookId: selectedWorkbookId,
+                  }}
+                  afterMutationHook={() => {
+                    const targetWorkbook = data.workbooks.find(({ _id }) => _id === selectedWorkbookId)
+                    const targetSheet = targetWorkbook.sheets.find(({ _id }) => _id === selectedSheetId)
+                    const nextFieldSelection = targetSheet.fields.find(({ _id }) => _id !== fieldObj._id)
+
+                    handleClick(nextFieldSelection)
+                  }}
+                />
+              </FieldPanelItem>
             ))
           }
         </ul>
