@@ -60,7 +60,7 @@ const WorkbooksPanel = () => {
           <WorkbookPanelItem 
             key={workbookObj._id}
             isSelected={workbookObj._id === selectedWorkbookId}
-            workbookName={workbookObj.workbook} 
+            workbookName={workbookObj.name} 
             handleClick={() => handleClick(workbookObj)}
           >
             <EditButton 

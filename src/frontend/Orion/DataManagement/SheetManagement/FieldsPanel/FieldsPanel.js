@@ -51,7 +51,7 @@ const FieldsPanel = () => {
           <FieldPanelItem
             key={fieldObj._id}
             isSelected={fieldObj._id === selectedFieldId}
-            fieldName={fieldObj.field}
+            fieldName={fieldObj.name}
             handleClick={() => handleClick(fieldObj)}
           />
         ))

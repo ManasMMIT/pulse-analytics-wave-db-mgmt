@@ -12,7 +12,7 @@ const TYPES = [
 const Form = ({
   data, // structure: { _id: 'asdf', workbook: 'asdfasdf' }
 }) => {
-  const [stagedFieldName, setFieldName] = useState(data.field)
+  const [stagedFieldName, setFieldName] = useState(data.name)
   const [stagedType, setType] = useState(data.type)
   const [stagedOneOf, setOneOf] = useState(data.oneOf || [])
 

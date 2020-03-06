@@ -58,7 +58,7 @@ const SheetsPanel = () => {
           <SheetPanelItem
             key={sheetObj._id}
             isSelected={sheetObj._id === selectedSheetId}
-            sheetName={sheetObj.sheet}
+            sheetName={sheetObj.name}
             handleClick={() => handleClick(sheetObj)}
           >
             <EditButton 

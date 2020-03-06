@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 const Form = ({
   data, // structure: { _id: 'asdf', workbook: 'asdfasdf' }
 }) => {
-  const [stagedSheetName, setSheetName] = useState(data.sheet)
+  const [stagedSheetName, setSheetName] = useState(data.name)
 
   // const [updateWorkbook] = useMutation({
   //   variables: {
