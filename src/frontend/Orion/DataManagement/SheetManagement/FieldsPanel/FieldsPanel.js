@@ -4,7 +4,15 @@ import { useQuery } from '@apollo/react-hooks'
 import queryString from 'query-string'
 
 import FieldPanelItem from './FieldPanelItem'
+import Form from './Form'
+
 import { GET_WORKBOOKS } from '../../../../api/queries'
+
+import { 
+  CREATE_SHEET_FIELD,
+  UPDATE_SHEET_FIELD,
+  DELETE_SHEET_FIELD,
+ } from '../../../../api/mutations'
 
 const FieldsPanel = () => {
   const history = useHistory()
@@ -44,19 +52,34 @@ const FieldsPanel = () => {
 
   const fields = selectedSheet ? selectedSheet.fields : []
 
+  const selectedField = fields.find(({ _id }) => (
+    _id === selectedFieldId
+  ))
+
   return (
-    <ul style={{ listStyle: 'none' }}>
-      {
-        fields.map(fieldObj => (
-          <FieldPanelItem
-            key={fieldObj._id}
-            isSelected={fieldObj._id === selectedFieldId}
-            fieldName={fieldObj.name}
-            handleClick={() => handleClick(fieldObj)}
-          />
-        ))
-      }
-    </ul>
+    <div style={{ display: 'flex' }}>
+      <ul style={{ listStyle: 'none' }}>
+        {
+          fields.map(fieldObj => (
+            <FieldPanelItem
+              key={fieldObj._id}
+              isSelected={fieldObj._id === selectedFieldId}
+              fieldName={fieldObj.name}
+              handleClick={() => handleClick(fieldObj)}
+            />
+          ))
+        }
+      </ul>
+
+      <Form
+        key={selectedFieldId}
+        data={selectedField} 
+        mutationDoc={UPDATE_SHEET_FIELD}
+        fieldId={selectedFieldId}
+        sheetId={selectedSheetId} 
+        workbookId={selectedWorkbookId}
+      />
+    </div>
   )
 }
 
