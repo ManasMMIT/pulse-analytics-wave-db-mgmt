@@ -9,7 +9,7 @@ const deleteSheetField = async (
   sheetId = ObjectId(sheetId)
   fieldId = ObjectId(fieldId)
 
-  const { value } = await pulseCoreDb.collection('workbooksConfig')
+  const { value: workbook } = await pulseCoreDb.collection('workbooksConfig')
     .findOneAndUpdate(
       { _id: workbookId },
       {
@@ -21,11 +21,14 @@ const deleteSheetField = async (
         arrayFilters: [
           { 'sheet._id': sheetId },
         ],
-        returnOriginal: false,
+        // { returnOriginal: false } // get the original to return what was deleted
       },
     )
 
-  return value
+  const targetSheet = workbook.sheets.find(({ _id }) => _id.equals(sheetId))
+  const deletedField = targetSheet.fields.find(({ _id }) => _id.equals(fieldId))
+
+  return deletedField
 }
 
 module.exports = deleteSheetField
