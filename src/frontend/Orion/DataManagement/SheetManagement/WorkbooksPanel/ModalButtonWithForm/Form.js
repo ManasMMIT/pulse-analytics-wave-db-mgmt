@@ -18,9 +18,11 @@ const Form = ({
     },
     refetchQueries: [{ query: GET_WORKBOOKS }],
     onCompleted: result => {
-      const newWorkbook = result.createWorkbook
+      const targetDataKey = Object.keys(result)[0]
+      const newOrUpdatedWorkbook = result[targetDataKey]
+
       closeModal()
-      afterMutationHook(newWorkbook)
+      afterMutationHook(newOrUpdatedWorkbook)
     },
     awaitRefetchQueries: true,
   })
