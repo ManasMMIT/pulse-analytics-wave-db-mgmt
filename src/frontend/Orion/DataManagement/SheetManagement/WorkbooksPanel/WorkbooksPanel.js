@@ -80,7 +80,7 @@ const WorkbooksPanel = () => {
             >
               <ModalButtonWithForm 
                 buttonLabel="Edit" 
-                data={_.omit(workbookObj, ['sheets', '__typename'])}
+                data={workbookObj}
                 mutationDoc={UPDATE_WORKBOOK}
                 afterMutationHook={handleClick}
               />
