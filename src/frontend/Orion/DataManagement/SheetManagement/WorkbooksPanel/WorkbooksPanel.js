@@ -62,14 +62,14 @@ const WorkbooksPanel = () => {
   if (loading) return 'Loading...'
 
   return (
-    <div>
+    <div style={{ padding: 24 }}>
       <ModalButtonWithForm 
         buttonLabel="Create Workbook"
         mutationDoc={CREATE_WORKBOOK}
         afterMutationHook={handleClick}
       />
 
-      <ul style={{ listStyle: 'none' }}>
+      <ul style={{ listStyle: 'none', padding: 0 }}>
         {
           data.workbooks.map(workbookObj => (
             <WorkbookPanelItem 

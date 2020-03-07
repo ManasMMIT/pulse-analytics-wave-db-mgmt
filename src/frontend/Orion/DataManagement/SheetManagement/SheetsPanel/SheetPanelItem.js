@@ -7,16 +7,16 @@ const SheetPanelItem = ({
   children,
  }) => {
   return (
-    <div style={{ display: 'flex' }}>
-      <li 
+    <li style={{ display: 'flex', padding: 8 }}>
+      <div
         style={{ border: isSelected ? '1px solid red' : null }}
         onClick={handleClick}
       >
         {sheetName}
-      </li>
+      </div>
       
       {children}
-    </div>
+    </li>
   )
 }
 

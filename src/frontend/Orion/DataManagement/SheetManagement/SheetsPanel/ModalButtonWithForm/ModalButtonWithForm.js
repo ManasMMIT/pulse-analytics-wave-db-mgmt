@@ -19,7 +19,10 @@ const ModalButtonWithForm = ({
 
   return (
     <>
-      <button onClick={openModal}>
+      <button 
+        style={{ marginLeft: 8 }} 
+        onClick={openModal}
+      >
         {buttonLabel}
       </button>
       <Modal

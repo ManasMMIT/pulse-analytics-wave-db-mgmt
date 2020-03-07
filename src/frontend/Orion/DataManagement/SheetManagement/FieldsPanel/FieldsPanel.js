@@ -59,8 +59,8 @@ const FieldsPanel = () => {
   ))
 
   return (
-    <div style={{ display: 'flex' }}>
-      <div>
+    <div style={{ display: 'flex'}}>
+      <div style={{ padding: 24 }}>
         <CreateButtonWithForm
           mutationDoc={CREATE_SHEET_FIELD}
           mutationVars={{
@@ -70,7 +70,7 @@ const FieldsPanel = () => {
           afterMutationHook={handleClick}
         />
         
-        <ul style={{ listStyle: 'none' }}>
+        <ul style={{ listStyle: 'none', padding: 0 }}>
           {
             fields.map(fieldObj => (
               <FieldPanelItem
@@ -100,16 +100,18 @@ const FieldsPanel = () => {
         </ul>
       </div>
 
-      <UpdateForm
-        key={selectedFieldId}
-        data={selectedField} 
-        mutationDoc={UPDATE_SHEET_FIELD}
-        mutationVars={{
-          fieldId: selectedFieldId,
-          sheetId: selectedSheetId,
-          workbookId: selectedWorkbookId,
-        }}
-      />
+      <div style={{ padding: 24 }}>
+        <UpdateForm
+          key={selectedFieldId}
+          data={selectedField} 
+          mutationDoc={UPDATE_SHEET_FIELD}
+          mutationVars={{
+            fieldId: selectedFieldId,
+            sheetId: selectedSheetId,
+            workbookId: selectedWorkbookId,
+          }}
+        />
+      </div>
     </div>
   )
 }

@@ -60,7 +60,7 @@ const SheetsPanel = () => {
   const sheets = selectedWorkbook ? selectedWorkbook.sheets : []
 
   return (
-    <div>
+    <div style={{ padding: 24 }}>
       <ModalButtonWithForm
         buttonLabel="Create Sheet"
         mutationDoc={CREATE_SHEET}
@@ -68,7 +68,7 @@ const SheetsPanel = () => {
         afterMutationHook={handleClick}
       />
 
-      <ul style={{ listStyle: 'none' }}>
+      <ul style={{ listStyle: 'none', padding: 0 }}>
         {
           sheets.map(sheetObj => (
             <SheetPanelItem
