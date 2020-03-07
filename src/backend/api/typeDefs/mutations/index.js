@@ -98,6 +98,8 @@ const mutationType = gql`
     filterQuery(input: JSON): JSON
 
     pipeDelimitedScript: JSON
+
+    singleUpload(file: Upload!): JSON
   }
 `
 

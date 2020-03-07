@@ -1,12 +1,19 @@
 import React, { useState, useRef } from "react"
 import XLSX from 'xlsx'
 import _ from 'lodash'
+import gql from 'graphql-tag'
 
 import Select from 'react-select'
 import Spinner from '../../Phoenix/shared/Spinner'
 import { UPLOAD_SHEET } from '../../api/mutations'
 
 import { useMutation } from '@apollo/react-hooks'
+
+export const SINGLE_UPLOAD = gql`
+  mutation SingleUpload($file: Upload!) {
+    singleUpload(file: $file)
+  }
+`
 
 const Import = () => {
   const fileInputRef = useRef(null)
@@ -16,7 +23,7 @@ const Import = () => {
   const [workbook, setWorkbook] = useState(null)
   const [loading, setLoading] = useState(false)
 
-  const [uploadSheet] = useMutation(UPLOAD_SHEET, {
+  const [uploadFile] = useMutation(SINGLE_UPLOAD, {
     onCompleted: result => {
       // alert(`${json.length} rows would go to the backend`)
       setLoading(false)
@@ -56,16 +63,21 @@ const Import = () => {
 
     const fileName = fileInputRef.current.files[0].name
     const fileNameWithoutExt = fileName.replace('.xlsx', '')
+    
+    const file = fileInputRef.current.files[0]
 
-    uploadSheet({
+    debugger
+
+    uploadFile({
       variables: {
-        input: [
-          {
-            wb: fileNameWithoutExt,
-            sheet: selectedSheetName,
-            data: json,
-          }
-        ]
+        file,
+        // input: [
+        //   {
+        //     wb: fileNameWithoutExt,
+        //     sheet: selectedSheetName,
+        //     data: json,
+        //   }
+        // ]
       },
     })
   }
