@@ -2,10 +2,8 @@ import React, { useState, useRef } from "react"
 import XLSX from 'xlsx'
 import _ from 'lodash'
 
-import sheetToJson from './sheetToJson'
-
 import Select from 'react-select'
-import Spinner from '../../../Phoenix/shared/Spinner'
+import Spinner from '../../Phoenix/shared/Spinner'
 
 const Import = () => {
   const fileInputRef = useRef(null);
@@ -41,10 +39,11 @@ const Import = () => {
     setLoading(true)
 
     const selectedSheetObj = workbook.Sheets[selectedSheet.value]
-    const { json, numExcludedRows } = sheetToJson(selectedSheetObj)
+    const json = XLSX.utils.sheet_to_json(selectedSheetObj, { blankrows: true, defval: null })
 
     setLoading(false)
-    alert(`${json.length} rows would be imported; ${numExcludedRows} rows excluded`)
+
+    alert(`${json.length} rows would go to the backend`)
   }
 
   return (
