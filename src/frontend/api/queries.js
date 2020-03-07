@@ -490,6 +490,7 @@ export const GET_WORKBOOKS = gql`
       sheets {
         _id
         name
+        collection
         fields {
           _id
           name

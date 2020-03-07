@@ -12,13 +12,15 @@ const Form = ({
   closeModal,
 }) => {
   const [stagedSheetName, setSheetName] = useState(data.name)
+  const [stagedCollectionName, setCollectionName] = useState(data.collection)
 
   const [saveSheet] = useMutation(mutationDoc, {
     variables: {
       input: { 
         ...mutationVars, 
         sheetId: data._id, 
-        name: stagedSheetName 
+        name: stagedSheetName,
+        collection: stagedCollectionName,
       }
     },
     refetchQueries: [{ query: GET_WORKBOOKS }],
@@ -32,23 +34,40 @@ const Form = ({
     awaitRefetchQueries: true,
   })
   
-  const handleChange = e => {
+  const handleSheetNameChange = e => {
     e.persist()
     const value = e.currentTarget && e.currentTarget.value
     setSheetName(value)
   }
 
+  const handleCollectionNameChange = e => {
+    e.persist()
+    const value = e.currentTarget && e.currentTarget.value
+    setCollectionName(value)
+  }
+
   return (
-    <div style={{ display: 'flex' }}>
-      <label>Sheet Name</label>
-      <input
-        type="text"
-        value={stagedSheetName}
-        onChange={handleChange}
-      />
+    <>
+      <div style={{ display: 'flex', padding: 8 }}>
+        <label>Sheet Name</label>
+        <input
+          type="text"
+          value={stagedSheetName}
+          onChange={handleSheetNameChange}
+        />
+      </div>
+
+      <div style={{ display: 'flex', padding: 8 }}>
+        <label>Collection Name</label>
+        <input
+          type="text"
+          value={stagedCollectionName}
+          onChange={handleCollectionNameChange}
+        />
+      </div>
 
       <button onClick={saveSheet}>submit</button>
-    </div>
+    </>
   )
 }
 

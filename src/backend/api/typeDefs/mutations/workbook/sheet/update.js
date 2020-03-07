@@ -5,6 +5,7 @@ const updateSheetTypeDefs = gql`
     workbookId: ID!
     sheetId: ID!
     name: String!
+    collection: String
   }
 `
 

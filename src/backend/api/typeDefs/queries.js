@@ -207,6 +207,7 @@ const queries = gql`
     _id: ID!
     name: String!
     fields: [Field]
+    collection: String
   }
 
   type Field {

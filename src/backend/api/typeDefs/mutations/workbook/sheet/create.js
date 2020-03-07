@@ -4,6 +4,7 @@ const createSheetTypeDefs = gql`
   input CreateSheetInput {
     workbookId: ID!
     name: String!
+    collection: String
   }
 `
 

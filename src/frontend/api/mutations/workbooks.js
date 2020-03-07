@@ -61,6 +61,7 @@ export const CREATE_SHEET = gql`
     createSheet(input: $input) {
       _id
       name
+      collection
       fields {
         _id
         name
@@ -76,6 +77,7 @@ export const UPDATE_SHEET = gql`
     updateSheet(input: $input) {
       _id
       name
+      collection
       fields {
         _id
         name
@@ -91,6 +93,7 @@ export const DELETE_SHEET = gql`
     deleteSheet(input: $input) {
       _id
       name
+      collection
       fields {
         _id
         name
