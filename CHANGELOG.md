@@ -15,6 +15,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased] - Started: 2-25-20
 
 ### Added
+- Installed `JSZip` for file zipping and `file-saver` for file downloading on the client side
+- `Orion`: Allow merck pipe delimited csv and txt files to be downloadable from a click of a button
 - `Polaris`: Temporary seed scripts for treatment plan and org.treatmentPlan collections.
 
 ### Changed
