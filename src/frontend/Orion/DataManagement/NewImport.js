@@ -4,13 +4,19 @@ import _ from 'lodash'
 
 import Select from 'react-select'
 import Spinner from '../../Phoenix/shared/Spinner'
+import { UPLOAD_SHEET } from '../../api/mutations'
+
+import { useMutation } from '@apollo/react-hooks'
 
 const Import = () => {
-  const fileInputRef = useRef(null);
+  const fileInputRef = useRef(null)
+
   const [sheetNames, setSheetNames] = useState([])
   const [selectedSheet, selectSheet] = useState(null)
   const [workbook, setWorkbook] = useState(null)
   const [loading, setLoading] = useState(false)
+
+  const [uploadSheet] = useMutation(UPLOAD_SHEET)
 
   const onFileAdded = () => {
     setLoading(true)
@@ -38,12 +44,29 @@ const Import = () => {
   const handleSubmit = () => {
     setLoading(true)
 
-    const selectedSheetObj = workbook.Sheets[selectedSheet.value]
+    const selectedSheetName = selectedSheet.value
+    const selectedSheetObj = workbook.Sheets[selectedSheetName]
+
     const json = XLSX.utils.sheet_to_json(selectedSheetObj, { blankrows: true, defval: null })
 
-    setLoading(false)
+    const fileName = fileInputRef.current.files[0].name
+    const fileNameWithoutExt = fileName.replace('.xlsx', '')
 
-    alert(`${json.length} rows would go to the backend`)
+    uploadSheet({
+      variables: {
+        input: [
+          {
+            wb: fileNameWithoutExt,
+            sheet: selectedSheetName,
+            data: json,
+          }
+        ]
+      },
+      onCompleted: result => {
+        // alert(`${json.length} rows would go to the backend`)
+        setLoading(false)
+      },
+    })
   }
 
   return (
@@ -65,7 +88,7 @@ const Import = () => {
             {
               <Select
                 value={selectedSheet}
-                onChange={selectSheet}
+                onChange={obj => selectSheet(obj)}
                 options={sheetNames.map(n => ({ value: n, label: n }))}
               />
             }

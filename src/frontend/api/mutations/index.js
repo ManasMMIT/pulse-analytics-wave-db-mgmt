@@ -93,6 +93,7 @@ import {
 import {
   BACKUP_EXPORT,
   UPLOAD_COLLECTION,
+  UPLOAD_SHEET,
 } from './collection'
 
 import {
@@ -196,6 +197,7 @@ export {
 
   BACKUP_EXPORT,
   UPLOAD_COLLECTION,
+  UPLOAD_SHEET,
 
   SEND_TO_SUBSCRIBED_USERS,
   SEND_TO_TEST_GROUP,
