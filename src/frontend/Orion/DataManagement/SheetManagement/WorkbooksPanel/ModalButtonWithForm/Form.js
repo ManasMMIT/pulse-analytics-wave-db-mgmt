@@ -34,16 +34,18 @@ const Form = ({
   }
 
   return (
-    <div style={{ display: 'flex' }}>
-      <label>Workbook Name</label>
-      <input
-        type="text"
-        value={stagedWorkbookStr}
-        onChange={handleChange}
-      />
+    <>
+      <div style={{ display: 'flex', padding: 8 }}>
+        <label>Workbook Name</label>
+        <input
+          type="text"
+          value={stagedWorkbookStr}
+          onChange={handleChange}
+        />
+      </div>
 
       <button onClick={saveWorkbook}>submit</button>
-    </div>
+    </>
   )
 }
 
