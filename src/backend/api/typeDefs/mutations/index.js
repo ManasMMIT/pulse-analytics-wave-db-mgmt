@@ -71,6 +71,7 @@ const mutationType = gql`
     deleteQualityOfAccessScore(input: DeleteQualityOfAccessScoreInput!): DeleteQualityOfAccessScorePayload
 
     uploadCollection(input: UploadCollectionInput!): JSON
+    uploadSheet(input: [UploadSheetInput!]!): JSON
     backupExport(input: BackupExportInput!): String
 
     sendToSubscribedUsers(input: SendToSubscribedUsersInput!): SendToSubscribedUsersPayload

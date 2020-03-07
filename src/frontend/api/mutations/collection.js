@@ -13,7 +13,7 @@ export const UPLOAD_COLLECTION = gql`
 `
 
 export const UPLOAD_SHEET = gql`
-  mutation UploadSheet($input: UploadSheetInput!) {
-    UploadSheet(input: $input)
+  mutation UploadSheet($input: [UploadSheetInput!]!) {
+    uploadSheet(input: $input)
   }
 `

@@ -16,7 +16,12 @@ const Import = () => {
   const [workbook, setWorkbook] = useState(null)
   const [loading, setLoading] = useState(false)
 
-  const [uploadSheet] = useMutation(UPLOAD_SHEET)
+  const [uploadSheet] = useMutation(UPLOAD_SHEET, {
+    onCompleted: result => {
+      // alert(`${json.length} rows would go to the backend`)
+      setLoading(false)
+    },
+  })
 
   const onFileAdded = () => {
     setLoading(true)
@@ -61,10 +66,6 @@ const Import = () => {
             data: json,
           }
         ]
-      },
-      onCompleted: result => {
-        // alert(`${json.length} rows would go to the backend`)
-        setLoading(false)
       },
     })
   }
