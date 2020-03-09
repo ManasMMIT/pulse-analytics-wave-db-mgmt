@@ -12,13 +12,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Fixed** for any bug fixes.
 - **Security** in case of vulnerabilities.
 
-## [Unreleased] - Started: 2-25-20
+## [Unreleased] - Started: 3-9-20
+
+## [1.3.0] - Started: 2-25-20
 
 ### Added
-- Build out temporary seed scripts for `treatmentPlan`, `org.treatmentPlan`, `org.treatmentPlan.history`, and `lives.history` collections.
-- Installed `JSZip` for file zipping and `file-saver` for file downloading on the client side
+- `Polaris`: Build out temporary seed scripts for `treatmentPlan`, `org.treatmentPlan`, `org.treatmentPlan.history`, and `lives.history` collections.
+- `Polaris`: Installed `JSZip` for file zipping and `file-saver` for file downloading on the client side
 - `Orion`: Allow merck pipe delimited csv and txt files to be downloadable from a click of a button
-- `Polaris`: Temporary seed scripts for treatment plan and org.treatmentPlan collections.
 - `Orion`: Built sheet management CRUD system with URL-based panels and panel item selection
 - `Orion`: Allow novartis csv files to be downloadable from a click of a button
 
