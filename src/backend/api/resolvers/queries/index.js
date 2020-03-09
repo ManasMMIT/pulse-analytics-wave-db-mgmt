@@ -13,6 +13,9 @@ const testEmailGroups = require('./testEmailGroups')
 const alert = require('./alert')
 const opLogs = require('./opLogs')
 const bomSchema = require('./bomSchema')
+const workbooks = require('./workbooks')
+const singlePayerProject = require('./singlePayerProject')
+const payerProjectsList = require('./payerProjectsList')
 
 module.exports = {
   collections,
@@ -30,4 +33,7 @@ module.exports = {
   alert,
   opLogs,
   bomSchema,
+  workbooks,
+  singlePayerProject,
+  payerProjectsList
 }

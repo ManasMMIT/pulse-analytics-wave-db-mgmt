@@ -1,11 +1,8 @@
 import gql from 'graphql-tag'
 
 export const GET_BOM_SCHEMA = gql`
-  query getBomSchema($boid: ID) {
-    bomSchema(boid: $boid) {
-      tag
-      fields
-    }
+  query getBomSchema($boId: ID) {
+    bomSchema(boId: $boId)
   }
 `
 
@@ -481,6 +478,26 @@ export const GET_OP_LOG = gql`
       userId
       operationName
       operationVariables
+    }
+  }
+`
+
+export const GET_WORKBOOKS = gql`
+  query getWorkbooks {
+    workbooks {
+      _id
+      name
+      sheets {
+        _id
+        name
+        collection
+        fields {
+          _id
+          name
+          type
+          oneOf
+        }
+      }
     }
   }
 `

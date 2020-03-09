@@ -31,7 +31,11 @@ const queries = gql`
 
     opLogs: [OpLog]
 
-    bomSchema(boid: ID): [BomTagFields]
+    workbooks: [Workbook]
+    bomSchema(boId: ID): JSON
+
+    singlePayerProject(projectId: ID): SinglePayerProject
+    payerProjectsList: [PayerProjectsList]
   }
 
   type Node {
@@ -196,9 +200,35 @@ const queries = gql`
     operationVariables: JSON
   }
 
-  type BomTagFields {
-    tag: String!
-    fields: JSON # not stable enough yet
+  type Workbook {
+    _id: ID!
+    name: String!
+    sheets: [Sheet]!
+  }
+
+  type Sheet {
+    _id: ID!
+    name: String!
+    fields: [Field]
+    collection: String
+  }
+
+  type Field {
+    _id: ID!
+    name: String!
+    type: String!
+    oneOf: [String]
+  }
+
+  type SinglePayerProject {
+    _id: ID!
+    name: String!
+    timestamps: [DateTime]
+  }
+
+  type PayerProjectsList {
+    _id: ID!
+    name: String!
   }
 `
 

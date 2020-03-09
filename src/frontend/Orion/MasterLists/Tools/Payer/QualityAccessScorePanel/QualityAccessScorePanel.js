@@ -6,7 +6,7 @@ import { transparentize } from 'polished'
 
 import Panel from '../../../../../Phoenix/shared/Panel'
 import ModalButtonWithForm from '../../../../shared/ModalButtonWithForm'
-import DeleteButton from '../../../../shared/DeleteButton'
+// import DeleteButton from '../../../../shared/DeleteButton'
 import CopyOneOfStringButton from '../../../../shared/CopyOneOfStringButton'
 import { GET_SOURCE_QUALITY_OF_ACCESS_SCORES } from '../../../../../api/queries'
 import ColorBox from '../../../../shared/ColorBox'
@@ -15,7 +15,7 @@ import QoaForm from './QoaForm'
 import {
   CREATE_QUALITY_OF_ACCESS_SCORE,
   UPDATE_QUALITY_OF_ACCESS_SCORE,
-  DELETE_QUALITY_OF_ACCESS_SCORE,
+  // DELETE_QUALITY_OF_ACCESS_SCORE,
 } from '../../../../../api/mutations'
 
 import { Colors } from '../../../../../utils/pulseStyles'
@@ -89,11 +89,11 @@ const buttonGroupCallback = entity => {
         refetchQueries={[{ query: GET_SOURCE_QUALITY_OF_ACCESS_SCORES }]}
         getInputFields={getInputFields}
       />
-      <DeleteButton
+      {/* <DeleteButton
         itemId={entity._id}
         mutationDoc={DELETE_QUALITY_OF_ACCESS_SCORE}
         refetchQueries={[{ query: GET_SOURCE_QUALITY_OF_ACCESS_SCORES }]}
-      />
+      /> */}
     </>
   )
 }

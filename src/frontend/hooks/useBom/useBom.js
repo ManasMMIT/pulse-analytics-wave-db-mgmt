@@ -7,11 +7,11 @@ import {
   GET_BOM_SCHEMA,
 } from './../../api/queries'
 
-export default (boid, entityId) => {
+export default (boId, entityId) => {
   const [schema, setSchema] = useState({})
 
   const { loading: loadingSchema } = useQuery(GET_BOM_SCHEMA, {
-    variables: { boid },
+    variables: { boId },
     onCompleted: data => {
       const { bomSchema } = data
 
@@ -19,7 +19,7 @@ export default (boid, entityId) => {
     }
   })
 
-  const { loading: loadingEntity, data } = useQuery(BOID_QUERY_MAP[boid])
+  const { loading: loadingEntity, data } = useQuery(BOID_QUERY_MAP[boId])
 
   let entity = {}
   if (!loadingEntity) {

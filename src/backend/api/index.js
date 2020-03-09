@@ -9,6 +9,8 @@ const resolvers = require('./resolvers')
 
 const {
   getNodeController,
+  MerckPipeDelimitedCtrl,
+  NovartisCsvCtrl,
 } = require('./controllers')
 
 const MongoClient = require('mongodb').MongoClient
@@ -67,6 +69,12 @@ MongoClient.connect(process.env.LOADER_URI, { useNewUrlParser: true }, (err, cli
   const nodeController = getNodeController(twoGuysInAHorseCostume)
 
   subApp.use('/nodes', nodeController)
+
+  const merckPipeDelimitedCtrl = new MerckPipeDelimitedCtrl(pulseDevDb)
+  const novartisCsvCtrl = new NovartisCsvCtrl(pulseDevDb)
+  
+  subApp.get('/merck-pipe-delimited-file', merckPipeDelimitedCtrl.apiDownloadFiles)
+  subApp.get('/novartis-csv-file', novartisCsvCtrl.apiDownloadFiles)
 
   subApp.use('/collections', async (req, res) => {
     const collections = await pulseRawDb.listCollections().toArray()
