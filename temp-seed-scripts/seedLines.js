@@ -12,10 +12,9 @@ module.exports = async ({
     ...payerHistoricalPolicyLinks,
   ]
 
-  const linesObj = combinedHistoricalData.reduce((acc, { line, lineOfTherapy }) => {
-    const lineName = line || lineOfTherapy
-    if (lineName && !acc[lineName]) {
-      acc[lineName] = lineName
+  const linesObj = combinedHistoricalData.reduce((acc, { line }) => {
+    if (line && !acc[line]) {
+      acc[line] = line
     }
 
     return acc

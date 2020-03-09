@@ -1,4 +1,5 @@
 const _ = require('lodash')
+const format = require('date-fns/format')
 
 const ENRICH_TP_FIELDS_PIPELINE = require('./enrich-tps-pipeline')
 
@@ -115,12 +116,13 @@ module.exports = async ({
 
     const accessScore = accessScoresGroupedByAccess[flatDoc.access] || []
 
-    const timestamp = new Date(`${flatDoc.month}/1/${flatDoc.year}`)
+    const correctIsoFormat = format(new Date(flatDoc.year, flatDoc.month, 1), 'yyyy-MM-dd')
+    const timestamp = new Date(correctIsoFormat)
 
     const orgTpIdHashKey = [organizationId, treatmentPlanId].join('|')
     const orgTpIdHashVal = hashedOrgTpDocs[orgTpIdHashKey]
 
-    if (!orgTpIdHashVal) continue 
+    if (!orgTpIdHashVal) continue
 
     const orgTpId = orgTpIdHashVal[0]
       ? orgTpIdHashVal[0]._id

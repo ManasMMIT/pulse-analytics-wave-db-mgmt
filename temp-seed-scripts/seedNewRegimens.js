@@ -26,5 +26,4 @@ module.exports = async ({
   await pulseCore.collection('regimensFromHistoricalData').insertMany(regimensDocs)
 
   console.log('`regimens` collection seeded')
-
 }

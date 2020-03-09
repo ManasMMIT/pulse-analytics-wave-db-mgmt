@@ -15,10 +15,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased] - Started: 2-25-20
 
 ### Added
-- Installed `JSZip` for file zipping
+- Build out temporary seed scripts for `treatmentPlan`, `org.treatmentPlan`, `org.treatmentPlan.history`, and `lives.history` collections.
+- Installed `JSZip` for file zipping and `file-saver` for file downloading on the client side
 - `Orion`: Allow merck pipe delimited csv and txt files to be downloadable from a click of a button
 - `Orion`: Allow novartis csv files to be downloadable from a click of a button
-- `Polaris`: Temporary seed scripts for treatment plan and org.treatmentPlan collections.
 
 ### Changed
 - `Orion`: Update payer quality of access throughout history and disable quality of access panel delete button.
@@ -42,7 +42,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.2.2] - Started: 2-11-20
 
 ### Fixed
-- `Phoenix`: Make sure OpLog always refetches log on remount 
+- `Phoenix`: Make sure OpLog always refetches log on remount
 
 ## [1.2.1] - Started: 2-11-20
 
@@ -102,12 +102,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `Orion`: refactor all connections logic, front- and back-end, for new connections collection ([link](https://github.com/pulse-data/wave-db-mgmt/pull/294))
 - `Polaris Backend`: fixed/optimized payer historical data import by aggregating, deleting, and inserting for a single project.
 - `Delphi`: refactored backend to be more flexible with less hard-coding for Pathways subscription.
-- `Orion`: added additional fields to Provider Acc Modal: `state`, `city`, and `oncologistsCount`, and persist organization state changes on both sides of connections. 
+- `Orion`: added additional fields to Provider Acc Modal: `state`, `city`, and `oncologistsCount`, and persist organization state changes on both sides of connections.
   - Also lock every provider's connections' states to be tied to that provider's headquarters's state ([link](https://github.com/pulse-data/wave-db-mgmt/pull/274)).
 - `Orion`: when accounts, indications, or regimens are updated in their master lists, duplicate data fields -- `slug` for account, `name` for indication/regimen -- used in `users.nodes.resources` for validation are also updated.
 - `Phoenix`: the Regional Breakdown switch in the View Control node resource modal now persists its resource, in alignment with treatment plans and accounts, to `users.nodes.resources` instead of `users.sitemaps`. Old sitemap resource merging code has been deleted from the backend, as well as really old PostgreSQL files.
 - `Phoenix`: user resources and sitemap management is now **single-user**- (CUD) and **single-team**- (UD) based, instead of operating on all users at once.
-  1) guards against transaction failure when writes exceed 16MB 
+  1) guards against transaction failure when writes exceed 16MB
   2) improves UX (involves less steps) for `Polaris` users to update permissions/sitemaps
   3) makes it faster to update permissions/sitemaps (now that writes are smaller).
 - `Phoenix`: Resources Modal: query for organizations using tool-id-to-query-doc map for getting orgs by org type rather than all organizations
@@ -117,7 +117,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 - `Polaris Backend`: removed old `client`, `role`, and `user` controllers.
 - `Phoenix`: `push to dev` button has been commented out, until there's a discussion on managing admin features.
-- `Phoenix`: Removed general organizations query endpoint in favor of leaving organization querying broken up by type of organization 
+- `Phoenix`: Removed general organizations query endpoint in favor of leaving organization querying broken up by type of organization
 - `Delphi`: Removed old approach code including standlone email prep node script and deprecated mutations, resolvers, typeDefs, queries
 
 ### Fixed
@@ -129,4 +129,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Team and Client resolvers now only operate on MongoDB; where auth0 was depended on to generate a `uuid` for teams and clients, we now generate our own using the `uuid` library
   - User resolvers operate on MongoDB and Auth0 core but no longer do anything related to auth0 ext linking/delinking of teams
 - `Phoenix`: Fix combineResources util mock data after removing resources from users.sitemap logic
-- `Orion`: When updating a non-provider-type org, the state field on all of that org's connections is no longer accidentally erased 
+- `Orion`: When updating a non-provider-type org, the state field on all of that org's connections is no longer accidentally erased
