@@ -33,6 +33,9 @@ const queries = gql`
 
     workbooks: [Workbook]
     bomSchema(boId: ID): JSON
+
+    singlePayerProject(projectId: ID): SinglePayerProject
+    payerProjectsList: [PayerProjectsList]
   }
 
   type Node {
@@ -214,6 +217,17 @@ const queries = gql`
     field: String!
     type: String!
     oneOf: [String]
+  }
+
+  type SinglePayerProject {
+    _id: ID!
+    name: String!
+    timestamps: [DateTime]
+  }
+
+  type PayerProjectsList {
+    _id: ID!
+    name: String!
   }
 `
 
