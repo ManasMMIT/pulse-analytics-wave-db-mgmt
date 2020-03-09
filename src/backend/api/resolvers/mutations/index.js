@@ -10,6 +10,7 @@ const qualityOfAccessScoreResolvers = require('./qualityOfAccessScore')
 const collectionResolvers = require('./collection')
 const treatmentPlan = require('./treatmentPlan')
 const testEmailGroupResolvers = require('./testEmailGroup')
+const workbookResolvers = require('./workbook')
 
 const emailResolvers = require('./email')
 
@@ -32,4 +33,6 @@ module.exports = {
   ...testEmailGroupResolvers,
 
   ...queryResolvers,
+
+  ...workbookResolvers,
 }

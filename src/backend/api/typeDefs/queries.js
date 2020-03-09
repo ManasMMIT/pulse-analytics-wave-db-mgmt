@@ -202,19 +202,20 @@ const queries = gql`
 
   type Workbook {
     _id: ID!
-    workbook: String!
+    name: String!
     sheets: [Sheet]!
   }
 
   type Sheet {
     _id: ID!
-    sheet: String!
+    name: String!
     fields: [Field]
+    collection: String
   }
 
   type Field {
     _id: ID!
-    field: String!
+    name: String!
     type: String!
     oneOf: [String]
   }

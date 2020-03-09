@@ -5,7 +5,15 @@ import queryString from 'query-string'
 import _ from 'lodash'
 
 import WorkbookPanelItem from './WorkbookPanelItem'
-import EditButton from './EditButton/EditButton'
+import ModalButtonWithForm from './ModalButtonWithForm'
+import DeleteButton from './../shared/DeleteButton'
+
+import { 
+  CREATE_WORKBOOK,
+  UPDATE_WORKBOOK,
+  DELETE_WORKBOOK,
+} from '../../../../api/mutations'
+
 import { GET_WORKBOOKS } from '../../../../api/queries'
 
 const getWorkbookSheetFieldIds = wb => {
@@ -54,23 +62,42 @@ const WorkbooksPanel = () => {
   if (loading) return 'Loading...'
 
   return (
-    <ul style={{ listStyle: 'none' }}>
-      {
-        data.workbooks.map(workbookObj => (
-          <WorkbookPanelItem 
-            key={workbookObj._id}
-            isSelected={workbookObj._id === selectedWorkbookId}
-            workbookName={workbookObj.workbook} 
-            handleClick={() => handleClick(workbookObj)}
-          >
-            <EditButton 
-              buttonLabel="Edit" 
-              data={_.omit(workbookObj, ['sheets', '__typename'])}
-            />
-          </WorkbookPanelItem>
-        ))
-      }
-    </ul>
+    <div style={{ padding: 24 }}>
+      <ModalButtonWithForm 
+        buttonLabel="Create Workbook"
+        mutationDoc={CREATE_WORKBOOK}
+        afterMutationHook={handleClick}
+      />
+
+      <ul style={{ listStyle: 'none', padding: 0 }}>
+        {
+          data.workbooks.map(workbookObj => (
+            <WorkbookPanelItem 
+              key={workbookObj._id}
+              isSelected={workbookObj._id === selectedWorkbookId}
+              workbookName={workbookObj.name} 
+              handleClick={() => handleClick(workbookObj)}
+            >
+              <ModalButtonWithForm 
+                buttonLabel="Edit" 
+                data={workbookObj}
+                mutationDoc={UPDATE_WORKBOOK}
+                afterMutationHook={handleClick}
+              />
+
+              <DeleteButton
+                mutationVars={{ _id: workbookObj._id }}
+                mutationDoc={DELETE_WORKBOOK}
+                afterMutationHook={() => {
+                  const nextWorkbookSelection = data.workbooks.find(({ _id }) => _id !== workbookObj._id)
+                  handleClick(nextWorkbookSelection)
+                }}
+              />
+            </WorkbookPanelItem>
+          ))
+        }
+      </ul>
+    </div>
   )
 }
 

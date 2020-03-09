@@ -5,7 +5,15 @@ import queryString from 'query-string'
 import _ from 'lodash'
 
 import SheetPanelItem from './SheetPanelItem'
-import EditButton from './EditButton'
+import ModalButtonWithForm from './ModalButtonWithForm'
+import DeleteButton from '../shared/DeleteButton'
+
+import { 
+  CREATE_SHEET, 
+  UPDATE_SHEET,
+  DELETE_SHEET,
+} from '../../../../api/mutations'
+
 import { GET_WORKBOOKS } from '../../../../api/queries'
 
 const getSheetFieldIds = sheetObj => {
@@ -52,23 +60,46 @@ const SheetsPanel = () => {
   const sheets = selectedWorkbook ? selectedWorkbook.sheets : []
 
   return (
-    <ul style={{ listStyle: 'none' }}>
-      {
-        sheets.map(sheetObj => (
-          <SheetPanelItem
-            key={sheetObj._id}
-            isSelected={sheetObj._id === selectedSheetId}
-            sheetName={sheetObj.sheet}
-            handleClick={() => handleClick(sheetObj)}
-          >
-            <EditButton 
-              buttonLabel="Edit"
-              data={_.omit(sheetObj, ['fields', '__typename'])}
-            />
-          </SheetPanelItem>
-        ))
-      }
-    </ul>
+    <div style={{ padding: 24 }}>
+      <ModalButtonWithForm
+        buttonLabel="Create Sheet"
+        mutationDoc={CREATE_SHEET}
+        mutationVars={{ workbookId: selectedWorkbookId }}
+        afterMutationHook={handleClick}
+      />
+
+      <ul style={{ listStyle: 'none', padding: 0 }}>
+        {
+          sheets.map(sheetObj => (
+            <SheetPanelItem
+              key={sheetObj._id}
+              isSelected={sheetObj._id === selectedSheetId}
+              sheetName={sheetObj.name}
+              handleClick={() => handleClick(sheetObj)}
+            >
+              <ModalButtonWithForm 
+                buttonLabel="Edit"
+                data={sheetObj}
+                mutationDoc={UPDATE_SHEET}
+                mutationVars={{ workbookId: selectedWorkbookId }}
+                afterMutationHook={handleClick}
+              />
+
+              <DeleteButton
+                mutationVars={{ workbookId: selectedWorkbookId, sheetId: sheetObj._id }}
+                mutationDoc={DELETE_SHEET}
+                afterMutationHook={() => {
+                  const targetWorkbook = data.workbooks.find(({ _id }) => _id === selectedWorkbookId)
+                  const nextSheetSelection = targetWorkbook.sheets.find(({ _id }) => _id !== sheetObj._id)
+
+                  handleClick(nextSheetSelection)
+                }}
+              />
+            </SheetPanelItem>
+          ))
+        }
+      </ul>
+    </div>
   )
 }
 

@@ -1,5 +1,9 @@
 import React, { useState } from 'react'
+import PropTypes from 'prop-types'
 import Select from 'react-select'
+import { useMutation } from '@apollo/react-hooks'
+
+import { GET_WORKBOOKS } from '../../../../api/queries'
 
 const TYPES = [
   'string',
@@ -9,18 +13,36 @@ const TYPES = [
   'csv',
 ]
 
-const Form = ({
-  data, // structure: { _id: 'asdf', workbook: 'asdfasdf' }
+const Form = ({ 
+  data, 
+  afterMutationHook,
+  mutationDoc,
+  mutationVars,
+  closeModal,
 }) => {
-  const [stagedFieldName, setFieldName] = useState(data.field)
+  const [stagedFieldName, setFieldName] = useState(data.name)
   const [stagedType, setType] = useState(data.type)
   const [stagedOneOf, setOneOf] = useState(data.oneOf || [])
 
-  // const [updateWorkbook] = useMutation({
-  //   variables: {
-  //     input: { _id: data._id, workbook: data.workbook }
-  //   }
-  // })
+  const [saveField] = useMutation(mutationDoc, {
+    variables: {
+      input: { 
+        ...mutationVars,
+        name: stagedFieldName,
+        type: stagedType,
+        oneOf: stagedOneOf, 
+      }
+    },
+    refetchQueries: [{ query: GET_WORKBOOKS }],
+    onCompleted: result => {
+      const targetDataKey = Object.keys(result)[0]
+      const newOrUpdatedField = result[targetDataKey]
+
+      closeModal()
+      afterMutationHook(newOrUpdatedField)
+    },
+    awaitRefetchQueries: true,
+  })
 
   const handleTypeSelection = obj => setType(obj.value)
 
@@ -68,8 +90,25 @@ const Form = ({
           onChange={handleOneOfChange}
         />
       </div>
+
+      <button onClick={saveField}>submit</button>
     </div>
   )
+}
+
+Form.propTypes = {
+  data: PropTypes.object,
+  mutationDoc: PropTypes.object,
+  afterMutationHook: PropTypes.func,
+  closeModal: PropTypes.func,
+  mutationVars: PropTypes.object,
+}
+
+Form.defaultProps = {
+  data: {},
+  mutationDoc: null,
+  afterMutationHook: () => {},
+  closeModal: () => {},
 }
 
 export default Form

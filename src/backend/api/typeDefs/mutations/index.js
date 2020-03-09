@@ -12,6 +12,7 @@ const qualityAccessScore = require('./qualityAccessScore')
 const collection = require('./collection')
 const treatmentPlan = require('./treatmentPlan')
 const testEmailGroup = require('./testEmailGroup')
+const workbook = require('./workbook')
 
 const email = require('./email')
 
@@ -82,6 +83,18 @@ const mutationType = gql`
     updateTestEmailGroup(input: UpdateTestEmailGroupInput!): TestEmailGroup
     deleteTestEmailGroup(input: DeleteTestEmailGroupInput!): TestEmailGroup
 
+    createWorkbook(input: CreateWorkbookInput!): CreateWorkbookPayload
+    updateWorkbook(input: UpdateWorkbookInput!): UpdateWorkbookPayload
+    deleteWorkbook(input: DeleteWorkbookInput!): DeleteWorkbookPayload
+    
+    createSheet(input: CreateSheetInput!): Sheet
+    updateSheet(input: UpdateSheetInput!): Sheet
+    deleteSheet(input: DeleteSheetInput!): Sheet
+
+    createSheetField(input: CreateSheetFieldInput!): Field
+    updateSheetField(input: UpdateSheetFieldInput!): Field
+    deleteSheetField(input: DeleteSheetFieldInput!): Field
+
     filterQuery(input: JSON): JSON
 
     pipeDelimitedScript: JSON
@@ -105,4 +118,5 @@ module.exports = [
   ...email,
 
   ...testEmailGroup,
+  ...workbook,
 ]

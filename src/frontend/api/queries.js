@@ -486,13 +486,14 @@ export const GET_WORKBOOKS = gql`
   query getWorkbooks {
     workbooks {
       _id
-      workbook
+      name
       sheets {
         _id
-        sheet
+        name
+        collection
         fields {
           _id
-          field
+          name
           type
           oneOf
         }
