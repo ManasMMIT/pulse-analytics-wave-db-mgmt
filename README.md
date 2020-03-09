@@ -212,13 +212,8 @@ Here's an example of the output:
 
 # 4. Exporting Novartis CSV Data
 
-Run the following command in terminal:
-
-```
-node ./exportNovartisCsvData
-```
-
-That will output a CSV file in the format `NOVARTIS_KYMRIAH_${DATE}.csv` within the `./exportNovartisCsvData` directory.
+1. Go to http://polaris.pulse-tools.com/orion/data-management/export-custom-data
+2. Click on the download button for novartis csv
 
 Refer to [this Conf doc for specs](https://dedhamgroup.atlassian.net/wiki/spaces/PAD/pages/659521555/Kymriah+CSV+Export).
 

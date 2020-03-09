@@ -3,9 +3,9 @@ const Papa = require('papaparse')
 const path = require('path')
 const fs = require('fs')
 const {
-  deleteFile
-} = require('./utils')
-const JSZip = require('jszip')
+  zipFiles,
+  deleteFile,
+} = require('../../../utils/fileHandler')
 
 const renflexisDataManipulation = require('./data-manipulation/renflexis-data-manipulation')
 const merckDataManipulation = require('./data-manipulation/merck-data-manipulation')
@@ -13,7 +13,18 @@ const merckDataManipulation = require('./data-manipulation/merck-data-manipulati
 const PAYER_TOOL_ID = 'a3f419de-ca7d-4498-94dd-04fb9f6b8777'
 const MERCK_PIPE_SCRIPT_USER = 'auth0|5e287871544fad0f3bf5f421'
 
-const getFilePath = fileName => path.resolve(__dirname, fileName)
+const fieldsOrder = [
+  'Market',
+  'Product',
+  'DRG Parent ID',
+  'Payer',
+  'Payer Channel',
+  'Medical Lives',
+  'Access Category',
+  'Access',
+  'Policy Date',
+  'Review Date'
+]
 
 class MerckPipeDelimitedController {
   constructor(db) {
@@ -27,14 +38,13 @@ class MerckPipeDelimitedController {
     this.getCSVandPSVData = this.getCSVandPSVData.bind(this)
 
     this.createFiles = this.createFiles.bind(this)
-    this.zipFiles = this.zipFiles.bind(this)
     this.apiDownloadFiles = this.apiDownloadFiles.bind(this)
   }
 
   getRenflexisData() {
     return this.db.collection('renflexisRelativeQoa')
-    .find({ coverage: 'Medical' })
-    .toArray()
+      .find({ coverage: 'Medical' })
+      .toArray()
   }
 
   async getMerckProjectData() {
@@ -104,18 +114,6 @@ class MerckPipeDelimitedController {
   async getCSVandPSVData() {
     const mergedData = await this.getMergedData()
 
-    const fieldsOrder = [
-      'Market',
-      'Product',
-      'DRG Parent ID',
-      'Payer',
-      'Payer Channel',
-      'Medical Lives',
-      'Access Category',
-      'Access',
-      'Policy Date',
-      'Review Date'
-    ]
 
     const csv = Papa.unparse({
       fields: fieldsOrder,
@@ -135,25 +133,6 @@ class MerckPipeDelimitedController {
     }
   }
 
-  zipFiles({ csv, psv, csvFileName, psvFileName, zipFilePath }) {
-    const zip = new JSZip()
-    return new Promise((resolve, reject) => {
-      zip.folder('tmp')
-        .file(csvFileName, csv)
-        .file(psvFileName, psv)
-        .generateNodeStream({ type:'nodebuffer', streamFiles: true })
-        .pipe(fs.createWriteStream(zipFilePath))
-        .on('finish', () => {
-          console.log('Zip File Written.')
-          resolve()
-        })
-        .on('error', (err) => {
-          console.err(err)
-          reject()
-        })
-      })
-  }
-
   async createFiles() {
     const { csv, psv } = await this.getCSVandPSVData()
 
@@ -164,13 +143,13 @@ class MerckPipeDelimitedController {
     const csvFileName = `DEDHAM_PYR_ACCESS_${formattedDate}.csv`
     const psvFileName = `DEDHAM_PYR_ACCESS_${formattedDate}.txt`
 
-    const zipFilePath = getFilePath(zipFileName)
+    const zipFilePath = path.resolve(__dirname, zipFileName)
 
-    await this.zipFiles({
-      csv,
-      psv,
-      csvFileName,
-      psvFileName,
+    await zipFiles({
+      fileContent1: csv,
+      fileContent2: psv,
+      fileName1: csvFileName,
+      fileName2: psvFileName,
       zipFilePath
     })
 

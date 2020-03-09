@@ -18,20 +18,8 @@ const usePlaceholderIfNeeded = value => value || ''
 
 const medicareToMedicareAdvantage = book => book.includes('Medicare') ? 'Medicare Advantage Plan' : book
 
-const deleteFile = file => { 
-  console.log(`Deleting file: ${ file }`)
-  fs.unlink(file, err => {
-      if (err) {
-        console.error(err.toString());
-      } else {
-        console.warn(file + ' deleted');
-      }
-  })
-}
-
 module.exports = {
   livesFilterToKey,
   usePlaceholderIfNeeded,
   medicareToMedicareAdvantage,
-  deleteFile,
 }
