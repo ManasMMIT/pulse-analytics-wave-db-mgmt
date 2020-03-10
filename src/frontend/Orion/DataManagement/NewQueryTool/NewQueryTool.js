@@ -2,9 +2,9 @@ import React from 'react'
 import _ from 'lodash'
 import Inspector from 'react-inspector'
 
-import useAquila from './../../hooks/useAquila'
+import useAquila from '../../../hooks/useAquila'
 
-import Spinner from './../../Phoenix/shared/Spinner'
+import Spinner from '../../../Phoenix/shared/Spinner'
 
 const NewQueryTool = () => {
   const {
