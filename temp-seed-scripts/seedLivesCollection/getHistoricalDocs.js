@@ -37,7 +37,10 @@ module.exports = ({
     const parsedLivesValue = parseInt(doc[key])
 
     // ! let 0 through
-    const lives = [null, '', undefined].includes(parsedLivesValue)
+    const lives = (
+        [null, '', undefined].includes(parsedLivesValue)
+        || isNaN(parsedLivesValue)
+      )
       ? null
       : parsedLivesValue
 
