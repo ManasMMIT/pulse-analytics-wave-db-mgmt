@@ -32,7 +32,7 @@ module.exports = async ({
       ...payerHistoricalDrgNationalLives,
       ...payerHistoricalDrgStateLives,
     ],
-    payerOrganizationsBySlug,
+    organizationsHash: payerOrganizationsBySlug,
     source: 'DRG',
   })
 
@@ -41,7 +41,7 @@ module.exports = async ({
       ...payerHistoricalMmitNationalLives,
       ...payerHistoricalMmitStateLives,
     ],
-    payerOrganizationsBySlug,
+    organizationsHash: payerOrganizationsBySlug,
     source: 'MMIT',
   })
 
