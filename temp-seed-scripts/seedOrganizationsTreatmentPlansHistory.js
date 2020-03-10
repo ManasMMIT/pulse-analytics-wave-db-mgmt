@@ -8,6 +8,7 @@ module.exports = async ({
   payerHistoricalQualityAccess,
   payerHistoricalAdditionalCriteria,
   payerHistoricalPolicyLinks,
+  payerOrganizationsBySlug,
 }) => {
   await pulseCore.collection('organizations.treatmentPlans.history')
     .deleteMany()
@@ -49,11 +50,6 @@ module.exports = async ({
     onlyPolicyLinksWithAllFields,
     thing => [thing.slug, thing.regimen, thing.book, thing.coverage, thing.month, thing.year].join('|')
   )
-
-  const organizations = await pulseCore.collection('organizations')
-    .find({}).toArray()
-
-  const orgsBySlug = _.groupBy(organizations, 'slug')
 
   const accessScores = await pulseCore.collection('qualityOfAccessScore')
     .find({}).toArray()
@@ -106,12 +102,12 @@ module.exports = async ({
       ? treatmentPlan[0]._id
       : null
 
-    const organization = orgsBySlug[flatDoc.slug]
+    const organization = payerOrganizationsBySlug[flatDoc.slug]
 
     if (!organization) continue
 
-    const organizationId = organization[0]
-      ? organization[0]._id
+    const organizationId = organization
+      ? organization._id
       : null
 
     const accessScore = accessScoresGroupedByAccess[flatDoc.access] || []
