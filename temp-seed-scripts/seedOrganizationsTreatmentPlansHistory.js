@@ -112,7 +112,7 @@ module.exports = async ({
 
     const accessScore = accessScoresGroupedByAccess[flatDoc.access] || []
 
-    const correctIsoFormat = format(new Date(flatDoc.year, flatDoc.month, 1), 'yyyy-MM-dd')
+    const correctIsoFormat = format(new Date(flatDoc.year, flatDoc.month - 1, 1), 'yyyy-MM-dd')
     const timestamp = new Date(correctIsoFormat)
 
     const orgTpIdHashKey = [organizationId, treatmentPlanId].join('|')

@@ -13,7 +13,7 @@ module.exports = ({
 
   const organizationId = organization._id
 
-  const correctIsoFormat = format(new Date(doc.year, doc.month, 1), 'yyyy-MM-dd')
+  const correctIsoFormat = format(new Date(doc.year, doc.month - 1, 1), 'yyyy-MM-dd')
   const timestamp = new Date(correctIsoFormat)
 
   const [
