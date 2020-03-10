@@ -27,7 +27,7 @@ module.exports = ({
   const parentOrganization = organizationsHash[doc.parentSlug]
 
   const parentIdObj = parentOrganization
-    ? { parentOrganization: parentOrganization._id}
+    ? { parentOrganizationId: parentOrganization._id}
     : {}
 
   const uniqBookCoverageDocs = Object.keys(doc).reduce((acc, key) => {
