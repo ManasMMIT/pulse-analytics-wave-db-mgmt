@@ -11,7 +11,7 @@ module.exports = ({
   const organization = organizationsHash[doc.slug]
   if (!organization || !doc.month || !doc.year) return acc
 
-  const organizationId = organization[0]._id
+  const organizationId = organization._id
 
   const correctIsoFormat = format(new Date(doc.year, doc.month, 1), 'yyyy-MM-dd')
   const timestamp = new Date(correctIsoFormat)
@@ -20,23 +20,37 @@ module.exports = ({
     territoryType,
     territoryName,
   ] = [
-      doc.state ? 'U.S. State' : 'National',
-      doc.state || 'United States'
-    ]
+    doc.state ? 'U.S. State' : 'National',
+    doc.state || 'United States',
+  ]
+
+  const parentOrganization = organizationsHash[doc.parentSlug]
+
+  const parentIdObj = parentOrganization
+    ? { parentOrganization: parentOrganization._id}
+    : {}
 
   const uniqBookCoverageDocs = Object.keys(doc).reduce((acc, key) => {
     const mappedData = KEY_BOOK_COVERAGE_MAP[key]
     if (!mappedData) return acc
+
+    const parsedLivesValue = parseInt(doc[key])
+
+    // ! let 0 through
+    const lives = [null, '', undefined].includes(parsedLivesValue)
+      ? null
+      : parsedLivesValue
 
     const comboDoc = {
       organizationId,
       timestamp,
       book: mappedData.book,
       coverage: mappedData.coverage,
-      lives: parseInt(doc[key]),
+      lives,
       source,
       territoryType,
       territoryName,
+      ...parentIdObj,
     }
 
     return [
