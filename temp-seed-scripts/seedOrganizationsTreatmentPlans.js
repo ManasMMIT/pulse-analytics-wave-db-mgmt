@@ -6,13 +6,11 @@ module.exports = async ({
   pulseCore,
   payerHistoricalQualityAccess,
   payerHistoricalAdditionalCriteria,
+  payerOrganizationsBySlug,
 }) => {
   await pulseCore.collection('organizations.treatmentPlans')
     .deleteMany()
 
-  const orgs = await pulseCore.collection('organizations').find({}).toArray()
-
-  const orgsBySlug = _.groupBy(orgs, 'slug')
 
   const allTheThings = [
     ...payerHistoricalQualityAccess,
@@ -38,7 +36,7 @@ module.exports = async ({
     .aggregate(ENRICH_TP_FIELDS_PIPELINE)
     .toArray()
 
-  const hashedTps = _.groupBy(
+  const hashedTps = _.keyBy(
     enrichedTreatmentPlan,
     thing => [thing.indication, thing.regimen, thing.line, thing.population, thing.book, thing.coverage].join('|'),
   )
@@ -48,13 +46,13 @@ module.exports = async ({
       // need to all be _ids
       const stringHash = [indication, regimen, line, population, book, coverage].join('|')
       const treatmentPlan = hashedTps[stringHash]
-      const organization = orgsBySlug[slug]
+      const organization = payerOrganizationsBySlug[slug]
 
       if (!treatmentPlan || !organization) return acc
 
       acc.push({
-        treatmentPlanId: treatmentPlan[0]._id,
-        organizationId: organization[0]._id,
+        treatmentPlanId: treatmentPlan._id,
+        organizationId: organization._id,
       })
 
       return acc
