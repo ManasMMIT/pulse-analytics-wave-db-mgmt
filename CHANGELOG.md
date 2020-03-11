@@ -12,7 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Fixed** for any bug fixes.
 - **Security** in case of vulnerabilities.
 
-## [Unreleased] - Started: 3-9-20
+## [Unreleased] - Started: 3-11-20
 
 ## [1.3.0] - Started: 2-25-20
 
@@ -27,6 +27,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `Orion`: Update payer quality of access throughout history and disable quality of access panel delete button.
 - `Orion`: Whenever an `indication` or `regimen` is deleted, delete docs from `treatmentPlans`, `organizations.treatmentPlans`, `organization.treatmentPlans.history` (trash not delete) collections.
 - `Orion`: Deleting an organization now deletes docs on `organization.treatmentPlans` and `organization.treatmentPlans.history`.
+
+### Fixed
+- `Polaris`: Fixed order of routing in express server so `/api` can be hit before serving up `index.html` for general react routing routes
 
 ## [1.2.3] - Started: 2-11-20
 
