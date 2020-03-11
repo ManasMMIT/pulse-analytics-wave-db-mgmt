@@ -5,7 +5,7 @@ import FieldsPanel from './FieldsPanel'
 
 const SheetManagement = () => {
   return (
-    <div style={{ display: 'flex' }}>
+    <div style={{ display: 'flex', width: '100%', height: '100vh', }}>
       <WorkbooksPanel />
       <SheetsPanel />
       <FieldsPanel />

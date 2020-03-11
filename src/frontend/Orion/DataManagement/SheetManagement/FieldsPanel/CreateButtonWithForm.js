@@ -4,6 +4,8 @@ import PropTypes from 'prop-types'
 import Form from './Form'
 import Modal from '../../../../components/Modal'
 
+import { StyledButton } from '../shared/styledComponents'
+
 const CreateButtonWithForm = ({
   modalTitle,
   modalStyle,
@@ -17,14 +19,15 @@ const CreateButtonWithForm = ({
 
   return (
     <>
-      <button onClick={openModal}>
-        Create Field
-      </button>
+      <StyledButton onClick={openModal}>
+        +
+      </StyledButton>
       <Modal
         style={modalStyle}
         handleClose={closeModal}
         show={isModalOpen}
         title={modalTitle}
+        width={500}
       >
         <Form
           closeModal={closeModal}

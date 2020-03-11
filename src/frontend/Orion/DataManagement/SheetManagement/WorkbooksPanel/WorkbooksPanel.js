@@ -7,8 +7,14 @@ import _ from 'lodash'
 import WorkbookPanelItem from './WorkbookPanelItem'
 import ModalButtonWithForm from './ModalButtonWithForm'
 import DeleteButton from './../shared/DeleteButton'
+import {
+  ListContainer,
+  ListHeader,
+  ListTitle,
+  StyledUnorderedList,
+} from '../shared/styledComponents'
 
-import { 
+import {
   CREATE_WORKBOOK,
   UPDATE_WORKBOOK,
   DELETE_WORKBOOK,
@@ -37,7 +43,7 @@ const WorkbooksPanel = () => {
   const location = useLocation()
 
   const selectedWorkbookId = (
-    location.search 
+    location.search
       && queryString.parse(location.search)
       && queryString.parse(location.search).workbookId
   ) || ''
@@ -51,10 +57,10 @@ const WorkbooksPanel = () => {
       ),
     })
   }
-  
+
   useEffect(() => {
     if (!selectedWorkbookId && !loading) {
-      const firstWb = data.workbooks[0]  
+      const firstWb = data.workbooks[0]
       handleClick(firstWb)
     }
   }, [loading])
@@ -62,27 +68,32 @@ const WorkbooksPanel = () => {
   if (loading) return 'Loading...'
 
   return (
-    <div style={{ padding: 24 }}>
-      <ModalButtonWithForm 
-        buttonLabel="Create Workbook"
-        mutationDoc={CREATE_WORKBOOK}
-        afterMutationHook={handleClick}
-      />
+    <ListContainer style={{ width: '25%' }}>
+      <ListHeader>
+        <ListTitle>Workbooks</ListTitle>
+        <ModalButtonWithForm
+          buttonLabel="+"
+          mutationDoc={CREATE_WORKBOOK}
+          afterMutationHook={handleClick}
+          modalTitle="Create or Edit Workbook"
+        />
+      </ListHeader>
 
-      <ul style={{ listStyle: 'none', padding: 0 }}>
+      <StyledUnorderedList>
         {
           data.workbooks.map(workbookObj => (
-            <WorkbookPanelItem 
+            <WorkbookPanelItem
               key={workbookObj._id}
               isSelected={workbookObj._id === selectedWorkbookId}
-              workbookName={workbookObj.name} 
+              workbookName={workbookObj.name}
               handleClick={() => handleClick(workbookObj)}
             >
-              <ModalButtonWithForm 
-                buttonLabel="Edit" 
+              <ModalButtonWithForm
+                buttonLabel="Edit"
                 data={workbookObj}
                 mutationDoc={UPDATE_WORKBOOK}
                 afterMutationHook={handleClick}
+                style={{ fontSize: 10, padding: '4px 8px' }}
               />
 
               <DeleteButton
@@ -96,8 +107,8 @@ const WorkbooksPanel = () => {
             </WorkbookPanelItem>
           ))
         }
-      </ul>
-    </div>
+      </StyledUnorderedList>
+    </ListContainer>
   )
 }
 

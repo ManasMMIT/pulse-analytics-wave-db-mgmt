@@ -7,9 +7,15 @@ import _ from 'lodash'
 import SheetPanelItem from './SheetPanelItem'
 import ModalButtonWithForm from './ModalButtonWithForm'
 import DeleteButton from '../shared/DeleteButton'
+import {
+  ListContainer,
+  ListHeader,
+  ListTitle,
+  StyledUnorderedList,
+} from '../shared/styledComponents'
 
-import { 
-  CREATE_SHEET, 
+import {
+  CREATE_SHEET,
   UPDATE_SHEET,
   DELETE_SHEET,
 } from '../../../../api/mutations'
@@ -32,11 +38,11 @@ const SheetsPanel = () => {
   const history = useHistory()
   const location = useLocation()
 
-  const { 
-    sheetId: selectedSheetId, 
+  const {
+    sheetId: selectedSheetId,
     workbookId: selectedWorkbookId,
   } = (
-    location.search 
+    location.search
     && queryString.parse(location.search)
   ) || {}
 
@@ -45,7 +51,7 @@ const SheetsPanel = () => {
   const handleClick = sheetObj => {
     const prevQueryParams = queryString.parse(location.search)
     const nextParams = { ...prevQueryParams, ...getSheetFieldIds(sheetObj) }
-    
+
     history.push({
       search: queryString.stringify(nextParams),
     })
@@ -60,15 +66,19 @@ const SheetsPanel = () => {
   const sheets = selectedWorkbook ? selectedWorkbook.sheets : []
 
   return (
-    <div style={{ padding: 24 }}>
-      <ModalButtonWithForm
-        buttonLabel="Create Sheet"
-        mutationDoc={CREATE_SHEET}
-        mutationVars={{ workbookId: selectedWorkbookId }}
-        afterMutationHook={handleClick}
-      />
+    <ListContainer style={{  width: '25%' }}>
+      <ListHeader>
+        <ListTitle>Sheets</ListTitle>
+        <ModalButtonWithForm
+          buttonLabel="+"
+          mutationDoc={CREATE_SHEET}
+          mutationVars={{ workbookId: selectedWorkbookId }}
+          afterMutationHook={handleClick}
+          modalTitle="Create or Edit Sheet"
+        />
+      </ListHeader>
 
-      <ul style={{ listStyle: 'none', padding: 0 }}>
+      <StyledUnorderedList>
         {
           sheets.map(sheetObj => (
             <SheetPanelItem
@@ -77,12 +87,14 @@ const SheetsPanel = () => {
               sheetName={sheetObj.name}
               handleClick={() => handleClick(sheetObj)}
             >
-              <ModalButtonWithForm 
+              <ModalButtonWithForm
                 buttonLabel="Edit"
                 data={sheetObj}
                 mutationDoc={UPDATE_SHEET}
+                modalTitle="Create or Edit Sheet"
                 mutationVars={{ workbookId: selectedWorkbookId }}
                 afterMutationHook={handleClick}
+                style={{ fontSize: 10, padding: '4px 8px' }}
               />
 
               <DeleteButton
@@ -98,8 +110,8 @@ const SheetsPanel = () => {
             </SheetPanelItem>
           ))
         }
-      </ul>
-    </div>
+      </StyledUnorderedList>
+    </ListContainer>
   )
 }
 

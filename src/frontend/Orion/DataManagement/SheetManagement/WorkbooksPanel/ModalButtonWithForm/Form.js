@@ -2,6 +2,13 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { useMutation } from '@apollo/react-hooks'
 
+import {
+  FieldContainer,
+  FormLabel,
+  StyledInput,
+  StyledButton,
+} from '../../shared/styledComponents'
+
 import { GET_WORKBOOKS } from '../../../../../api/queries'
 
 const Form = ({
@@ -26,7 +33,7 @@ const Form = ({
     },
     awaitRefetchQueries: true,
   })
-  
+
   const handleChange = e => {
     e.persist()
     const value = e.currentTarget && e.currentTarget.value
@@ -35,16 +42,16 @@ const Form = ({
 
   return (
     <>
-      <div style={{ display: 'flex', padding: 8 }}>
-        <label>Workbook Name</label>
-        <input
+      <FieldContainer>
+        <FormLabel>Workbook Name</FormLabel>
+        <StyledInput
           type="text"
           value={stagedWorkbookStr}
           onChange={handleChange}
         />
-      </div>
+      </FieldContainer>
 
-      <button onClick={saveWorkbook}>submit</button>
+      <StyledButton onClick={saveWorkbook}>Submit</StyledButton>
     </>
   )
 }

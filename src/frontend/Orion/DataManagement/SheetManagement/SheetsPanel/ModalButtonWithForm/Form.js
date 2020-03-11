@@ -4,6 +4,13 @@ import { useMutation } from '@apollo/react-hooks'
 
 import { GET_WORKBOOKS } from '../../../../../api/queries'
 
+import {
+  FieldContainer,
+  FormLabel,
+  StyledInput,
+  StyledButton,
+} from '../../shared/styledComponents'
+
 const Form = ({
   data,
   mutationDoc,
@@ -16,9 +23,9 @@ const Form = ({
 
   const [saveSheet] = useMutation(mutationDoc, {
     variables: {
-      input: { 
-        ...mutationVars, 
-        sheetId: data._id, 
+      input: {
+        ...mutationVars,
+        sheetId: data._id,
         name: stagedSheetName,
         collection: stagedCollectionName,
       }
@@ -33,7 +40,7 @@ const Form = ({
     },
     awaitRefetchQueries: true,
   })
-  
+
   const handleSheetNameChange = e => {
     e.persist()
     const value = e.currentTarget && e.currentTarget.value
@@ -48,25 +55,25 @@ const Form = ({
 
   return (
     <>
-      <div style={{ display: 'flex', padding: 8 }}>
-        <label>Sheet Name</label>
-        <input
+      <FieldContainer>
+        <FormLabel>Sheet Name</FormLabel>
+        <StyledInput
           type="text"
           value={stagedSheetName}
           onChange={handleSheetNameChange}
         />
-      </div>
+      </FieldContainer>
 
-      <div style={{ display: 'flex', padding: 8 }}>
-        <label>Collection Name</label>
-        <input
+      <FieldContainer>
+        <FormLabel>Collection Name</FormLabel>
+        <StyledInput
           type="text"
           value={stagedCollectionName}
           onChange={handleCollectionNameChange}
         />
-      </div>
+      </FieldContainer>
 
-      <button onClick={saveSheet}>submit</button>
+      <StyledButton onClick={saveSheet}>Submit</StyledButton>
     </>
   )
 }
