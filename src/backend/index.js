@@ -8,8 +8,7 @@ const fs = require('fs')
 const jwt = require('express-jwt')
 const jwksRsa = require('jwks-rsa')
 const morgan = require('morgan')
-const api = require('./api')
-const pql = require('./pql')
+const routes = require('./routes')
 
 const app = express()
 const port = 1337
@@ -21,7 +20,7 @@ var checkJwt = jwt({
     jwksRequestsPerMinute: 5,
     jwksUri: 'https://pulse-polaris.auth0.com/.well-known/jwks.json'
   }),
-  // ! not sure what audience line is needed for; 
+  // ! not sure what audience line is needed for;
   // ! initializing auth0 client on frontend with audience gets tokens that expire as expected without this line in the backend
   audience: 'https://polaris-api.com/',
   issuer: 'https://pulse-polaris.auth0.com/',
@@ -29,7 +28,7 @@ var checkJwt = jwt({
 })
 
 const accessLogStream = fs.createWriteStream(
-  path.join(__dirname, 'api.log'), 
+  path.join(__dirname, 'api.log'),
   { flags: 'a' },
 )
 
@@ -50,19 +49,11 @@ morgan.token('graphql-query', req => {
   return `username: ${username} / userId: ${user_id} / operationName: ${operationName} / operationVariables: ${JSON.stringify(copyOfVariables)}`
 })
 
-if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(path.join(process.cwd(), 'build')));
-
-  app.get('/*', (req, res) => {
-    res.sendFile(path.join(process.cwd(), 'build', 'index.html'));
-  })
-}
-
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }))
 app.use(bodyParser.json({ limit: '50mb' }))
 
 app.use(
-  '/api', 
+  '/api',
   checkJwt,
   (err, req, res, next) => {
     if (err.name === 'UnauthorizedError') {
@@ -72,31 +63,26 @@ app.use(
     }
   },
   morgan(
-    '[:date[iso]] :graphql-query\n', 
-    { 
+    '[:date[iso]] :graphql-query\n',
+    {
       // skip any query that doesn't have a body, body.query, or whose body.query isn't a mutation
       skip: req => {
         if (!req.body) return true
-        if (!req.body.query) return true 
+        if (!req.body.query) return true
         if (!req.body.query.match(/mutation/)) return true
       },
       stream: accessLogStream,
     }
   ),
-  api
+  routes
 )
 
-app.use(
-  '/pql',
-  checkJwt,
-  (err, req, res, next) => {
-    if (err.name === 'UnauthorizedError') {
-      res.status(401).json(err)
-    } else {
-      next()
-    }
-  },
-  pql
-)
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.join(process.cwd(), 'build')));
+
+  app.get('/*', (req, res) => {
+    res.sendFile(path.join(process.cwd(), 'build', 'index.html'));
+  })
+}
 
 app.listen(port, () => console.log(`PHOENIX ONLINE. PORT ${port}!`))

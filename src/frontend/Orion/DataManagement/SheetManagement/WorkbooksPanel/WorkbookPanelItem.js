@@ -1,4 +1,9 @@
 import React from 'react'
+import { transparentize } from 'polished'
+
+import { Colors } from '../../../../utils/pulseStyles'
+
+import { ListItem } from '../shared/styledComponents'
 
 const WorkbookPanelItem = ({
   isSelected,
@@ -6,17 +11,21 @@ const WorkbookPanelItem = ({
   workbookName,
   children,
  }) => {
+   const listItemActiveStyle = {
+     background: isSelected ? transparentize(0.9, Colors.PRIMARY) : null,
+     color: isSelected ? Colors.PRIMARY : Colors.BLACK,
+     fontWeight: isSelected ? 700 : 500,
+   }
+
   return (
-    <li style={{ display: 'flex', padding: 8 }}>
-      <div 
-        style={{ border: isSelected ? '1px solid red' : null }}
-        onClick={handleClick}
-        >
+    <ListItem onClick={handleClick} style={listItemActiveStyle}>
+      <div>
         {workbookName}
       </div>
-
-      {children}
-    </li>
+      <div>
+        {children}
+      </div>
+    </ListItem>
   )
 }
 

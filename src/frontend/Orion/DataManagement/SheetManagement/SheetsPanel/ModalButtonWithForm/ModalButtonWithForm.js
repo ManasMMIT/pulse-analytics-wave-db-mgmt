@@ -4,6 +4,8 @@ import PropTypes from 'prop-types'
 import Form from './Form'
 import Modal from '../../../../../components/Modal'
 
+import { StyledButton } from '../../shared/styledComponents'
+
 const ModalButtonWithForm = ({
   data,
   modalTitle,
@@ -12,6 +14,7 @@ const ModalButtonWithForm = ({
   mutationVars,
   afterMutationHook,
   buttonLabel,
+  style,
 }) => {
   const [isModalOpen, toggleModal] = useState(false)
   const openModal = () => toggleModal(true)
@@ -19,17 +22,18 @@ const ModalButtonWithForm = ({
 
   return (
     <>
-      <button 
-        style={{ marginLeft: 8 }} 
+      <StyledButton
+        style={style}
         onClick={openModal}
       >
         {buttonLabel}
-      </button>
+      </StyledButton>
       <Modal
         style={modalStyle}
         handleClose={closeModal}
         show={isModalOpen}
         title={modalTitle}
+        width={500}
       >
         <Form
           data={data}

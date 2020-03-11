@@ -7,10 +7,19 @@ import FieldPanelItem from './FieldPanelItem'
 import UpdateForm from './Form'
 import CreateButtonWithForm from './CreateButtonWithForm'
 import DeleteButton from '../shared/DeleteButton'
+import {
+  ListContainer,
+  ListHeader,
+  ListTitle,
+  UpdateFormLabel,
+  StyledUnorderedList,
+} from '../shared/styledComponents'
+
+import { Colors } from '../../../../utils/pulseStyles'
 
 import { GET_WORKBOOKS } from '../../../../api/queries'
 
-import { 
+import {
   CREATE_SHEET_FIELD,
   UPDATE_SHEET_FIELD,
   DELETE_SHEET_FIELD,
@@ -20,12 +29,12 @@ const FieldsPanel = () => {
   const history = useHistory()
   const location = useLocation()
 
-  const { 
+  const {
     workbookId: selectedWorkbookId,
-    sheetId: selectedSheetId, 
+    sheetId: selectedSheetId,
     fieldId: selectedFieldId,
   } = (
-    location.search 
+    location.search
     && queryString.parse(location.search)
   ) || {}
 
@@ -34,7 +43,7 @@ const FieldsPanel = () => {
   const handleClick = fieldObj => {
     const prevQueryParams = queryString.parse(location.search)
     const nextParams = { ...prevQueryParams, fieldId: fieldObj._id }
-    
+
     history.push({
       search: queryString.stringify(nextParams),
     })
@@ -59,18 +68,22 @@ const FieldsPanel = () => {
   ))
 
   return (
-    <div style={{ display: 'flex'}}>
-      <div style={{ padding: 24 }}>
-        <CreateButtonWithForm
-          mutationDoc={CREATE_SHEET_FIELD}
-          mutationVars={{
-            sheetId: selectedSheetId,
-            workbookId: selectedWorkbookId,
-          }}
-          afterMutationHook={handleClick}
-        />
-        
-        <ul style={{ listStyle: 'none', padding: 0 }}>
+    <div style={{ display: 'flex', width: '50%' }}>
+      <ListContainer style={{ width: '50%' }}>
+        <ListHeader>
+          <ListTitle>Fields</ListTitle>
+          <CreateButtonWithForm
+            mutationDoc={CREATE_SHEET_FIELD}
+            mutationVars={{
+              sheetId: selectedSheetId,
+              workbookId: selectedWorkbookId,
+            }}
+            modalTitle='Create Field'
+            afterMutationHook={handleClick}
+          />
+        </ListHeader>
+
+        <StyledUnorderedList>
           {
             fields.map(fieldObj => (
               <FieldPanelItem
@@ -97,13 +110,14 @@ const FieldsPanel = () => {
               </FieldPanelItem>
             ))
           }
-        </ul>
-      </div>
+        </StyledUnorderedList>
+      </ListContainer>
 
-      <div style={{ padding: 24 }}>
+      <div style={{ width: '50%', background: Colors.LIGHT_BLUE_GRAY_2, }}>
+        <UpdateFormLabel>Update Field</UpdateFormLabel>
         <UpdateForm
           key={selectedFieldId}
-          data={selectedField} 
+          data={selectedField}
           mutationDoc={UPDATE_SHEET_FIELD}
           mutationVars={{
             fieldId: selectedFieldId,

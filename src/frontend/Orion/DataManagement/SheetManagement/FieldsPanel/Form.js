@@ -3,6 +3,15 @@ import PropTypes from 'prop-types'
 import Select from 'react-select'
 import { useMutation } from '@apollo/react-hooks'
 
+import {
+  FormLabel,
+  FieldContainer,
+  FieldsFormContainer,
+  StyledInput,
+  StyledTextarea,
+  StyledButton,
+} from '../shared/styledComponents'
+
 import { GET_WORKBOOKS } from '../../../../api/queries'
 
 const TYPES = [
@@ -13,8 +22,8 @@ const TYPES = [
   'csv',
 ]
 
-const Form = ({ 
-  data, 
+const Form = ({
+  data,
   afterMutationHook,
   mutationDoc,
   mutationVars,
@@ -26,11 +35,11 @@ const Form = ({
 
   const [saveField] = useMutation(mutationDoc, {
     variables: {
-      input: { 
+      input: {
         ...mutationVars,
         name: stagedFieldName,
         type: stagedType,
-        oneOf: stagedOneOf, 
+        oneOf: stagedOneOf,
       }
     },
     refetchQueries: [{ query: GET_WORKBOOKS }],
@@ -52,7 +61,7 @@ const Form = ({
     const oneOfArr = value.split(',').map(str => str.trim())
     setOneOf(oneOfArr)
   }
-  
+
   const handleFieldChange = e => {
     e.persist()
     const value = e.currentTarget && e.currentTarget.value
@@ -60,19 +69,19 @@ const Form = ({
   }
 
   return (
-    <div>
-      <div style={{ display: 'flex' }}>
-        <label>Field Name</label>
-        <input
+    <FieldsFormContainer>
+      <FieldContainer>
+        <FormLabel>Field Name</FormLabel>
+        <StyledInput
           type="text"
           value={stagedFieldName}
           onChange={handleFieldChange}
         />
-      </div>
+      </FieldContainer>
 
-      <div style={{ display: 'flex' }}>
-        <label>Field Type</label>
-        
+      <FieldContainer>
+        <FormLabel>Field Type</FormLabel>
+
         <Select
           styles={{ container: base => ({ ...base, flex: 1 }) }}
           value={{ value: stagedType, label: stagedType }}
@@ -80,19 +89,18 @@ const Form = ({
           onChange={handleTypeSelection}
           options={TYPES.map(type => ({ value: type, label: type }))}
         />
-      </div>
+      </FieldContainer>
 
-      <div>
-        <div>oneOf Restrictions</div>
-        <textarea
-          style={{ width: 200, height: 200 }}
+      <FieldContainer>
+        <FormLabel>oneOf Restrictions</FormLabel>
+        <StyledTextarea
           value={stagedOneOf.join(', ')}
           onChange={handleOneOfChange}
         />
-      </div>
+      </FieldContainer>
 
-      <button onClick={saveField}>submit</button>
-    </div>
+      <StyledButton onClick={saveField}>Save Field</StyledButton>
+    </FieldsFormContainer>
   )
 }
 
