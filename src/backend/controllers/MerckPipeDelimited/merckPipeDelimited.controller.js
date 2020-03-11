@@ -5,7 +5,7 @@ const fs = require('fs')
 const {
   zipFiles,
   deleteFile,
-} = require('../../../utils/fileHandler')
+} = require('../../utils/fileHandler')
 
 const renflexisDataManipulation = require('./data-manipulation/renflexis-data-manipulation')
 const merckDataManipulation = require('./data-manipulation/merck-data-manipulation')
@@ -180,7 +180,7 @@ class MerckPipeDelimitedController {
         readStream.destroy()
         deleteFile(zipFilePath)
       })
-    
+
       readStream.on('error', err => {
         res.end(err)
       })

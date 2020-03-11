@@ -1,4 +1,4 @@
-const wait = require('./../../../../utils/wait')
+const wait = require('./../../../utils/wait')
 
 const deleteClient = async (
   parent,

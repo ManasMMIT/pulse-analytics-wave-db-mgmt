@@ -6,7 +6,7 @@ const fs = require('fs')
 const {
   zipFiles,
   deleteFile,
-} = require('../../../utils/fileHandler')
+} = require('./../../utils/fileHandler')
 const aggregationPipeline = require('./aggregationPipeline')
 
 const fieldsOrder = [
@@ -46,12 +46,12 @@ class NovartisCsvController {
 
     const data = result.map(obj => {
       let additionalCriteriaNotes = null
-  
+
       if (obj.RESTRICTION_DETAIL_TEXT) {
         additionalCriteriaNotes = obj.RESTRICTION_DETAIL_TEXT.map(({ criteriaNotes }) => criteriaNotes)
         additionalCriteriaNotes = additionalCriteriaNotes.join('| ')
       }
-  
+
       return { ...obj, RESTRICTION_DETAIL_TEXT: additionalCriteriaNotes }
     })
 
@@ -113,7 +113,7 @@ class NovartisCsvController {
         readStream.destroy()
         deleteFile(zipFilePath)
       })
-    
+
       readStream.on('error', err => {
         res.end(err)
       })

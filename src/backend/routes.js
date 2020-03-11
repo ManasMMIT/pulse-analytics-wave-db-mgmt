@@ -32,7 +32,7 @@ MongoClient.connect(process.env.LOADER_URI, { useNewUrlParser: true }, (err, cli
   const coreNodes = pulseCoreDb.collection('nodes')
   const coreClients = pulseCoreDb.collection('clients')
 
-  console.log(`API Connected to MongoDB: ${process.env.LOADER_URI}`)
+  console.log(`Connected to MongoDB: ${process.env.LOADER_URI}`)
 
   const twoGuysInAHorseCostume = {
     // Head + front-hooves
@@ -72,7 +72,7 @@ MongoClient.connect(process.env.LOADER_URI, { useNewUrlParser: true }, (err, cli
 
   const merckPipeDelimitedCtrl = new MerckPipeDelimitedCtrl(pulseDevDb)
   const novartisCsvCtrl = new NovartisCsvCtrl(pulseDevDb)
-  
+
   subApp.get('/merck-pipe-delimited-file', merckPipeDelimitedCtrl.apiDownloadFiles)
   subApp.get('/novartis-csv-file', novartisCsvCtrl.apiDownloadFiles)
 

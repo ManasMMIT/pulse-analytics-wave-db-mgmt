@@ -8,8 +8,7 @@ const fs = require('fs')
 const jwt = require('express-jwt')
 const jwksRsa = require('jwks-rsa')
 const morgan = require('morgan')
-const api = require('./api')
-const pql = require('./pql')
+const routes = require('./routes')
 
 const app = express()
 const port = 1337
@@ -21,7 +20,7 @@ var checkJwt = jwt({
     jwksRequestsPerMinute: 5,
     jwksUri: 'https://pulse-polaris.auth0.com/.well-known/jwks.json'
   }),
-  // ! not sure what audience line is needed for; 
+  // ! not sure what audience line is needed for;
   // ! initializing auth0 client on frontend with audience gets tokens that expire as expected without this line in the backend
   audience: 'https://polaris-api.com/',
   issuer: 'https://pulse-polaris.auth0.com/',
@@ -29,7 +28,7 @@ var checkJwt = jwt({
 })
 
 const accessLogStream = fs.createWriteStream(
-  path.join(__dirname, 'api.log'), 
+  path.join(__dirname, 'api.log'),
   { flags: 'a' },
 )
 
@@ -75,20 +74,7 @@ app.use(
       stream: accessLogStream,
     }
   ),
-  api
-)
-
-app.use(
-  '/pql',
-  checkJwt,
-  (err, req, res, next) => {
-    if (err.name === 'UnauthorizedError') {
-      res.status(401).json(err)
-    } else {
-      next()
-    }
-  },
-  pql
+  routes
 )
 
 if (process.env.NODE_ENV === 'production') {

@@ -24,6 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `Orion`: Allow novartis csv files to be downloadable from a click of a button
 
 ### Changed
+- De-nested api subapp and removed old pql subapp.
 - `Orion`: Update payer quality of access throughout history and disable quality of access panel delete button.
 - `Orion`: Whenever an `indication` or `regimen` is deleted, delete docs from `treatmentPlans`, `organizations.treatmentPlans`, `organization.treatmentPlans.history` (trash not delete) collections.
 - `Orion`: Deleting an organization now deletes docs on `organization.treatmentPlans` and `organization.treatmentPlans.history`.
