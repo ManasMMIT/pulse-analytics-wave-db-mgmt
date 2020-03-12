@@ -14,6 +14,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased] - Started: 3-11-20
 
+### Changed
+- `Orion`: Refactored the `useAquila` hook to fetch filter options and placard configs separately.
+
 ## [1.3.0] - Started: 2-25-20
 
 ### Added

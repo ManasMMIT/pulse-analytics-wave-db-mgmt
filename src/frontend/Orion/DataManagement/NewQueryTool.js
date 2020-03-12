@@ -1,22 +1,40 @@
-import React from 'react'
-import _ from 'lodash'
+import React, { useState } from 'react'
+
 import Inspector from 'react-inspector'
 
 import useAquila from './../../hooks/useAquila'
 
 import Spinner from './../../Phoenix/shared/Spinner'
+import { useEffect } from 'react'
 
 const NewQueryTool = () => {
+  const [
+    filterConfigOptions,
+    setFilterConfigOptions,
+  ] = useState([])
+  const [
+    placardOptions,
+    setPlacardOptions,
+  ] = useState([])
+
   const {
     setPql,
-    data: {
-      pql,
-      results,
-      filterOptions
-    },
+    data: { pql, results },
+    getFilterConfigOptions,
+    getPlacardOptions,
     loading,
     submitPql,
   } = useAquila()
+
+  useEffect(() => {
+    getPlacardOptions().then(result => {
+      setPlacardOptions(result)
+    })
+
+    getFilterConfigOptions().then(result => {
+      setFilterConfigOptions(result)
+    })
+  }, [])
 
   return (
     <div style={{ margin: 12 }}>
