@@ -17,11 +17,11 @@ const Label = styled.div({
 }))
 
 const FieldLabel = ({
-  label,
+  children,
   isCardLabel,
 }) => (
   <Label isCardLabel={isCardLabel}>
-    { label }
+    { children }
   </Label>
 )
 

@@ -23,7 +23,9 @@ const FieldsSectionCard = ({
 
   return (
     <Wrapper style={containerStyle}>
-      <FieldLabel label={name} isCardLabel />
+      <FieldLabel isCardLabel>
+          { name }
+      </FieldLabel>
       {
         fields.map(field => {
           const { key, label } = field
@@ -31,7 +33,9 @@ const FieldsSectionCard = ({
 
           return (
             <div>
-              <FieldLabel label={label}/>
+              <FieldLabel>
+                { label }
+              </FieldLabel>
               { Input }
             </div>
           )
