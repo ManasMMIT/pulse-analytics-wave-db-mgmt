@@ -481,3 +481,23 @@ export const GET_OP_LOG = gql`
     }
   }
 `
+
+export const GET_WORKBOOKS = gql`
+  query getWorkbooks {
+    workbooks {
+      _id
+      name
+      sheets {
+        _id
+        name
+        collection
+        fields {
+          _id
+          name
+          type
+          oneOf
+        }
+      }
+    }
+  }
+`
