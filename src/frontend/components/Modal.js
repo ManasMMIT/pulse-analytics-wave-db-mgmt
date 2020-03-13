@@ -159,7 +159,7 @@ Modal.propTypes = {
   modalStyle: PropTypes.object,
   padding: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   disableHeader: PropTypes.bool,
-  width: PropTypes.string,
+  width: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   noClickAway: PropTypes.bool,
 }
 

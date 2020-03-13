@@ -1,10 +1,26 @@
 const { ObjectId } = require('mongodb')
+const _ = require('lodash')
 
 const createSheetField = async (
   parent,
-  { input: { workbookId, sheetId, ...body } },
+  { input },
   { pulseCoreDb }
 ) => {
+  let {
+    workbookId,
+    sheetId,
+    type,
+    oneOf,
+    name,
+  } = input
+
+  try {
+    oneOf = JSON.parse('[' + oneOf + ']')
+    if (_.isEmpty(oneOf)) oneOf = null
+  } catch(e) {
+    throw Error(`oneOf was improperly formatted`)
+  }
+
   workbookId = ObjectId(workbookId)
   sheetId = ObjectId(sheetId)
 
@@ -15,7 +31,7 @@ const createSheetField = async (
       { _id: workbookId },
       {
         $push: {
-          'sheets.$[sheet].fields': { _id: newFieldId, ...body }
+          'sheets.$[sheet].fields': { _id: newFieldId, type, oneOf, name }
         }
       },
       {

@@ -7,7 +7,7 @@ const updateSheetFieldTypeDefs = gql`
     fieldId: ID!
     name: String!
     type: String!
-    oneOf: [String]
+    oneOf: String
   }
 `
 

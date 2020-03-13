@@ -6,7 +6,7 @@ const createSheetFieldTypeDefs = gql`
     sheetId: ID!
     name: String!
     type: String!
-    oneOf: [String]
+    oneOf: String
   }
 `
 

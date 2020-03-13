@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - `Orion`: Refactored the `useAquila` hook to fetch filter options and placard configs separately.
+- `Orion`: Change sheet management CRUD on oneOf to only accept quoted, comma-delimited strings but still persist to backend as array of strings
 
 ## [1.3.0] - Started: 2-25-20
 
