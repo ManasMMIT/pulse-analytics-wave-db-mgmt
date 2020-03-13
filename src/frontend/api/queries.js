@@ -501,3 +501,12 @@ export const GET_WORKBOOKS = gql`
     }
   }
 `
+
+export const GET_PAYER_PROJECTS_LIST = gql`
+ query getPayerProjectsList {
+   payerProjectsList {
+     _id
+     name
+   }
+ }
+`

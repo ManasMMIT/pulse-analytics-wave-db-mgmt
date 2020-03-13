@@ -8,6 +8,8 @@ import Import from './Import'
 import NewImport from './NewImport'
 import SheetManagement from './SheetManagement'
 import ExportCustomData from './ExportCustomData'
+import PayerProjectsList from './PayerProjects/PayerProjectsList'
+import PayerProject from './PayerProjects/PayerProject'
 
 const DataManagement = () => (
   <Switch>
@@ -18,6 +20,8 @@ const DataManagement = () => (
     <Route path="/orion/data-management/sheet-management" component={SheetManagement} />
     <Route path="/orion/data-management/new-import" component={NewImport} />
     <Route path="/orion/data-management/export-custom-data" component={ExportCustomData} />
+    <Route exact path="/orion/data-management/payer-projects" component={PayerProjectsList} />
+    <Route path="/orion/data-management/payer-projects/:projectId" component={PayerProject} />
     <Redirect to={'/orion/data-management/import'} />
   </Switch>
 )

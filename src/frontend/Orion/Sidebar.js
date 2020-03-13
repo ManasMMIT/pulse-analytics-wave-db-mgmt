@@ -111,6 +111,28 @@ const getToolItemPath = (tool, item) => {
   return `/orion/lists/tools/${tool}/${item}`
 }
 
+const linkConfig = [
+  { label: 'Query Tool', link: '/orion/data-management/query' },
+  { label: 'New Query Tool', link: '/orion/data-management/new-query' },
+  { label: 'Suggested Questions', link: '/orion/data-management/questions' },
+  { label: 'Sheet Management', link: '/orion/data-management/sheet-management' },
+  { label: 'New Import Tool', link: '/orion/data-management/new-import' },
+  { label: 'Old Import Tool', link: '/orion/data-management/import' },
+  { label: 'Export Custom Data', link: '/orion/data-management/export-custom-data' },
+  { label: 'Payer Projects', link: '/orion/data-management/payer-projects' },
+]
+
+const renderStyledNavLink = ({ label, link }) => (
+  <StyledNavLink
+    key={link}
+    style={inactiveLinkStyle}
+    activeStyle={activeLinkStyle}
+    to={link}
+  >
+    { label }
+  </StyledNavLink>
+)
+
 const Sidebar = () => {
   const masterListItems = ORDERED_MASTER_LIST_ITEMS.map(getNavLink)
 
@@ -123,55 +145,7 @@ const Sidebar = () => {
       <Header>
         Data Management
       </Header>
-      <StyledNavLink
-        style={inactiveLinkStyle}
-        activeStyle={activeLinkStyle}
-        to={`/orion/data-management/query`}
-      >
-        Query Tool
-      </StyledNavLink>
-      <StyledNavLink
-        style={inactiveLinkStyle}
-        activeStyle={activeLinkStyle}
-        to={`/orion/data-management/new-query`}
-      >
-        New Query Tool
-      </StyledNavLink>
-      <StyledNavLink
-        style={inactiveLinkStyle}
-        activeStyle={activeLinkStyle}
-        to={`/orion/data-management/questions`}
-      >
-        Suggested Questions
-      </StyledNavLink>
-      <StyledNavLink
-        style={inactiveLinkStyle}
-        activeStyle={activeLinkStyle}
-        to={`/orion/data-management/sheet-management`}
-      >
-        Sheet Management
-      </StyledNavLink>
-      <StyledNavLink
-        style={inactiveLinkStyle}
-        activeStyle={activeLinkStyle}
-        to={`/orion/data-management/new-import`}
-      >
-        New Import Tool
-      </StyledNavLink>
-      <StyledNavLink
-        style={inactiveLinkStyle}
-        activeStyle={activeLinkStyle}
-        to={`/orion/data-management/import`}
-      >
-        Old Import Tool
-      </StyledNavLink>
-      <StyledNavLink
-        style={inactiveLinkStyle}
-        activeStyle={activeLinkStyle}
-        to={`/orion/data-management/export-custom-data`}
-      >
-        Export Custom Data
-      </StyledNavLink>
+      { linkConfig.map(renderStyledNavLink)}
       <Header>
         MASTER LISTS
       </Header>
