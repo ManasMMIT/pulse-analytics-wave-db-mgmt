@@ -6,21 +6,10 @@ const {
   getProjectOrgTpsPipeline,
 } = require('./agg-pipelines')
 
-const MERCK_KEYTRUDA_PROJECT_ID = ObjectId('5e6812b82510ab0c89bdc215')
-
-const TEST_DATE = '2019-12-01'
-// const TEST_SHEET_NAME = 'MerckKeytruda-QualityAccess-11-20'
-// const TEST_SHEET_DATA = require('./testQualityAccessSheetData')
-
-// const TEST_SHEET_NAME = 'MerckKeytruda-AdditionalCriteri'
-// const TEST_SHEET_DATA = require('./testAddCriteriaData')
-
-const TEST_SHEET_NAME = 'MerckKeytruda-PolicyLinks-11-20'
-const TEST_SHEET_DATA = require('./testPolicyLinksSheetData')
-
-class HistoricalProjectData {
-  constructor(projectId = MERCK_KEYTRUDA_PROJECT_ID) {
-    this.projectId = projectId
+class ProjectHistoryManager {
+  constructor({ projectId, pulseCore }) {
+    this.projectId = ObjectId(projectId)
+    this.pulseCore = pulseCore
   }
 
   getEnrichedOrgTpsOp() {
@@ -262,13 +251,11 @@ class HistoricalProjectData {
     })
   }
 
-  async update({
-    db,
-    sheetData = TEST_SHEET_DATA,
-    sheetName = TEST_SHEET_NAME,
-    date = TEST_DATE,
+  async upsertOrgTpHistory({
+    sheetData,
+    sheetName,
+    date,
   }) {
-    this.pulseCore = db
     this.sheetName = sheetName
     this.sheetData = sheetData
     this.timestamp = new Date(date)
@@ -308,4 +295,4 @@ class HistoricalProjectData {
   }
 }
 
-module.exports = HistoricalProjectData
+module.exports = ProjectHistoryManager

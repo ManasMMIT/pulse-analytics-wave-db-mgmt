@@ -2,12 +2,12 @@ const createPayerOrganization = require('./create')
 const updatePayerOrganization = require('./update')
 const deletePayerOrganization = require('./delete')
 
-const importPayerHistoricalData = require('./importHistoricalData')
+const importPayerHistoricalProjectData = require('./importHistoricalProjectData')
 
 module.exports = {
   createPayerOrganization,
   updatePayerOrganization,
   deletePayerOrganization,
 
-  importPayerHistoricalData,
+  importPayerHistoricalProjectData,
 }

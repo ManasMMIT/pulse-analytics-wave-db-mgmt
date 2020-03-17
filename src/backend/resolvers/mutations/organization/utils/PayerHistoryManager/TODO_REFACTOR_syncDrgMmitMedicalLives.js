@@ -85,7 +85,7 @@ const synchronizeLives = async pulseCoreDb => {
       const mmitRowId = groupMmitBySlugAndId[slug][state]
 
       // If _id is found in hash map, update the existing document,
-      // otherwise insert the new document with the corresponding
+      // otherwise insert the new document with the corrresponding
       // medical lives
       if (mmitRowId) {
         mmitCollection.updateOne(
