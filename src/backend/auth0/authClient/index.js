@@ -1,4 +1,4 @@
-require('dotenv').load()
+require('dotenv').config()
 
 const {
   auth0_mgmt_api_clientid,
