@@ -1,8 +1,8 @@
-const sanitizeAndFormat = require('./utils/sanitizeAndFormat')
+const sanitize = require('./utils/sanitize')
 const validate = require('./utils/validate')
 const importPayerHistoricalData = async args => args
 const importData = async args => args
-const getWorkbookConfig = async () => ({})
+const getSheetConfig = async () => ({})
 
 const uploadSheet = async (
   parent,
@@ -13,12 +13,12 @@ const uploadSheet = async (
   for (const sheetToUpload of input) {
     let { wb, sheet, data, timestamp, projectId } = sheetToUpload
 
-    data = sanitizeAndFormat(data)
+    data = sanitize(data)
 
-    const workbookConfig = await getWorkbookConfig(wb, sheet) // handles getting the right config, including for payer historical data exceptions
-    const targetCollection = workbookConfig.collection
+    const sheetConfig = await getSheetConfig(wb, sheet) // handles getting the right sheet config, including for payer historical data exceptions
+    const targetCollection = sheetConfig.collection
     
-    const validationResults = validate(data, workbookConfig)
+    const validationResults = validate(data, sheetConfig)
 
     // depending on validation results, either continue or throw errors as needed
 
