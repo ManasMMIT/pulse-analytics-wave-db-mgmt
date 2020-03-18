@@ -55,8 +55,8 @@ const sharedStyles = {
 
 const StyledNavLink = styled(NavLink)({
   ':hover': {
-    background: transparentize(0.9, Colors.WHITE)
-  }
+    background: transparentize(0.9, Colors.WHITE),
+  },
 })
 
 const StyledDropdown = styled(Dropdown)({
@@ -93,18 +93,18 @@ const ORDERED_MASTER_LIST_ITEMS = [
   'Indications',
   'Regimens',
   'Products',
-  'Manufacturers'
+  'Manufacturers',
 ]
 
 const getNavLink = label => (
-    <StyledNavLink
-      key={`nav-link:${label}`}
-      style={inactiveLinkStyle}
-      activeStyle={activeLinkStyle}
-      to={`/orion/lists/${_.kebabCase(label)}`}
-    >
-      {label}
-    </StyledNavLink>
+  <StyledNavLink
+    key={`nav-link:${label}`}
+    style={inactiveLinkStyle}
+    activeStyle={activeLinkStyle}
+    to={`/orion/lists/${_.kebabCase(label)}`}
+  >
+    {label}
+  </StyledNavLink>
 )
 
 const getToolItemPath = (tool, item) => {
@@ -115,10 +115,16 @@ const linkConfig = [
   { label: 'Query Tool', link: '/orion/data-management/query' },
   { label: 'New Query Tool', link: '/orion/data-management/new-query' },
   { label: 'Suggested Questions', link: '/orion/data-management/questions' },
-  { label: 'Sheet Management', link: '/orion/data-management/sheet-management' },
+  {
+    label: 'Sheet Management',
+    link: '/orion/data-management/sheet-management',
+  },
   { label: 'New Import Tool', link: '/orion/data-management/new-import' },
   { label: 'Old Import Tool', link: '/orion/data-management/import' },
-  { label: 'Export Custom Data', link: '/orion/data-management/export-custom-data' },
+  {
+    label: 'Export Custom Data',
+    link: '/orion/data-management/export-custom-data',
+  },
   { label: 'Payer Projects', link: '/orion/data-management/payer-projects' },
 ]
 
@@ -129,7 +135,7 @@ const renderStyledNavLink = ({ label, link }) => (
     activeStyle={activeLinkStyle}
     to={link}
   >
-    { label }
+    {label}
   </StyledNavLink>
 )
 
@@ -142,18 +148,12 @@ const Sidebar = () => {
         <OrionLogo src="https://res.cloudinary.com/pulsedatatools/image/upload/v1573837414/polaris/icons/orion-1-color.svg" />
         Orion DB
       </OrionHeader>
-      <Header>
-        Data Management
-      </Header>
-      { linkConfig.map(renderStyledNavLink)}
-      <Header>
-        MASTER LISTS
-      </Header>
+      <Header>Data Management</Header>
+      {linkConfig.map(renderStyledNavLink)}
+      <Header>MASTER LISTS</Header>
       {masterListItems}
       <div>
-        <Header>
-          TOOL MASTER LISTS
-        </Header>
+        <Header>TOOL MASTER LISTS</Header>
         <StyledDropdown
           style={inactiveLinkStyle}
           label={'Alternative Payment Models'}
@@ -166,16 +166,20 @@ const Sidebar = () => {
             Accounts
           </StyledNavLink>
         </StyledDropdown>
-        <StyledDropdown
-          style={inactiveLinkStyle}
-          label={'Pathways'}
-        >
+        <StyledDropdown style={inactiveLinkStyle} label={'Pathways'}>
           <StyledNavLink
             style={dropdownInactiveLinkStyle}
             activeStyle={dropdownActiveLinkStyle}
             to={getToolItemPath('pathways', 'accounts')}
           >
             Accounts
+          </StyledNavLink>
+          <StyledNavLink
+            style={dropdownInactiveLinkStyle}
+            activeStyle={dropdownActiveLinkStyle}
+            to={getToolItemPath('pathways', 'newaccounts')}
+          >
+            New Pathways Accounts
           </StyledNavLink>
         </StyledDropdown>
         <StyledDropdown

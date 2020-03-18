@@ -1,0 +1,21 @@
+const Color = {
+  PRIMARY: '#0668D9',
+  BLACK: '#0A2E4D',
+  WHITE: '#FFFFFF',
+  BLUE: '#0668D9',
+  GREEN: '#22BF6B',
+  RED: '#EE5340',
+  ORANGE: '#FD9651',
+  YELLOW: '#FFDC6C',
+  PURPLE: '#7C5EFA',
+  LIGHT_GRAY_1: '#DFE3EA',
+  LIGHT_BLUE_GRAY_1: '#F0F6F9',
+  LIGHT_BLUE_GRAY_2: '#EEF4FA',
+  MEDIUM_GRAY_1: '#CDD8E6',
+  MEDIUM_GRAY_2: '#A3BBDA',
+  PHOENIX: '#FA8969',
+  ORION: '#38B59A',
+  DELPHI: '#30B2DC',
+}
+
+export default Color
