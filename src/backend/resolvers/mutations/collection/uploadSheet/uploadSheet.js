@@ -1,26 +1,39 @@
 const sanitize = require('./utils/sanitize')
 const validate = require('./utils/validate')
+const getSheetConfig = require('./utils/getSheetConfig')
+const formatAjvErrors = require('./utils/formatAjvErrors')
 const importPayerHistoricalData = async args => args
-const importData = async args => args
-const getSheetConfig = async () => ({})
 
 const uploadSheet = async (
   parent,
   { input }, // schema is [ { wb, sheet, data, timestamp, projectId }, etc. ]
-  { pulseCoreDb, mongoClient },
+  { pulseCoreDb, pulseDevDb, mongoClient },
   info
 ) => {
+  const importFeedback = []
+
   for (const sheetToUpload of input) {
     let { wb, sheet, data, timestamp, projectId } = sheetToUpload
+    const originalDataLength = data.length // excludes header
 
-    data = sanitize(data)
+    const { result, skippedRows } = sanitize(data)
+    data = result
 
-    const sheetConfig = await getSheetConfig(wb, sheet) // handles getting the right sheet config, including for payer historical data exceptions
+    const sheetConfig = await getSheetConfig({ wb, sheet, pulseCoreDb }) // handles getting the right sheet config, including for payer historical data exceptions
     const targetCollection = sheetConfig.collection
     
-    const validationResults = validate(data, sheetConfig)
+    const {
+      valid,
+      errors,
+      data: validatedData,
+    }  = validate({ data, skippedRows, sheetConfig })
 
-    // depending on validation results, either continue or throw errors as needed
+    data = validatedData
+
+    if (!valid) {
+      const errorString = formatAjvErrors({ errors, wb, sheet })
+      throw new Error(errorString)
+    }
 
     const importArgs = {
       data,
@@ -36,10 +49,20 @@ const uploadSheet = async (
       continue
     }
 
-    await importData(importArgs)
+    await pulseDevDb.collection(targetCollection)
+      .deleteMany()
+
+    await pulseDevDb.collection(targetCollection)
+      .insertMany(data)
+
+    importFeedback.push(
+      `Import successful for ${wb}/${sheet}`
+        + `\n${data.length}/${originalDataLength} rows imported (excluding header)`
+        + `\nSkipped rows were: ${skippedRows.join(', ')}`
+    )
   }
   
-  return 'Import successful'
+  return importFeedback
 }
 
 module.exports = uploadSheet

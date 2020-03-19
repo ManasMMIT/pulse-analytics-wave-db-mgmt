@@ -17,10 +17,11 @@ const Import = () => {
   const [loading, setLoading] = useState(false)
 
   const [uploadSheet] = useMutation(UPLOAD_SHEET, {
-    onCompleted: result => {
-      // alert(`${json.length} rows would go to the backend`)
+    onCompleted: ({ uploadSheet: importFeedback }) => {
+      alert(importFeedback.join('\n'))
       setLoading(false)
     },
+    onError: alert,
   })
 
   const onFileAdded = () => {

@@ -50,61 +50,61 @@ const skipBlankRowsInput = require('./mockData/input/skip-blank-rows')
 const skipBlankRowsOutput = require('./mockData/output/skip-blank-rows')
 
 test('Skip first two incoming rows (assume they\'re metadata)', () => {
-  const sanitizedData = sanitize(twoRowsInput)
-  expect(sanitizedData).toStrictEqual(twoRowsOutput)
+  const sanitizationRes = sanitize(twoRowsInput)
+  expect(sanitizationRes).toStrictEqual(twoRowsOutput)
 })
 
 test('Skip rows with truthy value for "skip" key', () => {
-  const sanitizedData = sanitize(onlySkipsInput)
-  expect(sanitizedData).toStrictEqual(onlySkipsOutput)
+  const sanitizationRes = sanitize(onlySkipsInput)
+  expect(sanitizationRes).toStrictEqual(onlySkipsOutput)
 })
 
 test('Keep rows with falsey values for "skip" key but delete the skip key/values pairs', () => {
-  const sanitizedData = sanitize(falseySkipsInput)
-  expect(sanitizedData).toStrictEqual(falseySkipsOutput)
+  const sanitizationRes = sanitize(falseySkipsInput)
+  expect(sanitizationRes).toStrictEqual(falseySkipsOutput)
 })
 
 test('Combo: Skip rows with truthy values; keep rows with falsey values', () => {
-  const sanitizedData = sanitize(mixedSkipsInput)
-  expect(sanitizedData).toStrictEqual(mixedSkipsOutput)
+  const sanitizationRes = sanitize(mixedSkipsInput)
+  expect(sanitizationRes).toStrictEqual(mixedSkipsOutput)
 })
 
 test('Trim all column names, including for unicode whitespace characters', () => {
-  const sanitizedData = sanitize(trimmableColumnsInput)
-  expect(sanitizedData).toStrictEqual(trimmableColumnsOutput)
+  const sanitizationRes = sanitize(trimmableColumnsInput)
+  expect(sanitizationRes).toStrictEqual(trimmableColumnsOutput)
 })
 
 test('Skip all column names trimmable to an empty space', () => {
-  const sanitizedData = sanitize(skipColumnsInput)
-  expect(sanitizedData).toStrictEqual(skipColumnsOutput)
+  const sanitizationRes = sanitize(skipColumnsInput)
+  expect(sanitizationRes).toStrictEqual(skipColumnsOutput)
 })
 
 test('Skip all columns containing keyword __EMPTY', () => {
-  const sanitizedData = sanitize(skipEmptyColumnsInput)
-  expect(sanitizedData).toStrictEqual(skipEmptyColumnsOutput)
+  const sanitizationRes = sanitize(skipEmptyColumnsInput)
+  expect(sanitizationRes).toStrictEqual(skipEmptyColumnsOutput)
 })
 
 test('Coerce falsey non-null values to null except for false', () => {
-  const sanitizedData = sanitize(coerceFalseyValuesToNullInput)
-  expect(sanitizedData).toStrictEqual(coerceFalseyValuesToNullOutput)
+  const sanitizationRes = sanitize(coerceFalseyValuesToNullInput)
+  expect(sanitizationRes).toStrictEqual(coerceFalseyValuesToNullOutput)
 })
 
 test("Coerce keys to lowerCamelCase except for '_id'", () => {
-  const sanitizedData = sanitize(coerceToCamelCaseInput)
-  expect(sanitizedData).toStrictEqual(coerceToCamelCaseOutput)
+  const sanitizationRes = sanitize(coerceToCamelCaseInput)
+  expect(sanitizationRes).toStrictEqual(coerceToCamelCaseOutput)
 })
 
 test('Trim values if they\'re strings', () => {
-  const sanitizedData = sanitize(trimValuesInput)
-  expect(sanitizedData).toStrictEqual(trimValuesOutput)
+  const sanitizationRes = sanitize(trimValuesInput)
+  expect(sanitizationRes).toStrictEqual(trimValuesOutput)
 })
 
 test('Skip blank rows (if a row\'s values are all non-false falsey values)', () => {
-  const sanitizedData = sanitize(skipBlankRowsInput)
-  expect(sanitizedData).toStrictEqual(skipBlankRowsOutput)
+  const sanitizationRes = sanitize(skipBlankRowsInput)
+  expect(sanitizationRes).toStrictEqual(skipBlankRowsOutput)
 })
 
 test('Successfully sanitize real sample of raw data (mixed impurities)', () => {
-  const sanitizedData = sanitize(mixedBagRawDataInput)
-  expect(sanitizedData).toStrictEqual(mixedBagRawDataOutput)
+  const sanitizationRes = sanitize(mixedBagRawDataInput)
+  expect(sanitizationRes).toStrictEqual(mixedBagRawDataOutput)
 })

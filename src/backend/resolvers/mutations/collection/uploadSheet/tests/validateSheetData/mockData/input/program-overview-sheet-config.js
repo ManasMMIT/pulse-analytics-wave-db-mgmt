@@ -27,7 +27,7 @@ module.exports = {
       "_id": ObjectId("5e62f093374fa0f578c44581"),
       "name": "overview",
       "type": "string",
-      "oneOf": []
+      "oneOf": null
     },
     {
       "_id": ObjectId("5e62f0e4374fa0f578c44582"),
@@ -46,19 +46,19 @@ module.exports = {
       "_id": ObjectId("5e62f10b374fa0f578c44583"),
       "name": "start",
       "type": "string",
-      "oneOf": []
+      "oneOf": null
     },
     {
       "_id": ObjectId("5e62f115374fa0f578c44584"),
       "name": "end",
       "type": "string",
-      "oneOf": []
+      "oneOf": null
     },
     {
       "_id": ObjectId("5e62f11d374fa0f578c44585"),
       "name": "focus",
       "type": "string",
-      "oneOf": []
+      "oneOf": null
     },
     {
       "_id": ObjectId("5e62f14a374fa0f578c44586"),

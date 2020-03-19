@@ -36,22 +36,37 @@ const sanitizeKeysAndTrimData = obj => {
 
 const isEmptyRow = obj => _.every(obj, val => FALSEY_VALUES.includes(val))
 
-const sanitize = data => data.reduce((acc, row, i) => {
+const sanitize = data => data.reduce(({ result, skippedRows }, row, i) => {
+  // Because i is zero-indexed AND the header row isn't in the
+  // raw incoming json, add 2 to i to get corresponding row in sheet
+  const curRowNumInSheet = i + 2 
+
   // skip the type row (string, integer, etc.) AND the second row (TDG keys)
-  if (i < NUM_ROWS_TO_SKIP) return acc
+  if (i < NUM_ROWS_TO_SKIP) {
+    skippedRows.push(curRowNumInSheet)
+    return { result, skippedRows }
+  }
 
   // skip any row for which there's a truthy 'skip' value
-  if (row.skip) return acc
+  if (row.skip) {
+    skippedRows.push(curRowNumInSheet)
+    return { result, skippedRows }
+  }
+
   delete row.skip // delete any 'skip' key/value pair if skip is falsey
 
   // trim and camelCase keys unless they're '_id'; trim values if they're strings
   const sanitizedRow = sanitizeKeysAndTrimData(row)
 
   // if a row's values are all empty strings skip it
-  if (isEmptyRow(sanitizedRow)) return acc
+  if (isEmptyRow(sanitizedRow)) {
+    skippedRows.push(curRowNumInSheet)
+    return { result, skippedRows }
+  }
 
-  acc.push(sanitizedRow)
-  return acc
-}, [])
+  result.push(sanitizedRow)
+
+  return { result, skippedRows }
+}, { result: [], skippedRows: [] })
 
 module.exports = sanitize

@@ -318,7 +318,7 @@ module.exports = {
       "end": null,
       "focus": "Revenue generated from reduced drug spending from practices following the pathways which have preferred therapies",
       "commercial": 1,
-      "medicaid": 0,
+      "medicaid": 5,
       "medicare": 1,
       "exchange": 0
     },
@@ -356,7 +356,7 @@ module.exports = {
       "organization": "New Century Health",
       "overview": "Recently acquired by Evolent Health (EVH), a VA-based population health company. NCH is a care management solutions that leverage technology and evidence-based medicine at the point of care with focus on oncology and cardiology",
       "sponsor": "Vendor",
-      "start": 2011,
+      "start": [],
       "end": null,
       "focus": "Contract with payers and form alliances with key organizations (NCCN)",
       "commercial": 1,
@@ -375,7 +375,7 @@ module.exports = {
       "focus": "Payer focus with minimal growth outside Humana and with a strong focus on appropriate supportive care utilization",
       "commercial": 1,
       "medicaid": 0,
-      "medicare": 1,
+      "medicare": {},
       "exchange": 0
     },
     {
@@ -387,7 +387,7 @@ module.exports = {
       "start": 2013,
       "end": null,
       "focus": "Partnership between McKesson & NCCN with limited current payer uptake",
-      "commercial": 1,
+      "commercial": [],
       "medicaid": 1,
       "medicare": 1,
       "exchange": 0
@@ -397,7 +397,7 @@ module.exports = {
       "organizationType": "Pathways",
       "organization": "Via Oncology",
       "overview": "Acquired by Elsevier in 1Q18, UPMC oncologist-developed pathways commercialized and adopted by practices and institutions with limited payer uptake",
-      "sponsor": "Vendor",
+      "sponsor": "Asdf",
       "start": 2005,
       "end": null,
       "focus": "Focus on providers & academic affiliations",
