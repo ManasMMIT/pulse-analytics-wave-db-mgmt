@@ -19,9 +19,11 @@ const Label = styled.div({
 const FieldLabel = ({
   children,
   isCardLabel,
+  removeCb
 }) => (
   <Label isCardLabel={isCardLabel}>
     { children }
+    { removeCb && <button onClick={removeCb}>Remove</button> }
   </Label>
 )
 
