@@ -2,6 +2,7 @@ const clients = require('./clients')
 const teams = require('./teams')
 const users = require('./users')
 const nodes = require('./nodes')
+const pathNodes = require('./pathNodes')
 const indications = require('./indications')
 const products = require('./products')
 const regimens = require('./regimens')
@@ -23,6 +24,7 @@ module.exports = {
   teams,
   users,
   nodes,
+  pathNodes,
   indications,
   products,
   regimens,

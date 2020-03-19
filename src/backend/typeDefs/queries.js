@@ -3,6 +3,8 @@ const { gql } = require('apollo-server-express')
 const queries = gql`
   type Query {
     nodes(parentId: String, type: String): [Node]
+    pathNodes(roleId: ID): JSON
+    
     clients(_id: String): [Client]
     teams(clientId: String, userId: String): [Team]
     users(
