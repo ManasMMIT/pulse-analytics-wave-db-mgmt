@@ -77,8 +77,9 @@ export const FormLabel = styled.label({
 })
 
 const sharedInputStyles = {
+  background: Colors.WHITE,
   border: '1px solid',
-  borderColor: transparentize(0.9, Colors.BLACK),
+  borderColor: 'transparent',
   borderRadius: 4,
   fontSize: 12,
   fontWeight: 400,
@@ -128,5 +129,11 @@ export const StyledButton = styled.button({
   height: 'fit-content',
   ':hover': {
     background: transparentize(0.7, Colors.PRIMARY),
+  },
+  ':focus': {
+    boxShadow: '0 0 0 2px',
+  },
+  ':active': {
+    background: transparentize(0.5, Colors.PRIMARY),
   }
 })

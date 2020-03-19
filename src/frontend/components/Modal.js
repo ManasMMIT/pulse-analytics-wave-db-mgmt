@@ -72,6 +72,7 @@ const CloseButton = styled.button({
   },
   ':focus': {
     outline: 'none',
+    boxShadow: '0 0 0 2px',
   },
   ':active': {
     outline: 'none',
