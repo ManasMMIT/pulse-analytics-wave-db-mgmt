@@ -129,6 +129,12 @@ export const GET_SELECTED_USER = gql`
   }
 `
 
+export const GET_PATH_NODES = gql`
+  query getPathNodes($roleId: ID) {
+    pathNodes(roleId: $roleId)
+  }
+`
+
 export const GET_SOURCE_TOOLS = gql`
   query getSourceTools {
     nodes(type: "tool") {
