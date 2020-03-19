@@ -1,6 +1,5 @@
-import React from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import _ from 'lodash'
-import Select from 'react-select'
 import styled from '@emotion/styled'
 
 import useAquila from '../../../hooks/useAquila'
@@ -9,35 +8,11 @@ import Spacing from '../../../utils/spacing'
 import FontSpace from '../../../utils/fontspace'
 import Color from '../../../utils/color'
 
-import FieldsSectionCard from '../../../components/FieldsSectionCard'
+import FilterMenu from '../../../components/FilterMenu'
+import Button from '../../../components/Button'
+import SectionCard from './SectionCard'
 
-const generateCardInputs = fields => {
-  const inputs = fields.reduce((result, field) => {
-    const { key, options } = field
-    result[key] = (<Select
-      isMulti
-      key={`query-tool-${ key }-input`}
-      options={options}
-    />)
-
-    return result
-  }, {})
-
-  return inputs
-}
-
-const generatePanel = filterOption => {
-  const { fields } = filterOption
-  const inputs = generateCardInputs(fields)
-
-  return (
-    <FieldsSectionCard
-      data={filterOption}
-      inputs={inputs}
-      containerStyle={{ width: '50%' }}
-    />
-  )
-}
+import { generatePqlString } from './utils'
 
 const Wrapper = styled.div({
   width: '100%',
@@ -55,25 +30,88 @@ const FiltersContainer = styled.div({
 })
 
 const QueryTool = () => {
+  const [
+    filterConfigOptions,
+    setFilterConfigOptions,
+  ] = useState([])
+
+  const [
+    isMenuOpen,
+    toggleMenu,
+  ] = useState(false)
+
+  const [
+    filterValues,
+    setFilterValues,
+  ] = useState({})
+
   const {
     setPql,
-    data: {
-      pql,
-      results,
-      filterOptions
-    },
+    data: { pql, results },
+    getFilterConfigOptions,
+    getPlacardOptions,
     loading,
     submitPql,
   } = useAquila()
 
-  const optionsLoaded = !_.isEmpty(filterOptions)
+  useEffect(() => {
+    getFilterConfigOptions().then(result => {
+      setFilterConfigOptions(result)
+    })
+  }, [])
+
+  const optionsLoaded = !_.isEmpty(filterConfigOptions)
+
+  const filterPlacards = filterConfigOptions.filter(({ name }) => Boolean(filterValues[name]))
+
+  const filterMenuOptions = filterConfigOptions.map(({ name }) => {
+    const newFilterValues = { ...filterValues, [name]: {} }
+
+    return ({
+      label: name,
+      onClick: () => {
+        setFilterValues(newFilterValues)
+
+        const pqlString = generatePqlString(newFilterValues)
+        setPql(pqlString)
+
+        toggleMenu(false)
+      }
+    })
+  })
+
+  const anchorEl = useRef()
 
   return (
     <Wrapper>
       <h1 style={{ padding: Spacing.S4, ...FontSpace.FS4 }}>Query Tool</h1>
       <FiltersContainer>
-        { optionsLoaded && filterOptions.map(filterOption => generatePanel(filterOption)) }
+        <Button
+          ref={anchorEl}
+          onClick={() => toggleMenu(!isMenuOpen)}
+        >
+          +
+        </Button>
+        { 
+          optionsLoaded && 
+          filterPlacards.map(filterOption => 
+            <SectionCard 
+              filterOption={filterOption}
+              filterValues={filterValues}
+              setFilterValues={setFilterValues}
+              getPlacardOptions={getPlacardOptions}
+              setPql={setPql}
+            />
+          )
+        }
       </FiltersContainer>
+      <FilterMenu
+        anchorEl={anchorEl.current}
+        isMenuOpen={isMenuOpen}
+        options={filterMenuOptions}
+        onClickAway={() => toggleMenu(false)}
+        filterValues={filterValues}
+      />
     </Wrapper>
   )
 }
