@@ -65,6 +65,7 @@ SidebarItem.defaultProps = {
   isSelected: false,
   selectedStyle: {},
   inactiveStyle: {},
+  onClick: () => {}
 }
 
 export default SidebarItem
