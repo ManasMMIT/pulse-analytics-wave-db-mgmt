@@ -56,8 +56,6 @@ const mutationType = gql`
     deletePayerOrganization(input: DeletePayerOrganizationInput!): DeletePayerOrganizationPayload
     updatePayerOrganization(input: UpdatePayerOrganizationInput!): UpdatePayerOrganizationPayload
 
-    importPayerHistoricalProjectData(input: JSON): JSON
-
     createPathwaysOrganization(input: CreatePathwaysOrganizationInput!): CreatePathwaysOrganizationPayload
     deletePathwaysOrganization(input: DeletePathwaysOrganizationInput!): DeletePathwaysOrganizationPayload
     updatePathwaysOrganization(input: UpdatePathwaysOrganizationInput!): UpdatePathwaysOrganizationPayload

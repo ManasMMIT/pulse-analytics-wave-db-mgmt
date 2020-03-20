@@ -4,12 +4,90 @@ const _ = require('lodash')
 const {
   ENRICH_TP_PARTS_PIPELINE,
   getProjectOrgTpsPipeline,
+  getProjectOrgTpsEnrichedPipeline,
 } = require('./agg-pipelines')
 
 class ProjectHistoryManager {
   constructor({ projectId, pulseCore }) {
     this.projectId = ObjectId(projectId)
     this.pulseCore = pulseCore
+  }
+
+  async validate({
+    sheetData,
+    sheetName,
+  }) {
+    const allowedOrgTpCombos = await this.pulseCore
+      .collection('tdgProjects')
+      .aggregate(
+        getProjectOrgTpsEnrichedPipeline(this.projectId)
+      )
+      .toArray()
+
+    const isPolicyLinksSheet = /PolicyLinks/.test(sheetName)
+
+    const selectedTpHasher = isPolicyLinksSheet
+      ? this.POLICY_LINKS_hashTpParts
+      : this.hashTpParts
+
+    const allowedOrgTpHashByParts = _.keyBy(
+      allowedOrgTpCombos,
+      combo => [
+        combo.slug,
+        selectedTpHasher(combo)
+      ].join('|'),
+    )
+
+    const exactCorrectSetOfOrgTps = Object.keys(allowedOrgTpHashByParts)
+
+    const sheetDataHashes = sheetData.map(datum => {
+      const datumOrgTpHash = [
+        datum.slug,
+        selectedTpHasher(datum)
+      ].join('|')
+
+      return datumOrgTpHash
+    })
+    
+    const missingOrgTpCombos = _.difference(
+      exactCorrectSetOfOrgTps,
+      sheetDataHashes,
+    ).join('\n')
+
+    const invalidOrgTpCombos = _.difference(
+      sheetDataHashes,
+      exactCorrectSetOfOrgTps,
+    ).join('\n')
+
+    if (missingOrgTpCombos.length || invalidOrgTpCombos.length) {
+      throw new Error(
+        'Incoming organization-treatmentPlan combos did not pass validation\n'
+        + `The following combinations were expected, but missing:\n${missingOrgTpCombos}\n`
+        + `The following combinations were invalid:\n${invalidOrgTpCombos}\n`
+      )
+    }
+
+    // ! Still possible at this point that all orgTps in sheetDataHashes are valid but
+    // ! there are dupes in them, which requires us to error
+    if (sheetDataHashes.length !== exactCorrectSetOfOrgTps.length) {
+      const hash = {}
+      const orgTpsThatHaveDupes = []
+
+      for (const str of sheetDataHashes) {
+        if (hash[str]) {
+          hash[str]++
+        } else {
+          hash[str] = 1
+        }
+
+        if (hash[str] === 2) orgTpsThatHaveDupes.push(str)
+      }
+
+      throw new Error(
+        'Incoming organization-treatmentPlan combos did not pass validation\n'
+        + `The following combinations were duplicated: ${orgTpsThatHaveDupes}\n`
+      )
+    }
   }
 
   getEnrichedOrgTpsOp() {
@@ -254,11 +332,11 @@ class ProjectHistoryManager {
   async upsertOrgTpHistory({
     sheetData,
     sheetName,
-    date,
+    timestamp,
   }) {
     this.sheetName = sheetName
     this.sheetData = sheetData
-    this.timestamp = new Date(date)
+    this.timestamp = new Date(timestamp)
     /*
       The policyLink sheet only has a subset of treatmentPlan parts:
         - `coverage`

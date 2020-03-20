@@ -2,7 +2,7 @@ const sanitize = require('./utils/sanitize')
 const validate = require('./utils/validate')
 const getSheetConfig = require('./utils/getSheetConfig')
 const formatAjvErrors = require('./utils/formatAjvErrors')
-const importPayerHistoricalData = async args => args
+const importPayerHistoricalData = require('./importPayerHistoricalData')
 
 const uploadSheet = async (
   parent,
@@ -21,7 +21,7 @@ const uploadSheet = async (
 
     const sheetConfig = await getSheetConfig({ wb, sheet, pulseCoreDb }) // handles getting the right sheet config, including for payer historical data exceptions
     const targetCollection = sheetConfig.collection
-    
+
     const {
       valid,
       errors,
@@ -35,17 +35,19 @@ const uploadSheet = async (
       throw new Error(errorString)
     }
 
-    const importArgs = {
-      data,
-      timestamp,
-      projectId,
-      targetCollection,
-      pulseCoreDb,
-      mongoClient,
-    }
-
     if (timestamp && projectId) {
-      await importPayerHistoricalData(importArgs)
+      await importPayerHistoricalData(
+        {
+          wb,
+          sheet,
+          data,
+          timestamp,
+          projectId,
+        },
+        { pulseCoreDb, pulseDevDb, mongoClient },
+        importFeedback,
+      )
+
       continue
     }
 
@@ -61,7 +63,7 @@ const uploadSheet = async (
         + `\nSkipped rows were: ${skippedRows.join(', ')}`
     )
   }
-  
+
   return importFeedback
 }
 

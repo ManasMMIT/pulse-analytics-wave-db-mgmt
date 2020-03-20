@@ -1,5 +1,5 @@
 const _ = require('lodash')
-const { STATE_ID_BY_ABBREV } = require('../../states-data-util')
+const { STATE_ID_BY_ABBREV } = require('./states-data-util')
 const { RESTRICTIVE_SCORE_THRESHOLD, generateAccessBuckets } = require('./combine-lives-util')
 
 const combineStateLives = ({
@@ -157,4 +157,3 @@ const combineStateLives = ({
 }
 
 module.exports = combineStateLives
-
