@@ -30,6 +30,8 @@ const mutationType = gql`
     updateTeam(input: UpdateTeamInput!): UpdateTeamPayload
     deleteTeam(input: DeleteTeamInput!): DeleteTeamPayload
 
+    updateTeamNode(input: UpdateTeamNodeInput!): Node
+
     updateRoleSitemap(input: UpdateRoleSitemapInput!): UpdateRoleSitemapPayload
     updatePermissions(input: UpdatePermissionsInput!): UpdateTeamPayload
     pushSitemapToDev: String

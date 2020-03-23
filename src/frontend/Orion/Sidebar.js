@@ -126,6 +126,7 @@ const linkConfig = [
     link: '/orion/data-management/export-custom-data',
   },
   { label: 'Payer Projects', link: '/orion/data-management/payer-projects' },
+  { label: 'Edit Role Node', link: '/orion/data-management/edit-role-node' },
 ]
 
 const renderStyledNavLink = ({ label, link }) => (

@@ -10,6 +10,7 @@ import SheetManagement from './SheetManagement'
 import ExportCustomData from './ExportCustomData'
 import PayerProjectsList from './PayerProjects/PayerProjectsList'
 import PayerProject from './PayerProjects/PayerProject'
+import EditRoleNodeView from './EditRoleNodeView'
 
 const DataManagement = () => (
   <Switch>
@@ -22,6 +23,10 @@ const DataManagement = () => (
     <Route path="/orion/data-management/export-custom-data" component={ExportCustomData} />
     <Route exact path="/orion/data-management/payer-projects" component={PayerProjectsList} />
     <Route path="/orion/data-management/payer-projects/:projectId" component={PayerProject} />
+    <Route
+      path="/orion/data-management/edit-role-node"
+      component={EditRoleNodeView}
+    />
     <Redirect to={'/orion/data-management/import'} />
   </Switch>
 )

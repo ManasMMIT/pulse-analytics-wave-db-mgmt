@@ -119,6 +119,23 @@ export const GET_USER_TEAMS = gql`
   }
 `
 
+export const GET_TEAMS = gql`
+  query getAllTeams {
+    teams {
+      _id
+      name
+      description
+      isDefault
+      sitemap
+      client {
+        _id
+        name
+        description
+      }
+    }
+  }
+`
+
 export const GET_SELECTED_USER = gql`
   query getSelectedUser {
     selectedUser @client {
