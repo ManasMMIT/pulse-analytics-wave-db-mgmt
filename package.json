@@ -47,6 +47,7 @@
     "query-string": "^6.11.1",
     "react": "^16.13.0",
     "react-dom": "^16.13.0",
+    "react-inlinesvg": "^1.2.0",
     "react-inspector": "^5.0.1",
     "react-router-dom": "^5.0.1",
     "react-scripts": "3.4.0",

@@ -9,6 +9,8 @@ import FontSpace from '../../../utils/fontspace'
 import Color from '../../../utils/color'
 
 import FieldsSectionCard from '../../../components/FieldsSectionCard'
+import Button from '../../../components/Button'
+import Icon from '../../../components/Icon'
 
 const generatePanel = filterOption => {
   const { name, fields } = filterOption
@@ -82,6 +84,16 @@ const QueryTool = () => {
   return (
     <Wrapper>
       <h1 style={{ padding: Spacing.S4, ...FontSpace.FS4 }}>Query Tool</h1>
+      <Button
+        iconName="add"
+        iconPosition="left"
+        iconColor1={Color.WHITE}
+      >
+        Submit Form
+      </Button>
+      <Icon
+        iconName="check-box"
+      />
       <FiltersContainer>
         { optionsLoaded && generatePanel(placardOptions) }
       </FiltersContainer>
