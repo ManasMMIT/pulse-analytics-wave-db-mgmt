@@ -8,6 +8,7 @@ const SidebarWrapper = styled.div(
   {
     width: 256,
     padding: Spacing.S4,
+    height: '100%',
   },
   ({ width, sidebarStyle }) => ({
     width,
@@ -25,7 +26,7 @@ const Sidebar = ({ children, width, sidebarStyle }) => {
 
 Sidebar.propTypes = {
   children: PropTypes.any,
-  width: PropTypes.number,
+  width: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   sidebarStyle: PropTypes.object,
 }
 

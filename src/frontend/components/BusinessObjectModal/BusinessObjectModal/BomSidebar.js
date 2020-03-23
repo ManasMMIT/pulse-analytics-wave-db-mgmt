@@ -1,10 +1,16 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
+import Color from '../../../utils/color'
+
 import Sidebar from '../../Sidebar'
 import SidebarItem from '../../Sidebar/SidebarItem'
 
-const BomSidebar = ({ options, onClick, selectedTab, sidebarStyle }) => {
+const sidebarStyle = {
+  borderRight: `1px solid ${Color.LIGHT_BLUE_GRAY_1}`,
+}
+
+const BomSidebar = ({ options, onClick, selectedTab }) => {
   if (!selectedTab.value) return null
 
   const sidebarItems = options.map(option => {
@@ -19,7 +25,11 @@ const BomSidebar = ({ options, onClick, selectedTab, sidebarStyle }) => {
     )
   })
 
-  return <Sidebar sidebarStyle={sidebarStyle}>{sidebarItems}</Sidebar>
+  return (
+    <Sidebar width={300} sidebarStyle={sidebarStyle}>
+      {sidebarItems}
+    </Sidebar>
+  )
 }
 
 BomSidebar.propTypes = {
@@ -34,11 +44,9 @@ BomSidebar.propTypes = {
     value: PropTypes.string,
   }).isRequired,
   onClick: PropTypes.func,
-  sidebarStyle: PropTypes.object,
 }
 
 BomSidebar.defaultProps = {
-  sidebarStyle: {},
   onClick: () => null,
 }
 

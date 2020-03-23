@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from '@emotion/styled'
+import PropTypes from 'prop-types'
 
 import FieldLabel from '../FieldLabel'
 
@@ -20,13 +21,35 @@ const FieldsSectionCard = ({
   label,
   fields,
   containerStyle,
+  sectionLabelStyle,
+  fieldLabelStyle,
+  fieldStyle,
 }) => (
   <Wrapper style={containerStyle}>
-    <FieldLabel isCardLabel>
-        { label }
+    <FieldLabel isCardLabel labelStyle={sectionLabelStyle}>
+      {label}
     </FieldLabel>
-    { fields.map(generateCardInput) }
+    {fields.map(field =>
+      generateCardInput({ field, fieldLabelStyle, fieldStyle })
+    )}
   </Wrapper>
 )
+
+FieldsSectionCard.propTypes = {
+  label: PropTypes.string.isRequired,
+  fields: PropTypes.array.isRequired,
+  containerStyle: PropTypes.object,
+  sectionLabelStyle: PropTypes.object,
+  fieldLabelStyle: PropTypes.object,
+  fieldStyle: PropTypes.object,
+}
+
+FieldsSectionCard.defaultProps = {
+  fields: [],
+  containerStyle: {},
+  sectionLabelStyle: {},
+  fieldLabelStyle: {},
+  fieldStyle: {},
+}
 
 export default FieldsSectionCard

@@ -16,6 +16,7 @@ const TitleWrapper = styled.div(
   },
   props => ({
     ...props.fontSpace,
+    ...props.titleStyle,
   })
 )
 
@@ -27,7 +28,7 @@ const TitleModifier = styled.div({
   color: Color.BLUE,
 })
 
-const Title = ({ title, titleModifiers, size }) => {
+const Title = ({ title, titleModifiers, size, titleStyle }) => {
   const fontSpace = FontSpace[size]
   let formattedModifier
 
@@ -43,7 +44,7 @@ const Title = ({ title, titleModifiers, size }) => {
   }
 
   return (
-    <TitleWrapper fontSpace={fontSpace}>
+    <TitleWrapper fontSpace={fontSpace} titleStyle={titleStyle}>
       <TitleLabel>{title}</TitleLabel>
       {formattedModifier}
     </TitleWrapper>
@@ -54,12 +55,14 @@ Title.propTypes = {
   title: PropTypes.string,
   titleModifiers: PropTypes.array,
   size: PropTypes.string,
+  titleStyle: PropTypes.object,
 }
 
 Title.defaultProps = {
   title: 'Title Component',
-  titleModifiers: [],
   size: 'FS4',
+  titleStyle: {},
+  titleModifiers: [],
 }
 
 export default Title

@@ -1,36 +1,15 @@
 import React, { useState, useEffect } from 'react'
 import styled from '@emotion/styled'
+import PropTypes from 'prop-types'
 import useBom from '../../../hooks/useBom'
 
-import { ZIndexes, AlphaColors } from '../../../utils/pulseStyles'
 import Color from '../../../utils/color'
 import Spacing from '../../../utils/spacing'
 
 import BomSidebar from './BomSidebar'
-import FieldCard from '../../../Orion/MasterLists/Tools/Pathways/FieldCard'
+import BomSections from './BomSections'
 import Title from '../../Title'
-
-const ModalWrapper = styled.div({
-  position: 'fixed',
-  left: 0,
-  top: 0,
-  width: '100%',
-  height: '100%',
-  background: AlphaColors.Black70,
-  zIndex: ZIndexes.Modal,
-})
-
-const ModalContent = styled.div({
-  background: Color.WHITE,
-  borderRadius: Spacing.S2,
-  margin: Spacing.S7,
-})
-
-const Modal = ({ children }) => (
-  <ModalWrapper>
-    <ModalContent>{children}</ModalContent>
-  </ModalWrapper>
-)
+import Dialog from '../../Dialog'
 
 const Header = styled.div({
   display: 'flex',
@@ -41,11 +20,9 @@ const Header = styled.div({
 
 const BoContent = styled.div({
   display: 'flex',
+  overflowY: 'auto',
+  height: '100%',
 })
-
-const sidebarStyle = {
-  borderRight: `1px solid ${Color.LIGHT_BLUE_GRAY_1}`,
-}
 
 const formatSchemaItems = schema => {
   return schema.tags.map(tag => ({ label: tag.label, value: tag._id }))
@@ -75,11 +52,13 @@ const BusinessObjectModal = ({ entityId, boId, closeModal, headerText }) => {
   }, [loading, schema.tags, entity])
 
   if (loading) return null
+
   const modalTitle = `Edit ${headerText}`
   const modalTitleModifier = [entity.organization]
+  console.log(inputFields)
 
   return (
-    <Modal>
+    <Dialog>
       <Header>
         <Title title={modalTitle} titleModifiers={modalTitleModifier} />
         <div style={{ margin: Spacing.S4 }}>
@@ -95,27 +74,27 @@ const BusinessObjectModal = ({ entityId, boId, closeModal, headerText }) => {
             setSelectedTab(nextTab)
           }}
           selectedTab={{ value: selectedTab._id, label: selectedTab.label }}
-          sidebarStyle={sidebarStyle}
         />
-        <div>
-          <Title
-            title={'Edit'}
-            titleModifiers={[selectedTab.label]}
-            size={'FS3'}
-          />
-          {selectedTab.sections &&
-            selectedTab.sections.map(section => (
-              <FieldCard
-                key={section._id}
-                sectionData={section}
-                inputFields={inputFields}
-                setInputField={setInputField}
-              />
-            ))}
-        </div>
+        <BomSections
+          inputFields={inputFields}
+          selectedTab={selectedTab}
+          setInputField={setInputField}
+        />
       </BoContent>
-    </Modal>
+    </Dialog>
   )
+}
+
+BusinessObjectModal.propTypes = {
+  entityId: PropTypes.string.isRequired,
+  boId: PropTypes.string.isRequired,
+  closeModal: PropTypes.func,
+  headerText: PropTypes.string,
+}
+
+BusinessObjectModal.defaultProps = {
+  closeModal: () => null,
+  headerText: '',
 }
 
 export default BusinessObjectModal
