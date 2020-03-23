@@ -10,6 +10,11 @@ const validate = ({ data, skippedRows, sheetConfig }) => {
   const ajvSchema = getAjvSchema(sheetConfig)
   const ajvValidate = ajv.compile(ajvSchema)
 
+  const csvKeys = sheetConfig.fields.reduce((acc, { name, type }) => {
+    if (type === 'csv') acc.push(name)
+    return acc
+  }, [])
+
   let errors = []
 
   let areAllRowsValid = true
@@ -28,14 +33,22 @@ const validate = ({ data, skippedRows, sheetConfig }) => {
     }
     
     const datum = data[j]
+    
+    csvKeys.forEach(csvKey => {
+      if (datum[csvKey]) {
+        datum[csvKey] = datum[csvKey].split(',').map(str => str.trim())
+      }
+    })
 
     const valid = ajvValidate(datum)
 
     if (!valid) {
-      errors.push({
-        error: ajvValidate.errors[0],
-        rowNum: curRowNumInSheet,
-        datum,
+      ajvValidate.errors.forEach(error => { // eslint-disable-line no-loop-func
+        errors.push({
+          error: error,
+          rowNum: curRowNumInSheet,
+          datum,
+        })
       })
 
       areAllRowsValid = false
@@ -49,10 +62,24 @@ const validate = ({ data, skippedRows, sheetConfig }) => {
 }
 
 // ! schema structure looks like
+// ? REFERENCE: types you can use https://github.com/epoberezkin/ajv/blob/master/KEYWORDS.md#type
 // {
 //   properties: {
-//     foo: { type: "string" }, // REFERENCE: types you can use https://github.com/epoberezkin/ajv/blob/master/KEYWORDS.md#type
-//     bar: { type: "number", maximum: 3 }
+//     foo: { 
+//       type: "string",
+//       enum: ['hello', "world"],
+//     }, 
+//     bar: { 
+//       type: "number", 
+//       maximum: 3,
+//     }
+//     list: { // ! ex of schema def if type is CSV and has "oneOf" constraint
+//       type: "array", 
+//       items: {
+//         type: "string",
+//         enum: ['hello', "world"],
+//       } 
+//     },
 //   }
 // }
 const getAjvSchema = ({ fields }) => {
@@ -60,11 +87,23 @@ const getAjvSchema = ({ fields }) => {
   const schemaProperties = schema.properties
 
   fields.forEach(({ name, type, oneOf }) => {
-    schemaProperties[name] = { type }
-    
-    if (oneOf) {
-      oneOf = oneOf.map(TYPE_MAP[type]) // coerce oneOf values to the type specified
-      schemaProperties[name].enum = oneOf
+    if (type === 'csv') {
+      schemaProperties[name] = {
+        type: 'array',
+        items: { type: 'string' }
+      }
+
+      if (oneOf) {
+        oneOf = oneOf.map(TYPE_MAP[type]) // coerce oneOf values to the type specified
+        schemaProperties[name].items.enum = oneOf
+      }
+    } else {
+      schemaProperties[name] = { type }
+
+      if (oneOf) {
+        oneOf = oneOf.map(TYPE_MAP[type]) // coerce oneOf values to the type specified
+        schemaProperties[name].enum = oneOf
+      }
     }
   })
 
@@ -72,6 +111,7 @@ const getAjvSchema = ({ fields }) => {
 }
 
 const TYPE_MAP = {
+  csv: String,
   number: Number,
   integer: Number,
   string: String,

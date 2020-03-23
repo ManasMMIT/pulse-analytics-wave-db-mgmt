@@ -82,6 +82,35 @@ module.exports = [
   },
   {
     "error": {
+      "keyword": "enum",
+      "dataPath": "/medicare",
+      "schemaPath": "#/properties/medicare/enum",
+      "params": {
+        "allowedValues": [
+          1,
+          0
+        ]
+      },
+      "message": "should be equal to one of the allowed values"
+    },
+    "rowNum": 38,
+    "datum": {
+      "slug": "oncology-analytics",
+      "organizationType": "Pathways",
+      "organization": "Oncology Analytics",
+      "overview": "OBM with limited uptake designed to monitor compliance to Level 1 NCCN guidelines and act as peer-review for 2A and lower treatment selection",
+      "sponsor": "Vendor",
+      "start": "2009",
+      "end": "",
+      "focus": "Payer focus with minimal growth outside Humana and with a strong focus on appropriate supportive care utilization",
+      "commercial": 1,
+      "medicaid": 0,
+      "medicare": {},
+      "exchange": 0
+    }
+  },
+  {
+    "error": {
       "keyword": "type",
       "dataPath": "/commercial",
       "schemaPath": "#/properties/commercial/type",
@@ -89,6 +118,35 @@ module.exports = [
         "type": "integer"
       },
       "message": "should be integer"
+    },
+    "rowNum": 39,
+    "datum": {
+      "slug": "value-pathways-nccn",
+      "organizationType": "Pathways",
+      "organization": "Value Pathways powered by NCCN",
+      "overview": "Evolution of Level 1 Pathways (Innovent) with additional NCCN influence, to be integrated in USON EMRs with intention to expand into additional practices",
+      "sponsor": "Vendor",
+      "start": "2013",
+      "end": "",
+      "focus": "Partnership between McKesson & NCCN with limited current payer uptake",
+      "commercial": [],
+      "medicaid": 1,
+      "medicare": 1,
+      "exchange": 0
+    }
+  },
+  {
+    "error": {
+      "keyword": "enum",
+      "dataPath": "/commercial",
+      "schemaPath": "#/properties/commercial/enum",
+      "params": {
+        "allowedValues": [
+          1,
+          0
+        ]
+      },
+      "message": "should be equal to one of the allowed values"
     },
     "rowNum": 39,
     "datum": {

@@ -6,8 +6,19 @@ const formatAjvErrors = ({ errors, wb, sheet }) => {
   errorString = errors.reduce((acc, { error, rowNum, datum }) => {
     const { dataPath, message, params } = error
 
-    const key = dataPath.replace('/', '')
-    const erroringVal = datum[key]
+    let key = dataPath.replace('/', '') // replaces the first slash only on purpose
+    let erroringVal = datum[key]
+
+    const matchForCsvPath = key.match(/^(\w+)\/([0-9]{1,})$/)
+    
+    let extraErrorStr = ' '
+    if (matchForCsvPath) {
+      key = matchForCsvPath[1]
+      const idxOfInvalidCsvVal = Number(matchForCsvPath[2])
+      erroringVal = datum[key][idxOfInvalidCsvVal]
+
+      extraErrorStr = `, csv position ${idxOfInvalidCsvVal + 1} `
+    }
     
     let suggestion = ''
     if (message === "should be equal to one of the allowed values") {
@@ -20,7 +31,7 @@ const formatAjvErrors = ({ errors, wb, sheet }) => {
       suggestion = target
     }
 
-    acc += `Row ${rowNum}, key '${key}' ${message}\n`
+    acc += `Row ${rowNum}, key '${key}'${extraErrorStr}${message}\n`
     if (suggestion) {
       acc += `Did you mean: '${suggestion}'?\n\n`
     } else {

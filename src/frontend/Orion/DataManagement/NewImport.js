@@ -15,13 +15,18 @@ const Import = () => {
   const [selectedSheet, selectSheet] = useState(null)
   const [workbook, setWorkbook] = useState(null)
   const [loading, setLoading] = useState(false)
+  const [errors, setErrors] = useState(null)
 
   const [uploadSheet] = useMutation(UPLOAD_SHEET, {
     onCompleted: ({ uploadSheet: importFeedback }) => {
       alert(importFeedback.join('\n'))
       setLoading(false)
     },
-    onError: alert,
+    onError: errorMessage => {
+      alert(errorMessage)
+      setLoading(false)
+      setErrors(errorMessage.toString())
+    },
   })
 
   const onFileAdded = () => {
@@ -107,6 +112,20 @@ const Import = () => {
       }
 
       { loading && <Spinner /> }
+
+      { 
+        errors && (
+          <div style={{ 
+            color: 'red', 
+            whiteSpace: 'pre-wrap', 
+            height: 600, 
+            overflow: 'auto', 
+            border: '1px solid black' 
+          }}>
+            { errors }
+          </div>
+        ) 
+      }
     </div>
   )
 }
