@@ -146,6 +146,23 @@ export const GET_SELECTED_USER = gql`
   }
 `
 
+export const GET_SOURCE_NODES = gql`
+  query getSourceNodes {
+    nodes {
+      _id
+      name
+      type
+      componentPath
+      text
+      subtitle
+      caption
+      order
+      parentId
+      resources
+    }
+  }
+`
+
 export const GET_SOURCE_TOOLS = gql`
   query getSourceTools {
     nodes(type: "tool") {

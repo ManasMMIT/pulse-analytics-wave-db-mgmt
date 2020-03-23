@@ -51,7 +51,7 @@ const queries = gql`
     schemaVersion: String
     resources: JSON
     icon: String # TODO: deprecate and change to iconId
-    }
+  }
 
   type Client {
     _id: String

@@ -110,3 +110,17 @@ export const SET_STAGED_SITEMAP = gql`
     }
   }
 `
+
+export const CREATE_SOURCE_NODE = gql`
+  mutation CreateSourceNode($input: CreateSourceNodeInput!) {
+    createSourceNode(input: $input) {
+      _id
+      name
+      type
+      componentPath
+      text
+      order
+      parentId
+    }
+  }
+`
