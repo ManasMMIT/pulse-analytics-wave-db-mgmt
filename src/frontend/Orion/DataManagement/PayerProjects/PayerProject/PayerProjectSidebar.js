@@ -6,6 +6,8 @@ import _ from 'lodash'
 import Sidebar from '../../../../components/Sidebar'
 import SidebarItem from '../../../../components/Sidebar/SidebarItem'
 
+import Color from '../../../../utils/color'
+
 const generateSidebarItems = (
   selectedSidebarItem,
   url
@@ -36,7 +38,7 @@ const PayerProjectSidebar = ({
   const selectedSidebarItem = pathname.split('/').pop()
 
   return (
-    <Sidebar>
+    <Sidebar sidebarStyle={{ borderRight: `1px solid ${ Color.LIGHT_GRAY_1 }`}}>
       { sidebarConfig.map(generateSidebarItems(selectedSidebarItem, url)) }
     </Sidebar>
   )

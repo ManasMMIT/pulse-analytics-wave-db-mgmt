@@ -7,9 +7,10 @@ import {
 } from 'react-router-dom'
 
 import PayerProjectSidebar from './PayerProjectSidebar'
+import PayerHistoricalImport from './PayerHistoricalImport'
 
 const sidebarConfig = [
-  { label: 'Import Historical Data', component: () => <div>Import Historical Data</div> },
+  { label: 'Import Historical Data', component: PayerHistoricalImport },
   { label: 'Project Setup', component: () => <div>Project Setup</div> },
   { label: 'Payer Project Treatment Plan', component: () => <div>Payer Project Treatment Plan</div> },
 ].map(({ ...item }) => ({
