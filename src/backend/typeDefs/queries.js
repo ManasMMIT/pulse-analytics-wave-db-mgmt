@@ -37,7 +37,7 @@ const queries = gql`
     singlePayerProject(projectId: ID): SinglePayerProject
     payerProjectsList: [PayerProjectsList]
 
-    projectsPtps(input: ProjectPtpsInput!)
+    projectPtps(input: ProjectPtpsInput!): [ProjectPtp]
 
     treatmentPlans: [TreatmentPlan]
   }
@@ -258,14 +258,14 @@ const queries = gql`
     project: JSON # not sure how much we want here
   }
 
-  type ProjectPtpsInput {
+  input ProjectPtpsInput {
     projectId: ID
     limit: Int
     skip: Int
-    order: [OrderConfig!]!
+    order: [OrderConfig]
   }
 
-  type OrderConfig {
+  input OrderConfig {
     key: String!
     direction: Int!
   }
