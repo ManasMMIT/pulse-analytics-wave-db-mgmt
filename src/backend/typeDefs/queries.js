@@ -36,6 +36,8 @@ const queries = gql`
 
     singlePayerProject(projectId: ID): SinglePayerProject
     payerProjectsList: [PayerProjectsList]
+
+    treatmentPlans: [TreatmentPlan]
   }
 
   type Node {
@@ -229,6 +231,16 @@ const queries = gql`
   type PayerProjectsList {
     _id: ID!
     name: String!
+  }
+
+  type TreatmentPlan {
+    _id: ID!
+    indication: String
+    regimen: String
+    book: String
+    coverage: String
+    line: String
+    population: String
   }
 `
 

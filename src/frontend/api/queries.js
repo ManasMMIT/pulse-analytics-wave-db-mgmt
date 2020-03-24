@@ -544,3 +544,17 @@ export const GET_PAYER_PROJECTS_LIST = gql`
    }
  }
 `
+
+export const GET_SOURCE_TREATMENT_PLANS = gql`
+ query getSourceTreatmentPlans {
+   treatmentPlans {
+    _id
+    indication
+    regimen
+    line
+    population
+    book
+    coverage
+   }
+ }
+`

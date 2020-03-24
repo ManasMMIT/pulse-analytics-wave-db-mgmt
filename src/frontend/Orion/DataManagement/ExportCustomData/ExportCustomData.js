@@ -1,9 +1,11 @@
 import React, { useState } from 'react'
 import Button from '@material-ui/core/Button'
-import Spinner from './../../Phoenix/shared/Spinner'
-import { useAuth0 } from '../../../react-auth0-spa'
+import Spinner from '../../../Phoenix/shared/Spinner'
+import { useAuth0 } from '../../../../react-auth0-spa'
 import FileSaver from 'file-saver'
-import { Colors } from '../../utils/pulseStyles'
+import { Colors } from '../../../utils/pulseStyles'
+
+import ExportRegionalBreakdown from './ExportRegionalBreakdown'
 
 const MERCK_URL = '/api/merck-pipe-delimited-file'
 const NOVARTIS_URL = '/api/novartis-csv-file'
@@ -37,7 +39,7 @@ const ExportCustomData = () => {
   }
 
   return (
-    <div style={{ padding: 24 }}>
+    <div style={{ padding: 24, flex: '1 0 auto' }}>
       <h1>Export Custom Data</h1>
       <div>
         <Button
@@ -58,6 +60,9 @@ const ExportCustomData = () => {
           <span style={{ marginRight: 8 }}>Download Kymriah Cart-T CSV File</span>
           { isNvsScriptLoading && <Spinner fill={Colors.RED} />}
         </Button>
+      </div>
+      <div style={{ marginTop: 24 }}>
+        <ExportRegionalBreakdown />
       </div>
     </div>
   )

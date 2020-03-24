@@ -16,6 +16,7 @@ const bomSchema = require('./bomSchema')
 const workbooks = require('./workbooks')
 const singlePayerProject = require('./singlePayerProject')
 const payerProjectsList = require('./payerProjectsList')
+const treatmentPlans = require('./treatmentPlans')
 
 module.exports = {
   collections,
@@ -35,5 +36,6 @@ module.exports = {
   bomSchema,
   workbooks,
   singlePayerProject,
-  payerProjectsList
+  payerProjectsList,
+  treatmentPlans,
 }
