@@ -558,3 +558,20 @@ export const GET_SOURCE_TREATMENT_PLANS = gql`
    }
  }
 `
+
+export const GET_PROJECT_PTPS = gql`
+ query getProjectPtps($input: ProjectPtpsInput!) {
+   projectPtps(input: $input) {
+      _id
+      slug
+      organization
+      indication
+      population
+      line
+      regimen
+      book
+      coverage
+      project
+   }
+ }
+`
