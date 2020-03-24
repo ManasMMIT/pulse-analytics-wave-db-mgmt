@@ -37,6 +37,8 @@ const queries = gql`
     singlePayerProject(projectId: ID): SinglePayerProject
     payerProjectsList: [PayerProjectsList]
 
+    projectsPtps(input: ProjectPtpsInput!)
+
     treatmentPlans: [TreatmentPlan]
   }
 
@@ -193,7 +195,7 @@ const queries = gql`
     updatedAt: DateTime
     updater: JSON
   }
-  
+
   type OpLog {
     timestamp: DateTime
     username: String
@@ -241,6 +243,31 @@ const queries = gql`
     coverage: String
     line: String
     population: String
+  }
+
+  type ProjectPtp {
+    _id: ID!
+    slug: String
+    organization: String
+    indication: String
+    population: String
+    line: String
+    regimen: String
+    book: String
+    coverage: String
+    project: JSON # not sure how much we want here
+  }
+
+  type ProjectPtpsInput {
+    projectId: ID
+    limit: Int
+    skip: Int
+    order: [OrderConfig!]!
+  }
+
+  type OrderConfig {
+    key: String!
+    direction: Int!
   }
 `
 
