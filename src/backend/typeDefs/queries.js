@@ -255,7 +255,12 @@ const queries = gql`
     regimen: String
     book: String
     coverage: String
-    project: JSON # not sure how much we want here
+    project: PtpProjectSubdoc
+  }
+
+  type PtpProjectSubdoc {
+    _id: ID
+    name: String
   }
 
   input ProjectPtpsInput {

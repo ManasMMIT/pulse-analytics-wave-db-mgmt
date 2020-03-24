@@ -571,7 +571,10 @@ export const GET_PROJECT_PTPS = gql`
       regimen
       book
       coverage
-      project
+      project {
+        _id
+        name
+      }
    }
  }
 `
