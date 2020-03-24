@@ -7,7 +7,7 @@ module.exports = (
       projectId,
       limit,
       skip,
-      order = {}
+      order,
     }
   },
   { pulseCoreDb }
@@ -51,6 +51,14 @@ const getAggPipeline = ({
   limit
     ? { '$limit': limit }
     : {},
+  {
+    '$addFields': {
+      'orgTps.project': {
+        '_id': '$_id',
+        'name': '$name'
+      }
+    }
+  },
   {
     '$replaceRoot': {
       'newRoot': '$orgTps'
@@ -147,7 +155,8 @@ const getAggPipeline = ({
         '$arrayElemAt': [
           '$coverage', 0
         ]
-      }
+      },
+      'project': 1
     }
   }, {
     '$project': {
@@ -157,7 +166,8 @@ const getAggPipeline = ({
       'population': '$population.name',
       'line': '$line.name',
       'book': '$book.name',
-      'coverage': '$coverage.name'
+      'coverage': '$coverage.name',
+      'project': 1
     }
   },
   (order && order.length)
@@ -165,10 +175,9 @@ const getAggPipeline = ({
     : {}
 ]
 
-const getSortObjFromConfig = orderConfig => {
-  return orderConfig.reduce((acc, { key, direction }) => {
+const getSortObjFromConfig = orderConfig => orderConfig
+  .reduce((acc, { key, direction }) => {
     acc[key] = direction
 
     return acc
   }, {})
-}
