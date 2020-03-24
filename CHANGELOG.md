@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - `Orion`: Created new Pathways Accounts page that features BOM modal with the `useBom` hook
 - `Polaris`: Built reusable components - `Sidebar`, `Modal`, `FieldsSectionCard`, `FieldLabel` and `Input`
+- `Backend`: Added projectPtps endpoint.
 
 ### Changed
 - `Polaris`: upgraded all packages to the latest minor/patch versions (no major upgrades needed)

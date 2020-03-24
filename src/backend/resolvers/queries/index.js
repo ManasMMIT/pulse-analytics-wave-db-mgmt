@@ -17,6 +17,7 @@ const workbooks = require('./workbooks')
 const singlePayerProject = require('./singlePayerProject')
 const payerProjectsList = require('./payerProjectsList')
 const treatmentPlans = require('./treatmentPlans')
+const projectPtps = require('./projectPtps')
 
 module.exports = {
   collections,
@@ -38,4 +39,5 @@ module.exports = {
   singlePayerProject,
   payerProjectsList,
   treatmentPlans,
+  projectPtps,
 }
