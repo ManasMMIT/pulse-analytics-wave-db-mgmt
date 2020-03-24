@@ -35,7 +35,7 @@ const getAggPipeline = ({
     ? { '$match': { '_id': ObjectId(projectId) } }
     : null
 
-  const skipStage = skip && !matchStage
+  const skipStage = skip
     ? { '$skip': skip }
     : null
 
