@@ -9,20 +9,21 @@ import {
 
 import PayerProjectSidebar from './PayerProjectSidebar'
 import PayerHistoricalImport from './PayerHistoricalImport'
+import PayerProjectSetup from '../PayerProjectSetup'
 
 const sidebarConfig = [
   { label: 'Import Historical Data', component: PayerHistoricalImport },
-  { label: 'Project Setup', component: () => <div>Project Setup</div> },
+  { label: 'Project Setup', component: PayerProjectSetup },
   { label: 'Payer Project Treatment Plan', component: () => <div>Payer Project Treatment Plan</div> },
 ].map(({ ...item }) => ({
   ...item,
   link: _.kebabCase(item.label)
 }))
 
-const generateRoutes = matchUrl => ({ label, link, component }) => (
+const generateRoutes = matchPath => ({ label, link, component }) => (
   <Route
     key={`route-${ label }`}
-    path={`${ matchUrl }/${ link }`}
+    path={`${ matchPath }/${ link }`}
     component={component}
   />
 )
