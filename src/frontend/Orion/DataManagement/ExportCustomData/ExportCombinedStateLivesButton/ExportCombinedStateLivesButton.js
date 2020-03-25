@@ -57,7 +57,11 @@ const ExportCombinedStateLivesButton = ({
 
   const isDisabled = (_.isEmpty(exportData) || loading)
 
-  const isDisabledBecauseNoDataToExport = (_.isEmpty(exportData) && !loading)
+  const isDisabledBecauseNoDataToExport = (
+    !loading
+    && data !== undefined
+    && _.isEmpty(data.payerCombinedStateLives)
+  )
 
   return (
     <>
