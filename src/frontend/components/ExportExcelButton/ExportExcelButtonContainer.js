@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useMutation, useQuery } from '@apollo/react-hooks'
 import PropTypes from 'prop-types'
 import _ from 'lodash'
@@ -68,7 +68,17 @@ const ExportExcelButtonContainer = ({
   children,
   sheetName,
 }) => {
-  const [finalFilename, setFinalFilename] = useState(filename)
+  const user = JSON.parse(localStorage.getItem('user'))
+
+  const formattedDate = formatDateTimeDotted(new Date())
+
+  const finalFileName = `${filename}_${formattedDate}_${user.name}`
+
+  const [finalFilename, setFinalFilename] = useState(finalFileName)
+
+  useEffect(() => {
+    setFinalFilename(finalFileName)
+  }, [filename])
 
   const dataIds = data.reduce((acc, { _id }) => {
     // ? data comes in with empty rows
@@ -136,13 +146,7 @@ const ExportExcelButtonContainer = ({
     }
   })
 
-  const user = JSON.parse(localStorage.getItem('user'))
-
-  const formattedDate = formatDateTimeDotted(new Date())
-
   const backupExportWithTimestamp = () => {
-    const finalFileName = `${filename}_${formattedDate}_${user.name}`
-
     setFinalFilename(finalFileName)
 
     backupExport({
