@@ -2,12 +2,12 @@ import React, { useState, useEffect } from 'react'
 import { useLazyQuery } from '@apollo/react-hooks'
 import _ from 'lodash'
 
-import ExportExcelButton from '../../../components/ExportExcelButton'
+import ExportExcelButton from '../../../../components/ExportExcelButton'
 
 // TODO 1: send treatmentPlan to backend resolver for data
 import {
   GET_PAYER_COMBINED_DRG_STATE_LIVES
-} from './../../../api/queries'
+} from './../../../../api/queries'
 
 
 // TODO 2: disable button if
