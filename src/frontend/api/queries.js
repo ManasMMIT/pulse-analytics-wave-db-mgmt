@@ -537,11 +537,21 @@ export const GET_WORKBOOKS = gql`
 `
 
 export const GET_PAYER_PROJECTS_LIST = gql`
- query getPayerProjectsList {
-   payerProjectsList {
-     _id
-     name
-   }
+  query getPayerProjectsList {
+    payerProjectsList {
+       _id
+      name
+    }
+ }
+`
+
+export const GET_SINGLE_PAYER_PROJECT = gql`
+  query getSinglePayerProject($projectId: String) {
+    singlePayerProject(projectId: $projectId) {
+       _id
+      name
+      timestamps
+    }
  }
 `
 

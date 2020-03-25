@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
 
 import ImportSection from './ImportSection'
@@ -15,11 +16,14 @@ const SectionWrapper = styled.div({
   height: '50%'
 })
 
-const PayerHistoricalImport = () => {
+const PayerHistoricalImport = ({
+  match,
+}) => {
+  const { projectId } = match.params
   return (
     <PayerHistoricalImportWrapper>
       <SectionWrapper>
-        <ImportSection />
+        <ImportSection projectId={projectId} />
         <div>
           TODO: Timestamp list
         </div>
@@ -29,6 +33,10 @@ const PayerHistoricalImport = () => {
       </SectionWrapper>
     </PayerHistoricalImportWrapper>
   )
+}
+
+PayerHistoricalImport.propTypes = {
+  match: PropTypes.object.isRequired,
 }
 
 export default PayerHistoricalImport

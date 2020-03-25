@@ -34,7 +34,7 @@ const queries = gql`
     workbooks: [Workbook]
     bomSchema(boId: ID): JSON
 
-    singlePayerProject(projectId: ID): SinglePayerProject
+    singlePayerProject(projectId: String): SinglePayerProject
     payerProjectsList: [PayerProjectsList]
 
     projectPtps(input: ProjectPtpsInput!): [ProjectPtp]

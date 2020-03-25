@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import _ from 'lodash'
+
 import {
   Route,
   Switch,
@@ -28,9 +29,9 @@ const generateRoutes = matchUrl => ({ label, link, component }) => (
 
 const PayerProject = ({
   match,
-  location
+  location,
 }) => {
-  const { url } = match
+  const { path } = match
 
   return (
     <>
@@ -40,7 +41,7 @@ const PayerProject = ({
         sidebarConfig={sidebarConfig}
       />
       <Switch>
-        { sidebarConfig.map(generateRoutes(url)) }
+        { sidebarConfig.map(generateRoutes(path)) }
       </Switch>
     </>
   )
