@@ -24,41 +24,59 @@ const ExportCombinedStateLivesButton = ({
 
   const [
     loadCombinedDrgStateLivesData,
-    { loading }
+    { data, loading }
   ] = useLazyQuery(
     GET_PAYER_COMBINED_DRG_STATE_LIVES,
     {
       variables: { treatmentPlan },
-      onCompleted: data => {
-        if (_.isEmpty(data.payerCombinedStateLives[0])) {
-          setExportData([])
-        } else if (data.payerCombinedStateLives[0]) {
-
-          const formattedDataForExport = getCombinedStateLivesExportData(
-            data.payerCombinedStateLives[0],
-            SOURCE,
-            TERRITORY_TYPE,
-          )
-
-          setExportData(formattedDataForExport)
-        }
-      }
     }
   )
+
+  // ! careful balancing act between useEffects...
 
   useEffect(() => {
     if (!_.isEmpty(treatmentPlan)) loadCombinedDrgStateLivesData()
   }, [treatmentPlan])
 
+  useEffect(() => {
+    if (!loading && data) {
+
+      if (_.isEmpty(data.payerCombinedStateLives[0])) {
+        setExportData([])
+      } else if (data.payerCombinedStateLives[0]) {
+        const formattedDataForExport = getCombinedStateLivesExportData(
+          data.payerCombinedStateLives[0],
+          SOURCE,
+          TERRITORY_TYPE,
+        )
+
+        setExportData(formattedDataForExport)
+      }
+    }
+  }, [loading, data])
+
+  const isDisabled = (_.isEmpty(exportData) || loading)
+
+  const isDisabledBecauseNoDataToExport = (_.isEmpty(exportData) && !loading)
+
   return (
-    <ExportExcelButton
-      data={exportData}
-      isDisabled={_.isEmpty(exportData) || loading}
-      filename={`${SOURCE}_Lives-${ treatmentPlanLabel }`}
-      sheetName={'State Sheet'}
-    >
-      { loading ? <Spinner /> : 'Export State Sheet' }
-    </ExportExcelButton>
+    <>
+      <ExportExcelButton
+        data={exportData}
+        isDisabled={isDisabled}
+        filename={`${SOURCE}_Lives-${ treatmentPlanLabel }`}
+        sheetName={'State Sheet'}
+      >
+        { loading ? <Spinner /> : 'Export State Sheet' }
+      </ExportExcelButton>
+      {
+        isDisabledBecauseNoDataToExport && (
+          <div style={{ color: 'red' }}>
+            This treatment plan does not have state lives data
+          </div>
+        )
+      }
+    </>
   )
 }
 
