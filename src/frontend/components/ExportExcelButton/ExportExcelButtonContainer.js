@@ -66,6 +66,7 @@ const ExportExcelButtonContainer = ({
   isDisabled,
   createBackup,
   children,
+  sheetName,
 }) => {
   const [finalFilename, setFinalFilename] = useState(filename)
 
@@ -87,7 +88,7 @@ const ExportExcelButtonContainer = ({
   )
 
   let dataWithMetaFields = data
-  if (!isMetaDataLoading) {
+  if (!isMetaDataLoading && createBackup) {
     const { organizationMeta } = metaData
     dataWithMetaFields = getOrgsWithMetaData(data, organizationMeta)
   }
@@ -95,7 +96,7 @@ const ExportExcelButtonContainer = ({
   /* convert from json to workbook */
   const worksheet = XLSX.utils.json_to_sheet(dataWithMetaFields)
   const workbook = XLSX.utils.book_new()
-  XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet1')
+  XLSX.utils.book_append_sheet(workbook, worksheet, sheetName || 'Sheet1')
 
   const wbOut = XLSX.write(workbook, { bookType: 'xlsx', type: 'binary' })
 
@@ -108,16 +109,20 @@ const ExportExcelButtonContainer = ({
     },
   })
 
+  const saveFile = () => {
+    const blob = new Blob(
+      [s2ab(wbOut)],
+      {
+        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+      }
+    )
+
+    saveAs(blob, finalFilename + '.xlsx')
+  }
+
   const [backupExport, { loading: isBackingUp, error }] = useMutation(BACKUP_EXPORT, {
     onCompleted: async () => {
-      const blob = new Blob(
-        [s2ab(wbOut)],
-        {
-          type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-        }
-      )
-      
-      saveAs(blob, finalFilename + '.xlsx')
+      saveFile()
 
       writeMetaData({
         refetchQueries: [
@@ -150,7 +155,7 @@ const ExportExcelButtonContainer = ({
     })
   }
 
-  const onClick = createBackup ? backupExportWithTimestamp : undefined
+  const onClick = createBackup ? backupExportWithTimestamp : saveFile
 
   return (
     <div>
