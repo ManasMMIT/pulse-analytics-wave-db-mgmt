@@ -5,7 +5,7 @@ const uploadSheetTypeDef = gql`
     data: JSON!
     wb: String!
     sheet: String!
-    timestamp: DateTime
+    timestamp: Date
     projectId: ID
   }
 `

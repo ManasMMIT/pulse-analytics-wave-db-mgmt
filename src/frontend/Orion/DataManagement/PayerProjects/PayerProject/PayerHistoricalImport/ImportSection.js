@@ -1,8 +1,11 @@
 import React, { useState, useRef } from 'react'
 import XLSX from 'xlsx'
 import PropTypes from 'prop-types'
+import { useMutation } from '@apollo/react-hooks'
 
 import styled from '@emotion/styled'
+
+import { UPLOAD_SHEET } from '../../../../../api/mutations'
 
 import Spacing from '../../../../../utils/spacing'
 import FontSpace from '../../../../../utils/fontspace'
@@ -54,6 +57,18 @@ const ImportSection = ({
   const [sheetNames, setSheetNames] = useState([])
   const [timestamp, setTimestamp] = useState(null)
   
+  const [uploadSheet] = useMutation(UPLOAD_SHEET, {
+    onCompleted: ({ uploadSheet: importFeedback }) => {
+      alert(importFeedback.join('\n'))
+      // setLoading(false)
+      },
+      onError: errorMessage => {
+        alert(errorMessage)
+        // setLoading(false)
+        // setErrors(errorMessage.toString())
+      },
+  })
+
   const onFileAdded = () => {
     setIsWorkbookUploaded(false)
     const file = fileInputRef.current.files[0]
@@ -78,9 +93,6 @@ const ImportSection = ({
   }
 
   const handleSubmit = () => {
-    const fileName = fileInputRef.current.files[0].name
-    const fileNameWithoutExt = fileName.replace('.xlsx', '')
-    
     const sheetData = []
     
     sheetNames.forEach(sheet => {
@@ -88,7 +100,7 @@ const ImportSection = ({
       const json = XLSX.utils.sheet_to_json(selectedSheetObj, { blankrows: true, defval: null })
 
       sheetData.push({
-        wb: fileNameWithoutExt,
+        wb: 'Payer Data Master',
         sheet,
         data: json,
         timestamp,
@@ -96,8 +108,9 @@ const ImportSection = ({
       })
     })
 
-    // TODO: Wire in import mutation
     console.log(sheetData)
+
+    uploadSheet({ variables: { input: sheetData } })
   }
 
   const shouldDisableButton = !isWorkbookUploaded || !timestamp

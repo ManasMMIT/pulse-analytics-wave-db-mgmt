@@ -1,6 +1,6 @@
 const ProjectHistoryManager = require('./ProjectHistoryManager')
 
-const PayerHistoryManager = require('./PayerHistoryManager')
+// const PayerHistoryManager = require('./PayerHistoryManager')
 
 // ? FOR FUTURE: random global tracker to indicate when to trigger combo materialization functions
 // let tracker = 0
@@ -22,6 +22,16 @@ const importHistoricalProjectData = async (
   { pulseCoreDb, pulseDevDb, mongoClient },
   importFeedback, // TODO: add success messages to importFeedback array on success
 ) => {
+  if (
+    ![
+      'Quality of Access',
+      'Policy Links',
+      // 'Additional Criteria',
+    ].includes(sheet)
+  ) {
+    throw Error('Payer data import only accepts "Quality of Access" and "Policy Links" right now')
+  }
+
   const projectHistoryManager = new ProjectHistoryManager({
     projectId,
     pulseCore: pulseCoreDb,
@@ -37,23 +47,23 @@ const importHistoricalProjectData = async (
     // throw new Error(e.message + '\n' + 'Successful stuff:' + importFeedback.join('\n'))
   }
 
-  await projectHistoryManager
-    .upsertOrgTpHistory({
-      sheetData: data,
-      sheetName: sheet,
-      timestamp,
-    })
+  // await projectHistoryManager
+  //   .upsertOrgTpHistory({
+  //     sheetData: data,
+  //     sheetName: sheet,
+  //     timestamp,
+  //   })
 
-  // ? TODO: Matt builds up success string and adds memoized importFeedback array
+  // // ? TODO: Matt builds up success string and adds memoized importFeedback array
 
-  // ? let successString = `${wb}/${sheet} successfully updated in CORE DB for ${timestamp}`
+  // // ? let successString = `${wb}/${sheet} successfully updated in CORE DB for ${timestamp}`
 
-  const payerHistoryManager = new PayerHistoryManager({
-    pulseDev: pulseDevDb,
-    pulseCore: pulseCoreDb,
-  })
+  // const payerHistoryManager = new PayerHistoryManager({
+  //   pulseDev: pulseDevDb,
+  //   pulseCore: pulseCoreDb,
+  // })
 
-  await payerHistoryManager.materializeNonLivesCollections()
+  // await payerHistoryManager.materializeNonLivesCollections()
 
   // ? successString += 'successfully materialized data in DEV DB \n'
   // importFeedback.push(successString)

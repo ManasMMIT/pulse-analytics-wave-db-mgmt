@@ -249,9 +249,9 @@ class ProjectHistoryManager {
       }
     */
 
-    const isPolicyLinksSheet = /PolicyLinks/.test(this.sheetName)
-    const isQualityAccessSheet = /QualityAccess/.test(this.sheetName)
-    const isAdditionalCriteriaSheet = /AdditionalCriteria/.test(this.sheetName)
+    const isPolicyLinksSheet = /Policy Links/.test(this.sheetName)
+    const isQualityAccessSheet = /Quality of Access/.test(this.sheetName)
+    const isAdditionalCriteriaSheet = /Additional Criteria/.test(this.sheetName)
 
     const dataForOps = this.getFilteredAndEnrichedSheetData()
 
@@ -345,7 +345,7 @@ class ProjectHistoryManager {
 
       Therefore, matching orgTpIds requires a different hash of fields to match treatmentPlans.
     */
-    const isPolicyLinksSheet = /PolicyLinks/.test(sheetName)
+    const isPolicyLinksSheet = /Policy Links/.test(sheetName)
 
     this.selectedTpHasher = isPolicyLinksSheet
       ? this.POLICY_LINKS_hashTpParts
@@ -369,7 +369,7 @@ class ProjectHistoryManager {
 
     // await Promise.all(ops)
 
-    // return 'success'
+    return 'success'
   }
 }
 
