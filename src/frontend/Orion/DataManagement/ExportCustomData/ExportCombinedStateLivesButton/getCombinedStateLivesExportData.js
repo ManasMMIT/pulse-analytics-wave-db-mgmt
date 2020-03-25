@@ -1,18 +1,5 @@
 import _ from 'lodash'
 
-// ! Stolen from wave-app; probably should be moved to util/ directory
-const percentageFormatter = (value, decimals = 0) => (
-  // #toFixed may result in imperfect rounding,
-  // example: 859.385 doesn't round correctly for two decimal places
-  [undefined, null].includes(value) ? null : `${(value * 100).toFixed(decimals)}%`
-)
-
-const percentageFormatterToNDecimalPlaces = place => value => (
-  percentageFormatter(value, place)
-)
-
-const percentFormatterTo1DecimalPlace = percentageFormatterToNDecimalPlaces(1)
-
 export default (combinedStateLivesDoc, source, territoryType) => {
   const {
     statesData,
@@ -58,3 +45,16 @@ export default (combinedStateLivesDoc, source, territoryType) => {
     }
   })
 }
+
+// ! Stolen from wave-app; probably should be moved to util/ directory
+const percentageFormatter = (value, decimals = 0) => (
+  // #toFixed may result in imperfect rounding,
+  // example: 859.385 doesn't round correctly for two decimal places
+  [undefined, null].includes(value) ? null : `${(value * 100).toFixed(decimals)}%`
+)
+
+const percentageFormatterToNDecimalPlaces = place => value => (
+  percentageFormatter(value, place)
+)
+
+const percentFormatterTo1DecimalPlace = percentageFormatterToNDecimalPlaces(1)
