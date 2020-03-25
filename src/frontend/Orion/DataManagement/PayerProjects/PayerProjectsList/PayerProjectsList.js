@@ -6,6 +6,7 @@ import { GET_PAYER_PROJECTS_LIST } from '../../../../api/queries'
 import Spinner from '../../../../Phoenix/shared/Spinner'
 import { Colors, Spacing } from '../../../../utils/pulseStyles'
 import ProjectPlacard from './ProjectPlacard'
+import CreateProjectButton from './CreateProjectButton'
 
 const PlacardContainer = styled.div({
   display: 'flex',
@@ -20,6 +21,9 @@ const Wrapper = styled.div({
 
 const Header = styled.div({
   margin: Spacing.NORMAL,
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'center',
 })
 
 const generatePlacards = ({ _id, name, }) => {
@@ -38,7 +42,12 @@ const PayerProjectsList = props => {
 
   return (
     <Wrapper>
-      <Header>Payer Projects</Header>
+      <Header>
+        <div>
+          Payer Projects
+        </div>
+        <CreateProjectButton/>
+      </Header>
       <PlacardContainer>
         { data.payerProjectsList.map(generatePlacards)}
       </PlacardContainer>
