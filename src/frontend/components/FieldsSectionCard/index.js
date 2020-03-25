@@ -37,7 +37,7 @@ const FieldsSectionCard = ({
 
 FieldsSectionCard.propTypes = {
   label: PropTypes.string.isRequired,
-  fields: PropTypes.array.isRequired,
+  fields: PropTypes.array,
   containerStyle: PropTypes.object,
   sectionLabelStyle: PropTypes.object,
   fieldLabelStyle: PropTypes.object,
