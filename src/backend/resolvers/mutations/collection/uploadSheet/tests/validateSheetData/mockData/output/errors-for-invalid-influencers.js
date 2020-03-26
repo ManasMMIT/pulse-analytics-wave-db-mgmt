@@ -111,10 +111,10 @@ module.exports = [
       ],
       "indicationCategory": "Genitourinary, Head & Neck, Thyroid",
       "priority": "Low",
-      "startDate": "",
-      "alertDate": "",
-      "alertType": "",
-      "alertDescription": ""
+      "startDate": null,
+      "alertDate": null,
+      "alertType": null,
+      "alertDescription": null
     }
   },
   {
@@ -229,10 +229,10 @@ module.exports = [
       ],
       "indicationCategory": "Genitourinary, Head & Neck, Thyroid",
       "priority": "Low",
-      "startDate": "",
-      "alertDate": "",
-      "alertType": "",
-      "alertDescription": ""
+      "startDate": null,
+      "alertDate": null,
+      "alertType": null,
+      "alertDescription": null
     }
   },
   {
@@ -346,10 +346,10 @@ module.exports = [
       ],
       "indicationCategory": "Genitourinary, Melanoma / Skin",
       "priority": "Medium",
-      "startDate": "",
-      "alertDate": "",
-      "alertType": "",
-      "alertDescription": ""
+      "startDate": null,
+      "alertDate": null,
+      "alertType": null,
+      "alertDescription": null
     }
   },
   {
@@ -463,10 +463,10 @@ module.exports = [
       ],
       "indicationCategory": "Genitourinary, Melanoma / Skin",
       "priority": "Medium",
-      "startDate": "",
-      "alertDate": "",
-      "alertType": "",
-      "alertDescription": ""
+      "startDate": null,
+      "alertDate": null,
+      "alertType": null,
+      "alertDescription": null
     }
   },
   {
@@ -580,10 +580,10 @@ module.exports = [
       ],
       "indicationCategory": "Genitourinary, Melanoma / Skin",
       "priority": "Low",
-      "startDate": "",
-      "alertDate": "",
-      "alertType": "",
-      "alertDescription": ""
+      "startDate": null,
+      "alertDate": null,
+      "alertType": null,
+      "alertDescription": null
     }
   },
   {
@@ -697,10 +697,10 @@ module.exports = [
       ],
       "indicationCategory": "Genitourinary, Melanoma / Skin",
       "priority": "Low",
-      "startDate": "",
-      "alertDate": "",
-      "alertType": "",
-      "alertDescription": ""
+      "startDate": null,
+      "alertDate": null,
+      "alertType": null,
+      "alertDescription": null
     }
   },
   {
@@ -814,10 +814,10 @@ module.exports = [
       ],
       "indicationCategory": "Genitourinary, Sarcoma",
       "priority": "High",
-      "startDate": "",
-      "alertDate": "",
-      "alertType": "",
-      "alertDescription": ""
+      "startDate": null,
+      "alertDate": null,
+      "alertType": null,
+      "alertDescription": null
     }
   },
   {
@@ -931,10 +931,10 @@ module.exports = [
       ],
       "indicationCategory": "Genitourinary, Sarcoma",
       "priority": "High",
-      "startDate": "",
-      "alertDate": "",
-      "alertType": "",
-      "alertDescription": ""
+      "startDate": null,
+      "alertDate": null,
+      "alertType": null,
+      "alertDescription": null
     }
   },
   {
@@ -1048,10 +1048,10 @@ module.exports = [
       ],
       "indicationCategory": "Genitourinary, Sarcoma",
       "priority": "High",
-      "startDate": "",
-      "alertDate": "",
-      "alertType": "",
-      "alertDescription": ""
+      "startDate": null,
+      "alertDate": null,
+      "alertType": null,
+      "alertDescription": null
     }
   },
   {
@@ -1159,10 +1159,10 @@ module.exports = [
       ],
       "indicationCategory": "N/A",
       "priority": "Low",
-      "startDate": "",
-      "alertDate": "",
-      "alertType": "",
-      "alertDescription": ""
+      "startDate": null,
+      "alertDate": null,
+      "alertType": null,
+      "alertDescription": null
     }
   }
 ]

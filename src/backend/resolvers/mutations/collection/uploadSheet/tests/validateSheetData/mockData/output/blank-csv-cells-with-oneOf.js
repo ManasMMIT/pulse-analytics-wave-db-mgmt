@@ -13,10 +13,10 @@ module.exports = [
     "indication": [""],
     "indicationCategory": "Genitourinary, Head & Neck, Thyroid",
     "priority": "Low",
-    "startDate": '',
-    "alertDate": '',
-    "alertType": '',
-    "alertDescription": ''
+    "startDate": null,
+    "alertDate": null,
+    "alertType": null,
+    "alertDescription": null
   }
 ]
 
