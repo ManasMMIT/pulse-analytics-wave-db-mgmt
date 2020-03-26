@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - `Orion`: Created new Pathways Accounts page that features BOM modal with the `useBom` hook
 - `Polaris`: Built reusable components - `Sidebar`, `Modal`, `FieldsSectionCard`, `FieldLabel` and `Input`
+- `Polaris`: Created hotfix script for easier setting of regional breakdown for a role and its users.
 - `Backend`: Added projectPtps endpoint.
 - `Orion`: Add export payerCombinedStateLives DRG state data button on custom exports page.
 
