@@ -46,7 +46,7 @@ module.exports = async ({
     && thing.year
   ))
 
-  const policyLinksGroupedbyTpParts = _.groupBy(
+  const policyLinksGroupedByTpParts = _.groupBy(
     onlyPolicyLinksWithAllFields,
     thing => [thing.slug, thing.regimen, thing.book, thing.coverage, thing.month, thing.year].join('|')
   )
@@ -77,10 +77,44 @@ module.exports = async ({
   for (let uniqOrgTpTimeString in groupedOrgTpsMonthYearDocs) {
     const comboDocs = groupedOrgTpsMonthYearDocs[uniqOrgTpTimeString]
 
-    const flatDoc = Object.assign({}, ...comboDocs)
+    const flatDoc = comboDocs.reduce((acc, { criteria, criteriaNotes, dateTracked, restrictionLevel, ...doc }) => {
+
+      if (criteria) {
+        const correctIsoFormat = format(new Date(doc.year, doc.month - 1, 1), 'yyyy-MM-dd')
+        const timestamp = new Date(correctIsoFormat)
+
+        const additionalCriteriaSubDoc = {
+          criteria,
+          criteriaNotes,
+          dateTracked,
+          restrictionLevel,
+
+          // ! keeping dupe fields in this subdoc, as seen in payerHistoricalCombinedData
+          project: doc.project,
+          slug: doc.slug,
+          organization: doc.organization,
+          indication: doc.indication,
+          regimen: doc.regimen,
+          book: doc.book,
+          coverage: doc.coverage,
+          line: doc.line,
+          population: doc.population,
+          month: doc.month,
+          year: doc.year,
+          timestamp,
+          createdOn: doc.createdOn,
+        }
+
+        acc.additionalCriteria
+          ? acc.additionalCriteria.push(additionalCriteriaSubDoc)
+          : acc.additionalCriteria = [additionalCriteriaSubDoc]
+      }
+
+      return Object.assign({}, acc, doc)
+    }, { additionalCriteria: null })
 
     const policyLinkHash = [flatDoc.slug, flatDoc.regimen, flatDoc.book, flatDoc.coverage, flatDoc.month, flatDoc.year].join('|')
-    const policyLinkData = policyLinksGroupedbyTpParts[policyLinkHash] || []
+    const policyLinkData = policyLinksGroupedByTpParts[policyLinkHash] || []
 
     const links = policyLinkData[0]
       ? {
@@ -137,13 +171,7 @@ module.exports = async ({
       timestamp,
       project: flatDoc.project,
       policyLinkData: links,
-      additionalCriteriaData: {
-        criteria: flatDoc.criteria,
-        criteriaNotes: flatDoc.criteriaNotes,
-        restrictionLevel: flatDoc.restrictionLevel,
-        subPopulation: flatDoc.subPopulation,
-        lineOfTherapy: flatDoc.lineOfTherapy,
-      }
+      additionalCriteriaData: flatDoc.additionalCriteria
     }
 
     docs.push(doc)
