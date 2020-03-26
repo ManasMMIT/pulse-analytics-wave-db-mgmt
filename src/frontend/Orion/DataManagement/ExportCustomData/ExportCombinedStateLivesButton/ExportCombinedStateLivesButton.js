@@ -11,6 +11,8 @@ import {
 
 import getCombinedStateLivesExportData from './getCombinedStateLivesExportData'
 
+import { ErrorMessage } from '../styledComponents'
+
 const SOURCE = 'DRG'
 const TERRITORY_TYPE = 'states'
 
@@ -64,7 +66,7 @@ const ExportCombinedStateLivesButton = ({
   )
 
   return (
-    <>
+    <div style={{ marginTop: 12 }}>
       <ExportExcelButton
         data={exportData}
         isDisabled={isDisabled}
@@ -75,12 +77,12 @@ const ExportCombinedStateLivesButton = ({
       </ExportExcelButton>
       {
         isDisabledBecauseNoDataToExport && (
-          <div style={{ color: 'red' }}>
-            This treatment plan does not have state lives data
-          </div>
+          <ErrorMessage>
+            This treatment plan does not have state lives data. Select another treatment plan or contact Pulse for more details.
+          </ErrorMessage>
         )
       }
-    </>
+    </div>
   )
 }
 

@@ -3,8 +3,15 @@ import { useQuery } from '@apollo/react-hooks'
 import Select from 'react-select'
 
 import { GET_SOURCE_TREATMENT_PLANS } from '../../../api/queries'
+import { customSelectStyles } from './../../../components/customSelectStyles'
 
 import ExportCombinedStateLivesButton from './ExportCombinedStateLivesButton'
+
+import {
+  SectionContainer,
+  SectionHeader,
+  SelectLabel,
+} from './styledComponents'
 
 const ExportRegionalBreakdown = () => {
   const [selectedTreatmentPlan, selectTreatmentPlan] = useState({})
@@ -26,15 +33,16 @@ const ExportRegionalBreakdown = () => {
   }))
 
   return (
-    <div style={{ border: '1px solid black', padding: 24 }}>
-      <div>DOWNLOAD REGIONAL TARGETING DATA</div>
+    <SectionContainer>
+      <SectionHeader>Regional Targeting Export</SectionHeader>
 
       <div style={{ marginTop: 24 }}>
-        <div>Select a treatment plan:</div>
+        <SelectLabel>Select a treatment plan:</SelectLabel>
         <Select
           value={{ value: selectedTreatmentPlan, label: getTpLabel(selectedTreatmentPlan) }}
           onChange={({ value }) => selectTreatmentPlan(value)}
           options={treatmentPlansOptions}
+          styles={customSelectStyles}
         />
 
         <ExportCombinedStateLivesButton
@@ -42,7 +50,7 @@ const ExportRegionalBreakdown = () => {
         />
       </div>
 
-    </div>
+    </SectionContainer>
   )
 }
 
