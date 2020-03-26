@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
 
 import ImportSection from './ImportSection'
+import TimestampSection from './TimestampSection'
 
 const PayerHistoricalImportWrapper = styled.div({
   display: 'flex',
@@ -22,11 +23,9 @@ const PayerHistoricalImport = ({
   const { projectId } = match.params
   return (
     <PayerHistoricalImportWrapper>
-      <SectionWrapper>
+      <SectionWrapper style={{ maxHeight: 500 }}>
         <ImportSection projectId={projectId} />
-        <div>
-          TODO: Timestamp list
-        </div>
+        <TimestampSection projectId={projectId} />
       </SectionWrapper>
       <SectionWrapper>
         TODO: Error/Warning Table placeholder
