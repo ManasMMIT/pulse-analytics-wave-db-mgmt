@@ -249,6 +249,7 @@ const queries = gql`
     _id: ID!
     slug: String
     organization: String
+    organizationTiny: String
     indication: String
     population: String
     line: String

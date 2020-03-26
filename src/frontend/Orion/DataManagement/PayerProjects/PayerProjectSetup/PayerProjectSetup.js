@@ -33,7 +33,7 @@ const PayerProjectSetup = props => {
   return (
     <Wrapper>
       <ProjectInfo name={project.name} />
-      <ProjectContentConfiguration />
+      <ProjectContentConfiguration projectId={projectId} />
       <ConflictedTreatmentPlans />
     </Wrapper>
   )

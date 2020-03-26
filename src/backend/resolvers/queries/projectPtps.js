@@ -172,6 +172,7 @@ const getAggPipeline = ({
       '$project': {
         'slug': '$organization.slug',
         'organization': '$organization.organization',
+        'organizationTiny': '$organization.organizationTiny',
         'indication': '$indication.name',
         'regimen': '$regimen.name',
         'population': '$population.name',

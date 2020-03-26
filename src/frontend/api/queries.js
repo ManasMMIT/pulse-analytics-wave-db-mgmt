@@ -575,6 +575,7 @@ export const GET_PROJECT_PTPS = gql`
       _id
       slug
       organization
+      organizationTiny
       indication
       population
       line
