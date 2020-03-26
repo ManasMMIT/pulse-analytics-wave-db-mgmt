@@ -21,7 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `Orion`: Add export payerCombinedStateLives DRG state data button on custom exports page.
 
 ### Changed
-- `Polaris`: upgraded all packages to the latest minor/patch versions (no major upgrades needed)
+- `Polaris`: upgraded packages to the latest minor/patch versions (keep papaparse the version it was due to major upgrade not being backward compatible)
 - `Orion`: Refactored the `useAquila` hook to fetch filter options and placard configs separately.
 - `Orion`: Change sheet management CRUD on oneOf to only accept quoted, comma-delimited strings but still persist to backend as array of strings
 

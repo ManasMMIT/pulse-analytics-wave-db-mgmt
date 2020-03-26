@@ -41,7 +41,7 @@
     "node-fetch": "^2.4.1",
     "nodemon": "^2.0.2",
     "nunjucks": "^3.2.1",
-    "papaparse": "^5.1.1",
+    "papaparse": "4.6.3",
     "polished": "^3.4.4",
     "qs": "^6.9.1",
     "query-string": "^6.11.1",
