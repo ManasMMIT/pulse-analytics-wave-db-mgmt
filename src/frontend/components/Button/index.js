@@ -18,6 +18,7 @@ const baseButtonStyle = {
   padding: `${Spacing.S2} ${Spacing.S3}`,
   borderRadius: 4,
   fontWeight: 700,
+  cursor: 'pointer',
   whiteSpace: 'nowrap',
   ...FontSpace.FS2,
 }
@@ -89,9 +90,9 @@ const generateButtonContent = ({
         style={iconStyle}
         {...iconProps}
       />,
-      children 
+      children
     ]
-    
+
     return iconPosition === 'left' ? content : content.reverse()
   } else {
     return (
@@ -120,8 +121,8 @@ const Button = ({
     children
   })
 
-  const combinedButtonStyle = children 
-    ? buttonStyle 
+  const combinedButtonStyle = children
+    ? buttonStyle
     : { ...buttonStyle, padding: '7px 8px', lineHeight: 'normal' }
 
   return (
