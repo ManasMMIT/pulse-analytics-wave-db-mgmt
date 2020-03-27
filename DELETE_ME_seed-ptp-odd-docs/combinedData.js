@@ -63,6 +63,7 @@ module.exports = async pulseDev => {
       ? additionalCriteria
         .map(({ criteria, criteriaNote }) => [criteria, criteriaNote].join('|'))
         .sort()
+        .join('|')
       : ''
   ].join('|')
 
