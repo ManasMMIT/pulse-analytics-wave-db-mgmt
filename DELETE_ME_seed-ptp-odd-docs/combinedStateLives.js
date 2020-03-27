@@ -25,6 +25,6 @@ module.exports = async pulseDev => {
     db: pulseDev,
     comparer,
     oldCollectionName: 'payerCombinedStateLives',
-    newCollectionName: 'payerCombinedStateLives-MATT_TEST',
+    newCollectionName: 'payerCombinedStateLives-MATT_FIX',
   })
 }

@@ -41,14 +41,14 @@ module.exports = async pulseDev => {
     db: pulseDev,
     comparer,
     oldCollectionName: 'payerHistoricalAdditionalCriteria',
-    newCollectionName: 'payerHistoricalAdditionalCriteria-MATT_TEST',
+    newCollectionName: 'payerHistoricalAdditionalCriteria-MATT_FIX',
   })
 
   const historicalOp = getDiffDoc({
     db: pulseDev,
     comparer,
     oldCollectionName: 'payerHistoricalAdditionalCriteriaHt',
-    newCollectionName: 'payerHistoricalAdditionalCriteriaHt-MATT_TEST',
+    newCollectionName: 'payerHistoricalAdditionalCriteriaHt-MATT_FIX',
   })
 
   return Promise.all([
