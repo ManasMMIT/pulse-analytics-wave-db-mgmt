@@ -33,6 +33,7 @@ module.exports = async pulseDev => {
     tierRating,
     tierTotal,
     year,
+    additionalCriteria,
   }) => [
     access,
     accessTiny,
@@ -58,6 +59,9 @@ module.exports = async pulseDev => {
     tierRating,
     tierTotal,
     year,
+    additionalCriteria
+      ? additionalCriteria.map(({ criteria, criteriaNote }) => [criteria, criteriaNote].join('|'))
+      : ''
   ].join('|')
 
   return getDiffDoc({

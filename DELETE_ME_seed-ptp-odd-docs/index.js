@@ -4,7 +4,7 @@ const getAdditionalCriteriaDiffDocs = require('./additionalCriteria')
 const getPolicyLinkDiffDocs = require('./policyLinks')
 
 const getCombinedDataDocs = require('./combinedData')
-const getCombinedStateLivesDocs = require('./combinedStateLives')
+// const getCombinedStateLivesDocs = require('./combinedStateLives')
 
 const runDiffer = async () => {
   const dbs = await connectToMongoDb()
