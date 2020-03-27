@@ -60,7 +60,9 @@ module.exports = async pulseDev => {
     tierTotal,
     year,
     additionalCriteria
-      ? additionalCriteria.map(({ criteria, criteriaNote }) => [criteria, criteriaNote].join('|'))
+      ? additionalCriteria
+        .map(({ criteria, criteriaNote }) => [criteria, criteriaNote].join('|'))
+        .sort()
       : ''
   ].join('|')
 
