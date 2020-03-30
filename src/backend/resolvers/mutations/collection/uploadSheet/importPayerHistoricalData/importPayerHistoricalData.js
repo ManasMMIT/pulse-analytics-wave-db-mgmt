@@ -20,18 +20,8 @@ const importHistoricalProjectData = async (
     projectId,
   },
   { pulseCoreDb, pulseDevDb, mongoClient },
-  importFeedback, // TODO: add success messages to importFeedback array on success
+  importFeedback, // TODO: add success messages to importFeedback array on success (mutate this array)
 ) => {
-  if (
-    ![
-      'Quality of Access',
-      'Policy Links',
-      // 'Additional Criteria',
-    ].includes(sheet)
-  ) {
-    throw Error('Payer data import only accepts "Quality of Access" and "Policy Links" right now')
-  }
-
   const projectHistoryManager = new ProjectHistoryManager({
     projectId,
     pulseCore: pulseCoreDb,
@@ -44,15 +34,16 @@ const importHistoricalProjectData = async (
     })
   } catch(e) {
     throw new Error(e)
+    // TODO: eventually you'll have to report what was successful even if 1 out of 3 sheets failed to be imported
     // throw new Error(e.message + '\n' + 'Successful stuff:' + importFeedback.join('\n'))
   }
 
-  // await projectHistoryManager
-  //   .upsertOrgTpHistory({
-  //     sheetData: data,
-  //     sheetName: sheet,
-  //     timestamp,
-  //   })
+  await projectHistoryManager
+    .upsertOrgTpHistory({
+      sheetData: data,
+      sheetName: sheet,
+      timestamp,
+    })
 
   // // ? TODO: Matt builds up success string and adds memoized importFeedback array
 
