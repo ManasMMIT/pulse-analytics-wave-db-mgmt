@@ -80,29 +80,30 @@ module.exports = async ({
     const flatDoc = comboDocs.reduce((acc, { criteria, criteriaNotes, dateTracked, restrictionLevel, ...doc }) => {
 
       if (criteria) {
-        const correctIsoFormat = format(new Date(doc.year, doc.month - 1, 1), 'yyyy-MM-dd')
-        const timestamp = new Date(correctIsoFormat)
-
         const additionalCriteriaSubDoc = {
           criteria,
           criteriaNotes,
-          dateTracked,
           restrictionLevel,
 
-          // ! keeping dupe fields in this subdoc, as seen in payerHistoricalCombinedData
-          project: doc.project,
-          slug: doc.slug,
-          organization: doc.organization,
-          indication: doc.indication,
-          regimen: doc.regimen,
-          book: doc.book,
-          coverage: doc.coverage,
-          line: doc.line,
-          population: doc.population,
-          month: doc.month,
-          year: doc.year,
-          timestamp,
-          createdOn: doc.createdOn,
+          // ! this key isn't used anywhere in wave-app/wave-api; deeming it extranenous for now
+          // dateTracked,
+
+          // ! the following fields are in additionalCriteria subdoc in materialized payerHistoricalCombinedData but:
+          // ! A) are dupes of top-level fields; if they have to exist on this level in final materialized view, fine, but they shouldn't go into core
+          // ! B) aren't currently used -- and aren't expected to be used -- by anything in wave-app and wave-api
+          // project: doc.project,
+          // slug: doc.slug,
+          // organization: doc.organization,
+          // indication: doc.indication,
+          // regimen: doc.regimen,
+          // book: doc.book,
+          // coverage: doc.coverage,
+          // line: doc.line,
+          // population: doc.population,
+          // month: doc.month,
+          // year: doc.year,
+          // timestamp: new Date(format(new Date(doc.year, doc.month - 1, 1), 'yyyy-MM-dd')),
+          // createdOn: doc.createdOn,
         }
 
         acc.additionalCriteria

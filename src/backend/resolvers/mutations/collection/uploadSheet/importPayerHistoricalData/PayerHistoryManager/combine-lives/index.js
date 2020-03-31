@@ -34,7 +34,7 @@ const combineLives = async ({
     pulseDevDb.collection('payerHistoricalMmitNationalLives').find().toArray(),
     pulseCoreDb.collection('payerDrgNationalLivesTotals').find().toArray(),
     pulseCoreDb.collection('payerMmitNationalLivesTotals').find().toArray(),
-    payerHistoricalCombinedData || pulseDevDb.collection('payerHistoricalCombinedData-MATT_TEST').find().toArray()
+    payerHistoricalCombinedData || pulseDevDb.collection('payerHistoricalCombinedData').find().toArray(),
   ])
 
   console.log('Beginning data crunching for every treatment plan...')
@@ -100,13 +100,13 @@ const combineLives = async ({
   console.log('Data crunching completed; moving onto DB operations.')
 
   console.log(`Deleting all existing data in 'payerCombinedStateLives' collection...`)
-  await pulseDevDb.collection('payerCombinedStateLives-MATT_TEST').deleteMany()
+  await pulseDevDb.collection('payerCombinedStateLives').deleteMany()
   console.log('Deletion completed.')
 
   console.log(`Inserting new data into 'payerCombinedStateLives' collection...`)
   const insertionStartTime = new Date()
 
-  await pulseDevDb.collection('payerCombinedStateLives-MATT_TEST')
+  await pulseDevDb.collection('payerCombinedStateLives')
     .insertMany(payerDataWithLives, { ordered: false })
 
   const insertionEndTime = new Date()

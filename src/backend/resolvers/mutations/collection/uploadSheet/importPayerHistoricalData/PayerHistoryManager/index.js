@@ -1,18 +1,12 @@
 const combineLives = require('./combine-lives')
-const qualityAccessAndAddCriteriaOrgTpHistoryAggPip = require('./agg-pipelines/quality-access-addit-criteria-last-org-tp-history-agg-pip')
+const additionalCriteriaAggPip = require('./agg-pipelines/additional-criteria-ptp-pipeline')
+const qualityAccessAggPip = require('./agg-pipelines/quality-access-agg-pip')
 const policyLinkAggPipeline = require('./agg-pipelines/policy-link-agg-pipeline')
 
 const {
   formatQualityAccessDoc,
-  formatAdditionalCriteriaDoc,
   formatCombinedDataDoc,
 } = require('./formatters')
-
-const isValidAddCritDoc = ({ additionalCriteriaData }) => (
-  additionalCriteriaData && additionalCriteriaData.criteria
-)
-
-const isValidQualityAccessDoc = ({ accessData }) => accessData && accessData.access
 
 class PayerHistoryManager {
   constructor({ pulseDev, pulseCore }) {
@@ -25,18 +19,34 @@ class PayerHistoryManager {
   async getNonLivesCollectionDocs() {
     console.log('grabbing payer historical data')
 
-    const qualityAccessAndAdditionalCriteriaSixMonthOp = this.pulseCore
+    const qualityAccessSixMonthOp = this.pulseCore
       .collection('organizations.treatmentPlans.history')
       .aggregate(
-        qualityAccessAndAddCriteriaOrgTpHistoryAggPip(6),
+        qualityAccessAggPip(6),
         { allowDiskUse: true }
       )
       .toArray()
 
-    const qualityAccessAndAdditionalCriteriaOneMonthOp = this.pulseCore
+    const additCritSixMonthOp = this.pulseCore
       .collection('organizations.treatmentPlans.history')
       .aggregate(
-        qualityAccessAndAddCriteriaOrgTpHistoryAggPip(1),
+        additionalCriteriaAggPip(6),
+        { allowDiskUse: true }
+      )
+      .toArray()
+
+    const qualityAccessOneMonthOp = this.pulseCore
+      .collection('organizations.treatmentPlans.history')
+      .aggregate(
+        qualityAccessAggPip(1),
+        { allowDiskUse: true }
+      )
+      .toArray()
+
+    const addCritOneMonthOp = this.pulseCore
+      .collection('organizations.treatmentPlans.history')
+      .aggregate(
+        additionalCriteriaAggPip(1),
         { allowDiskUse: true }
       )
       .toArray()
@@ -58,52 +68,37 @@ class PayerHistoryManager {
       .toArray()
 
     const [
-      lastSixMonthDocs,
-      lastMonthDocs,
+      qualityAccessLastSixMonthDocs,
+      additCritLastSixMonthDocs,
+      qualityAccessLastMonthDocs,
+      additCritLastMonthDocs,
       formattedPolicyLinkLastSixMonthDocs, // payer link agg pipeline already formats this, weeds out null links
       formattedPolicyLinkLastMonthDocs,  // payer link agg pipeline already formats this, weeds out null links
     ] = await Promise.all([
-      qualityAccessAndAdditionalCriteriaSixMonthOp,
-      qualityAccessAndAdditionalCriteriaOneMonthOp,
+      qualityAccessSixMonthOp,
+      additCritSixMonthOp,
+      qualityAccessOneMonthOp,
+      addCritOneMonthOp,
       policyLinkSixMonthOp,
       policyLinkOneMonthOp,
     ])
 
     console.log('formatting docs to write to payer collections')
 
-    const [
-      formattedQualityAccessLastSixMonthsDocs,
-      formattedAdditionalCriteriaLastSixMonthsDocs,
-    ] = lastSixMonthDocs.reduce((acc, doc) => {
-      if (isValidQualityAccessDoc(doc)) {
-        acc[0].push(formatQualityAccessDoc(doc))
-      }
-
-      if (isValidAddCritDoc(doc)) {
-        acc[1].push(formatAdditionalCriteriaDoc(doc))
-      }
-
-      return acc
-    }, [[], []])
+    const formattedQualityAccessLastSixMonthsDocs = qualityAccessLastSixMonthDocs
+      .map(formatQualityAccessDoc)
 
     const [
       formattedQualityAccessLastMonthDocs,
-      formattedAdditionalCriteriaLastMonthDocs,
       formattedCombinedDataDocs,
-    ] = lastMonthDocs.reduce((acc, doc) => {
+    ] = qualityAccessLastMonthDocs.reduce((acc, doc) => {
 
-      if (isValidQualityAccessDoc(doc)) {
-        acc[0].push(formatQualityAccessDoc(doc))
-      }
+      acc[0].push(formatQualityAccessDoc(doc))
 
-      if (isValidAddCritDoc(doc)) {
-        acc[1].push(formatAdditionalCriteriaDoc(doc))
-      }
-
-      acc[2].push(formatCombinedDataDoc(doc))
+      acc[1].push(formatCombinedDataDoc(doc))
 
       return acc
-    }, [[], [], []])
+    }, [[], []])
 
     return {
       combinedData: formattedCombinedDataDocs,
@@ -112,8 +107,8 @@ class PayerHistoryManager {
         nonHtDocs: formattedQualityAccessLastMonthDocs,
       },
       additionalCriteria: {
-        htDocs: formattedAdditionalCriteriaLastSixMonthsDocs,
-        nonHtDocs: formattedAdditionalCriteriaLastMonthDocs,
+        htDocs: additCritLastSixMonthDocs,
+        nonHtDocs: additCritLastMonthDocs,
       },
       policyLink: {
         htDocs: formattedPolicyLinkLastSixMonthDocs,
@@ -131,19 +126,19 @@ class PayerHistoryManager {
     } = this.nonLivesCollectionDocs
 
     await this.pulseDev
-      .collection('payerHistoricalQualityAccess-MATT_TEST')
+      .collection('payerHistoricalQualityAccess')
       .deleteMany()
 
     await this.pulseDev
-      .collection('payerHistoricalQualityAccess-MATT_TEST')
+      .collection('payerHistoricalQualityAccess')
       .insertMany(nonHtDocs)
 
     await this.pulseDev
-      .collection('payerHistoricalQualityAccessHt-MATT_TEST')
+      .collection('payerHistoricalQualityAccessHt')
       .deleteMany()
 
     await this.pulseDev
-      .collection('payerHistoricalQualityAccessHt-MATT_TEST')
+      .collection('payerHistoricalQualityAccessHt')
       .insertMany(htDocs)
   }
 
@@ -156,19 +151,19 @@ class PayerHistoryManager {
     } = this.nonLivesCollectionDocs
 
     await this.pulseDev
-      .collection('payerHistoricalAdditionalCriteria-MATT_TEST')
+      .collection('payerHistoricalAdditionalCriteria')
       .deleteMany()
 
     await this.pulseDev
-      .collection('payerHistoricalAdditionalCriteria-MATT_TEST')
+      .collection('payerHistoricalAdditionalCriteria')
       .insertMany(nonHtDocs)
 
     await this.pulseDev
-      .collection('payerHistoricalAdditionalCriteriaHt-MATT_TEST')
+      .collection('payerHistoricalAdditionalCriteriaHt')
       .deleteMany()
 
     await this.pulseDev
-      .collection('payerHistoricalAdditionalCriteriaHt-MATT_TEST')
+      .collection('payerHistoricalAdditionalCriteriaHt')
       .insertMany(htDocs)
   }
 
@@ -181,19 +176,19 @@ class PayerHistoryManager {
     } = this.nonLivesCollectionDocs
 
     await this.pulseDev
-      .collection('payerHistoricalPolicyLinks-MATT_TEST')
+      .collection('payerHistoricalPolicyLinks')
       .deleteMany()
 
     await this.pulseDev
-      .collection('payerHistoricalPolicyLinks-MATT_TEST')
+      .collection('payerHistoricalPolicyLinks')
       .insertMany(nonHtDocs)
 
     await this.pulseDev
-      .collection('payerHistoricalPolicyLinksHt-MATT_TEST')
+      .collection('payerHistoricalPolicyLinksHt')
       .deleteMany()
 
     await this.pulseDev
-      .collection('payerHistoricalPolicyLinksHt-MATT_TEST')
+      .collection('payerHistoricalPolicyLinksHt')
       .insertMany(htDocs)
   }
 
@@ -201,11 +196,11 @@ class PayerHistoryManager {
    const { combinedData } = this.nonLivesCollectionDocs
 
     await this.pulseDev
-      .collection('payerHistoricalCombinedData-MATT_TEST')
+      .collection('payerHistoricalCombinedData')
       .deleteMany()
 
     await this.pulseDev
-      .collection('payerHistoricalCombinedData-MATT_TEST')
+      .collection('payerHistoricalCombinedData')
       .insertMany(combinedData)
   }
 
@@ -218,16 +213,9 @@ class PayerHistoryManager {
   async materializeStateMmitLives() {}
 
   async materializeRegionalTargetingData() {
-    // ! actually materializes the payerCombinedStateLives collection
-    const payerHistoricalCombinedData = await this.pulseDev
-      .collection('payerHistoricalCombinedData-MATT_TEST')
-      .find()
-      .toArray()
-
     await combineLives({
       pulseDevDb: this.pulseDev,
       pulseCoreDb: this.pulseCore,
-      payerHistoricalCombinedData,
     })
   }
 

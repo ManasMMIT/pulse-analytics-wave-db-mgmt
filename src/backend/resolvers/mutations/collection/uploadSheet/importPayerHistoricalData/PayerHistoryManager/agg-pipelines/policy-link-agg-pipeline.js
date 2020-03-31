@@ -1,16 +1,16 @@
 module.exports = limit => [
   {
+    '$match': {
+      'policyLinkData': {
+        '$ne': null
+      }
+    }
+  }, {
     '$addFields': {
       'dateParts': {
         '$dateToParts': {
           'date': '$timestamp'
         }
-      }
-    }
-  }, {
-    '$match': {
-      'policyLinkData': {
-        '$ne': null
       }
     }
   }, {

@@ -1,5 +1,11 @@
 module.exports = limit => [
   {
+    '$match': {
+      'accessData': {
+        '$ne': null
+      }
+    }
+  }, {
     '$addFields': {
       'dateParts': {
         '$dateToParts': {
