@@ -162,7 +162,7 @@ const ExportExcelButtonContainer = ({
   const onClick = createBackup ? backupExportWithTimestamp : saveFile
 
   return (
-    <div>
+    <>
       <ExportExcelButton
         isDisabled={isDisabled}
         onClick={onClick}
@@ -176,7 +176,7 @@ const ExportExcelButtonContainer = ({
       {
         error && <div style={{ color: 'red', fontSize: 10, padding: 4 }}>Export Failed</div>
       }
-    </div>
+    </>
   )
 }
 

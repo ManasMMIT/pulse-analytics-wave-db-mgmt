@@ -12,6 +12,7 @@ export const ButtonLabel = styled.button({
   background: 'none',
   border: 'none',
   borderRadius: 4,
+  padding: '8px 12px',
   color: transparentize(0.7, Colors.BLACK),
   cursor: 'pointer',
   fontWeight: 600,
@@ -24,7 +25,7 @@ export const ButtonLabel = styled.button({
   ':focus': {
     outline: 'none',
   }
-}, ({ children, ...props}) => ({ ...props })) // not sure why children is here
+}, ({ children, ...props }) => ({ ...props })) // not sure why children is here // ? also doesn't this allow onClick through even though it's not styling related?
 
 export const SectionTitle = styled.h3({
   fontSize: 14,

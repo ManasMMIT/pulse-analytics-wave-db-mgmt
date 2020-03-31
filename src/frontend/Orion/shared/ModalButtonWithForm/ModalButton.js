@@ -5,12 +5,27 @@ import styled from '@emotion/styled'
 import Modal from '../../../components/Modal'
 import Form from './Form'
 
+import { transparentize } from 'polished'
+import { Colors } from '../../../utils/pulseStyles'
+
 const StyledButton = styled.button({
+  background: 'none',
   border: 'none',
   borderRadius: 4,
-  fontWeight: 600,
+  padding: '8px 12px',
+  color: transparentize(0.7, Colors.BLACK),
   cursor: 'pointer',
-})
+  fontWeight: 600,
+  lineHeight: 1.5,
+  textAlign: 'left',
+  ':hover': {
+    background: transparentize(0.9, Colors.PRIMARY),
+    color: Colors.PRIMARY,
+  },
+  ':focus': {
+    outline: 'none',
+  }
+}, ({ children, ...props }) => ({ ...props })) // not sure why children is here // ? also doesn't this allow onClick through even though it's not styling related?
 
 class Button extends React.Component {
   state = {
@@ -28,7 +43,6 @@ class Button extends React.Component {
       mutationDoc,
       buttonLabel,
       buttonStyle,
-      css,
       modalTitle,
       modalStyle,
       refetchQueries,
@@ -39,7 +53,7 @@ class Button extends React.Component {
     return (
       <>
         <StyledButton
-          style={{  ...buttonStyle }}
+          {...buttonStyle}
           onClick={this.openModal}
         >
           {buttonLabel}

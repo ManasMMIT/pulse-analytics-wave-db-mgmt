@@ -65,7 +65,8 @@ const headerChildren = (
 
     <CopyOneOfStringButton
       queryDoc={GET_SOURCE_QUALITY_OF_ACCESS_SCORES}
-      dataKey='qualityOfAccessScores'
+      dataKey="qualityOfAccessScores"
+      datumKey="access"
     />
   </div>
 )

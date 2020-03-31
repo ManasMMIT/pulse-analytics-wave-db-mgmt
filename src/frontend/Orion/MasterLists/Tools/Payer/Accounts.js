@@ -5,10 +5,9 @@ import { faEdit } from "@fortawesome/free-solid-svg-icons"
 import { transparentize } from 'polished'
 
 import Panel from '../../../../Phoenix/shared/Panel'
-
 import { PayerAccountModalButton } from './../../../shared/AccountModals'
-
 import DeleteButton from '../../../shared/DeleteButton'
+import CopyOneOfStringButton from '../../../shared/CopyOneOfStringButton'
 
 import {
   DELETE_PAYER_ORGANIZATION,
@@ -50,6 +49,12 @@ const headerChildren = (
     <PayerAccountModalButton
       buttonLabel={CREATE_BUTTON_TXT}
       buttonStyle={buttonStyle}
+    />
+
+    <CopyOneOfStringButton
+      queryDoc={GET_PAYER_ORGANIZATIONS}
+      dataKey="payerOrganizations"
+      datumKey="slug"
     />
   </div>
 )
