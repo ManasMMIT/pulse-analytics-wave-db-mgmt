@@ -1,11 +1,51 @@
 const Ajv = require('ajv')
+const AjvErrors = require('ajv-errors')
 const _ = require('lodash')
+const { parse, parseISO } = require('date-fns')
+const { zonedTimeToUtc } = require('date-fns-tz')
+
+const DEFAULT_TIMEZONE = require('../../../../../utils/defaultTimeZone')
 
 const ajv = new Ajv({ 
   allErrors: true, 
   coerceTypes: 'array',
   jsonPointers: true,
   useDefaults: "empty",
+})
+
+AjvErrors(ajv)
+
+const isValidDate = obj => obj instanceof Date && !isNaN(obj)
+
+ajv.addKeyword('coerceToDate', {
+  modifying: true,
+  compile: (schema, parentSchema, it) => {
+    return (data, dataPath, parentData, parentKey) => {
+      // if string has a slash, attempt to get ISO string from possible 'M/d/yy' or 'M/d/yyyy' formats
+      if (typeof data === 'string' && data.match('/')) {
+        const parseAttempt1 = parse(data, 'M/d/yy', new Date())
+        if (isValidDate(parseAttempt1)) {
+          data = parseAttempt1.toISOString()
+        } else {
+          const parseAttempt2 = parse(data, 'M/d/yyyy', new Date())
+          if (isValidDate(parseAttempt2)) data = parseAttempt2.toISOString()
+        }
+      }
+
+      const isoParseAttempt = parseISO(data)
+
+      // if ISO string, shorten the string to ISO short to avoid daylight savings problems
+      if (isValidDate(isoParseAttempt)) {
+        const isoShortString = data.slice(0, 10)
+        // create JS Date Object (which uses absolute UTC time) but fix it to New York time
+        const dateObj = zonedTimeToUtc(isoShortString, DEFAULT_TIMEZONE)
+        parentData[parentKey] = dateObj
+        return true
+      }
+      
+      return false
+    }
+  },
 })
 
 const validate = ({ data, skippedRows, sheetConfig }) => {
@@ -104,6 +144,12 @@ const getAjvSchema = ({ fields }) => {
   const schema = { properties: {} }
   const schemaProperties = schema.properties
 
+  populateSchemaProperties({ fields, schemaProperties })
+
+  return schema
+}
+
+const populateSchemaProperties = ({ fields, schemaProperties }) => {
   fields.forEach(({ name, type, oneOf }) => {
     if (type === 'csv') {
       schemaProperties[name] = {
@@ -123,6 +169,19 @@ const getAjvSchema = ({ fields }) => {
         const oneOfHasEmptyString = oneOf.includes('')
         if (!oneOfHasEmptyString) delete schemaProperties[name].default
       }
+    } else if (type === 'date') {
+      schemaProperties[name] = { 
+        anyOf: [
+          { type: 'null' },
+          {
+            allOf: [
+              { type: 'string' },
+              { coerceToDate: true },
+            ]
+          }
+        ],
+        errorMessage: "Invalid date; make cell Date type OR format as yyyy-MM-dd, d/M/yy, or dd/MM/yyyy",
+      }
     } else {
       schemaProperties[name] = { type: ['null', type] }
 
@@ -140,8 +199,6 @@ const getAjvSchema = ({ fields }) => {
       }
     }
   })
-
-  return schema
 }
 
 const TYPE_MAP = {

@@ -20,6 +20,7 @@ const TYPES = [
   'integer',
   'boolean',
   'csv',
+  'date',
 ]
 
 const Form = ({

@@ -52,7 +52,7 @@ const Import = () => {
 
     reader.onload = e => {
       const data = new Uint8Array(e.target.result)
-      const nextWorkbook = XLSX.read(data, { type: 'array' })
+      const nextWorkbook = XLSX.read(data, { cellDates: true, type: 'array' })
 
       const nextSheetNames = nextWorkbook.SheetNames
       const nextSelectedSheet = { value: nextSheetNames[0], label: nextSheetNames[0] }

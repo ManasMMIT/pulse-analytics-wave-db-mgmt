@@ -41,17 +41,31 @@ const getUserPathwaysAlerts = async ({
   pulseDevDb,
   subscriptionId,
   userNodesResources,
+  monthYearFilterParams,
 }) => {
   const filteredCollectionPromises = ALERT_COLLECTIONS
     .map(collectionName => {
       const postMatchAggregationPipeline = [
+        { 
+          $match: { 
+            alertDate: { $type: 'date' },
+          } 
+        },
+        { 
+          $addFields: { 
+            month: { $month: '$alertDate' },
+            year: { $year: '$alertDate' },
+          } 
+        },
         {
-          $match: {
-            alertDate: {
-              $exists: true,
-            }
+          $match: monthYearFilterParams
+        },
+        {
+          $project: {
+            month: 0,
+            year: 0,
           }
-        }
+        },
       ]
 
       return getFilteredData({
@@ -105,7 +119,7 @@ const getUserPathwaysAlerts = async ({
     { data: payerLives, type: 'Payer'},
   ]
 
-  // collect all of the unique slugs present in the three collection
+  // collect all of the unique slugs present in the alert collections
   const collectionSlugs = aggregatedCollections.reduce((acc, { data }) => {
     data.forEach(({ slug }) => acc.add(slug))
     return acc

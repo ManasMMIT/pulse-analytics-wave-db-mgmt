@@ -47,6 +47,14 @@ const mixedCsvCellsWithWhitespaceOutput = require('./mockData/output/mixed-csv-c
 const coercedInvalidMultiWhitespacedDataOutput = require('./mockData/output/coerced-invalid-multi-whitespaced-data')
 const errorsForMultiWhiteSpacedCsvCell = require('./mockData/output/errors-for-multi-whitespaced-csv-cell')
 
+const sheetConfigWithDateType = require('./mockData/input/sheet-config-with-date-type')
+const validDateStringsInput = require('./mockData/input/valid-date-strings')
+const validDateStringsOutput = require('./mockData/output/valid-date-strings')
+
+const invalidDateStringsInput = require('./mockData/input/invalid-date-strings')
+const invalidDateStringsOutput = require('./mockData/output/invalid-date-strings')
+const errorsForInvalidDateStrings = require('./mockData/output/errors-for-invalid-date-strings')
+
 test('Valid data is reported valid with zero errors and type-coerced values', () => {
   const { result, skippedRows } = validProgramOverviewSanitizationRes
 
@@ -287,4 +295,49 @@ test("CSV cells sanitized to empty still fail oneOf if oneOf doesn't include emp
   expect(valid).toEqual(false)
   expect(errors).toStrictEqual(errorsForMultiWhiteSpacedCsvCell)
   expect(data).toStrictEqual(coercedInvalidMultiWhitespacedDataOutput)
+})
+
+test(`- Valid date cells pass validation and are coerced into Date objects
+    - Valid date cell means null OR string formatted in short ISO, long ISO, d/M/yy, or dd/MM/yyyy format
+    - If string, it's coerced into short ISO string (any time portion is stripped), then coerced into a Date object
+    - Date object is generated with the UTC time equivalent to the NY-timezoned short ISO string`,
+() => {
+  const { result, skippedRows } = validDateStringsInput
+
+  const {
+    valid,
+    errors,
+    data,
+  } = validate({
+    data: result,
+    skippedRows,
+    sheetConfig: sheetConfigWithDateType,
+  })
+
+  const formattedData = data.map(({ timestamp }) => {
+    if (timestamp) return { timestamp: timestamp.getTime() }
+    return { timestamp: null }
+  })
+
+  expect(valid).toEqual(true)
+  expect(errors).toStrictEqual([])
+  expect(formattedData).toStrictEqual(validDateStringsOutput)
+})
+
+test("Invalid date cells fail validation", () => {
+  const { result, skippedRows } = invalidDateStringsInput
+
+  const {
+    valid,
+    errors,
+    data,
+  } = validate({
+    data: result,
+    skippedRows,
+    sheetConfig: sheetConfigWithDateType,
+  })
+
+  expect(valid).toEqual(false)
+  expect(errors).toStrictEqual(errorsForInvalidDateStrings)
+  expect(data).toStrictEqual(invalidDateStringsOutput)
 })
