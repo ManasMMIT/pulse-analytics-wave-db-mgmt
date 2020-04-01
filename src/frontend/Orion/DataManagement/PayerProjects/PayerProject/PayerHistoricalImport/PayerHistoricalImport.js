@@ -1,8 +1,9 @@
-import React from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
 
 import ImportSection from './ImportSection'
+import ValidationErrorTable from './ValidationErrorTable'
 import TimestampSection from './TimestampSection'
 
 const PayerHistoricalImportWrapper = styled.div({
@@ -21,14 +22,19 @@ const PayerHistoricalImport = ({
   match,
 }) => {
   const { projectId } = match.params
+  const [validationErrors, setValidationErrorsAndWarnings] = useState('')
+
   return (
     <PayerHistoricalImportWrapper>
       <SectionWrapper style={{ maxHeight: 500 }}>
-        <ImportSection projectId={projectId} />
+        <ImportSection
+          projectId={projectId}
+          setValidationErrorsAndWarnings={setValidationErrorsAndWarnings}
+        />
         <TimestampSection projectId={projectId} />
       </SectionWrapper>
       <SectionWrapper>
-        TODO: Error/Warning Table placeholder
+        <ValidationErrorTable validationErrors={validationErrors} />
       </SectionWrapper>
     </PayerHistoricalImportWrapper>
   )

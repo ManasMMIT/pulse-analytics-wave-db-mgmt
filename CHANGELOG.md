@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `Polaris`: Created hotfix script for easier setting of regional breakdown for a role and its users.
 - `Backend`: Added projectPtps endpoint.
 - `Orion`: Add export payerCombinedStateLives DRG state data button on custom exports page.
+- `Phoenix`: Installed `@material-ui/lab` for material-ui's experimental/futuristic components.
 
 ### Changed
 - `Polaris`: upgraded packages to the latest minor/patch versions (keep papaparse the version it was due to major upgrade not being backward compatible)
