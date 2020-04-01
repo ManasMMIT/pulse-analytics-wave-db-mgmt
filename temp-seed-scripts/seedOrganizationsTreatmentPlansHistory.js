@@ -1,7 +1,9 @@
 const _ = require('lodash')
 const format = require('date-fns/format')
+const { zonedTimeToUtc } = require('date-fns-tz')
 
 const ENRICH_TP_FIELDS_PIPELINE = require('./enrich-tps-pipeline')
+const DEFAULT_TIMEZONE = require('../src/backend/utils/defaultTimeZone')
 
 module.exports = async ({
   pulseCore,
@@ -84,26 +86,10 @@ module.exports = async ({
           criteria,
           criteriaNotes,
           restrictionLevel,
-
-          // ! this key isn't used anywhere in wave-app/wave-api; deeming it extranenous for now
-          // dateTracked,
-
-          // ! the following fields are in additionalCriteria subdoc in materialized payerHistoricalCombinedData but:
+          // ! there are other fields in additionalCriteria subdoc in materialized payerHistoricalCombinedData as of 3/31/20 but either they:
           // ! A) are dupes of top-level fields; if they have to exist on this level in final materialized view, fine, but they shouldn't go into core
           // ! B) aren't currently used -- and aren't expected to be used -- by anything in wave-app and wave-api
-          // project: doc.project,
-          // slug: doc.slug,
-          // organization: doc.organization,
-          // indication: doc.indication,
-          // regimen: doc.regimen,
-          // book: doc.book,
-          // coverage: doc.coverage,
-          // line: doc.line,
-          // population: doc.population,
-          // month: doc.month,
-          // year: doc.year,
-          // timestamp: new Date(format(new Date(doc.year, doc.month - 1, 1), 'yyyy-MM-dd')),
-          // createdOn: doc.createdOn,
+          // ! C) both A and B
         }
 
         acc.additionalCriteria
@@ -120,7 +106,7 @@ module.exports = async ({
     const links = policyLinkData[0]
       ? {
         policyLink: policyLinkData[0].link,
-        dateTracked: policyLinkData[0].dateTracked,
+        dateTracked: policyLinkData[0].dateTracked, // ? should dateTracked make it into core? not sure
         paLink: policyLinkData[0].paLink,
         project: policyLinkData[0].project,
         siteLink: policyLinkData[0].siteLink,
@@ -147,8 +133,9 @@ module.exports = async ({
 
     const accessScore = accessScoresGroupedByAccess[flatDoc.access] || []
 
-    const correctIsoFormat = format(new Date(flatDoc.year, flatDoc.month - 1, 1), 'yyyy-MM-dd')
-    const timestamp = new Date(correctIsoFormat)
+    const isoShortString = format(new Date(flatDoc.year, flatDoc.month - 1, 1), 'yyyy-MM-dd')
+    // create JS Date Object (which only stores dates in absolute UTC time) as the UTC equivalent of isoShortString in New York time
+    const timestamp = zonedTimeToUtc(isoShortString, DEFAULT_TIMEZONE)
 
     const orgTpIdHashKey = [organizationId, treatmentPlanId].join('|')
     const orgTpIdHashVal = hashedOrgTpDocs[orgTpIdHashKey]

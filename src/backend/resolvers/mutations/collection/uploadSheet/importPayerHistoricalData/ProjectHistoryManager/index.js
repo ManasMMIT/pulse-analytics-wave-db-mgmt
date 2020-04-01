@@ -1,5 +1,8 @@
 const { ObjectId } = require('mongodb')
 const _ = require('lodash')
+const { zonedTimeToUtc } = require('date-fns-tz')
+
+const DEFAULT_TIMEZONE = require('../../../../../../utils/defaultTimeZone')
 
 const {
   ENRICH_TP_PARTS_PIPELINE,
@@ -364,7 +367,10 @@ class ProjectHistoryManager {
   }) {
     this.sheetName = sheetName
     this.sheetData = sheetData
-    this.timestamp = new Date(timestamp)
+    
+    // create JS Date Object (which only stores dates in absolute UTC time) as the UTC equivalent of isoShortString in New York time
+    this.timestamp = zonedTimeToUtc(timestamp, DEFAULT_TIMEZONE)
+
     /*
       The policyLink sheet only has a subset of treatmentPlan parts:
         - `coverage`

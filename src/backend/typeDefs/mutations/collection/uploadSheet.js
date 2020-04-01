@@ -5,7 +5,7 @@ const uploadSheetTypeDef = gql`
     data: JSON!
     wb: String!
     sheet: String!
-    timestamp: Date
+    timestamp: String # purposely String so short ISO string gets to backend and can be made UTC equivalent of NY time
     projectId: ID
   }
 `
