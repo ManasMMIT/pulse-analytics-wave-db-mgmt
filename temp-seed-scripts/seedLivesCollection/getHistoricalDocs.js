@@ -1,7 +1,7 @@
 const format = require('date-fns/format')
 const { zonedTimeToUtc } = require('date-fns-tz')
 
-const DEFAULT_TIMEZONE = require('../src/backend/utils/defaultTimeZone')
+const DEFAULT_TIMEZONE = require('../../src/backend/utils/defaultTimeZone')
 const KEY_BOOK_COVERAGE_MAP = require('./key-book-coverage-map')
 
 module.exports = ({

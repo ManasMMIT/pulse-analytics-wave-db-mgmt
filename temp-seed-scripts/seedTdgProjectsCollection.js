@@ -53,6 +53,9 @@ module.exports = async ({
     )
   })
 
+  const seenOrgTpIds = {}
+  const dupeOrgTpIds = []
+
   const tdgProjects = Object.keys(groupedByProject).map(project => {
     const historicalDocsInProject = groupedByProject[project]
 
@@ -71,6 +74,19 @@ module.exports = async ({
         if (!orgTp) return null
 
         const orgTpId = orgTp[0]._id
+
+        if (seenOrgTpIds[orgTpId]) {
+          dupeOrgTpIds.push({
+            project,
+            conflictCombo: seenOrgTpIds[orgTpId],
+            orgTpId,
+          })
+          
+          return null
+        }
+
+        seenOrgTpIds[orgTpId] = `${project}|${slug}|${tpHashStr}`
+
         return orgTpId
       })
 
@@ -81,6 +97,11 @@ module.exports = async ({
       orgTpIds: orgTps
     }
   })
+
+  if (!_.isEmpty(dupeOrgTpIds)) {
+    console.error('Warning! Either intra- or inter- project orgTpId conflicts')
+    console.log(dupeOrgTpIds)
+  }
 
   await pulseCore.collection('tdgProjects').insertMany(tdgProjects)
 
