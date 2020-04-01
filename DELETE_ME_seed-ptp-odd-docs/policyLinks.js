@@ -1,9 +1,4 @@
-const getDiffDoc = require('./getDiffDoc')
-
-module.exports = async ({
-  pulseDevStaging,
-  pulseDevTest,
-}) => {
+module.exports = async getDiffDoc => {
   const comparer = ({
     book,
     coverage,
@@ -33,19 +28,11 @@ module.exports = async ({
   ].join('|')
 
   const latestMonthOp = getDiffDoc({
-    dbs: {
-      pulseDevStaging,
-      pulseDevTest,
-    },
     comparer,
     collectionName: 'payerHistoricalPolicyLinks',
   })
 
   const historicalOp = getDiffDoc({
-    dbs: {
-      pulseDevStaging,
-      pulseDevTest,
-    },
     comparer,
     collectionName: 'payerHistoricalPolicyLinksHt',
   })

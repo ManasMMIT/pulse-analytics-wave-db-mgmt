@@ -1,5 +1,3 @@
-const getDiffDoc = require('./getDiffDoc')
-
 // ! caption is skipped for now because keys/values aren't standard
 
 // ! all criteria fields are skipped because in
@@ -7,10 +5,7 @@ const getDiffDoc = require('./getDiffDoc')
 
 // TODO We should match the two collections in the seed file.
 
-module.exports = async ({
-  pulseDevStaging,
-  pulseDevTest,
-}) => {
+module.exports = async getDiffDoc => {
   const comparer = ({
     access,
     // accessTiny,
@@ -71,10 +66,6 @@ module.exports = async ({
   ].join('|')
 
   return getDiffDoc({
-    dbs: {
-      pulseDevStaging,
-      pulseDevTest,
-    },
     comparer,
     collectionName: 'payerHistoricalCombinedData',
   })
