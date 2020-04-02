@@ -11,7 +11,7 @@ const StyledLink = styled(Link)({
   background: 'none',
   cursor: 'pointer',
   position: 'relative',
-  marginLeft: Spacing.TINY,
+  margin: '0 4px',
   top: 4,
   fill: transparentize( 0.7, Colors.BLACK),
   ':hover': {
