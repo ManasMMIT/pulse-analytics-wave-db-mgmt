@@ -15,7 +15,7 @@ const StyledButton = styled.button({
   borderRadius: 4,
   fontWeight: 700,
   cursor: 'pointer',
-  padding: `${Spacing.S3} ${Spacing.S4}`,
+  padding: `${Spacing.S3}`,
   ':active': {
     outline: 'none',
   },
