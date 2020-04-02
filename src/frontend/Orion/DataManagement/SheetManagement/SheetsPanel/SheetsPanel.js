@@ -94,7 +94,7 @@ const SheetsPanel = () => {
                 modalTitle="Create or Edit Sheet"
                 mutationVars={{ workbookId: selectedWorkbookId }}
                 afterMutationHook={handleClick}
-                style={{ fontSize: 10, padding: '4px 8px' }}
+                style={{ fontSize: 10, padding: '4px 8px', marginRight: 8 }}
               />
 
               <DeleteButton
