@@ -4,7 +4,7 @@ import styled from '@emotion/styled'
 import { transparentize } from 'polished'
 import { Link } from 'react-router-dom'
 
-import { Colors, Spacing } from '../../utils/pulseStyles'
+import { Colors } from '../../utils/pulseStyles'
 
 const StyledLink = styled(Link)({
   border: 'none',
