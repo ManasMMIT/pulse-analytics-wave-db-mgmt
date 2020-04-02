@@ -26,7 +26,6 @@ export default ({ teamId }) => {
       additionalFormData={{ clientId: selectedClient._id }}
       clientMutation={MANAGE_DELETED_TEAM}
       modalTitle="Delete Team"
-      style={{ margin: '0 4px' }}
     />
   )
 }

@@ -16,7 +16,7 @@ import { Colors } from '../../../utils/pulseStyles'
 const EditIcon = styled(FontAwesomeIcon)({
   border: 'none',
   background: 'none',
-  margin: '0 4px',
+  margin: '0 8px',
   color: transparentize(0.7, Colors.BLACK),
   ':hover': {
     color: Colors.PRIMARY,

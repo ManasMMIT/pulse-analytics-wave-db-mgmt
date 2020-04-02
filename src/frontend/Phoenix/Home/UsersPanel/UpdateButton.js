@@ -17,6 +17,7 @@ const EditIcon = styled(FontAwesomeIcon)({
   border: 'none',
   background: 'none',
   color: transparentize(0.7, Colors.BLACK),
+  margin: '0 8px',
   ':hover': {
     color: Colors.PRIMARY,
   },
