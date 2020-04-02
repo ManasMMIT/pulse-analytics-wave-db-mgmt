@@ -3,7 +3,8 @@ import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
 import { transparentize } from 'polished'
 
-import { Colors } from '../../../../utils/pulseStyles'
+import Color from '../../../../utils/color'
+import Spacing from '../../../../utils/spacing'
 
 import Modal from '../../../../components/Modal'
 import UserForm from './UserFormContainer'
@@ -14,6 +15,7 @@ const StyledButton = styled.button({
   borderRadius: 4,
   fontWeight: 700,
   cursor: 'pointer',
+  padding: `${Spacing.S3}`,
   ':active': {
     outline: 'none',
   },
@@ -93,7 +95,7 @@ Button.propTypes = {
 Button.defaultProps = {
   buttonLabel: <div>click to open</div>,
   buttonStyle: {},
-  buttonColor: Colors.PRIMARY,
+  buttonColor: Color.PRIMARY,
   modalTitle: null,
   modalStyle: {},
   ...UserForm.defaultProps,

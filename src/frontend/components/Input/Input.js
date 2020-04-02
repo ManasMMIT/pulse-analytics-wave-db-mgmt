@@ -9,7 +9,7 @@ import FontSpace from '../../utils/fontspace'
 const InputComponent = styled.input({
   background: Color.WHITE,
   width: '100%',
-  padding: `${Spacing.S3} ${Spacing.S4}`,
+  padding: `${Spacing.S3}`,
   borderRadius: 4,
   ...FontSpace.FS2,
 })

@@ -18,7 +18,7 @@ const StyledButton = styled.button({
   background: 'none',
   color: transparentize(0.7, Colors.BLACK),
   cursor: 'pointer',
-  marginLeft: Spacing.TINY,
+  margin: '0 8px',
   ':hover': {
     color: Colors.RED,
   }

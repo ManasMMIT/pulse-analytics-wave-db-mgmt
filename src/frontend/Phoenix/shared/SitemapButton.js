@@ -4,14 +4,14 @@ import styled from '@emotion/styled'
 import { transparentize } from 'polished'
 import { Link } from 'react-router-dom'
 
-import { Colors, Spacing } from '../../utils/pulseStyles'
+import { Colors } from '../../utils/pulseStyles'
 
 const StyledLink = styled(Link)({
   border: 'none',
   background: 'none',
   cursor: 'pointer',
   position: 'relative',
-  marginLeft: Spacing.TINY,
+  margin: '0 4px',
   top: 4,
   fill: transparentize( 0.7, Colors.BLACK),
   ':hover': {
