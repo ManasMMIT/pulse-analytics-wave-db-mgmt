@@ -30,6 +30,9 @@ const mutationType = gql`
     updateTeam(input: UpdateTeamInput!): UpdateTeamPayload
     deleteTeam(input: DeleteTeamInput!): DeleteTeamPayload
 
+    createSourceNode(input: CreateSourceNodeInput!): Node
+    updateTeamNode(input: UpdateTeamNodeInput!): Node
+
     updateRoleSitemap(input: UpdateRoleSitemapInput!): UpdateRoleSitemapPayload
     updatePermissions(input: UpdatePermissionsInput!): UpdateTeamPayload
     pushSitemapToDev: String
@@ -55,8 +58,6 @@ const mutationType = gql`
     createPayerOrganization(input: CreatePayerOrganizationInput!): CreatePayerOrganizationPayload
     deletePayerOrganization(input: DeletePayerOrganizationInput!): DeletePayerOrganizationPayload
     updatePayerOrganization(input: UpdatePayerOrganizationInput!): UpdatePayerOrganizationPayload
-
-    importPayerHistoricalData(input: JSON): JSON
 
     createPathwaysOrganization(input: CreatePathwaysOrganizationInput!): CreatePathwaysOrganizationPayload
     deletePathwaysOrganization(input: DeletePathwaysOrganizationInput!): DeletePathwaysOrganizationPayload
@@ -88,7 +89,7 @@ const mutationType = gql`
     createWorkbook(input: CreateWorkbookInput!): CreateWorkbookPayload
     updateWorkbook(input: UpdateWorkbookInput!): UpdateWorkbookPayload
     deleteWorkbook(input: DeleteWorkbookInput!): DeleteWorkbookPayload
-    
+
     createSheet(input: CreateSheetInput!): Sheet
     updateSheet(input: UpdateSheetInput!): Sheet
     deleteSheet(input: DeleteSheetInput!): Sheet

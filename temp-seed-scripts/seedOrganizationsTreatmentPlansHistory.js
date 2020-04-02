@@ -1,7 +1,9 @@
 const _ = require('lodash')
 const format = require('date-fns/format')
+const { zonedTimeToUtc } = require('date-fns-tz')
 
 const ENRICH_TP_FIELDS_PIPELINE = require('./enrich-tps-pipeline')
+const DEFAULT_TIMEZONE = require('../src/backend/utils/defaultTimeZone')
 
 module.exports = async ({
   pulseCore,
@@ -46,7 +48,7 @@ module.exports = async ({
     && thing.year
   ))
 
-  const policyLinksGroupedbyTpParts = _.groupBy(
+  const policyLinksGroupedByTpParts = _.groupBy(
     onlyPolicyLinksWithAllFields,
     thing => [thing.slug, thing.regimen, thing.book, thing.coverage, thing.month, thing.year].join('|')
   )
@@ -77,15 +79,34 @@ module.exports = async ({
   for (let uniqOrgTpTimeString in groupedOrgTpsMonthYearDocs) {
     const comboDocs = groupedOrgTpsMonthYearDocs[uniqOrgTpTimeString]
 
-    const flatDoc = Object.assign({}, ...comboDocs)
+    const flatDoc = comboDocs.reduce((acc, { criteria, criteriaNotes, dateTracked, restrictionLevel, ...doc }) => {
+
+      if (criteria) {
+        const additionalCriteriaSubDoc = {
+          criteria,
+          criteriaNotes,
+          restrictionLevel,
+          // ! there are other fields in additionalCriteria subdoc in materialized payerHistoricalCombinedData as of 3/31/20 but either they:
+          // ! A) are dupes of top-level fields; if they have to exist on this level in final materialized view, fine, but they shouldn't go into core
+          // ! B) aren't currently used -- and aren't expected to be used -- by anything in wave-app and wave-api
+          // ! C) both A and B
+        }
+
+        acc.additionalCriteria
+          ? acc.additionalCriteria.push(additionalCriteriaSubDoc)
+          : acc.additionalCriteria = [additionalCriteriaSubDoc]
+      }
+
+      return Object.assign({}, acc, doc)
+    }, { additionalCriteria: null })
 
     const policyLinkHash = [flatDoc.slug, flatDoc.regimen, flatDoc.book, flatDoc.coverage, flatDoc.month, flatDoc.year].join('|')
-    const policyLinkData = policyLinksGroupedbyTpParts[policyLinkHash] || []
+    const policyLinkData = policyLinksGroupedByTpParts[policyLinkHash] || []
 
     const links = policyLinkData[0]
       ? {
         policyLink: policyLinkData[0].link,
-        dateTracked: policyLinkData[0].dateTracked,
+        dateTracked: policyLinkData[0].dateTracked, // ? should dateTracked make it into core? not sure
         paLink: policyLinkData[0].paLink,
         project: policyLinkData[0].project,
         siteLink: policyLinkData[0].siteLink,
@@ -112,8 +133,9 @@ module.exports = async ({
 
     const accessScore = accessScoresGroupedByAccess[flatDoc.access] || []
 
-    const correctIsoFormat = format(new Date(flatDoc.year, flatDoc.month - 1, 1), 'yyyy-MM-dd')
-    const timestamp = new Date(correctIsoFormat)
+    const isoShortString = format(new Date(flatDoc.year, flatDoc.month - 1, 1), 'yyyy-MM-dd')
+    // create JS Date Object (which only stores dates in absolute UTC time) as the UTC equivalent of isoShortString in New York time
+    const timestamp = zonedTimeToUtc(isoShortString, DEFAULT_TIMEZONE)
 
     const orgTpIdHashKey = [organizationId, treatmentPlanId].join('|')
     const orgTpIdHashVal = hashedOrgTpDocs[orgTpIdHashKey]
@@ -137,13 +159,7 @@ module.exports = async ({
       timestamp,
       project: flatDoc.project,
       policyLinkData: links,
-      additionalCriteriaData: {
-        criteria: flatDoc.criteria,
-        criteriaNotes: flatDoc.criteriaNotes,
-        restrictionLevel: flatDoc.restrictionLevel,
-        subPopulation: flatDoc.subPopulation,
-        lineOfTherapy: flatDoc.lineOfTherapy,
-      }
+      additionalCriteriaData: flatDoc.additionalCriteria
     }
 
     docs.push(doc)

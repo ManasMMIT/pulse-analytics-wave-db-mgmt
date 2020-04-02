@@ -250,10 +250,10 @@ const ModalOuterContentContainer = props => {
   const { selectedTool: { _id: selectedToolId } } = selectedToolData
 
   const flatSelectedNodes = [
-    selectedToolData.selectedTool,
-    selectedDashboardData.selectedDashboard,
-    selectedPageData.selectedPage,
-    selectedCardData.selectedCard
+    selectedToolData && selectedToolData.selectedTool,
+    selectedDashboardData && selectedDashboardData.selectedDashboard,
+    selectedPageData && selectedPageData.selectedPage,
+    selectedCardData && selectedCardData.selectedCard
   ]
 
   return (

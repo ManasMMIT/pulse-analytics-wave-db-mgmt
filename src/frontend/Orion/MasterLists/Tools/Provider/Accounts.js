@@ -9,6 +9,7 @@ import { ProviderAccountModalButton } from '../../../shared/AccountModals'
 import DeleteButton from '../../../shared/DeleteButton'
 import ExportExcelButton from '../../../../components/ExportExcelButton'
 import ProviderImportButton from './ProviderImportButton'
+import CopyOneOfStringButton from '../../../shared/CopyOneOfStringButton'
 
 import {
   DELETE_PROVIDER_ORGANIZATION,
@@ -53,18 +54,22 @@ const headerChildren = data => {
 
   return (
     <div>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around', margin: 24 }}>
-        <ProviderAccountModalButton
-          buttonLabel={CREATE_BUTTON_TXT}
-          buttonStyle={buttonStyle}
-        />
-        <ExportExcelButton
-          createBackup
-          filename={`providers-master-list`}
-          isDisabled={!exportData.length}
-          data={exportData}
-        />
-      </div>
+      <ProviderAccountModalButton
+        buttonLabel={CREATE_BUTTON_TXT}
+        buttonStyle={buttonStyle}
+      />
+      <CopyOneOfStringButton
+        queryDoc={GET_PROVIDER_ORGANIZATIONS}
+        dataKey="providerOrganizations"
+        datumKey="slug"
+        buttonStyle={{ marginRight: 15 }}
+      />
+      <ExportExcelButton
+        createBackup
+        filename={`providers-master-list`}
+        isDisabled={!exportData.length}
+        data={exportData}
+      />
       { name === 'admin' && <ProviderImportButton /> }
     </div>
   )

@@ -72,6 +72,7 @@ const CloseButton = styled.button({
   },
   ':focus': {
     outline: 'none',
+    boxShadow: '0 0 0 2px',
   },
   ':active': {
     outline: 'none',
@@ -159,7 +160,7 @@ Modal.propTypes = {
   modalStyle: PropTypes.object,
   padding: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   disableHeader: PropTypes.bool,
-  width: PropTypes.string,
+  width: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   noClickAway: PropTypes.bool,
 }
 

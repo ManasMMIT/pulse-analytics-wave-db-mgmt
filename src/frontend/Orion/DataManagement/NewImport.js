@@ -8,6 +8,20 @@ import { UPLOAD_SHEET } from '../../api/mutations'
 
 import { useMutation } from '@apollo/react-hooks'
 
+import Button from '../../components/Button'
+import { customSelectStyles } from '../../components/customSelectStyles'
+
+import {
+  PageContainer,
+  PageHeaderContainer,
+  PageHeader,
+  ImportFormContainer,
+  FieldContainer,
+  FieldLabel,
+  FileInput,
+  ErrorContainer,
+} from './styledImportComponents'
+
 const Import = () => {
   const fileInputRef = useRef(null)
 
@@ -15,11 +29,17 @@ const Import = () => {
   const [selectedSheet, selectSheet] = useState(null)
   const [workbook, setWorkbook] = useState(null)
   const [loading, setLoading] = useState(false)
+  const [errors, setErrors] = useState(null)
 
   const [uploadSheet] = useMutation(UPLOAD_SHEET, {
-    onCompleted: result => {
-      // alert(`${json.length} rows would go to the backend`)
+    onCompleted: ({ uploadSheet: importFeedback }) => {
+      alert(importFeedback.join('\n'))
       setLoading(false)
+    },
+    onError: errorMessage => {
+      alert(errorMessage)
+      setLoading(false)
+      setErrors(errorMessage.toString())
     },
   })
 
@@ -32,7 +52,7 @@ const Import = () => {
 
     reader.onload = e => {
       const data = new Uint8Array(e.target.result)
-      const nextWorkbook = XLSX.read(data, { type: 'array' })
+      const nextWorkbook = XLSX.read(data, { cellDates: true, type: 'array' })
 
       const nextSheetNames = nextWorkbook.SheetNames
       const nextSelectedSheet = { value: nextSheetNames[0], label: nextSheetNames[0] }
@@ -71,42 +91,56 @@ const Import = () => {
   }
 
   return (
-    <div style={{ padding: 24 }}>
-      <div>
-        <p>Pick an Excel file:</p>
-        <input
-          ref={fileInputRef}
-          type="file"
-          multiple
-          onChange={onFileAdded}
-        />
-      </div>
+    <PageContainer>
+      <PageHeaderContainer>
+        <PageHeader>Import Excel Sheets</PageHeader>
+      </PageHeaderContainer>
+      <ImportFormContainer>
+        <FieldContainer>
+          <FieldLabel>Pick an Excel file:</FieldLabel>
+          <FileInput
+            ref={fileInputRef}
+            type="file"
+            multiple
+            onChange={onFileAdded}
+          />
+        </FieldContainer>
 
-      {
-        _.isEmpty(sheetNames) || (
-          <div style={{ marginTop: 24, width: 500 }}>
-            <p>Sheets to Upload:</p>
-            {
-              <Select
-                value={selectedSheet}
-                onChange={obj => selectSheet(obj)}
-                options={sheetNames.map(n => ({ value: n, label: n }))}
-              />
-            }
-          </div>
-        )
-      }
+        {
+          _.isEmpty(sheetNames) || (
+            <FieldContainer style={{ width: 500 }}>
+              <FieldLabel>Sheets to Upload:</FieldLabel>
+              {
+                <Select
+                  value={selectedSheet}
+                  onChange={obj => selectSheet(obj)}
+                  options={sheetNames.map(n => ({ value: n, label: n }))}
+                  styles={customSelectStyles}
+                />
+              }
+            </FieldContainer>
+          )
+        }
 
-      {
-        selectedSheet && (
-          <button onClick={handleSubmit}>
-            Import
-          </button>
-        )
-      }
+        {
+          selectedSheet && (
+            <Button onClick={handleSubmit}>
+              Import Sheet
+            </Button>
+          )
+        }
 
-      { loading && <Spinner /> }
-    </div>
+        { loading && <Spinner /> }
+
+        {
+          errors && (
+            <ErrorContainer>
+              { errors }
+            </ErrorContainer>
+          )
+        }
+      </ImportFormContainer>
+    </PageContainer>
   )
 }
 

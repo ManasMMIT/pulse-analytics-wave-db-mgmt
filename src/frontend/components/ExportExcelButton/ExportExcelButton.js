@@ -15,7 +15,7 @@ const ExportButton = styled.button({
   padding: '8px 12px',
   borderRadius: 4,
   cursor: 'pointer',
-  marginLeft: 24,
+  margin: '12px 0px',
   ':hover': {
     background: transparentize(0.65, primaryColor),
   }

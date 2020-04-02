@@ -77,6 +77,7 @@ const headerChildren = (
     <CopyOneOfStringButton
       queryDoc={GET_SOURCE_INDICATIONS}
       dataKey="indications"
+      datumKey="name"
     />
   </div>
 )

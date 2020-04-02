@@ -20,6 +20,7 @@ const TYPES = [
   'integer',
   'boolean',
   'csv',
+  'date',
 ]
 
 const Form = ({
@@ -31,7 +32,11 @@ const Form = ({
 }) => {
   const [stagedFieldName, setFieldName] = useState(data.name)
   const [stagedType, setType] = useState(data.type)
-  const [stagedOneOf, setOneOf] = useState(data.oneOf || [])
+  const [stagedOneOf, setOneOf] = useState(
+    Array.isArray(data.oneOf)
+      ? JSON.stringify(data.oneOf).replace(/\[|\]/g, '')
+      : ''
+  )
 
   const [saveField] = useMutation(mutationDoc, {
     variables: {
@@ -40,7 +45,7 @@ const Form = ({
         name: stagedFieldName,
         type: stagedType,
         oneOf: stagedOneOf,
-      }
+      },
     },
     refetchQueries: [{ query: GET_WORKBOOKS }],
     onCompleted: result => {
@@ -50,6 +55,7 @@ const Form = ({
       closeModal()
       afterMutationHook(newOrUpdatedField)
     },
+    onError: e => alert(`Write failure: ${e.message}`),
     awaitRefetchQueries: true,
   })
 
@@ -58,8 +64,7 @@ const Form = ({
   const handleOneOfChange = e => {
     e.persist()
     const value = e.currentTarget && e.currentTarget.value
-    const oneOfArr = value.split(',').map(str => str.trim())
-    setOneOf(oneOfArr)
+    setOneOf(value)
   }
 
   const handleFieldChange = e => {
@@ -94,7 +99,7 @@ const Form = ({
       <FieldContainer>
         <FormLabel>oneOf Restrictions</FormLabel>
         <StyledTextarea
-          value={stagedOneOf.join(', ')}
+          value={stagedOneOf}
           onChange={handleOneOfChange}
         />
       </FieldContainer>

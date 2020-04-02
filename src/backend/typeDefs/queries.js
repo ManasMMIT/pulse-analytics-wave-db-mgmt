@@ -34,8 +34,14 @@ const queries = gql`
     workbooks: [Workbook]
     bomSchema(boId: ID): JSON
 
-    singlePayerProject(projectId: ID): SinglePayerProject
+    singlePayerProject(projectId: String): SinglePayerProject
     payerProjectsList: [PayerProjectsList]
+
+    projectPtps(input: ProjectPtpsInput!): [ProjectPtp]
+
+    treatmentPlans: [TreatmentPlan]
+
+    payerCombinedStateLives(treatmentPlan: JSON): [PayerCombinedStateLives]
   }
 
   type Node {
@@ -51,7 +57,7 @@ const queries = gql`
     schemaVersion: String
     resources: JSON
     icon: String # TODO: deprecate and change to iconId
-    }
+  }
 
   type Client {
     _id: String
@@ -191,7 +197,7 @@ const queries = gql`
     updatedAt: DateTime
     updater: JSON
   }
-  
+
   type OpLog {
     timestamp: DateTime
     username: String
@@ -229,6 +235,62 @@ const queries = gql`
   type PayerProjectsList {
     _id: ID!
     name: String!
+  }
+
+  type TreatmentPlan {
+    _id: ID!
+    indication: String
+    regimen: String
+    book: String
+    coverage: String
+    line: String
+    population: String
+  }
+
+  type ProjectPtp {
+    _id: ID!
+    slug: String
+    organization: String
+    organizationTiny: String
+    indication: String
+    population: String
+    line: String
+    regimen: String
+    book: String
+    coverage: String
+    project: PtpProjectSubdoc
+  }
+
+  type PtpProjectSubdoc {
+    _id: ID
+    name: String
+  }
+
+  input ProjectPtpsInput {
+    projectId: ID
+    limit: Int
+    skip: Int
+    order: [OrderConfig]
+  }
+
+  input OrderConfig {
+    key: String!
+    direction: Int!
+  }
+
+  type PayerCombinedStateLives {
+    _id: ID
+    indication: String
+    regimen: String
+    book: String
+    coverage: String
+    line: String
+    population: String
+    treatmentPlan: String
+    DRG_statesData: JSON
+    MMIT_statesData: JSON
+    DRG_nationalData: JSON
+    MMIT_nationalData: JSON
   }
 `
 

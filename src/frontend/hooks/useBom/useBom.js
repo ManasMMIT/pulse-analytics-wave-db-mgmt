@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { useQuery } from '@apollo/react-hooks'
 
 import BOID_QUERY_MAP from './boid-query-map'
@@ -8,15 +7,8 @@ import {
 } from './../../api/queries'
 
 export default (boId, entityId) => {
-  const [schema, setSchema] = useState({})
-
-  const { loading: loadingSchema } = useQuery(GET_BOM_SCHEMA, {
-    variables: { boId },
-    onCompleted: data => {
-      const { bomSchema } = data
-
-      setSchema(bomSchema)
-    }
+  const { loading: loadingSchema, data: schemaData } = useQuery(GET_BOM_SCHEMA, {
+    variables: { boId }
   })
 
   const { loading: loadingEntity, data } = useQuery(BOID_QUERY_MAP[boId])
@@ -30,6 +22,9 @@ export default (boId, entityId) => {
       ? queryResult.find(({ _id }) => _id === entityId)
       : queryResult
   }
+
+  let schema = {}
+  if (!loadingSchema) schema = schemaData.bomSchema
 
   return {
     schema,

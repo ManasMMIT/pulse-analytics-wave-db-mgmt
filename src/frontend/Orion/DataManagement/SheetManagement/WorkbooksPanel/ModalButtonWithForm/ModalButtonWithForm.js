@@ -32,6 +32,7 @@ const ModalButtonWithForm = ({
         handleClose={closeModal}
         show={isModalOpen}
         title={modalTitle}
+        width={500}
       >
         <Form
           data={data}

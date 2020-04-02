@@ -1,5 +1,19 @@
 import gql from 'graphql-tag'
 
+export const UPDATE_TEAM_NODE = gql`
+  mutation UpdateTeamNode($input: UpdateTeamNodeInput!) {
+    updateTeamNode(input: $input) {
+      _id
+      name
+      type
+      componentPath
+      text
+      order
+      parentId
+    }
+  }
+`
+
 export const SELECT_TEAM = gql`
   mutation SelectTeam($_id: String) {
     selectTeam(_id: $_id) @client {

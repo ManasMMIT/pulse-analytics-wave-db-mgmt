@@ -119,12 +119,46 @@ export const GET_USER_TEAMS = gql`
   }
 `
 
+export const GET_TEAMS = gql`
+  query getAllTeams {
+    teams {
+      _id
+      name
+      description
+      isDefault
+      sitemap
+      client {
+        _id
+        name
+        description
+      }
+    }
+  }
+`
+
 export const GET_SELECTED_USER = gql`
   query getSelectedUser {
     selectedUser @client {
       _id
       username
       email
+    }
+  }
+`
+
+export const GET_SOURCE_NODES = gql`
+  query getSourceNodes {
+    nodes {
+      _id
+      name
+      type
+      componentPath
+      text
+      subtitle
+      caption
+      order
+      parentId
+      resources
     }
   }
 `
@@ -500,4 +534,74 @@ export const GET_WORKBOOKS = gql`
       }
     }
   }
+`
+
+export const GET_PAYER_PROJECTS_LIST = gql`
+  query getPayerProjectsList {
+    payerProjectsList {
+       _id
+      name
+    }
+ }
+`
+
+export const GET_SINGLE_PAYER_PROJECT = gql`
+  query getSinglePayerProject($projectId: String) {
+    singlePayerProject(projectId: $projectId) {
+       _id
+      name
+      timestamps
+    }
+ }
+`
+
+export const GET_SOURCE_TREATMENT_PLANS = gql`
+ query getSourceTreatmentPlans {
+   treatmentPlans {
+    _id
+    indication
+    regimen
+    line
+    population
+    book
+    coverage
+   }
+ }
+`
+
+export const GET_PROJECT_PTPS = gql`
+ query getProjectPtps($input: ProjectPtpsInput!) {
+   projectPtps(input: $input) {
+      _id
+      slug
+      organization
+      organizationTiny
+      indication
+      population
+      line
+      regimen
+      book
+      coverage
+      project {
+        _id
+        name
+      }
+   }
+ }
+`
+
+export const GET_PAYER_COMBINED_DRG_STATE_LIVES = gql`
+  query getPayerCombinedDrgStateLives($treatmentPlan: JSON) {
+    payerCombinedStateLives(treatmentPlan: $treatmentPlan) {
+      _id
+      indication
+      regimen
+      book
+      coverage
+      line
+      population
+      treatmentPlan
+      DRG_statesData
+   }
+ }
 `

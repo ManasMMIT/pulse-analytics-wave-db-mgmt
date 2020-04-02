@@ -1,4 +1,4 @@
-require('dotenv').load()
+require('dotenv').config()
 const LOADER_URI = process.env.LOADER_URI
 const MongoClient = require('mongodb').MongoClient
 

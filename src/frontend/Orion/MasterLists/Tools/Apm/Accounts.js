@@ -8,6 +8,7 @@ import Panel from '../../../../Phoenix/shared/Panel'
 
 import { ApmAccountModalButton } from './../../../shared/AccountModals'
 import DeleteButton from '../../../shared/DeleteButton'
+import CopyOneOfStringButton from '../../../shared/CopyOneOfStringButton'
 
 import {
   DELETE_APM_ORGANIZATION,
@@ -49,6 +50,12 @@ const headerChildren = (
     <ApmAccountModalButton
       buttonLabel={CREATE_BUTTON_TXT}
       buttonStyle={buttonStyle}
+    />
+
+    <CopyOneOfStringButton
+      queryDoc={GET_APM_ORGANIZATIONS}
+      dataKey="apmOrganizations"
+      datumKey="slug"
     />
   </div>
 )

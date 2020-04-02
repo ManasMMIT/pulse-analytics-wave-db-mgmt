@@ -1,45 +1,70 @@
-const sanitizeAndFormat = require('./utils/sanitizeAndFormat')
+const sanitize = require('./utils/sanitize')
 const validate = require('./utils/validate')
-const importPayerHistoricalData = async args => args
-const importData = async args => args
-const getWorkbookConfig = async () => ({})
+const getSheetConfig = require('./utils/getSheetConfig')
+const formatAjvErrors = require('./utils/formatAjvErrors')
+const importPayerHistoricalData = require('./importPayerHistoricalData')
 
 const uploadSheet = async (
   parent,
   { input }, // schema is [ { wb, sheet, data, timestamp, projectId }, etc. ]
-  { pulseCoreDb, mongoClient },
+  { pulseCoreDb, pulseDevDb, mongoClient },
   info
 ) => {
+  const importFeedback = []
+
   for (const sheetToUpload of input) {
     let { wb, sheet, data, timestamp, projectId } = sheetToUpload
+    const originalDataLength = data.length // excludes header
 
-    data = sanitizeAndFormat(data)
+    const { result, skippedRows } = sanitize(data)
+    data = result
 
-    const workbookConfig = await getWorkbookConfig(wb, sheet) // handles getting the right config, including for payer historical data exceptions
-    const targetCollection = workbookConfig.collection
-    
-    const validationResults = validate(data, workbookConfig)
+    const sheetConfig = await getSheetConfig({ wb, sheet, pulseCoreDb }) // handles getting the right sheet config, including for payer historical data exceptions
+    const targetCollection = sheetConfig.collection
 
-    // depending on validation results, either continue or throw errors as needed
+    const {
+      valid,
+      errors,
+      data: validatedData,
+    }  = validate({ data, skippedRows, sheetConfig })
 
-    const importArgs = {
-      data,
-      timestamp,
-      projectId,
-      targetCollection,
-      pulseCoreDb,
-      mongoClient,
+    data = validatedData
+
+    if (!valid) {
+      const errorString = formatAjvErrors({ errors, wb, sheet })
+      throw new Error(errorString)
     }
 
     if (timestamp && projectId) {
-      await importPayerHistoricalData(importArgs)
+      await importPayerHistoricalData(
+        {
+          wb,
+          sheet,
+          data,
+          timestamp,
+          projectId,
+        },
+        { pulseCoreDb, pulseDevDb, mongoClient },
+        importFeedback,
+      )
+
       continue
     }
 
-    await importData(importArgs)
+    await pulseDevDb.collection(targetCollection)
+      .deleteMany()
+
+    await pulseDevDb.collection(targetCollection)
+      .insertMany(data)
+
+    importFeedback.push(
+      `Import successful for ${wb}/${sheet}`
+        + `\n${data.length}/${originalDataLength} rows imported (excluding header)`
+        + `\nSkipped rows were: ${skippedRows.join(', ')}`
+    )
   }
-  
-  return 'Import successful'
+
+  return importFeedback
 }
 
 module.exports = uploadSheet

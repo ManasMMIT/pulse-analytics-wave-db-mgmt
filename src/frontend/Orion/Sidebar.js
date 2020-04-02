@@ -55,8 +55,8 @@ const sharedStyles = {
 
 const StyledNavLink = styled(NavLink)({
   ':hover': {
-    background: transparentize(0.9, Colors.WHITE)
-  }
+    background: transparentize(0.9, Colors.WHITE),
+  },
 })
 
 const StyledDropdown = styled(Dropdown)({
@@ -93,23 +93,53 @@ const ORDERED_MASTER_LIST_ITEMS = [
   'Indications',
   'Regimens',
   'Products',
-  'Manufacturers'
+  'Manufacturers',
 ]
 
 const getNavLink = label => (
-    <StyledNavLink
-      key={`nav-link:${label}`}
-      style={inactiveLinkStyle}
-      activeStyle={activeLinkStyle}
-      to={`/orion/lists/${_.kebabCase(label)}`}
-    >
-      {label}
-    </StyledNavLink>
+  <StyledNavLink
+    key={`nav-link:${label}`}
+    style={inactiveLinkStyle}
+    activeStyle={activeLinkStyle}
+    to={`/orion/lists/${_.kebabCase(label)}`}
+  >
+    {label}
+  </StyledNavLink>
 )
 
 const getToolItemPath = (tool, item) => {
   return `/orion/lists/tools/${tool}/${item}`
 }
+
+const linkConfig = [
+  { label: 'Query Tool', link: '/orion/data-management/query' },
+  { label: 'New Query Tool', link: '/orion/data-management/new-query' },
+  { label: 'Suggested Questions', link: '/orion/data-management/questions' },
+  {
+    label: 'Sheet Management',
+    link: '/orion/data-management/sheet-management',
+  },
+  { label: 'New Import Tool', link: '/orion/data-management/new-import' },
+  { label: 'Old Import Tool', link: '/orion/data-management/import' },
+  {
+    label: 'Export Custom Data',
+    link: '/orion/data-management/export-custom-data',
+  },
+  { label: 'Payer Projects', link: '/orion/data-management/payer-projects' },
+  { label: 'Add Source Node', link: '/orion/data-management/add-source-node' },
+  { label: 'Edit Role Node', link: '/orion/data-management/edit-role-node' },
+]
+
+const renderStyledNavLink = ({ label, link }) => (
+  <StyledNavLink
+    key={link}
+    style={inactiveLinkStyle}
+    activeStyle={activeLinkStyle}
+    to={link}
+  >
+    {label}
+  </StyledNavLink>
+)
 
 const Sidebar = () => {
   const masterListItems = ORDERED_MASTER_LIST_ITEMS.map(getNavLink)
@@ -120,66 +150,12 @@ const Sidebar = () => {
         <OrionLogo src="https://res.cloudinary.com/pulsedatatools/image/upload/v1573837414/polaris/icons/orion-1-color.svg" />
         Orion DB
       </OrionHeader>
-      <Header>
-        Data Management
-      </Header>
-      <StyledNavLink
-        style={inactiveLinkStyle}
-        activeStyle={activeLinkStyle}
-        to={`/orion/data-management/query`}
-      >
-        Query Tool
-      </StyledNavLink>
-      <StyledNavLink
-        style={inactiveLinkStyle}
-        activeStyle={activeLinkStyle}
-        to={`/orion/data-management/new-query`}
-      >
-        New Query Tool
-      </StyledNavLink>
-      <StyledNavLink
-        style={inactiveLinkStyle}
-        activeStyle={activeLinkStyle}
-        to={`/orion/data-management/questions`}
-      >
-        Suggested Questions
-      </StyledNavLink>
-      <StyledNavLink
-        style={inactiveLinkStyle}
-        activeStyle={activeLinkStyle}
-        to={`/orion/data-management/sheet-management`}
-      >
-        Sheet Management
-      </StyledNavLink>
-      <StyledNavLink
-        style={inactiveLinkStyle}
-        activeStyle={activeLinkStyle}
-        to={`/orion/data-management/new-import`}
-      >
-        New Import Tool
-      </StyledNavLink>
-      <StyledNavLink
-        style={inactiveLinkStyle}
-        activeStyle={activeLinkStyle}
-        to={`/orion/data-management/import`}
-      >
-        Old Import Tool
-      </StyledNavLink>
-      <StyledNavLink
-        style={inactiveLinkStyle}
-        activeStyle={activeLinkStyle}
-        to={`/orion/data-management/export-custom-data`}
-      >
-        Export Custom Data
-      </StyledNavLink>
-      <Header>
-        MASTER LISTS
-      </Header>
+      <Header>Data Management</Header>
+      {linkConfig.map(renderStyledNavLink)}
+      <Header>MASTER LISTS</Header>
       {masterListItems}
       <div>
-        <Header>
-          TOOL MASTER LISTS
-        </Header>
+        <Header>TOOL MASTER LISTS</Header>
         <StyledDropdown
           style={inactiveLinkStyle}
           label={'Alternative Payment Models'}
@@ -192,16 +168,20 @@ const Sidebar = () => {
             Accounts
           </StyledNavLink>
         </StyledDropdown>
-        <StyledDropdown
-          style={inactiveLinkStyle}
-          label={'Pathways'}
-        >
+        <StyledDropdown style={inactiveLinkStyle} label={'Pathways'}>
           <StyledNavLink
             style={dropdownInactiveLinkStyle}
             activeStyle={dropdownActiveLinkStyle}
             to={getToolItemPath('pathways', 'accounts')}
           >
             Accounts
+          </StyledNavLink>
+          <StyledNavLink
+            style={dropdownInactiveLinkStyle}
+            activeStyle={dropdownActiveLinkStyle}
+            to={getToolItemPath('pathways', 'newaccounts')}
+          >
+            New Pathways Accounts
           </StyledNavLink>
         </StyledDropdown>
         <StyledDropdown

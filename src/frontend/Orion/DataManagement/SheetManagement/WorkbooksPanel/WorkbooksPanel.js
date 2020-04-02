@@ -93,7 +93,7 @@ const WorkbooksPanel = () => {
                 data={workbookObj}
                 mutationDoc={UPDATE_WORKBOOK}
                 afterMutationHook={handleClick}
-                style={{ fontSize: 10, padding: '4px 8px' }}
+                style={{ fontSize: 10, padding: '4px 8px', marginRight: 8, }}
               />
 
               <DeleteButton
