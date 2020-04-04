@@ -3,13 +3,13 @@ module.exports = async getDiffDoc => {
     book,
     coverage,
     // dateTracked,
-    link,
+    link = null, // if it's not there, sub null for comparison to work
     month,
     // organization,
-    paLink,
+    paLink = null, // if it's not there, sub null for comparison to work
     project,
     regimen,
-    siteLink,
+    siteLink = null, // if it's not there, sub null for comparison to work
     slug,
     year
   }) => [

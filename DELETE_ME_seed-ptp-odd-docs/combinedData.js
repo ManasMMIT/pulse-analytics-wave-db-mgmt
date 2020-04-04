@@ -18,13 +18,13 @@ module.exports = async getDiffDoc => {
     line,
     month,
     // organization,
-    paLink,
-    policyLink,
+    paLink = null, // if it's not there, sub null for comparison to work
+    policyLink = null, // if it's not there, sub null for comparison to work
     population,
     project,
     regimen,
     score,
-    siteLink,
+    siteLink = null, // if it's not there, sub null for comparison to work
     slug,
     sortOrder,
     tier,
