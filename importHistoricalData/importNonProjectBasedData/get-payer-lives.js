@@ -17,10 +17,8 @@ const getStateLivesTotals = stateLives => {
       commercialPharmacy: 0,
       medicarePharmacy: 0,
       macMedical: 0,
-      tricareMedical: 0,
-      tricarePharmacy: 0,
-      vaMedical: 0,
-      vaPharmacy: 0,
+      federalOtherMedical: 0,
+      federalOtherPharmacy: 0,
     }
 
     const livesTypesKeys = Object.keys(livesTypesAccumulator)
@@ -61,10 +59,8 @@ const getNationalLivesTotals = data => {
     totalPharmacy: 0,
     totalMedical: 0,
     macMedical: 0,
-    tricareMedical: 0,
-    tricarePharmacy: 0,
-    vaMedical: 0,
-    vaPharmacy: 0
+    federalOtherMedical: 0,
+    federalOtherPharmacy: 0,
   }
 
   const reduceCallback = (memo, item) => {

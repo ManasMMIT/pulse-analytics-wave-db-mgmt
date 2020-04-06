@@ -45,12 +45,8 @@ module.exports = [
               then: '$stateLives.ffsMedicaidMedical',
             },
             {
-              case: { $eq: ['$book', 'VA'] },
-              then: '$stateLives.vaMedical',
-            },
-            {
-              case: { $eq: ['$book', 'Tricare'] },
-              then: '$stateLives.tricareMedical',
+              case: { $eq: ['$book', 'Federal/Other'] },
+              then: '$stateLives.federalOtherMedical',
             },
           ]
         }

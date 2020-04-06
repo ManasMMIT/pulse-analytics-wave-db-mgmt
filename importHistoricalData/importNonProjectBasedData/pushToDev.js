@@ -9,6 +9,7 @@ const pushToDev = async ({
   pulseCoreDb,
   pulseDevDb,
   terminateScript,
+  ignoreConsolidatePayerData,
 }) => {
   try {
     const latestMonthYearData = await pulseCoreDb.collection(collectionName).aggregate(
@@ -41,7 +42,9 @@ const pushToDev = async ({
       await appendLivesPercentData({ pulseDevDb, pulseCoreDb, terminateScript })
     }
 
-    await consolidatePayerData({ pulseDevDb, pulseCoreDb, terminateScript })
+    if (!ignoreConsolidatePayerData) {
+      await consolidatePayerData({ pulseDevDb, pulseCoreDb, terminateScript })
+    }
   } catch(e) {
     console.error(e)
   } finally {
