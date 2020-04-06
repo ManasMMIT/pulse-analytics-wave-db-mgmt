@@ -1,4 +1,6 @@
-const connectToMongoDb = require('../connect-to-mongodb')
+require('dotenv').config()
+const MONGO_KEY = process.env.MONGO_KEY
+const MongoClient = require('mongodb').MongoClient
 const getQualityAccessDiffDocs = require('./qualityAccess')
 const getAdditionalCriteriaDiffDocs = require('./additionalCriteria')
 const getPolicyLinkDiffDocs = require('./policyLinks')
@@ -7,14 +9,17 @@ const getCombinedDataDocs = require('./combinedData')
 // const getCombinedStateLivesDocs = require('./combinedStateLives')
 
 const runDiffer = async () => {
-  const dbs = await connectToMongoDb()
-  const pulseDev = dbs.db('pulse-dev')
+  const stagingDbs = await MongoClient.connect(`mongodb://pulse-admin:${MONGO_KEY}@wave-staging-shard-00-00-ik4h2.mongodb.net:27017,wave-staging-shard-00-01-ik4h2.mongodb.net:27017,wave-staging-shard-00-02-ik4h2.mongodb.net:27017/pulse-dev?ssl=true&replicaSet=wave-staging-shard-0&authSource=admin`, { useNewUrlParser: true })
+  const testDbs = await MongoClient.connect(`mongodb+srv://pulse-admin:${MONGO_KEY}@wave-test.ik4h2.mongodb.net/pulse-dev?retryWrites=true&w=majority`, { useNewUrlParser: true })
 
-  await dbs.db('pulse-core')
+  const pulseDevStaging = stagingDbs.db('pulse-dev')
+  const pulseDevTest = testDbs.db('pulse-dev')
+
+  await pulseDevStaging
     .collection('aBHistoricalDiffsAll')
     .deleteMany()
 
-  await dbs.db('pulse-core')
+  await pulseDevStaging
     .collection('aBHistoricalDiffs')
     .deleteMany()
 
@@ -27,7 +32,10 @@ const runDiffer = async () => {
       simpleDiff: qualityAccessHtSimpleDiff,
       diff: qualityAccessHtDiff
     },
-  ] = await getQualityAccessDiffDocs(pulseDev)
+  ] = await getQualityAccessDiffDocs({
+    pulseDevStaging,
+    pulseDevTest,
+  })
 
   const [
     {
@@ -38,7 +46,10 @@ const runDiffer = async () => {
       simpleDiff: additionalCriteriaHtSimpleDiff,
       diff: additionalCriteriaHtDiff
     },
-  ] = await getAdditionalCriteriaDiffDocs(pulseDev)
+  ] = await getAdditionalCriteriaDiffDocs({
+    pulseDevStaging,
+    pulseDevTest,
+  })
 
   const [
     {
@@ -49,12 +60,18 @@ const runDiffer = async () => {
       simpleDiff: policyLinkHtSimpleDiff,
       diff: policyLinkHtDiff
     },
-  ] = await getPolicyLinkDiffDocs(pulseDev)
+  ] = await getPolicyLinkDiffDocs({
+    pulseDevStaging,
+    pulseDevTest,
+  })
 
   const {
     simpleDiff: combinedDataSimpleDiff,
     diff: combinedDataDiff,
-  } = await getCombinedDataDocs(pulseDev)
+  } = await getCombinedDataDocs({
+    pulseDevStaging,
+    pulseDevTest,
+  })
 
   // ! op is too big and blows up
   // const {
@@ -73,9 +90,7 @@ const runDiffer = async () => {
     // combinedStateLivesSimpleDiff,
   ]
 
-  debugger
-
-  await dbs.db('pulse-core')
+  await pulseDevStaging
     .collection('aBHistoricalDiffs')
     .insertMany(simpleDiffDocs)
 
@@ -96,14 +111,17 @@ const runDiffer = async () => {
   for (let i = 0; i < diffDocs.length; i++) {
     const diffDoc = diffDocs[i]
 
-    await dbs.db('pulse-core')
+    await pulseDevStaging
       .collection('aBHistoricalDiffsAll')
       .insertOne(diffDoc)
   }
 
   console.log('DONE')
 
-  dbs.close()
+  await stagingDbs.close()
+  await testDbs.close()
+
+  console.log('dbs connections closed')
 }
 
 runDiffer()

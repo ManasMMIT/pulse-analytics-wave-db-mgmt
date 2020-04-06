@@ -7,19 +7,22 @@ const getDiffDoc = require('./getDiffDoc')
 
 // TODO We should match the two collections in the seed file.
 
-module.exports = async pulseDev => {
+module.exports = async ({
+  pulseDevStaging,
+  pulseDevTest,
+}) => {
   const comparer = ({
     access,
-    accessTiny,
+    // accessTiny,
     book,
     // caption,
     color,
     coverage,
     indication,
-    internalTeamUse,
+    // internalTeamUse,
     line,
     month,
-    organization,
+    // organization,
     paLink,
     policyLink,
     population,
@@ -36,16 +39,16 @@ module.exports = async pulseDev => {
     additionalCriteria,
   }) => [
     access,
-    accessTiny,
+    // accessTiny,
     book,
     // caption,
     color,
     coverage,
     indication,
-    internalTeamUse,
+    // internalTeamUse,
     line,
     month,
-    organization,
+    // organization,
     paLink,
     policyLink,
     population,
@@ -68,9 +71,11 @@ module.exports = async pulseDev => {
   ].join('|')
 
   return getDiffDoc({
-    db: pulseDev,
+    dbs: {
+      pulseDevStaging,
+      pulseDevTest,
+    },
     comparer,
-    oldCollectionName: 'payerHistoricalCombinedData',
-    newCollectionName: 'payerHistoricalCombinedData-MATT_FIX',
+    collectionName: 'payerHistoricalCombinedData',
   })
 }

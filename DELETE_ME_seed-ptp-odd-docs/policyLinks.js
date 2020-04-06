@@ -1,13 +1,16 @@
 const getDiffDoc = require('./getDiffDoc')
 
-module.exports = async pulseDev => {
+module.exports = async ({
+  pulseDevStaging,
+  pulseDevTest,
+}) => {
   const comparer = ({
     book,
     coverage,
-    dateTracked,
+    // dateTracked,
     link,
     month,
-    organization,
+    // organization,
     paLink,
     project,
     regimen,
@@ -17,10 +20,10 @@ module.exports = async pulseDev => {
   }) => [
     book,
     coverage,
-    dateTracked,
+    // dateTracked,
     link,
     month,
-    organization,
+    // organization,
     paLink,
     project,
     regimen,
@@ -30,17 +33,21 @@ module.exports = async pulseDev => {
   ].join('|')
 
   const latestMonthOp = getDiffDoc({
-    db: pulseDev,
+    dbs: {
+      pulseDevStaging,
+      pulseDevTest,
+    },
     comparer,
-    oldCollectionName: 'payerHistoricalPolicyLinks',
-    newCollectionName: 'payerHistoricalPolicyLinks-MATT_TEST',
+    collectionName: 'payerHistoricalPolicyLinks',
   })
 
   const historicalOp = getDiffDoc({
-    db: pulseDev,
+    dbs: {
+      pulseDevStaging,
+      pulseDevTest,
+    },
     comparer,
-    oldCollectionName: 'payerHistoricalPolicyLinksHt',
-    newCollectionName: 'payerHistoricalPolicyLinksHt-MATT_TEST',
+    collectionName: 'payerHistoricalPolicyLinksHt',
   })
 
   return Promise.all([

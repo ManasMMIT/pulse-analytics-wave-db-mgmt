@@ -1,22 +1,24 @@
 const _ = require('lodash')
 
 module.exports = async ({
-  db: pulseDev,
+  dbs: {
+    pulseDevStaging,
+    pulseDevTest,
+  },
   comparer,
-  oldCollectionName,
-  newCollectionName,
+  collectionName,
 }) => {
-  const newCollectionOp = pulseDev
-    .collection(newCollectionName)
+  const newCollectionOp = pulseDevStaging
+    .collection(collectionName)
     .find()
     .toArray()
 
-  const oldCollectionOp = pulseDev
-    .collection(oldCollectionName)
+  const oldCollectionOp = pulseDevTest
+    .collection(collectionName)
     .find()
     .toArray()
 
-  console.log(`Comparing ${oldCollectionName} vs. ${ newCollectionName } docs`)
+  console.log(`Comparing ${collectionName} docs`)
 
   const [
     newCollectionDocs,
@@ -44,17 +46,17 @@ module.exports = async ({
     comparer,
   )
 
-  console.log(`FINISHED Comparing ${ oldCollectionName } vs. ${ newCollectionName } docs`)
+  console.log(`FINISHED Comparing ${collectionName} docs`)
 
   return {
     simpleDiff: {
-      collection: oldCollectionName,
-      'In old, not new':inOldNotNew[0],
-      'In new, not old':inNewNotOld[0],
-      'In both':inBothNewAndOld[0],
+      collection: collectionName,
+      'In old, not new': inOldNotNew[0],
+      'In new, not old': inNewNotOld[0],
+      'In both': inBothNewAndOld[0],
     },
     diff: {
-      collection: oldCollectionName,
+      collection: collectionName,
       // ! slices required to not bust buffer limit
       'In old, not new': inOldNotNew.slice(0, 500),
       'In new, not old': inNewNotOld.slice(0, 500),
