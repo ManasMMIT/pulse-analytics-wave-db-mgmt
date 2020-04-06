@@ -1,12 +1,15 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { NavLink } from 'react-router-dom'
-import _ from 'lodash'
+import { useQuery } from '@apollo/react-hooks'
 
 import Sidebar from '../../../../components/Sidebar'
 import SidebarItem from '../../../../components/Sidebar/SidebarItem'
 
 import Color from '../../../../utils/color'
+
+import { GET_SINGLE_PAYER_PROJECT } from '../../../../api/queries'
+import Spinner from '../../../../Phoenix/shared/Spinner'
 
 const generateSidebarItems = (
   selectedSidebarItem,
@@ -37,8 +40,18 @@ const PayerProjectSidebar = ({
   const { pathname } = location
   const selectedSidebarItem = pathname.split('/').pop()
 
+  const { data, loading } = useQuery(
+    GET_SINGLE_PAYER_PROJECT,
+    { variables: { projectId: match.params.projectId }}
+  )
+
+  const payerProjectName = loading
+    ? <Spinner />
+    : data.singlePayerProject.name
+
   return (
     <Sidebar sidebarStyle={{ borderRight: `1px solid ${ Color.LIGHT_GRAY_1 }`}}>
+      <h3>{ payerProjectName }</h3>
       { sidebarConfig.map(generateSidebarItems(selectedSidebarItem, url)) }
     </Sidebar>
   )

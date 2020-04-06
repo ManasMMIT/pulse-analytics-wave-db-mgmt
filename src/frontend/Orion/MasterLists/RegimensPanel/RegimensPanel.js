@@ -81,6 +81,7 @@ const headerChildren = (
     <CopyOneOfStringButton
       queryDoc={GET_SOURCE_REGIMENS}
       dataKey="regimens"
+      datumKey="name"
     />
   </div>
 )

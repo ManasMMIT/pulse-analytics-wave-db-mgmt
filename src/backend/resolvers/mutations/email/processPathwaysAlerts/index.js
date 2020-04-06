@@ -7,24 +7,14 @@ module.exports = async (
   date,
   userNodesResources,
 ) => {
+  const [year, month] = date.split('-').map(Number)
+
   let userPathwaysAlerts = await getUserPathwaysAlerts({
     pulseDevDb,
     subscriptionId: subscription,
     userNodesResources: userNodesResources.resources,
+    monthYearFilterParams: { month, year }
   })
 
-  const [year, month] = date.split('-')
-
-  // NOTE: In the future, store dates in the DB as dates that can be filtered by MongoDB rather than as a step afterward
-  const filteredUserAlertsData = userPathwaysAlerts
-    .filter(alert => {
-      const [alertYear, alertMonth] = alert.alertDate.split('-')
-
-      return (
-        year === alertYear
-          && month === alertMonth
-      )
-    })
-
-  return formatPathwaysAlerts(filteredUserAlertsData)
+  return formatPathwaysAlerts(userPathwaysAlerts)
 }

@@ -18,8 +18,9 @@ const baseButtonStyle = {
   padding: `${Spacing.S2} ${Spacing.S3}`,
   borderRadius: 4,
   fontWeight: 700,
+  cursor: 'pointer',
   whiteSpace: 'nowrap',
-  ...FontSpace.FS3,
+  ...FontSpace.FS2,
 }
 
 // Primary Button Style
@@ -39,7 +40,7 @@ const getPrimaryButtonStyle = color => ({
 // Secondary Button Style
 const getSecondaryButtonStyle = color => ({
   ...baseButtonStyle,
-  background: transparentize(0.1, color),
+  background: transparentize(0.9, color),
   color: color,
   transition: `background, color ${Transitions.NORMAL}`,
   ':hover': {
@@ -89,9 +90,9 @@ const generateButtonContent = ({
         style={iconStyle}
         {...iconProps}
       />,
-      children 
+      children
     ]
-    
+
     return iconPosition === 'left' ? content : content.reverse()
   } else {
     return (
@@ -101,6 +102,7 @@ const generateButtonContent = ({
 }
 
 const Button = ({
+  onClick,
   type,
   color,
   buttonStyle,
@@ -119,12 +121,13 @@ const Button = ({
     children
   })
 
-  const combinedButtonStyle = children 
-    ? buttonStyle 
+  const combinedButtonStyle = children
+    ? buttonStyle
     : { ...buttonStyle, padding: '7px 8px', lineHeight: 'normal' }
 
   return (
     <StyledButton
+      onClick={onClick}
       type={type}
       color={color}
       buttonStyle={combinedButtonStyle}
@@ -136,6 +139,7 @@ const Button = ({
 }
 
 Button.propTypes = {
+  onClick: PropTypes.func.isRequired,
   type: PropTypes.oneOf(['primary', 'secondary']),
   color: PropTypes.string,
   buttonStyle: PropTypes.object,

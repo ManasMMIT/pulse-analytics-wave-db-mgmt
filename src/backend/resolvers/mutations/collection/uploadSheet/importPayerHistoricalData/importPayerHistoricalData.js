@@ -1,6 +1,6 @@
 const ProjectHistoryManager = require('./ProjectHistoryManager')
 
-const PayerHistoryManager = require('./PayerHistoryManager')
+// const PayerHistoryManager = require('./PayerHistoryManager')
 
 // ? FOR FUTURE: random global tracker to indicate when to trigger combo materialization functions
 // let tracker = 0
@@ -20,7 +20,7 @@ const importHistoricalProjectData = async (
     projectId,
   },
   { pulseCoreDb, pulseDevDb, mongoClient },
-  importFeedback, // TODO: add success messages to importFeedback array on success
+  importFeedback, // TODO: add success messages to importFeedback array on success (mutate this array)
 ) => {
   const projectHistoryManager = new ProjectHistoryManager({
     projectId,
@@ -34,6 +34,7 @@ const importHistoricalProjectData = async (
     })
   } catch(e) {
     throw new Error(e)
+    // TODO: eventually you'll have to report what was successful even if 1 out of 3 sheets failed to be imported
     // throw new Error(e.message + '\n' + 'Successful stuff:' + importFeedback.join('\n'))
   }
 
@@ -44,16 +45,16 @@ const importHistoricalProjectData = async (
       timestamp,
     })
 
-  // ? TODO: Matt builds up success string and adds memoized importFeedback array
+  // // ? TODO: Matt builds up success string and adds memoized importFeedback array
 
-  // ? let successString = `${wb}/${sheet} successfully updated in CORE DB for ${timestamp}`
+  // // ? let successString = `${wb}/${sheet} successfully updated in CORE DB for ${timestamp}`
 
-  const payerHistoryManager = new PayerHistoryManager({
-    pulseDev: pulseDevDb,
-    pulseCore: pulseCoreDb,
-  })
+  // const payerHistoryManager = new PayerHistoryManager({
+  //   pulseDev: pulseDevDb,
+  //   pulseCore: pulseCoreDb,
+  // })
 
-  await payerHistoryManager.materializeNonLivesCollections()
+  // await payerHistoryManager.materializeNonLivesCollections()
 
   // ? successString += 'successfully materialized data in DEV DB \n'
   // importFeedback.push(successString)

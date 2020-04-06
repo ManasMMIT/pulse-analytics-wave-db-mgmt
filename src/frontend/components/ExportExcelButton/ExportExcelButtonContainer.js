@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useMutation, useQuery } from '@apollo/react-hooks'
 import PropTypes from 'prop-types'
 import _ from 'lodash'
@@ -66,8 +66,19 @@ const ExportExcelButtonContainer = ({
   isDisabled,
   createBackup,
   children,
+  sheetName,
 }) => {
-  const [finalFilename, setFinalFilename] = useState(filename)
+  const user = JSON.parse(localStorage.getItem('user'))
+
+  const formattedDate = formatDateTimeDotted(new Date())
+
+  const finalFileName = `${filename}_${formattedDate}_${user.name}`
+
+  const [finalFilename, setFinalFilename] = useState(finalFileName)
+
+  useEffect(() => {
+    setFinalFilename(finalFileName)
+  }, [filename])
 
   const dataIds = data.reduce((acc, { _id }) => {
     // ? data comes in with empty rows
@@ -87,7 +98,7 @@ const ExportExcelButtonContainer = ({
   )
 
   let dataWithMetaFields = data
-  if (!isMetaDataLoading) {
+  if (!isMetaDataLoading && createBackup) {
     const { organizationMeta } = metaData
     dataWithMetaFields = getOrgsWithMetaData(data, organizationMeta)
   }
@@ -95,7 +106,7 @@ const ExportExcelButtonContainer = ({
   /* convert from json to workbook */
   const worksheet = XLSX.utils.json_to_sheet(dataWithMetaFields)
   const workbook = XLSX.utils.book_new()
-  XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet1')
+  XLSX.utils.book_append_sheet(workbook, worksheet, sheetName || 'Sheet1')
 
   const wbOut = XLSX.write(workbook, { bookType: 'xlsx', type: 'binary' })
 
@@ -108,16 +119,20 @@ const ExportExcelButtonContainer = ({
     },
   })
 
+  const saveFile = () => {
+    const blob = new Blob(
+      [s2ab(wbOut)],
+      {
+        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+      }
+    )
+
+    saveAs(blob, finalFilename + '.xlsx')
+  }
+
   const [backupExport, { loading: isBackingUp, error }] = useMutation(BACKUP_EXPORT, {
     onCompleted: async () => {
-      const blob = new Blob(
-        [s2ab(wbOut)],
-        {
-          type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-        }
-      )
-      
-      saveAs(blob, finalFilename + '.xlsx')
+      saveFile()
 
       writeMetaData({
         refetchQueries: [
@@ -131,13 +146,7 @@ const ExportExcelButtonContainer = ({
     }
   })
 
-  const user = JSON.parse(localStorage.getItem('user'))
-
-  const formattedDate = formatDateTimeDotted(new Date())
-
   const backupExportWithTimestamp = () => {
-    const finalFileName = `${filename}_${formattedDate}_${user.name}`
-
     setFinalFilename(finalFileName)
 
     backupExport({
@@ -150,10 +159,10 @@ const ExportExcelButtonContainer = ({
     })
   }
 
-  const onClick = createBackup ? backupExportWithTimestamp : undefined
+  const onClick = createBackup ? backupExportWithTimestamp : saveFile
 
   return (
-    <div>
+    <>
       <ExportExcelButton
         isDisabled={isDisabled}
         onClick={onClick}
@@ -167,7 +176,7 @@ const ExportExcelButtonContainer = ({
       {
         error && <div style={{ color: 'red', fontSize: 10, padding: 4 }}>Export Failed</div>
       }
-    </div>
+    </>
   )
 }
 

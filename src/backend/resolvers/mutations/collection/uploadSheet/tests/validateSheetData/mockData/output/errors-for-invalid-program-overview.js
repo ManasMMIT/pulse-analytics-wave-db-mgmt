@@ -20,7 +20,7 @@ module.exports = [
       "overview": "Cancer care quality program with enhanced reimbursement for certain cancer treatment pathways to help improve patient outcomes and manage costs for cancer care",
       "sponsor": "Payer",
       "start": "2017Q2",
-      "end": "",
+      "end": null,
       "focus": "Revenue generated from reduced drug spending from practices following the pathways which have preferred therapies",
       "commercial": 1,
       "medicaid": 5,
@@ -34,9 +34,9 @@ module.exports = [
       "dataPath": "/start",
       "schemaPath": "#/properties/start/type",
       "params": {
-        "type": "string"
+        "type": "null,string"
       },
-      "message": "should be string"
+      "message": "should be null,string"
     },
     "rowNum": 37,
     "datum": {
@@ -46,7 +46,7 @@ module.exports = [
       "overview": "Recently acquired by Evolent Health (EVH), a VA-based population health company. NCH is a care management solutions that leverage technology and evidence-based medicine at the point of care with focus on oncology and cardiology",
       "sponsor": "Vendor",
       "start": [],
-      "end": "",
+      "end": null,
       "focus": "Contract with payers and form alliances with key organizations (NCCN)",
       "commercial": 1,
       "medicaid": 1,
@@ -60,9 +60,9 @@ module.exports = [
       "dataPath": "/medicare",
       "schemaPath": "#/properties/medicare/type",
       "params": {
-        "type": "integer"
+        "type": "null,integer"
       },
-      "message": "should be integer"
+      "message": "should be null,integer"
     },
     "rowNum": 38,
     "datum": {
@@ -72,7 +72,7 @@ module.exports = [
       "overview": "OBM with limited uptake designed to monitor compliance to Level 1 NCCN guidelines and act as peer-review for 2A and lower treatment selection",
       "sponsor": "Vendor",
       "start": "2009",
-      "end": "",
+      "end": null,
       "focus": "Payer focus with minimal growth outside Humana and with a strong focus on appropriate supportive care utilization",
       "commercial": 1,
       "medicaid": 0,
@@ -101,7 +101,7 @@ module.exports = [
       "overview": "OBM with limited uptake designed to monitor compliance to Level 1 NCCN guidelines and act as peer-review for 2A and lower treatment selection",
       "sponsor": "Vendor",
       "start": "2009",
-      "end": "",
+      "end": null,
       "focus": "Payer focus with minimal growth outside Humana and with a strong focus on appropriate supportive care utilization",
       "commercial": 1,
       "medicaid": 0,
@@ -115,9 +115,9 @@ module.exports = [
       "dataPath": "/commercial",
       "schemaPath": "#/properties/commercial/type",
       "params": {
-        "type": "integer"
+        "type": "null,integer"
       },
-      "message": "should be integer"
+      "message": "should be null,integer"
     },
     "rowNum": 39,
     "datum": {
@@ -127,7 +127,7 @@ module.exports = [
       "overview": "Evolution of Level 1 Pathways (Innovent) with additional NCCN influence, to be integrated in USON EMRs with intention to expand into additional practices",
       "sponsor": "Vendor",
       "start": "2013",
-      "end": "",
+      "end": null,
       "focus": "Partnership between McKesson & NCCN with limited current payer uptake",
       "commercial": [],
       "medicaid": 1,
@@ -156,7 +156,7 @@ module.exports = [
       "overview": "Evolution of Level 1 Pathways (Innovent) with additional NCCN influence, to be integrated in USON EMRs with intention to expand into additional practices",
       "sponsor": "Vendor",
       "start": "2013",
-      "end": "",
+      "end": null,
       "focus": "Partnership between McKesson & NCCN with limited current payer uptake",
       "commercial": [],
       "medicaid": 1,
@@ -189,7 +189,7 @@ module.exports = [
       "overview": "Acquired by Elsevier in 1Q18, UPMC oncologist-developed pathways commercialized and adopted by practices and institutions with limited payer uptake",
       "sponsor": "Asdf",
       "start": "2005",
-      "end": "",
+      "end": null,
       "focus": "Focus on providers & academic affiliations",
       "commercial": 1,
       "medicaid": 1,

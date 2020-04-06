@@ -5,7 +5,7 @@ module.exports = [
     "organization": "Via Oncology",
     "member": "Ryan Smith",
     "npiNumber": '1144294539',
-    "influencerType": "",
+    "influencerType": null,
     "title": "Rad Onc Chair - Bladder / Renal, Head & Neck, Prostate, Testicular",
     "affiliation": "UPMC",
     "affiliationPosition": "Medical Director of Radiation Oncology",
@@ -13,10 +13,10 @@ module.exports = [
     "indication": [""],
     "indicationCategory": "Genitourinary, Head & Neck, Thyroid",
     "priority": "Low",
-    "startDate": '',
-    "alertDate": '',
-    "alertType": '',
-    "alertDescription": ''
+    "startDate": null,
+    "alertDate": null,
+    "alertType": null,
+    "alertDescription": null
   }
 ]
 

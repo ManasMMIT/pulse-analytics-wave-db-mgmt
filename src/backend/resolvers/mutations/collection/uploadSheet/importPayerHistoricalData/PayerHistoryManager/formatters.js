@@ -40,40 +40,6 @@ const formatQualityAccessDoc = ({
   }
 }
 
-const formatAdditionalCriteriaDoc = ({
-  slug,
-  organization,
-  indication,
-  population,
-  line,
-  book,
-  coverage,
-  regimen,
-  additionalCriteriaData,
-  project,
-  timestamp,
-  dateParts: {
-    month,
-    year,
-  }
-}) => {
-  return {
-    slug,
-    organization,
-    indication,
-    population,
-    line,
-    book,
-    coverage,
-    regimen,
-    ...additionalCriteriaData,
-    project,
-    timestamp,
-    month,
-    year,
-  }
-}
-
 const formatCombinedDataDoc = ({
   slug,
   organization,
@@ -103,6 +69,11 @@ const formatCombinedDataDoc = ({
 
   let tierObj = tierData || { tier: null }
 
+  let additionalCriteriaObj = {}
+  if (additionalCriteriaData) {
+    additionalCriteriaObj = { additionalCriteria: additionalCriteriaData }
+  }
+
   return {
     slug,
     organization,
@@ -119,12 +90,11 @@ const formatCombinedDataDoc = ({
     ...accessObj,
     ...tierObj,
     ...policyLinkData, // ? guessing project field here should just overwrite other top-level field for now
-    ...additionalCriteriaData,
+    ...additionalCriteriaObj,
   }
 }
 
 module.exports = {
   formatQualityAccessDoc,
-  formatAdditionalCriteriaDoc,
   formatCombinedDataDoc,
 }

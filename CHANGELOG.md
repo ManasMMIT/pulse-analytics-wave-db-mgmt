@@ -12,16 +12,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Fixed** for any bug fixes.
 - **Security** in case of vulnerabilities.
 
-## [Unreleased] - Started: 3-11-20
+## [Unreleased] - Started: 4-2-20
+
+## [2.0.0] - Started: 3-11-20
 
 ### Added
+- `Polaris`: Built out new Import Tool with sanitization and validation, including validation/coercion for `date` and `csv` types to go beyond parity with wave-app old import tool
+- `Orion`: Built out minimum node CRUD needed for Imbruvica provider project; ability to Add Source Node and Edit Role Node
 - `Orion`: Created new Pathways Accounts page that features BOM modal with the `useBom` hook
 - `Polaris`: Built reusable components - `Sidebar`, `Modal`, `FieldsSectionCard`, `FieldLabel` and `Input`
+- `Polaris`: Created hotfix script for easier setting of regional breakdown for a role and its users.
+- `Backend`: Added projectPtps endpoint.
+- `Orion`: Added export payerCombinedStateLives DRG state data button on custom exports page.
+- `Phoenix`: Installed `@material-ui/lab` for material-ui's experimental/futuristic components.
+- `Polaris`: Added seed scripts for seeding lines, regimens, populations, books, coverages, treatmentPlans, organizations.treatmentPlans, organizations.treatmentPlans.history, lives.history, and tdgProjects
+- `Backend`: WIP on handling non-lives payer historical data import from sheet => core, and materialization from core => dev (connected to same import endpoint as general import tool)
 
 ### Changed
-- `Polaris`: upgraded all packages to the latest minor/patch versions (no major upgrades needed)
+- `Polaris`: Upgraded packages to the latest versions, mostly minor/patch (keep papaparse the version it was due to major upgrade not being backward compatible; handful of other major upgrades were fine)
 - `Orion`: Refactored the `useAquila` hook to fetch filter options and placard configs separately.
-- `Orion`: Change sheet management CRUD on oneOf to only accept quoted, comma-delimited strings but still persist to backend as array of strings
+- `Orion`: Changed sheet management CRUD on oneOf to only accept quoted, comma-delimited strings but still persist to backend as array of strings
 
 ## [1.3.0] - Started: 2-25-20
 

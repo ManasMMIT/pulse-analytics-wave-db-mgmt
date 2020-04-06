@@ -1,5 +1,8 @@
 const { ObjectId } = require('mongodb')
 const _ = require('lodash')
+const { zonedTimeToUtc } = require('date-fns-tz')
+
+const DEFAULT_TIMEZONE = require('../../../../../../utils/defaultTimeZone')
 
 const {
   ENRICH_TP_PARTS_PIPELINE,
@@ -48,7 +51,7 @@ class ProjectHistoryManager {
 
       return datumOrgTpHash
     })
-    
+
     const missingOrgTpCombos = _.difference(
       exactCorrectSetOfOrgTps,
       sheetDataHashes,
@@ -205,7 +208,13 @@ class ProjectHistoryManager {
     const copiedSheetData = _.cloneDeep(this.sheetData)
 
     return copiedSheetData.reduce((acc, datum) => {
-      const organizationId = this.orgsHashBySlug[datum.slug]._id
+      const orgMatch = this.orgsHashBySlug[datum.slug]
+
+      // if somehow invalid slug gets through, skip sheet data (error instead?)
+      // (shouldn't happen once validation is correctly in place)
+      if (!orgMatch) return acc
+
+      const organizationId = orgMatch._id
 
       const tpHash = this.selectedTpHasher(datum)
 
@@ -221,6 +230,10 @@ class ProjectHistoryManager {
           organizationId,
           treatmentPlanId,
         })
+
+        if (!this.allowedOrgTpsHash[orgTpHash]) {
+          return // skip the row; once validation layer is in, shouldn't need to do this
+        }
 
         const orgTpId = this.allowedOrgTpsHash[orgTpHash]._id
 
@@ -249,32 +262,58 @@ class ProjectHistoryManager {
       }
     */
 
-    const isPolicyLinksSheet = /PolicyLinks/.test(this.sheetName)
-    const isQualityAccessSheet = /QualityAccess/.test(this.sheetName)
-    const isAdditionalCriteriaSheet = /AdditionalCriteria/.test(this.sheetName)
+    const isPolicyLinksSheet = /Policy Links/.test(this.sheetName)
+    const isQualityAccessSheet = /Quality of Access/.test(this.sheetName)
+    const isAdditionalCriteriaSheet = /Additional Criteria/.test(this.sheetName)
 
     const dataForOps = this.getFilteredAndEnrichedSheetData()
 
-    return dataForOps.map(({
-      orgTpId,
-      access,
-      tier,
-      tierRating,
-      tierTotal,
-      treatmentPlanId,
-      organizationId,
-      dateTracked,
-      paLink,
-      policyLink,
-      project,
-      siteLink,
-      link,
-      criteria,
-      criteriaNotes,
-      lineOfTherapy,
-      restrictionLevel,
-      subPopulation,
-    }) => {
+    if (isAdditionalCriteriaSheet) {
+      const dataGroupedByOrgTp = _.groupBy(dataForOps, 'orgTpId')
+
+      return Object.keys(dataGroupedByOrgTp)
+        .map(orgTpId => {
+          const additionalCriteriaDocs = dataGroupedByOrgTp[orgTpId]
+
+          const additionalCriteriaData = additionalCriteriaDocs.length
+            ? additionalCriteriaDocs.map(({
+              orgTpId, treatmentPlanId, organizationId, ...rest
+            }) => rest)
+            : null
+
+          return ({
+            findObj: {
+              orgTpId: ObjectId(orgTpId),
+              timestamp: this.timestamp,
+            },
+            setObject: {
+              $set: {
+                orgTpId: ObjectId(orgTpId),
+                timestamp: this.timestamp,
+                additionalCriteriaData,
+              }
+            }
+          })
+        })
+    }
+
+    return dataForOps.map(datum => {
+      const {
+        orgTpId,
+        access,
+        tier,
+        tierRating,
+        tierTotal,
+        treatmentPlanId,
+        organizationId,
+        dateTracked,
+        paLink,
+        policyLink,
+        project,
+        siteLink,
+        link,
+      } = datum
+
       const setObj = {
         $set: {
           orgTpId,
@@ -307,23 +346,15 @@ class ProjectHistoryManager {
             tierTotal,
           }
         }
-      } else if (isAdditionalCriteriaSheet) {
-        setObj.$set = {
-          ...setObj.$set,
-          additionalCriteriaData: {
-            criteria,
-            criteriaNotes,
-            lineOfTherapy,
-            restrictionLevel,
-            subPopulation,
-          }
-        }
       } else {
         setObj.$set = {}
       }
 
       return ({
-        findObj: { orgTpId, timestamp: this.timestamp },
+        findObj: {
+          orgTpId,
+          timestamp: this.timestamp,
+        },
         setObj,
       })
     })
@@ -336,7 +367,10 @@ class ProjectHistoryManager {
   }) {
     this.sheetName = sheetName
     this.sheetData = sheetData
-    this.timestamp = new Date(timestamp)
+    
+    // create JS Date Object (which only stores dates in absolute UTC time) as the UTC equivalent of isoShortString in New York time
+    this.timestamp = zonedTimeToUtc(timestamp, DEFAULT_TIMEZONE)
+
     /*
       The policyLink sheet only has a subset of treatmentPlan parts:
         - `coverage`
@@ -345,7 +379,7 @@ class ProjectHistoryManager {
 
       Therefore, matching orgTpIds requires a different hash of fields to match treatmentPlans.
     */
-    const isPolicyLinksSheet = /PolicyLinks/.test(sheetName)
+    const isPolicyLinksSheet = /Policy Links/.test(sheetName)
 
     this.selectedTpHasher = isPolicyLinksSheet
       ? this.POLICY_LINKS_hashTpParts
@@ -368,8 +402,6 @@ class ProjectHistoryManager {
     //   ))
 
     // await Promise.all(ops)
-
-    // return 'success'
   }
 }
 

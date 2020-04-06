@@ -1,5 +1,7 @@
 const format = require('date-fns/format')
+const { zonedTimeToUtc } = require('date-fns-tz')
 
+const DEFAULT_TIMEZONE = require('../../src/backend/utils/defaultTimeZone')
 const KEY_BOOK_COVERAGE_MAP = require('./key-book-coverage-map')
 
 module.exports = ({
@@ -13,8 +15,9 @@ module.exports = ({
 
   const organizationId = organization._id
 
-  const correctIsoFormat = format(new Date(doc.year, doc.month - 1, 1), 'yyyy-MM-dd')
-  const timestamp = new Date(correctIsoFormat)
+  const isoShortString = format(new Date(doc.year, doc.month - 1, 1), 'yyyy-MM-dd')
+  // create JS Date Object (which only stores dates in absolute UTC time) as the UTC equivalent of isoShortString in New York time
+  const timestamp = zonedTimeToUtc(isoShortString, DEFAULT_TIMEZONE)
 
   const [
     territoryType,
