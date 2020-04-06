@@ -1,4 +1,5 @@
 import React from 'react'
+import styled from '@emotion/styled'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faEdit } from "@fortawesome/free-solid-svg-icons"
 import { transparentize } from 'polished'
@@ -15,7 +16,11 @@ import {
   DELETE_SOURCE_INDICATION,
 } from '../../api/mutations'
 
-import { Colors, Spacing } from '../../utils/pulseStyles'
+import Color from '../../utils/color'
+import Spacing from '../../utils/spacing'
+import FontSpace from '../../utils/fontspace'
+
+import { defaultPanelItemStyle } from './styledComponents'
 
 const editIcon = <FontAwesomeIcon size="lg" icon={faEdit} />
 
@@ -24,36 +29,33 @@ const CREATE_BUTTON_TXT = 'Create Indication'
 const CREATE_MODAL_TITLE = 'Create New Indication'
 
 const buttonStyle = {
-  background: "#234768",
-  color: 'white',
+  background: Color.PRIMARY,
+  color: Color.WHITE,
+  fontWeight: 700,
 }
 
-const defaultPanelItemStyle = {
-  display: 'flex',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-  padding: '8px 24px',
-  color: Colors.BLACK,
-  fontWeight: 600,
-  fontSize: 12,
-  borderBottom: `1px solid ${transparentize(0.9, Colors.BLACK)}`,
-}
+const StyledInput = styled.input({
+  background: Color.WHITE,
+  width: '100%',
+  padding: `${Spacing.S3}`,
+  borderRadius: 4,
+  ...FontSpace.FS2,
+})
 
 const getInputFields = (state, handleChange) => {
   return (
     <div style={{ display: 'block' }}>
       <div
         style={{
-          color: Colors.BLACK,
+          color: Color.BLACK,
           fontSize: 12,
           fontWeight: 500,
-          textTransform: 'capitalize',
-          marginBottom: Spacing.SMALL,
+          marginBottom: Spacing.S2,
         }}
       >
-        name:
+        Name:
       </div>
-      <input
+      <StyledInput
         type="text"
         name="name"
         onChange={handleChange}
@@ -113,8 +115,8 @@ const IndicationsPanel = () => (
     title="Indications"
     headerChildren={headerChildren}
     headerContainerStyle={{
-      background: Colors.WHITE,
-      borderBottom: `1px solid ${transparentize(0.9, Colors.BLACK)}`
+      background: Color.WHITE,
+      borderBottom: `1px solid ${transparentize(0.9, Color.BLACK)}`
     }}
     queryDocs={{
       fetchAllQueryProps: { query: GET_SOURCE_INDICATIONS },

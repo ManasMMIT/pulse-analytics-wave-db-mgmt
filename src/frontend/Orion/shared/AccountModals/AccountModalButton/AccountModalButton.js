@@ -1,13 +1,17 @@
 import React, { useState } from 'react'
+import styled from '@emotion/styled'
 import PropTypes from 'prop-types'
 import queryString from 'query-string'
 import { withRouter } from 'react-router-dom'
+
+import Color from '../../../../utils/color'
 
 import ModalContainer from './ModalContainer'
 
 import {
   ButtonLabel,
 } from './styledAccountModalButtonComponents'
+
 
 const AccountModalButton = ({
   buttonLabel,

@@ -3,6 +3,7 @@ import { useQuery } from '@apollo/react-hooks'
 import Select from 'react-select'
 import _ from 'lodash'
 import Spinner from '../../../Phoenix/shared/Spinner'
+import { customSelectStyles } from '../../../components/customSelectStyles'
 
 import {
   GET_SOURCE_PRODUCTS,
@@ -34,6 +35,7 @@ const ProductsSelect = ({
       options={formatProductStrings(defaultProducts)}
       className="basic-multi-select"
       classNamePrefix="select"
+      styles={customSelectStyles}
       onChange={arrOfVals => {
         let newProducts = arrOfVals || []
 

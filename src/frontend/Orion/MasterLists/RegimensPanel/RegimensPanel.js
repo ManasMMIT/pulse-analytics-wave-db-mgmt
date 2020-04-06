@@ -10,6 +10,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faEdit } from "@fortawesome/free-solid-svg-icons"
 import { transparentize } from 'polished'
 
+import { StyledInput, FormLabel, createObjectModalStyle, defaultPanelItemStyle } from '../styledComponents'
+
 import {
   GET_SOURCE_REGIMENS,
   GET_SOURCE_INDICATIONS,
@@ -22,7 +24,8 @@ import {
   DELETE_SOURCE_REGIMEN,
 } from '../../../api/mutations'
 
-import { Colors, Spacing } from '../../../utils/pulseStyles'
+import Color from '../../../utils/color'
+import Spacing from '../../../utils/spacing'
 
 const editIcon = <FontAwesomeIcon size="lg" icon={faEdit} />
 
@@ -30,15 +33,10 @@ const CREATE_BUTTON_TXT = 'Create Regimen'
 
 const CREATE_MODAL_TITLE = 'Create New Regimen'
 
-const FormLabel = styled.div({
-  textTransform: 'capitalize',
-  marginBottom: Spacing.SMALL,
-  fontWeight: 700,
-})
-
 const buttonStyle = {
-  background: "#234768",
-  color: 'white',
+  background: Color.PRIMARY,
+  color: Color.WHITE,
+  fontWeight: 700,
 }
 
 const getInputFields = (state, handleChange) => {
@@ -46,9 +44,9 @@ const getInputFields = (state, handleChange) => {
 
   return (
     <>
-      <div style={{ marginBottom: Spacing.LARGE }}>
+      <div style={{ marginBottom: Spacing.S5 }}>
         <FormLabel>Name:</FormLabel>
-        <input
+        <StyledInput
           type="text"
           name="name"
           onChange={handleChange}
@@ -73,6 +71,7 @@ const headerChildren = (
       modalTitle={CREATE_MODAL_TITLE}
       buttonLabel={CREATE_BUTTON_TXT}
       buttonStyle={buttonStyle}
+      modalStyle={createObjectModalStyle}
       mutationDoc={CREATE_REGIMEN}
       refetchQueries={[{ query: GET_SOURCE_REGIMENS }]}
       getInputFields={getInputFields}
@@ -92,6 +91,7 @@ const buttonGroupCallback = regimen => (
       modalTitle="Edit Regimen"
       buttonLabel={editIcon}
       buttonStyle={{ border: 'none', background: 'none', color: '#b6b9bc' }}
+      modalStyle={createObjectModalStyle}
       data={{ input: regimen }}
       mutationDoc={UPDATE_SOURCE_REGIMEN}
       refetchQueries={[
@@ -139,17 +139,6 @@ const buttonGroupCallback = regimen => (
   </>
 )
 
-const defaultPanelItemStyle = {
-  display: 'flex',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-  padding: '8px 24px',
-  color: Colors.BLACK,
-  fontWeight: 600,
-  fontSize: 12,
-  borderBottom: `1px solid ${transparentize(0.9, Colors.BLACK)}`,
-}
-
 const panelItemConfig = {
   style: defaultPanelItemStyle,
   buttonGroupCallback,
@@ -161,8 +150,8 @@ const RegimensPanel = () => (
     title="Regimens"
     headerChildren={headerChildren}
     headerContainerStyle={{
-      background: Colors.WHITE,
-      borderBottom: `1px solid ${transparentize(0.9, Colors.BLACK)}`
+      background: Color.WHITE,
+      borderBottom: `1px solid ${transparentize(0.9, Color.BLACK)}`
     }}
     queryDocs={{
       fetchAllQueryProps: { query: GET_SOURCE_REGIMENS },
