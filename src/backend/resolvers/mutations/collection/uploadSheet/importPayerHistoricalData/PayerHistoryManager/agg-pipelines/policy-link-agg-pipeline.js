@@ -14,10 +14,6 @@ module.exports = limit => [
       }
     }
   }, {
-    '$sort': {
-      'timestamp': -1
-    }
-  }, {
     '$lookup': {
       'from': 'organizations',
       'localField': 'organizationId',
@@ -125,6 +121,11 @@ module.exports = limit => [
       'siteLink': '$data.siteLink'
     }
   }, {
+    '$sort': {
+      'timestamp': -1
+    }
+  },
+  {
     '$group': {
       '_id': {
         'book': '$book',

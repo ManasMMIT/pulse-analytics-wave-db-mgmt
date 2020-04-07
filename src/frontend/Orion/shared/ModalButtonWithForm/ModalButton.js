@@ -59,7 +59,7 @@ class Button extends React.Component {
           {buttonLabel}
         </StyledButton>
         <Modal
-          style={modalStyle}
+          modalStyle={modalStyle}
           handleClose={this.closeModal}
           show={this.state.isModalOpen}
           title={modalTitle}

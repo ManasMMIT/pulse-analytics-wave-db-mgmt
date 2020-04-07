@@ -1,4 +1,5 @@
 import React from 'react'
+import styled from '@emotion/styled'
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faEdit } from "@fortawesome/free-solid-svg-icons"
@@ -11,6 +12,7 @@ import CopyOneOfStringButton from '../../../../shared/CopyOneOfStringButton'
 import { GET_SOURCE_QUALITY_OF_ACCESS_SCORES } from '../../../../../api/queries'
 import ColorBox from '../../../../shared/ColorBox'
 import QoaForm from './QoaForm'
+import { defaultPanelItemStyle } from '../../../styledComponents'
 
 import {
   CREATE_QUALITY_OF_ACCESS_SCORE,
@@ -18,7 +20,7 @@ import {
   // DELETE_QUALITY_OF_ACCESS_SCORE,
 } from '../../../../../api/mutations'
 
-import { Colors } from '../../../../../utils/pulseStyles'
+import Color from '../../../../../utils/color'
 
 const editIcon = <FontAwesomeIcon size="lg" icon={faEdit} />
 
@@ -26,23 +28,29 @@ const CREATE_BUTTON_TXT = 'Create Quality of Access'
 
 const CREATE_MODAL_TITLE = 'Create New Quality of Access'
 
-const buttonStyle = {
-  background: "#234768",
-  color: Colors.WHITE,
-}
-
-const defaultPanelItemStyle = {
+const BoxContainer = styled.div({
   display: 'flex',
-  justifyContent: 'space-between',
   alignItems: 'center',
-  padding: '8px 24px',
-  color: Colors.BLACK,
-  fontWeight: 600,
-  fontSize: 12,
-  borderBottom: `1px solid ${transparentize(0.9, Colors.BLACK)}`,
+})
+
+const BoxLabel = styled.span({
+  fontSize: 10,
+  color: Color.MEDIUM_GRAY_2,
+  margin: '0 8px 0 16px',
+})
+
+const buttonStyle = {
+  background: Color.PRIMARY,
+  color: Color.WHITE,
+  fontWeight: 700,
 }
 
-const formStyle = { height: 500, overflowY: 'auto', fontSize: 12 }
+const modalStyle = {
+  height: '90%',
+  maxHeight: '90%',
+  minWidth: 600,
+  justifyContent: 'flex-start',
+}
 
 const getInputFields = (state, handleChange) => (
   <QoaForm
@@ -54,10 +62,10 @@ const getInputFields = (state, handleChange) => (
 const headerChildren = (
   <div>
     <ModalButtonWithForm
-      formStyle={formStyle}
       modalTitle={CREATE_MODAL_TITLE}
       buttonLabel={CREATE_BUTTON_TXT}
       buttonStyle={buttonStyle}
+      modalStyle={modalStyle}
       mutationDoc={CREATE_QUALITY_OF_ACCESS_SCORE}
       refetchQueries={[{ query: GET_SOURCE_QUALITY_OF_ACCESS_SCORES }]}
       getInputFields={getInputFields}
@@ -81,10 +89,10 @@ const buttonGroupCallback = entity => {
   return (
     <>
       <ModalButtonWithForm
-        formStyle={formStyle}
         modalTitle="Edit Quality of Access Score"
         buttonLabel={editIcon}
         buttonStyle={{ border: 'none', background: 'none', color: '#b6b9bc' }}
+        modalStyle={modalStyle}
         data={{ input }}
         mutationDoc={UPDATE_QUALITY_OF_ACCESS_SCORE}
         refetchQueries={[{ query: GET_SOURCE_QUALITY_OF_ACCESS_SCORES }]}
@@ -104,22 +112,31 @@ const label1StyleWrapper = {
   alignItems: 'center',
   width: 400,
   justifyContent: 'space-between',
+  width: '100%',
 }
 
 const panelItemConfig = {
   style: defaultPanelItemStyle,
   buttonGroupCallback,
-  label1Callback: ({ access, score, color }) => (
+  label1Callback: ({ access, score, color, sortOrder }) => (
     <div style={label1StyleWrapper}>
-      <div style={{ fontSize: 12, fontWeight: 700 }}>
+      <div style={{ fontSize: 12, fontWeight: 700, width: 500, }}>
         {access}
       </div>
-      <div>
+      <BoxContainer>
+        <BoxLabel>Access Score</BoxLabel>
         <ColorBox
           label={score}
           boxColor={color}
         />
-      </div>
+      </BoxContainer>
+      <BoxContainer>
+        <BoxLabel>Sort Order</BoxLabel>
+        <ColorBox
+          label={sortOrder}
+          boxColor={Color.MEDIUM_GRAY_2}
+        />
+      </BoxContainer>
     </div>
   )
 }
@@ -129,8 +146,8 @@ const QualityAccessScorePanel = () => (
     title="Quality of Access Scores"
     headerChildren={headerChildren}
     headerContainerStyle={{
-      background: Colors.WHITE,
-      borderBottom: `1px solid ${transparentize(0.9, Colors.BLACK)}`
+      background: Color.WHITE,
+      borderBottom: `1px solid ${transparentize(0.9, Color.BLACK)}`
     }}
     queryDocs={{
       fetchAllQueryProps: { query: GET_SOURCE_QUALITY_OF_ACCESS_SCORES },

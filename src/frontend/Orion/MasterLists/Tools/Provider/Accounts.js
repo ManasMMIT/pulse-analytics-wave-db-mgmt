@@ -21,15 +21,16 @@ import {
   GET_APM_ORGANIZATIONS,
 } from '../../../../api/queries'
 
-import { Colors } from '../../../../utils/pulseStyles'
+import Color from '../../../../utils/color'
 
 const editIcon = <FontAwesomeIcon size="lg" icon={faEdit} />
 
 const CREATE_BUTTON_TXT = 'Create Provider Account'
 
 const buttonStyle = {
-  background: "#234768",
-  color: 'white',
+  background: Color.PRIMARY,
+  color: Color.WHITE,
+  fontWeight: 700,
 }
 
 const defaultPanelItemStyle = {
@@ -37,18 +38,18 @@ const defaultPanelItemStyle = {
   justifyContent: 'space-between',
   alignItems: 'center',
   padding: '8px 24px',
-  color: Colors.BLACK,
+  color: Color.BLACK,
   fontWeight: 600,
   fontSize: 12,
-  borderBottom: `1px solid ${transparentize(0.9, Colors.BLACK)}`,
+  borderBottom: `1px solid ${transparentize(0.9, Color.BLACK)}`,
   ':hover': {
-    background: transparentize(0.95, Colors.BLACK),
+    background: transparentize(0.95, Color.BLACK),
   }
 }
 
 const headerChildren = data => {
   const exportData = data
-    .map(({ __typename, connections, ...datum }) => datum) 
+    .map(({ __typename, connections, ...datum }) => datum)
 
   const { name } = JSON.parse(localStorage.getItem('user'))
 
@@ -73,7 +74,7 @@ const headerChildren = data => {
       { name === 'admin' && <ProviderImportButton /> }
     </div>
   )
-} 
+}
 
 const buttonGroupCallback = entity => (
   <>
@@ -111,7 +112,7 @@ const ProviderAccounts = () => (
     headerChildren={headerChildren}
     headerContainerStyle={{
       background: '#FFF',
-      borderBottom: `1px solid ${transparentize(0.9, Colors.BLACK)}`
+      borderBottom: `1px solid ${transparentize(0.9, Color.BLACK)}`
     }}
     queryDocs={{
       fetchAllQueryProps: { query: GET_PROVIDER_ORGANIZATIONS },

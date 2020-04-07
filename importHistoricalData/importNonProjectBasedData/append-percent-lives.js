@@ -15,11 +15,9 @@ const appendStructuredLivesField = async ({
     { key: 'commercialPharmacy', book: 'Commercial', coverage: 'Pharmacy'},
     { key: 'medicareMedical', book: 'Medicare', coverage: 'Medical'},
     { key: 'medicarePharmacy', book: 'Medicare', coverage: 'Pharmacy'},
-    { key: 'tricareMedical', book: 'Tricare', coverage: 'Medical'},
-    { key: 'tricarePharmacy', book: 'Tricare', coverage: 'Pharmacy'},
-    { key: 'vaMedical', book: 'VA', coverage: 'Medical'},
-    { key: 'vaPharmacy', book: 'VA', coverage: 'Pharmacy'},
-    { key: 'macMedical', book: 'MAC', coverage: 'Medical' }
+    { key: 'federalOtherMedical', book: 'Federal/Other', coverage: 'Medical'},
+    { key: 'federalOtherPharmacy', book: 'Federal/Other', coverage: 'Pharmacy'},
+    { key: 'macMedical', book: 'MAC', coverage: 'Medical' },
   ]
 
   const capitalizedCollectionType = _.capitalize(collectionType)

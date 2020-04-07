@@ -35,20 +35,12 @@ module.exports = {
     book: 'Medicare',
     coverage: 'Pharmacy',
   },
-  tricareMedical: {
-    book: 'Tricare',
+  federalOtherMedical: {
+    book: 'Federal/Other',
     coverage: 'Medical',
   },
-  tricarePharmacy: {
-    book: 'Tricare',
-    coverage: 'Pharmacy',
-  },
-  vaMedical: {
-    book: 'VA',
-    coverage: 'Medical',
-  },
-  vaPharmacy: {
-    book: 'VA',
+  federalOtherPharmacy: {
+    book: 'Federal/Other',
     coverage: 'Pharmacy',
   },
   healthExchangePharmacy: {

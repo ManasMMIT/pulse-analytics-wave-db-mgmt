@@ -2,9 +2,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { useQuery } from '@apollo/react-hooks'
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faPlusSquare } from "@fortawesome/free-solid-svg-icons"
-
 import CaptionInputs from './CaptionInputs'
 import Spinner from '../../../../../../Phoenix/shared/Spinner'
 
@@ -12,30 +9,10 @@ import {
   GET_SOURCE_INDICATIONS,
 } from '../../../../../../api/queries'
 
-const plusIcon = (
-  <FontAwesomeIcon
-    size="lg"
-    icon={faPlusSquare}
-    style={{ margin: '15px 0', display: 'inline' }}
-  />
-)
+import { FormLabel, StyledInput, NewAccessCaptionButton } from '../../../../styledComponents'
 
 const formFieldWrapper = {
-  padding: '24px 0',
-  display: 'flex',
-  alignItems: 'center',
-}
-
-const labelStyle = {
-  padding: 24,
-  minWidth: 100,
-}
-
-const inputStyle = {
-  flex: 1,
-  padding: '12px 24px',
-  boxSizing: 'border-box',
-  margin: '8px 0',
+  padding: '12px 0',
 }
 
 const QoaForm = ({
@@ -51,12 +28,11 @@ const QoaForm = ({
           key={`${label}-${idx}`}
           style={formFieldWrapper}
         >
-          <span style={labelStyle}>
+          <FormLabel>
             {label}:
-          </span>
-          <input
+          </FormLabel>
+          <StyledInput
             type="text"
-            style={inputStyle}
             name={label}
             onChange={handleChange}
             value={state.input[label] || ''}
@@ -88,7 +64,7 @@ const QoaForm = ({
           handleChange={handleChange}
           availableSourceIndications={availableSourceIndications}
         />
-        <div
+        <NewAccessCaptionButton
           onClick={() => {
             handleChange({
               target: {
@@ -98,8 +74,8 @@ const QoaForm = ({
             })
           }}
         >
-          {plusIcon}
-        </div>
+          + Add Caption
+        </NewAccessCaptionButton>
       </>
     )
   }

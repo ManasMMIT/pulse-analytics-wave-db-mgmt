@@ -4,23 +4,24 @@ import { transparentize } from 'polished'
 import {
   Spacing,
   Transitions,
-  Colors,
   FontFamily,
 } from '../../../../utils/pulseStyles'
+
+import Color from '../../../../utils/color'
 
 export const ButtonLabel = styled.button({
   background: 'none',
   border: 'none',
   borderRadius: 4,
   padding: '8px 12px',
-  color: transparentize(0.7, Colors.BLACK),
+  color: transparentize(0.7, Color.BLACK),
   cursor: 'pointer',
   fontWeight: 600,
   lineHeight: 1.5,
   textAlign: 'left',
   ':hover': {
-    background: transparentize(0.9, Colors.PRIMARY),
-    color: Colors.PRIMARY,
+    background: transparentize(0.9, Color.PRIMARY),
+    color: Color.PRIMARY,
   },
   ':focus': {
     outline: 'none',
@@ -31,12 +32,12 @@ export const SectionTitle = styled.h3({
   fontSize: 14,
   lineHeight: '24px',
   letterSpacing: -0.2,
-  color: Colors.BLACK,
+  color: Color.BLACK,
 })
 
 export const Label = styled.label({
   fontSize: 12,
-  color: Colors.BLACK,
+  color: Color.BLACK,
   lineHeight: '24px',
   letterSpacing: -0.2,
   display: 'flex',
@@ -50,16 +51,16 @@ export const LabelText = styled.div({
 })
 
 export const Input = styled.input({
-  background: Colors.WHITE,
-  border: `1px solid ${transparentize(0.96, Colors.BLACK)}`,
+  background: Color.WHITE,
+  border: `1px solid ${transparentize(0.96, Color.BLACK)}`,
   borderRadius: 4,
   padding: `${Spacing.SMALL} ${Spacing.NORMAL}`,
   marginBottom: Spacing.NORMAL,
   ':hover': {
-    border: `1px solid ${transparentize(0.9, Colors.BLACK)}`,
+    border: `1px solid ${transparentize(0.9, Color.BLACK)}`,
   },
   ':focus': {
-    border: `1px solid ${transparentize(0.1, Colors.PRIMARY)}`,
+    border: `1px solid ${transparentize(0.1, Color.PRIMARY)}`,
     outline: 'none',
   }
 }, props => ({ ...props }))
@@ -73,12 +74,12 @@ export const SubmitButton = styled.button({
   textTransform: 'uppercase',
   border: 'none',
   borderRadius: 4,
-  background: Colors.GREEN,
-  color: Colors.WHITE,
+  background: Color.GREEN,
+  color: Color.WHITE,
   fontWeight: 600,
   fontSize: 12,
   marginLeft: 12,
   ':hover': {
-    background: transparentize(0.2, Colors.GREEN),
+    background: transparentize(0.2, Color.GREEN),
   }
 })
