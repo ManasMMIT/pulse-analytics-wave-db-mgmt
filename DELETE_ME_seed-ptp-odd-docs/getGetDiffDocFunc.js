@@ -43,6 +43,8 @@ module.exports = ({
     oldCollectionOp,
   ])
 
+  // ! don't care about purposefully excluded docs b/c invalid parts
+
   oldCollectionDocs = oldCollectionDocs.filter(({
     slug,
     indication,
@@ -105,6 +107,22 @@ module.exports = ({
     return comboIsValid
   })
 
+  // ! don't care about purposefully excluded b/c dupes
+
+  const getHash = collectionName.includes('Policy')
+    ? ({ slug, regimen, book, coverage, month, year }) => [slug, regimen, book, coverage, month, year].join('|')
+    : ({ slug, regimen, book, coverage, indication, population, line, month, year }) => [slug, regimen, book, coverage, indication, population, line, month, year].join('|')
+
+  const oldCollectionDocsWithoutDupes = _.uniqBy(oldCollectionDocs, getHash)
+
+  const removedDupes = _.differenceBy(
+    oldCollectionDocs,
+    oldCollectionDocsWithoutDupes,
+    comparer,
+  )
+
+  oldCollectionDocs = oldCollectionDocsWithoutDupes
+
   const inOldNotNew = _.differenceBy(
     oldCollectionDocs,
     newCollectionDocs,
@@ -138,6 +156,7 @@ module.exports = ({
       'In old, not new': inOldNotNew.slice(0, 500),
       'In new, not old': inNewNotOld.slice(0, 500),
       'In both': inBothNewAndOld.slice(0, 500),
+      'Dupes': removedDupes.slice(0, 500),
     },
   }
 }
