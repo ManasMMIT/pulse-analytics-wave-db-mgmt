@@ -3,6 +3,9 @@ import PropTypes from 'prop-types'
 import Select from 'react-select'
 import _ from 'lodash'
 
+import { customSelectStyles } from '../../../../../../components/customSelectStyles'
+import Color from '../../../../../../utils/color'
+
 const formatIndicationStrings = indications => (
   indications.map(({ _id, name }) => ({ value: _id, label: name }))
 )
@@ -32,7 +35,22 @@ const handleAddCaptionField = (e, state, indication, handleChange) => {
   })
 }
 
-const formFieldWrapper = { padding: 24 }
+const formFieldWrapper = { padding: '12px 0' }
+
+const captionItemStyle = {
+  margin: '0 0 24px',
+  padding: '24px 0',
+  borderBottom: `1px solid ${Color.MEDIUM_GRAY_2}`,
+}
+
+const inputStyle = {
+  background: Color.WHITE,
+  padding: '12px 12px',
+  borderRadius: 4,
+  width: '100%',
+  fontSize: 12,
+  marginTop: 12,
+}
 
 const CaptionInputs = ({
   state,
@@ -41,7 +59,7 @@ const CaptionInputs = ({
 }) => {
   return (
     <div style={formFieldWrapper}>
-      <span>captions: </span>
+      <span style={{ fontSize: 12, color: Color.BLACK, fontWeight: 700 }}>Captions: </span>
       {
         Object.keys(state.input.caption).map((indication, idx) => {
           const defaultIndication = { value: idx + 100, label: indication }
@@ -49,18 +67,18 @@ const CaptionInputs = ({
           return (
             <div
               key={`${indication}-${idx}`}
-              style={{ display: 'flex', margin: '12px 0' }}
+              style={captionItemStyle}
             >
               <Select
-                styles={{ container: (base) => ({ ...base, flex: 1 }) }}
                 defaultValue={defaultIndication}
                 options={formatIndicationStrings(availableSourceIndications)}
                 className="basic-multi-select"
                 classNamePrefix="select"
+                styles={customSelectStyles}
                 onChange={({ label }) => handleSelectOnChange(label, state, indication, handleChange)}
               />
               <input
-                style={{ flex: 7, marginLeft: 25 }}
+                style={inputStyle}
                 type="text"
                 name={'caption'}
                 onChange={e => handleAddCaptionField(e, state, indication, handleChange)}

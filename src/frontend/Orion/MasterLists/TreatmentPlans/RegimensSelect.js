@@ -5,6 +5,8 @@ import _ from 'lodash'
 import Spinner from '../../../Phoenix/shared/Spinner'
 import stripTypename from '../../shared/strip-typename'
 
+import { customSelectStyles } from '../../../components/customSelectStyles'
+
 import {
   GET_SOURCE_REGIMENS,
 } from '../../../api/queries'
@@ -34,6 +36,7 @@ const RegimensSelect = ({ state, handleChange }) => {
       defaultValue={initialSelections}
       isMulti
       options={options}
+      styles={customSelectStyles}
       onChange={arrOfVals => {
         let newRegimens = arrOfVals || []
 

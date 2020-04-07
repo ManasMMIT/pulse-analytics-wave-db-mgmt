@@ -65,8 +65,7 @@ const synchronizeLives = async pulseCoreDb => {
         macMedical,
         managedMedicaidMedical,
         ffsMedicaidMedical,
-        tricareMedical,
-        vaMedical,
+        federalOtherMedical,
       } = drgRow
 
       const timestamp = new Date()
@@ -78,8 +77,7 @@ const synchronizeLives = async pulseCoreDb => {
         macMedical,
         managedMedicaidMedical,
         ffsMedicaidMedical,
-        tricareMedical,
-        vaMedical
+        federalOtherMedical,
       }
 
       const mmitRowId = groupMmitBySlugAndId[slug][state]

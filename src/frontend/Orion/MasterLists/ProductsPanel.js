@@ -1,5 +1,4 @@
 import React from 'react'
-import styled from '@emotion/styled'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faEdit } from "@fortawesome/free-solid-svg-icons"
 import { transparentize } from 'polished'
@@ -9,6 +8,8 @@ import ModalButtonWithForm from '../shared/ModalButtonWithForm'
 import DeleteButton from '../shared/DeleteButton'
 import CreatableMultiSelect from '../shared/CreatableMultiSelect';
 
+import { StyledInput, FormLabel, createObjectModalStyle } from './styledComponents'
+
 import { GET_SOURCE_PRODUCTS, GET_SOURCE_REGIMENS } from '../../api/queries'
 
 import {
@@ -17,7 +18,8 @@ import {
   DELETE_SOURCE_PRODUCT,
 } from '../../api/mutations'
 
-import { Colors, Spacing } from '../../utils/pulseStyles'
+import Color from '../../utils/color'
+import Spacing from '../../utils/spacing'
 
 const editIcon = <FontAwesomeIcon size="lg" icon={faEdit} />
 
@@ -25,15 +27,10 @@ const CREATE_BUTTON_TXT = 'Create Product'
 
 const CREATE_MODAL_TITLE = 'Create New Product'
 
-const FormLabel = styled.div({
-  textTransform: 'capitalize',
-  marginBottom: Spacing.SMALL,
-  fontWeight: 700,
-})
-
 const createButtonStyle = {
-  background: "#234768",
-  color: 'white',
+  background: Color.PRIMARY,
+  color: Color.WHITE,
+  fontWeight: 700,
 }
 
 const getInputFields = (state, handleChange) => {
@@ -43,23 +40,23 @@ const getInputFields = (state, handleChange) => {
     <>
       <div>
         <FormLabel>Generic Name:</FormLabel>
-        <input
+        <StyledInput
           type="text"
           name="nameGeneric"
           onChange={handleChange}
           value={state.input.nameGeneric || ''}
         />
       </div>
-      <div style={{ marginTop: Spacing.LARGE }}>
+      <div style={{ marginTop: Spacing.S5 }}>
         <FormLabel>Brand Name:</FormLabel>
-        <input
+        <StyledInput
           type="text"
           name="nameBrand"
           onChange={handleChange}
           value={state.input.nameBrand || ''}
         />
       </div>
-      <div style={{ marginTop: Spacing.LARGE }}>
+      <div style={{ marginTop: Spacing.S5 }}>
         <FormLabel>Tags:</FormLabel>
         <CreatableMultiSelect
           value={tags.map(str => ({ value: str, label: str }))}
@@ -81,6 +78,7 @@ const headerChildren = (
     modalTitle={CREATE_MODAL_TITLE}
     buttonLabel={CREATE_BUTTON_TXT}
     buttonStyle={createButtonStyle}
+    modalStyle={createObjectModalStyle}
     mutationDoc={CREATE_PRODUCT}
     refetchQueries={[{ query: GET_SOURCE_PRODUCTS }]}
     getInputFields={getInputFields}
@@ -121,10 +119,13 @@ const defaultPanelItemStyle = {
   justifyContent: 'space-between',
   alignItems: 'center',
   padding: '8px 24px',
-  color: Colors.BLACK,
+  color: Color.BLACK,
   fontWeight: 600,
   fontSize: 12,
-  borderBottom: `1px solid ${transparentize(0.9, Colors.BLACK)}`,
+  borderBottom: `1px solid ${transparentize(0.9, Color.BLACK)}`,
+  ':hover': {
+    background: transparentize(0.95, Color.BLACK),
+  }
 }
 
 const panelItemConfig = {
@@ -139,8 +140,8 @@ const ProductsPanel = () => (
     title="Products"
     headerChildren={headerChildren}
     headerContainerStyle={{
-      background: Colors.WHITE,
-      borderBottom: `1px solid ${transparentize(0.9, Colors.BLACK)}`
+      background: Color.WHITE,
+      borderBottom: `1px solid ${transparentize(0.9, Color.BLACK)}`
     }}
     queryDocs={{
       fetchAllQueryProps: { query: GET_SOURCE_PRODUCTS },

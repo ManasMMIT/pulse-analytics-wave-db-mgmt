@@ -1,5 +1,4 @@
 import React from 'react'
-import styled from '@emotion/styled'
 import { transparentize } from 'polished'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faEdit } from "@fortawesome/free-solid-svg-icons"
@@ -7,6 +6,8 @@ import { faEdit } from "@fortawesome/free-solid-svg-icons"
 import Panel from '../../../Phoenix/shared/Panel'
 import ModalButtonWithForm from '../../shared/ModalButtonWithForm'
 import RegimensSelect from './RegimensSelect'
+
+import { StyledInput, FormLabel, createObjectModalStyle, defaultPanelItemStyle } from '../styledComponents'
 
 import {
   GET_SOURCE_INDICATIONS,
@@ -23,34 +24,17 @@ import { Colors, Spacing } from '../../../utils/pulseStyles'
 
 const editIcon = <FontAwesomeIcon size="lg" icon={faEdit} />
 
-const defaultPanelItemStyle = {
-  display: 'flex',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-  padding: '8px 24px',
-  color: Colors.BLACK,
-  fontWeight: 600,
-  fontSize: 12,
-  borderBottom: `1px solid ${transparentize(0.9, Colors.BLACK)}`,
-}
-
 const panelItemActiveStyle = {
   backgroundColor: transparentize(0.85, Colors.PRIMARY),
   color: Colors.PRIMARY,
 }
-
-const FormLabel = styled.div({
-  textTransform: 'capitalize',
-  marginBottom: Spacing.SMALL,
-  fontWeight: 700,
-})
 
 const getInputFields = (state, handleChange) => {
   return (
     <>
       <div>
         <FormLabel>name: </FormLabel>
-        <input
+        <StyledInput
           type="text"
           name="name"
           onChange={handleChange}
@@ -75,6 +59,7 @@ const buttonGroupCallback = ({ name, _id, regimens }) => (
     <ModalButtonWithForm
       modalTitle="Edit Indication"
       buttonLabel={editIcon}
+      modalStyle={createObjectModalStyle}
       buttonStyle={{ border: 'none', background: 'none', color: transparentize(0.7, Colors.BLACK) }}
       data={{ input: { name, _id, regimens } }}
       mutationDoc={UPDATE_SOURCE_INDICATION}

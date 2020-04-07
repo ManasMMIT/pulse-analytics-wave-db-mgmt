@@ -1,20 +1,33 @@
 import React from 'react'
+import styled from '@emotion/styled'
+import { transparentize } from 'polished'
 import { useQuery } from '@apollo/react-hooks'
 import Spinner from '../../Phoenix/shared/Spinner'
 
 // ! temporary usage of account modal button to emulate style
 import { ButtonLabel } from './AccountModals/AccountModalButton/styledAccountModalButtonComponents'
 
-const defaultButtonStyle = {
-  background: "#234768",
-  color: 'white',
+import Color from '../../utils/color'
+
+const StyledButtonLabel = styled(ButtonLabel)({
+  background: transparentize(0.85, Color.MEDIUM_GRAY_2),
+  color: Color.MEDIUM_GRAY_2,
+  fontWeight: 700,
   marginLeft: 12,
-}
+  ':hover': {
+    background: transparentize(0.75, Color.MEDIUM_GRAY_2),
+    color: Color.MEDIUM_GRAY_2,
+  },
+  ':active': {
+    background: transparentize(0.85, Color.GREEN),
+    color: Color.GREEN,
+  }
+})
 
 const getOneOfString = (arr, datumKey) => {
   let result = arr.map(obj => obj[datumKey])
   result = JSON.stringify(result)
-  result = result.slice(1, result.length - 1) 
+  result = result.slice(1, result.length - 1)
 
   return result
 }
@@ -40,12 +53,12 @@ const CopyOneOfStringButton = ({ queryDoc, dataKey, datumKey, buttonStyle }) => 
   const oneOfString = getOneOfString(targetData, datumKey)
 
   return (
-    <ButtonLabel
-      {...Object.assign({}, defaultButtonStyle, buttonStyle)}
+    <StyledButtonLabel
+      {...Object.assign({}, buttonStyle)}
       onClick={() => copyToClipboard(oneOfString)}
     >
       Copy oneOf string
-    </ButtonLabel>
+    </StyledButtonLabel>
   )
 }
 
