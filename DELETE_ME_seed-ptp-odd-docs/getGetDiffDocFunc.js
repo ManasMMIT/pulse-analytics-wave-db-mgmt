@@ -43,7 +43,7 @@ module.exports = ({
     oldCollectionOp,
   ])
 
-  oldCollectionDocs = oldCollectionDocs.filter(({ 
+  oldCollectionDocs = oldCollectionDocs.filter(({
     slug,
     indication,
     regimen,
@@ -65,11 +65,11 @@ module.exports = ({
       invalidRegimens[regimen] = true
       comboIsValid = false
     }
-    
+
     const isBookValid = validBooks[book]
     if (!isBookValid) {
       invalidBooks[book] = true
-      comboIsValid = false 
+      comboIsValid = false
     }
 
     const isCoverageValid = validCoverages[coverage]
@@ -78,7 +78,10 @@ module.exports = ({
       comboIsValid = false
     }
 
-    if (collectionName === 'payerHistoricalPolicyLinks') return comboIsValid
+    if (
+      collectionName === 'payerHistoricalPolicyLinks'
+        || collectionName === 'payerHistoricalPolicyLinksHt'
+    ) return comboIsValid
 
     const isIndicationValid = validIndications[indication]
     if (!isIndicationValid) {
@@ -97,6 +100,7 @@ module.exports = ({
       invalidLines[line] = true
       comboIsValid = false
     }
+
 
     return comboIsValid
   })
