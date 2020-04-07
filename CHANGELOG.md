@@ -12,7 +12,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Fixed** for any bug fixes.
 - **Security** in case of vulnerabilities.
 
-## [Unreleased] - Started: 4-2-20
+## [Unreleased] - Started: 4-7-20
+
+## [2.1.0] - Started: 4-2-20
+
+### Changed
+- `Node Scripts, Orion`: change the data import pipeline for payer data to replace `Tricare` and `VA` books with `Federal/Other`; change payer data seed scripts to use `Federal/Other`, custom Novartis export
+- `Node Scripts`: for importing payer historical non-project-based data, you can now add a flag `--ignoreConsolidatePayerData` to the terminal command to avoid that costly step until you're at the last CSV that needs to be imported
 
 ## [2.0.0] - Started: 3-11-20
 
