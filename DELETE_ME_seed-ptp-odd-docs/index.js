@@ -16,7 +16,7 @@ const runDiffer = async () => {
 
   const pulseDevStaging = stagingDbs.db('pulse-dev')
   const pulseDevTest = testDbs.db('pulse-dev')
-  
+
   const pulseCoreStaging = stagingDbs.db('pulse-core')
 
   const [
@@ -27,6 +27,7 @@ const runDiffer = async () => {
     populations,
     books,
     coverages,
+    treatmentPlans,
   ] = await Promise.all([
     pulseCoreStaging.collection('organizations').find({ type: 'Payer' }).toArray(),
     pulseCoreStaging.collection('indications').find().toArray(),
@@ -35,14 +36,15 @@ const runDiffer = async () => {
     pulseCoreStaging.collection('populations').find().toArray(),
     pulseCoreStaging.collection('books').find().toArray(),
     pulseCoreStaging.collection('coverages').find().toArray(),
+    pulseCoreStaging.collection('treatmentPlans').find().toArray(),
   ])
 
   const validSlugs = _.keyBy(organizations, 'slug')
   const invalidSlugs = {}
-  
+
   const validIndications = _.keyBy(indications, 'name')
   const invalidIndications = {}
-  
+
   const validRegimens = _.keyBy(regimens, 'name')
   const invalidRegimens = {}
 
@@ -73,6 +75,7 @@ const runDiffer = async () => {
     invalidBooks,
     validCoverages,
     invalidCoverages,
+    treatmentPlans,
     dbs: {
       pulseDevStaging,
       pulseDevTest,

@@ -15,6 +15,7 @@ module.exports = ({
   invalidBooks,
   validCoverages,
   invalidCoverages,
+  treatmentPlans,
   dbs: {
     pulseDevStaging,
     pulseDevTest,
@@ -23,6 +24,12 @@ module.exports = ({
   comparer,
   collectionName,
 }) => {
+  const tpHash = collectionName.includes('Policy')
+    ? ({ book, coverage, regimen}) => [book, coverage, regimen].join('|')
+    : ({ book, coverage, regimen, indication, population, line }) => [book, coverage, regimen, indication, population, line].join('|')
+
+  const validTps = _.groupBy(treatmentPlans, tpHash)
+
   const newCollectionOp = pulseDevStaging
     .collection(collectionName)
     .find()
@@ -83,7 +90,17 @@ module.exports = ({
     if (
       collectionName === 'payerHistoricalPolicyLinks'
         || collectionName === 'payerHistoricalPolicyLinksHt'
-    ) return comboIsValid
+    ) {
+      const isValidTp = validTps[
+        [book, coverage, regimen].join('|')
+      ]
+
+      if (!isValidTp) {
+        comboIsValid = false
+      }
+
+      return comboIsValid
+    }
 
     const isIndicationValid = validIndications[indication]
     if (!isIndicationValid) {
@@ -103,6 +120,13 @@ module.exports = ({
       comboIsValid = false
     }
 
+    const isTpValid = validTps[
+      [book, coverage, regimen, indication, population, line].join('|')
+    ]
+
+    if (!isTpValid) {
+      comboIsValid = false
+    }
 
     return comboIsValid
   })
