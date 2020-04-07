@@ -2,7 +2,7 @@ module.exports = async getDiffDoc => {
   const comparer = ({
     book,
     coverage,
-    // dateTracked,
+    dateTracked = null,
     link = null, // if it's not there, sub null for comparison to work
     month,
     // organization,
@@ -15,7 +15,7 @@ module.exports = async getDiffDoc => {
   }) => [
     book,
     coverage,
-    // dateTracked,
+    dateTracked,
     link,
     month,
     // organization,
