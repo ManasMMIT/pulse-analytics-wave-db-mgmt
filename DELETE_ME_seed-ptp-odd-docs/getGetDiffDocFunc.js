@@ -137,20 +137,16 @@ module.exports = ({
     ? ({ slug, regimen, book, coverage, month, year }) => [slug, regimen, book, coverage, month, year].join('|')
     : ({ slug, regimen, book, coverage, indication, population, line, month, year }) => [slug, regimen, book, coverage, indication, population, line, month, year].join('|')
 
-  const oldCollectionDocsWithoutDupes = _.uniqBy(oldCollectionDocs, getHash)
-
-  const removedDupes = _.differenceBy(
-    oldCollectionDocs,
-    oldCollectionDocsWithoutDupes,
-    comparer,
-  )
-
-  oldCollectionDocs = oldCollectionDocsWithoutDupes
-
-  const inOldNotNew = _.differenceBy(
+  let inOldNotNew = _.differenceBy(
     oldCollectionDocs,
     newCollectionDocs,
     comparer,
+  )
+
+  inOldNotNew = _.differenceBy(
+    inOldNotNew,
+    newCollectionDocs,
+    getHash,
   )
 
   const inNewNotOld = _.differenceBy(
@@ -180,7 +176,6 @@ module.exports = ({
       'In old, not new': inOldNotNew.slice(0, 500),
       'In new, not old': inNewNotOld.slice(0, 500),
       'In both': inBothNewAndOld.slice(0, 500),
-      'Dupes': removedDupes.slice(0, 500),
     },
   }
 }
