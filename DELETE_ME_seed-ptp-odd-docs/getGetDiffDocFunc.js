@@ -60,7 +60,12 @@ module.exports = ({
     population,
     book,
     coverage,
+    criteria,
   }) => {
+    if (collectionName.includes('AdditionalCriteria')) {
+      if (!criteria) return false
+    }
+
     let comboIsValid = true
 
     const isSlugValid = validSlugs[slug]
