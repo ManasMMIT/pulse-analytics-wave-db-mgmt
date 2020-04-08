@@ -18,7 +18,7 @@ module.exports = ({
   treatmentPlans,
   dbs: {
     pulseDevStaging,
-    pulseDevTest,
+    pulseDevControl,
   },
 }) => async ({
   comparer,
@@ -35,7 +35,7 @@ module.exports = ({
     .find()
     .toArray()
 
-  const oldCollectionOp = pulseDevTest
+  const oldCollectionOp = pulseDevControl
     .collection(collectionName)
     .find()
     .toArray()

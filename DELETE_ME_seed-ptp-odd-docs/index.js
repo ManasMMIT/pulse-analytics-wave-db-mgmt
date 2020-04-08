@@ -11,11 +11,11 @@ const getCombinedDataDocs = require('./combinedData')
 // const getCombinedStateLivesDocs = require('./combinedStateLives')
 
 const runDiffer = async () => {
-  const stagingDbs = await MongoClient.connect(`mongodb://pulse-admin:${MONGO_KEY}@wave-staging-shard-00-00-ik4h2.mongodb.net:27017,wave-staging-shard-00-01-ik4h2.mongodb.net:27017,wave-staging-shard-00-02-ik4h2.mongodb.net:27017/pulse-dev?ssl=true&replicaSet=wave-staging-shard-0&authSource=admin`, { useNewUrlParser: true })
-  const testDbs = await MongoClient.connect(`mongodb+srv://pulse-admin:${MONGO_KEY}@wave-test.ik4h2.mongodb.net/pulse-dev?retryWrites=true&w=majority`, { useNewUrlParser: true })
+  const stagingDbs = await MongoClient.connect(`mongodb://pulse-admin:${MONGO_KEY}@wave-staging-shard-00-00-ik4h2.mongodb.net:27017,wave-staging-shard-00-01-ik4h2.mongodb.net:27017,wave-staging-shard-00-02-ik4h2.mongodb.net:27017/pulse-dev?ssl=true&replicaSet=wave-staging-shard-0&authSource=admin`, { useUnifiedTopology: true })
+  const controlDbs = await MongoClient.connect(`mongodb://pulse-admin:${MONGO_KEY}@wave-shard-00-00-ik4h2.mongodb.net:27017,wave-shard-00-01-ik4h2.mongodb.net:27017,wave-shard-00-02-ik4h2.mongodb.net:27017/pulse-dev?ssl=true&replicaSet=wave-shard-0&authSource=admin`, { useUnifiedTopology: true })
 
   const pulseDevStaging = stagingDbs.db('pulse-dev')
-  const pulseDevTest = testDbs.db('pulse-dev')
+  const pulseDevControl = controlDbs.db('pulse-dev')
 
   const pulseCoreStaging = stagingDbs.db('pulse-core')
 
@@ -164,7 +164,7 @@ const runDiffer = async () => {
     treatmentPlans,
     dbs: {
       pulseDevStaging,
-      pulseDevTest,
+      pulseDevControl,
     },
   })
 
@@ -262,7 +262,7 @@ const runDiffer = async () => {
   debugger
 
   await stagingDbs.close()
-  await testDbs.close()
+  await controlDbs.close()
 
   console.log('dbs connections closed')
 }
