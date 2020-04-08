@@ -28,6 +28,7 @@ const runDiffer = async () => {
     books,
     coverages,
     treatmentPlans,
+    allowedPolicyLinkNotches,
   ] = await Promise.all([
     pulseCoreStaging.collection('organizations').find({ type: 'Payer' }).toArray(),
     pulseCoreStaging.collection('indications').find().toArray(),
@@ -123,6 +124,102 @@ const runDiffer = async () => {
         }
       }
     ]).toArray(),
+    pulseCoreStaging.collection('organizations.treatmentPlans.history')
+      .aggregate([
+        {
+          '$addFields': {
+            'dateParts': {
+              '$dateToParts': {
+                'date': '$timestamp'
+              }
+            }
+          }
+        }, {
+          '$lookup': {
+            'from': 'organizations',
+            'localField': 'organizationId',
+            'foreignField': '_id',
+            'as': 'organization'
+          }
+        }, {
+          '$lookup': {
+            'from': 'treatmentPlans',
+            'localField': 'treatmentPlanId',
+            'foreignField': '_id',
+            'as': 'treatmentPlan'
+          }
+        }, {
+          '$lookup': {
+            'from': 'regimens',
+            'localField': 'treatmentPlan.regimen',
+            'foreignField': '_id',
+            'as': 'regimen'
+          }
+        }, {
+          '$lookup': {
+            'from': 'books',
+            'localField': 'treatmentPlan.book',
+            'foreignField': '_id',
+            'as': 'book'
+          }
+        }, {
+          '$lookup': {
+            'from': 'coverages',
+            'localField': 'treatmentPlan.coverage',
+            'foreignField': '_id',
+            'as': 'coverage'
+          }
+        }, {
+          '$addFields': {
+            'regimen': {
+              '$arrayElemAt': [
+                '$regimen', 0
+              ]
+            },
+            'book': {
+              '$arrayElemAt': [
+                '$book', 0
+              ]
+            },
+            'coverage': {
+              '$arrayElemAt': [
+                '$coverage', 0
+              ]
+            },
+            'organization': {
+              '$arrayElemAt': [
+                '$organization', 0
+              ]
+            }
+          }
+        }, {
+          '$addFields': {
+            'regimen': '$regimen.name',
+            'book': '$book.name',
+            'coverage': '$coverage.name',
+            'slug': '$organization.slug'
+          }
+        }, {
+          '$group': {
+            '_id': {
+              'timestamp': '$timestamp',
+              'book': '$book',
+              'coverage': '$coverage',
+              'regimen': '$regimen',
+              'slug': '$slug',
+              'month': '$dateParts.month',
+              'year': '$dateParts.year'
+            },
+            'data': {
+              '$push': '$$ROOT'
+            }
+          }
+        }, {
+          '$replaceRoot': {
+            'newRoot': '$_id'
+          }
+        }
+      ], { allowDiskUse: true }).toArray(),
   ])
 
   const validSlugs = _.keyBy(organizations, 'slug')
@@ -162,6 +259,7 @@ const runDiffer = async () => {
     validCoverages,
     invalidCoverages,
     treatmentPlans,
+    allowedPolicyLinkNotches,
     dbs: {
       pulseDevStaging,
       pulseDevControl,
