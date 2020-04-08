@@ -16,6 +16,7 @@ module.exports = ({
   validCoverages,
   invalidCoverages,
   treatmentPlans,
+  allowedPolicyLinkNotches,
   dbs: {
     pulseDevStaging,
     pulseDevControl,
@@ -29,6 +30,11 @@ module.exports = ({
     : ({ book, coverage, regimen, indication, population, line }) => [book, coverage, regimen, indication, population, line].join('|')
 
   const validTps = _.groupBy(treatmentPlans, tpHash)
+
+  const validPtpNotches = _.keyBy(
+    allowedPolicyLinkNotches,
+    doc => [doc.slug, doc.month, doc.year, doc.book, doc.coverage, doc.regimen].join('|')
+  )
 
   const newCollectionOp = pulseDevStaging
     .collection(collectionName)
@@ -61,6 +67,8 @@ module.exports = ({
     book,
     coverage,
     criteria,
+    month,
+    year,
   }) => {
     if (collectionName.includes('AdditionalCriteria')) {
       if (!criteria) return false
@@ -101,6 +109,14 @@ module.exports = ({
       ]
 
       if (!isValidTp) {
+        comboIsValid = false
+      }
+
+      const isNotchValid = validPtpNotches[
+        [slug, month, year, book, coverage, regimen].join('|')
+      ]
+
+      if (!isNotchValid) {
         comboIsValid = false
       }
 
