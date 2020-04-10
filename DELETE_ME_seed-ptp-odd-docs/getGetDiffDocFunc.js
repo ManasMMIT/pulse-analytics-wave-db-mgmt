@@ -41,9 +41,57 @@ module.exports = ({
     .find()
     .toArray()
 
+  let purposefullyDeletedAndPreLastImportFilter = {
+    $and: [
+      {
+        $nor: [
+          {
+            regimen: { $in: ['Dupixent', 'Cinqair', 'Nucala', 'Fasenra', 'Xolair'] },
+            population: 'No Subtype Specified'
+          },
+          {
+            regimen: 'Fasenra', population: 'Eosinophilic'
+          },
+          {
+            indication: 'Urothelial',
+            population: {
+              $in: [
+                'PD-L1 (CPS) Requirement',
+                'Cisplatin-Ineligible',
+                'PD-L1 (CPS) Requirement, Cisplatin-Ineligible',
+                'PD-L1 (IC) Requirement, Cisplatin-Ineligible'
+              ]
+            }
+          },
+          {
+            indication: 'Melanoma',
+            population: { $in: ['BRAF V600', 'Metastatic'] }
+          },
+          { indication: 'NSCLC', line: '1L+', regimen: 'Keytruda' },
+          { indication: 'NSCLC', line: '2L+', regimen: 'Keytruda' },
+          { indication: 'SCLC', line: '2L+', regimen: 'Keytruda' },
+          { indication: 'ALL', line: '3L+' }, // 1 doc
+        ]
+      },
+      {
+        createdOn: {
+          $lt: new Date('2020-04-09T15:00:00.000Z')
+        }
+      }
+    ]
+  }
+
+  if (collectionName.includes('PolicyLink')) {
+    purposefullyDeletedAndPreLastImportFilter = {
+      createdOn: {
+        $lt: new Date('2020-04-09T15:00:00.000Z')
+      }
+    }
+  }
+
   const oldCollectionOp = pulseDevControl
     .collection(collectionName)
-    .find()
+    .find(purposefullyDeletedAndPreLastImportFilter)
     .toArray()
 
   console.log(`Comparing ${collectionName} docs`)
