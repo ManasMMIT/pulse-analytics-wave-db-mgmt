@@ -8,7 +8,7 @@ const {
   formatCombinedDataDoc,
 } = require('./formatters')
 
-class PayerHistoryManager {
+class CoreToDev {
   constructor({ pulseDev, pulseCore }) {
     this.pulseDev = pulseDev
     this.pulseCore = pulseCore
@@ -270,4 +270,4 @@ class PayerHistoryManager {
   }
 }
 
-module.exports = PayerHistoryManager
+module.exports = CoreToDev
