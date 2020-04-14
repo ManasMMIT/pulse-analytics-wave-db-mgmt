@@ -1,5 +1,8 @@
 const { ObjectId } = require('mongodb')
 const _ = require('lodash')
+
+const Validation = require('./Validation')
+
 const { zonedTimeToUtc } = require('date-fns-tz')
 
 const DEFAULT_TIMEZONE = require('../../../../../../utils/defaultTimeZone')
@@ -7,90 +10,20 @@ const DEFAULT_TIMEZONE = require('../../../../../../utils/defaultTimeZone')
 const {
   ENRICH_TP_PARTS_PIPELINE,
   getProjectOrgTpsPipeline,
-  getProjectOrgTpsEnrichedPipeline,
 } = require('./agg-pipelines')
 
-class ProjectHistoryManager {
+const {
+  getIsQualityAccessSheet,
+  getIsAdditionalCriteriaSheet,
+  getIsPolicyLinksSheet,
+} = require('../utils')
+
+class Manager extends Validation {
   constructor({ projectId, pulseCore }) {
-    this.projectId = ObjectId(projectId)
+    super()
+
     this.pulseCore = pulseCore
-  }
-
-  async validate({
-    sheetData,
-    sheetName,
-  }) {
-    const allowedOrgTpCombos = await this.pulseCore
-      .collection('tdgProjects')
-      .aggregate(
-        getProjectOrgTpsEnrichedPipeline(this.projectId)
-      )
-      .toArray()
-
-    const isPolicyLinksSheet = /PolicyLinks/.test(sheetName)
-
-    const selectedTpHasher = isPolicyLinksSheet
-      ? this.POLICY_LINKS_hashTpParts
-      : this.hashTpParts
-
-    const allowedOrgTpHashByParts = _.keyBy(
-      allowedOrgTpCombos,
-      combo => [
-        combo.slug,
-        selectedTpHasher(combo)
-      ].join('|'),
-    )
-
-    const exactCorrectSetOfOrgTps = Object.keys(allowedOrgTpHashByParts)
-
-    const sheetDataHashes = sheetData.map(datum => {
-      const datumOrgTpHash = [
-        datum.slug,
-        selectedTpHasher(datum)
-      ].join('|')
-
-      return datumOrgTpHash
-    })
-
-    const missingOrgTpCombos = _.difference(
-      exactCorrectSetOfOrgTps,
-      sheetDataHashes,
-    ).join('\n')
-
-    const invalidOrgTpCombos = _.difference(
-      sheetDataHashes,
-      exactCorrectSetOfOrgTps,
-    ).join('\n')
-
-    if (missingOrgTpCombos.length || invalidOrgTpCombos.length) {
-      throw new Error(
-        'Incoming organization-treatmentPlan combos did not pass validation\n'
-        + `The following combinations were expected, but missing:\n${missingOrgTpCombos}\n`
-        + `The following combinations were invalid:\n${invalidOrgTpCombos}\n`
-      )
-    }
-
-    // ! Still possible at this point that all orgTps in sheetDataHashes are valid but
-    // ! there are dupes in them, which requires us to error
-    if (sheetDataHashes.length !== exactCorrectSetOfOrgTps.length) {
-      const hash = {}
-      const orgTpsThatHaveDupes = []
-
-      for (const str of sheetDataHashes) {
-        if (hash[str]) {
-          hash[str]++
-        } else {
-          hash[str] = 1
-        }
-
-        if (hash[str] === 2) orgTpsThatHaveDupes.push(str)
-      }
-
-      throw new Error(
-        'Incoming organization-treatmentPlan combos did not pass validation\n'
-        + `The following combinations were duplicated: ${orgTpsThatHaveDupes}\n`
-      )
-    }
+    this.projectId = ObjectId(projectId)
   }
 
   getEnrichedOrgTpsOp() {
@@ -132,25 +65,6 @@ class ProjectHistoryManager {
       .collection('treatmentPlans')
       .aggregate(ENRICH_TP_PARTS_PIPELINE)
       .toArray()
-  }
-
-  hashTpParts(datum) {
-    return [
-      datum.indication,
-      datum.regimen,
-      datum.line,
-      datum.population,
-      datum.book,
-      datum.coverage
-    ].join('|')
-  }
-
-  POLICY_LINKS_hashTpParts(datum) {
-    return [
-      datum.regimen,
-      datum.book,
-      datum.coverage
-    ].join('|')
   }
 
   getTreatmentPlansHashByParts(treatmentPlansWithParts) {
@@ -262,9 +176,11 @@ class ProjectHistoryManager {
       }
     */
 
-    const isPolicyLinksSheet = /Policy Links/.test(this.sheetName)
-    const isQualityAccessSheet = /Quality of Access/.test(this.sheetName)
-    const isAdditionalCriteriaSheet = /Additional Criteria/.test(this.sheetName)
+    const isPolicyLinksSheet = getIsPolicyLinksSheet(this.sheetName)
+
+    const isQualityAccessSheet = getIsQualityAccessSheet(this.sheetName)
+
+    const isAdditionalCriteriaSheet = getIsAdditionalCriteriaSheet(this.sheetName)
 
     const dataForOps = this.getFilteredAndEnrichedSheetData()
 
@@ -367,7 +283,7 @@ class ProjectHistoryManager {
   }) {
     this.sheetName = sheetName
     this.sheetData = sheetData
-    
+
     // create JS Date Object (which only stores dates in absolute UTC time) as the UTC equivalent of isoShortString in New York time
     this.timestamp = zonedTimeToUtc(timestamp, DEFAULT_TIMEZONE)
 
@@ -379,7 +295,7 @@ class ProjectHistoryManager {
 
       Therefore, matching orgTpIds requires a different hash of fields to match treatmentPlans.
     */
-    const isPolicyLinksSheet = /Policy Links/.test(sheetName)
+    const isPolicyLinksSheet = getIsPolicyLinksSheet(sheetName)
 
     this.selectedTpHasher = isPolicyLinksSheet
       ? this.POLICY_LINKS_hashTpParts
@@ -405,4 +321,4 @@ class ProjectHistoryManager {
   }
 }
 
-module.exports = ProjectHistoryManager
+module.exports = Manager

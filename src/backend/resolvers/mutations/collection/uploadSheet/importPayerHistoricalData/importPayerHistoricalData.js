@@ -1,5 +1,9 @@
-const ProjectHistoryManager = require('./ProjectHistoryManager')
-
+const {
+  getIsQualityAccessSheet,
+  getIsAdditionalCriteriaSheet,
+  getIsPolicyLinksSheet,
+} = require('./utils')
+const SheetToCore = require('./SheetToCore/Manager')
 // const PayerHistoryManager = require('./PayerHistoryManager')
 
 // ? FOR FUTURE: random global tracker to indicate when to trigger combo materialization functions
@@ -22,23 +26,27 @@ const importHistoricalProjectData = async (
   { pulseCoreDb, pulseDevDb, mongoClient },
   importFeedback, // TODO: add success messages to importFeedback array on success (mutate this array)
 ) => {
-  const projectHistoryManager = new ProjectHistoryManager({
+  const isQualityAccessSheet = getIsQualityAccessSheet(sheet)
+  const isAdditionalCriteriaSheet = getIsAdditionalCriteriaSheet(sheet)
+  const isPolicyLinksSheet = getIsPolicyLinksSheet(sheet)
+
+  const sheetToCoreManager = new SheetToCore({
     projectId,
     pulseCore: pulseCoreDb,
   })
 
-  try {
-    await projectHistoryManager.validate({
-      sheetData: data,
-      sheetName: sheet,
-    })
-  } catch(e) {
-    throw new Error(e)
-    // TODO: eventually you'll have to report what was successful even if 1 out of 3 sheets failed to be imported
-    // throw new Error(e.message + '\n' + 'Successful stuff:' + importFeedback.join('\n'))
+  if (isQualityAccessSheet) {
+    await sheetToCoreManager.validateQualityOfAccess(data)
+    // await sheetToCoreManager.upsertQoa()
+  } else if (isAdditionalCriteriaSheet) {
+    await sheetToCoreManager.validateAdditionalCriteria(data)
+    // await sheetToCoreManager.upsertAddlCriteria()
+  } else if (isPolicyLinksSheet) {
+    await sheetToCoreManager.validatePolicyLinks(data)
+    // await sheetToCoreManager.upsertPolicyLinks()
   }
 
-  await projectHistoryManager
+  await sheetToCoreManager
     .upsertOrgTpHistory({
       sheetData: data,
       sheetName: sheet,
