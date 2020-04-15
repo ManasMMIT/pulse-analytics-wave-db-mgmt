@@ -14,6 +14,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased] - Started: 4-7-20
 
+### Changed
+- `Orion`: Separate Lives and Access sections of historical uploadSheet resolver.
+
 ## [2.1.0] - Started: 4-2-20
 
 ### Changed

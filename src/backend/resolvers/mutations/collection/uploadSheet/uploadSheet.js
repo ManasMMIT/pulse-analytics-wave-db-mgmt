@@ -2,7 +2,7 @@ const sanitize = require('./utils/sanitize')
 const validate = require('./utils/validate')
 const getSheetConfig = require('./utils/getSheetConfig')
 const formatAjvErrors = require('./utils/formatAjvErrors')
-const importPayerHistoricalData = require('./importPayerHistoricalData')
+const importPayerHistoricalAccessData = require('./importPayerHistoricalAccessData')
 
 const uploadSheet = async (
   parent,
@@ -36,7 +36,7 @@ const uploadSheet = async (
     }
 
     if (timestamp && projectId) {
-      await importPayerHistoricalData(
+      await importPayerHistoricalAccessData(
         {
           wb,
           sheet,

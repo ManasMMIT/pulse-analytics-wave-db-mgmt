@@ -1,4 +1,4 @@
-const combineLives = require('./combine-lives')
+const combineLives = require('../../shared/combine-lives')
 const additionalCriteriaAggPip = require('./agg-pipelines/additional-criteria-ptp-pipeline')
 const qualityAccessAggPip = require('./agg-pipelines/quality-access-agg-pip')
 const policyLinkAggPipeline = require('./agg-pipelines/policy-link-agg-pipeline')
@@ -204,34 +204,12 @@ class CoreToDev {
       .insertMany(combinedData)
   }
 
-  async materializeNationalDrgLives() {}
-
-  async materializeNationalMmitLives() {}
-
-  async materializeStateDrgLives() {}
-
-  async materializeStateMmitLives() {}
-
   async materializeRegionalTargetingData() {
     await combineLives({
       pulseDevDb: this.pulseDev,
       pulseCoreDb: this.pulseCore,
     })
   }
-
-  async materializeLivesTotals() {
-    // ! needs to materialize the following collections:
-    // payerDrgNationalLivesTotals
-    // payerDrgStateLivesTotals
-    // payerMmitNationalLivesTotals
-    // payerMmitStateLivesTotals
-  }
-
-  /*
-    The `syncDrgMmitMedicalLives` script automatically executes on pulse-core whenever MMIT/DRG lives are imported into pulse-core
-    (but before the latest month/year MMIT/DRG lives data is pushed to pulse-dev, and before the MMIT/DRG totals collections are calculated).
-  */
-  async syncDrgMmitMedicalLives() {}
 
   async materializeNonLivesCollections() {
     this.nonLivesCollectionDocs = await this.getNonLivesCollectionDocs()
@@ -253,20 +231,6 @@ class CoreToDev {
     await this.materializeRegionalTargetingData()
 
     console.log('non-lives historical collections have finished materializing')
-  }
-
-  async materializeLivesCollections() {
-    await this.syncDrgMmitMedicalLives()
-
-    await Promise.all([
-      this.materializeNationalDrgLives,
-      this.materializeNationalMmitLives,
-      this.materializeStateDrgLives,
-      this.materializeStateMmitLives,
-      this.materializeLivesTotals,
-    ])
-
-    await this.materializeRegionalTargetingData()
   }
 }
 

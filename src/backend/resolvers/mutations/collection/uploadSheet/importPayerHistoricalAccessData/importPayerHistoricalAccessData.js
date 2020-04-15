@@ -15,7 +15,7 @@ const SheetToCore = require('./SheetToCore/Manager')
 //   pulseCore: pulseCoreDb,
 // })
 
-const importHistoricalProjectData = async (
+const importPayerHistoricalAccessData = async (
   {
     wb, // TODO: will probably be used for string going into import feedback
     sheet,
@@ -64,6 +64,7 @@ const importHistoricalProjectData = async (
 
   // await coreToDev.materializeNonLivesCollections()
 
+
   // ? successString += 'successfully materialized data in DEV DB \n'
   // importFeedback.push(successString)
 
@@ -100,4 +101,4 @@ function materializeExpensiveCombinationCollections() {
 
 */
 
-module.exports = importHistoricalProjectData
+module.exports = importPayerHistoricalAccessData
