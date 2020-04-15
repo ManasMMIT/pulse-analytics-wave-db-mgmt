@@ -37,7 +37,7 @@ const queries = gql`
     singlePayerProject(projectId: String): SinglePayerProject
     payerProjectsList: [PayerProjectsList]
 
-    projectPtps(input: ProjectPtpsInput!): [ProjectPtp]
+    payerProjectPtps(input: PayerProjectPtpsInput!): [PayerProjectPtp]
 
     treatmentPlans: [TreatmentPlan]
 
@@ -247,7 +247,7 @@ const queries = gql`
     population: String
   }
 
-  type ProjectPtp {
+  type PayerProjectPtp {
     _id: ID!
     slug: String
     organization: String
@@ -258,19 +258,11 @@ const queries = gql`
     regimen: String
     book: String
     coverage: String
-    project: PtpProjectSubdoc
+    project: String
   }
 
-  type PtpProjectSubdoc {
-    _id: ID
-    name: String
-  }
-
-  input ProjectPtpsInput {
-    projectId: ID
-    limit: Int
-    skip: Int
-    order: [OrderConfig]
+  input PayerProjectPtpsInput {
+    projectId: ID!
   }
 
   input OrderConfig {

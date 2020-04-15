@@ -16,6 +16,8 @@ const workbook = require('./workbook')
 
 const email = require('./email')
 
+const payerProjects = require('./payerProject')
+
 const mutationType = gql`
   type Mutation {
     createUser(input: CreateUserInput!): CreateUserPayload
@@ -101,6 +103,10 @@ const mutationType = gql`
     filterQuery(input: JSON): JSON
 
     pipeDelimitedScript: JSON
+
+    updatePayerProjectPtps(input: UpdatePayerProjectPtpsInput!): JSON
+    removePayerProjectPtps(input: RemovePayerProjectPtpsInput!): JSON
+    transferPayerProjectPtps(input: TransferPayerProjectPtpsInput!): JSON
   }
 `
 
@@ -122,4 +128,6 @@ module.exports = [
 
   ...testEmailGroup,
   ...workbook,
+
+  ...payerProjects,
 ]

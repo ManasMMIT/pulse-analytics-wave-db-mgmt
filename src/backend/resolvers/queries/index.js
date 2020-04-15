@@ -14,10 +14,10 @@ const alert = require('./alert')
 const opLogs = require('./opLogs')
 const bomSchema = require('./bomSchema')
 const workbooks = require('./workbooks')
-const singlePayerProject = require('./singlePayerProject')
-const payerProjectsList = require('./payerProjectsList')
 const treatmentPlans = require('./treatmentPlans')
-const projectPtps = require('./projectPtps')
+
+const payerProjects = require('./payerProjects')
+
 const payerCombinedStateLives = require('./payerCombinedStateLives')
 
 module.exports = {
@@ -37,9 +37,7 @@ module.exports = {
   opLogs,
   bomSchema,
   workbooks,
-  singlePayerProject,
-  payerProjectsList,
   treatmentPlans,
-  projectPtps,
+  ...payerProjects,
   payerCombinedStateLives,
 }

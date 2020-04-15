@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import ProjectContentConfigurationModal from './ProjectContentConfigurationModal/ProjectContentConfigurationModal'
 import Button from '../../../../../components/Button'
 
-const ProjectContentConfigurationButton = ({ projectId, name }) => {
+const ProjectContentConfigurationButton = () => {
   const [isModalOpen, toggleModal] = useState(false)
 
   const openModal = () => toggleModal(true)
@@ -18,7 +18,6 @@ const ProjectContentConfigurationButton = ({ projectId, name }) => {
         Configure Project Content
       </Button>
       <ProjectContentConfigurationModal
-        projectId={projectId}
         isModalOpen={isModalOpen}
         closeModal={closeModal}
       />

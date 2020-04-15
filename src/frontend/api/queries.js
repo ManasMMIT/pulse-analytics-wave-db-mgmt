@@ -569,24 +569,21 @@ export const GET_SOURCE_TREATMENT_PLANS = gql`
  }
 `
 
-export const GET_PROJECT_PTPS = gql`
- query getProjectPtps($input: ProjectPtpsInput!) {
-   projectPtps(input: $input) {
-      _id
-      slug
-      organization
-      organizationTiny
-      indication
-      population
-      line
-      regimen
-      book
-      coverage
-      project {
-        _id
-        name
-      }
-   }
+export const GET_PAYER_PROJECT_PTPS = gql`
+ query getPayerProjectPtps($input: PayerProjectPtpsInput!) {
+   payerProjectPtps(input: $input) {
+    _id
+    slug
+    organization
+    organizationTiny
+    indication
+    population
+    line
+    regimen
+    book
+    coverage
+    project
+  }
  }
 `
 

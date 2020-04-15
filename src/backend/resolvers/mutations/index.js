@@ -16,6 +16,8 @@ const emailResolvers = require('./email')
 
 const queryResolvers = require('./query')
 
+const payerProjectResolvers = require('./payerProject')
+
 module.exports = {
   ...clientResolvers,
   ...teamResolvers,
@@ -35,4 +37,6 @@ module.exports = {
   ...queryResolvers,
 
   ...workbookResolvers,
+
+  ...payerProjectResolvers,
 }

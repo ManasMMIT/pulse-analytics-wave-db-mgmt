@@ -23,7 +23,7 @@ const PayerProjectTreatmentPlan = ({ location, match }) => {
         <Title title={PAYER_TITLE} />
       </section>
       <TreatmentPlansFilters />
-      <TreatmentPlansTable />
+      <TreatmentPlansTable checkbox />
     </Wrapper>
   )
 }

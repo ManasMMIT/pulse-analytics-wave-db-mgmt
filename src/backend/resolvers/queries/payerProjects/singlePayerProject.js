@@ -7,7 +7,7 @@ const singlePayerProject = async (parent, args, { pulseCoreDb }) => {
   ] = await pulseCoreDb
     .collection('tdgProjects')
     .aggregate([
-      { 
+      {
         $match: {
           _id: ObjectId(args.projectId)
         }
