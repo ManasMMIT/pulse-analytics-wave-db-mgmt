@@ -40,8 +40,6 @@ const queries = gql`
     payerProjectPtps(input: PayerProjectPtpsInput!): [PayerProjectPtp]
 
     treatmentPlans: [TreatmentPlan]
-
-    payerCombinedStateLives(treatmentPlan: JSON): [PayerCombinedStateLives]
   }
 
   type Node {
@@ -268,21 +266,6 @@ const queries = gql`
   input OrderConfig {
     key: String!
     direction: Int!
-  }
-
-  type PayerCombinedStateLives {
-    _id: ID
-    indication: String
-    regimen: String
-    book: String
-    coverage: String
-    line: String
-    population: String
-    treatmentPlan: String
-    DRG_statesData: JSON
-    MMIT_statesData: JSON
-    DRG_nationalData: JSON
-    MMIT_nationalData: JSON
   }
 `
 

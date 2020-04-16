@@ -18,8 +18,6 @@ const treatmentPlans = require('./treatmentPlans')
 
 const payerProjects = require('./payerProjects')
 
-const payerCombinedStateLives = require('./payerCombinedStateLives')
-
 module.exports = {
   collections,
   clients,
@@ -39,5 +37,4 @@ module.exports = {
   workbooks,
   treatmentPlans,
   ...payerProjects,
-  payerCombinedStateLives,
 }

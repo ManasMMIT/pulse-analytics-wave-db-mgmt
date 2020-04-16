@@ -17,6 +17,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - `Orion`: Separate Lives and Access sections of historical uploadSheet resolver.
 
+### Removed
+- `Polaris`: Removed deprecated `payerCombinedStateLives` usage across the repo: old import process, new import process, custom data export for regional targeting data
+
 ## [2.1.0] - Started: 4-2-20
 
 ### Changed

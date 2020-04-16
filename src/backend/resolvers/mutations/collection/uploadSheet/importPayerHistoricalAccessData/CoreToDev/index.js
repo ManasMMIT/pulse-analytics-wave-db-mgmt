@@ -1,4 +1,3 @@
-const combineLives = require('../../shared/combine-lives')
 const additionalCriteriaAggPip = require('./agg-pipelines/additional-criteria-ptp-pipeline')
 const qualityAccessAggPip = require('./agg-pipelines/quality-access-agg-pip')
 const policyLinkAggPipeline = require('./agg-pipelines/policy-link-agg-pipeline')
@@ -204,13 +203,6 @@ class CoreToDev {
       .insertMany(combinedData)
   }
 
-  async materializeRegionalTargetingData() {
-    await combineLives({
-      pulseDevDb: this.pulseDev,
-      pulseCoreDb: this.pulseCore,
-    })
-  }
-
   async materializeNonLivesCollections() {
     this.nonLivesCollectionDocs = await this.getNonLivesCollectionDocs()
 
@@ -227,8 +219,6 @@ class CoreToDev {
       this.materializePolicyLinks(),
       this.materializeCombinedNonLivesData(),
     ])
-
-    await this.materializeRegionalTargetingData()
 
     console.log('non-lives historical collections have finished materializing')
   }

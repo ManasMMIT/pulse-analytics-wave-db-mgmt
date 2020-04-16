@@ -1,5 +1,3 @@
-const combineLives = require('../../shared/combine-lives')
-
 class CoreToDev {
   constructor({ pulseDev, pulseCore }) {
     this.pulseDev = pulseDev
@@ -13,13 +11,6 @@ class CoreToDev {
   async materializeStateDrgLives() { }
 
   async materializeStateMmitLives() { }
-
-  async materializeRegionalTargetingData() {
-    await combineLives({
-      pulseDevDb: this.pulseDev,
-      pulseCoreDb: this.pulseCore,
-    })
-  }
 
   async materializeLivesTotals() {
     // ! needs to materialize the following collections:
@@ -46,8 +37,6 @@ class CoreToDev {
       this.materializeStateMmitLives,
       this.materializeLivesTotals,
     ])
-
-    await this.materializeRegionalTargetingData()
   }
 }
 

@@ -586,19 +586,3 @@ export const GET_PAYER_PROJECT_PTPS = gql`
   }
  }
 `
-
-export const GET_PAYER_COMBINED_DRG_STATE_LIVES = gql`
-  query getPayerCombinedDrgStateLives($treatmentPlan: JSON) {
-    payerCombinedStateLives(treatmentPlan: $treatmentPlan) {
-      _id
-      indication
-      regimen
-      book
-      coverage
-      line
-      population
-      treatmentPlan
-      DRG_statesData
-   }
- }
-`
