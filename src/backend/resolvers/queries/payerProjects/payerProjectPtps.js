@@ -166,6 +166,8 @@ const getAggPipeline = projectId => [{
       ]
     },
     project: 1,
+    treatmentPlanId: 1,
+    organizationId: 1,
   }
 }, {
   $project: {
@@ -179,5 +181,7 @@ const getAggPipeline = projectId => [{
     book: '$book.name',
     coverage: '$coverage.name',
     project: 1,
+    treatmentPlanId: 1,
+    organizationId: 1,
   }
 }]

@@ -247,6 +247,8 @@ const queries = gql`
 
   type PayerProjectPtp {
     _id: ID!
+    organizationId: ID,
+    treatmentPlanId: ID,
     slug: String
     organization: String
     organizationTiny: String

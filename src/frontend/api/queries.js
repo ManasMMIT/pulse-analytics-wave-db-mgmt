@@ -573,6 +573,8 @@ export const GET_PAYER_PROJECT_PTPS = gql`
  query getPayerProjectPtps($input: PayerProjectPtpsInput!) {
    payerProjectPtps(input: $input) {
     _id
+    treatmentPlanId,
+    organizationId,
     slug
     organization
     organizationTiny
