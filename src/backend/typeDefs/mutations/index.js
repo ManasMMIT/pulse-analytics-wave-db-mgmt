@@ -105,7 +105,7 @@ const mutationType = gql`
     pipeDelimitedScript: JSON
 
     updatePayerProjectPtps(input: UpdatePayerProjectPtpsInput!): JSON
-    removePayerProjectPtps(input: RemovePayerProjectPtpsInput!): JSON
+    removePayerProjectPtps(input: RemovePayerProjectPtpsInput!): [ID]!
     transferPayerProjectPtps(input: TransferPayerProjectPtpsInput!): JSON
   }
 `

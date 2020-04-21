@@ -12,7 +12,24 @@ const removePtps = async (
 ) => {
   orgTpIds = orgTpIds.map(ObjectId)
 
-  return 'WIP, no op...'
+  await pulseCoreDb
+    .collection('tdgProjects')
+    .updateMany(
+      {
+        'orgTpIds': {
+          $in: orgTpIds,
+        }
+      },
+      {
+        $pull: {
+          orgTpIds: {
+            $in: orgTpIds,
+          }
+        }
+      }
+    )
+
+  return orgTpIds
 }
 
 module.exports = removePtps

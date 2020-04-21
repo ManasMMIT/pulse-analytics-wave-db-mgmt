@@ -74,7 +74,7 @@ const updatePtps = async (
     const aggPipeline = getPtpsOwnedByOtherProjects(projectId, incomingPtps)
 
     const pTpsOwnedByOtherProjects = await pulseCoreDb
-      .collection('testTdgProjects')
+      .collection('tdgProjects')
       .aggregate(
         aggPipeline,
         { allowDiskUse: true, session })
@@ -91,7 +91,7 @@ const updatePtps = async (
 
     // 6. completely reset owned and unowned PTPs for this project
     const { value: updatedProject } = await pulseCoreDb
-      .collection('testTdgProjects')
+      .collection('tdgProjects')
       .findOneAndUpdate(
         { _id: projectId },
         {
