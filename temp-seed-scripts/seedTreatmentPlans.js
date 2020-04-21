@@ -3,7 +3,6 @@ const _ = require('lodash')
 module.exports = async ({
   pulseCore,
   payerHistoricalQualityAccess,
-  payerHistoricalAdditionalCriteria,
 }) => {
   await pulseCore.collection('treatmentPlans').deleteMany()
 
@@ -56,13 +55,8 @@ module.exports = async ({
     return acc
   }, {})
 
-  // reference hashes for all historical data, inserting tp combos
-  const allTheThings = [
-    ...payerHistoricalQualityAccess,
-    ...payerHistoricalAdditionalCriteria,
-  ]
-
-  const onlyTreatmentPlanDocs = allTheThings.filter(thing => {
+  // ! quality of access is the source of truth for valid PTPs
+  const onlyTreatmentPlanDocs = payerHistoricalQualityAccess.filter(thing => {
     const isValid = (
       indicationsIdMap[thing.indication]
       && regimensIdMap[thing.regimen]

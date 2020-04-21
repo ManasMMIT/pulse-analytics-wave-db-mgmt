@@ -7,6 +7,21 @@ import { transparentize, mix } from 'polished'
 
 import { Colors, Spacing } from '../../../../../../../utils/pulseStyles'
 
+// ! temp: reuse components from TreatmentPlansTabContent
+import {
+  ActiveRow,
+  InactiveRow,
+  UnorderedList,
+} from './TreatmentPlansTabContent/styledComponents'
+
+const AccountsPanelContainer = styled.div({
+  borderRight: `1px solid ${transparentize(0.9, Colors.BLACK)}`,
+  borderTop: `1px solid ${transparentize(0.9, Colors.BLACK)}`,
+  maxHeight: 700,
+  overflow: 'auto',
+  background: Colors.WHITE,
+})
+
 const ToggleButtonContainer = styled.div({
   display: 'flex',
   justifyContent: 'flex-end',
@@ -91,24 +106,11 @@ const AccountsTabContent = ({
 
   const disableAllAccounts = () => setStagedAccounts([])
 
-  const accountsList = baseAccounts.map(account => {
-    let checked = false
-    if (enabledAccountsById[account._id]) checked = true
-
-    return (
-      <AccountRowItem key={account._id}>
-        <PhoenixSwitch
-          checked={checked}
-          onChange={e => {
-            e.target.checked ? enableAccount(account) : disableAccount(account)
-          }}
-          value={account._id}
-        />
-        <span style={{ fontWeight: 500 }}>{account.organization}</span>
-      </AccountRowItem>
-    )
-  })
-
+  const [
+    enabledAccounts,
+    disabledAccounts,
+  ] = _.partition(baseAccounts, account => enabledAccountsById[account._id])
+  
   return (
     <div style={{ maxHeight: 700, overflow: 'auto', background: Colors.WHITE }}>
       <ToggleButtonContainer>
@@ -127,7 +129,39 @@ const AccountsTabContent = ({
         </ToggleButton>
       </ToggleButtonContainer>
 
-      {accountsList}
+      <AccountsPanelContainer>
+        <ActiveRow>ACTIVE ({enabledAccounts.length})</ActiveRow>
+        <UnorderedList>
+          {
+            enabledAccounts.map(account => (
+              <AccountRowItem key={account._id}>
+                <PhoenixSwitch
+                  checked
+                  onChange={() => disableAccount(account)}
+                  value={account._id}
+                />
+                <span style={{ fontWeight: 500 }}>{account.organization} ({account.slug})</span>
+              </AccountRowItem>
+            ))
+          }
+        </UnorderedList>
+
+        <InactiveRow>INACTIVE ({disabledAccounts.length})</InactiveRow>
+        <UnorderedList>
+          {
+            disabledAccounts.map(account => (
+              <AccountRowItem key={account._id}>
+                <PhoenixSwitch
+                  checked={false}
+                  onChange={() => enableAccount(account)}
+                  value={account._id}
+                />
+                <span style={{ fontWeight: 500 }}>{account.organization} ({account.slug})</span>
+              </AccountRowItem>
+            ))
+          }
+        </UnorderedList>
+      </AccountsPanelContainer>
     </div>
   )
 }

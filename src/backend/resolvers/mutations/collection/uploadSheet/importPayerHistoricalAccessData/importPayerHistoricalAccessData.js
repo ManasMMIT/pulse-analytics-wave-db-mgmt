@@ -1,17 +1,21 @@
-const ProjectHistoryManager = require('./ProjectHistoryManager')
-
-// const PayerHistoryManager = require('./PayerHistoryManager')
+const {
+  getIsQualityAccessSheet,
+  getIsAdditionalCriteriaSheet,
+  getIsPolicyLinksSheet,
+} = require('./utils')
+const SheetToCore = require('./SheetToCore/Manager')
+// const CoreToDev = require('./CoreToDev')
 
 // ? FOR FUTURE: random global tracker to indicate when to trigger combo materialization functions
 // let tracker = 0
 
 // ? FOR FUTURE:  somehow instantiate outside so it doesn't hvae to be instantiated every time, every call
-// const globalPayerHistoryManager = new PayerHistoryManager({
+// const globalCoreToDev = new CoreToDev({
 //   pulseDev: pulseDevDb,
 //   pulseCore: pulseCoreDb,
 // })
 
-const importHistoricalProjectData = async (
+const importPayerHistoricalAccessData = async (
   {
     wb, // TODO: will probably be used for string going into import feedback
     sheet,
@@ -22,23 +26,27 @@ const importHistoricalProjectData = async (
   { pulseCoreDb, pulseDevDb, mongoClient },
   importFeedback, // TODO: add success messages to importFeedback array on success (mutate this array)
 ) => {
-  const projectHistoryManager = new ProjectHistoryManager({
+  const isQualityAccessSheet = getIsQualityAccessSheet(sheet)
+  const isAdditionalCriteriaSheet = getIsAdditionalCriteriaSheet(sheet)
+  const isPolicyLinksSheet = getIsPolicyLinksSheet(sheet)
+
+  const sheetToCoreManager = new SheetToCore({
     projectId,
     pulseCore: pulseCoreDb,
   })
 
-  try {
-    await projectHistoryManager.validate({
-      sheetData: data,
-      sheetName: sheet,
-    })
-  } catch(e) {
-    throw new Error(e)
-    // TODO: eventually you'll have to report what was successful even if 1 out of 3 sheets failed to be imported
-    // throw new Error(e.message + '\n' + 'Successful stuff:' + importFeedback.join('\n'))
+  if (isQualityAccessSheet) {
+    await sheetToCoreManager.validateQualityOfAccess(data)
+    // await sheetToCoreManager.upsertQoa()
+  } else if (isAdditionalCriteriaSheet) {
+    await sheetToCoreManager.validateAdditionalCriteria(data)
+    // await sheetToCoreManager.upsertAddlCriteria()
+  } else if (isPolicyLinksSheet) {
+    await sheetToCoreManager.validatePolicyLinks(data)
+    // await sheetToCoreManager.upsertPolicyLinks()
   }
 
-  await projectHistoryManager
+  await sheetToCoreManager
     .upsertOrgTpHistory({
       sheetData: data,
       sheetName: sheet,
@@ -49,28 +57,29 @@ const importHistoricalProjectData = async (
 
   // // ? let successString = `${wb}/${sheet} successfully updated in CORE DB for ${timestamp}`
 
-  // const payerHistoryManager = new PayerHistoryManager({
+  // const coreToDev = new CoreToDev({
   //   pulseDev: pulseDevDb,
   //   pulseCore: pulseCoreDb,
   // })
 
-  // await payerHistoryManager.materializeNonLivesCollections()
+  // await coreToDev.materializeNonLivesCollections()
+
 
   // ? successString += 'successfully materialized data in DEV DB \n'
   // importFeedback.push(successString)
 
   /* ? IDEA FOR FUTURE: ISOLATE WHAT'S MATERIALIZED BASED ON WHAT'S INCOMING
 
-  const payerHistoryManager = globalPayerHistoryManager
+  const coreToDev = globalCoreToDev
 
   if (sheet === 'qoa') {
-    await payerHistoryManager.materializeQoa()
+    await coreToDev.materializeQoa()
     tracker++
   } else if (sheet === 'addl criteria') {
-    await payerHistoryManager.materializeAddlCriteria()
+    await coreToDev.materializeAddlCriteria()
     tracker++
   } else if (sheet === 'policy links') {
-    await payerHistoryManager.materializePolicyLinks()
+    await coreToDev.materializePolicyLinks()
     tracker++
   }
 
@@ -86,10 +95,10 @@ const importHistoricalProjectData = async (
 /*
 
 function materializeExpensiveCombinationCollections() {
-  await payerHistoryManager.materializeCombinedNonLivesData()
-  await payerHistoryManager.materializeRegionalTargetingData()
+  await coreToDev.materializeCombinedNonLivesData()
+  await coreToDev.materializeRegionalTargetingData()
 }
 
 */
 
-module.exports = importHistoricalProjectData
+module.exports = importPayerHistoricalAccessData

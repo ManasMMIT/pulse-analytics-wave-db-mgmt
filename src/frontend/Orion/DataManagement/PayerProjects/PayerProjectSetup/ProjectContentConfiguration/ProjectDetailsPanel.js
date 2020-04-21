@@ -43,7 +43,7 @@ const ProjectDetailsPanel = ({ name, values }) => {
       <TagsContainer>
         {
           values.map(value => (
-            <Tag>
+            <Tag key={value}>
               { value }
             </Tag>
           ))

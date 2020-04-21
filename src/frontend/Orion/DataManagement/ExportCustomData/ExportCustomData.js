@@ -10,7 +10,8 @@ import Color from '../../../utils/color'
 import FontSpace from '../../../utils/fontspace'
 import Spacing from '../../../utils/spacing'
 
-import ExportRegionalBreakdown from './ExportRegionalBreakdown'
+import ExportStateAndRegionalBreakdown from './ExportStateAndRegionalBreakdown'
+
 import {
   PageHeaderContainer,
   PageHeader,
@@ -69,6 +70,7 @@ const ExportCustomData = () => {
       <PageHeaderContainer>
         <PageHeader>Export Custom Data</PageHeader>
       </PageHeaderContainer>
+      
       <ContentContainer>
         <SectionContainer>
           <SectionHeader>Merck Pipe Delimited CSV and TXT Files</SectionHeader>
@@ -80,6 +82,7 @@ const ExportCustomData = () => {
             { isMerckScriptLoading && <Spinner fill={Color.PRIMARY} />}
           </StyledButton>
         </SectionContainer>
+
         <SectionContainer>
           <SectionHeader>Kymriah Cart-T CSV File</SectionHeader>
           <StyledButton
@@ -90,7 +93,8 @@ const ExportCustomData = () => {
             { isNvsScriptLoading && <Spinner fill={Color.PRIMARY} />}
           </StyledButton>
         </SectionContainer>
-        <ExportRegionalBreakdown />
+
+        <ExportStateAndRegionalBreakdown />
       </ContentContainer>
     </div>
   )

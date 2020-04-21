@@ -5,19 +5,13 @@ const ENRICH_TP_FIELDS_PIPELINE = require('./enrich-tps-pipeline')
 module.exports = async ({
   pulseCore,
   payerHistoricalQualityAccess,
-  payerHistoricalAdditionalCriteria,
   payerOrganizationsBySlug,
 }) => {
   await pulseCore.collection('organizations.treatmentPlans')
     .deleteMany()
-
-
-  const allTheThings = [
-    ...payerHistoricalQualityAccess,
-    ...payerHistoricalAdditionalCriteria,
-  ]
-
-  const onlyTreatmentPlanDocsWithOrgs = allTheThings.filter(thing => (
+  
+  // ! quality of access is the source of truth for valid PTPs
+  const onlyTreatmentPlanDocsWithOrgs = payerHistoricalQualityAccess.filter(thing => (
     thing.slug
     && thing.indication
     && thing.regimen

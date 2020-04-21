@@ -18,10 +18,10 @@ const modalStyle = {
 const Subtitle = styled.div({
   color: Color.BLACK,
   fontWeight: 500,
-  ...FontSpace.FS2, 
+  ...FontSpace.FS2,
 })
 
-const ProjectContentConfigurationModal = ({ projectId, isModalOpen, closeModal }) => {
+const ProjectContentConfigurationModal = ({ isModalOpen, closeModal }) => {
   return (
     <Modal
       show={isModalOpen}
@@ -38,7 +38,7 @@ const ProjectContentConfigurationModal = ({ projectId, isModalOpen, closeModal }
       <Subtitle>
         To create a Treatment Plan, select a Payer followed by an Indication. Once selected, click the toggle to add to your preferred Treatment Plan.
       </Subtitle>
-      <ModalContent projectId={projectId} />
+      <ModalContent />
     </Modal>
   )
 }

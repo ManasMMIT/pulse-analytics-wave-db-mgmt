@@ -12,16 +12,21 @@ const TreatmentPlansTableHead = ({
   isAllSelected,
   order,
   headerData,
+  checkbox,
 }) => (
   <TableHead>
     <TableRow>
-      <TableCell padding="checkbox">
-        <Checkbox
-          checked={isAllSelected}
-          onChange={handleSelectAllClick}
-          inputProps={{ 'aria-label': 'select all payers' }}
-        />
-      </TableCell>
+      {
+        checkbox && (
+          <TableCell padding="checkbox">
+            <Checkbox
+              checked={isAllSelected}
+              onChange={handleSelectAllClick}
+              inputProps={{ 'aria-label': 'select all payers' }}
+            />
+          </TableCell>
+        )
+      }
       {headerData.map(({ value, label }) => (
         <TableCell key={value}>
           <TableSortLabel

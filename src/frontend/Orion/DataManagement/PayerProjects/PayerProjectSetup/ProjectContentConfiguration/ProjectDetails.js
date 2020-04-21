@@ -1,8 +1,9 @@
 import React from 'react'
+import { useRouteMatch } from 'react-router-dom'
 import styled from '@emotion/styled'
 import { useQuery } from '@apollo/react-hooks'
 
-import { GET_PROJECT_PTPS } from '../../../../../api/queries'
+import { GET_PAYER_PROJECT_PTPS } from '../../../../../api/queries'
 
 import ProjectDetailsPanel from './ProjectDetailsPanel'
 import Spinner from '../../../../../Phoenix/shared/Spinner'
@@ -15,18 +16,24 @@ const Wrapper = styled.div({
   'div:last-child': { marginRight: 0 }
 })
 
-const ProjectDetails = ({ projectId }) => {
+const ProjectDetails = () => {
+  const {
+    params: {
+      projectId,
+    },
+  } = useRouteMatch()
+
   const { data, loading } = useQuery(
-    GET_PROJECT_PTPS,
+    GET_PAYER_PROJECT_PTPS,
     {
-      variables: { 
-        input: { projectId } 
+      variables: {
+        input: { projectId }
       },
     })
 
   if (loading) return <Spinner />
 
-  const panelConfig = data.projectPtps.reduce((result, treatmentPlan) => {
+  const panelConfig = data.payerProjectPtps.reduce((result, treatmentPlan) => {
     const { organizationTiny, indication, regimen } = treatmentPlan
 
     result.payers.add(organizationTiny)
@@ -43,7 +50,7 @@ const ProjectDetails = ({ projectId }) => {
           const [name, values] = panel
           const valuesArr = [...values].sort()
 
-          return <ProjectDetailsPanel name={name} values={valuesArr}/>
+          return <ProjectDetailsPanel key={name} name={name} values={valuesArr}/>
         })
       }
     </Wrapper>

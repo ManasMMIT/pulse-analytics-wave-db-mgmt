@@ -3,9 +3,9 @@ import { useQuery } from '@apollo/react-hooks'
 import Select from 'react-select'
 
 import { GET_SOURCE_TREATMENT_PLANS } from '../../../api/queries'
-import { customSelectStyles } from './../../../components/customSelectStyles'
+import { customSelectStyles } from '../../../components/customSelectStyles'
 
-import ExportCombinedStateLivesButton from './ExportCombinedStateLivesButton'
+import ExportStateBreakdownButton from './ExportStateBreakdownButton'
 
 import {
   SectionContainer,
@@ -45,7 +45,7 @@ const ExportRegionalBreakdown = () => {
           styles={customSelectStyles}
         />
 
-        <ExportCombinedStateLivesButton
+        <ExportStateBreakdownButton
           treatmentPlan={selectedTreatmentPlan}
         />
       </div>
