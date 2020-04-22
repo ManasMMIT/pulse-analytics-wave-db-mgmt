@@ -48,36 +48,36 @@ const coreNationalTotalsComparer = ({
 // ! For now, let's see at a higher level what's wrong
 const coreStateTotalsComparer = ({
   state,
-  stateLong,
-  // medicareMedical,
-  totalMedical,
-  // commercialPharmacy,
-  totalPharmacy,
-  // commercialMedical,
-  // managedMedicaidPharmacy,
-  // ffsMedicaidMedical,
-  // managedMedicaidMedical,
-  // macMedical,
-  // federalOtherMedical,
-  // medicarePharmacy,
-  // ffsMedicaidPharmacy,
-  // federalOtherPharmacy,
+  // stateLong,
+  medicareMedical,
+  // totalMedical,
+  commercialPharmacy,
+  // totalPharmacy,
+  commercialMedical,
+  managedMedicaidPharmacy,
+  ffsMedicaidMedical,
+  managedMedicaidMedical,
+  macMedical,
+  federalOtherMedical,
+  medicarePharmacy,
+  ffsMedicaidPharmacy,
+  federalOtherPharmacy,
 }) => [
     state,
-    stateLong,
-    // medicareMedical,
-    totalMedical,
-    // commercialPharmacy,
-    totalPharmacy,
-    // commercialMedical,
-    // managedMedicaidPharmacy,
-    // ffsMedicaidMedical,
-    // managedMedicaidMedical,
-    // macMedical,
-    // federalOtherMedical,
-    // medicarePharmacy,
-    // ffsMedicaidPharmacy,
-    // federalOtherPharmacy,
+    // stateLong,
+    medicareMedical,
+    // totalMedical,
+    commercialPharmacy,
+    // totalPharmacy,
+    commercialMedical,
+    managedMedicaidPharmacy,
+    ffsMedicaidMedical,
+    managedMedicaidMedical,
+    macMedical,
+    federalOtherMedical,
+    medicarePharmacy,
+    ffsMedicaidPharmacy,
+    federalOtherPharmacy,
 ].join('|')
 
 const devHistoricalNationalLivesComparer = ({
@@ -93,8 +93,8 @@ const devHistoricalNationalLivesComparer = ({
   medicareMedical,
   medicarePharmacy,
   month,
-  organization,
-  organizationTiny,
+  // organization,
+  // organizationTiny,
   slug,
   year,
   // structuredLives, // ! NO
@@ -111,8 +111,8 @@ const devHistoricalNationalLivesComparer = ({
     medicareMedical,
     medicarePharmacy,
     month,
-    organization,
-    organizationTiny,
+    // organization,
+    // organizationTiny,
     slug,
     year,
 ].join('|')
@@ -130,13 +130,13 @@ const devHistoricalStateLivesComparer = ({
   medicareMedical,
   medicarePharmacy,
   month,
-  organization,
+  // organization,
   slug,
   state,
-  stateLong,
+  // stateLong,
   year,
-  totalMedical,
-  totalPharmacy,
+  // totalMedical,
+  // totalPharmacy,
 }) => [
   commercialMedical,
   commercialPharmacy,
@@ -150,13 +150,13 @@ const devHistoricalStateLivesComparer = ({
   medicareMedical,
   medicarePharmacy,
   month,
-  organization,
+  // organization,
   slug,
   state,
-  stateLong,
+  // stateLong,
   year,
-  totalMedical,
-  totalPharmacy,
+  // totalMedical,
+  // totalPharmacy,
 ].join('|')
 
 const runDiffer = async () => {
@@ -166,11 +166,11 @@ const runDiffer = async () => {
   const pulseDevStaging = stagingDbs.db('pulse-dev')
   const pulseCoreStaging = stagingDbs.db('pulse-core')
 
-  await pulseDevStaging
+  await pulseCoreStaging
     .collection('aBHistoricalLivesDiffsAll')
     .deleteMany()
 
-  await pulseDevStaging
+  await pulseCoreStaging
     .collection('aBHistoricalLivesDiffs')
     .deleteMany()
 
