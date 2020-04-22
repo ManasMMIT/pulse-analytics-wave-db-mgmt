@@ -200,22 +200,10 @@ module.exports = ({
     return comboIsValid
   })
 
-  // ! don't care about purposefully excluded b/c dupes
-
-  const getHash = collectionName.includes('Policy')
-    ? ({ slug, regimen, book, coverage, month, year }) => [slug, regimen, book, coverage, month, year].join('|')
-    : ({ slug, regimen, book, coverage, indication, population, line, month, year }) => [slug, regimen, book, coverage, indication, population, line, month, year].join('|')
-
-  let inOldNotNew = _.differenceBy(
+  const inOldNotNew = _.differenceBy(
     oldCollectionDocs,
     newCollectionDocs,
     comparer,
-  )
-
-  inOldNotNew = _.differenceBy(
-    inOldNotNew,
-    newCollectionDocs,
-    getHash,
   )
 
   const inNewNotOld = _.differenceBy(
