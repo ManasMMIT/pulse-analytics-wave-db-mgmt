@@ -15,13 +15,16 @@ module.exports = async ({
   await pulseCore.collection('organizations.treatmentPlans.history')
     .deleteMany()
 
-  const allTheThings = [
-    ...payerHistoricalQualityAccess,
-    ...payerHistoricalAdditionalCriteria,
-  ]
+  const pTpGrouper = thing => [thing.slug, thing.indication, thing.regimen, thing.line, thing.population, thing.book, thing.coverage, thing.month, thing.year].join('|')
 
+  const additionalCriteriaGroupedByTpParts = _.groupBy(
+    payerHistoricalAdditionalCriteria,
+    pTpGrouper
+  )
+
+  // ! only quality access is source of truth
   // only deal with docs that have all required fields for this historic collection
-  const onlyTreatmentPlanDocsWithOrgsMonthYear = allTheThings.filter(thing => (
+  const onlyTreatmentPlanDocsWithOrgsMonthYear = payerHistoricalQualityAccess.filter(thing => (
     thing.slug
     && thing.indication
     && thing.regimen
@@ -34,9 +37,9 @@ module.exports = async ({
   ))
 
   // create hashes of all collections
-  const groupedOrgTpsMonthYearDocs = _.groupBy(
+  const uniqueOrgTpsMonthYearDocs = _.keyBy(
     onlyTreatmentPlanDocsWithOrgsMonthYear,
-    thing => [thing.slug, thing.indication, thing.regimen, thing.line, thing.population, thing.book, thing.coverage, thing.month, thing.year].join('|')
+    pTpGrouper,
   )
 
   const onlyPolicyLinksWithAllFields = payerHistoricalPolicyLinks.filter(thing => (
@@ -76,31 +79,47 @@ module.exports = async ({
   )
 
   const docs = []
-  for (let uniqOrgTpTimeString in groupedOrgTpsMonthYearDocs) {
-    const comboDocs = groupedOrgTpsMonthYearDocs[uniqOrgTpTimeString]
+  for (let uniqOrgTpTimeString in uniqueOrgTpsMonthYearDocs) {
+    const entryDoc = uniqueOrgTpsMonthYearDocs[uniqOrgTpTimeString]
 
-    const flatDoc = comboDocs.reduce((acc, { criteria, criteriaNotes, dateTracked, restrictionLevel, ...doc }) => {
+    let additionalCriteriaDocs = !_.isEmpty(additionalCriteriaGroupedByTpParts[uniqOrgTpTimeString])
+      ? additionalCriteriaGroupedByTpParts[uniqOrgTpTimeString]
+      : null
 
-      if (criteria) {
-        const additionalCriteriaSubDoc = {
-          criteria,
-          criteriaNotes,
-          restrictionLevel,
-          // ! there are other fields in additionalCriteria subdoc in materialized payerHistoricalCombinedData as of 3/31/20 but either they:
-          // ! A) are dupes of top-level fields; if they have to exist on this level in final materialized view, fine, but they shouldn't go into core
-          // ! B) aren't currently used -- and aren't expected to be used -- by anything in wave-app and wave-api
-          // ! C) both A and B
+    if (additionalCriteriaDocs) {
+      additionalCriteriaDocs = additionalCriteriaDocs.reduce((acc, { criteria, criteriaNotes, restrictionLevel }) => {
+
+        if (criteria) {
+          const additionalCriteriaSubDoc = {
+            criteria,
+            criteriaNotes,
+            restrictionLevel,
+            // ! there are other fields in additionalCriteria subdoc in materialized payerHistoricalCombinedData as of 3/31/20 but either they:
+            // ! A) are dupes of top-level fields; if they have to exist on this level in final materialized view, fine, but they shouldn't go into core
+            // ! B) aren't currently used -- and aren't expected to be used -- by anything in wave-app and wave-api
+            // ! C) both A and B
+          }
+
+          // ! do not persist dupe additional criteria docs
+          if (
+            Array.isArray(acc)
+            && acc.find(docInAcc => _.isEqual(docInAcc, additionalCriteriaSubDoc))
+          ) {
+            return acc
+          }
+
+          acc
+            ? acc.push(additionalCriteriaSubDoc)
+            : acc = [additionalCriteriaSubDoc]
         }
 
-        acc.additionalCriteria
-          ? acc.additionalCriteria.push(additionalCriteriaSubDoc)
-          : acc.additionalCriteria = [additionalCriteriaSubDoc]
-      }
+        return acc
+      }, null)
+    }
 
-      return Object.assign({}, acc, doc)
-    }, { additionalCriteria: null })
+    entryDoc.additionalCriteria = additionalCriteriaDocs
 
-    const policyLinkHash = [flatDoc.slug, flatDoc.regimen, flatDoc.book, flatDoc.coverage, flatDoc.month, flatDoc.year].join('|')
+    const policyLinkHash = [entryDoc.slug, entryDoc.regimen, entryDoc.book, entryDoc.coverage, entryDoc.month, entryDoc.year].join('|')
     const policyLinkData = policyLinksGroupedByTpParts[policyLinkHash] || []
 
     const links = policyLinkData[0]
@@ -113,7 +132,7 @@ module.exports = async ({
       }
       : null
 
-    const hashForTps = [flatDoc.indication, flatDoc.regimen, flatDoc.line, flatDoc.population, flatDoc.book, flatDoc.coverage].join('|')
+    const hashForTps = [entryDoc.indication, entryDoc.regimen, entryDoc.line, entryDoc.population, entryDoc.book, entryDoc.coverage].join('|')
 
     const treatmentPlan = hashedTps[hashForTps]
 
@@ -123,7 +142,7 @@ module.exports = async ({
       ? treatmentPlan[0]._id
       : null
 
-    const organization = payerOrganizationsBySlug[flatDoc.slug]
+    const organization = payerOrganizationsBySlug[entryDoc.slug]
 
     if (!organization) continue
 
@@ -131,9 +150,9 @@ module.exports = async ({
       ? organization._id
       : null
 
-    const accessScore = accessScoresGroupedByAccess[flatDoc.access] || []
+    const accessScore = accessScoresGroupedByAccess[entryDoc.access] || []
 
-    const isoShortString = format(new Date(flatDoc.year, flatDoc.month - 1, 1), 'yyyy-MM-dd')
+    const isoShortString = format(new Date(entryDoc.year, entryDoc.month - 1, 1), 'yyyy-MM-dd')
     // create JS Date Object (which only stores dates in absolute UTC time) as the UTC equivalent of isoShortString in New York time
     const timestamp = zonedTimeToUtc(isoShortString, DEFAULT_TIMEZONE)
 
@@ -152,14 +171,14 @@ module.exports = async ({
       treatmentPlanId,
       accessData: accessScore[0] || null,
       tierData: {
-        tier: flatDoc.tier,
-        tierRating: flatDoc.tierRating,
-        tierTotal: flatDoc.tierTotal,
+        tier: entryDoc.tier,
+        tierRating: entryDoc.tierRating,
+        tierTotal: entryDoc.tierTotal,
       },
       timestamp,
-      project: flatDoc.project,
+      project: entryDoc.project,
       policyLinkData: links,
-      additionalCriteriaData: flatDoc.additionalCriteria
+      additionalCriteriaData: entryDoc.additionalCriteria
     }
 
     docs.push(doc)

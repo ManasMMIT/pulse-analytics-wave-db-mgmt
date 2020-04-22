@@ -569,39 +569,22 @@ export const GET_SOURCE_TREATMENT_PLANS = gql`
  }
 `
 
-export const GET_PROJECT_PTPS = gql`
- query getProjectPtps($input: ProjectPtpsInput!) {
-   projectPtps(input: $input) {
-      _id
-      slug
-      organization
-      organizationTiny
-      indication
-      population
-      line
-      regimen
-      book
-      coverage
-      project {
-        _id
-        name
-      }
-   }
- }
-`
-
-export const GET_PAYER_COMBINED_DRG_STATE_LIVES = gql`
-  query getPayerCombinedDrgStateLives($treatmentPlan: JSON) {
-    payerCombinedStateLives(treatmentPlan: $treatmentPlan) {
-      _id
-      indication
-      regimen
-      book
-      coverage
-      line
-      population
-      treatmentPlan
-      DRG_statesData
-   }
+export const GET_PAYER_PROJECT_PTPS = gql`
+ query getPayerProjectPtps($input: PayerProjectPtpsInput!) {
+   payerProjectPtps(input: $input) {
+    _id
+    treatmentPlanId,
+    organizationId,
+    slug
+    organization
+    organizationTiny
+    indication
+    population
+    line
+    regimen
+    book
+    coverage
+    project
+  }
  }
 `

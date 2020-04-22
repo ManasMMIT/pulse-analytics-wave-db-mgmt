@@ -14,11 +14,9 @@ const alert = require('./alert')
 const opLogs = require('./opLogs')
 const bomSchema = require('./bomSchema')
 const workbooks = require('./workbooks')
-const singlePayerProject = require('./singlePayerProject')
-const payerProjectsList = require('./payerProjectsList')
 const treatmentPlans = require('./treatmentPlans')
-const projectPtps = require('./projectPtps')
-const payerCombinedStateLives = require('./payerCombinedStateLives')
+
+const payerProjects = require('./payerProjects')
 
 module.exports = {
   collections,
@@ -37,9 +35,6 @@ module.exports = {
   opLogs,
   bomSchema,
   workbooks,
-  singlePayerProject,
-  payerProjectsList,
   treatmentPlans,
-  projectPtps,
-  payerCombinedStateLives,
+  ...payerProjects,
 }

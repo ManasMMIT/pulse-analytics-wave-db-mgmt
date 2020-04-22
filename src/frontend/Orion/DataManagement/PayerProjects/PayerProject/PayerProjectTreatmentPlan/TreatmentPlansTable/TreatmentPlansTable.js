@@ -1,4 +1,6 @@
 import React, { useState } from 'react'
+import { useRouteMatch } from 'react-router-dom'
+import { useQuery } from '@apollo/react-hooks'
 import styled from '@emotion/styled'
 import _ from 'lodash'
 
@@ -10,6 +12,10 @@ import TreatmentPlansTableHead from './TreatmentPlansTableHead'
 import TreatmentPlansTableBody from './TreatmentPlansTableBody'
 
 import { MOCK_DATA, TABLE_HEADER_DATA } from '../mock-data'
+
+import {
+  GET_PAYER_PROJECT_PTPS,
+} from '../../../../../../api/queries'
 
 const TableWrapper = styled.section({
   display: 'flex',
@@ -29,12 +35,32 @@ const sortData = ({ data, order, key }) => {
   return _.orderBy(data, [datum => datum[key].toLowerCase()], [order])
 }
 
-const TreatmentPlansTable = () => {
+const TreatmentPlansTable = ({
+  data = MOCK_DATA,
+  checkbox,
+}) => {
+  // const {
+  //   params: {
+  //     projectId,
+  //   }
+  // } = useRouteMatch()
+
+  // const { data: PTPS, loading: loadingPTPS } = useQuery(
+  //   GET_PAYER_PROJECT_PTPS,
+  //   {
+  //     variables: {
+  //       input: {
+  //         projectId,
+  //       }
+  //     }
+  //     }
+  // )
+
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(10)
   const [selected, setSelected] = useState(new Set([]))
   const [order, setOrder] = useState('asc')
-  const [tableData, setTableData] = useState(MOCK_DATA)
+  const [tableData, setTableData] = useState(data)
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage)
@@ -73,8 +99,8 @@ const TreatmentPlansTable = () => {
     if (isAllSelected) {
       newSelectedSet = new Set([])
     } else {
-      newSelectedSet = MOCK_DATA.reduce(
-        (acc, { id }) => acc.add(id),
+      newSelectedSet = tableData.reduce(
+        (acc, { _id }) => acc.add(_id),
         new Set([])
       )
     }
@@ -84,17 +110,22 @@ const TreatmentPlansTable = () => {
 
   return (
     <TableWrapper>
-      <section style={{ display: 'flex', justifyContent: 'space-between' }}>
-        <h2 style={{ padding: 12 }}>
-          {selected.size} Payer Treatments Selected
-        </h2>
-        {selected.size > 0 && (
-          <PlaceholderButton>Remove from Project</PlaceholderButton>
-        )}
-      </section>
+      {
+        checkbox && (
+          <section style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <h2 style={{ padding: 12 }}>
+              {selected.size} Payer Treatments Selected
+            </h2>
+            {selected.size > 0 && (
+              <PlaceholderButton>Remove from Project</PlaceholderButton>
+            )}
+          </section>
+        )
+      }
       <TableContainer style={{ height: 500 }}>
         <Table stickyHeader aria-label="sticky table">
           <TreatmentPlansTableHead
+            checkbox={checkbox}
             handleSelectAllClick={handleSelectAllClick}
             handleColumnSort={handleColumnSort}
             isAllSelected={isAllSelected}
@@ -102,6 +133,7 @@ const TreatmentPlansTable = () => {
             headerData={TABLE_HEADER_DATA}
           />
           <TreatmentPlansTableBody
+            checkbox={checkbox}
             tableData={tableData}
             page={page}
             rowsPerPage={rowsPerPage}

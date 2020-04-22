@@ -1,6 +1,8 @@
 const connectToMongoDb = require('../connect-to-mongodb')
 const _ = require('lodash')
 
+const cleanQualityAccessPtps = require('./cleanQualityAccessPtps')
+
 const seedBooks = require('./seedBooks')
 const seedLines = require('./seedLines')
 const seedPopulations = require('./seedPopulation')
@@ -19,9 +21,11 @@ const seedLivesCollection = require('./seedLivesCollection')
 
 const runSeedScripts = async () => {
   const dbs = await connectToMongoDb()
-  console.log(`Loading historical docs\n`);
+  console.log(`Loading historical docs\n`)
 
   const pulseCore = dbs.db('pulse-core')
+
+  await cleanQualityAccessPtps(pulseCore)
 
   const [
     payerHistoricalQualityAccess,

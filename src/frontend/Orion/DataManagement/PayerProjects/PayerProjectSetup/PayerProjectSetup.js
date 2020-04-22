@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import { useQuery } from '@apollo/react-hooks'
 import styled from '@emotion/styled'
 
@@ -7,10 +6,8 @@ import { GET_SINGLE_PAYER_PROJECT } from '../../../../api/queries'
 import Spinner from '../../../../Phoenix/shared/Spinner'
 import ProjectInfo from './ProjectInfo'
 import ProjectContentConfiguration from './ProjectContentConfiguration'
-import ConflictedTreatmentPlans from './ConflictedTreatmentPlans'
 
 import Color from '../../../../utils/color'
-import Spacing from '../../../../utils/spacing'
 
 const Wrapper = styled.div({
   background: Color.WHITE,
@@ -33,14 +30,13 @@ const PayerProjectSetup = props => {
   return (
     <Wrapper>
       <ProjectInfo name={project.name} />
-      <ProjectContentConfiguration projectId={projectId} />
-      <ConflictedTreatmentPlans />
+      <ProjectContentConfiguration />
     </Wrapper>
   )
 }
 
 PayerProjectSetup.propTypes = {
-  
+
 }
 
 export default PayerProjectSetup

@@ -12,31 +12,41 @@ const TreatmentPlansTableBody = ({
   handleCheckboxClick,
   isSelected,
   headerData,
+  checkbox,
 }) => (
   <TableBody>
     {tableData
       .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
       .map(row => {
-        const isItemSelected = isSelected(row.id)
-        const labelId = `table-checkbox-${row.id}`
+        const isItemSelected = isSelected(row._id)
+        const labelId = `table-checkbox-${row._id}`
         return (
           <TableRow
             hover
-            onClick={event => handleCheckboxClick(event, row.id)}
+            onClick={event => handleCheckboxClick(event, row._id)}
             role="checkbox"
-            key={row.id}
+            key={row._id}
             aria-checked={isItemSelected}
             selected={isItemSelected}
           >
-            <TableCell padding="checkbox">
-              <Checkbox
-                checked={isItemSelected}
-                inputProps={{ 'aria-labelledby': labelId }}
-              />
-            </TableCell>
+            {
+              checkbox && (
+                <TableCell padding="checkbox">
+                  <Checkbox
+                    checked={isItemSelected}
+                    inputProps={{ 'aria-labelledby': labelId }}
+                  />
+                </TableCell>
+              )
+            }
             {headerData.map(column => {
-              const label = row[column.value]
-              return <TableCell key={`${row.id}-${label}`}>{label}</TableCell>
+              const label = column.value.split('.')
+                .reduce(
+                  (prev, key) => prev[key],
+                  row
+                )
+
+              return <TableCell key={`${row._id}-${label}`}>{label}</TableCell>
             })}
           </TableRow>
         )

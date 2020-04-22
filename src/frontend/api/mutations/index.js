@@ -129,6 +129,10 @@ import {
   DELETE_SHEET_FIELD,
 } from './workbooks'
 
+import {
+  UPDATE_PAYER_PROJECT_PTPS,
+} from './payerProjects'
+
 export {
   SELECT_CLIENT,
   CREATE_CLIENT,
@@ -228,4 +232,6 @@ export {
   CREATE_SHEET_FIELD,
   UPDATE_SHEET_FIELD,
   DELETE_SHEET_FIELD,
+
+  UPDATE_PAYER_PROJECT_PTPS,
 }

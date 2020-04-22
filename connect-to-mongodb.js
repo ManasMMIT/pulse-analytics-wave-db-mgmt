@@ -9,7 +9,7 @@ const connectToMongoDb = async () => {
       process.exit()
     })
 
-  console.log(`-----Connected to MongoDB database system-----`)
+  console.log(`-----Connected to ${LOADER_URI}-----`)
   return mongoConnection
 }
 
