@@ -2,7 +2,7 @@ require('dotenv').config()
 const MONGO_KEY = process.env.MONGO_KEY
 const MongoClient = require('mongodb').MongoClient
 
-const getDiffDoc = require('./getDiffDocFunc')
+const getGetDiffDoc = require('./getGetDiffDocFunc')
 const _ = require('lodash')
 
 // TODO
@@ -174,6 +174,8 @@ const runDiffer = async () => {
     .collection('aBHistoricalLivesDiffs')
     .deleteMany()
 
+  const getDiffDoc = await getGetDiffDoc(pulseCoreStaging)
+
   const corePayerDrgNationalLivesTotalsDiffs = await getDiffDoc({
     db: pulseCoreStaging,
     collectionName: 'payerDrgNationalLivesTotals',
@@ -222,7 +224,6 @@ const runDiffer = async () => {
     comparer: devHistoricalStateLivesComparer,
   })
 
-debugger
   await pulseCoreStaging
     .collection('aBHistoricalLivesDiffs')
     .insertMany([
@@ -250,8 +251,6 @@ debugger
     ])
 
   console.log('DONE')
-
-  debugger
 
   await stagingDbs.close()
 
