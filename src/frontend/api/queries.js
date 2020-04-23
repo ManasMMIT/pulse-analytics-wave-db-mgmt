@@ -6,6 +6,24 @@ export const GET_BOM_SCHEMA = gql`
   }
 `
 
+export const GET_BUSINESS_OBJECTS = gql`
+  query getBusinessObjects {
+    businessObjects {
+      _id
+      name
+      sourceCollection {
+        collection
+      }
+      fields {
+        _id
+        key
+        name
+        type
+      }
+    }
+  }
+`
+
 export const GET_ORGANIZATION_META = gql`
   query getOrganizationMeta($_ids: [ID]) {
     organizationMeta(_ids: $_ids) {
