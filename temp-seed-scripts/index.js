@@ -25,7 +25,7 @@ const runSeedScripts = async () => {
 
   const pulseCore = dbs.db('pulse-core')
 
-  await cleanQualityAccessPtps(pulseCore)
+  // await cleanQualityAccessPtps(pulseCore)
 
   const [
     payerHistoricalQualityAccess,
@@ -52,23 +52,23 @@ const runSeedScripts = async () => {
   console.log(`Historical docs loaded\nBeginning seeding\n`);
 
   // 1. seed all treatment plan parts
-  await Promise.all([
-    seedBooks(seedParameters),
-    seedLines(seedParameters),
-    seedPopulations(seedParameters),
-    seedCoverages(seedParameters),
-  ])
+  // await Promise.all([
+  //   seedBooks(seedParameters),
+  //   seedLines(seedParameters),
+  //   seedPopulations(seedParameters),
+  //   seedCoverages(seedParameters),
+  // ])
 
   // 2. seed actual treatment plan combos
-  await seedTreatmentPlans(seedParameters)
+  // await seedTreatmentPlans(seedParameters)
 
-  await seedOrganizationsTreatmentPlans(seedParameters)
+  // await seedOrganizationsTreatmentPlans(seedParameters)
 
   await seedLivesCollection(seedParameters)
 
-  await seedOrganizationsTreatmentPlansHistory(seedParameters)
+  // await seedOrganizationsTreatmentPlansHistory(seedParameters)
 
-  await seedTdgProjectsCollection(seedParameters)
+  // await seedTdgProjectsCollection(seedParameters)
 
   dbs.close()
 }
