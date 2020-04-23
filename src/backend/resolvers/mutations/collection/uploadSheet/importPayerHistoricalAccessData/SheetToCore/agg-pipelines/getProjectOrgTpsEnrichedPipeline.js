@@ -1,7 +1,9 @@
+const { ObjectId } = require('mongodb')
+
 module.exports = projectId => [
   {
     '$match': {
-      '_id': projectId,
+      '_id': ObjectId(projectId),
     }
   }, {
     '$lookup': {

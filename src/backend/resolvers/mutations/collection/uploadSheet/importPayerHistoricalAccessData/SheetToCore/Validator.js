@@ -1,33 +1,42 @@
 const _ = require('lodash')
 
-const Base = require('./Base')
+
 const {
   getProjectOrgTpsEnrichedPipeline,
 } = require('./agg-pipelines')
 
-class Validation extends Base {
-  async getAllowedPtpsHash(hasher) {
-    const allowedOrgTpCombos = await this.pulseCore
-      .collection('tdgProjects')
-      .aggregate(
-        getProjectOrgTpsEnrichedPipeline(this.projectId)
-      )
-      .toArray()
+const {
+  payerCombinationHasher
+} = require('../utils')
 
-    return _.keyBy(
-      allowedOrgTpCombos,
-      hasher,
-    )
+class Validator {
+  constructor({ sheetData, pulseCore, projectId }) {
+    this.sheetData = sheetData
+    this.pulseCore = pulseCore
+    this.projectId = projectId
   }
 
-  async validateQualityOfAccess(sheetData) {
-    const {
-      hashPtps,
-      getAllowedPtpsHash,
-    } = this
+  async getAllowedPtpsHash(hasher) {
+    try {
+      const allowedOrgTpCombos = await this.pulseCore
+        .collection('tdgProjects')
+        .aggregate(
+          getProjectOrgTpsEnrichedPipeline(this.projectId)
+        )
+        .toArray()
+  
+      return _.keyBy(allowedOrgTpCombos, hasher)
+    } catch(e) {
+      console.log(`getAllowedPtpsHash: ${ e }`)
+      return null
+    }
+  }
 
-    const allowedPtps = await getAllowedPtpsHash.call(this, hashPtps)
+  async validateQualityOfAccess() {
+    const { sheetData } = this
 
+    const hashPtps = payerCombinationHasher('ptps')
+    const allowedPtps = await this.getAllowedPtpsHash(hashPtps)
     const exactCorrectSetOfOrgTps = Object.keys(allowedPtps)
 
     const sheetDataHashes = sheetData.map(hashPtps)
@@ -73,13 +82,10 @@ class Validation extends Base {
     }
   }
 
-  async validateAdditionalCriteria(sheetData) {
-    const {
-      hashPtps,
-      getAllowedPtpsHash,
-    } = this
-
-    const allowedPtps = await getAllowedPtpsHash.call(this, hashPtps)
+  async validateAdditionalCriteria() {
+    const { sheetData } = this
+    const hashPtps = payerCombinationHasher('ptps')
+    const allowedPtps = await this.getAllowedPtpsHash(hashPtps)
 
     const exactCorrectSetOfOrgTps = Object.keys(allowedPtps)
 
@@ -106,13 +112,10 @@ class Validation extends Base {
     }
   }
 
-  async validatePolicyLinks(sheetData) {
-    const {
-      hashBrcs,
-      getAllowedPtpsHash,
-    } = this
-
-    const allowedBrcs = await getAllowedPtpsHash.call(this, hashBrcs)
+  async validatePolicyLinks() {
+    const { sheetData } = this
+    const hashBrcs = payerCombinationHasher('brcs')
+    const allowedBrcs = await this.getAllowedPtpsHash(hashBrcs)
 
     const exactCorrectSetOfBrcs = Object.keys(allowedBrcs)
 
@@ -149,4 +152,4 @@ class Validation extends Base {
   }
 }
 
-module.exports = Validation
+module.exports = Validator
