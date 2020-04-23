@@ -3,6 +3,7 @@ const validate = require('./utils/validate')
 const getSheetConfig = require('./utils/getSheetConfig')
 const formatAjvErrors = require('./utils/formatAjvErrors')
 const importPayerHistoricalAccessData = require('./importPayerHistoricalAccessData')
+const importPayerHistoricalLivesData = require('./importPayerHistoricalLivesData')
 
 const uploadSheet = async (
   parent,
@@ -10,32 +11,39 @@ const uploadSheet = async (
   { pulseCoreDb, pulseDevDb, mongoClient },
   info
 ) => {
+  await importPayerHistoricalLivesData({
+    pulseCore: pulseCoreDb,
+    pulseDev: pulseDevDb,
+  })
+
+  return 'NO'
+
   const importFeedback = []
 
   for (const sheetToUpload of input) {
     let { wb, sheet, data, timestamp, projectId } = sheetToUpload
-    const originalDataLength = data.length // excludes header
+    // const originalDataLength = data.length // excludes header
 
-    const { result, skippedRows } = sanitize(data)
-    data = result
+    // const { result, skippedRows } = sanitize(data)
+    // data = result
 
-    const sheetConfig = await getSheetConfig({ wb, sheet, pulseCoreDb }) // handles getting the right sheet config, including for payer historical data exceptions
-    const targetCollection = sheetConfig.collection
+    // const sheetConfig = await getSheetConfig({ wb, sheet, pulseCoreDb }) // handles getting the right sheet config, including for payer historical data exceptions
+    // const targetCollection = sheetConfig.collection
 
-    const {
-      valid,
-      errors,
-      data: validatedData,
-    }  = validate({ data, skippedRows, sheetConfig })
+    // const {
+    //   valid,
+    //   errors,
+    //   data: validatedData,
+    // }  = validate({ data, skippedRows, sheetConfig })
 
-    data = validatedData
+    // data = validatedData
 
-    if (!valid) {
-      const errorString = formatAjvErrors({ errors, wb, sheet })
-      throw new Error(errorString)
-    }
+    // if (!valid) {
+    //   const errorString = formatAjvErrors({ errors, wb, sheet })
+    //   throw new Error(errorString)
+    // }
 
-    if (timestamp && projectId) {
+    // if (timestamp && projectId) {
       await importPayerHistoricalAccessData(
         {
           wb,
@@ -48,14 +56,14 @@ const uploadSheet = async (
         importFeedback,
       )
 
-      continue
-    }
+    //   continue
+    // }
 
-    await pulseDevDb.collection(targetCollection)
-      .deleteMany()
+    // await pulseDevDb.collection(targetCollection)
+    //   .deleteMany()
 
-    await pulseDevDb.collection(targetCollection)
-      .insertMany(data)
+    // await pulseDevDb.collection(targetCollection)
+    //   .insertMany(data)
 
     importFeedback.push(
       `Import successful for ${wb}/${sheet}`
