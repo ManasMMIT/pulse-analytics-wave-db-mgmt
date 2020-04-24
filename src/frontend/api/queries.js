@@ -606,3 +606,9 @@ export const GET_PAYER_PROJECT_PTPS = gql`
   }
  }
 `
+
+export const GET_REGIONAL_TARGETING_DATA = gql`
+ query getRegionalTargetingData($input: JSON) {
+   regionalTargetingData(input: $input)
+ }
+`

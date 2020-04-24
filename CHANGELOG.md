@@ -14,6 +14,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased] - Started: 4-22-20
 
+### Changed
+- `Orion`: Rebuilt regional targeting data export placard and backend to account for team permissions; can now export state breakdown and regional breakdown data as Excel
+
 ## [2.2.0] - Started: 4-7-20
 
 ### Added

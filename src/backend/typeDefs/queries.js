@@ -41,6 +41,8 @@ const queries = gql`
     payerProjectPtps(input: PayerProjectPtpsInput!): [PayerProjectPtp]
 
     treatmentPlans: [TreatmentPlan]
+    
+    regionalTargetingData(input: JSON): JSON
   }
 
   type Node {

@@ -16,6 +16,7 @@ const bomSchema = require('./bomSchema')
 const businessObjects = require('./businessObjects')
 const workbooks = require('./workbooks')
 const treatmentPlans = require('./treatmentPlans')
+const regionalTargetingData = require('./regionalTargetingData')
 
 const payerProjects = require('./payerProjects')
 
@@ -39,4 +40,5 @@ module.exports = {
   workbooks,
   treatmentPlans,
   ...payerProjects,
+  regionalTargetingData,
 }
