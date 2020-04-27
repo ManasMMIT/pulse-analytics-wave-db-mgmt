@@ -19,19 +19,29 @@ class QualityAccessManager extends Manager {
         organizationId,
       } = datum
 
+      // ! but what if there's no match? top validation layer should catch this
+      const { createdOn, ...accessData } = this.qualityOfAccessHash[access]
+
+      const updatedOn = new Date()
+
       const setObj = {
         $set: {
           orgTpId,
           treatmentPlanId,
           organizationId,
+          projectId: this.projectId,
           timestamp: this.timestamp,
-          accessData: this.qualityOfAccessHash[access], // ! but what if there's no match? top validation layer should catch this
+          accessData,
           tierData: {
             tier,
             tierRating,
             tierTotal,
-          }
+          },
+          updatedOn,
         },
+        $setOnInsert: {
+          createdOn: updatedOn,
+        }
       }
 
       return ({

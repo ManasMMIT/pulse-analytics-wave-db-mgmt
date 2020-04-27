@@ -24,19 +24,21 @@ class AdditionalCriteriaManager extends Manager {
 
     const dataGroupedByOrgTp = _.groupBy(dataForOps, 'orgTpId')
 
+    const updatedOn = new Date()
+
     return Object.keys(dataGroupedByOrgTp)
       .map(orgTpId => {
         orgTpId = ObjectId(orgTpId)
-        
+
         const additionalCriteriaDocs = dataGroupedByOrgTp[orgTpId]
-        
+
         const {
           treatmentPlanId,
           organizationId,
         } = additionalCriteriaDocs[0]
 
         const additionalCriteriaData = this.getCriteriaData(additionalCriteriaDocs)
-          
+
         return {
           findObj: {
             orgTpId,
@@ -45,10 +47,15 @@ class AdditionalCriteriaManager extends Manager {
           setObject: {
             $set: {
               orgTpId,
+              projectId: this.projectId,
               treatmentPlanId,
               organizationId,
               timestamp: this.timestamp,
               additionalCriteriaData,
+              updatedOn,
+            },
+            $setOnInsert: {
+              createdOn: updatedOn,
             }
           }
         }

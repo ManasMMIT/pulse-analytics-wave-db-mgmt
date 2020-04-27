@@ -15,28 +15,33 @@ class PolicyLinkManager extends Manager {
        dateTracked,
        paLink,
        policyLink,
-       project,
        siteLink,
        link,
        treatmentPlanId,
        organizationId,
      } = datum
 
+    const updatedOn = new Date()
+
     const setObj = {
       $set: {
         orgTpId,
         treatmentPlanId,
         organizationId,
+        projectId: this.projectId,
         timestamp: this.timestamp,
         policyLinkData: {
           dateTracked,
           link,
           paLink,
           policyLink,
-          project,
           siteLink,
-        }
+        },
+        updatedOn,
       },
+      $setOnInsert: {
+        createdOn: updatedOn,
+      }
     }
 
      return ({
