@@ -20,7 +20,7 @@ import { Colors } from '../../../../utils/pulseStyles'
 import { GET_BUSINESS_OBJECTS } from '../../../../api/queries'
 
 import {
-  CREATE_SHEET_FIELD,
+  CREATE_BUSINESS_OBJECT_FIELD,
   UPDATE_SHEET_FIELD,
   DELETE_SHEET_FIELD,
  } from '../../../../api/mutations'
@@ -65,15 +65,14 @@ const FieldsPanel = () => {
       <ListContainer style={{ width: '100%' }}>
         <ListHeader>
           <ListTitle>Fields</ListTitle>
-          {/* <CreateButtonWithForm
-            mutationDoc={CREATE_SHEET_FIELD}
+          <CreateButtonWithForm
+            mutationDoc={CREATE_BUSINESS_OBJECT_FIELD}
             mutationVars={{
-              sheetId: selectedSheetId,
-              workbookId: selectedWorkbookId,
+              businessObjectId: selectedBusinessObjectId,
             }}
             modalTitle='Create Field'
             afterMutationHook={handleClick}
-          /> */}
+          />
         </ListHeader>
 
         <StyledUnorderedList>

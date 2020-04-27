@@ -242,7 +242,6 @@ const queries = gql`
   type BoField {
     _id: ID!
     key: String
-    name: String
     type: String
   }
 

@@ -5,8 +5,6 @@ import { Colors } from '../../../../utils/pulseStyles'
 
 import { ListItem } from '../shared/styledComponents'
 
-
-
 const FieldPanelItem = ({
   isSelected,
   handleClick,

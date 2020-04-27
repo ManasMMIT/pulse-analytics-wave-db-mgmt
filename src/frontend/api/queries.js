@@ -17,7 +17,6 @@ export const GET_BUSINESS_OBJECTS = gql`
       fields {
         _id
         key
-        name
         type
       }
     }

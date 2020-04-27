@@ -8,19 +8,20 @@ import {
   FieldContainer,
   FieldsFormContainer,
   StyledInput,
-  StyledTextarea,
   StyledButton,
 } from '../shared/styledComponents'
 
-import { GET_WORKBOOKS } from '../../../../api/queries'
+import { GET_BUSINESS_OBJECTS } from '../../../../api/queries'
 
 const TYPES = [
   'string',
-  'number',
-  'integer',
-  'boolean',
-  'csv',
+  'objectId',
+  'array',
+  'bool',
   'date',
+  'null',
+  'int',
+  'decimal',
 ]
 
 const Form = ({
@@ -30,16 +31,20 @@ const Form = ({
   mutationVars,
   closeModal,
 }) => {
-  const [stagedFieldName, setFieldName] = useState(data.name)
+  const [stagedFieldKey, setFieldKey] = useState(data.key)
+  const [stagedType, setType] = useState(data.type)
 
   const [saveField] = useMutation(mutationDoc, {
     variables: {
       input: {
         ...mutationVars,
-        name: stagedFieldName,
+        field: {
+          key: stagedFieldKey,
+          type: stagedType,
+        },
       },
     },
-    refetchQueries: [{ query: GET_WORKBOOKS }],
+    refetchQueries: [{ query: GET_BUSINESS_OBJECTS }],
     onCompleted: result => {
       const targetDataKey = Object.keys(result)[0]
       const newOrUpdatedField = result[targetDataKey]
@@ -51,27 +56,38 @@ const Form = ({
     awaitRefetchQueries: true,
   })
 
-  // const handleFieldChange = e => {
-  //   e.persist()
-  //   const value = e.currentTarget && e.currentTarget.value
-  //   setFieldName(value)
-  // }
+  const handleTypeSelection = obj => setType(obj.value)
+
+  const handleFieldChange = e => {
+    e.persist()
+    const value = e.currentTarget && e.currentTarget.value
+    setFieldKey(value)
+  }
 
   return (
     <FieldsFormContainer>
       <FieldContainer>
-        <FormLabel>Field Key</FormLabel>
+        <FormLabel>Field Type</FormLabel>
 
-        <StyledInput type="text" disabled value={data.key} />
+        <Select
+          styles={{ container: base => ({ ...base, flex: 1 }) }}
+          value={{ value: stagedType, label: stagedType }}
+          defaultValue={TYPES[0]}
+          onChange={handleTypeSelection}
+          options={TYPES.map(type => ({ value: type, label: type }))}
+        />
       </FieldContainer>
 
       <FieldContainer>
-        <FormLabel>Field Type</FormLabel>
-
-        <StyledInput type="text" disabled value={data.type} />
+        <FormLabel>Key</FormLabel>
+        <StyledInput
+          type="text"
+          value={stagedFieldKey}
+          onChange={handleFieldChange}
+        />
       </FieldContainer>
 
-      <StyledButton onClick={() => {}}>Save Field</StyledButton>
+      <StyledButton onClick={saveField}>Save Field</StyledButton>
     </FieldsFormContainer>
   )
 }

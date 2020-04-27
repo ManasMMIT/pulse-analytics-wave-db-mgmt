@@ -9,7 +9,7 @@ import {
   StyledButton,
 } from '../../shared/styledComponents'
 
-import { GET_WORKBOOKS } from '../../../../../api/queries'
+import { GET_BUSINESS_OBJECTS } from '../../../../../api/queries'
 
 const Form = ({
   data,
@@ -17,37 +17,58 @@ const Form = ({
   afterMutationHook,
   closeModal,
 }) => {
-  const [stagedWorkbookStr, setWorkbookStr] = useState(data.name)
+  const [stagedName, setStagedName] = useState(data.name)
+  const [stagedSourceColl, setStagedSourceColl] = useState(data.sourceCollection)
 
   const [saveWorkbook] = useMutation(mutationDoc, {
     variables: {
-      input: { _id: data._id, name: stagedWorkbookStr }
+      input: {
+        name: stagedName,
+        sourceCollection: stagedSourceColl,
+      }
     },
-    refetchQueries: [{ query: GET_WORKBOOKS }],
+    refetchQueries: [{ query: GET_BUSINESS_OBJECTS }],
     onCompleted: result => {
       const targetDataKey = Object.keys(result)[0]
-      const newOrUpdatedWorkbook = result[targetDataKey]
+      const newOrUpdatedBusinessObject = result[targetDataKey]
 
       closeModal()
-      afterMutationHook(newOrUpdatedWorkbook)
+      afterMutationHook(newOrUpdatedBusinessObject)
+    },
+    onError: e => {
+      alert(e)
     },
     awaitRefetchQueries: true,
   })
 
-  const handleChange = e => {
+  const handleNameChange = e => {
     e.persist()
     const value = e.currentTarget && e.currentTarget.value
-    setWorkbookStr(value)
+
+    setStagedName(value)
+  }
+
+  const handleSourceCollChange = e => {
+    e.persist()
+    const value = e.currentTarget && e.currentTarget.value
+
+    setStagedSourceColl(value)
   }
 
   return (
     <>
       <FieldContainer>
-        <FormLabel>Workbook Name</FormLabel>
+        <FormLabel>Name</FormLabel>
         <StyledInput
           type="text"
-          value={stagedWorkbookStr}
-          onChange={handleChange}
+          value={stagedName}
+          onChange={handleNameChange}
+        />
+        <FormLabel>Source Collection</FormLabel>
+        <StyledInput
+          type="text"
+          value={stagedSourceColl}
+          onChange={handleSourceCollChange}
         />
       </FieldContainer>
 

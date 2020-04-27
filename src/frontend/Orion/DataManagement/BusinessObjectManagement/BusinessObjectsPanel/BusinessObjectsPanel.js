@@ -5,7 +5,7 @@ import queryString from 'query-string'
 // import _ from 'lodash'
 
 import BusinessObjectsPanelItem from './BusinessObjectsPanelItem'
-// import ModalButtonWithForm from './ModalButtonWithForm'
+import ModalButtonWithForm from './ModalButtonWithForm'
 // import DeleteButton from './../shared/DeleteButton'
 import {
   ListContainer,
@@ -14,11 +14,11 @@ import {
   StyledUnorderedList,
 } from '../shared/styledComponents'
 
-// import {
-//   CREATE_WORKBOOK,
-//   UPDATE_WORKBOOK,
-//   DELETE_WORKBOOK,
-// } from '../../../../api/mutations'
+import {
+  CREATE_BUSINESS_OBJECT,
+  // UPDATE_BUSINESS_OBJECT,
+  // DELETE_BUSINESS_OBJECT,
+} from '../../../../api/mutations'
 
 import { GET_BUSINESS_OBJECTS } from '../../../../api/queries'
 
@@ -68,12 +68,12 @@ const BusinessObjectsPanel = () => {
     <ListContainer style={{ width: '25%' }}>
       <ListHeader>
         <ListTitle>Business Objects</ListTitle>
-        {/* <ModalButtonWithForm
+        <ModalButtonWithForm
           buttonLabel="+"
-          mutationDoc={CREATE_WORKBOOK}
+          mutationDoc={CREATE_BUSINESS_OBJECT}
           afterMutationHook={handleClick}
-          modalTitle="Create or Edit BusinessObjects"
-        /> */}
+          modalTitle="Create Business Object"
+        />
       </ListHeader>
 
       <StyledUnorderedList>

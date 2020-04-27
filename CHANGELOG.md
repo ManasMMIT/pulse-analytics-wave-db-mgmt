@@ -14,6 +14,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased] - Started: 4-22-20
 
+### Added
+- `Orion`: Business Object Management Panels -- read and create fields and business objects.
+
 ### Removed
 - `Polaris`: Removed step of generating `payerHistoricalCombinedData` on node script import of lives; wasn't ever actually needed on the side of lives import
 
