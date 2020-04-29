@@ -12,6 +12,7 @@ const createSheetField = async (
     type,
     oneOf,
     name,
+    businessObjRef = null,
   } = input
 
   try {
@@ -19,6 +20,11 @@ const createSheetField = async (
     if (_.isEmpty(oneOf)) oneOf = null
   } catch(e) {
     throw Error(`oneOf was improperly formatted`)
+  }
+
+  if (businessObjRef) {
+    businessObjRef._id = ObjectId(businessObjRef._id)
+    businessObjRef.fieldId = ObjectId(businessObjRef.fieldId)
   }
 
   workbookId = ObjectId(workbookId)
@@ -31,7 +37,13 @@ const createSheetField = async (
       { _id: workbookId },
       {
         $push: {
-          'sheets.$[sheet].fields': { _id: newFieldId, type, oneOf, name }
+          'sheets.$[sheet].fields': { 
+            _id: newFieldId, 
+            type, 
+            oneOf, 
+            name,
+            businessObjRef,
+          }
         }
       },
       {

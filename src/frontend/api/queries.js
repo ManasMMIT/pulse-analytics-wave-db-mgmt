@@ -547,6 +547,10 @@ export const GET_WORKBOOKS = gql`
           name
           type
           oneOf
+          businessObjRef {
+            _id
+            fieldId
+          }
         }
       }
     }

@@ -225,6 +225,12 @@ const queries = gql`
     name: String!
     type: String!
     oneOf: [String]
+    businessObjRef: BusinessObjRef
+  }
+
+  type BusinessObjRef {
+    _id: ID!
+    fieldId: ID!
   }
 
   type BusinessObject {

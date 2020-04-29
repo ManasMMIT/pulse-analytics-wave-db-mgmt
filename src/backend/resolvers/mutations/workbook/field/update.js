@@ -13,6 +13,7 @@ const updateSheetField = async (
     type,
     oneOf,
     name,
+    businessObjRef = null,
   } = input
 
   try {
@@ -20,6 +21,11 @@ const updateSheetField = async (
     if (_.isEmpty(oneOf)) oneOf = null
   } catch (e) {
     throw Error(`oneOf was improperly formatted`)
+  }
+
+  if (businessObjRef) {
+    businessObjRef._id = ObjectId(businessObjRef._id)
+    businessObjRef.fieldId = ObjectId(businessObjRef.fieldId)
   }
 
   workbookId = ObjectId(workbookId)
@@ -36,6 +42,7 @@ const updateSheetField = async (
             type,
             name,
             oneOf,
+            businessObjRef,
           }
         }
       },

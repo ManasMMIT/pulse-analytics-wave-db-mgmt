@@ -3,6 +3,8 @@ import PropTypes from 'prop-types'
 import Select from 'react-select'
 import { useMutation } from '@apollo/react-hooks'
 
+import BusinessObjectValidationForm from './BusinessObjectValidationForm'
+
 import {
   FormLabel,
   FieldContainer,
@@ -10,9 +12,11 @@ import {
   StyledInput,
   StyledTextarea,
   StyledButton,
-} from '../shared/styledComponents'
+} from '../../shared/styledComponents'
 
-import { GET_WORKBOOKS } from '../../../../api/queries'
+import { 
+  GET_WORKBOOKS,
+} from '../../../../../api/queries'
 
 const TYPES = [
   'string',
@@ -37,6 +41,11 @@ const Form = ({
       ? JSON.stringify(data.oneOf).replace(/\[|\]/g, '')
       : ''
   )
+  const [stagedBusinessObjRef, setBusinessObjRef] = useState(data.businessObjRef || null)
+  // const [stagedBusinessObjRef, setBusinessObjRef] = useState({
+  //   "_id": "5ea0ac4fe252c3f35e78a960",
+  //   "fieldId": "5ea0acd82827f3f35e35ad82"
+  // })
 
   const [saveField] = useMutation(mutationDoc, {
     variables: {
@@ -45,6 +54,7 @@ const Form = ({
         name: stagedFieldName,
         type: stagedType,
         oneOf: stagedOneOf,
+        businessObjRef: stagedBusinessObjRef,
       },
     },
     refetchQueries: [{ query: GET_WORKBOOKS }],
@@ -103,6 +113,11 @@ const Form = ({
           onChange={handleOneOfChange}
         />
       </FieldContainer>
+
+      <BusinessObjectValidationForm
+        stagedBusinessObjRef={stagedBusinessObjRef}
+        setBusinessObjRef={setBusinessObjRef}
+      />
 
       <StyledButton onClick={saveField}>Save Field</StyledButton>
     </FieldsFormContainer>

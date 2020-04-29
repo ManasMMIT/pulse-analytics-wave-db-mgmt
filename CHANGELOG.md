@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - `Orion`: Business Object Management Panels -- read and create fields and business objects.
+- `Orion`: Built CRUD functionality on business object references for fields in the Sheet Mgmt System (for dynamic validation against business objects)
 
 ### Removed
 - `Polaris`: Removed step of generating `payerHistoricalCombinedData` on node script import of lives; wasn't ever actually needed on the side of lives import
