@@ -85,7 +85,7 @@ const ExportButtons = ({
       </StyledButton>
 
       <div style={{ marginTop: 16, color: Color.RED, ...FontSpace.FS2 }}>
-          Note: If regional data is available for the selected team, that button will become clickable upon generating data.
+          Note: All lives are DRG lives, and regional sheet only becomes downloadable if the selected team has regional data. 
       </div>
 
       <div style={{ display: 'flex' }}>
