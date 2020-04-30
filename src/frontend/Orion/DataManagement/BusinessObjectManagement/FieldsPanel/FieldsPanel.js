@@ -21,8 +21,8 @@ import { GET_BUSINESS_OBJECTS } from '../../../../api/queries'
 
 import {
   CREATE_BUSINESS_OBJECT_FIELD,
-  UPDATE_SHEET_FIELD,
-  DELETE_SHEET_FIELD,
+  UPDATE_BUSINESS_OBJECT_FIELD,
+  DELETE_BUSINESS_OBJECT_FIELD,
  } from '../../../../api/mutations'
 
 const FieldsPanel = () => {
@@ -84,21 +84,30 @@ const FieldsPanel = () => {
                 label={fieldObj.key}
                 handleClick={() => handleClick(fieldObj)}
               >
-                {/* <DeleteButton
-                  mutationDoc={DELETE_SHEET_FIELD}
+                <DeleteButton
+                  mutationDoc={DELETE_BUSINESS_OBJECT_FIELD}
                   mutationVars={{
                     fieldId: selectedFieldId,
-                    sheetId: selectedSheetId,
-                    workbookId: selectedWorkbookId,
+                    businessObjectId: selectedBusinessObjectId,
                   }}
                   afterMutationHook={() => {
-                    const targetWorkbook = data.workbooks.find(({ _id }) => _id === selectedWorkbookId)
-                    const targetSheet = targetWorkbook.sheets.find(({ _id }) => _id === selectedSheetId)
-                    const nextFieldSelection = targetSheet.fields.find(({ _id }) => _id !== fieldObj._id)
+                    const targetBusinessObject = data.businessObjects.find(({ _id }) => _id === selectedBusinessObjectId)
+                    
+                    // find the first field that isn't what was selected
+                    const nextField = targetBusinessObject.fields.find(({ _id }) => _id !== selectedFieldId)
 
-                    handleClick(nextFieldSelection)
+                    if (!nextField) { // nothing left was found, clear the query string and URL for field
+                      const queryParams = queryString.parse(location.search)
+                      delete queryParams.fieldId
+
+                      history.push({
+                        search: queryString.stringify(queryParams),
+                      })
+                    } else {
+                      handleClick(nextField)
+                    }
                   }}
-                /> */}
+                />
               </FieldPanelItem>
             ))
           }
@@ -110,12 +119,10 @@ const FieldsPanel = () => {
         <UpdateForm
           key={selectedFieldId}
           data={selectedField}
-          mutationDoc={UPDATE_SHEET_FIELD}
-          // mutationVars={{
-          //   fieldId: selectedFieldId,
-          //   sheetId: selectedSheetId,
-          //   workbookId: selectedWorkbookId,
-          // }}
+          mutationDoc={UPDATE_BUSINESS_OBJECT_FIELD}
+          mutationVars={{
+            businessObjectId: selectedBusinessObjectId,
+          }}
         />
       </div>
     </div>

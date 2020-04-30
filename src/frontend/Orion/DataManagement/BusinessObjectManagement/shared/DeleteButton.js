@@ -11,7 +11,7 @@ import Spinner from '../../../../Phoenix/shared/Spinner'
 
 import { Colors, Spacing } from '../../../../utils/pulseStyles'
 
-import { GET_WORKBOOKS } from '../../../../api/queries'
+import { GET_BUSINESS_OBJECTS, GET_WORKBOOKS } from '../../../../api/queries'
 
 const trashCan = <FontAwesomeIcon size="lg" icon={faTrashAlt} />
 
@@ -57,7 +57,7 @@ const DeleteButton = props => {
     {
       onCompleted: afterMutationHook,
       awaitRefetchQueries: true,
-      refetchQueries: [{ query: GET_WORKBOOKS }],
+      refetchQueries: [{ query: GET_BUSINESS_OBJECTS }, { query: GET_WORKBOOKS }],
     }
   )
 

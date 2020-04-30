@@ -6,7 +6,8 @@ import queryString from 'query-string'
 
 import BusinessObjectsPanelItem from './BusinessObjectsPanelItem'
 import ModalButtonWithForm from './ModalButtonWithForm'
-// import DeleteButton from './../shared/DeleteButton'
+import DeleteButton from './../shared/DeleteButton'
+
 import {
   ListContainer,
   ListHeader,
@@ -16,8 +17,8 @@ import {
 
 import {
   CREATE_BUSINESS_OBJECT,
-  // UPDATE_BUSINESS_OBJECT,
-  // DELETE_BUSINESS_OBJECT,
+  UPDATE_BUSINESS_OBJECT,
+  DELETE_BUSINESS_OBJECT,
 } from '../../../../api/mutations'
 
 import { GET_BUSINESS_OBJECTS } from '../../../../api/queries'
@@ -26,11 +27,15 @@ const getBusinessObjectsFieldIds = bo => {
   const businessObjectId = bo._id
 
   const firstField = bo.fields[0]
-  const fieldId = firstField._id
+
+  let fieldIdObj = {}
+  if (firstField) {
+    fieldIdObj = { fieldId: firstField._id }
+  }
 
   return {
     businessObjectId,
-    fieldId,
+    ...fieldIdObj,
   }
 }
 
@@ -85,22 +90,22 @@ const BusinessObjectsPanel = () => {
               businessObjectName={businessObject.name}
               handleClick={() => handleClick(businessObject)}
             >
-              {/* <ModalButtonWithForm
+              <ModalButtonWithForm
                 buttonLabel="Edit"
                 data={businessObject}
-                mutationDoc={UPDATE_WORKBOOK}
+                mutationDoc={UPDATE_BUSINESS_OBJECT}
                 afterMutationHook={handleClick}
                 style={{ fontSize: 10, padding: '4px 8px', marginRight: 8, }}
-              /> */}
+              />
 
-              {/* <DeleteButton
+              <DeleteButton
                 mutationVars={{ _id: businessObject._id }}
-                mutationDoc={DELETE_WORKBOOK}
+                mutationDoc={DELETE_BUSINESS_OBJECT}
                 afterMutationHook={() => {
                   const nextBusinessObjectsSelection = data.businessObjects.find(({ _id }) => _id !== businessObject._id)
                   handleClick(nextBusinessObjectsSelection)
                 }}
-              /> */}
+              />
             </BusinessObjectsPanelItem>
           ))
         }

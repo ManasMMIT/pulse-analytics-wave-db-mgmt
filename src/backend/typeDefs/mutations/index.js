@@ -112,6 +112,10 @@ const mutationType = gql`
 
     createBusinessObject(input: CreateBusinessObjectInput!): BusinessObject
     createBusinessObjectField(input: CreateBusinessObjectFieldInput!): BoField
+    deleteBusinessObject(input: DeleteBusinessObjectInput!): BusinessObject
+    deleteBusinessObjectField(input: DeleteBusinessObjectFieldInput!): BoField
+    updateBusinessObject(input: UpdateBusinessObjectInput!): BusinessObject
+    updateBusinessObjectField(input: UpdateBusinessObjectFieldInput!): BoField
   }
 `
 

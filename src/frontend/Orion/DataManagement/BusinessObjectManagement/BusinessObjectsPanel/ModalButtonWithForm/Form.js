@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { useMutation } from '@apollo/react-hooks'
+import _ from 'lodash'
 
 import {
   FieldContainer,
@@ -18,15 +19,23 @@ const Form = ({
   closeModal,
 }) => {
   const [stagedName, setStagedName] = useState(data.name)
-  const [stagedSourceColl, setStagedSourceColl] = useState(data.sourceCollection)
+  const [stagedSourceColl, setStagedSourceColl] = useState(
+    data.sourceCollection && data.sourceCollection.collection
+  )
 
-  const [saveWorkbook] = useMutation(mutationDoc, {
-    variables: {
-      input: {
+  const input = _.isEmpty(data)
+    ? {
         name: stagedName,
         sourceCollection: stagedSourceColl,
       }
-    },
+    : {
+        _id: data._id,
+        name: stagedName,
+        sourceCollection: stagedSourceColl
+      }
+
+  const [saveBusinessObject] = useMutation(mutationDoc, {
+    variables: { input },
     refetchQueries: [{ query: GET_BUSINESS_OBJECTS }],
     onCompleted: result => {
       const targetDataKey = Object.keys(result)[0]
@@ -72,7 +81,7 @@ const Form = ({
         />
       </FieldContainer>
 
-      <StyledButton onClick={saveWorkbook}>Submit</StyledButton>
+      <StyledButton onClick={saveBusinessObject}>Submit</StyledButton>
     </>
   )
 }

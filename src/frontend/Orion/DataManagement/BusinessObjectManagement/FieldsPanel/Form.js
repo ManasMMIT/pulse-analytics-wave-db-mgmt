@@ -34,16 +34,25 @@ const Form = ({
   const [stagedFieldKey, setFieldKey] = useState(data.key)
   const [stagedType, setType] = useState(data.type)
 
-  const [saveField] = useMutation(mutationDoc, {
-    variables: {
-      input: {
-        ...mutationVars,
-        field: {
-          key: stagedFieldKey,
-          type: stagedType,
-        },
+  const input = data._id
+    ? ({
+      ...mutationVars,
+      field: {
+        _id: data._id,
+        key: stagedFieldKey,
+        type: stagedType,
       },
-    },
+    })
+    : ({
+      ...mutationVars,
+      field: {
+        key: stagedFieldKey,
+        type: stagedType,
+      }
+    })
+
+  const [saveField] = useMutation(mutationDoc, {
+    variables: { input },
     refetchQueries: [{ query: GET_BUSINESS_OBJECTS }],
     onCompleted: result => {
       const targetDataKey = Object.keys(result)[0]
