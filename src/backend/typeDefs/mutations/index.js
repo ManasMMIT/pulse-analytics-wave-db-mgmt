@@ -18,6 +18,8 @@ const email = require('./email')
 
 const payerProjects = require('./payerProject')
 
+const businessObject = require('./businessObject')
+
 const mutationType = gql`
   type Mutation {
     createUser(input: CreateUserInput!): CreateUserPayload
@@ -107,6 +109,13 @@ const mutationType = gql`
     updatePayerProjectPtps(input: UpdatePayerProjectPtpsInput!): JSON
     removePayerProjectPtps(input: RemovePayerProjectPtpsInput!): [ID]!
     transferPayerProjectPtps(input: TransferPayerProjectPtpsInput!): JSON
+
+    createBusinessObject(input: CreateBusinessObjectInput!): BusinessObject
+    createBusinessObjectField(input: CreateBusinessObjectFieldInput!): BoField
+    deleteBusinessObject(input: DeleteBusinessObjectInput!): BusinessObject
+    deleteBusinessObjectField(input: DeleteBusinessObjectFieldInput!): BoField
+    updateBusinessObject(input: UpdateBusinessObjectInput!): BusinessObject
+    updateBusinessObjectField(input: UpdateBusinessObjectFieldInput!): BoField
   }
 `
 
@@ -130,4 +139,6 @@ module.exports = [
   ...workbook,
 
   ...payerProjects,
+
+  ...businessObject,
 ]

@@ -3,7 +3,8 @@ const {
   getIsAdditionalCriteriaSheet,
   getIsPolicyLinksSheet,
 } = require('./utils')
-const SheetToCore = require('./SheetToCore/Manager')
+const SheetToCore = require('./SheetToCore/ManagerFactory')
+const Validator = require('./SheetToCore/Validator')
 // const CoreToDev = require('./CoreToDev')
 
 // ? FOR FUTURE: random global tracker to indicate when to trigger combo materialization functions
@@ -18,7 +19,7 @@ const SheetToCore = require('./SheetToCore/Manager')
 const importPayerHistoricalAccessData = async (
   {
     wb, // TODO: will probably be used for string going into import feedback
-    sheet,
+    sheet: sheetName,
     data,
     timestamp,
     projectId,
@@ -26,32 +27,34 @@ const importPayerHistoricalAccessData = async (
   { pulseCoreDb, pulseDevDb, mongoClient },
   importFeedback, // TODO: add success messages to importFeedback array on success (mutate this array)
 ) => {
-  const isQualityAccessSheet = getIsQualityAccessSheet(sheet)
-  const isAdditionalCriteriaSheet = getIsAdditionalCriteriaSheet(sheet)
-  const isPolicyLinksSheet = getIsPolicyLinksSheet(sheet)
+  const isQualityAccessSheet = getIsQualityAccessSheet(sheetName)
+  const isAdditionalCriteriaSheet = getIsAdditionalCriteriaSheet(sheetName)
+  const isPolicyLinksSheet = getIsPolicyLinksSheet(sheetName)
 
-  const sheetToCoreManager = new SheetToCore({
+  const validatorConfig = {
+    sheetData: data,
     projectId,
     pulseCore: pulseCoreDb,
-  })
-
-  if (isQualityAccessSheet) {
-    await sheetToCoreManager.validateQualityOfAccess(data)
-    // await sheetToCoreManager.upsertQoa()
-  } else if (isAdditionalCriteriaSheet) {
-    await sheetToCoreManager.validateAdditionalCriteria(data)
-    // await sheetToCoreManager.upsertAddlCriteria()
-  } else if (isPolicyLinksSheet) {
-    await sheetToCoreManager.validatePolicyLinks(data)
-    // await sheetToCoreManager.upsertPolicyLinks()
   }
 
-  await sheetToCoreManager
-    .upsertOrgTpHistory({
-      sheetData: data,
-      sheetName: sheet,
-      timestamp,
-    })
+  const projectConfig = {
+    ...validatorConfig,
+    sheetName,
+    timestamp
+  }
+
+  const sheetValidator = new Validator(validatorConfig)
+  const sheetManager = new SheetToCore(projectConfig).getManager(sheetName)
+
+  if (isQualityAccessSheet) {
+    await sheetValidator.validateQualityOfAccess()
+  } else if (isAdditionalCriteriaSheet) {
+    await sheetValidator.validateAdditionalCriteria()
+  } else if (isPolicyLinksSheet) {
+    await sheetValidator.validatePolicyLinks()
+  }
+
+  await sheetManager.upsertOrgTpHistory()
 
   // // ? TODO: Matt builds up success string and adds memoized importFeedback array
 

@@ -6,6 +6,23 @@ export const GET_BOM_SCHEMA = gql`
   }
 `
 
+export const GET_BUSINESS_OBJECTS = gql`
+  query getBusinessObjects {
+    businessObjects {
+      _id
+      name
+      sourceCollection {
+        collection
+      }
+      fields {
+        _id
+        key
+        type
+      }
+    }
+  }
+`
+
 export const GET_ORGANIZATION_META = gql`
   query getOrganizationMeta($_ids: [ID]) {
     organizationMeta(_ids: $_ids) {
@@ -530,6 +547,7 @@ export const GET_WORKBOOKS = gql`
           name
           type
           oneOf
+          businessObjRef
         }
       }
     }
@@ -586,5 +604,11 @@ export const GET_PAYER_PROJECT_PTPS = gql`
     coverage
     project
   }
+ }
+`
+
+export const GET_REGIONAL_TARGETING_DATA = gql`
+ query getRegionalTargetingData($input: JSON) {
+   regionalTargetingData(input: $input)
  }
 `

@@ -8,6 +8,7 @@ const updateSheetFieldTypeDefs = gql`
     name: String!
     type: String!
     oneOf: String
+    businessObjRef: BusinessObjRefInput # this typeDef initialized in createSheetFieldTypeDefs
   }
 `
 

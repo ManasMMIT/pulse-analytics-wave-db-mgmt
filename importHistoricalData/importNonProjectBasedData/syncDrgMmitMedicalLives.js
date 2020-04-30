@@ -1,4 +1,5 @@
 const d3 = require('d3-collection')
+const _ = require('lodash')
 const { latestMonthYearPipeline } = require('../../utils')
 
 const MMIT_COLLECTION = 'payerHistoricalMmitStateLives'
@@ -16,6 +17,8 @@ const synchronizeLives = async pulseCoreDb => {
   const latestMmitData = await mmitCollection
     .aggregate(latestMonthYearPipeline)
     .toArray()
+
+  const mmitSlugToOrgMap = _.mapValues(_.keyBy(latestMmitData, 'slug'), 'organization')
 
   const startingMmitRowsCount = latestMmitData.length
 
@@ -58,7 +61,6 @@ const synchronizeLives = async pulseCoreDb => {
         slug,
         state,
         stateLong,
-        organization,
         totalMedical,
         commercialMedical,
         medicareMedical,
@@ -80,6 +82,7 @@ const synchronizeLives = async pulseCoreDb => {
         federalOtherMedical,
       }
 
+      const mmitOrganization = mmitSlugToOrgMap[slug]
       const mmitRowId = groupMmitBySlugAndId[slug][state]
 
       // If _id is found in hash map, update the existing document,
@@ -102,7 +105,7 @@ const synchronizeLives = async pulseCoreDb => {
           parentSlug,
           month: latestMmitMonth,
           year: latestMmitYear,
-          organization,
+          organization: mmitOrganization,
           state,
           stateLong,
           slug,

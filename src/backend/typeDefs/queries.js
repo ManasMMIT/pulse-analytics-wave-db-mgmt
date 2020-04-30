@@ -33,6 +33,7 @@ const queries = gql`
 
     workbooks: [Workbook]
     bomSchema(boId: ID): JSON
+    businessObjects: [BusinessObject]
 
     singlePayerProject(projectId: String): SinglePayerProject
     payerProjectsList: [PayerProjectsList]
@@ -40,6 +41,8 @@ const queries = gql`
     payerProjectPtps(input: PayerProjectPtpsInput!): [PayerProjectPtp]
 
     treatmentPlans: [TreatmentPlan]
+    
+    regionalTargetingData(input: JSON): JSON
   }
 
   type Node {
@@ -222,6 +225,30 @@ const queries = gql`
     name: String!
     type: String!
     oneOf: [String]
+    businessObjRef: JSON # tried using BusinessObjRef but difficult to solve caching issue on frontend arises
+  }
+
+  # type BusinessObjRef {
+  #   _id: String!
+  #   fieldId: ID!
+  # }
+
+  type BusinessObject {
+    _id: ID!
+    name: String
+    sourceCollection: SourceCollectionSubDoc
+    fields: [BoField]
+  }
+
+  type SourceCollectionSubDoc {
+    collection: String
+    query: JSON
+  }
+
+  type BoField {
+    _id: ID!
+    key: String
+    type: String
   }
 
   type SinglePayerProject {

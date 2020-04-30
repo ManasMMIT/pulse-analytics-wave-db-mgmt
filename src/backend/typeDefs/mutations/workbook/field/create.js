@@ -7,6 +7,12 @@ const createSheetFieldTypeDefs = gql`
     name: String!
     type: String!
     oneOf: String
+    businessObjRef: BusinessObjRefInput
+  }
+
+  input BusinessObjRefInput {
+    _id: ID!
+    fieldId: ID!
   }
 `
 

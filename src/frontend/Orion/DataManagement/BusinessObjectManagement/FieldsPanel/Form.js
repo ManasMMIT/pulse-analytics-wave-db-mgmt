@@ -8,19 +8,20 @@ import {
   FieldContainer,
   FieldsFormContainer,
   StyledInput,
-  StyledTextarea,
   StyledButton,
 } from '../shared/styledComponents'
 
-import { GET_WORKBOOKS } from '../../../../api/queries'
+import { GET_BUSINESS_OBJECTS } from '../../../../api/queries'
 
 const TYPES = [
   'string',
-  'number',
-  'integer',
-  'boolean',
-  'csv',
+  'objectId',
+  'array',
+  'bool',
   'date',
+  'null',
+  'int',
+  'decimal',
 ]
 
 const Form = ({
@@ -30,24 +31,29 @@ const Form = ({
   mutationVars,
   closeModal,
 }) => {
-  const [stagedFieldName, setFieldName] = useState(data.name)
+  const [stagedFieldKey, setFieldKey] = useState(data.key)
   const [stagedType, setType] = useState(data.type)
-  const [stagedOneOf, setOneOf] = useState(
-    Array.isArray(data.oneOf)
-      ? JSON.stringify(data.oneOf).replace(/\[|\]/g, '')
-      : ''
-  )
+
+  const input = data._id
+    ? ({
+      ...mutationVars,
+      field: {
+        _id: data._id,
+        key: stagedFieldKey,
+        type: stagedType,
+      },
+    })
+    : ({
+      ...mutationVars,
+      field: {
+        key: stagedFieldKey,
+        type: stagedType,
+      }
+    })
 
   const [saveField] = useMutation(mutationDoc, {
-    variables: {
-      input: {
-        ...mutationVars,
-        name: stagedFieldName,
-        type: stagedType,
-        oneOf: stagedOneOf,
-      },
-    },
-    refetchQueries: [{ query: GET_WORKBOOKS }],
+    variables: { input },
+    refetchQueries: [{ query: GET_BUSINESS_OBJECTS }],
     onCompleted: result => {
       const targetDataKey = Object.keys(result)[0]
       const newOrUpdatedField = result[targetDataKey]
@@ -61,29 +67,14 @@ const Form = ({
 
   const handleTypeSelection = obj => setType(obj.value)
 
-  const handleOneOfChange = e => {
-    e.persist()
-    const value = e.currentTarget && e.currentTarget.value
-    setOneOf(value)
-  }
-
   const handleFieldChange = e => {
     e.persist()
     const value = e.currentTarget && e.currentTarget.value
-    setFieldName(value)
+    setFieldKey(value)
   }
 
   return (
     <FieldsFormContainer>
-      <FieldContainer>
-        <FormLabel>Field Name</FormLabel>
-        <StyledInput
-          type="text"
-          value={stagedFieldName}
-          onChange={handleFieldChange}
-        />
-      </FieldContainer>
-
       <FieldContainer>
         <FormLabel>Field Type</FormLabel>
 
@@ -97,10 +88,11 @@ const Form = ({
       </FieldContainer>
 
       <FieldContainer>
-        <FormLabel>oneOf Restrictions</FormLabel>
-        <StyledTextarea
-          value={stagedOneOf}
-          onChange={handleOneOfChange}
+        <FormLabel>Key</FormLabel>
+        <StyledInput
+          type="text"
+          value={stagedFieldKey}
+          onChange={handleFieldChange}
         />
       </FieldContainer>
 

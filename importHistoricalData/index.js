@@ -25,7 +25,7 @@ if (!fileExists(filepath)) {
 }
 
 if (args.ignoreProjects) {
-  importNonProjectBasedData(filepath, args.ignoreConsolidatePayerData)
+  importNonProjectBasedData(filepath)
 } else {
   importProjectBasedData(filepath, args.ignoreConsolidatePayerData)
 }

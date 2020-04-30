@@ -1,14 +1,8 @@
 import React, { useState } from 'react'
-import Button from '@material-ui/core/Button'
-import { withStyles } from '@material-ui/core/styles';
-import { transparentize } from 'polished'
 import Spinner from '../../../Phoenix/shared/Spinner'
 import { useAuth0 } from '../../../../react-auth0-spa'
 import FileSaver from 'file-saver'
-
 import Color from '../../../utils/color'
-import FontSpace from '../../../utils/fontspace'
-import Spacing from '../../../utils/spacing'
 
 import ExportStateAndRegionalBreakdown from './ExportStateAndRegionalBreakdown'
 
@@ -18,24 +12,11 @@ import {
   ContentContainer,
   SectionContainer,
   SectionHeader,
+  StyledButton,
 } from './styledComponents'
 
 const MERCK_URL = '/api/merck-pipe-delimited-file'
 const NOVARTIS_URL = '/api/novartis-csv-file'
-
-const StyledButton = withStyles({
-  root: {
-    ...FontSpace.FS2,
-    background: transparentize(0.85, Color.PRIMARY),
-    color: Color.PRIMARY,
-    fontWeight: 700,
-    padding: Spacing.S3,
-    textTransform: 'capitalize',
-    '&:hover': {
-      background: transparentize(0.7, Color.PRIMARY),
-    }
-  }
-})(Button)
 
 const ExportCustomData = () => {
   const { accessToken } = useAuth0()

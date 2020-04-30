@@ -1,9 +1,7 @@
-const ENRICH_TP_PARTS_PIPELINE = require('./enrich-tp-parts-pipeline')
-const getProjectOrgTpsPipeline = require('./getProjectOrgTpsPipeline')
+const ENRICH_ORG_TP_PIPELINE = require('./enrich-org-tp-pipeline')
 const getProjectOrgTpsEnrichedPipeline = require('./getProjectOrgTpsEnrichedPipeline')
 
 module.exports = {
-  ENRICH_TP_PARTS_PIPELINE,
-  getProjectOrgTpsPipeline,
+  ENRICH_ORG_TP_PIPELINE,
   getProjectOrgTpsEnrichedPipeline,
 }

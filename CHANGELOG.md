@@ -12,7 +12,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Fixed** for any bug fixes.
 - **Security** in case of vulnerabilities.
 
-## [Unreleased] - Started: 4-22-20
+## [Unreleased] - Started: 4-30-20
+
+## [2.3.0] - Started: 4-22-20
+
+### Added
+- `Orion`: Business Object Management Panels -- CRUD on fields and business objects.
+- `Orion`: Built CRUD functionality on business object references for fields in the Sheet Mgmt System (for dynamic validation against business objects)
+- `Orion`/`Import Tool`: Built out business object validation layer that overrides manual oneOf and allows for dynamic checking against master lists on import
+
+### Removed
+- `Polaris`: Removed step of generating `payerHistoricalCombinedData` on node script import of lives; wasn't ever actually needed on the side of lives import
+
+### Changed
+- `Orion`: Rebuilt regional targeting data export placard and backend to account for team permissions; can now export state breakdown and regional breakdown data as Excel
 
 ## [2.2.0] - Started: 4-7-20
 

@@ -6,6 +6,8 @@ const { zonedTimeToUtc } = require('date-fns-tz')
 
 const DEFAULT_TIMEZONE = require('../../../../../utils/defaultTimeZone')
 
+const getFieldBoEnumMap = require('./getFieldBoEnumMap')
+
 const ajv = new Ajv({ 
   allErrors: true, 
   coerceTypes: 'array',
@@ -48,8 +50,8 @@ ajv.addKeyword('coerceToDate', {
   },
 })
 
-const validate = ({ data, skippedRows, sheetConfig }) => {
-  const ajvSchema = getAjvSchema(sheetConfig)
+const validate = async ({ data, skippedRows, sheetConfig, db }) => {
+  const ajvSchema = await getAjvSchema(sheetConfig, db)
   const ajvValidate = ajv.compile(ajvSchema)
 
   const csvKeys = sheetConfig.fields.reduce((acc, { name, type }) => {
@@ -140,17 +142,24 @@ const validate = ({ data, skippedRows, sheetConfig }) => {
 //     },
 //   }
 // }
-const getAjvSchema = ({ fields }) => {
+const getAjvSchema = async ({ fields }, db) => {
   const schema = { properties: {} }
   const schemaProperties = schema.properties
 
-  populateSchemaProperties({ fields, schemaProperties })
+  await populateSchemaProperties({ fields, schemaProperties, db })
 
   return schema
 }
 
-const populateSchemaProperties = ({ fields, schemaProperties }) => {
-  fields.forEach(({ name, type, oneOf }) => {
+const populateSchemaProperties = async ({ fields, schemaProperties, db }) => {
+  // process all business object-related querying all simultaneously and upfront
+  // and create a map that can override any oneOf as needed in the following step
+  const fieldBoEnumMap = await getFieldBoEnumMap(fields, db)
+
+  fields.forEach(({ _id, name, type, oneOf }) => {
+    // override manual oneOf if the field has business object validation on it
+    if (fieldBoEnumMap[_id]) oneOf = fieldBoEnumMap[_id]
+
     if (type === 'csv') {
       schemaProperties[name] = {
         type: 'array',

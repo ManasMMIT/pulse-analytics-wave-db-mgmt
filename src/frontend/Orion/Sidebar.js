@@ -119,6 +119,10 @@ const linkConfig = [
     label: 'Sheet Management',
     link: '/orion/data-management/sheet-management',
   },
+  {
+    label: 'Business Object Management',
+    link: '/orion/data-management/bo-management',
+  },
   { label: 'New Import Tool', link: '/orion/data-management/new-import' },
   { label: 'Old Import Tool', link: '/orion/data-management/import' },
   {

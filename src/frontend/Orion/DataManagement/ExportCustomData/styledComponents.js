@@ -1,9 +1,11 @@
 import styled from '@emotion/styled'
+import Button from '@material-ui/core/Button'
 import { transparentize } from 'polished'
+import { withStyles } from '@material-ui/core/styles';
 
-import Color from '../../../utils/color'
 import FontSpace from '../../../utils/fontspace'
 import Spacing from '../../../utils/spacing'
+import Color from '../../../utils/color'
 
 export const PageHeaderContainer = styled.div({
   borderBottom: `1px solid ${transparentize(0.9, Color.BLACK)}`,
@@ -50,3 +52,17 @@ export const ErrorMessage = styled.div({
   fontWeight: 700,
   padding: Spacing.S5,
 })
+
+export const StyledButton = withStyles({
+  root: {
+    ...FontSpace.FS2,
+    background: transparentize(0.85, Color.PRIMARY),
+    color: Color.PRIMARY,
+    fontWeight: 700,
+    padding: Spacing.S3,
+    textTransform: 'capitalize',
+    '&:hover': {
+      background: transparentize(0.7, Color.PRIMARY),
+    }
+  }
+})(Button)
