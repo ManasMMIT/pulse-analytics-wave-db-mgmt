@@ -41,11 +41,14 @@ const Form = ({
       ? JSON.stringify(data.oneOf).replace(/\[|\]/g, '')
       : ''
   )
-  const [stagedBusinessObjRef, setBusinessObjRef] = useState(data.businessObjRef || null)
-  // const [stagedBusinessObjRef, setBusinessObjRef] = useState({
-  //   "_id": "5ea0ac4fe252c3f35e78a960",
-  //   "fieldId": "5ea0acd82827f3f35e35ad82"
-  // })
+
+  let defaultStagedBusinessObjRef = null
+  if (data.businessObjRef) {
+    const { __typename, ...rest } = data.businessObjRef
+      defaultStagedBusinessObjRef = rest
+  }
+
+  const [stagedBusinessObjRef, setBusinessObjRef] = useState(defaultStagedBusinessObjRef)
 
   const [saveField] = useMutation(mutationDoc, {
     variables: {

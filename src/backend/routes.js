@@ -19,7 +19,7 @@ const auth0 = require('./auth0')
 
 const subApp = express()
 
-MongoClient.connect(process.env.LOADER_URI, { useNewUrlParser: true }, (err, client) => {
+MongoClient.connect(process.env.LOADER_URI, { useUnifiedTopology: true }, (err, client) => {
   if (err) throw err;
   const mongoClient = client
   const pulseRawDb = client.db('pulse-raw')

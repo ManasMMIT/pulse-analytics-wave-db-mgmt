@@ -55,14 +55,27 @@ const invalidDateStringsInput = require('./mockData/input/invalid-date-strings')
 const invalidDateStringsOutput = require('./mockData/output/invalid-date-strings')
 const errorsForInvalidDateStrings = require('./mockData/output/errors-for-invalid-date-strings')
 
-test('Valid data is reported valid with zero errors and type-coerced values', () => {
+const {
+  BO_INPUT_1_dataAndSkippedRows,
+  BO_INPUT_1_mockDb,
+  BO_INPUT_1_sheetConfig,
+} = require('./mockData/input/businessObjValidationInput/input1')
+const BO_OUTPUT_1_data = require('./mockData/output/businessObjValidationOutput/output1')
+
+const BO_INPUT_2_dataAndSkippedRows = require('./mockData/input/businessObjValidationInput/input2')
+const {
+  BO_OUTPUT_2_data,
+  BO_OUTPUT_2_errors,
+} = require('./mockData/output/businessObjValidationOutput/output2')
+
+test('Valid data is reported valid with zero errors and type-coerced values', async () => {
   const { result, skippedRows } = validProgramOverviewSanitizationRes
 
   const {
     valid,
     errors,
     data,
-  } = validate({ 
+  } = await validate({ 
     data: result, 
     skippedRows, 
     sheetConfig: programOverviewSheetConfig, 
@@ -75,14 +88,14 @@ test('Valid data is reported valid with zero errors and type-coerced values', ()
   expect(data).toStrictEqual(coercedProgramOverviewDataOutput)
 })
 
-test('Invalid data is reported invalid with correct errors', () => {
+test('Invalid data is reported invalid with correct errors', async () => {
   const { result, skippedRows } = invalidProgramOverviewSanitizationRes
 
   const {
     valid,
     errors,
     // data,
-  } = validate({ 
+  } = await validate({ 
     data: result, 
     skippedRows, 
     sheetConfig: programOverviewSheetConfig, 
@@ -96,15 +109,14 @@ test('Invalid data is reported invalid with correct errors', () => {
 
 test(`- Invalid CSV values trigger errors if they're not in oneOf
     - Input data still coerced from string to arr of strings
-    - Formatted error message is intelligible to casual user`, 
-() => {
+    - Formatted error message is intelligible to casual user`, async () => {
   const { result, skippedRows } = invalidSanitiziedInfluencersRes
 
   const {
     valid,
     errors,
     data,
-  } = validate({ 
+  } = await validate({ 
     data: result, 
     skippedRows, 
     sheetConfig: influencersSheetConfig, 
@@ -122,14 +134,14 @@ test(`- Invalid CSV values trigger errors if they're not in oneOf
   expect(data).toStrictEqual(coercedInvalidInfluencers)
 })
 
-test('Data with valid CSV values passes validation', () => {
+test('Data with valid CSV values passes validation', async () => {
   const { result, skippedRows } = validSanitizedInfluencersRes
 
   const {
     valid,
     errors,
     data,
-  } = validate({ 
+  } = await validate({ 
     data: result, 
     skippedRows, 
     sheetConfig: influencersSheetConfig, 
@@ -142,7 +154,7 @@ test('Data with valid CSV values passes validation', () => {
 
 // !!! ALL TESTS ABOVE THIS LINE ARE LIKELY TOO VAGUE TO BE THAT MEANINGFUL
 
-test('Blank non-CSV cells are left alone to be persisted as null', () => {
+test('Blank non-CSV cells are left alone to be persisted as null', async () => {
   const { result, skippedRows } = mixedRegularCellsInput
   const copyInputData = _.cloneDeep(result)
   
@@ -150,7 +162,7 @@ test('Blank non-CSV cells are left alone to be persisted as null', () => {
     valid,
     errors,
     data,
-  } = validate({
+  } = await validate({
     data: result,
     skippedRows,
     sheetConfig: sheetConfigWithStringType,
@@ -163,36 +175,34 @@ test('Blank non-CSV cells are left alone to be persisted as null', () => {
 
 test(`- Blank non-CSV cells pass oneOf validation if oneOf includes empty string
     - Empty string in oneOf is converted to null to line up with blank cells' values
-    - Blank non-CSV cell's value is left as null`,
-  () => {
-    const { result, skippedRows } = mixedRegularCellsWithOneOfInput
-    const copyInputData = _.cloneDeep(result)
+    - Blank non-CSV cell's value is left as null`, async () => {
+  const { result, skippedRows } = mixedRegularCellsWithOneOfInput
+  const copyInputData = _.cloneDeep(result)
 
-    const {
-      valid,
-      errors,
-      data,
-    } = validate({
-      data: result,
-      skippedRows,
-      sheetConfig: sheetConfigWithBlankOneOf,
-    })
-
-    expect(valid).toEqual(true)
-    expect(errors).toStrictEqual([])
-    expect(data).toStrictEqual(copyInputData)
+  const {
+    valid,
+    errors,
+    data,
+  } = await validate({
+    data: result,
+    skippedRows,
+    sheetConfig: sheetConfigWithBlankOneOf,
   })
 
+  expect(valid).toEqual(true)
+  expect(errors).toStrictEqual([])
+  expect(data).toStrictEqual(copyInputData)
+})
+
 test(`- Blank non-CSV cells fail oneOf validation if oneOf doesn't include empty string
-    - Blank non-CSV cell's value is left as null`,
-() => {
+    - Blank non-CSV cell's value is left as null`, async () => {
   const { result, skippedRows } = blankRegularCellsWithOneOfInput
 
   const {
     valid,
     errors,
     data,
-  } = validate({
+  } = await validate({
     data: result,
     skippedRows,
     sheetConfig: influencersSheetConfig,
@@ -203,14 +213,14 @@ test(`- Blank non-CSV cells fail oneOf validation if oneOf doesn't include empty
   expect(data).toStrictEqual(blankRegularCellsWithOneOfOutput)
 })
 
-test('Blank CSV cells are coerced into empty arrays', () => {
+test('Blank CSV cells are coerced into empty arrays', async () => {
   const { result, skippedRows } = mixedCsvCellsInput
   
   const {
     valid,
     errors,
     data,
-  } = validate({ 
+  } = await validate({ 
     data: result, 
     skippedRows, 
     sheetConfig: sheetConfigWithCsvType, 
@@ -222,15 +232,14 @@ test('Blank CSV cells are coerced into empty arrays', () => {
 })
 
 test(`- Blank CSV cells pass oneOf validation if oneOf includes empty string
-    - Blank CSV cells are coerced into empty arrays`,
-() => {
+    - Blank CSV cells are coerced into empty arrays`, async () => {
   const { result, skippedRows } = mixedCsvCellsWithOneOfInput
 
   const {
     valid,
     errors,
     data,
-  } = validate({ 
+  } = await validate({ 
     data: result, 
     skippedRows, 
     sheetConfig: sheetConfigWithBlankCsvOneOf, 
@@ -242,15 +251,14 @@ test(`- Blank CSV cells pass oneOf validation if oneOf includes empty string
 })
 
 test(`- Blank CSV cells fail oneOf validation if oneOf doesn't include empty string
-    (Let ajv coerce blank cell's value to arr with empty string to force failure)`,
-() => {
+    (Let ajv coerce blank cell's value to arr with empty string to force failure)`, async () => {
   const { result, skippedRows } = blankCsvCellsWithOneOfInput
 
   const {
     valid,
     errors,
     data,
-  } = validate({ 
+  } = await validate({ 
     data: result, 
     skippedRows, 
     sheetConfig: influencersSheetConfig, 
@@ -261,14 +269,14 @@ test(`- Blank CSV cells fail oneOf validation if oneOf doesn't include empty str
   expect(data).toStrictEqual(blankCsvCellsWithOneOfOutput)
 })
 
-test('Random whitespace values in CSV cells are sanitized', () => {
+test('Random whitespace values in CSV cells are sanitized', async () => {
   const { result, skippedRows } = _.cloneDeep(mixedCsvCellsWithWhitespaceInput) // reused in later test
 
   const {
     valid,
     errors,
     data,
-  } = validate({
+  } = await validate({
     data: result,
     skippedRows,
     sheetConfig: sheetConfigWithCsvType,
@@ -279,14 +287,14 @@ test('Random whitespace values in CSV cells are sanitized', () => {
   expect(data).toStrictEqual(mixedCsvCellsWithWhitespaceOutput)
 })
 
-test("CSV cells sanitized to empty still fail oneOf if oneOf doesn't include empty string", () => {
+test("CSV cells sanitized to empty still fail oneOf if oneOf doesn't include empty string", async () => {
   const { result, skippedRows } = _.cloneDeep(mixedCsvCellsWithWhitespaceInput)
 
   const {
     valid,
     errors,
     data,
-  } = validate({
+  } = await validate({
     data: result,
     skippedRows,
     sheetConfig: sheetConfigWithOneOf,
@@ -300,15 +308,14 @@ test("CSV cells sanitized to empty still fail oneOf if oneOf doesn't include emp
 test(`- Valid date cells pass validation and are coerced into Date objects
     - Valid date cell means null OR string formatted in short ISO, long ISO, d/M/yy, or dd/MM/yyyy format
     - If string, it's coerced into short ISO string (any time portion is stripped), then coerced into a Date object
-    - Date object is generated with the UTC time equivalent to the NY-timezoned short ISO string`,
-() => {
+    - Date object is generated with the UTC time equivalent to the NY-timezoned short ISO string`, async () => {
   const { result, skippedRows } = validDateStringsInput
 
   const {
     valid,
     errors,
     data,
-  } = validate({
+  } = await validate({
     data: result,
     skippedRows,
     sheetConfig: sheetConfigWithDateType,
@@ -324,14 +331,14 @@ test(`- Valid date cells pass validation and are coerced into Date objects
   expect(formattedData).toStrictEqual(validDateStringsOutput)
 })
 
-test("Invalid date cells fail validation", () => {
+test("Invalid date cells fail validation", async () => {
   const { result, skippedRows } = invalidDateStringsInput
 
   const {
     valid,
     errors,
     data,
-  } = validate({
+  } = await validate({
     data: result,
     skippedRows,
     sheetConfig: sheetConfigWithDateType,
@@ -340,4 +347,44 @@ test("Invalid date cells fail validation", () => {
   expect(valid).toEqual(false)
   expect(errors).toStrictEqual(errorsForInvalidDateStrings)
   expect(data).toStrictEqual(invalidDateStringsOutput)
+})
+
+test(`- Valid data with business object validation passes validation
+    - oneOf disregarded when businessObj ref exists`, async () => {
+  const { result, skippedRows } = BO_INPUT_1_dataAndSkippedRows
+
+  const {
+    valid,
+    errors,
+    data,
+  } = await validate({
+    data: result,
+    skippedRows,
+    sheetConfig: BO_INPUT_1_sheetConfig,
+    db: BO_INPUT_1_mockDb,
+  })
+
+  expect(valid).toEqual(true)
+  expect(errors).toStrictEqual([])
+  expect(data).toStrictEqual(BO_OUTPUT_1_data)
+})
+
+test(`- Invalid data with business object validation fails validation
+    - oneOf disregarded when businessObj ref exists`, async () => {
+  const { result, skippedRows } = BO_INPUT_2_dataAndSkippedRows
+
+  const {
+    valid,
+    errors,
+    data,
+  } = await validate({
+    data: result,
+    skippedRows,
+    sheetConfig: BO_INPUT_1_sheetConfig,
+    db: BO_INPUT_1_mockDb,
+  })
+
+  expect(valid).toEqual(false)
+  expect(errors).toStrictEqual(BO_OUTPUT_2_errors)
+  expect(data).toStrictEqual(BO_OUTPUT_2_data)
 })

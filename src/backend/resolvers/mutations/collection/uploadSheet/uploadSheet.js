@@ -26,7 +26,7 @@ const uploadSheet = async (
       valid,
       errors,
       data: validatedData,
-    }  = validate({ data, skippedRows, sheetConfig })
+    } = await validate({ data, skippedRows, sheetConfig, db: pulseCoreDb })
 
     data = validatedData
 

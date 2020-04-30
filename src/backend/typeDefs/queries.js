@@ -225,13 +225,13 @@ const queries = gql`
     name: String!
     type: String!
     oneOf: [String]
-    businessObjRef: BusinessObjRef
+    businessObjRef: JSON # tried using BusinessObjRef but difficult to solve caching issue on frontend arises
   }
 
-  type BusinessObjRef {
-    _id: ID!
-    fieldId: ID!
-  }
+  # type BusinessObjRef {
+  #   _id: String!
+  #   fieldId: ID!
+  # }
 
   type BusinessObject {
     _id: ID!
