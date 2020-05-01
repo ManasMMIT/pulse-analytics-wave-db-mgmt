@@ -12,7 +12,7 @@ module.exports = {
       "_id": ObjectId("5e62da4b9514b7f2c0bc91c7"),
     },
     {
-      "name": "type",
+      "name": "organizationType",
       "type": "string",
       "oneOf": null,
       "_id": ObjectId("5e62da4b9514b7f2c0bc91c8"),

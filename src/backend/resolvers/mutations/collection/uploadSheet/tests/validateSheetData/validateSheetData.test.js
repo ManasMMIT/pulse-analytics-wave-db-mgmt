@@ -78,6 +78,12 @@ const {
   DUPE_ROWS_formattedErrors,
 } = require('./mockData/output/dupeRowsValidationOutput')
 
+const {
+  EXTRA_COLS_dataAndSkippedRows,
+  EXTRA_COLS_sheetConfig,
+} = require('./mockData/input/extraColsValidationInput')
+const EXTRA_COLS_data = require('./mockData/output/extraColsValidationOutput')
+
 test('Valid data is reported valid with zero errors and type-coerced values', async () => {
   const { result, skippedRows } = validProgramOverviewSanitizationRes
 
@@ -424,4 +430,22 @@ test(`- Data coming in with dupe rows fails validation
   expect(errors).toStrictEqual(DUPE_ROWS_errors)
   expect(formattedErrors).toStrictEqual(DUPE_ROWS_formattedErrors)
   expect(data).toStrictEqual(DUPE_ROWS_data)
+})
+
+test("Extra columns (keys not in sheet config) are excluded from import", async () => {
+  const { result, skippedRows } = EXTRA_COLS_dataAndSkippedRows
+
+  const {
+    valid,
+    errors,
+    data,
+  } = await validate({
+    data: result,
+    skippedRows,
+    sheetConfig: EXTRA_COLS_sheetConfig,
+  })
+
+  expect(valid).toEqual(true)
+  expect(errors).toStrictEqual([])
+  expect(data).toStrictEqual(EXTRA_COLS_data)
 })

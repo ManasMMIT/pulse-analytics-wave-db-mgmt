@@ -13,6 +13,7 @@ const ajv = new Ajv({
   coerceTypes: 'array',
   jsonPointers: true,
   useDefaults: "empty",
+  removeAdditional: 'all',
 })
 
 AjvErrors(ajv)
