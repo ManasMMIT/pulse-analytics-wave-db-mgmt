@@ -84,6 +84,16 @@ const {
 } = require('./mockData/input/extraColsValidationInput')
 const EXTRA_COLS_data = require('./mockData/output/extraColsValidationOutput')
 
+const {
+  MISSING_COLS_dataAndSkippedRows,
+  MISSING_COLS_sheetConfig,
+} = require('./mockData/input/missingColsValidationInput')
+const {
+  MISSING_COLS_data,
+  MISSING_COLS_errors,
+  MISSING_COLS_formattedErrors,
+} = require('./mockData/output/missingColsValidationOutput')
+
 test('Valid data is reported valid with zero errors and type-coerced values', async () => {
   const { result, skippedRows } = validProgramOverviewSanitizationRes
 
@@ -448,4 +458,29 @@ test("Extra columns (keys not in sheet config) are excluded from import", async 
   expect(valid).toEqual(true)
   expect(errors).toStrictEqual([])
   expect(data).toStrictEqual(EXTRA_COLS_data)
+})
+
+test("Missing columns (keys in sheet config but not in data) fail validation", async () => {
+  const { result, skippedRows } = MISSING_COLS_dataAndSkippedRows
+
+  const {
+    valid,
+    errors,
+    data,
+  } = await validate({
+    data: result,
+    skippedRows,
+    sheetConfig: MISSING_COLS_sheetConfig,
+  })
+
+  const formattedErrors = formatAjvErrors({
+    errors,
+    wb: 'Mock Workbook',
+    sheet: 'Mock Sheet'
+  })
+
+  expect(valid).toEqual(false)
+  expect(errors).toStrictEqual(MISSING_COLS_errors)
+  expect(formattedErrors).toStrictEqual(MISSING_COLS_formattedErrors)
+  expect(data).toStrictEqual(MISSING_COLS_data)
 })

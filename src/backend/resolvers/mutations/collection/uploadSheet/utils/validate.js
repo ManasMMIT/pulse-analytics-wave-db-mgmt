@@ -175,6 +175,8 @@ const validate = async ({ data, skippedRows, sheetConfig, db }) => {
 const getAjvSchema = async ({ fields }, db) => {
   const schema = { properties: {} }
   const schemaProperties = schema.properties
+  
+  schema.required = fields.map(({ name }) => name)
 
   await populateSchemaProperties({ fields, schemaProperties, db })
 

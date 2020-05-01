@@ -36,7 +36,10 @@ const formatAjvErrors = ({ errors, wb, sheet }) => {
       suggestion = target
     }
 
-    acc += `Row ${rowNum}, key '${key}'${extraErrorStr}${message}\n`
+    acc += `Row ${rowNum}`
+    if (key) acc += `, key '${key}'`
+    acc += `${extraErrorStr}${message}\n`
+
     if (suggestion) {
       acc += `Did you mean: '${suggestion}'?\n\n`
     } else {
