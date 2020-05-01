@@ -65,6 +65,7 @@ const validate = async ({ data, skippedRows, sheetConfig, db }) => {
 
   const totalRowCountPlusHeader = skippedRows.length + data.length + 1
 
+  let rowsTracker = {} // for detecting dupes
   let i = 0
   let j = 0
   let curRowNumInSheet = 2 // to keep proper track of row num in sheet, don't start with header row
@@ -78,6 +79,16 @@ const validate = async ({ data, skippedRows, sheetConfig, db }) => {
     
     const datum = data[j]
     
+    const serializedDatum = JSON.stringify(datum)
+    let entryInRowsTracker = rowsTracker[serializedDatum]
+    const newEntry = { datum, rowNum: curRowNumInSheet }
+
+    if (entryInRowsTracker) {
+      entryInRowsTracker.push(newEntry)
+    } else {
+      rowsTracker[serializedDatum] = [newEntry]
+    }
+
     // eslint-disable-next-line no-loop-func
     csvKeys.forEach(csvKey => {
       if (datum[csvKey]) {
@@ -117,6 +128,24 @@ const validate = async ({ data, skippedRows, sheetConfig, db }) => {
     j++
     curRowNumInSheet++
   }
+
+  const dupeRows = _.filter(rowsTracker, groupOfRows => groupOfRows.length > 1)
+  if (dupeRows.length) areAllRowsValid = false
+
+  dupeRows.forEach(groupOfDupes => {
+    const { datum, rowNum } = groupOfDupes[0]
+
+    let errorMessage = `Row ${rowNum} is duplicated on row(s) `
+    const rowNums = groupOfDupes.slice(1).map(({ rowNum }) => rowNum).join(', ')
+
+    errorMessage += rowNums
+
+    errors.unshift({
+      error: errorMessage,
+      rowNum,
+      datum,
+    })
+  }) 
 
   return { valid: areAllRowsValid, errors, data }
 }

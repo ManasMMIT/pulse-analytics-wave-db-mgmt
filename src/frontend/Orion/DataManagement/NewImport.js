@@ -10,6 +10,9 @@ import { useMutation } from '@apollo/react-hooks'
 
 import Button from '../../components/Button'
 import { customSelectStyles } from '../../components/customSelectStyles'
+import FontSpace from '../../utils/fontspace'
+import Color from '../../utils/color'
+
 
 import {
   PageContainer,
@@ -95,6 +98,14 @@ const Import = () => {
       <PageHeaderContainer>
         <PageHeader>Import Excel Sheets</PageHeader>
       </PageHeaderContainer>
+        
+        <div style={{ padding: '24px 0 0 36px', color: Color.RED, ...FontSpace.FS3 }}>
+          <ul style={{ listStyle: 'circle' }}>
+            <li>Second and third rows are always skipped</li>
+            <li>If an error message says "should be null,number", it means cell should either be empty or in the format specified</li>
+          </ul>
+        </div>
+
       <ImportFormContainer>
         <FieldContainer>
           <FieldLabel>Pick an Excel file:</FieldLabel>

@@ -68,6 +68,16 @@ const {
   BO_OUTPUT_2_errors,
 } = require('./mockData/output/businessObjValidationOutput/output2')
 
+const {
+  DUPE_ROWS_dataAndSkippedRows,
+  DUPE_ROWS_sheetConfig,
+} = require('./mockData/input/dupeRowsValidationInput')
+const {
+  DUPE_ROWS_data,
+  DUPE_ROWS_errors,
+  DUPE_ROWS_formattedErrors,
+} = require('./mockData/output/dupeRowsValidationOutput')
+
 test('Valid data is reported valid with zero errors and type-coerced values', async () => {
   const { result, skippedRows } = validProgramOverviewSanitizationRes
 
@@ -387,4 +397,31 @@ test(`- Invalid data with business object validation fails validation
   expect(valid).toEqual(false)
   expect(errors).toStrictEqual(BO_OUTPUT_2_errors)
   expect(data).toStrictEqual(BO_OUTPUT_2_data)
+})
+
+test(`- Data coming in with dupe rows fails validation
+    - Dupes are consolidated to error once for each set of dupes
+    - Dupe row erroring doesn't affect other error messaging`, async () => {
+  const { result, skippedRows } = DUPE_ROWS_dataAndSkippedRows
+
+  const {
+    valid,
+    errors,
+    data,
+  } = await validate({
+    data: result,
+    skippedRows,
+    sheetConfig: DUPE_ROWS_sheetConfig,
+  })
+
+  const formattedErrors = formatAjvErrors({
+    errors,
+    wb: 'Mock Workbook',
+    sheet: 'Mock Sheet'
+  })
+
+  expect(valid).toEqual(false)
+  expect(errors).toStrictEqual(DUPE_ROWS_errors)
+  expect(formattedErrors).toStrictEqual(DUPE_ROWS_formattedErrors)
+  expect(data).toStrictEqual(DUPE_ROWS_data)
 })

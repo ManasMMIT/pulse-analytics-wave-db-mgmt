@@ -4,6 +4,11 @@ const formatAjvErrors = ({ errors, wb, sheet }) => {
   let errorString = `${wb}/${sheet} failed validation for the following rows:\n\n`
 
   errorString = errors.reduce((acc, { error, rowNum, datum }) => {
+    if (typeof error === 'string') {
+      acc += (error + '\n')
+      return acc
+    }
+
     const { dataPath, message, params } = error
 
     let key = dataPath.replace('/', '') // replaces the first slash only on purpose
