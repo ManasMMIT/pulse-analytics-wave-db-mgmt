@@ -20,6 +20,8 @@ const regionalTargetingData = require('./regionalTargetingData')
 
 const payerProjects = require('./payerProjects')
 
+const cMsOrgPrimarySpecialtyCounts = require('./cMsOrgPrimarySpecialtyCounts')
+
 module.exports = {
   collections,
   clients,
@@ -41,4 +43,5 @@ module.exports = {
   treatmentPlans,
   ...payerProjects,
   regionalTargetingData,
+  cMsOrgPrimarySpecialtyCounts,
 }

@@ -21,18 +21,21 @@ module.exports = async ({
     .collection('organizations.treatmentPlans.history')
     .aggregate(getEnrichOrgTpHistoryTrashPipeline(organizationId), { session })
     .toArray()
-    
+
   const trashDocsToInsert = enrichedTrashDocs.map(({ _id, ...doc }) => doc)
 
-  // 3. insert trash docs
-  await db
-    .collection('trash.organizations.treatmentPlans.history')
-    .insertMany(trashDocsToInsert, { session })
+  // 3. insert trash docs only if there are any
+  if (trashDocsToInsert.length) {
+    await db
+      .collection('trash.organizations.treatmentPlans.history')
+      .insertMany(trashDocsToInsert, { session })
 
-  // 4. delete all historical documents
-  await db
-    .collection('organizations.treatmentPlans.history')
-    .deleteMany({ organizationId }, { session })
+    // 4. delete all historical documents only if they exist
+    await db
+      .collection('organizations.treatmentPlans.history')
+      .deleteMany({ organizationId }, { session })
+  }
+
 
   return enrichedTrashDocs
 }

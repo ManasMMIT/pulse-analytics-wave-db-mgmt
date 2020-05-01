@@ -41,8 +41,10 @@ const queries = gql`
     payerProjectPtps(input: PayerProjectPtpsInput!): [PayerProjectPtp]
 
     treatmentPlans: [TreatmentPlan]
-    
+
     regionalTargetingData(input: JSON): JSON
+
+    cMsOrgPrimarySpecialtyCounts(orgPacId: String): JSON
   }
 
   type Node {
@@ -130,6 +132,7 @@ const queries = gql`
     city: String
     oncologistsCount: Int
     sitesCount: Int
+    groupPracticePacId: String
   }
 
   type PayerOrganization {

@@ -10,6 +10,7 @@ import DeleteButton from '../../../shared/DeleteButton'
 import ExportExcelButton from '../../../../components/ExportExcelButton'
 import ProviderImportButton from './ProviderImportButton'
 import CopyOneOfStringButton from '../../../shared/CopyOneOfStringButton'
+import CmsModalButton from './CmsModalButton'
 
 import {
   DELETE_PROVIDER_ORGANIZATION,
@@ -78,6 +79,7 @@ const headerChildren = data => {
 
 const buttonGroupCallback = entity => (
   <>
+    <CmsModalButton account={entity} />
     <ProviderAccountModalButton
       account={entity}
       buttonLabel={editIcon}

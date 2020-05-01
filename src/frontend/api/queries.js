@@ -1,5 +1,11 @@
 import gql from 'graphql-tag'
 
+export const GET_CMS_PRIM_SPEC_COUNTS = gql`
+  query getCmsPrimarySpecialtyCounts($orgPacId: String) {
+    cMsOrgPrimarySpecialtyCounts(orgPacId: $orgPacId)
+  }
+`
+
 export const GET_BOM_SCHEMA = gql`
   query getBomSchema($boId: ID) {
     bomSchema(boId: $boId)
@@ -443,6 +449,7 @@ export const GET_PROVIDER_ORGANIZATIONS = gql`
       city
       oncologistsCount
       sitesCount
+      groupPracticePacId
     }
   }
 `
