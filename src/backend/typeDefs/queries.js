@@ -260,6 +260,7 @@ const queries = gql`
   type PayerProjectsList {
     _id: ID!
     name: String!
+    timestamps: [DateTime]
   }
 
   type TreatmentPlan {

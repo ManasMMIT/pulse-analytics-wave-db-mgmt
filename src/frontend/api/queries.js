@@ -559,6 +559,7 @@ export const GET_PAYER_PROJECTS_LIST = gql`
     payerProjectsList {
        _id
       name
+      timestamps
     }
  }
 `
