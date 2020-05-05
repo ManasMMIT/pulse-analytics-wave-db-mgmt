@@ -1,35 +1,16 @@
 const _ = require('lodash')
-
-
-const {
-  getProjectOrgTpsEnrichedPipeline,
-} = require('./agg-pipelines')
-
 const {
   payerCombinationHasher
 } = require('../utils')
+const ValidatorDAO = require('./ValidatorDAO')
 
 class Validator {
   constructor({ sheetData, pulseCore, projectId }) {
     this.sheetData = sheetData
     this.pulseCore = pulseCore
     this.projectId = projectId
-  }
 
-  async getAllowedPtpsHash(hasher) {
-    try {
-      const allowedOrgTpCombos = await this.pulseCore
-        .collection('tdgProjects')
-        .aggregate(
-          getProjectOrgTpsEnrichedPipeline(this.projectId)
-        )
-        .toArray()
-  
-      return _.keyBy(allowedOrgTpCombos, hasher)
-    } catch(e) {
-      console.log(`getAllowedPtpsHash: ${ e }`)
-      return null
-    }
+    this.validatorDAO = new ValidatorDAO(pulseCore)
   }
 
   async validateQualityOfAccess() {
