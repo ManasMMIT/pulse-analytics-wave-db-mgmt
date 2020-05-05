@@ -51,6 +51,10 @@ const uploadSheet = async (
       continue
     }
 
+    // for data going straight to dev, tack on createdOn to every doc
+    const createdOn = new Date()
+    data = data.map(datum => ({ ...datum, createdOn }))
+
     await pulseDevDb.collection(targetCollection)
       .deleteMany()
 
