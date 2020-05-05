@@ -44,17 +44,18 @@ const importPayerHistoricalAccessData = async (
   }
 
   const sheetValidator = new Validator(validatorConfig)
-  const sheetManager = new SheetToCore(projectConfig).getManager(sheetName)
+  debugger
+  // const sheetManager = new SheetToCore(projectConfig).getManager(sheetName)
 
-  if (isQualityAccessSheet) {
-    await sheetValidator.validateQualityOfAccess()
-  } else if (isAdditionalCriteriaSheet) {
-    await sheetValidator.validateAdditionalCriteria()
-  } else if (isPolicyLinksSheet) {
-    await sheetValidator.validatePolicyLinks()
-  }
+  // if (isQualityAccessSheet) {
+  //   await sheetValidator.validateQualityOfAccess()
+  // } else if (isAdditionalCriteriaSheet) {
+  //   await sheetValidator.validateAdditionalCriteria()
+  // } else if (isPolicyLinksSheet) {
+  //   await sheetValidator.validatePolicyLinks()
+  // }
 
-  await sheetManager.upsertOrgTpHistory()
+  // await sheetManager.upsertOrgTpHistory()
 
   // // ? TODO: Matt builds up success string and adds memoized importFeedback array
 

@@ -25,4 +25,4 @@ class ValidatorDAO {
   }
 }
 
-export default ValidatorDAO
+module.exports = ValidatorDAO
