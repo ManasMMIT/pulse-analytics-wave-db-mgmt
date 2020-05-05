@@ -1,7 +1,7 @@
 const _ = require('lodash')
 const {
   getProjectOrgTpsEnrichedPipeline,
-} = require('./agg-pipelines')
+} = require('../agg-pipelines')
 
 class ValidatorDAO {
   constructor(db) {

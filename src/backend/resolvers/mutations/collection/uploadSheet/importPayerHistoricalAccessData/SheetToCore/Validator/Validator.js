@@ -1,26 +1,31 @@
 const _ = require('lodash')
 const {
   payerCombinationHasher
-} = require('../utils')
+} = require('../../utils')
 const ValidatorDAO = require('./ValidatorDAO')
 
 class Validator {
-  constructor({ sheetData, pulseCore, projectId }) {
+  constructor({ sheetData, pulseCore, projectId, allowedBrcs, allowedPtps }) {
     this.sheetData = sheetData
     this.pulseCore = pulseCore
     this.projectId = projectId
 
     this.validatorDAO = new ValidatorDAO(pulseCore)
+    this.hashPtps = payerCombinationHasher('ptps')
+    this.hashBrcs = payerCombinationHasher('brcs')
+    
+    const defaultAllowedPtps = this.validatorDAO.getAllowedPtpsHash(this.hashPtps)
+    const defaultAllowedBrcs = this.validatorDAO.getAllowedPtpsHash(this.hashBrcs)
+
+    this.allowedPtps = allowedPtps || defaultAllowedPtps
+    this.allowedBrcs = allowedBrcs || defaultAllowedBrcs
   }
 
-  async validateQualityOfAccess() {
+  async validateQualityOfAccess(allowedPtps = this.allowedPtps) {
     const { sheetData } = this
-
-    const hashPtps = payerCombinationHasher('ptps')
-    const allowedPtps = await this.getAllowedPtpsHash(hashPtps)
     const exactCorrectSetOfOrgTps = Object.keys(allowedPtps)
 
-    const sheetDataHashes = sheetData.map(hashPtps)
+    const sheetDataHashes = sheetData.map(this.hashPtps)
 
     const missingOrgTpCombos = _.difference(
       exactCorrectSetOfOrgTps,
@@ -63,10 +68,8 @@ class Validator {
     }
   }
 
-  async validateAdditionalCriteria() {
+  async validateAdditionalCriteria(allowedPtps = this.allowedPtps) {
     const { sheetData } = this
-    const hashPtps = payerCombinationHasher('ptps')
-    const allowedPtps = await this.getAllowedPtpsHash(hashPtps)
 
     const exactCorrectSetOfOrgTps = Object.keys(allowedPtps)
 
@@ -75,7 +78,7 @@ class Validator {
     const uniqueSheetDataHashes = Object.keys(
       _.keyBy(
         sheetData,
-        hashPtps,
+        this.hashPtps,
       )
     )
 
@@ -93,14 +96,11 @@ class Validator {
     }
   }
 
-  async validatePolicyLinks() {
+  async validatePolicyLinks(allowedBrcs = this.allowedBrcs) {
     const { sheetData } = this
-    const hashBrcs = payerCombinationHasher('brcs')
-    const allowedBrcs = await this.getAllowedPtpsHash(hashBrcs)
-
     const exactCorrectSetOfBrcs = Object.keys(allowedBrcs)
 
-    const sheetBrcsGroupedByBrcs = _.groupBy(sheetData, hashBrcs)
+    const sheetBrcsGroupedByBrcs = _.groupBy(sheetData, this.hashBrcs)
 
     const allSheetBrcs = Object.keys(sheetBrcsGroupedByBrcs)
 
