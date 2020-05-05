@@ -16,6 +16,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [2.3.0] - Started: 4-22-20
 
+### Changed
+- `Polaris Backend`/`Node Scripts`: Added a `DB_CLUSTER_ENV` variable to have the API show which cluster it's connected to while not revealing the full connection string with the MongoDB password in it
+
 ### Added
 - `Orion`: Business Object Management Panels -- CRUD on fields and business objects.
 - `Orion`: Built CRUD functionality on business object references for fields in the Sheet Mgmt System (for dynamic validation against business objects)
