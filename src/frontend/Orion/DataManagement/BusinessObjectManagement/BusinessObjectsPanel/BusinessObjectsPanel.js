@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { useHistory, useLocation } from 'react-router-dom'
+import { useHistory, useLocation, useParams } from 'react-router-dom'
 import { useQuery } from '@apollo/react-hooks'
 import queryString from 'query-string'
 // import _ from 'lodash'
@@ -42,30 +42,27 @@ const getBusinessObjectsFieldIds = bo => {
 const BusinessObjectsPanel = () => {
   const history = useHistory()
   const location = useLocation()
-
-  const selectedBusinessObjectId = (
-    location.search
-      && queryString.parse(location.search)
-      && queryString.parse(location.search).businessObjectId
-  ) || ''
+  const {
+    businessObjectId: selectedBusinessObjectId
+  } = useParams()
 
   const { data, loading } = useQuery(GET_BUSINESS_OBJECTS)
 
-  const handleClick = businessObj => {
-    history.push({
-      search: queryString.stringify(
-        getBusinessObjectsFieldIds(businessObj)
-      ),
+  const handleClick = (businessObj, history) => {
+    const { pathname } = history.location
+    const oldPathname = pathname.split('/').splice(0, pathname.split('/').length - 2)
+
+    const newPathname = [
+      ...oldPathname,
+      businessObj._id,
+      businessObj.fields[0]._id,
+    ].join('/')
+
+    history.replace({
+      // pathname: `${businessObj._id}/${businessObj.fields[0]._id}`,
+      pathname: newPathname
     })
   }
-
-  useEffect(() => {
-    if (!selectedBusinessObjectId && !loading) {
-      const firstBo = data.businessObjects[0]
-
-      handleClick(firstBo)
-    }
-  }, [loading])
 
   if (loading) return 'Loading...'
 
@@ -88,13 +85,13 @@ const BusinessObjectsPanel = () => {
               key={businessObject._id}
               isSelected={businessObject._id === selectedBusinessObjectId}
               businessObjectName={businessObject.name}
-              handleClick={() => handleClick(businessObject)}
+              handleClick={() => handleClick(businessObject, history)}
             >
               <ModalButtonWithForm
                 buttonLabel="Edit"
                 data={businessObject}
                 mutationDoc={UPDATE_BUSINESS_OBJECT}
-                afterMutationHook={handleClick}
+                afterMutationHook={() => handleClick(businessObject, history)}
                 style={{ fontSize: 10, padding: '4px 8px', marginRight: 8, }}
               />
 
@@ -103,7 +100,7 @@ const BusinessObjectsPanel = () => {
                 mutationDoc={DELETE_BUSINESS_OBJECT}
                 afterMutationHook={() => {
                   const nextBusinessObjectsSelection = data.businessObjects.find(({ _id }) => _id !== businessObject._id)
-                  handleClick(nextBusinessObjectsSelection)
+                  handleClick(nextBusinessObjectsSelection, history)
                 }}
               />
             </BusinessObjectsPanelItem>
