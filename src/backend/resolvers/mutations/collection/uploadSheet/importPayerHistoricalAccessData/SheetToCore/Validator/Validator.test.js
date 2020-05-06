@@ -7,16 +7,31 @@ const {
 } = require('./Validator.mocks')
 
 describe('Validator', () => {
-  test('validates Quality of Access sheet', () => {
-    // const sheetValidator = new Validator(validatorConfig)
-    expect(1).toEqual(1)
-  })
+  describe('Quality of Access Sheet Validator', () => {
+    test('should throw an Error if data is invalid', async () => {
+      const sheetConfig = {
+        sheetData: mockInvalidData
+      }
+      const validator = new Validator(sheetConfig)
+      await expect(validator.validateQualityOfAccess(mockPtps)).rejects.toThrow(true)
+    })
 
-  test('validates Additional Criteria sheet', () => {
-    expect(1).toEqual(1)
-  })
+    test('should return true if data is valid', async () => {
+      const sheetConfig = {
+        sheetData: mockValidSheetData
+      }
 
-  test('validates Policy Links sheet', () => {
-    expect(1).toEqual(1)
+      const validator = new Validator(sheetConfig)
+      await expect(validator.validateQualityOfAccess(mockPtps)).resolves.toBe(true)
+    })
+   
+
   })
+  // test('validates Additional Criteria sheet', () => {
+  //   expect(1).toEqual(1)
+  // })
+
+  // test('validates Policy Links sheet', () => {
+  //   expect(1).toEqual(1)
+  // })
 })

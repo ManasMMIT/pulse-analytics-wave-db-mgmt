@@ -60,6 +60,8 @@ class Validator {
         + `The following combinations were duplicated: ${orgTpsThatHaveDupes}\n`
       )
     }
+
+    return true
   }
 
   async validateAdditionalCriteria(allowedPtps) {
@@ -90,6 +92,8 @@ class Validator {
         + `The following combinations were invalid:\n${invalidOrgTpCombos}\n`
       )
     }
+
+    return true
   }
 
   async validatePolicyLinks(allowedBrcs) {
@@ -129,6 +133,8 @@ class Validator {
         + `The following combinations were invalid:\n${invalidBrcs}\n`
       )
     }
+
+    return true
   }
 }
 
