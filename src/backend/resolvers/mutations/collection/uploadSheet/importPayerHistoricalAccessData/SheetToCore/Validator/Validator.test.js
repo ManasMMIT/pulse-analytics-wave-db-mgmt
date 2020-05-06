@@ -1,14 +1,14 @@
 const Validator = require('./Validator')
-
-const validatorConfig = {
-  sheetData: [],
-  projectId: '',
-
-}
+const { 
+  mockPtps,
+  mockInvalidData,
+  mockValidSheetData,
+  mockDuplicateInvalidData,
+} = require('./Validator.mocks')
 
 describe('Validator', () => {
   test('validates Quality of Access sheet', () => {
-    const sheetValidator = new Validator(validatorConfig)
+    // const sheetValidator = new Validator(validatorConfig)
     expect(1).toEqual(1)
   })
 

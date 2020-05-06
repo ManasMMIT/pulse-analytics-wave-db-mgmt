@@ -44,7 +44,7 @@ const importPayerHistoricalAccessData = async (
   }
 
   const sheetValidator = new Validator(validatorConfig)
-  debugger
+  await sheetValidator.validateQualityOfAccess()
   // const sheetManager = new SheetToCore(projectConfig).getManager(sheetName)
 
   // if (isQualityAccessSheet) {

@@ -4,8 +4,9 @@ const {
 } = require('../agg-pipelines')
 
 class ValidatorDAO {
-  constructor(db) {
+  constructor({ db, projectId }) {
     this.db = db
+    this.projectId = projectId
   }
 
   async getAllowedPtpsHash(hasher) {
@@ -16,7 +17,7 @@ class ValidatorDAO {
           getProjectOrgTpsEnrichedPipeline(this.projectId)
         )
         .toArray()
-  
+
       return _.keyBy(allowedOrgTpCombos, hasher)
     } catch(e) {
       console.log(`getAllowedPtpsHash: ${ e }`)
