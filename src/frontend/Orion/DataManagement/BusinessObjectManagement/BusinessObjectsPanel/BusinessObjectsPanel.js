@@ -23,43 +23,29 @@ import {
 
 import { GET_BUSINESS_OBJECTS } from '../../../../api/queries'
 
-const getBusinessObjectsFieldIds = bo => {
-  const businessObjectId = bo._id
-
-  const firstField = bo.fields[0]
-
-  let fieldIdObj = {}
-  if (firstField) {
-    fieldIdObj = { fieldId: firstField._id }
-  }
-
-  return {
-    businessObjectId,
-    ...fieldIdObj,
-  }
-}
-
 const BusinessObjectsPanel = () => {
   const history = useHistory()
-  const location = useLocation()
   const {
-    businessObjectId: selectedBusinessObjectId
+    businessObjectId: selectedBusinessObjectId,
   } = useParams()
 
   const { data, loading } = useQuery(GET_BUSINESS_OBJECTS)
 
-  const handleClick = (businessObj, history) => {
+  const handleClick = businessObj => {
     const { pathname } = history.location
     const oldPathname = pathname.split('/').splice(0, pathname.split('/').length - 2)
+
+    const selectedFieldId = businessObj.fields[0]
+      ? businessObj.fields[0]._id
+      : ' '
 
     const newPathname = [
       ...oldPathname,
       businessObj._id,
-      businessObj.fields[0]._id,
+      selectedFieldId,
     ].join('/')
 
     history.replace({
-      // pathname: `${businessObj._id}/${businessObj.fields[0]._id}`,
       pathname: newPathname
     })
   }
@@ -85,13 +71,13 @@ const BusinessObjectsPanel = () => {
               key={businessObject._id}
               isSelected={businessObject._id === selectedBusinessObjectId}
               businessObjectName={businessObject.name}
-              handleClick={() => handleClick(businessObject, history)}
+              handleClick={() => handleClick(businessObject)}
             >
               <ModalButtonWithForm
                 buttonLabel="Edit"
                 data={businessObject}
                 mutationDoc={UPDATE_BUSINESS_OBJECT}
-                afterMutationHook={() => handleClick(businessObject, history)}
+                afterMutationHook={() => handleClick(businessObject)}
                 style={{ fontSize: 10, padding: '4px 8px', marginRight: 8, }}
               />
 
@@ -99,8 +85,10 @@ const BusinessObjectsPanel = () => {
                 mutationVars={{ _id: businessObject._id }}
                 mutationDoc={DELETE_BUSINESS_OBJECT}
                 afterMutationHook={() => {
-                  const nextBusinessObjectsSelection = data.businessObjects.find(({ _id }) => _id !== businessObject._id)
-                  handleClick(nextBusinessObjectsSelection, history)
+                  const nextBusinessObjectsSelection = data.businessObjects
+                    .find(({ _id }) => _id !== businessObject._id)
+
+                  handleClick(nextBusinessObjectsSelection)
                 }}
               />
             </BusinessObjectsPanelItem>

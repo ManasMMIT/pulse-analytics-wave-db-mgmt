@@ -27,7 +27,6 @@ import {
 
 const FieldsPanel = () => {
   const history = useHistory()
-  const location = useLocation()
   const {
     businessObjectId: selectedBusinessObjectId,
     fieldId: selectedFieldId,
@@ -89,12 +88,9 @@ const FieldsPanel = () => {
                     // find the first field that isn't what was selected
                     const nextField = targetBusinessObject.fields.find(({ _id }) => _id !== selectedFieldId)
 
-                    if (!nextField) { // nothing left was found, clear the query string and URL for field
-                      const queryParams = queryString.parse(location.search)
-                      delete queryParams.fieldId
-
+                    if (!nextField) { // nothing left was found, clear the URL for field id
                       history.push({
-                        search: queryString.stringify(queryParams),
+                        pathname: ' ',
                       })
                     } else {
                       handleClick(nextField)

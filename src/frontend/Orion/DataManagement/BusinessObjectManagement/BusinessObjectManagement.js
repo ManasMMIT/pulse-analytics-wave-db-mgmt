@@ -35,8 +35,12 @@ const BusinessObjectManagement = () => {
           .find(({ _id }) => _id.toString() === businessObjectId)
 
         if (selectedBusObj) {
+          const selectedFieldId = selectedBusObj.fields[0]
+            ? selectedBusObj.fields[0]._id
+            : ' '
+
           history.push({
-            pathname: selectedBusObj.fields[0]._id
+            pathname: selectedFieldId
           })
         } else {
           const { pathname } = history.location
