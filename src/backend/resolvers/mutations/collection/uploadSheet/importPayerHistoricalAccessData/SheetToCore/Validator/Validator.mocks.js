@@ -109,6 +109,16 @@ const mockDuplicateInvalidData = [
     "coverage": "Medical"
   },
   {
+    "_id": "5eac293b79e11113da3b1bd2",
+    "slug": "bcbs-mn",
+    "indication": "ALL",
+    "regimen": "Kymriah",
+    "population": "No Subtype Specified",
+    "line": "2L+",
+    "book": "Commercial",
+    "coverage": "Medical"
+  },
+  {
     "_id": "5eac293b79e11113da3b1c08",
     "slug": "fepb",
     "indication": "ALL",
