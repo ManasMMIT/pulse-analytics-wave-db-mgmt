@@ -1,5 +1,5 @@
 import React from 'react'
-import { useHistory, useLocation } from 'react-router-dom'
+import { useHistory, useLocation, useParams } from 'react-router-dom'
 import { useQuery } from '@apollo/react-hooks'
 import queryString from 'query-string'
 
@@ -28,23 +28,16 @@ import {
 const FieldsPanel = () => {
   const history = useHistory()
   const location = useLocation()
-
   const {
     businessObjectId: selectedBusinessObjectId,
     fieldId: selectedFieldId,
-  } = (
-    location.search
-    && queryString.parse(location.search)
-  ) || {}
+  } = useParams()
 
   const { data, loading } = useQuery(GET_BUSINESS_OBJECTS)
 
   const handleClick = fieldObj => {
-    const prevQueryParams = queryString.parse(location.search)
-    const nextParams = { ...prevQueryParams, fieldId: fieldObj._id }
-
     history.push({
-      search: queryString.stringify(nextParams),
+      pathname: fieldObj._id,
     })
   }
 
@@ -59,6 +52,12 @@ const FieldsPanel = () => {
   const selectedField = fields.find(({ _id }) => (
     _id === selectedFieldId
   ))
+
+  if (selectedBusinessObject && !selectedFieldId) {
+    history.push({
+      pathname: fields[0]._id,
+    })
+  }
 
   return (
     <div style={{ display: 'flex', width: '100%' }}>
@@ -92,7 +91,7 @@ const FieldsPanel = () => {
                   }}
                   afterMutationHook={() => {
                     const targetBusinessObject = data.businessObjects.find(({ _id }) => _id === selectedBusinessObjectId)
-                    
+
                     // find the first field that isn't what was selected
                     const nextField = targetBusinessObject.fields.find(({ _id }) => _id !== selectedFieldId)
 
