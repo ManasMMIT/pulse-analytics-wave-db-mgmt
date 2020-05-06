@@ -19,6 +19,7 @@ const email = require('./email')
 const payerProjects = require('./payerProject')
 
 const businessObject = require('./businessObject')
+const line = require('./line')
 
 const mutationType = gql`
   type Mutation {
@@ -116,6 +117,10 @@ const mutationType = gql`
     deleteBusinessObjectField(input: DeleteBusinessObjectFieldInput!): BoField
     updateBusinessObject(input: UpdateBusinessObjectInput!): BusinessObject
     updateBusinessObjectField(input: UpdateBusinessObjectFieldInput!): BoField
+
+    deleteLine(input: DeleteLineInput!): DeleteLinePayload
+    createLine(input: CreateLineInput!): CreateLinePayload
+    updateLine(input: UpdateLineInput!): UpdateLinePayload
   }
 `
 
@@ -141,4 +146,5 @@ module.exports = [
   ...payerProjects,
 
   ...businessObject,
+  ...line,
 ]

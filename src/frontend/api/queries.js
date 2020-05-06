@@ -1,5 +1,14 @@
 import gql from 'graphql-tag'
 
+export const GET_LINES = gql`
+  query getLines {
+    lines {
+      _id
+      name
+    }
+  }
+`
+
 export const GET_CMS_PRIM_SPEC_COUNTS = gql`
   query getCmsPrimarySpecialtyCounts($orgPacId: String) {
     cMsOrgPrimarySpecialtyCounts(orgPacId: $orgPacId)

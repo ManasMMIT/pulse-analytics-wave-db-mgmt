@@ -92,6 +92,7 @@ const ORDERED_MASTER_LIST_ITEMS = [
   'Treatment Plans',
   'Indications',
   'Regimens',
+  'Lines',
   'Products',
   'Manufacturers',
 ]

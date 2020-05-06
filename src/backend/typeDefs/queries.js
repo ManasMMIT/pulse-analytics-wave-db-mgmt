@@ -42,6 +42,8 @@ const queries = gql`
 
     treatmentPlans: [TreatmentPlan]
 
+    lines: [Line]
+
     regionalTargetingData(input: JSON): JSON
 
     cMsOrgPrimarySpecialtyCounts(orgPacId: String): JSON
@@ -273,6 +275,11 @@ const queries = gql`
     coverage: String
     line: String
     population: String
+  }
+
+  type Line {
+    _id: ID!
+    name: String
   }
 
   type PayerProjectPtp {

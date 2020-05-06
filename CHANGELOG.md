@@ -14,6 +14,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased] - Started: 4-30-20
 
+### Added
+- `Orion`: Line Master List Panel w/ CRUD
+
 ## [2.3.0] - Started: 4-22-20
 
 ### Changed
