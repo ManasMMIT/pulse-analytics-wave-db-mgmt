@@ -21,7 +21,10 @@ const DataManagement = () => (
     <Route path="/orion/data-management/questions" component={Questions} />
     <Route path="/orion/data-management/import" component={Import} />
     <Route path="/orion/data-management/sheet-management" component={SheetManagement} />
-    <Route path="/orion/data-management/bo-management" component={BusinessObjectManagement} />
+    <Route
+      path="/orion/data-management/bo-management/:businessObjectId?/:fieldId?"
+      component={BusinessObjectManagement}
+    />
     <Route path="/orion/data-management/new-import" component={NewImport} />
     <Route path="/orion/data-management/export-custom-data" component={ExportCustomData} />
     <Route exact path="/orion/data-management/payer-projects" component={PayerProjectsList} />
