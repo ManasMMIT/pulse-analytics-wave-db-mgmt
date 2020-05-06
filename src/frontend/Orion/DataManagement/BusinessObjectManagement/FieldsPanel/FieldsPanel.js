@@ -53,12 +53,6 @@ const FieldsPanel = () => {
     _id === selectedFieldId
   ))
 
-  if (selectedBusinessObject && !selectedFieldId) {
-    history.push({
-      pathname: fields[0]._id,
-    })
-  }
-
   return (
     <div style={{ display: 'flex', width: '100%' }}>
       <ListContainer style={{ width: '100%' }}>
