@@ -1,6 +1,16 @@
 require('dotenv').config()
-const _ = require('lodash')
 
+let LOADER_URI = ''
+const MONGO_KEY = process.env.MONGO_KEY
+if (process.env.DB_CLUSTER_ENV === 'production') {
+  LOADER_URI = `mongodb://pulse-admin:${MONGO_KEY}@wave-shard-00-00-ik4h2.mongodb.net:27017,wave-shard-00-01-ik4h2.mongodb.net:27017,wave-shard-00-02-ik4h2.mongodb.net:27017/pulse-dev?ssl=true&replicaSet=wave-shard-0&authSource=admin`
+} else if (process.env.DB_CLUSTER_ENV === 'staging') {
+  LOADER_URI = `mongodb://pulse-admin:${MONGO_KEY}@wave-staging-shard-00-00-ik4h2.mongodb.net:27017,wave-staging-shard-00-01-ik4h2.mongodb.net:27017,wave-staging-shard-00-02-ik4h2.mongodb.net:27017/pulse-dev?ssl=true&replicaSet=wave-staging-shard-0&authSource=admin`
+} else if (process.env.DB_CLUSTER_ENV === 'local') {
+  LOADER_URI = 'mongodb://localhost:27017'
+}
+
+const _ = require('lodash')
 const express = require('express')
 const { ApolloServer } = require('apollo-server-express')
 
@@ -19,7 +29,7 @@ const auth0 = require('./auth0')
 
 const subApp = express()
 
-MongoClient.connect(process.env.LOADER_URI, { useUnifiedTopology: true }, (err, client) => {
+MongoClient.connect(LOADER_URI, { useUnifiedTopology: true }, (err, client) => {
   if (err) throw err;
   const mongoClient = client
   const pulseRawDb = client.db('pulse-raw')
@@ -32,7 +42,7 @@ MongoClient.connect(process.env.LOADER_URI, { useUnifiedTopology: true }, (err, 
   const coreNodes = pulseCoreDb.collection('nodes')
   const coreClients = pulseCoreDb.collection('clients')
 
-  console.log(`Connected to MongoDB: ${process.env.LOADER_URI}`)
+  console.log(`Connected to MongoDB cluster: ${process.env.DB_CLUSTER_ENV}`)
 
   const twoGuysInAHorseCostume = {
     // Head + front-hooves
