@@ -44,7 +44,7 @@ class AdditionalCriteriaManager extends Manager {
             orgTpId,
             timestamp: this.timestamp,
           },
-          setObject: {
+          setObj: {
             $set: {
               orgTpId,
               projectId: this.projectId,

@@ -17,6 +17,7 @@ class Manager {
   constructor({
     projectId, pulseCore, sheetData, sheetName, timestamp, hashType = 'ptps'
   }) {
+
     this.pulseCore = pulseCore
     this.projectId = ObjectId(projectId)
 
@@ -119,18 +120,15 @@ class Manager {
     // 2. use hashes made during setup to getPermittedOps
     const permittedOps = await this.getPermittedOps()
 
-    return permittedOps
-
-    // ! temporary to test architecture:
     // 3. run upsert logic
-    // const ops = permittedOps
-    //   .map(({ findObj, setObj }) => (
-    //     this.pulseCore
-    //       .collection('organizations.treatmentPlans.history')
-    //       .updateOne(findObj, setObj, { upsert: true })
-    //   ))
+    const ops = permittedOps
+      .map(({ findObj, setObj }) => (
+        this.pulseCore
+          .collection('organizations.treatmentPlans.history')
+          .updateOne(findObj, setObj, { upsert: true })
+      ))
 
-    // return Promise.all(ops)
+    return Promise.all(ops)
   }
 }
 
