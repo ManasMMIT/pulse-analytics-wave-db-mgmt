@@ -1,7 +1,6 @@
 import React from 'react'
-import { useHistory, useLocation, useParams } from 'react-router-dom'
+import { useHistory, useParams } from 'react-router-dom'
 import { useQuery } from '@apollo/react-hooks'
-import queryString from 'query-string'
 
 import FieldPanelItem from './FieldPanelItem'
 import UpdateForm from './Form'
@@ -34,11 +33,7 @@ const FieldsPanel = () => {
 
   const { data, loading } = useQuery(GET_BUSINESS_OBJECTS)
 
-  const handleClick = fieldObj => {
-    history.push({
-      pathname: fieldObj._id,
-    })
-  }
+  const handleClick = ({ _id }) => history.push(_id)
 
   if (loading) return 'Loading...'
 

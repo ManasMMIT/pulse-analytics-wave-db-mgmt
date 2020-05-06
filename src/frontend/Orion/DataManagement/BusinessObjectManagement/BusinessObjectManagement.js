@@ -18,8 +18,8 @@ const BusinessObjectManagement = () => {
     if there's no first param, businessObjectId, then push default first bo and field to history
 
     else if there's a bo param but no field param, check to see if bo param is valid.
-    if bo param is valid, push the bo's first field to history.
-    if bo param is not valid, push the default first bo and field to history.
+      if bo param is valid, push the bo's first field to history.
+      if bo param is not valid, push the default first bo and field to history.
   */
   useEffect(() => {
     if (!loading) {
@@ -27,9 +27,7 @@ const BusinessObjectManagement = () => {
       const firstField = firstBusinessObj.fields[0]
 
       if (!businessObjectId) {
-        history.push({
-          pathname: `bo-management/${firstBusinessObj._id}/${firstField._id}`
-        })
+        history.push(`bo-management/${firstBusinessObj._id}/${firstField._id}`)
       } else if (!fieldId) {
         const selectedBusObj = data.businessObjects
           .find(({ _id }) => _id.toString() === businessObjectId)
@@ -37,24 +35,12 @@ const BusinessObjectManagement = () => {
         if (selectedBusObj) {
           const selectedFieldId = selectedBusObj.fields[0]
             ? selectedBusObj.fields[0]._id
-            : ' '
+            : ' ' // ! still unclear why we need this
 
-          history.push({
-            pathname: selectedFieldId
-          })
+          history.push(selectedFieldId)
         } else {
-          const { pathname } = history.location
-          const oldPathname = pathname.split('/').slice(0, pathname.split('/').length - 1)
-
-          const newPathname = [
-            ...oldPathname,
-            firstBusinessObj._id,
-            firstField._id,
-          ].join('/')
-
-          history.replace({
-            pathname: newPathname
-          })
+          const newPathname = [firstBusinessObj._id, firstField._id].join('/')
+          history.push(newPathname)
         }
       }
     }

@@ -1,8 +1,6 @@
-import React, { useEffect } from 'react'
-import { useHistory, useLocation, useParams } from 'react-router-dom'
+import React from 'react'
+import { useHistory, useParams } from 'react-router-dom'
 import { useQuery } from '@apollo/react-hooks'
-import queryString from 'query-string'
-// import _ from 'lodash'
 
 import BusinessObjectsPanelItem from './BusinessObjectsPanelItem'
 import ModalButtonWithForm from './ModalButtonWithForm'
@@ -32,22 +30,18 @@ const BusinessObjectsPanel = () => {
   const { data, loading } = useQuery(GET_BUSINESS_OBJECTS)
 
   const handleClick = businessObj => {
+    // ! need to rip out the old selected businessObj _id param manually
+    // ! -- idea here is to rip out that AND whatever field was selected
     const { pathname } = history.location
-    const oldPathname = pathname.split('/').splice(0, pathname.split('/').length - 2)
+    const oldPathname = pathname.split('/').slice(0, pathname.split('/').length - 2)
 
-    const selectedFieldId = businessObj.fields[0]
-      ? businessObj.fields[0]._id
-      : ' '
-
-    const newPathname = [
-      ...oldPathname,
-      businessObj._id,
-      selectedFieldId,
-    ].join('/')
-
-    history.replace({
-      pathname: newPathname
-    })
+    // ! Now add the newly selected businessObj _id, and let the rerender one level up
+    // ! select the first field  for that business obj by default
+    const newPathname = [...oldPathname, businessObj._id].join('/')
+    
+    // ! need the trailing slash so the fieldId can be pushed on and not replace the business obj _id 
+    // ! you just added appended
+    history.replace(newPathname + '/') 
   }
 
   if (loading) return 'Loading...'
