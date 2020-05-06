@@ -65,9 +65,8 @@ class Validator {
   }
 
   async validateAdditionalCriteria(allowedPtps) {
+    const ptpsToValidate = allowedPtps || await this.validatorDAO.getAllowedPtpsHash(this.hashPtps)
     const { sheetData } = this
-    const { getAllowedPtpsHash } = this.validatorDAO
-    const ptpsToValidate = allowedPtps || await getAllowedPtpsHash(this.hashPtps)
 
     const exactCorrectSetOfOrgTps = Object.keys(ptpsToValidate)
 
@@ -98,8 +97,7 @@ class Validator {
 
   async validatePolicyLinks(allowedBrcs) {
     const { sheetData } = this
-    const { getAllowedPtpsHash } = this.validatorDAO
-    const brcsToValidate = allowedBrcs || await getAllowedPtpsHash(this.hashBrcs)
+    const brcsToValidate = allowedBrcs || await this.validatorDAO.getAllowedPtpsHash(this.hashBrcs)
 
     const exactCorrectSetOfBrcs = Object.keys(brcsToValidate)
 

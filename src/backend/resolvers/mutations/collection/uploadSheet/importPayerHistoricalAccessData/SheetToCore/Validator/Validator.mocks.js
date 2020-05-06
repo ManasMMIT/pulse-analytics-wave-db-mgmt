@@ -27,11 +27,13 @@ const mockPtps = {
     "population": "No Subtype Specified",
     "line": "2L+",
     "book": "Commercial",
-    "coverage": "Medical"
+    "coverage": "Medical",
+    "access": "access A"
   }
 }
 
-const mockValidSheetData = [
+// QOA DATA
+const mockValidQoaData = [
   {
     "_id": "5eac293b79e11113da3b1bd2",
     "slug": "bcbs-mn",
@@ -40,7 +42,8 @@ const mockValidSheetData = [
     "population": "No Subtype Specified",
     "line": "2L+",
     "book": "Commercial",
-    "coverage": "Medical"
+    "coverage": "Medical",
+    "access": "access A"
   },
   {
     "_id": "5eac293b79e11113da3b1c08",
@@ -50,7 +53,8 @@ const mockValidSheetData = [
     "population": "No Subtype Specified",
     "line": "2L",
     "book": "Commercial",
-    "coverage": "Medical"
+    "coverage": "Medical",
+    "access": "access A"
   },
   {
     "_id": "5eac293b79e11113da3b1bea",
@@ -60,11 +64,12 @@ const mockValidSheetData = [
     "population": "No Subtype Specified",
     "line": "2L+",
     "book": "Commercial",
-    "coverage": "Medical"
+    "coverage": "Medical",
+    "access": "access A"
   }
 ]
 
-const mockInvalidData = [
+const mockInvalidQoaData = [
   {
     "_id": "5eac293b79e11113da3b1c09",
     "slug": "bcbs-la",
@@ -73,7 +78,8 @@ const mockInvalidData = [
     "population": "No Subtype Specified",
     "line": "2L",
     "book": "Commercial",
-    "coverage": "Medical"
+    "coverage": "Medical",
+    "access": "access A"
   },
   {
     "_id": "5eac293b79e11113da3b1c0a",
@@ -83,7 +89,8 @@ const mockInvalidData = [
     "population": "No Subtype Specified",
     "line": "2L+",
     "book": "Commercial",
-    "coverage": "Medical"
+    "coverage": "Medical",
+    "access": "access A"
   },
   {
     "_id": "5eac293b79e11113da3b1bea",
@@ -93,11 +100,12 @@ const mockInvalidData = [
     "population": "No Subtype Specified",
     "line": "2L+",
     "book": "Commercial",
-    "coverage": "Medical"
+    "coverage": "Medical",
+    "access": "access A"
   }
 ]
 
-const mockDuplicateInvalidData = [
+const mockDuplicateInvalidQoaData = [
   {
     "_id": "5eac293b79e11113da3b1c08",
     "slug": "fepb",
@@ -106,7 +114,8 @@ const mockDuplicateInvalidData = [
     "population": "No Subtype Specified",
     "line": "2L",
     "book": "Commercial",
-    "coverage": "Medical"
+    "coverage": "Medical",
+    "access": "access A"
   },
   {
     "_id": "5eac293b79e11113da3b1bd2",
@@ -116,7 +125,8 @@ const mockDuplicateInvalidData = [
     "population": "No Subtype Specified",
     "line": "2L+",
     "book": "Commercial",
-    "coverage": "Medical"
+    "coverage": "Medical",
+    "access": "access A"
   },
   {
     "_id": "5eac293b79e11113da3b1c08",
@@ -126,7 +136,8 @@ const mockDuplicateInvalidData = [
     "population": "No Subtype Specified",
     "line": "2L",
     "book": "Commercial",
-    "coverage": "Medical"
+    "coverage": "Medical",
+    "access": "access A"
   },
   {
     "_id": "5eac293b79e11113da3b1bea",
@@ -136,13 +147,89 @@ const mockDuplicateInvalidData = [
     "population": "No Subtype Specified",
     "line": "2L+",
     "book": "Commercial",
-    "coverage": "Medical"
+    "coverage": "Medical",
+    "access": "access A"
+  }
+]
+
+// Additional Criteria Data
+const mockValidCriteriaData = [
+  {
+    "_id": "5eac293b79e11113da3b1bd2",
+    "slug": "bcbs-mn",
+    "indication": "ALL",
+    "regimen": "Kymriah",
+    "population": "No Subtype Specified",
+    "line": "2L+",
+    "book": "Commercial",
+    "coverage": "Medical",
+    "criteria": "criteria A"
+  },
+  {
+    "_id": "5eac293b79e11113da3b1bd2",
+    "slug": "bcbs-mn",
+    "indication": "ALL",
+    "regimen": "Kymriah",
+    "population": "No Subtype Specified",
+    "line": "2L+",
+    "book": "Commercial",
+    "coverage": "Medical",
+    "criteria": "criteria B"
+  },
+  {
+    "_id": "5eac293b79e11113da3b1bea",
+    "slug": "horizon-bcbs-nj",
+    "indication": "ALL",
+    "regimen": "Kymriah",
+    "population": "No Subtype Specified",
+    "line": "2L+",
+    "book": "Commercial",
+    "coverage": "Medical",
+    "criteria": "criteria C"
+  }
+]
+
+const mockInvalidCriteriaData = [
+  {
+    "_id": "5eac293b79e11113da3b1bd2",
+    "slug": "bcbs-mn",
+    "indication": "ALL",
+    "regimen": "Kymriah",
+    "population": "No Subtype Specified",
+    "line": "2L+",
+    "book": "Commercial",
+    "coverage": "Medical",
+    "criteria": "criteria A"
+  },
+  {
+    "_id": "5eac293b79e11113da3b1c0a",
+    "slug": "hmsa",
+    "indication": "ALL",
+    "regimen": "Kymriah",
+    "population": "No Subtype Specified",
+    "line": "2L+",
+    "book": "Commercial",
+    "coverage": "Medical",
+    "criteria": "criteria B"
+  },
+  {
+    "_id": "5eac293b79e11113da3b1bea",
+    "slug": "horizon-bcbs-nj",
+    "indication": "ALL",
+    "regimen": "Kymriah",
+    "population": "No Subtype Specified",
+    "line": "2L+",
+    "book": "Commercial",
+    "coverage": "Medical",
+    "criteria": "criteria C"
   }
 ]
 
 module.exports = {
   mockPtps,
-  mockInvalidData,
-  mockValidSheetData,
-  mockDuplicateInvalidData,
+  mockInvalidQoaData,
+  mockValidQoaData,
+  mockDuplicateInvalidQoaData,
+  mockValidCriteriaData,
+  mockInvalidCriteriaData
 }
