@@ -1,11 +1,13 @@
 const Validator = require('./Validator')
 const { 
   mockPtps,
+  mockBrcs,
   mockInvalidQoaData,
   mockValidQoaData,
   mockDuplicateInvalidQoaData,
   mockValidCriteriaData,
-  mockInvalidCriteriaData
+  mockInvalidCriteriaData,
+  mockValidPolicyLinkData
 } = require('./Validator.mocks')
 
 describe('Validator', () => {
@@ -45,12 +47,17 @@ describe('Validator', () => {
     })
   })
 
+  describe('Policy Link Validator', () => {
+    // test('should throw an Error if sheet data is invalid', async () => {
+    //   const sheetConfig = { sheetData: mockValidPolicyLinkData }
+    //   const validator = new Validator(sheetConfig)
+    //   await expect(validator.validateAdditionalCriteria(mockBrcs)).rejects.toThrow()
+    // })
 
-  // test('validates Additional Criteria sheet', () => {
-  //   expect(1).toEqual(1)
-  // })
-
-  // test('validates Policy Links sheet', () => {
-  //   expect(1).toEqual(1)
-  // })
+    test('should return true if data is valid', async () => {
+      const sheetConfig = { sheetData: mockValidPolicyLinkData }
+      const validator = new Validator(sheetConfig)
+      await expect(validator.validateAdditionalCriteria(mockBrcs)).resolves.toBe(true)
+    })
+  })
 })

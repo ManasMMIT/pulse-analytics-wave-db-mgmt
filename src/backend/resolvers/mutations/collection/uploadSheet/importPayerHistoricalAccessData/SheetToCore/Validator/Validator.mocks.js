@@ -32,10 +32,33 @@ const mockPtps = {
   }
 }
 
+const mockBrcs = {
+  "bcbs-mn|Kymriah|Commercial|Medical": {
+    "_id": "5eac293b79e11113da3b1bd2",
+    "slug": "bcbs-mn",
+    "regimen": "Kymriah",
+    "book": "Commercial",
+    "coverage": "Medical"
+  },
+  "fepb|Besponsa|Commercial|Medical": {
+    "_id": "5eac293b79e11113da3b1c08",
+    "slug": "fepb",
+    "regimen": "Besponsa",
+    "book": "Commercial",
+    "coverage": "Medical"
+  },
+  "aetna|Keytruda|Medicare|Medical": {
+    "_id": "5eac293b79e11113da3b1c10",
+    "slug": "aetna",
+    "regimen": "Keytruda",
+    "book": "Medicare",
+    "coverage": "Medical"
+  }
+}
+
 // QOA DATA
 const mockValidQoaData = [
   {
-    "_id": "5eac293b79e11113da3b1bd2",
     "slug": "bcbs-mn",
     "indication": "ALL",
     "regimen": "Kymriah",
@@ -46,7 +69,6 @@ const mockValidQoaData = [
     "access": "access A"
   },
   {
-    "_id": "5eac293b79e11113da3b1c08",
     "slug": "fepb",
     "indication": "ALL",
     "regimen": "Besponsa",
@@ -57,7 +79,6 @@ const mockValidQoaData = [
     "access": "access A"
   },
   {
-    "_id": "5eac293b79e11113da3b1bea",
     "slug": "horizon-bcbs-nj",
     "indication": "ALL",
     "regimen": "Kymriah",
@@ -71,7 +92,6 @@ const mockValidQoaData = [
 
 const mockInvalidQoaData = [
   {
-    "_id": "5eac293b79e11113da3b1c09",
     "slug": "bcbs-la",
     "indication": "ALL",
     "regimen": "Besponsa",
@@ -82,7 +102,6 @@ const mockInvalidQoaData = [
     "access": "access A"
   },
   {
-    "_id": "5eac293b79e11113da3b1c0a",
     "slug": "hmsa",
     "indication": "ALL",
     "regimen": "Kymriah",
@@ -93,7 +112,6 @@ const mockInvalidQoaData = [
     "access": "access A"
   },
   {
-    "_id": "5eac293b79e11113da3b1bea",
     "slug": "horizon-bcbs-nj",
     "indication": "ALL",
     "regimen": "Kymriah",
@@ -107,7 +125,6 @@ const mockInvalidQoaData = [
 
 const mockDuplicateInvalidQoaData = [
   {
-    "_id": "5eac293b79e11113da3b1c08",
     "slug": "fepb",
     "indication": "ALL",
     "regimen": "Besponsa",
@@ -118,7 +135,6 @@ const mockDuplicateInvalidQoaData = [
     "access": "access A"
   },
   {
-    "_id": "5eac293b79e11113da3b1bd2",
     "slug": "bcbs-mn",
     "indication": "ALL",
     "regimen": "Kymriah",
@@ -129,7 +145,6 @@ const mockDuplicateInvalidQoaData = [
     "access": "access A"
   },
   {
-    "_id": "5eac293b79e11113da3b1c08",
     "slug": "fepb",
     "indication": "ALL",
     "regimen": "Besponsa",
@@ -140,7 +155,6 @@ const mockDuplicateInvalidQoaData = [
     "access": "access A"
   },
   {
-    "_id": "5eac293b79e11113da3b1bea",
     "slug": "horizon-bcbs-nj",
     "indication": "ALL",
     "regimen": "Kymriah",
@@ -155,7 +169,6 @@ const mockDuplicateInvalidQoaData = [
 // Additional Criteria Data
 const mockValidCriteriaData = [
   {
-    "_id": "5eac293b79e11113da3b1bd2",
     "slug": "bcbs-mn",
     "indication": "ALL",
     "regimen": "Kymriah",
@@ -166,7 +179,6 @@ const mockValidCriteriaData = [
     "criteria": "criteria A"
   },
   {
-    "_id": "5eac293b79e11113da3b1bd2",
     "slug": "bcbs-mn",
     "indication": "ALL",
     "regimen": "Kymriah",
@@ -177,7 +189,6 @@ const mockValidCriteriaData = [
     "criteria": "criteria B"
   },
   {
-    "_id": "5eac293b79e11113da3b1bea",
     "slug": "horizon-bcbs-nj",
     "indication": "ALL",
     "regimen": "Kymriah",
@@ -191,7 +202,6 @@ const mockValidCriteriaData = [
 
 const mockInvalidCriteriaData = [
   {
-    "_id": "5eac293b79e11113da3b1bd2",
     "slug": "bcbs-mn",
     "indication": "ALL",
     "regimen": "Kymriah",
@@ -202,7 +212,6 @@ const mockInvalidCriteriaData = [
     "criteria": "criteria A"
   },
   {
-    "_id": "5eac293b79e11113da3b1c0a",
     "slug": "hmsa",
     "indication": "ALL",
     "regimen": "Kymriah",
@@ -213,7 +222,6 @@ const mockInvalidCriteriaData = [
     "criteria": "criteria B"
   },
   {
-    "_id": "5eac293b79e11113da3b1bea",
     "slug": "horizon-bcbs-nj",
     "indication": "ALL",
     "regimen": "Kymriah",
@@ -225,11 +233,59 @@ const mockInvalidCriteriaData = [
   }
 ]
 
+// "bcbs-mn|Kymriah|Commercial|Medical": {
+//   "_id": "5eac293b79e11113da3b1bd2",
+//   "slug": "bcbs-mn",
+//   "regimen": "Kymriah",
+//   "book": "Commercial",
+//   "coverage": "Medical"
+// },
+// "fepb|Besponsa|Commercial|Medical": {
+//   "_id": "5eac293b79e11113da3b1c08",
+//   "slug": "fepb",
+//   "regimen": "Besponsa",
+//   "book": "Commercial",
+//   "coverage": "Medical"
+// },
+// "aetna|Keytruda|Medicare|Medical": {
+//   "_id": "5eac293b79e11113da3b1c10",
+//   "slug": "aetna",
+//   "regimen": "Keytruda",
+//   "book": "Medicare",
+//   "coverage": "Medical"
+// }
+
+const mockValidPolicyLinkData = [
+  {
+    "slug": "bcbs-mn",
+    "regimen": "Kymriah",
+    "book": "Commercial",
+    "coverage": "Medical",
+    "link": "https://s3-us-west-2.amazonaws.com/tdgwebportal/link-a.pdf"
+  },
+  {
+    "slug": "fepb",
+    "regimen": "Besponsa",
+    "book": "Commercial",
+    "coverage": "Medical",
+    "link": "https://s3-us-west-2.amazonaws.com/tdgwebportal/link-b.pdf"
+  },
+  {
+    "slug": "aetna",
+    "regimen": "Keytruda",
+    "book": "Medicare",
+    "coverage": "Medical",
+    "link": "https://s3-us-west-2.amazonaws.com/tdgwebportal/link-c.pdf"
+  },
+]
+
 module.exports = {
   mockPtps,
+  mockBrcs,
   mockInvalidQoaData,
   mockValidQoaData,
   mockDuplicateInvalidQoaData,
   mockValidCriteriaData,
-  mockInvalidCriteriaData
+  mockInvalidCriteriaData,
+  mockValidPolicyLinkData
 }
