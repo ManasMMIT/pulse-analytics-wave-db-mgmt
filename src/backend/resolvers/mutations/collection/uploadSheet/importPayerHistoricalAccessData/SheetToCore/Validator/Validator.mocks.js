@@ -233,28 +233,6 @@ const mockInvalidCriteriaData = [
   }
 ]
 
-// "bcbs-mn|Kymriah|Commercial|Medical": {
-//   "_id": "5eac293b79e11113da3b1bd2",
-//   "slug": "bcbs-mn",
-//   "regimen": "Kymriah",
-//   "book": "Commercial",
-//   "coverage": "Medical"
-// },
-// "fepb|Besponsa|Commercial|Medical": {
-//   "_id": "5eac293b79e11113da3b1c08",
-//   "slug": "fepb",
-//   "regimen": "Besponsa",
-//   "book": "Commercial",
-//   "coverage": "Medical"
-// },
-// "aetna|Keytruda|Medicare|Medical": {
-//   "_id": "5eac293b79e11113da3b1c10",
-//   "slug": "aetna",
-//   "regimen": "Keytruda",
-//   "book": "Medicare",
-//   "coverage": "Medical"
-// }
-
 const mockValidPolicyLinkData = [
   {
     "slug": "bcbs-mn",
