@@ -279,6 +279,54 @@ const mockValidPolicyLinkData = [
   },
 ]
 
+const mockInvalidPolicyLinkData = [
+  {
+    "slug": "bcbs-sc",
+    "regimen": "Imfinzi",
+    "book": "Commercial",
+    "coverage": "Medical",
+    "link": "https://s3-us-west-2.amazonaws.com/tdgwebportal/link-a.pdf"
+  },
+  {
+    "slug": "fepb",
+    "regimen": "Besponsa",
+    "book": "Commercial",
+    "coverage": "Medical",
+    "link": "https://s3-us-west-2.amazonaws.com/tdgwebportal/link-b.pdf"
+  },
+  {
+    "slug": "aetna",
+    "regimen": "Keytruda",
+    "book": "Medicare",
+    "coverage": "Medical",
+    "link": "https://s3-us-west-2.amazonaws.com/tdgwebportal/link-c.pdf"
+  },
+]
+
+const mockDuplicateInvalidPolicyLinkData = [
+  {
+    "slug": "fepb",
+    "regimen": "Besponsa",
+    "book": "Commercial",
+    "coverage": "Medical",
+    "link": "https://s3-us-west-2.amazonaws.com/tdgwebportal/link-b.pdf"
+  },
+  {
+    "slug": "fepb",
+    "regimen": "Besponsa",
+    "book": "Commercial",
+    "coverage": "Medical",
+    "link": "https://s3-us-west-2.amazonaws.com/tdgwebportal/link-b.pdf"
+  },
+  {
+    "slug": "aetna",
+    "regimen": "Keytruda",
+    "book": "Medicare",
+    "coverage": "Medical",
+    "link": "https://s3-us-west-2.amazonaws.com/tdgwebportal/link-c.pdf"
+  },
+]
+
 module.exports = {
   mockPtps,
   mockBrcs,
@@ -287,5 +335,7 @@ module.exports = {
   mockDuplicateInvalidQoaData,
   mockValidCriteriaData,
   mockInvalidCriteriaData,
-  mockValidPolicyLinkData
+  mockValidPolicyLinkData,
+  mockInvalidPolicyLinkData,
+  mockDuplicateInvalidPolicyLinkData
 }

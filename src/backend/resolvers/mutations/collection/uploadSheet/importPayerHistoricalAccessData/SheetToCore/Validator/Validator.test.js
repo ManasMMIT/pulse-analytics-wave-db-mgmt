@@ -7,7 +7,9 @@ const {
   mockDuplicateInvalidQoaData,
   mockValidCriteriaData,
   mockInvalidCriteriaData,
-  mockValidPolicyLinkData
+  mockValidPolicyLinkData,
+  mockInvalidPolicyLinkData,
+  mockDuplicateInvalidPolicyLinkData
 } = require('./Validator.mocks')
 
 describe('Validator', () => {
@@ -48,16 +50,22 @@ describe('Validator', () => {
   })
 
   describe('Policy Link Validator', () => {
-    // test('should throw an Error if sheet data is invalid', async () => {
-    //   const sheetConfig = { sheetData: mockValidPolicyLinkData }
-    //   const validator = new Validator(sheetConfig)
-    //   await expect(validator.validateAdditionalCriteria(mockBrcs)).rejects.toThrow()
-    // })
+    test('should throw an Error if sheet data is invalid', async () => {
+      const sheetConfig = { sheetData: mockInvalidPolicyLinkData }
+      const validator = new Validator(sheetConfig)
+      await expect(validator.validatePolicyLinks(mockBrcs)).rejects.toThrow()
+    })
+
+    test('should throw an Error if sheet data has duplicate combos', async () => {
+      const sheetConfig = { sheetData: mockDuplicateInvalidPolicyLinkData }
+      const validator = new Validator(sheetConfig)
+      await expect(validator.validatePolicyLinks(mockBrcs)).rejects.toThrow()
+    })
 
     test('should return true if data is valid', async () => {
       const sheetConfig = { sheetData: mockValidPolicyLinkData }
       const validator = new Validator(sheetConfig)
-      await expect(validator.validateAdditionalCriteria(mockBrcs)).resolves.toBe(true)
+      await expect(validator.validatePolicyLinks(mockBrcs)).resolves.toBe(true)
     })
   })
 })
