@@ -13,14 +13,13 @@ const ManagerDao = require('./ManagerDao')
 
 class Manager {
   constructor({
-    projectId, pulseCore, sheetData, sheetName, timestamp, hashType = 'ptps'
+    projectId, pulseCore, sheetData, timestamp, hashType = 'ptps'
   }) {
 
     this.pulseCore = pulseCore
     this.projectId = ObjectId(projectId)
 
     this.sheetData = sheetData
-    this.sheetName = sheetName
     this.managerDao = new ManagerDao({ db: pulseCore })
 
     // create JS Date Object (which only stores dates in absolute UTC time) as the UTC equivalent of isoShortString in New York time
@@ -86,22 +85,17 @@ class Manager {
     return result
   }
 
-  async upsertOrgTpHistory() {
+  async initiateUpsertToOrgTpHistory() {
     // 1.  wait on setup steps to complete
     await this.setupHashes()
 
     // 2. use hashes made during setup to getPermittedOps
     const permittedOps = await this.getPermittedOps()
 
-    // 3. run upsert logic
-    const ops = permittedOps
-      .map(({ findObj, setObj }) => (
-        this.pulseCore
-          .collection('organizations.treatmentPlans.history')
-          .updateOne(findObj, setObj, { upsert: true })
-      ))
+    // 3. Upsert data based on allowed operations
+    const upsertResult = await this.managerDao.upsertOrgTpHistory(permittedOps)
 
-    return Promise.all(ops)
+    return upsertResult
   }
 }
 
