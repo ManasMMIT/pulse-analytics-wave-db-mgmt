@@ -34,30 +34,25 @@ class Manager {
     this.timestamp = zonedTimeToUtc(timestamp, DEFAULT_TIMEZONE)
   }
 
-  async setupHashes() {
-    /*
-      ? Note:
-      Getting a hash is split into two parts for performance benefits
-
-      1. Fetch appropriate date
-      2. Group hash by desired fields
-    */
-    //
-
-    const [
-      orgs,
-      enrichedPtps,
-      qualityOfAccesses,
-    ] = await Promise.all([
-      this.managerDao.getOrgsOp(),
-      this.managerDao.getEnrichedPtps(),
-      this.managerDao.getAccessesOp(),
-    ])
-
+  async setOrgsHashBySlug(setOrgs) {
+    const orgs = setOrgs || await this.managerDao.getOrgsOp()
     this.orgsHashBySlug = _.keyBy(orgs, 'slug')
+  }
 
+  async setEnrichedPtps(setEnrichedPtps) {
+    const enrichedPtps = setEnrichedPtps || await this.managerDao.getEnrichedPtps()
     this.enrichedPtpsByCombo = _.groupBy(enrichedPtps, this.payerCombinationHasher)
+  }
+
+  async setQualityOfAccessHash(setQualityOfAccesses) {
+    const qualityOfAccesses = setQualityOfAccesses || await this.managerDao.getAccessesOp()
     this.qualityOfAccessHash = _.keyBy(qualityOfAccesses, 'access')
+  }
+
+  async setupHashes() {
+    await this.setOrgsHashBySlug()
+    await this.setEnrichedPtps()
+    await this.setQualityOfAccessHash()
   }
 
   getFilteredAndEnrichedSheetData() {
