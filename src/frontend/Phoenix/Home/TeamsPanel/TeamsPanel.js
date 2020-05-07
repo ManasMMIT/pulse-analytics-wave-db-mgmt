@@ -1,7 +1,7 @@
 import React from 'react'
 import { useQuery } from '@apollo/react-hooks'
 
-import Panel from '../../shared/Panel'
+import Panel from '../../../components/Panel'
 import CreateButton from './CreateButton'
 import UpdateButton from './UpdateButton'
 import DeleteButton from './DeleteButton'

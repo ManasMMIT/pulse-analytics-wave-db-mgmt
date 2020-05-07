@@ -1,6 +1,5 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom'
-import _ from 'lodash'
 import styled from '@emotion/styled'
 import { transparentize } from 'polished'
 
@@ -88,51 +87,60 @@ const dropdownActiveLinkStyle = {
   cursor: 'pointer',
 }
 
-const ORDERED_MASTER_LIST_ITEMS = [
-  'Treatment Plans',
-  'Indications',
-  'Regimens',
-  'Lines',
-  'Products',
-  'Manufacturers',
-]
-
-const getNavLink = label => (
-  <StyledNavLink
-    key={`nav-link:${label}`}
-    style={inactiveLinkStyle}
-    activeStyle={activeLinkStyle}
-    to={`/orion/lists/${_.kebabCase(label)}`}
-  >
-    {label}
-  </StyledNavLink>
-)
-
 const getToolItemPath = (tool, item) => {
-  return `/orion/lists/tools/${tool}/${item}`
+  return `/orion/organizations/${tool}/${item}`
 }
 
-const linkConfig = [
-  { label: 'Query Tool', link: '/orion/data-management/query' },
-  { label: 'New Query Tool', link: '/orion/data-management/new-query' },
-  { label: 'Suggested Questions', link: '/orion/data-management/questions' },
-  {
-    label: 'Sheet Management',
-    link: '/orion/data-management/sheet-management',
-  },
-  {
-    label: 'Business Object Management',
-    link: '/orion/data-management/bo-management',
-  },
-  { label: 'New Import Tool', link: '/orion/data-management/new-import' },
-  { label: 'Old Import Tool', link: '/orion/data-management/import' },
+const QUERY_LINKS_CONFIG = [
+  { label: 'Query Tool', link: '/orion/query/tool' },
+  { label: 'Query Tool Demo', link: '/orion/query/tool-demo' },
+  { label: 'Suggested Questions', link: '/orion/query/questions' },
+]
+
+const EXCEL_LINKS_CONFIG = [
+  { label: 'Import Sheets', link: '/orion/excel/import-sheets' },
   {
     label: 'Export Custom Data',
-    link: '/orion/data-management/export-custom-data',
+    link: '/orion/excel/export-custom-data',
   },
+]
+
+const PRODUCT_INDICATION_LINKS_CONFIG = [
+  {
+    label: 'Phoenix Treatment Plans',
+    link: '/orion/configuration/products-indications/phoenix-treatment-plans',
+  },
+  {
+    label: 'Indications',
+    link: '/orion/configuration/products-indications/indications',
+  },
+  {
+    label: 'Regimens',
+    link: '/orion/configuration/products-indications/regimens',
+  },
+  {
+    label: 'Products',
+    link: '/orion/configuration/products-indications/products',
+  },
+  {
+    label: 'Lines',
+    link: '/orion/configuration/products-indications/lines',
+  },
+]
+
+const ADMIN_SETTINGS_LINKS_CONFIG = [
+  {
+    label: 'Business Object Management',
+    link: '/orion/configuration/admin-settings/bo-management',
+  },
+  {
+    label: 'Sheet Management',
+    link: '/orion/configuration/admin-settings/sheet-management',
+  },
+  // { label: 'Payer Projects', link: '/orion/configuration/admin-settings/payer-projects' },
   { label: 'Payer Projects', link: '/orion/data-management/payer-projects' },
-  { label: 'Add Source Node', link: '/orion/data-management/add-source-node' },
-  { label: 'Edit Role Node', link: '/orion/data-management/edit-role-node' },
+  { label: 'Add Source Node', link: '/orion/configuration/admin-settings/add-source-node' },
+  { label: 'Edit Role Node', link: '/orion/configuration/admin-settings/edit-role-node' },
 ]
 
 const renderStyledNavLink = ({ label, link }) => (
@@ -147,20 +155,18 @@ const renderStyledNavLink = ({ label, link }) => (
 )
 
 const Sidebar = () => {
-  const masterListItems = ORDERED_MASTER_LIST_ITEMS.map(getNavLink)
-
   return (
     <Wrapper>
       <OrionHeader>
         <OrionLogo src="https://res.cloudinary.com/pulsedatatools/image/upload/v1573837414/polaris/icons/orion-1-color.svg" />
         Orion DB
       </OrionHeader>
-      <Header>Data Management</Header>
-      {linkConfig.map(renderStyledNavLink)}
-      <Header>MASTER LISTS</Header>
-      {masterListItems}
+      <Header>Query</Header>
+      {QUERY_LINKS_CONFIG.map(renderStyledNavLink)}
+      <Header>Excel</Header>
+      {EXCEL_LINKS_CONFIG.map(renderStyledNavLink)}
       <div>
-        <Header>TOOL MASTER LISTS</Header>
+        <Header>Organizations</Header>
         <StyledDropdown
           style={inactiveLinkStyle}
           label={'Alternative Payment Models'}
@@ -219,6 +225,25 @@ const Sidebar = () => {
           >
             Accounts
           </StyledNavLink>
+        </StyledDropdown>
+      </div>
+      <div>
+        <Header>Configuration</Header>
+        <StyledDropdown
+          style={inactiveLinkStyle}
+          label={'Products + Indications'}
+        >
+          <div style={{ display: 'flex', flexDirection: 'column' }}>
+            {PRODUCT_INDICATION_LINKS_CONFIG.map(renderStyledNavLink)}
+          </div>
+        </StyledDropdown>
+        <StyledDropdown
+          style={inactiveLinkStyle}
+          label={'Admin Settings'}
+        >
+          <div style={{ display: 'flex', flexDirection: 'column' }}>
+            {ADMIN_SETTINGS_LINKS_CONFIG.map(renderStyledNavLink)}
+          </div>
         </StyledDropdown>
       </div>
     </Wrapper>

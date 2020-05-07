@@ -17,6 +17,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - `Orion`: Line Master List Panel w/ CRUD
 
+### Changed
+- `Orion`: Restructure frontend code to match new sidebar structure
+
 ## [2.3.0] - Started: 4-22-20
 
 ### Changed

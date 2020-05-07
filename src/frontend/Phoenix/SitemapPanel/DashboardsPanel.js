@@ -9,7 +9,7 @@ import {
 
 import { SELECT_DASHBOARD } from '../../api/mutations'
 
-import Panel from '../shared/Panel'
+import Panel from '../../components/Panel'
 import ButtonGroup from './shared/ButtonGroup'
 
 import {
