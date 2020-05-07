@@ -6,12 +6,10 @@ const { zonedTimeToUtc } = require('date-fns-tz')
 const DEFAULT_TIMEZONE = require('../../../../../../../utils/defaultTimeZone')
 
 const {
-  ENRICH_ORG_TP_PIPELINE,
-} = require('../agg-pipelines')
-
-const {
   payerCombinationHasher
 } = require('../../utils')
+
+const ManagerDao = require('./ManagerDao')
 
 class Manager {
   constructor({
@@ -23,33 +21,13 @@ class Manager {
 
     this.sheetData = sheetData
     this.sheetName = sheetName
+    this.managerDao = new ManagerDao({ db: pulseCore })
 
     // create JS Date Object (which only stores dates in absolute UTC time) as the UTC equivalent of isoShortString in New York time
     this.setTimeZone(timestamp)
 
     // Set default hasher 
     this.payerCombinationHasher = payerCombinationHasher(hashType)
-  }
-
-  async getOrgsOp() {
-    return await this.pulseCore
-      .collection('organizations')
-      .find({ type: 'Payer' })
-      .toArray()
-  }
-
-  async getEnrichedPtps() {
-    return await this.pulseCore
-      .collection('organizations.treatmentPlans')
-      .aggregate(ENRICH_ORG_TP_PIPELINE)
-      .toArray()
-  }
-
-  async getAccessesOp() {
-    return await this.pulseCore
-      .collection('qualityOfAccessScore')
-      .find()
-      .toArray()
   }
 
   setTimeZone(timestamp) {
@@ -71,9 +49,9 @@ class Manager {
       enrichedPtps,
       qualityOfAccesses,
     ] = await Promise.all([
-      this.getOrgsOp(),
-      this.getEnrichedPtps(),
-      this.getAccessesOp(),
+      this.managerDao.getOrgsOp(),
+      this.managerDao.getEnrichedPtps(),
+      this.managerDao.getAccessesOp(),
     ])
 
     this.orgsHashBySlug = _.keyBy(orgs, 'slug')

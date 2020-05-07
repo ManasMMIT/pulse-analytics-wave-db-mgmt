@@ -6,9 +6,7 @@ const {
 
 class ManagerDao {
   constructor({ db }) {
-
     this.db = db
-
   }
 
   async getOrgsOp() {
@@ -37,7 +35,7 @@ class ManagerDao {
 
   async getAccessesOp() {
     try {
-      return this.db
+      return await this.db
         .collection('qualityOfAccessScore')
         .find()
         .toArray()
