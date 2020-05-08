@@ -1,3 +1,5 @@
+const _ = require('lodash')
+
 const getIsQualityAccessSheet = sheetName => /Quality of Access/.test(sheetName)
 
 const getIsAdditionalCriteriaSheet = sheetName => /Additional Criteria/.test(sheetName)
@@ -23,9 +25,15 @@ const payerCombinationHasher = key => (datum) => {
   return hasher.join('|')
 }
 
+const getAllowedComboHashes = (allowedOrgTpCombos, hashType) => {
+  const hasher = payerCombinationHasher(hashType)
+  return _.keyBy(allowedOrgTpCombos, hasher)
+}
+
 module.exports = {
   getIsQualityAccessSheet,
   getIsAdditionalCriteriaSheet,
   getIsPolicyLinksSheet,
   payerCombinationHasher,
+  getAllowedComboHashes,
 }

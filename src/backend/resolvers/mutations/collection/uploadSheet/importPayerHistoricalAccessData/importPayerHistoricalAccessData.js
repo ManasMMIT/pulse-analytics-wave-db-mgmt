@@ -2,9 +2,18 @@ const {
   getIsQualityAccessSheet,
   getIsAdditionalCriteriaSheet,
   getIsPolicyLinksSheet,
+  getAllowedComboHashes
 } = require('./utils')
 const SheetToCore = require('./SheetToCore/ManagerFactory')
-const Validator = require('./SheetToCore/Validator')
+const {
+  validateQualityOfAccess,
+  validateAdditionalCriteria,
+  validatePolicyLinks,
+} = require('./SheetToCore/validatePayerHistoricalAccessData')
+const {
+  getProjectOrgTpsEnrichedPipeline,
+} = require('./SheetToCore/agg-pipelines')
+const _ = require('lodash')
 // const CoreToDev = require('./CoreToDev')
 
 // ? FOR FUTURE: random global tracker to indicate when to trigger combo materialization functions
@@ -31,27 +40,30 @@ const importPayerHistoricalAccessData = async (
   const isAdditionalCriteriaSheet = getIsAdditionalCriteriaSheet(sheetName)
   const isPolicyLinksSheet = getIsPolicyLinksSheet(sheetName)
 
-  const validatorConfig = {
+  const allowedOrgTpCombos = await pulseCoreDb
+    .collection('tdgProjects')
+    .aggregate(getProjectOrgTpsEnrichedPipeline(projectId))
+    .toArray()
+
+  const projectConfig = {
     sheetData: data,
+    sheetName,
+    timestamp,
     projectId,
     pulseCore: pulseCoreDb,
   }
 
-  const projectConfig = {
-    ...validatorConfig,
-    sheetName,
-    timestamp
-  }
-
-  const sheetValidator = new Validator(validatorConfig)
   const sheetManager = new SheetToCore(projectConfig).getManager(sheetName)
 
   if (isQualityAccessSheet) {
-    await sheetValidator.validateQualityOfAccess()
+    const allowedPtps = getAllowedComboHashes(allowedOrgTpCombos, 'ptps')
+    validateQualityOfAccess({ sheetData: data, allowedPtps })
   } else if (isAdditionalCriteriaSheet) {
-    await sheetValidator.validateAdditionalCriteria()
+    const allowedPtps = getAllowedComboHashes(allowedOrgTpCombos, 'ptps')
+    validateAdditionalCriteria({ sheetData: data, allowedPtps })
   } else if (isPolicyLinksSheet) {
-    await sheetValidator.validatePolicyLinks()
+    const allowedBrcs = getAllowedComboHashes(allowedOrgTpCombos, 'brcs')
+    validatePolicyLinks({ sheetData: data, allowedBrcs })
   }
 
   await sheetManager.upsertOrgTpHistory()
