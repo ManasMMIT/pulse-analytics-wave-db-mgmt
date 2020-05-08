@@ -217,6 +217,13 @@ const Sidebar = () => {
           <StyledNavLink
             style={dropdownInactiveLinkStyle}
             activeStyle={dropdownActiveLinkStyle}
+            to={getToolItemPath('payer', 'book-of-business')}
+          >
+            Book of Business
+          </StyledNavLink>
+          <StyledNavLink
+            style={dropdownInactiveLinkStyle}
+            activeStyle={dropdownActiveLinkStyle}
             to={getToolItemPath('payer', 'scores')}
           >
             Quality of Access Scores

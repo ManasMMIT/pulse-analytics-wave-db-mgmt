@@ -1,5 +1,14 @@
 import gql from 'graphql-tag'
 
+export const GET_BOOKS = gql`
+  query getBooks {
+    books {
+      _id
+      name
+    }
+  }
+`
+
 export const GET_COVERAGES = gql`
   query getCoverages {
     coverages {
