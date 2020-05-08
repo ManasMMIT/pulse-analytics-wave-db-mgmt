@@ -44,6 +44,8 @@ const queries = gql`
 
     lines: [Line]
 
+    populations: [Population]
+
     regionalTargetingData(input: JSON): JSON
 
     cMsOrgPrimarySpecialtyCounts(orgPacId: String): JSON
@@ -275,6 +277,11 @@ const queries = gql`
     coverage: String
     line: String
     population: String
+  }
+
+  type Population {
+    _id: ID!
+    name: String
   }
 
   type Line {

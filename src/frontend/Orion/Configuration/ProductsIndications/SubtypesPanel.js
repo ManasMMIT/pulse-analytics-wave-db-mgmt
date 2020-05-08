@@ -1,35 +1,41 @@
 import React from 'react'
 import { useQuery } from '@apollo/react-hooks'
 import _ from 'lodash'
-
-import Panel from '../../../../components/Panel'
-import ModalButtonWithForm from '../../../shared/ModalButtonWithForm'
-import DeleteButton from '../../../shared/DeleteButton'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faEdit } from "@fortawesome/free-solid-svg-icons"
 import { transparentize } from 'polished'
 
-import { StyledInput, FormLabel, createObjectModalStyle, defaultPanelItemStyle } from '../../../Organizations/styledComponents'
-
+import Panel from 'frontend/components/Panel'
 import {
   GET_SOURCE_TREATMENT_PLANS,
-  GET_LINES,
-} from '../../../../api/queries'
+  GET_POPULATIONS,
+} from 'frontend/api/queries'
 
 import {
-  DELETE_LINE,
-  CREATE_LINE,
-  UPDATE_LINE,
-} from '../../../../api/mutations'
+  DELETE_POPULATION,
+  CREATE_POPULATION,
+  UPDATE_POPULATION,
+} from 'frontend/api/mutations'
 
-import Color from '../../../../utils/color'
-import Spacing from '../../../../utils/spacing'
+import Color from 'frontend/utils/color'
+import Spacing from 'frontend/utils/spacing'
+
+import ModalButtonWithForm from '../../shared/ModalButtonWithForm'
+import DeleteButton from '../../shared/DeleteButton'
+
+import {
+  StyledInput,
+  FormLabel,
+  createObjectModalStyle,
+  defaultPanelItemStyle
+} from '../../Organizations/styledComponents'
+
 
 const editIcon = <FontAwesomeIcon size="lg" icon={faEdit} />
 
-const CREATE_BUTTON_TXT = 'Create Line'
+const CREATE_BUTTON_TXT = 'Create Subtype'
 
-const CREATE_MODAL_TITLE = 'Create New Line'
+const CREATE_MODAL_TITLE = 'Create New Subtype'
 
 const buttonStyle = {
   background: Color.PRIMARY,
@@ -58,14 +64,14 @@ const headerChildren = (
       buttonLabel={CREATE_BUTTON_TXT}
       buttonStyle={buttonStyle}
       modalStyle={createObjectModalStyle}
-      mutationDoc={CREATE_LINE}
-      refetchQueries={[{ query: GET_LINES }]}
+      mutationDoc={CREATE_POPULATION}
+      refetchQueries={[{ query: GET_POPULATIONS }]}
       getInputFields={getInputFields}
     />
   </div>
 )
 
-const getButtonGroupCallback = treatmentPlansByLine => line => (
+const getButtonGroupCallback = treatmentPlansByPopulation => population => (
   <>
     <span
       style={{
@@ -76,37 +82,37 @@ const getButtonGroupCallback = treatmentPlansByLine => line => (
         color: Color.ORION,
       }}
     >
-      {`(${(treatmentPlansByLine[line.name] || []).length} Treatment Plans)`}
+      {`(${(treatmentPlansByPopulation[population.name] || []).length} Treatment Plans)`}
     </span>
     <ModalButtonWithForm
-      modalTitle="Edit Line"
+      modalTitle="Edit Subtype"
       buttonLabel={editIcon}
       buttonStyle={{ border: 'none', background: 'none', color: '#b6b9bc' }}
       modalStyle={createObjectModalStyle}
-      data={{ input: line }}
-      mutationDoc={UPDATE_LINE}
-      refetchQueries={[{ query: GET_LINES }]}
+      data={{ input: population }}
+      mutationDoc={UPDATE_POPULATION}
+      refetchQueries={[{ query: GET_POPULATIONS }]}
       getInputFields={getInputFields}
     />
     <DeleteButton
-      itemId={line._id}
-      mutationDoc={DELETE_LINE}
-      refetchQueries={[{ query: GET_LINES }]}
+      itemId={population._id}
+      mutationDoc={DELETE_POPULATION}
+      refetchQueries={[{ query: GET_POPULATIONS }]}
     />
   </>
 )
 
 
-const LinesPanel = () => {
+const SubtypesPanel = () => {
   const { data, loading } = useQuery(GET_SOURCE_TREATMENT_PLANS)
 
   if (loading) return null
 
   const { treatmentPlans } = data
 
-  const treatmentPlansByLine = _.groupBy(treatmentPlans, 'line')
+  const treatmentPlansByPopulation = _.groupBy(treatmentPlans, 'population')
 
-  const buttonGroupCallback = getButtonGroupCallback(treatmentPlansByLine)
+  const buttonGroupCallback = getButtonGroupCallback(treatmentPlansByPopulation)
 
   const panelItemConfig = {
     style: defaultPanelItemStyle,
@@ -116,18 +122,18 @@ const LinesPanel = () => {
 
   return (
     <Panel
-      title="Lines"
+      title="Subtypes"
       headerChildren={headerChildren}
       headerContainerStyle={{
         background: Color.WHITE,
         borderBottom: `1px solid ${transparentize(0.9, Color.BLACK)}`
       }}
       queryDocs={{
-        fetchAllQueryProps: { query: GET_LINES },
+        fetchAllQueryProps: { query: GET_POPULATIONS },
       }}
       panelItemConfig={panelItemConfig}
     />
   )
 }
 
-export default LinesPanel
+export default SubtypesPanel

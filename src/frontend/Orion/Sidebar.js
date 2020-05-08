@@ -123,6 +123,10 @@ const PRODUCT_INDICATION_LINKS_CONFIG = [
     link: '/orion/configuration/products-indications/products',
   },
   {
+    label: 'Subtypes',
+    link: '/orion/configuration/products-indications/subtypes',
+  },
+  {
     label: 'Lines',
     link: '/orion/configuration/products-indications/lines',
   },

@@ -1,5 +1,14 @@
 import gql from 'graphql-tag'
 
+export const GET_POPULATIONS = gql`
+  query getPopulations {
+    populations {
+      _id
+      name
+    }
+  }
+`
+
 export const GET_LINES = gql`
   query getLines {
     lines {
