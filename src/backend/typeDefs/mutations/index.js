@@ -19,6 +19,7 @@ const email = require('./email')
 const payerProjects = require('./payerProject')
 
 const businessObject = require('./businessObject')
+const coverage = require('./coverage')
 const population = require('./population')
 const line = require('./line')
 
@@ -119,6 +120,10 @@ const mutationType = gql`
     updateBusinessObject(input: UpdateBusinessObjectInput!): BusinessObject
     updateBusinessObjectField(input: UpdateBusinessObjectFieldInput!): BoField
 
+    deleteCoverage(input: DeleteCoverageInput!): DeleteCoveragePayload
+    createCoverage(input: CreateCoverageInput!): CreateCoveragePayload
+    updateCoverage(input: UpdateCoverageInput!): UpdateCoveragePayload
+
     deletePopulation(input: DeletePopulationInput!): DeletePopulationPayload
     createPopulation(input: CreatePopulationInput!): CreatePopulationPayload
     updatePopulation(input: UpdatePopulationInput!): UpdatePopulationPayload
@@ -151,6 +156,7 @@ module.exports = [
   ...payerProjects,
 
   ...businessObject,
+  ...coverage,
   ...line,
   ...population,
 ]

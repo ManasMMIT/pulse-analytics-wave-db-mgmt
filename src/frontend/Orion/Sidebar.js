@@ -123,6 +123,10 @@ const PRODUCT_INDICATION_LINKS_CONFIG = [
     link: '/orion/configuration/products-indications/products',
   },
   {
+    label: 'Coverage Types',
+    link: '/orion/configuration/products-indications/coverage-types',
+  },
+  {
     label: 'Subtypes',
     link: '/orion/configuration/products-indications/subtypes',
   },

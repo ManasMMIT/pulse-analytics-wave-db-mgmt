@@ -1,5 +1,14 @@
 import gql from 'graphql-tag'
 
+export const GET_COVERAGES = gql`
+  query getCoverages {
+    coverages {
+      _id
+      name
+    }
+  }
+`
+
 export const GET_POPULATIONS = gql`
   query getPopulations {
     populations {

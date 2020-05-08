@@ -42,6 +42,8 @@ const queries = gql`
 
     treatmentPlans: [TreatmentPlan]
 
+    coverages: [Coverage]
+
     lines: [Line]
 
     populations: [Population]
@@ -277,6 +279,11 @@ const queries = gql`
     coverage: String
     line: String
     population: String
+  }
+
+  type Coverage {
+    _id: ID!
+    name: String
   }
 
   type Population {

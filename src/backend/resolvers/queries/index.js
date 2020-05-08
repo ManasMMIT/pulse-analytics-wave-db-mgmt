@@ -17,6 +17,7 @@ const businessObjects = require('./businessObjects')
 const workbooks = require('./workbooks')
 const treatmentPlans = require('./treatmentPlans')
 const regionalTargetingData = require('./regionalTargetingData')
+const coverages = require('./coverages')
 const populations = require('./populations')
 const lines = require('./lines')
 
@@ -43,6 +44,7 @@ module.exports = {
   businessObjects,
   workbooks,
   treatmentPlans,
+  coverages,
   populations,
   lines,
   ...payerProjects,

@@ -5,6 +5,7 @@ import PhoenixTreatmentPlans from './PhoenixTreatmentPlans'
 import IndicationsPanel from './IndicationsPanel'
 import RegimensPanel from './RegimensPanel'
 import ProductsPanel from './ProductsPanel'
+import CoveragesPanel from './CoveragesPanel'
 import SubtypesPanel from './SubtypesPanel'
 import LinesPanel from './LinesPanel'
 
@@ -25,6 +26,10 @@ const ProductsIndications = () => (
     <Route
       path={'/orion/configuration/products-indications/products'}
       component={ProductsPanel}
+    />
+    <Route
+      path={'/orion/configuration/products-indications/coverage-types'}
+      component={CoveragesPanel}
     />
     <Route
       path={'/orion/configuration/products-indications/subtypes'}
