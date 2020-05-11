@@ -1,8 +1,8 @@
-const validate = require('../../utils/validate')
-const formatAjvErrors = require('../../utils/formatAjvErrors')
+const validate = require('..')
+const formatAjvErrors = require('../../formatAjvErrors')
 const _ = require('lodash')
 
-const validProgramOverviewSanitizationRes = require('../sanitizeSheetData/mockData/output/sanitized-program-overview')
+const validProgramOverviewSanitizationRes = require('../../../tests/sanitizeSheetData/mockData/output/sanitized-program-overview')
 const programOverviewSheetConfig = require('./mockData/input/program-overview-sheet-config')
 const coercedProgramOverviewDataOutput = require('./mockData/output/coerced-valid-program-overview')
 
@@ -93,8 +93,8 @@ const {
   MISSING_COLS_formattedErrors,
 } = require('./mockData/output/missingColsValidationOutput')
 
-jest.mock('../../utils/validate/initializeAjv/addLocationCustomKeyword/getGeocodingData')
-const getGeocodingData = require('../../utils/validate/initializeAjv/addLocationCustomKeyword/getGeocodingData')
+jest.mock('../initializeAjv/addLocationCustomKeyword/getGeocodingData')
+const getGeocodingData = require('../initializeAjv/addLocationCustomKeyword/getGeocodingData')
 
 const {
   LOCATION_INPUT_1_dataAndSkippedRows,
