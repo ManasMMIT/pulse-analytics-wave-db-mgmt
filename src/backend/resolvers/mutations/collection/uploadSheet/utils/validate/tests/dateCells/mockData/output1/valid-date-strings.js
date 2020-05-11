@@ -1,5 +1,5 @@
 const { zonedTimeToUtc } = require('date-fns-tz')
-const DEFAULT_TIMEZONE = require('../../../../../../../../../utils/defaultTimeZone')
+const DEFAULT_TIMEZONE = require('../../../../../../../../../../utils/defaultTimeZone')
 
 module.exports = [
   {
