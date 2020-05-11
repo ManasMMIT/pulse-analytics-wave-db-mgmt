@@ -1,6 +1,4 @@
-import React, { useState } from 'react'
-import { useRouteMatch } from 'react-router-dom'
-import { useQuery } from '@apollo/react-hooks'
+import React, { useState, useEffect } from 'react'
 import styled from '@emotion/styled'
 import _ from 'lodash'
 
@@ -11,11 +9,7 @@ import TablePagination from '@material-ui/core/TablePagination'
 import TreatmentPlansTableHead from './TreatmentPlansTableHead'
 import TreatmentPlansTableBody from './TreatmentPlansTableBody'
 
-import { MOCK_DATA, TABLE_HEADER_DATA } from '../mock-data'
-
-import {
-  GET_PAYER_PROJECT_PTPS,
-} from '../../../../../../api/queries'
+import { TABLE_HEADER_CONFIG } from '../utils'
 
 const TableWrapper = styled.section({
   display: 'flex',
@@ -35,32 +29,16 @@ const sortData = ({ data, order, key }) => {
   return _.orderBy(data, [datum => datum[key].toLowerCase()], [order])
 }
 
-const TreatmentPlansTable = ({
-  data = MOCK_DATA,
-  checkbox,
-}) => {
-  // const {
-  //   params: {
-  //     projectId,
-  //   }
-  // } = useRouteMatch()
-
-  // const { data: PTPS, loading: loadingPTPS } = useQuery(
-  //   GET_PAYER_PROJECT_PTPS,
-  //   {
-  //     variables: {
-  //       input: {
-  //         projectId,
-  //       }
-  //     }
-  //     }
-  // )
-
+const TreatmentPlansTable = ({ data, checkbox }) => {
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(10)
   const [selected, setSelected] = useState(new Set([]))
   const [order, setOrder] = useState('asc')
   const [tableData, setTableData] = useState(data)
+
+  useEffect(() => {
+    setTableData(data)
+  }, [data])
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage)
@@ -80,7 +58,7 @@ const TreatmentPlansTable = ({
   }
 
   const isSelected = id => selected.has(id)
-  const isAllSelected = selected.size === MOCK_DATA.length
+  const isAllSelected = selected.size === data.length
 
   const handleCheckboxClick = (event, id) => {
     const newSelectedSet = new Set([...selected])
@@ -110,18 +88,16 @@ const TreatmentPlansTable = ({
 
   return (
     <TableWrapper>
-      {
-        checkbox && (
-          <section style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <h2 style={{ padding: 12 }}>
-              {selected.size} Payer Treatments Selected
-            </h2>
-            {selected.size > 0 && (
-              <PlaceholderButton>Remove from Project</PlaceholderButton>
-            )}
-          </section>
-        )
-      }
+      {checkbox && (
+        <section style={{ display: 'flex', justifyContent: 'space-between' }}>
+          <h2 style={{ padding: 12 }}>
+            {selected.size} Payer Treatments Selected
+          </h2>
+          {selected.size > 0 && (
+            <PlaceholderButton>Remove from Project</PlaceholderButton>
+          )}
+        </section>
+      )}
       <TableContainer style={{ height: 500 }}>
         <Table stickyHeader aria-label="sticky table">
           <TreatmentPlansTableHead
@@ -130,7 +106,7 @@ const TreatmentPlansTable = ({
             handleColumnSort={handleColumnSort}
             isAllSelected={isAllSelected}
             order={order}
-            headerData={TABLE_HEADER_DATA}
+            headerData={TABLE_HEADER_CONFIG}
           />
           <TreatmentPlansTableBody
             checkbox={checkbox}
@@ -139,14 +115,14 @@ const TreatmentPlansTable = ({
             rowsPerPage={rowsPerPage}
             handleCheckboxClick={handleCheckboxClick}
             isSelected={isSelected}
-            headerData={TABLE_HEADER_DATA}
+            headerData={TABLE_HEADER_CONFIG}
           />
         </Table>
       </TableContainer>
       <TablePagination
         rowsPerPageOptions={[10, 25, 100]}
         component="div"
-        count={MOCK_DATA.length}
+        count={data.length}
         rowsPerPage={rowsPerPage}
         page={page}
         onChangePage={handleChangePage}

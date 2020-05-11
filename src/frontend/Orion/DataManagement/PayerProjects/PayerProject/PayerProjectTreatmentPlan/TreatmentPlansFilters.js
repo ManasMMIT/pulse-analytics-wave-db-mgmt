@@ -1,39 +1,56 @@
 import React from 'react'
+import styled from '@emotion/styled'
+import Select from 'react-select'
 
-import FieldsSectionCard from '../../../../../components/FieldsSectionCard'
+import Color from '../../../../../utils/color'
+import Spacing from '../../../../../utils/spacing'
+import FontSpace from '../../../../../utils/fontspace'
 
-import { TABLE_HEADER_DATA } from './mock-data'
-
-const fieldsContainerStyle = {
+const Wrapper = styled.div({
   display: 'flex',
   flexWrap: 'wrap',
+  padding: `${Spacing.S4} ${Spacing.S4} 0`,
+  background: Color.LIGHT_BLUE_GRAY_1,
+  borderRadius: 4,
+})
+
+const SelectContainer = styled.div({
+  width: '25%',
+  padding: `0 ${Spacing.S3} ${Spacing.S4}`,
+  ...FontSpace.FS3,
+})
+
+const colorStyles = {
+  menu: provided => ({
+    ...provided,
+    zIndex: 3,
+  }),
 }
 
-// ! remove mock data
-const TreatmentPlansFilters = () => {
-  const fieldsConfig = TABLE_HEADER_DATA.map(item => ({
-    ...item,
-    inputComponent: 'Select',
-    inputProps: {
-      type: 'string',
-      isMulti: true,
-      placeholder: item.label,
-      options: [
-        { label: 'Aetna', value: 'aetna' },
-        { label: 'Aetna 2', value: 'aetna-2' },
-        { label: 'Aetna 3', value: 'aetna-3' },
-      ],
-    },
-  }))
+const TreatmentPlansFilters = ({
+  selectedFilters,
+  filtersConfig,
+  setFilter,
+}) => {
+  const filters = filtersConfig.map(({ options, value, label }) => {
+    const { selectedVal } = selectedFilters[value]
+    const placeholder = `${label}(s)`
 
-  return (
-    <FieldsSectionCard
-      label={'Filters'}
-      fields={fieldsConfig}
-      fieldStyle={{ width: 250, margin: 8 }}
-      fieldsContainerStyle={fieldsContainerStyle}
-    />
-  )
+    return (
+      <SelectContainer key={`${value}-multi-select`}>
+        <Select
+          placeholder={placeholder}
+          isMulti
+          value={selectedVal}
+          options={options}
+          onChange={e => setFilter(e, value)}
+          styles={colorStyles}
+        />
+      </SelectContainer>
+    )
+  })
+
+  return <Wrapper>{filters}</Wrapper>
 }
 
 export default TreatmentPlansFilters
