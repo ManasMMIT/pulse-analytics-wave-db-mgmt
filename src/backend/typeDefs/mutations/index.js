@@ -24,6 +24,8 @@ const coverage = require('./coverage')
 const population = require('./population')
 const line = require('./line')
 
+const importWorkbook = require('./importWorkbook')
+
 const mutationType = gql`
   type Mutation {
     createUser(input: CreateUserInput!): CreateUserPayload
@@ -82,7 +84,7 @@ const mutationType = gql`
     deleteQualityOfAccessScore(input: DeleteQualityOfAccessScoreInput!): DeleteQualityOfAccessScorePayload
 
     uploadCollection(input: UploadCollectionInput!): JSON
-    uploadSheet(input: [UploadSheetInput!]!): JSON
+    importWorkbook(input: [ImportWorkbookInput!]!): JSON
     backupExport(input: BackupExportInput!): String
 
     sendToSubscribedUsers(input: SendToSubscribedUsersInput!): SendToSubscribedUsersPayload
@@ -165,4 +167,6 @@ module.exports = [
   ...coverage,
   ...line,
   ...population,
+
+  importWorkbook,
 ]

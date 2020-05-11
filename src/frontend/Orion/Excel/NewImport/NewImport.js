@@ -4,7 +4,7 @@ import _ from 'lodash'
 
 import Select from 'react-select'
 import Spinner from '../../../Phoenix/shared/Spinner'
-import { UPLOAD_SHEET } from '../../../api/mutations'
+import { IMPORT_WORKBOOK } from '../../../api/mutations'
 
 import { useMutation } from '@apollo/react-hooks'
 
@@ -34,8 +34,8 @@ const Import = () => {
   const [loading, setLoading] = useState(false)
   const [errors, setErrors] = useState(null)
 
-  const [uploadSheet] = useMutation(UPLOAD_SHEET, {
-    onCompleted: ({ uploadSheet: importFeedback }) => {
+  const [importWorkbook] = useMutation(IMPORT_WORKBOOK, {
+    onCompleted: ({ importWorkbook: importFeedback }) => {
       alert(importFeedback.join('\n'))
       setLoading(false)
     },
@@ -80,7 +80,7 @@ const Import = () => {
     const fileName = fileInputRef.current.files[0].name
     const fileNameWithoutExt = fileName.replace('.xlsx', '')
 
-    uploadSheet({
+    importWorkbook({
       variables: {
         input: [
           {
