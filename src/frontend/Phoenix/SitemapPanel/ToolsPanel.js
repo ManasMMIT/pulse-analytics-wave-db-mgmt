@@ -1,6 +1,6 @@
 import React from 'react'
 import ButtonGroup from './shared/ButtonGroup'
-import Panel from '../shared/Panel'
+import Panel from '../../components/Panel'
 
 import {
   GET_SOURCE_TOOLS,

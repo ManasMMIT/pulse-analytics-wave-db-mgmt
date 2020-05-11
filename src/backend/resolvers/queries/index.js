@@ -13,10 +13,18 @@ const testEmailGroups = require('./testEmailGroups')
 const alert = require('./alert')
 const opLogs = require('./opLogs')
 const bomSchema = require('./bomSchema')
+const businessObjects = require('./businessObjects')
 const workbooks = require('./workbooks')
 const treatmentPlans = require('./treatmentPlans')
+const regionalTargetingData = require('./regionalTargetingData')
+const books = require('./books')
+const coverages = require('./coverages')
+const populations = require('./populations')
+const lines = require('./lines')
 
 const payerProjects = require('./payerProjects')
+
+const cMsOrgPrimarySpecialtyCounts = require('./cMsOrgPrimarySpecialtyCounts')
 
 module.exports = {
   collections,
@@ -34,7 +42,14 @@ module.exports = {
   alert,
   opLogs,
   bomSchema,
+  businessObjects,
   workbooks,
   treatmentPlans,
+  books,
+  coverages,
+  populations,
+  lines,
   ...payerProjects,
+  regionalTargetingData,
+  cMsOrgPrimarySpecialtyCounts,
 }

@@ -7,6 +7,7 @@ const extraProjectionFields = {
   city: '$city',
   oncologistsCount: '$oncologistsCount',
   sitesCount: '$sitesCount',
+  groupPracticePacId: '$groupPracticePacId',
 }
 
 const providerOrganizations = async (

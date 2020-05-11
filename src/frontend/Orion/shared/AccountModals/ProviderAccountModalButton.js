@@ -11,7 +11,7 @@ import {
   GET_PROVIDER_ORGANIZATIONS,
   GET_PATHWAYS_ORGANIZATIONS,
   GET_APM_ORGANIZATIONS,
-} from '../../../api/queries'
+} from './../../../api/queries'
 
 import AccountModalButton from './AccountModalButton'
 
@@ -21,6 +21,7 @@ const ADDITIONAL_FIELDS = [
   { label: 'oncologists #', key: 'oncologistsCount', type: 'number' },
   { label: 'cancer center', key: 'providerCancerCenter' },
   { label: 'sites #', key: 'sitesCount', type: 'number' },
+  { label: 'Group Practice PAC ID', key: 'groupPracticePacId' },
 ]
 
 const ProviderAccountModalButton = ({

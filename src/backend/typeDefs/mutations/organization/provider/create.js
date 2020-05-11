@@ -10,6 +10,7 @@ const createProviderOrganizationTypeDefs = gql`
     city: String
     oncologistsCount: Int
     sitesCount: Int
+    groupPracticePacId: String
   }
 
   type CreateProviderOrganizationPayload {
@@ -22,6 +23,7 @@ const createProviderOrganizationTypeDefs = gql`
     city: String
     oncologistsCount: Int
     sitesCount: Int
+    groupPracticePacId: String
   }
 `
 

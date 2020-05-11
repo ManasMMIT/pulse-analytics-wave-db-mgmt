@@ -127,7 +127,6 @@ module.exports = async ({
         policyLink: policyLinkData[0].link,
         dateTracked: policyLinkData[0].dateTracked, // ? should dateTracked make it into core? not sure
         paLink: policyLinkData[0].paLink,
-        project: policyLinkData[0].project,
         siteLink: policyLinkData[0].siteLink,
       }
       : null
@@ -152,6 +151,13 @@ module.exports = async ({
 
     const accessScore = accessScoresGroupedByAccess[entryDoc.access] || []
 
+    let accessScoreFields = null
+    if (accessScore[0]) {
+      const { createdOn, ...rest } = accessScore[0]
+
+      accessScoreFields = rest
+    }
+
     const isoShortString = format(new Date(entryDoc.year, entryDoc.month - 1, 1), 'yyyy-MM-dd')
     // create JS Date Object (which only stores dates in absolute UTC time) as the UTC equivalent of isoShortString in New York time
     const timestamp = zonedTimeToUtc(isoShortString, DEFAULT_TIMEZONE)
@@ -165,20 +171,24 @@ module.exports = async ({
       ? orgTpIdHashVal[0]._id
       : null
 
+    const createdOn = new Date()
+
     const doc = {
       orgTpId,
       organizationId,
       treatmentPlanId,
-      accessData: accessScore[0] || null,
+      accessData: accessScoreFields,
       tierData: {
         tier: entryDoc.tier,
         tierRating: entryDoc.tierRating,
         tierTotal: entryDoc.tierTotal,
       },
       timestamp,
-      project: entryDoc.project,
+      projectId: entryDoc.project,
       policyLinkData: links,
-      additionalCriteriaData: entryDoc.additionalCriteria
+      additionalCriteriaData: entryDoc.additionalCriteria,
+      createdOn,
+      updatedOn: createdOn,
     }
 
     docs.push(doc)

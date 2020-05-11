@@ -12,10 +12,40 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Fixed** for any bug fixes.
 - **Security** in case of vulnerabilities.
 
-## [Unreleased] - Started: 4-7-20
+## [Unreleased] - Started: 4-30-20
+
+### Added
+- `Orion`: Line Master List Panel w/ CRUD
 
 ### Changed
+- `Polaris Backend`/`Node Scripts`: Added a `DB_CLUSTER_ENV` variable to have the API show which cluster it's connected to while not revealing the full connection string with the MongoDB password in it
+- `Orion`: Restructure frontend code to match new sidebar structure
+- `Import Tool`: Revise order in which imported data is processed; group ops for payer workbook import to avoid repetition
+
+## [2.3.0] - Started: 4-22-20
+
+### Added
+- `Orion`: Business Object Management Panels -- CRUD on fields and business objects.
+- `Orion`: Built CRUD functionality on business object references for fields in the Sheet Mgmt System (for dynamic validation against business objects)
+- `Orion`/`Import Tool`: Built out business object validation layer that overrides manual oneOf and allows for dynamic checking against master lists on import
+
+### Removed
+- `Polaris`: Removed step of generating `payerHistoricalCombinedData` on node script import of lives; wasn't ever actually needed on the side of lives import
+
+### Changed
+- `Orion`: Rebuilt regional targeting data export placard and backend to account for team permissions; can now export state breakdown and regional breakdown data as Excel
+
+## [2.2.0] - Started: 4-7-20
+
+### Added
+- `Orion`: Initial Payer Historical Lives Core to Dev materializations.
+- `Orion`: Payer project `updatePtps` and `removePtps`
+
+### Changed
+- `Node Scripts, Polaris`: Seeding of treatment plans, org.tps, etc., now uses access collections as entry, instead of a mix of additional criteria _and_ access.
 - `Orion`: Separate Lives and Access sections of historical uploadSheet resolver.
+- `Orion`: Improve Payer Historical Sheet to Core validation for each sheet type.
+- `Orion`: Payer project query resolver I/O changes -- no longer handling pagination on backend.
 
 ### Removed
 - `Polaris`: Removed deprecated `payerCombinedStateLives` usage across the repo: old import process, new import process, custom data export for regional targeting data

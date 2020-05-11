@@ -30,6 +30,7 @@ export const CREATE_PROVIDER_ORGANIZATION = gql`
       state
       city
       oncologistsCount
+      groupPracticePacId
     }
   }
 `
@@ -61,6 +62,7 @@ export const UPDATE_PROVIDER_ORGANIZATION = gql`
       city
       oncologistsCount
       connections
+      groupPracticePacId
     }
   }
 `

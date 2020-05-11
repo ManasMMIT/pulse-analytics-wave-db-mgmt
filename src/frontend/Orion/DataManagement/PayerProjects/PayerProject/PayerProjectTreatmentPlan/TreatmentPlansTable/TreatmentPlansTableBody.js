@@ -29,22 +29,18 @@ const TreatmentPlansTableBody = ({
             aria-checked={isItemSelected}
             selected={isItemSelected}
           >
-            {
-              checkbox && (
-                <TableCell padding="checkbox">
-                  <Checkbox
-                    checked={isItemSelected}
-                    inputProps={{ 'aria-labelledby': labelId }}
-                  />
-                </TableCell>
-              )
-            }
+            {checkbox && (
+              <TableCell padding="checkbox">
+                <Checkbox
+                  checked={isItemSelected}
+                  inputProps={{ 'aria-labelledby': labelId }}
+                />
+              </TableCell>
+            )}
             {headerData.map(column => {
-              const label = column.value.split('.')
-                .reduce(
-                  (prev, key) => prev[key],
-                  row
-                )
+              const label = column.value
+                .split('.')
+                .reduce((prev, key) => prev[key], row)
 
               return <TableCell key={`${row._id}-${label}`}>{label}</TableCell>
             })}
