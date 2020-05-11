@@ -20,6 +20,9 @@ const payerProjectResolvers = require('./payerProject')
 
 const businessObjectResolvers = require('./businessObject')
 
+const bookResolvers = require('./book')
+const coverageResolvers = require('./coverage')
+const populationResolvers = require('./population')
 const lineResolvers = require('./line')
 
 module.exports = {
@@ -46,5 +49,8 @@ module.exports = {
 
   ...businessObjectResolvers,
 
+  ...bookResolvers,
+  ...coverageResolvers,
   ...lineResolvers,
+  ...populationResolvers,
 }

@@ -2,7 +2,7 @@ import React from 'react'
 import styled from '@emotion/styled'
 import { transparentize } from 'polished'
 
-import Panel from '../../shared/Panel'
+import Panel from '../../../components/Panel'
 import CreateButton from './CreateButton'
 // import DeleteButton from './DeleteButton'
 // import UpdateButton from './UpdateButton'

@@ -42,7 +42,13 @@ const queries = gql`
 
     treatmentPlans: [TreatmentPlan]
 
+    books: [Book]
+
+    coverages: [Coverage]
+
     lines: [Line]
+
+    populations: [Population]
 
     regionalTargetingData(input: JSON): JSON
 
@@ -275,6 +281,21 @@ const queries = gql`
     coverage: String
     line: String
     population: String
+  }
+
+  type Book {
+    _id: ID!
+    name: String
+  }
+
+  type Coverage {
+    _id: ID!
+    name: String
+  }
+
+  type Population {
+    _id: ID!
+    name: String
   }
 
   type Line {

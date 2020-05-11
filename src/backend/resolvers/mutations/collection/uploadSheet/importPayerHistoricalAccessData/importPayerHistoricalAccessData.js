@@ -1,65 +1,90 @@
-const {
-  getIsQualityAccessSheet,
-  getIsAdditionalCriteriaSheet,
-  getIsPolicyLinksSheet,
-} = require('./utils')
+const { ObjectId } = require('mongodb')
+
 const SheetToCore = require('./SheetToCore/ManagerFactory')
-const Validator = require('./SheetToCore/Validator')
+
 // const CoreToDev = require('./CoreToDev')
 
-// ? FOR FUTURE: random global tracker to indicate when to trigger combo materialization functions
-// let tracker = 0
+const {
+  validateQualityOfAccess,
+  validateAdditionalCriteria,
+  validatePolicyLinks,
+} = require('./SheetToCore/validatePayerHistoricalAccessData')
 
-// ? FOR FUTURE:  somehow instantiate outside so it doesn't hvae to be instantiated every time, every call
-// const globalCoreToDev = new CoreToDev({
-//   pulseDev: pulseDevDb,
-//   pulseCore: pulseCoreDb,
-// })
+const {
+  getProjectOrgTpsEnrichedPipeline,
+} = require('./SheetToCore/agg-pipelines')
 
-const importPayerHistoricalAccessData = async (
-  {
-    wb, // TODO: will probably be used for string going into import feedback
-    sheet: sheetName,
-    data,
-    timestamp,
-    projectId,
-  },
-  { pulseCoreDb, pulseDevDb, mongoClient },
-  importFeedback, // TODO: add success messages to importFeedback array on success (mutate this array)
-) => {
-  const isQualityAccessSheet = getIsQualityAccessSheet(sheetName)
-  const isAdditionalCriteriaSheet = getIsAdditionalCriteriaSheet(sheetName)
-  const isPolicyLinksSheet = getIsPolicyLinksSheet(sheetName)
+const {
+  isQualityAccessSheet,
+  isAdditionalCriteriaSheet,
+  isPolicyLinksSheet,
+  getValidationComboHash,
+} = require('./utils')
 
-  const validatorConfig = {
-    sheetData: data,
-    projectId,
-    pulseCore: pulseCoreDb,
+const importPayerHistoricalAccessData = async ({
+  cleanedSheetsWithMetadata,
+  dbsConfig: { pulseCoreDb, pulseDevDb, mongoClient },
+  importFeedback,
+}) => {
+  // STEP 1: Get the project's PTPs; it's going to be used throughout this process
+  let [{ projectId }] = cleanedSheetsWithMetadata
+  projectId = ObjectId(projectId)
+
+  const projectPtps = await pulseCoreDb
+    .collection('tdgProjects')
+    .aggregate(getProjectOrgTpsEnrichedPipeline(projectId))
+    .toArray()
+
+  // STEP 2: Validate all the sheets; if there's anything wrong, error and stop the code
+  for (const sheetObjWithMetadata of cleanedSheetsWithMetadata) {
+    let { sheet: sheetName, data } = sheetObjWithMetadata
+
+    if (isQualityAccessSheet(sheetName)) {
+      const strictlyRequiredPtps = getValidationComboHash(projectPtps, 'ptps')
+      validateQualityOfAccess({ sheetData: data, strictlyRequiredPtps })
+    } else if (isAdditionalCriteriaSheet(sheetName)) {
+      const allowedPtps = getValidationComboHash(projectPtps, 'ptps')
+      validateAdditionalCriteria({ sheetData: data, allowedPtps })
+    } else if (isPolicyLinksSheet(sheetName)) {
+      const allowedBrcs = getValidationComboHash(projectPtps, 'brcs')
+      validatePolicyLinks({ sheetData: data, allowedBrcs })
+    }
   }
 
-  const projectConfig = {
-    ...validatorConfig,
-    sheetName,
-    timestamp
+  // STEP 3: Upsert all the sheets
+  for (const sheetObjWithMetadata of cleanedSheetsWithMetadata) {
+    let {
+      wb,
+      sheet: sheetName,
+      data,
+      timestamp,
+      projectId,
+      skippedRows,
+      originalDataLength,
+    } = sheetObjWithMetadata
+
+    projectId = ObjectId(projectId)
+
+    const projectConfig = {
+      sheetData: data,
+      sheetName,
+      timestamp,
+      projectId,
+      pulseCore: pulseCoreDb,
+    }
+
+    const sheetManager = new SheetToCore(projectConfig).getManager(sheetName)
+
+    await sheetManager.upsertOrgTpHistory()
+
+    importFeedback.push(
+      `Import to CORE successful for ${wb}/${sheetName}`
+      + `\n${data.length}/${originalDataLength} rows imported (excluding header)`
+      + `\nSkipped rows were: ${skippedRows.join(', ')}`
+    )
   }
 
-  const sheetValidator = new Validator(validatorConfig)
-  const sheetManager = new SheetToCore(projectConfig).getManager(sheetName)
-
-  if (isQualityAccessSheet) {
-    await sheetValidator.validateQualityOfAccess()
-  } else if (isAdditionalCriteriaSheet) {
-    await sheetValidator.validateAdditionalCriteria()
-  } else if (isPolicyLinksSheet) {
-    await sheetValidator.validatePolicyLinks()
-  }
-
-  await sheetManager.upsertOrgTpHistory()
-
-  // // ? TODO: Matt builds up success string and adds memoized importFeedback array
-
-  // // ? let successString = `${wb}/${sheet} successfully updated in CORE DB for ${timestamp}`
-
+  // STEP 4: Materialize payer historical access data, CoreToDev
   // const coreToDev = new CoreToDev({
   //   pulseDev: pulseDevDb,
   //   pulseCore: pulseCoreDb,
@@ -67,41 +92,9 @@ const importPayerHistoricalAccessData = async (
 
   // await coreToDev.materializeNonLivesCollections()
 
-
-  // ? successString += 'successfully materialized data in DEV DB \n'
-  // importFeedback.push(successString)
-
-  /* ? IDEA FOR FUTURE: ISOLATE WHAT'S MATERIALIZED BASED ON WHAT'S INCOMING
-
-  const coreToDev = globalCoreToDev
-
-  if (sheet === 'qoa') {
-    await coreToDev.materializeQoa()
-    tracker++
-  } else if (sheet === 'addl criteria') {
-    await coreToDev.materializeAddlCriteria()
-    tracker++
-  } else if (sheet === 'policy links') {
-    await coreToDev.materializePolicyLinks()
-    tracker++
-  }
-
-  if (tracker === 3) {
-    materializeExpensiveCombinationCollections()
-    tracker = 0; // reset tracker
-  }
-  */
+  // importFeedback.push('Payer historical access data successfully materialized to dev')
 
   return 'Success'
 }
-
-/*
-
-function materializeExpensiveCombinationCollections() {
-  await coreToDev.materializeCombinedNonLivesData()
-  await coreToDev.materializeRegionalTargetingData()
-}
-
-*/
 
 module.exports = importPayerHistoricalAccessData
