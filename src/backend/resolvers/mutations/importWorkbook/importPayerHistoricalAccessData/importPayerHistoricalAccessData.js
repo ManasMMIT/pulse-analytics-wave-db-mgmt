@@ -1,6 +1,7 @@
 const { ObjectId } = require('mongodb')
 
-const SheetToCore = require('./SheetToCore/ManagerFactory')
+const SheetToCoreManager = require('./SheetToCore/ManagerFactory')
+const SheetToCoreManagerDao = require('./SheetToCore/ManagerFactory')
 
 // const CoreToDev = require('./CoreToDev')
 
@@ -67,15 +68,26 @@ const importPayerHistoricalAccessData = async ({
 
     const projectConfig = {
       sheetData: data,
-      sheetName,
       timestamp,
       projectId,
       pulseCore: pulseCoreDb,
     }
 
-    const sheetManager = new SheetToCore(projectConfig).getManager(sheetName)
+    const sheetManagerFactory = new SheetToCoreManager(projectConfig)
+    const sheetManager = sheetManagerFactory.getManager(sheetName)
+    const sheetManagerDao = new SheetToCoreManagerDao({ db: pulseCoreDb })
 
-    await sheetManager.upsertOrgTpHistory()
+    const setOrgs = await sheetManagerDao.getOrgsOp()
+    const setQualityOfAccesses = await sheetManagerDao.getAccessesOp()
+
+    sheetManager.setupHashes({
+      setOrgs,
+      setEnrichedPtps: projectPtps,
+      setQualityOfAccesses
+    })
+
+    const permittedOps = sheetManager.getPermittedOps()
+    await sheetManagerDao.upsertOrgTpHistory(permittedOps)
 
     importFeedback.push(
       `Import to CORE successful for ${wb}/${sheetName}`

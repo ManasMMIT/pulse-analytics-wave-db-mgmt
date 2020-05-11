@@ -1,9 +1,3 @@
-const _ = require('lodash')
-
-const {
-  ENRICH_ORG_TP_PIPELINE,
-} = require('../agg-pipelines')
-
 class ManagerDao {
   constructor({ db }) {
     this.db = db
@@ -17,18 +11,6 @@ class ManagerDao {
         .toArray()
     } catch (e) {
       console.error(`Unable to get Orgs Ops: ${e}`)
-      return { error: e }
-    }
-  }
-
-  async getEnrichedPtps() {
-    try {
-      return await this.db
-        .collection('organizations.treatmentPlans')
-        .aggregate(ENRICH_ORG_TP_PIPELINE)
-        .toArray()
-    } catch (e) {
-      console.error(`Unable to get enriched ptps: ${e}`)
       return { error: e }
     }
   }

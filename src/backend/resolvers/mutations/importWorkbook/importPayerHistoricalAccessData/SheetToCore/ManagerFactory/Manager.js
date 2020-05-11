@@ -9,18 +9,13 @@ const {
   payerCombinationHasher
 } = require('../../utils')
 
-const ManagerDao = require('./ManagerDao')
-
 class Manager {
   constructor({
-    projectId, pulseCore, sheetData, timestamp, hashType = 'ptps'
+    sheetData, timestamp, hashType = 'ptps', projectId
   }) {
 
-    this.pulseCore = pulseCore
-    this.projectId = ObjectId(projectId)
-
     this.sheetData = sheetData
-    this.managerDao = new ManagerDao({ db: pulseCore })
+    this.projectId = projectId
 
     // create JS Date Object (which only stores dates in absolute UTC time) as the UTC equivalent of isoShortString in New York time
     this.setTimeZone(timestamp)
@@ -33,25 +28,25 @@ class Manager {
     this.timestamp = zonedTimeToUtc(timestamp, DEFAULT_TIMEZONE)
   }
 
-  async setOrgsHashBySlug(setOrgs) {
-    const orgs = setOrgs || await this.managerDao.getOrgsOp()
+  async setOrgsHashBySlug(setOrgs = []) {
+    const orgs = setOrgs
     this.orgsHashBySlug = _.keyBy(orgs, 'slug')
   }
 
-  async setEnrichedPtps(setEnrichedPtps) {
-    const enrichedPtps = setEnrichedPtps || await this.managerDao.getEnrichedPtps()
+  async setEnrichedPtps(setEnrichedPtps = []) {
+    const enrichedPtps = setEnrichedPtps
     this.enrichedPtpsByCombo = _.groupBy(enrichedPtps, this.payerCombinationHasher)
   }
 
-  async setQualityOfAccessHash(setQualityOfAccesses) {
-    const qualityOfAccesses = setQualityOfAccesses || await this.managerDao.getAccessesOp()
+  async setQualityOfAccessHash(setQualityOfAccesses = []) {
+    const qualityOfAccesses = setQualityOfAccesses
     this.qualityOfAccessHash = _.keyBy(qualityOfAccesses, 'access')
   }
 
-  async setupHashes() {
-    await this.setOrgsHashBySlug()
-    await this.setEnrichedPtps()
-    await this.setQualityOfAccessHash()
+  async setupHashes({ setOrgs, setEnrichedPtps, setQualityOfAccesses }) {
+    this.setOrgsHashBySlug(setOrgs)
+    this.setEnrichedPtps(setEnrichedPtps)
+    this.setQualityOfAccessHash(setQualityOfAccesses)
   }
 
   getFilteredAndEnrichedSheetData() {
@@ -83,19 +78,6 @@ class Manager {
     }, [])
 
     return result
-  }
-
-  async initiateUpsertToOrgTpHistory() {
-    // 1.  wait on setup steps to complete
-    await this.setupHashes()
-
-    // 2. use hashes made during setup to getPermittedOps
-    const permittedOps = await this.getPermittedOps()
-
-    // 3. Upsert data based on allowed operations
-    const upsertResult = await this.managerDao.upsertOrgTpHistory(permittedOps)
-
-    return upsertResult
   }
 }
 
