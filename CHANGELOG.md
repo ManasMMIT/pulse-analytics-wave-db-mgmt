@@ -12,7 +12,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Fixed** for any bug fixes.
 - **Security** in case of vulnerabilities.
 
-## [Unreleased] - Started: 4-30-20
+## [Unreleased] - Started: 5-11-20
+
+## [2.4.0] - Started: 4-30-20
 
 ### Added
 - `Orion`: Treatment Plans, lines, coverages, books, populations master list views w/ CRUD
