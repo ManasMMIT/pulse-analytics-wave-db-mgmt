@@ -3,9 +3,9 @@ const {
 } = require('../../utils')
 const _ = require('lodash')
 
-const validateQuaityOfAccess = ({ sheetData, allowedPtps }) => {
+const validateQualityOfAccess = ({ sheetData, strictlyRequiredPtps }) => {
   const hashPtps = payerCombinationHasher('ptps')
-  const exactCorrectSetOfOrgTps = Object.keys(allowedPtps)
+  const exactCorrectSetOfOrgTps = Object.keys(strictlyRequiredPtps)
 
   const sheetDataHashes = sheetData.map(hashPtps)
   const missingOrgTpCombos = _.difference(
@@ -51,4 +51,4 @@ const validateQuaityOfAccess = ({ sheetData, allowedPtps }) => {
   return true
 }
 
-module.exports = validateQuaityOfAccess
+module.exports = validateQualityOfAccess

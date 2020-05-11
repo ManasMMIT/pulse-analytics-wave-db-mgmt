@@ -22,14 +22,14 @@ describe('Validate payer historical access data', () => {
     test('should throw an Error if sheet data contains invalid combinations', () => {
       const validatorConfig = {
         sheetData: mockInvalidQoaData,
-        allowedPtps: mockPtps
+        strictlyRequiredPtps: mockPtps
       }
       expect(() => validateQualityOfAccess(validatorConfig)).toThrow()
     })
     test('should throw an Error if sheet data is a subset of the allowed combinations', () => {
       const validatorConfig = {
         sheetData: mockInvalidQoaData2,
-        allowedPtps: mockPtps
+        strictlyRequiredPtps: mockPtps
       }
       expect(() => validateQualityOfAccess(validatorConfig)).toThrow()
     })
@@ -37,7 +37,7 @@ describe('Validate payer historical access data', () => {
     test('should throw an Error if sheet data is valid but has duplicate combos', () => {
       const validatorConfig = {
         sheetData: mockDuplicateInvalidQoaData,
-        allowedPtps: mockPtps
+        strictlyRequiredPtps: mockPtps
       }
       expect(() => validateQualityOfAccess(validatorConfig)).toThrow()
     })
@@ -45,7 +45,7 @@ describe('Validate payer historical access data', () => {
     test('should return true if data is valid', () => {
       const validatorConfig = {
         sheetData: mockValidQoaData,
-        allowedPtps: mockPtps
+        strictlyRequiredPtps: mockPtps
       }
       expect(validateQualityOfAccess(validatorConfig)).toBe(true)
     })
