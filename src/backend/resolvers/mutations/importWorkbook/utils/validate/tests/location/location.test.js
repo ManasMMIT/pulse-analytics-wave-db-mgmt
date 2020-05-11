@@ -1,6 +1,8 @@
 const validate = require('../..')
 const formatAjvErrors = require('../../../formatAjvErrors')
 
+// * Mock the custom module that hits the Google Maps API; comment out starred (*) code blocks in this file
+// * including these two lines if you want to hit the actual Google Maps API; https://jestjs.io/docs/en/mock-functions
 jest.mock('../../initializeAjv/addLocationCustomKeyword/getGeocodingData')
 const getGeocodingData = require('../../initializeAjv/addLocationCustomKeyword/getGeocodingData')
 
@@ -32,6 +34,7 @@ const {
 describe('Test location validation', () => {
   test(`- Data with valid location strings passes validation (sample of 9 docs)
     - Side-effect of generating geocoding data generates expected data`, async () => {
+    // * mock API calls to Google Maps API
     LOCATION_OUTPUT_1_sideEffectData.reduce((acc, { data }) => {
       acc.mockImplementationOnce(() => data)
       return acc
@@ -57,6 +60,7 @@ describe('Test location validation', () => {
   })
 
   test(`Data with valid location strings passes validation (sample of 100 docs)`, async () => {
+    // * mock API calls to Google Maps API
     LOCATION_OUTPUT_2_sideEffectData.reduce((acc, { data }) => {
       acc.mockImplementationOnce(() => data)
       return acc
@@ -82,6 +86,7 @@ describe('Test location validation', () => {
   })
 
   test(`Data with invalid location strings fail validation`, async () => {
+    // * mock API calls to Google Maps API
     LOCATION_OUTPUT_3_sideEffectData.reduce((acc, { data }) => {
       acc.mockImplementationOnce(() => data)
       return acc

@@ -6,7 +6,7 @@ const influencersSheetConfig = require('./mockData/input1/influencers-sheet-conf
 const validSanitizedInfluencersRes = require('./mockData/input1/valid-sanitized-influencers')
 const coercedValidInfluencers = require('./mockData/output1/coerced-valid-influencers')
 
-const invalidSanitiziedInfluencersRes = require('./mockData/input2/invalid-sanitized-influencers')
+const invalidSanitizedInfluencersRes = require('./mockData/input2/invalid-sanitized-influencers')
 const coercedInvalidInfluencers = require('./mockData/output2/coerced-invalid-influencers')
 const errorsForInvalidInfluencers = require('./mockData/output2/errors-for-invalid-influencers')
 const formattedErrorsForInvalidInfluencers = require('./mockData/output2/formatted-errors-for-invalid-influencers')
@@ -52,7 +52,7 @@ describe('Test CSV cells validation', () => {
   test(`- Invalid CSV values trigger errors if they're not in oneOf
     - Input data still coerced from string to arr of strings
     - Formatted error message is intelligible to casual user`, async () => {
-    const { result, skippedRows } = invalidSanitiziedInfluencersRes
+    const { result, skippedRows } = invalidSanitizedInfluencersRes
 
     const {
       valid,

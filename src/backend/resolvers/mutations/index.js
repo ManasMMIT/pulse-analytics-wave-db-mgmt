@@ -25,6 +25,8 @@ const coverageResolvers = require('./coverage')
 const populationResolvers = require('./population')
 const lineResolvers = require('./line')
 
+const importWorkbook = require('./importWorkbook')
+
 module.exports = {
   ...clientResolvers,
   ...teamResolvers,
@@ -53,4 +55,6 @@ module.exports = {
   ...coverageResolvers,
   ...lineResolvers,
   ...populationResolvers,
+  
+  importWorkbook,
 }

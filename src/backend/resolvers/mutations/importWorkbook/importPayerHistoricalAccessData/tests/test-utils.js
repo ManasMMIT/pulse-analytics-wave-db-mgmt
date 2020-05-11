@@ -1,5 +1,6 @@
-const connectToMongoDb = require('../../../../../../../../connect-to-mongodb')
-const { getScriptTerminator } = require('../../../../../../../../utils')
+const connectToMongoDb = require('../../../../../../../connect-to-mongodb')
+const { getScriptTerminator } = require('../../../../../../../utils') 
+
 const {
   mockOrgTps,
   TEST_COLLECTION_NAME,

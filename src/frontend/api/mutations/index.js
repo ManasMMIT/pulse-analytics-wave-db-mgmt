@@ -119,7 +119,6 @@ import {
 import {
   BACKUP_EXPORT,
   UPLOAD_COLLECTION,
-  UPLOAD_SHEET,
 } from './collection'
 
 import {
@@ -165,6 +164,10 @@ import {
   UPDATE_BUSINESS_OBJECT,
   UPDATE_BUSINESS_OBJECT_FIELD,
 } from './businessObjects'
+
+import {
+  IMPORT_WORKBOOK,
+} from './importWorkbook'
 
 export {
   SELECT_CLIENT,
@@ -255,7 +258,6 @@ export {
 
   BACKUP_EXPORT,
   UPLOAD_COLLECTION,
-  UPLOAD_SHEET,
 
   SEND_TO_SUBSCRIBED_USERS,
   SEND_TO_TEST_GROUP,
@@ -290,4 +292,6 @@ export {
   DELETE_BUSINESS_OBJECT_FIELD,
   UPDATE_BUSINESS_OBJECT,
   UPDATE_BUSINESS_OBJECT_FIELD,
+
+  IMPORT_WORKBOOK,
 }

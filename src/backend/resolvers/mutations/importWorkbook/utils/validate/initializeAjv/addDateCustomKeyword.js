@@ -1,7 +1,7 @@
 const { parse, parseISO } = require('date-fns')
 const { zonedTimeToUtc } = require('date-fns-tz')
 
-const DEFAULT_TIMEZONE = require('../../../../../../../utils/defaultTimeZone')
+const DEFAULT_TIMEZONE = require('../../../../../../utils/defaultTimeZone')
 
 const isValidDate = obj => obj instanceof Date && !isNaN(obj)
 

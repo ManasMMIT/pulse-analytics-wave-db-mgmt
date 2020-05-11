@@ -11,7 +11,7 @@ const {
   isPolicyLinksSheet,
 } = require('./importPayerHistoricalAccessData/utils')
 
-const uploadSheet = async (
+const importWorkbook = async (
   parent,
   { input }, // schema is [ { wb, sheet, data, timestamp, projectId }, etc. ]
   { pulseCoreDb, pulseDevDb, mongoClient },
@@ -105,4 +105,4 @@ const uploadSheet = async (
   return importFeedback
 }
 
-module.exports = uploadSheet
+module.exports = importWorkbook

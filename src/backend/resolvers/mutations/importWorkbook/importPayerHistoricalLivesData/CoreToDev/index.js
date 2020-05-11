@@ -9,7 +9,7 @@ const {
 
 const {
   STATE_LONG_BY_ABBREV,
-} = require('./../../../../../../utils/states-data-util')
+} = require('../../../../../utils/states-data-util')
 
 class CoreToDev {
   constructor({ pulseDev, pulseCore }) {

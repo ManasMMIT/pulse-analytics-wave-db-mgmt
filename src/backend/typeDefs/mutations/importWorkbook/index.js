@@ -1,7 +1,7 @@
 const { gql } = require('apollo-server-express')
 
-const uploadSheetTypeDef = gql`
-  input UploadSheetInput {
+const importWorkbookTypeDef = gql`
+  input ImportWorkbookInput {
     data: JSON!
     wb: String!
     sheet: String!
@@ -10,4 +10,4 @@ const uploadSheetTypeDef = gql`
   }
 `
 
-module.exports = uploadSheetTypeDef
+module.exports = importWorkbookTypeDef
