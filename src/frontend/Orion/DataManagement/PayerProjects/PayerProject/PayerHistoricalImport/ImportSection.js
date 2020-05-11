@@ -5,7 +5,7 @@ import { useMutation } from '@apollo/react-hooks'
 import styled from '@emotion/styled'
 import Alert from '@material-ui/lab/Alert'
 
-import { UPLOAD_SHEET } from '../../../../../api/mutations'
+import { IMPORT_WORKBOOK } from '../../../../../api/mutations'
 
 import Button from '../../../../../components/Button'
 import FieldLabel from '../../../../../components/FieldLabel'
@@ -69,8 +69,8 @@ const ImportSection = ({
     status: null, message: null
   })
   
-  const [uploadSheet] = useMutation(UPLOAD_SHEET, {
-    onCompleted: ({ uploadSheet: importFeedback }) => {
+  const [importWorkbook] = useMutation(IMPORT_WORKBOOK, {
+    onCompleted: ({ importWorkbook: importFeedback }) => {
       setAlertStatus({
         status: SUCCESS,
         message: alertMessageMap[SUCCESS]
@@ -109,13 +109,13 @@ const ImportSection = ({
   }
 
   const handleSubmit = () => {
-    const sheetData = []
+    const workbookData = []
     
     sheetNames.forEach(sheet => {
       const selectedSheetObj = workbook.Sheets[sheet]
       const json = XLSX.utils.sheet_to_json(selectedSheetObj, { blankrows: true, defval: null })
 
-      sheetData.push({
+      workbookData.push({
         wb: 'Payer Data Master',
         sheet,
         data: json,
@@ -124,14 +124,14 @@ const ImportSection = ({
       })
     })
 
-    console.log(sheetData)
+    console.log(workbookData)
 
     setAlertStatus({
       status: INFO,
       message: alertMessageMap[INFO]
     })
 
-    uploadSheet({ variables: { input: sheetData } })
+    importWorkbook({ variables: { input: workbookData } })
   }
 
   const shouldDisableButton = !isWorkbookUploaded || !timestamp

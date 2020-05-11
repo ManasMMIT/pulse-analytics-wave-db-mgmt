@@ -19,6 +19,12 @@ const email = require('./email')
 const payerProjects = require('./payerProject')
 
 const businessObject = require('./businessObject')
+const book = require('./book')
+const coverage = require('./coverage')
+const population = require('./population')
+const line = require('./line')
+
+const importWorkbook = require('./importWorkbook')
 
 const mutationType = gql`
   type Mutation {
@@ -78,12 +84,14 @@ const mutationType = gql`
     deleteQualityOfAccessScore(input: DeleteQualityOfAccessScoreInput!): DeleteQualityOfAccessScorePayload
 
     uploadCollection(input: UploadCollectionInput!): JSON
-    uploadSheet(input: [UploadSheetInput!]!): JSON
+    importWorkbook(input: [ImportWorkbookInput!]!): JSON
     backupExport(input: BackupExportInput!): String
 
     sendToSubscribedUsers(input: SendToSubscribedUsersInput!): SendToSubscribedUsersPayload
     sendToTestGroup(input: SendToTestGroupInput): SendToTestGroupPayload
 
+    deleteSourceTreatmentPlan(input: DeleteSourceTreatmentPlanInput!): JSON
+    createSourceTreatmentPlan(input: CreateSourceTreatmentPlanInput!): CreateSourceTreatmentPlanPayload
     bulkCreateTreatmentPlans(input: BulkCreateTreatmentPlansInput!): JSON
 
     createTestEmailGroup: TestEmailGroup
@@ -116,6 +124,22 @@ const mutationType = gql`
     deleteBusinessObjectField(input: DeleteBusinessObjectFieldInput!): BoField
     updateBusinessObject(input: UpdateBusinessObjectInput!): BusinessObject
     updateBusinessObjectField(input: UpdateBusinessObjectFieldInput!): BoField
+
+    deleteBook(input: DeleteBookInput!): DeleteBookPayload
+    createBook(input: CreateBookInput!): CreateBookPayload
+    updateBook(input: UpdateBookInput!): UpdateBookPayload
+
+    deleteCoverage(input: DeleteCoverageInput!): DeleteCoveragePayload
+    createCoverage(input: CreateCoverageInput!): CreateCoveragePayload
+    updateCoverage(input: UpdateCoverageInput!): UpdateCoveragePayload
+
+    deletePopulation(input: DeletePopulationInput!): DeletePopulationPayload
+    createPopulation(input: CreatePopulationInput!): CreatePopulationPayload
+    updatePopulation(input: UpdatePopulationInput!): UpdatePopulationPayload
+
+    deleteLine(input: DeleteLineInput!): DeleteLinePayload
+    createLine(input: CreateLineInput!): CreateLinePayload
+    updateLine(input: UpdateLineInput!): UpdateLinePayload
   }
 `
 
@@ -141,4 +165,10 @@ module.exports = [
   ...payerProjects,
 
   ...businessObject,
+  ...book,
+  ...coverage,
+  ...line,
+  ...population,
+
+  importWorkbook,
 ]

@@ -4,8 +4,12 @@ import { Route, Switch, Redirect } from 'react-router-dom'
 
 import { SELECT_INDICATION } from './../api/mutations'
 
+import Query from './Query'
+import Excel from './Excel'
+import Organizations from './Organizations'
+import Configuration from './Configuration'
+
 import DataManagement from './DataManagement'
-import MasterLists from './MasterLists'
 import Sidebar from './Sidebar'
 
 class Orion extends React.Component {
@@ -27,9 +31,12 @@ class Orion extends React.Component {
       <div style={{ display: 'flex', flex: 1 }}>
         <Sidebar />
         <Switch>
+          <Route path="/orion/query" component={Query} />
+          <Route path="/orion/excel" component={Excel} />
+          <Route path="/orion/organizations" component={Organizations} />
           <Route path="/orion/data-management" component={DataManagement} />
-          <Route path="/orion/lists" component={MasterLists} />
-          <Redirect to={'/orion/data-management/query'} />
+          <Route path="/orion/configuration" component={Configuration} />
+          <Redirect to={'/orion/query'} />
         </Switch>
       </div>
     )

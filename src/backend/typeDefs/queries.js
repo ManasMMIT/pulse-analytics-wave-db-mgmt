@@ -41,8 +41,18 @@ const queries = gql`
     payerProjectPtps(input: PayerProjectPtpsInput!): [PayerProjectPtp]
 
     treatmentPlans: [TreatmentPlan]
-    
+
+    books: [Book]
+
+    coverages: [Coverage]
+
+    lines: [Line]
+
+    populations: [Population]
+
     regionalTargetingData(input: JSON): JSON
+
+    cMsOrgPrimarySpecialtyCounts(orgPacId: String): JSON
   }
 
   type Node {
@@ -130,6 +140,7 @@ const queries = gql`
     city: String
     oncologistsCount: Int
     sitesCount: Int
+    groupPracticePacId: String
   }
 
   type PayerOrganization {
@@ -270,6 +281,26 @@ const queries = gql`
     coverage: String
     line: String
     population: String
+  }
+
+  type Book {
+    _id: ID!
+    name: String
+  }
+
+  type Coverage {
+    _id: ID!
+    name: String
+  }
+
+  type Population {
+    _id: ID!
+    name: String
+  }
+
+  type Line {
+    _id: ID!
+    name: String
   }
 
   type PayerProjectPtp {

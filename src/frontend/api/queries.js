@@ -1,5 +1,47 @@
 import gql from 'graphql-tag'
 
+export const GET_BOOKS = gql`
+  query getBooks {
+    books {
+      _id
+      name
+    }
+  }
+`
+
+export const GET_COVERAGES = gql`
+  query getCoverages {
+    coverages {
+      _id
+      name
+    }
+  }
+`
+
+export const GET_POPULATIONS = gql`
+  query getPopulations {
+    populations {
+      _id
+      name
+    }
+  }
+`
+
+export const GET_LINES = gql`
+  query getLines {
+    lines {
+      _id
+      name
+    }
+  }
+`
+
+export const GET_CMS_PRIM_SPEC_COUNTS = gql`
+  query getCmsPrimarySpecialtyCounts($orgPacId: String) {
+    cMsOrgPrimarySpecialtyCounts(orgPacId: $orgPacId)
+  }
+`
+
 export const GET_BOM_SCHEMA = gql`
   query getBomSchema($boId: ID) {
     bomSchema(boId: $boId)
@@ -443,6 +485,7 @@ export const GET_PROVIDER_ORGANIZATIONS = gql`
       city
       oncologistsCount
       sitesCount
+      groupPracticePacId
     }
   }
 `

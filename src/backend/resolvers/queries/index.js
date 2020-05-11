@@ -17,8 +17,14 @@ const businessObjects = require('./businessObjects')
 const workbooks = require('./workbooks')
 const treatmentPlans = require('./treatmentPlans')
 const regionalTargetingData = require('./regionalTargetingData')
+const books = require('./books')
+const coverages = require('./coverages')
+const populations = require('./populations')
+const lines = require('./lines')
 
 const payerProjects = require('./payerProjects')
+
+const cMsOrgPrimarySpecialtyCounts = require('./cMsOrgPrimarySpecialtyCounts')
 
 module.exports = {
   collections,
@@ -39,6 +45,11 @@ module.exports = {
   businessObjects,
   workbooks,
   treatmentPlans,
+  books,
+  coverages,
+  populations,
+  lines,
   ...payerProjects,
   regionalTargetingData,
+  cMsOrgPrimarySpecialtyCounts,
 }

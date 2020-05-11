@@ -13,6 +13,7 @@ const updateProviderOrganizationTypeDefs = gql`
     sitesCount: Int
     connections: JSON
     type: String
+    groupPracticePacId: String
   }
 
   type UpdateProviderOrganizationPayload {
@@ -27,6 +28,7 @@ const updateProviderOrganizationTypeDefs = gql`
     sitesCount: Int
     connections: JSON
     type: String
+    groupPracticePacId: String
   }
 `
 
