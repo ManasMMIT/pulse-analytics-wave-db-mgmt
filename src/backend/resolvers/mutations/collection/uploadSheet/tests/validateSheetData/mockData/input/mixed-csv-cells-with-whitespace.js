@@ -7,9 +7,6 @@ module.exports = {
       "fruit": "cherry,    apple,  ",
     },
     {
-      "fruit": "cherry, , apple",
-    },
-    {
       "fruit": "        ",
     },
   ],

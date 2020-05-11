@@ -13,12 +13,6 @@ module.exports = [
   },
   {
     "fruit": [
-      "cherry",
-      "apple"
-    ]
-  },
-  {
-    "fruit": [
       ""
     ]
   }

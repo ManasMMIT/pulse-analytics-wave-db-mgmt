@@ -14,7 +14,7 @@ module.exports = [
       },
       "message": "should be equal to one of the allowed values"
     },
-    "rowNum": 7,
+    "rowNum": 6,
     "datum": {
       "fruit": [
         ""

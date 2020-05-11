@@ -73,7 +73,6 @@ const {
   DUPE_ROWS_sheetConfig,
 } = require('./mockData/input/dupeRowsValidationInput')
 const {
-  DUPE_ROWS_data,
   DUPE_ROWS_errors,
   DUPE_ROWS_formattedErrors,
 } = require('./mockData/output/dupeRowsValidationOutput')
@@ -93,6 +92,9 @@ const {
   MISSING_COLS_errors,
   MISSING_COLS_formattedErrors,
 } = require('./mockData/output/missingColsValidationOutput')
+
+jest.mock('../../utils/validate/initializeAjv/addLocationCustomKeyword/getGeocodingData')
+const getGeocodingData = require('../../utils/validate/initializeAjv/addLocationCustomKeyword/getGeocodingData')
 
 const {
   LOCATION_INPUT_1_dataAndSkippedRows,
@@ -442,13 +444,13 @@ test(`- Invalid data with business object validation fails validation
 
 test(`- Data coming in with dupe rows fails validation
     - Dupes are consolidated to error once for each set of dupes
-    - Dupe row erroring doesn't affect other error messaging`, async () => {
+    - Dupe row erroring precludes further error messaging`, async () => {
   const { result, skippedRows } = DUPE_ROWS_dataAndSkippedRows
 
   const {
     valid,
     errors,
-    data,
+    // data, // data will be undefined because dupe erroring means no data is returned
   } = await validate({
     data: result,
     skippedRows,
@@ -464,7 +466,6 @@ test(`- Data coming in with dupe rows fails validation
   expect(valid).toEqual(false)
   expect(errors).toStrictEqual(DUPE_ROWS_errors)
   expect(formattedErrors).toStrictEqual(DUPE_ROWS_formattedErrors)
-  expect(data).toStrictEqual(DUPE_ROWS_data)
 })
 
 test("Extra columns (keys not in sheet config) are excluded from import", async () => {
@@ -512,6 +513,11 @@ test("Missing columns (keys in sheet config but not in data) fail validation", a
 
 test(`- Data with valid location strings passes validation (sample of 9 docs)
     - Side-effect of generating geocoding data generates expected data`, async () => {
+  LOCATION_OUTPUT_1_sideEffectData.reduce((acc, { data }) => {
+    acc.mockImplementationOnce(() => data)
+    return acc
+  }, getGeocodingData)
+
   const { result, skippedRows } = LOCATION_INPUT_1_dataAndSkippedRows
 
   const {
@@ -532,7 +538,10 @@ test(`- Data with valid location strings passes validation (sample of 9 docs)
 })
 
 test(`Data with valid location strings passes validation (sample of 100 docs)`, async () => {
-  jest.setTimeout(60000) // ! needed to adjust jest timeout now that we're geocoding 100 docs
+  LOCATION_OUTPUT_2_sideEffectData.reduce((acc, { data }) => {
+    acc.mockImplementationOnce(() => data)
+    return acc
+  }, getGeocodingData)
 
   const { result, skippedRows } = LOCATION_INPUT_2_dataAndSkippedRows
 
@@ -554,6 +563,11 @@ test(`Data with valid location strings passes validation (sample of 100 docs)`, 
 })
 
 test(`Data with invalid location strings fail validation`, async () => {
+  LOCATION_OUTPUT_3_sideEffectData.reduce((acc, { data }) => {
+    acc.mockImplementationOnce(() => data)
+    return acc
+  }, getGeocodingData)
+
   const { result, skippedRows } = LOCATION_INPUT_3_dataAndSkippedRows
 
   const {

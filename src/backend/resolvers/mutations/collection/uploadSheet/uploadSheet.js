@@ -39,12 +39,12 @@ const uploadSheet = async (
       sideEffectData,
     } = await validate({ data, skippedRows, sheetConfig, db: pulseCoreDb })
 
-    data = validatedData
-
     if (!valid) {
       const errorString = formatAjvErrors({ errors, wb, sheet })
       throw new Error(errorString)
     }
+
+    data = validatedData
 
     cleanedSheetsWithMetadata.push({
       ...sheetToUpload, // if this is payer historical access import, there'll be projectId and timestamp in here
