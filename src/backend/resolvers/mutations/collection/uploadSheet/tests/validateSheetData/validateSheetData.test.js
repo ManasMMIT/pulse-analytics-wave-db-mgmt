@@ -94,6 +94,31 @@ const {
   MISSING_COLS_formattedErrors,
 } = require('./mockData/output/missingColsValidationOutput')
 
+const {
+  LOCATION_INPUT_1_dataAndSkippedRows,
+  LOCATION_INPUT_1_sheetConfig,
+} = require('./mockData/input/locationValidationInput/input1')
+
+const { LOCATION_OUTPUT_1_sideEffectData } = require('./mockData/output/locationValidationOutput/output1')
+
+const {
+  LOCATION_INPUT_2_dataAndSkippedRows,
+  LOCATION_INPUT_2_sheetConfig,
+} = require('./mockData/input/locationValidationInput/input2')
+
+const { LOCATION_OUTPUT_2_sideEffectData } = require('./mockData/output/locationValidationOutput/output2')
+
+const {
+  LOCATION_INPUT_3_dataAndSkippedRows,
+  LOCATION_INPUT_3_sheetConfig,
+} = require('./mockData/input/locationValidationInput/input3')
+
+const { 
+  LOCATION_OUTPUT_3_sideEffectData,
+  LOCATION_OUTPUT_3_errors,
+  LOCATION_OUTPUT_3_formattedErrors,
+} = require('./mockData/output/locationValidationOutput/output3')
+
 test('Valid data is reported valid with zero errors and type-coerced values', async () => {
   const { result, skippedRows } = validProgramOverviewSanitizationRes
 
@@ -483,4 +508,74 @@ test("Missing columns (keys in sheet config but not in data) fail validation", a
   expect(errors).toStrictEqual(MISSING_COLS_errors)
   expect(formattedErrors).toStrictEqual(MISSING_COLS_formattedErrors)
   expect(data).toStrictEqual(MISSING_COLS_data)
+})
+
+test(`- Data with valid location strings passes validation (sample of 9 docs)
+    - Side-effect of generating geocoding data generates expected data`, async () => {
+  const { result, skippedRows } = LOCATION_INPUT_1_dataAndSkippedRows
+
+  const {
+    valid,
+    errors,
+    data,
+    sideEffectData,
+  } = await validate({
+    data: result,
+    skippedRows,
+    sheetConfig: LOCATION_INPUT_1_sheetConfig,
+  })
+
+  expect(valid).toEqual(true)
+  expect(errors).toStrictEqual([])
+  expect(sideEffectData).toStrictEqual(LOCATION_OUTPUT_1_sideEffectData)
+  expect(result).toStrictEqual(data) // data shouldn't be mutated
+})
+
+test(`Data with valid location strings passes validation (sample of 100 docs)`, async () => {
+  jest.setTimeout(60000) // ! needed to adjust jest timeout now that we're geocoding 100 docs
+
+  const { result, skippedRows } = LOCATION_INPUT_2_dataAndSkippedRows
+
+  const {
+    valid,
+    errors,
+    data,
+    sideEffectData,
+  } = await validate({
+    data: result,
+    skippedRows,
+    sheetConfig: LOCATION_INPUT_2_sheetConfig,
+  })
+
+  expect(valid).toEqual(true)
+  expect(errors).toStrictEqual([])
+  expect(sideEffectData).toStrictEqual(LOCATION_OUTPUT_2_sideEffectData)
+  expect(result).toStrictEqual(data) // data shouldn't be mutated
+})
+
+test(`Data with invalid location strings fail validation`, async () => {
+  const { result, skippedRows } = LOCATION_INPUT_3_dataAndSkippedRows
+
+  const {
+    valid,
+    errors,
+    data,
+    sideEffectData,
+  } = await validate({
+    data: result,
+    skippedRows,
+    sheetConfig: LOCATION_INPUT_3_sheetConfig,
+  })
+
+  const formattedErrors = formatAjvErrors({
+    errors,
+    wb: 'Mock Workbook',
+    sheet: 'Mock Sheet'
+  })
+
+  expect(valid).toEqual(false)
+  expect(errors).toStrictEqual(LOCATION_OUTPUT_3_errors)
+  expect(formattedErrors).toStrictEqual(LOCATION_OUTPUT_3_formattedErrors)
+  expect(sideEffectData).toStrictEqual(LOCATION_OUTPUT_3_sideEffectData)
+  expect(result).toStrictEqual(data) // data shouldn't be mutated
 })

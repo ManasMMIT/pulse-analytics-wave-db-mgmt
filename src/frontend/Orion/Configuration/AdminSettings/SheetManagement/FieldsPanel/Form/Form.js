@@ -25,6 +25,7 @@ const TYPES = [
   'boolean',
   'csv',
   'date',
+  'location',
 ]
 
 const Form = ({

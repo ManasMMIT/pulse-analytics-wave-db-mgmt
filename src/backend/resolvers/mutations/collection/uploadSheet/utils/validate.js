@@ -1,8 +1,10 @@
+require('dotenv').config()
 const Ajv = require('ajv')
 const AjvErrors = require('ajv-errors')
 const _ = require('lodash')
 const { parse, parseISO } = require('date-fns')
 const { zonedTimeToUtc } = require('date-fns-tz')
+const fetch = require('node-fetch')
 
 const DEFAULT_TIMEZONE = require('../../../../../utils/defaultTimeZone')
 
@@ -51,6 +53,38 @@ ajv.addKeyword('coerceToDate', {
   },
 })
 
+const getGeocodingData = async address => {
+  const uriEncodedAddress = encodeURIComponent(address)
+
+  const response = await fetch(
+    `https://maps.googleapis.com/maps/api/geocode/json?address=${uriEncodedAddress}&key=${process.env.GOOGLE_API_KEY}`,
+  ).then(res => res.json())
+
+  if (response && response.results && response.results[0]) {
+    const latLongCoordinates = response.results[0].geometry.location
+    return latLongCoordinates
+  }
+
+  return false
+}
+
+ajv.addKeyword('validateLocation', {
+  async: true,
+  modifying: true,
+  compile: (schema, parentSchema, it) => {
+    return async (data, dataPath, parentData, parentKey) => {
+      const geocodingResult = await getGeocodingData(data)
+
+      if (geocodingResult) {
+        const { lat, lng: long } = geocodingResult
+        parentData.__SIDE_EFFECT_DATA = { lat, long }
+      }
+      
+      return Boolean(geocodingResult)
+    }
+  }
+})
+
 const validate = async ({ data, skippedRows, sheetConfig, db }) => {
   const ajvSchema = await getAjvSchema(sheetConfig, db)
   const ajvValidate = ajv.compile(ajvSchema)
@@ -66,6 +100,7 @@ const validate = async ({ data, skippedRows, sheetConfig, db }) => {
 
   const totalRowCountPlusHeader = skippedRows.length + data.length + 1
 
+  const sideEffectData = []
   let rowsTracker = {} // for detecting dupes
   let i = 0
   let j = 0
@@ -112,10 +147,26 @@ const validate = async ({ data, skippedRows, sheetConfig, db }) => {
       }
     })
 
-    const valid = ajvValidate(datum)
+    let valid = true
+    let validationErrors = []
+    try {
+      await ajvValidate(datum)
+    } catch(e) {
+      valid = false
+      validationErrors = e.errors
+    }
+    
+    if (datum.__SIDE_EFFECT_DATA) {
+      sideEffectData.push({
+        mutationTargetIdx: j,
+        data: datum.__SIDE_EFFECT_DATA
+      })
+
+      delete datum.__SIDE_EFFECT_DATA      
+    }
 
     if (!valid) {
-      ajvValidate.errors.forEach(error => { // eslint-disable-line no-loop-func
+      validationErrors.forEach(error => { // eslint-disable-line no-loop-func
         errors.push({
           error: error,
           rowNum: curRowNumInSheet,
@@ -148,7 +199,12 @@ const validate = async ({ data, skippedRows, sheetConfig, db }) => {
     })
   }) 
 
-  return { valid: areAllRowsValid, errors, data }
+  return { 
+    valid: areAllRowsValid, 
+    errors, 
+    data, 
+    sideEffectData 
+  }
 }
 
 // ! schema structure looks like
@@ -173,7 +229,7 @@ const validate = async ({ data, skippedRows, sheetConfig, db }) => {
 //   }
 // }
 const getAjvSchema = async ({ fields }, db) => {
-  const schema = { properties: {} }
+  const schema = { '$async': true, properties: {} }
   const schemaProperties = schema.properties
   
   schema.required = fields.map(({ name }) => name)
@@ -223,6 +279,23 @@ const populateSchemaProperties = async ({ fields, schemaProperties, db }) => {
         ],
         errorMessage: "Invalid date; make cell Date type OR format as yyyy-MM-dd, d/M/yy, or dd/MM/yyyy",
       }
+    } else if (type === 'location') {
+      schemaProperties[name] = {
+        anyOf: [
+          // if location cell is null, 'validateLocation' step doesn't 
+          // happen and no side effect data is produced for that row; 
+          // consequence is schema becomes uneven; when data finally persists, 
+          // some docs have 'lat', 'long', 'locationCityState'; others may not
+          { type: 'null' }, 
+          {
+            allOf: [
+              { type: 'string' }, 
+              { validateLocation: true },
+            ]
+          }
+        ],
+        errorMessage: "Invalid location; try another location string or blank out the cell",
+      }
     } else {
       schemaProperties[name] = { type: ['null', type] }
 
@@ -244,6 +317,7 @@ const populateSchemaProperties = async ({ fields, schemaProperties, db }) => {
 
 const TYPE_MAP = {
   csv: String,
+  location: String,
   number: Number,
   integer: Number,
   string: String,

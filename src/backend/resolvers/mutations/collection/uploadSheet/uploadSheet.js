@@ -1,5 +1,6 @@
 const sanitize = require('./utils/sanitize')
 const validate = require('./utils/validate')
+const enrich = require('./utils/enrich')
 const getSheetConfig = require('./utils/getSheetConfig')
 const formatAjvErrors = require('./utils/formatAjvErrors')
 const importPayerHistoricalAccessData = require('./importPayerHistoricalAccessData')
@@ -35,6 +36,7 @@ const uploadSheet = async (
       valid,
       errors,
       data: validatedData,
+      sideEffectData,
     } = await validate({ data, skippedRows, sheetConfig, db: pulseCoreDb })
 
     data = validatedData
@@ -50,6 +52,7 @@ const uploadSheet = async (
       skippedRows,
       originalDataLength,
       targetCollection,
+      sideEffectData,
     })
   }
 
@@ -79,11 +82,11 @@ const uploadSheet = async (
         skippedRows,
         originalDataLength,
         targetCollection,
+        sideEffectData,
       } = sheetObjWithMetadata
 
-      // for data going straight to dev, tack on createdOn to every doc
-      const createdOn = new Date()
-      data = data.map(datum => ({ ...datum, createdOn }))
+      // miscellaneous enrichment of data before it's persisted
+      data = enrich(data, sideEffectData)
 
       await pulseDevDb.collection(targetCollection)
         .deleteMany()
