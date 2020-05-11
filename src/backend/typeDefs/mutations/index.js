@@ -90,6 +90,8 @@ const mutationType = gql`
     sendToSubscribedUsers(input: SendToSubscribedUsersInput!): SendToSubscribedUsersPayload
     sendToTestGroup(input: SendToTestGroupInput): SendToTestGroupPayload
 
+    deleteSourceTreatmentPlan(input: DeleteSourceTreatmentPlanInput!): JSON
+    createSourceTreatmentPlan(input: CreateSourceTreatmentPlanInput!): CreateSourceTreatmentPlanPayload
     bulkCreateTreatmentPlans(input: BulkCreateTreatmentPlansInput!): JSON
 
     createTestEmailGroup: TestEmailGroup

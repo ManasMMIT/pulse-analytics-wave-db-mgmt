@@ -2,6 +2,7 @@ import React from 'react'
 import { Switch, Route, Redirect } from 'react-router-dom'
 
 import PhoenixTreatmentPlans from './PhoenixTreatmentPlans'
+import TreatmentPlansPanel from './TreatmentPlansPanel'
 import IndicationsPanel from './IndicationsPanel'
 import RegimensPanel from './RegimensPanel'
 import ProductsPanel from './ProductsPanel'
@@ -14,6 +15,10 @@ const ProductsIndications = () => (
     <Route
       path={'/orion/configuration/products-indications/phoenix-treatment-plans'}
       component={PhoenixTreatmentPlans}
+    />
+    <Route
+      path={'/orion/configuration/products-indications/treatment-plans'}
+      component={TreatmentPlansPanel}
     />
     <Route
       path={'/orion/configuration/products-indications/indications'}

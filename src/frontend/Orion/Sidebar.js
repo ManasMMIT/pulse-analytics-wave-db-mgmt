@@ -111,6 +111,10 @@ const PRODUCT_INDICATION_LINKS_CONFIG = [
     link: '/orion/configuration/products-indications/phoenix-treatment-plans',
   },
   {
+    label: 'Treatment Plans',
+    link: '/orion/configuration/products-indications/treatment-plans',
+  },
+  {
     label: 'Indications',
     link: '/orion/configuration/products-indications/indications',
   },

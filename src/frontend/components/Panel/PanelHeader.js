@@ -25,10 +25,11 @@ const PanelHeader = ({
   title,
   titleStyle,
   children,
+  childrenStyle,
 }) => (
   <Header style={headerContainerStyle}>
     <Title style={titleStyle}>{title}</Title>
-    <div style={{paddingRight: 24}}>
+    <div style={childrenStyle || { paddingRight: 24 }}>
       { children }
     </div>
   </Header>
@@ -38,12 +39,14 @@ PanelHeader.propTypes = {
   headerContainerStyle: PropTypes.object,
   title: PropTypes.string,
   titleStyle: PropTypes.object,
+  childrenStyle: PropTypes.object,
 }
 
 PanelHeader.defaultProps = {
   headerContainerStyle: {},
   title: 'This is PanelHeader title',
   titleStyle: {},
+  childrenStyle: null,
 }
 
 export default PanelHeader

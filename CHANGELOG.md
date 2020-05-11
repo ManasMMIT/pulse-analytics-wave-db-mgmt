@@ -15,7 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased] - Started: 4-30-20
 
 ### Added
-- `Orion`: Line Master List Panel w/ CRUD
+- `Orion`: Treatment Plans, lines, coverages, books, populations master list views w/ CRUD
 
 ### Changed
 - `Polaris Backend`/`Node Scripts`: Added a `DB_CLUSTER_ENV` variable to have the API show which cluster it's connected to while not revealing the full connection string with the MongoDB password in it
