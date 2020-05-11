@@ -7,7 +7,33 @@ module.exports = async ({
 }) => {
   if (!session) throw new Error('Session not passed to Delete Treatment Plans Cascade Ops')
 
-  // STEP 1: delete `organizations.treatmentPlans` docs for each deleted `treatmentPlan`
+  // STEP 1: find all `organizations.treatmentPlans` docs for all `treatmentPlan`s
+  const orgTps = await db
+    .collection('organizations.treatmentPlans')
+    .find(
+      {
+        treatmentPlanId: { $in: treatmentPlanIds },
+      },
+      { session },
+    ).toArray()
+
+  const orgTpIds = orgTps.map(({ _id }) => _id)
+
+  // STEP 2: delete the PTPs from the tdgProjects collection
+  await db
+    .collection('tdgProjects')
+    .updateMany(
+      {},
+      {
+        $pull: {
+          orgTpIds: { $in: orgTpIds },
+          extraOrgTpIds: { $in: orgTpIds },
+        }
+      },
+      { session }
+    )
+
+  // STEP 3: delete `organizations.treatmentPlans` docs for each to-be-deleted `treatmentPlan`
   await db
     .collection('organizations.treatmentPlans')
     .deleteMany(
@@ -17,7 +43,7 @@ module.exports = async ({
       { session },
     )
 
-  // Step 2: Get enriched trash docs
+  // STEP 4: Get enriched trash docs
   const uncleanTrashDocs = await db
     .collection('organizations.treatmentPlans.history')
     .aggregate(
@@ -26,7 +52,7 @@ module.exports = async ({
     )
     .toArray()
 
-  // STEP 3: delete `organizations.treatmentPlans.history` docs for each deleted `treatmentPlan`
+  // STEP 5: delete `organizations.treatmentPlans.history` docs for each deleted `treatmentPlan`
   await db.collection('organizations.treatmentPlans.history')
     .deleteMany(
       {
@@ -35,14 +61,14 @@ module.exports = async ({
       { session },
     )
 
-  // STEP 4: delete actual treatmentPlans
+  // STEP 6: delete actual treatmentPlans
   await db.collection('treatmentPlans')
     .deleteMany(
       { _id: { $in: treatmentPlanIds } },
       { session },
     )
 
-  // STEP 5: add deleted `organizations.treatmentPlans.history` docs (now enriched) to trash
+  // STEP 7: add deleted `organizations.treatmentPlans.history` docs (now enriched) to trash
   const cleanTrashDocs = uncleanTrashDocs
     .map(({ _id, ...doc }) => doc)
 
