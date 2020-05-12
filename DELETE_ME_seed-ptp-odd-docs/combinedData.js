@@ -21,7 +21,7 @@ module.exports = async getDiffDoc => {
     paLink = null, // if it's not there, sub null for comparison to work
     policyLink = null, // if it's not there, sub null for comparison to work
     population,
-    project,
+    // project,
     regimen,
     score,
     siteLink = null, // if it's not there, sub null for comparison to work
@@ -47,7 +47,7 @@ module.exports = async getDiffDoc => {
     paLink,
     policyLink,
     population,
-    project,
+    // project,
     regimen,
     score,
     siteLink,

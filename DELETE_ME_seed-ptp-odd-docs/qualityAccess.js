@@ -11,7 +11,7 @@ module.exports = async getDiffDoc => {
     tierRating,
     coverage,
     book,
-    project,
+    // project,
     month,
     year,
   }) => [
@@ -26,7 +26,7 @@ module.exports = async getDiffDoc => {
     tierRating,
     coverage,
     book,
-    project,
+    // project,
     month,
     year,
   ].join('|')

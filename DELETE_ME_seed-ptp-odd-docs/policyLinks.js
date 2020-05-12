@@ -7,7 +7,7 @@ module.exports = async getDiffDoc => {
     month,
     // organization,
     paLink = null, // if it's not there, sub null for comparison to work
-    project,
+    // project,
     regimen,
     siteLink = null, // if it's not there, sub null for comparison to work
     slug,
@@ -20,7 +20,7 @@ module.exports = async getDiffDoc => {
     month,
     // organization,
     paLink,
-    project,
+    // project,
     regimen,
     siteLink,
     slug,
