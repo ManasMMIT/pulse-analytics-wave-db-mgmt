@@ -11,7 +11,7 @@ const {
 
 class Manager {
   constructor({
-    sheetData, timestamp, hashType = 'ptps', projectId
+    sheetData = [], timestamp, hashType = 'ptps', projectId
   }) {
 
     this.sheetData = sheetData
@@ -28,24 +28,21 @@ class Manager {
     this.timestamp = zonedTimeToUtc(timestamp, DEFAULT_TIMEZONE)
   }
 
-  async setOrgsHashBySlug(setOrgs = []) {
-    const orgs = setOrgs
-    this.orgsHashBySlug = _.keyBy(orgs, 'slug')
+  setOrgsHashBySlug(setOrgs = []) {
+    this.orgsHashBySlug = _.keyBy(setOrgs, 'slug')
   }
 
-  async setEnrichedPtps(setEnrichedPtps = []) {
-    const enrichedPtps = setEnrichedPtps
-    this.enrichedPtpsByCombo = _.groupBy(enrichedPtps, this.payerCombinationHasher)
+  setEnrichedPtpsByCombination(setEnrichedPtps = []) {
+    this.enrichedPtpsByCombo = _.groupBy(setEnrichedPtps, this.payerCombinationHasher)
   }
 
-  async setQualityOfAccessHash(setQualityOfAccesses = []) {
-    const qualityOfAccesses = setQualityOfAccesses
-    this.qualityOfAccessHash = _.keyBy(qualityOfAccesses, 'access')
+  setQualityOfAccessHash(setQualityOfAccesses = []) {
+    this.qualityOfAccessHash = _.keyBy(setQualityOfAccesses, 'access')
   }
 
-  async setupHashes({ setOrgs, setEnrichedPtps, setQualityOfAccesses }) {
+  setupHashes({ setOrgs, setEnrichedPtps, setQualityOfAccesses }) {
     this.setOrgsHashBySlug(setOrgs)
-    this.setEnrichedPtps(setEnrichedPtps)
+    this.setEnrichedCombination(setEnrichedPtps)
     this.setQualityOfAccessHash(setQualityOfAccesses)
   }
 
