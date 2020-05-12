@@ -236,6 +236,7 @@ module.exports = ({
 
   console.log(collectionName + ': ' + 'Total diff...in old not new: ' + inOldNotNew.length)
   console.log(collectionName + ': ' + 'Total diff...in new not old: ' + inNewNotOld.length)
+  console.log(collectionName + ': ' + 'Total diff...in both new and old: ' + inBothNewAndOld.length)
 
   return {
     simpleDiff: {
