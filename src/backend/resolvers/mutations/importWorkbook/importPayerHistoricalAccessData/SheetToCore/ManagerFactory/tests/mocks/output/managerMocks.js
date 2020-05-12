@@ -1,3 +1,5 @@
+const mockFormattedTimestamp = new Date('2020-04-30T04:00:00.000+00:00')
+
 const mockOrgsHashBySlug = {
   aetna: {
     _id: "5d825030cc80b15a9476b813",
@@ -293,6 +295,7 @@ const mockFilteredAndEnrichedData = [
 ]
 
 module.exports = {
+  mockFormattedTimestamp,
   mockOrgsHashBySlug,
   mockEnrichedPtpsByPtps,
   mockEnrichedPtpsByBrcs,

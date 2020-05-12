@@ -42,7 +42,7 @@ class Manager {
 
   setupHashes({ setOrgs, setEnrichedPtps, setQualityOfAccesses }) {
     this.setOrgsHashBySlug(setOrgs)
-    this.setEnrichedCombination(setEnrichedPtps)
+    this.setEnrichedPtpsByCombination(setEnrichedPtps)
     this.setQualityOfAccessHash(setQualityOfAccesses)
   }
 

@@ -5,22 +5,22 @@ const {
   mockEnrichedPtps,
   mockAccesses,
   mockSheetData,
-} = require('./inputMockData')
+} = require('./mocks/input/managerMocks')
 
 const {
   mockOrgsHashBySlug,
   mockEnrichedPtpsByPtps,
   mockEnrichedPtpsByBrcs,
   mockQualityOfAccessHash,
-  mockFilteredAndEnrichedData
-} = require('./outputMockData')
+  mockFilteredAndEnrichedData,
+  mockFormattedTimestamp
+} = require('./mocks/output/managerMocks')
 
 describe('Sheet to Core Manager', () => {
   test('setTimezone method should set a NY time date object', () => {
     const manager = new Manager({})
     manager.setTimeZone(mockTimestamp)
-    const expectedTimestamp = new Date('2020-04-30T04:00:00.000+00:00')
-    expect(manager.timestamp).toStrictEqual(expectedTimestamp)
+    expect(manager.timestamp).toStrictEqual(mockFormattedTimestamp)
   })
 
   test('setOrgsHashBySlug should set an array of organizations keyed by slug', () => {
@@ -49,9 +49,11 @@ describe('Sheet to Core Manager', () => {
 
   test('getFilteredAndEnrichedSheetData should return enriched sheet data ', () => {
     const manager = new Manager({ sheetData: mockSheetData })
-    manager.setOrgsHashBySlug(mockOrganizations)
-    manager.setEnrichedPtpsByCombination(mockEnrichedPtps)
-    manager.setQualityOfAccessHash(mockAccesses)
+    manager.setupHashes({
+      setOrgs: mockOrganizations,
+      setEnrichedPtps: mockEnrichedPtps,
+      setQualityOfAccesses: mockAccesses
+    })
 
     const filteredAndEnrichedSheetData = manager.getFilteredAndEnrichedSheetData()
     expect(filteredAndEnrichedSheetData).toStrictEqual(mockFilteredAndEnrichedData)
