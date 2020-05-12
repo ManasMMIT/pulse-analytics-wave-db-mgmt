@@ -44,7 +44,9 @@ const mockEnrichedPtpsByPtps = {
       population: "HER2+",
       line: "Adjuvant",
       book: "Commercial",
-      coverage: "Medical"
+      coverage: "Medical",
+      treatmentPlanId: "5eac293a79e11113da3b1b6b",
+      organizationId: "5d825030cc80b15a9476b813"
     }
   ],
   "anthem|Breast Cancer|Herceptin+Perjeta+docetaxel|Neoadjuvant|HER2+|Medicare|Medical": [
@@ -56,7 +58,9 @@ const mockEnrichedPtpsByPtps = {
       population: "HER2+",
       line: "Neoadjuvant",
       book: "Medicare",
-      coverage: "Medical"
+      coverage: "Medical",
+      treatmentPlanId: "5eac293a79e11113da3b1b65",
+      organizationId: "5d825030cc80b15a9476b822"
     }
   ],
   "bcbs-nc|Breast Cancer|Ibrance+Faslodex|2L+ Metastatic|HR+, HER2-|Commercial|Pharmacy": [
@@ -68,7 +72,9 @@ const mockEnrichedPtpsByPtps = {
       population: "HR+, HER2-",
       line: "2L+ Metastatic",
       book: "Commercial",
-      coverage: "Pharmacy"
+      coverage: "Pharmacy",
+      treatmentPlanId: "5eac293a79e11113da3b1b83",
+      organizationId: "5d825030cc80b15a9476b83d"
     }
   ],
   "aetna|Breast Cancer|Herceptin|1L+ Metastatic|HER2+|Commercial|Medical": [
@@ -80,7 +86,9 @@ const mockEnrichedPtpsByPtps = {
       population: "HER2+",
       line: "1L+ Metastatic",
       book: "Commercial",
-      coverage: "Medical"
+      coverage: "Medical",
+      treatmentPlanId: "5eac293a79e11113da3b1b73",
+      organizationId: "5d825030cc80b15a9476b813"
     }
   ],
   "anthem|Breast Cancer|Herceptin+Perjeta+docetaxel|1L+ Metastatic|HER2+|Medicare|Medical": [
@@ -92,7 +100,9 @@ const mockEnrichedPtpsByPtps = {
       population: "HER2+",
       line: "1L+ Metastatic",
       book: "Medicare",
-      coverage: "Medical"
+      coverage: "Medical",
+      treatmentPlanId: "5eac293a79e11113da3b1b63",
+      organizationId: "5d825030cc80b15a9476b822"
     }
   ]
 }
@@ -107,7 +117,9 @@ const mockEnrichedPtpsByBrcs = {
       population: "HER2+",
       line: "Adjuvant",
       book: "Commercial",
-      coverage: "Medical"
+      coverage: "Medical",
+      treatmentPlanId: "5eac293a79e11113da3b1b6b",
+      organizationId: "5d825030cc80b15a9476b813"
     },
     {
       _id: "5eac293b79e11113da3b6800",
@@ -117,7 +129,9 @@ const mockEnrichedPtpsByBrcs = {
       population: "HER2+",
       line: "1L+ Metastatic",
       book: "Commercial",
-      coverage: "Medical"
+      coverage: "Medical",
+      treatmentPlanId: "5eac293a79e11113da3b1b73",
+      organizationId: "5d825030cc80b15a9476b813"
     }
   ],
   "anthem|Herceptin+Perjeta+docetaxel|Medicare|Medical": [
@@ -129,7 +143,9 @@ const mockEnrichedPtpsByBrcs = {
       population: "HER2+",
       line: "Neoadjuvant",
       book: "Medicare",
-      coverage: "Medical"
+      coverage: "Medical",
+      treatmentPlanId: "5eac293a79e11113da3b1b65",
+      organizationId: "5d825030cc80b15a9476b822"
     },
     {
       _id: "5eac293b79e11113da3b6856",
@@ -139,7 +155,9 @@ const mockEnrichedPtpsByBrcs = {
       population: "HER2+",
       line: "1L+ Metastatic",
       book: "Medicare",
-      coverage: "Medical"
+      coverage: "Medical",
+      treatmentPlanId: "5eac293a79e11113da3b1b63",
+      organizationId: "5d825030cc80b15a9476b822"
     }
   ],
   "bcbs-nc|Ibrance+Faslodex|Commercial|Pharmacy": [
@@ -151,7 +169,9 @@ const mockEnrichedPtpsByBrcs = {
       population: "HR+, HER2-",
       line: "2L+ Metastatic",
       book: "Commercial",
-      coverage: "Pharmacy"
+      coverage: "Pharmacy",
+      treatmentPlanId: "5eac293a79e11113da3b1b83",
+      organizationId: "5d825030cc80b15a9476b83d"
     }
   ]
 }
@@ -215,8 +235,8 @@ const mockFilteredAndEnrichedData = [
     coverage: "Medical",
     mockDataField: "mockDataValue",
     orgTpId: "5eac293b79e11113da3b67f6",
-    organizationId: "5d825030cc80b15a9476b813",
-    treatmentPlanId: "",
+    treatmentPlanId: "5eac293a79e11113da3b1b6b",
+    organizationId: "5d825030cc80b15a9476b813"
   },
   {
     slug: "anthem",
@@ -228,8 +248,8 @@ const mockFilteredAndEnrichedData = [
     coverage: "Medical",
     mockDataField: "mockDataValue",
     orgTpId: "5eac293b79e11113da3b683e",
-    organizationId: "5d825030cc80b15a9476b822",
-    treatmentPlanId: "",
+    treatmentPlanId: "5eac293a79e11113da3b1b65",
+    organizationId: "5d825030cc80b15a9476b822"
   },
   {
     slug: "bcbs-nc",
@@ -241,8 +261,8 @@ const mockFilteredAndEnrichedData = [
     coverage: "Pharmacy",
     mockDataField: "mockDataValue",
     orgTpId: "5eac293b79e11113da3b687d",
-    organizationId: "5d825030cc80b15a9476b83d",
-    treatmentPlanId: "",
+    treatmentPlanId: "5eac293a79e11113da3b1b83",
+    organizationId: "5d825030cc80b15a9476b83d"
   },
   {
     slug: "aetna",
@@ -254,8 +274,8 @@ const mockFilteredAndEnrichedData = [
     coverage: "Medical",
     mockDataField: "mockDataValue",
     orgTpId: "5eac293b79e11113da3b6800",
-    organizationId: "5d825030cc80b15a9476b813",
-    treatmentPlanId: "",
+    treatmentPlanId: "5eac293a79e11113da3b1b73",
+    organizationId: "5d825030cc80b15a9476b813"
   },
   {
     slug: "anthem",
@@ -267,8 +287,8 @@ const mockFilteredAndEnrichedData = [
     coverage: "Medical",
     mockDataField: "mockDataValue",
     orgTpId: "5eac293b79e11113da3b6856",
-    organizationId: "5d825030cc80b15a9476b822",
-    treatmentPlanId: "",
+    treatmentPlanId: "5eac293a79e11113da3b1b63",
+    organizationId: "5d825030cc80b15a9476b822"
   }
 ]
 
@@ -276,5 +296,6 @@ module.exports = {
   mockOrgsHashBySlug,
   mockEnrichedPtpsByPtps,
   mockEnrichedPtpsByBrcs,
-  mockQualityOfAccessHash
+  mockQualityOfAccessHash,
+  mockFilteredAndEnrichedData
 }

@@ -1,4 +1,4 @@
-const mockTimestamp = "2020-04-30"
+const mockTimestamp = "2020-04-30";
 
 const mockSheetData = [
   {
@@ -51,7 +51,7 @@ const mockSheetData = [
     coverage: "Medical",
     mockDataField: "mockDataValue"
   }
-]
+];
 
 const mockOrganizations = [
   {
@@ -87,7 +87,7 @@ const mockOrganizations = [
       "b81f2c08-dfb7-474c-b8db-6b4f1cdac43c"
     ]
   }
-]
+];
 
 const mockEnrichedPtps = [
   {
@@ -98,7 +98,9 @@ const mockEnrichedPtps = [
     population: "HER2+",
     line: "Adjuvant",
     book: "Commercial",
-    coverage: "Medical"
+    coverage: "Medical",
+    treatmentPlanId: "5eac293a79e11113da3b1b6b",
+    organizationId: "5d825030cc80b15a9476b813"
   },
   {
     _id: "5eac293b79e11113da3b683e",
@@ -108,7 +110,9 @@ const mockEnrichedPtps = [
     population: "HER2+",
     line: "Neoadjuvant",
     book: "Medicare",
-    coverage: "Medical"
+    coverage: "Medical",
+    treatmentPlanId: "5eac293a79e11113da3b1b65",
+    organizationId: "5d825030cc80b15a9476b822"
   },
   {
     _id: "5eac293b79e11113da3b687d",
@@ -118,7 +122,9 @@ const mockEnrichedPtps = [
     population: "HR+, HER2-",
     line: "2L+ Metastatic",
     book: "Commercial",
-    coverage: "Pharmacy"
+    coverage: "Pharmacy",
+    treatmentPlanId: "5eac293a79e11113da3b1b83",
+    organizationId: "5d825030cc80b15a9476b83d"
   },
   {
     _id: "5eac293b79e11113da3b6800",
@@ -128,19 +134,23 @@ const mockEnrichedPtps = [
     population: "HER2+",
     line: "1L+ Metastatic",
     book: "Commercial",
-    coverage: "Medical"
+    coverage: "Medical",
+    treatmentPlanId: "5eac293a79e11113da3b1b73",
+    organizationId: "5d825030cc80b15a9476b813"
   },
   {
-    _id: "5eac293b79e11113da3b6856",
+    _id: "5eac293b79e11113da3b6856", 
     slug: "anthem",
     indication: "Breast Cancer",
     regimen: "Herceptin+Perjeta+docetaxel",
     population: "HER2+",
     line: "1L+ Metastatic",
     book: "Medicare",
-    coverage: "Medical"
+    coverage: "Medical",
+    treatmentPlanId: "5eac293a79e11113da3b1b63",
+    organizationId: "5d825030cc80b15a9476b822"
   }
-]
+];
 
 const mockAccesses = [
   {
@@ -188,12 +198,12 @@ const mockAccesses = [
         "Prior authorization is required, and additional criteria beyond FDA label have to be met in order to get coverage approval (e.g. oncologist Rx, medical documentations)"
     }
   }
-]
+];
 
 module.exports = {
   mockTimestamp,
   mockOrganizations,
   mockEnrichedPtps,
   mockAccesses,
-  mockSheetData,
-}
+  mockSheetData
+};
