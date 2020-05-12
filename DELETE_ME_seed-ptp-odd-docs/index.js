@@ -19,6 +19,7 @@ const runDiffer = async () => {
 
   const pulseCoreStaging = stagingDbs.db('pulse-core')
 
+  console.log('Loading diffing data')
   const [
     organizations,
     indications,
@@ -221,7 +222,7 @@ const runDiffer = async () => {
         }
       ], { allowDiskUse: true }).toArray(),
   ])
-
+console.log('done loading diffing data')
   const validSlugs = _.keyBy(organizations, 'slug')
   const invalidSlugs = {}
 

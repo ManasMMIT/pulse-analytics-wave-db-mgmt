@@ -220,6 +220,9 @@ module.exports = ({
 
   console.log(`FINISHED Comparing ${collectionName} docs`)
 
+  console.log(collectionName + ': ' + 'Total diff...in old not new: ' + inOldNotNew.length)
+  console.log(collectionName + ': ' + 'Total diff...in new not old: ' + inNewNotOld.length)
+
   return {
     simpleDiff: {
       collection: collectionName,
