@@ -17,6 +17,7 @@ module.exports = ({
   invalidCoverages,
   treatmentPlans,
   allowedPolicyLinkNotches,
+  allowedPtpNotches,
   dbs: {
     pulseDevStaging,
     pulseDevControl,
@@ -37,7 +38,7 @@ module.exports = ({
   )
 
   const validPtpNotches = _.keyBy(
-    allowedPolicyLinkNotches,
+    allowedPtpNotches,
     doc => [doc.slug, doc.month, doc.year, doc.book, doc.coverage, doc.regimen, doc.indication, doc.population, doc.line].join('|')
   )
 

@@ -30,6 +30,7 @@ const runDiffer = async () => {
     coverages,
     treatmentPlans,
     allowedPolicyLinkNotches,
+    allowedPtpNotches,
   ] = await Promise.all([
     pulseCoreStaging.collection('organizations').find({ type: 'Payer' }).toArray(),
     pulseCoreStaging.collection('indications').find().toArray(),
@@ -221,6 +222,144 @@ const runDiffer = async () => {
           }
         }
       ], { allowDiskUse: true }).toArray(),
+    pulseCoreStaging.collection('organizations.treatmentPlans.history')
+      .aggregate([
+        {
+          '$addFields': {
+            'dateParts': {
+              '$dateToParts': {
+                'date': '$timestamp'
+              }
+            }
+          }
+        }, {
+          '$lookup': {
+            'from': 'organizations',
+            'localField': 'organizationId',
+            'foreignField': '_id',
+            'as': 'organization'
+          }
+        }, {
+          '$lookup': {
+            'from': 'treatmentPlans',
+            'localField': 'treatmentPlanId',
+            'foreignField': '_id',
+            'as': 'treatmentPlan'
+          }
+        }, {
+          '$lookup': {
+            'from': 'regimens',
+            'localField': 'treatmentPlan.regimen',
+            'foreignField': '_id',
+            'as': 'regimen'
+          }
+        }, {
+          '$lookup': {
+            'from': 'indications',
+            'localField': 'treatmentPlan.indication',
+            'foreignField': '_id',
+            'as': 'indication'
+          }
+        }, {
+          '$lookup': {
+            'from': 'lines',
+            'localField': 'treatmentPlan.line',
+            'foreignField': '_id',
+            'as': 'line'
+          }
+        }, {
+          '$lookup': {
+            'from': 'populations',
+            'localField': 'treatmentPlan.population',
+            'foreignField': '_id',
+            'as': 'population'
+          }
+        }, {
+          '$lookup': {
+            'from': 'books',
+            'localField': 'treatmentPlan.book',
+            'foreignField': '_id',
+            'as': 'book'
+          }
+        }, {
+          '$lookup': {
+            'from': 'coverages',
+            'localField': 'treatmentPlan.coverage',
+            'foreignField': '_id',
+            'as': 'coverage'
+          }
+        }, {
+          '$addFields': {
+            'regimen': {
+              '$arrayElemAt': [
+                '$regimen', 0
+              ]
+            },
+            'book': {
+              '$arrayElemAt': [
+                '$book', 0
+              ]
+            },
+            'coverage': {
+              '$arrayElemAt': [
+                '$coverage', 0
+              ]
+            },
+            'population': {
+              '$arrayElemAt': [
+                '$population', 0
+              ]
+            },
+            'indication': {
+              '$arrayElemAt': [
+                '$indication', 0
+              ]
+            },
+            'line': {
+              '$arrayElemAt': [
+                '$line', 0
+              ]
+            },
+            'organization': {
+              '$arrayElemAt': [
+                '$organization', 0
+              ]
+            }
+          }
+        }, {
+          '$addFields': {
+            'line': '$line.name',
+            'population': '$population.name',
+            'indication': '$indication.name',
+            'regimen': '$regimen.name',
+            'book': '$book.name',
+            'coverage': '$coverage.name',
+            'slug': '$organization.slug'
+          }
+        }, {
+          '$group': {
+            '_id': {
+              'timestamp': '$timestamp',
+              'book': '$book',
+              'coverage': '$coverage',
+              'regimen': '$regimen',
+              'slug': '$slug',
+              'month': '$dateParts.month',
+              'year': '$dateParts.year',
+              'indication': '$indication',
+              'population': '$population',
+              'line': '$line',
+            },
+            'data': {
+              '$push': '$$ROOT'
+            }
+          }
+        }, {
+          '$replaceRoot': {
+            'newRoot': '$_id'
+          }
+        }
+      ], { allowDiskUse: true }).toArray(),
   ])
 console.log('done loading diffing data')
   const validSlugs = _.keyBy(organizations, 'slug')
@@ -261,6 +400,7 @@ console.log('done loading diffing data')
     invalidCoverages,
     treatmentPlans,
     allowedPolicyLinkNotches,
+    allowedPtpNotches,
     dbs: {
       pulseDevStaging,
       pulseDevControl,
