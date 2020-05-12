@@ -1,4 +1,4 @@
-const mockTimestamp = "2020-04-30";
+const mockTimestamp = "2020-04-30"
 
 const mockSheetData = [
   {
@@ -51,7 +51,7 @@ const mockSheetData = [
     coverage: "Medical",
     mockDataField: "mockDataValue"
   }
-];
+]
 
 const mockOrganizations = [
   {
@@ -198,12 +198,12 @@ const mockAccesses = [
         "Prior authorization is required, and additional criteria beyond FDA label have to be met in order to get coverage approval (e.g. oncologist Rx, medical documentations)"
     }
   }
-];
+]
 
 module.exports = {
   mockTimestamp,
   mockOrganizations,
   mockEnrichedPtps,
   mockAccesses,
-  mockSheetData
-};
+  mockSheetData,
+}
