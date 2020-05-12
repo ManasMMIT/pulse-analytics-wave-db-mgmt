@@ -66,6 +66,26 @@ const mockEnrichedPtps = [
     line: "2L+ Metastatic",
     book: "Commercial",
     coverage: "Pharmacy"
+  },
+  {
+    _id: "5eac293b79e11113da3b6800",
+    slug: "aetna",
+    indication: "Breast Cancer",
+    regimen: "Herceptin",
+    population: "HER2+",
+    line: "1L+ Metastatic",
+    book: "Commercial",
+    coverage: "Medical"
+  },
+  {
+    _id: "5eac293b79e11113da3b6856",
+    slug: "anthem",
+    indication: "Breast Cancer",
+    regimen: "Herceptin+Perjeta+docetaxel",
+    population: "HER2+",
+    line: "1L+ Metastatic",
+    book: "Commercial",
+    coverage: "Medical"
   }
 ]
 
