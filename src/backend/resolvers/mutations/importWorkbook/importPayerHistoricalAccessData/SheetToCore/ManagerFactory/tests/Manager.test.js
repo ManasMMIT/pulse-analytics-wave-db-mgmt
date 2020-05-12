@@ -3,12 +3,14 @@ const {
   mockTimestamp,
   mockOrganizations,
   mockEnrichedPtps,
+  mockAccesses,
 } = require('./input.mocks')
 
 const {
   mockOrgsHashBySlug,
   mockEnrichedPtpsByPtps,
   mockEnrichedPtpsByBrcs,
+  mockQualityOfAccessHash
 } = require('./output.mocks')
 
 describe('Sheet to Core Manager', () => {
@@ -37,11 +39,11 @@ describe('Sheet to Core Manager', () => {
     expect(manager.enrichedPtpsByCombo).toStrictEqual(mockEnrichedPtpsByBrcs)
   })
 
-  // test('setQualityOfAccessHash should return an array of quality of access data grouped by access', () => {
-  //   const manager = new Manager({ sheetData: [] })
-  //   manager.setQualityOfAccessHash([])
-  //   expect(manager.qualityOfAccessHash).toBe(1)
-  // })
+  test('setQualityOfAccessHash should return an array of quality of access data grouped by access', () => {
+    const manager = new Manager({})
+    manager.setQualityOfAccessHash(mockAccesses)
+    expect(manager.qualityOfAccessHash).toStrictEqual(mockQualityOfAccessHash)
+  })
 
   // test('getFilteredAndEnrichedSheetData should return ', () => {
   //   const manager = new Manager({ sheetData: [] })
