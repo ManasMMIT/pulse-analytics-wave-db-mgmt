@@ -6,19 +6,13 @@ import FontSpace from '../../../utils/fontspace'
 import Spacing from '../../../utils/spacing'
 
 export const PageContainer = styled.div({
-  width: '100%'
-})
-
-export const PageHeaderContainer = styled.div({
-  borderBottom: `1px solid ${transparentize(0.9, Color.BLACK)}`,
-  padding: Spacing.S7,
-})
-
-export const PageHeader = styled.h1({
-  ...FontSpace.FS4,
-  color: Color.BLACK,
-  fontWeight: 700,
-  textTransform: 'uppercase',
+  padding: Spacing.EXTRA_LARGE,
+  backgroundColor: '#e8ebec',
+  flex: '1 1 auto',
+  overflowY: 'scroll',
+  boxSizing: 'border-box',
+  display: 'flex',
+  flexDirection: 'column',
 })
 
 export const ImportFormContainer = styled.div({
@@ -47,9 +41,16 @@ export const ErrorContainer = styled.div({
   borderRadius: 4,
   color: Color.RED,
   fontWeight: 500,
-  height: 600,
   marginTop: Spacing.S7,
   overflow: 'auto',
   padding: Spacing.S7,
   whiteSpace: 'pre-wrap',
+})
+
+export const CardHeader = styled.div({
+  fontSize: 14,
+  fontWeight: 700,
+  padding: `${Spacing.S4} ${Spacing.S7}`,
+  textTransform: 'uppercase',
+  borderBottom: `1px solid ${transparentize(0.9, Color.BLACK)}`,
 })

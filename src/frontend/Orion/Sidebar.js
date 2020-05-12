@@ -38,8 +38,7 @@ const Wrapper = styled.div({
   backgroundColor: Colors.TOOL_SIDEBAR,
   display: 'flex',
   flexDirection: 'column',
-  overflowY: 'scroll',
-  height: '100vh',
+  overflowY: 'auto',
 })
 
 const sharedStyles = {

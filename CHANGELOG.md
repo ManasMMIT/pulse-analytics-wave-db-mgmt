@@ -14,6 +14,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased] - Started: 5-11-20
 
+### Added
+- `Orion`: Built out tools timestamp widget on import tool page for updating timestamps globally on core nodes, core teams, dev users.sitemaps; meant to replace collectionsConfig/dashboardsConfig usage in wave-app/wave-api
+
 ## [2.4.0] - Started: 4-30-20
 
 ### Added

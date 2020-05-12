@@ -1,6 +1,5 @@
 import React, { useState, useRef } from "react"
 import XLSX from 'xlsx'
-import _ from 'lodash'
 
 import Select from 'react-select'
 import Spinner from '../../../Phoenix/shared/Spinner'
@@ -13,17 +12,17 @@ import { customSelectStyles } from '../../../components/customSelectStyles'
 import FontSpace from '../../../utils/fontspace'
 import Color from '../../../utils/color'
 
-
 import {
   PageContainer,
-  PageHeaderContainer,
-  PageHeader,
   ImportFormContainer,
   FieldContainer,
   FieldLabel,
   FileInput,
   ErrorContainer,
+  CardHeader,
 } from './styledImportComponents'
+
+import ToolsTimestamps from './ToolsTimestamps'
 
 const Import = () => {
   const fileInputRef = useRef(null)
@@ -95,62 +94,72 @@ const Import = () => {
 
   return (
     <PageContainer>
-      <PageHeaderContainer>
-        <PageHeader>Import Excel Sheets</PageHeader>
-      </PageHeaderContainer>
+      <div style={{ display: 'flex' }}>
+        <div style={{ flex: 1, margin: '24px 12px 24px 24px', backgroundColor: '#FFFFFF', borderRadius: 4 }}>
+          <CardHeader>Import Excel Sheet</CardHeader>
 
-        <div style={{ padding: '24px 0 0 36px', color: Color.RED, ...FontSpace.FS3 }}>
-          <ul style={{ listStyle: 'circle' }}>
-            <li>Second and third rows are always skipped</li>
-            <li>If an error message says "should be null,number", it means cell should either be empty or in the format specified</li>
-          </ul>
+          <div style={{ padding: '24px 12px 0 36px', color: Color.RED, ...FontSpace.FS3 }}>
+            <ul style={{ listStyle: 'circle' }}>
+              <li>Second and third rows are always skipped</li>
+              <li>If an error message says "should be null,number", it means cell should either be empty or in the format specified</li>
+            </ul>
+          </div>
+
+          <ImportFormContainer>
+            <FieldContainer>
+              <FieldLabel>Pick an Excel file:</FieldLabel>
+              <FileInput
+                ref={fileInputRef}
+                type="file"
+                multiple
+                onChange={onFileAdded}
+              />
+            </FieldContainer>
+
+              <FieldContainer>
+                <FieldLabel>Sheets to Upload:</FieldLabel>
+                {
+                  <Select
+                    value={selectedSheet}
+                    onChange={obj => selectSheet(obj)}
+                    options={sheetNames.map(n => ({ value: n, label: n }))}
+                    styles={customSelectStyles}
+                  />
+                }
+              </FieldContainer>
+
+              <Button onClick={handleSubmit}>
+                Import Sheet
+              </Button>
+          </ImportFormContainer>
         </div>
 
-      <ImportFormContainer>
-        <FieldContainer>
-          <FieldLabel>Pick an Excel file:</FieldLabel>
-          <FileInput
-            ref={fileInputRef}
-            type="file"
-            multiple
-            onChange={onFileAdded}
-          />
-        </FieldContainer>
+        <div style={{ flex: 1, margin: '24px 24px 24px 12px', backgroundColor: '#FFFFFF', borderRadius: 4 }}>
+          <CardHeader>Last Updated Dates</CardHeader>
+          <ToolsTimestamps />
+        </div>
+      </div>
 
-        {
-          _.isEmpty(sheetNames) || (
-            <FieldContainer style={{ width: 500 }}>
-              <FieldLabel>Sheets to Upload:</FieldLabel>
-              {
-                <Select
-                  value={selectedSheet}
-                  onChange={obj => selectSheet(obj)}
-                  options={sheetNames.map(n => ({ value: n, label: n }))}
-                  styles={customSelectStyles}
-                />
-              }
-            </FieldContainer>
-          )
-        }
-
-        {
-          selectedSheet && (
-            <Button onClick={handleSubmit}>
-              Import Sheet
-            </Button>
-          )
-        }
-
-        { loading && <Spinner /> }
-
+      <div 
+        style={{ 
+          flex: '1 0 0%',
+          margin: '0px 24px 24px 24px',
+          backgroundColor: '#FFFFFF',
+          borderRadius: 4,
+          padding: 24,
+          overflow: 'auto',
+        }}
+      >
         {
           errors && (
             <ErrorContainer>
-              { errors }
+              {errors}
             </ErrorContainer>
           )
         }
-      </ImportFormContainer>
+
+        {loading && <Spinner />}
+      </div>
     </PageContainer>
   )
 }

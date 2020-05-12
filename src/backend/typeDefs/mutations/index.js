@@ -43,6 +43,8 @@ const mutationType = gql`
     createSourceNode(input: CreateSourceNodeInput!): Node
     updateTeamNode(input: UpdateTeamNodeInput!): Node
 
+    updateTdgTimestamps(input: UpdateTdgTimestampsInput!): JSON
+
     updateRoleSitemap(input: UpdateRoleSitemapInput!): UpdateRoleSitemapPayload
     updatePermissions(input: UpdatePermissionsInput!): UpdateTeamPayload
     pushSitemapToDev: String

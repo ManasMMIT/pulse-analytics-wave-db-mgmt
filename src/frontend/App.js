@@ -35,7 +35,6 @@ const PolarisSidebar = styled.div({
   display: 'flex',
   flexDirection: 'column',
   backgroundColor: '#0E2539',
-  height: `calc(100vh - ${Spacing.SMALL})`,
   padding: Spacing.TINY,
 })
 
@@ -140,7 +139,7 @@ const App = () => {
   return (
     <ApolloProvider client={client}>
         <Router>
-          <div style={{ display: 'flex' }}>
+          <div style={{ display: 'flex', height: '100vh' }}>
             <PolarisSidebar>
               <StyledNavLink
                 to="/phoenix"
