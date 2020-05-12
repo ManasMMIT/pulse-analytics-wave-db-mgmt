@@ -4,14 +4,15 @@ const {
   mockOrganizations,
   mockEnrichedPtps,
   mockAccesses,
-} = require('./input.mocks')
+  mockSheetData,
+} = require('./inputMockDatata')
 
 const {
   mockOrgsHashBySlug,
   mockEnrichedPtpsByPtps,
   mockEnrichedPtpsByBrcs,
   mockQualityOfAccessHash
-} = require('./output.mocks')
+} = require('./outputMockDatata')
 
 describe('Sheet to Core Manager', () => {
   test('setTimezone method should set a NY time date object', () => {
@@ -27,29 +28,30 @@ describe('Sheet to Core Manager', () => {
     expect(manager.orgsHashBySlug).toStrictEqual(mockOrgsHashBySlug)
   })
 
-  test('setEnrichedPtpsByCombos should return an array of ptps grouped by PTP', () => {
+  test('setEnrichedPtpsByCombos should set an array of ptps grouped by PTP', () => {
     const manager = new Manager({})
     manager.setEnrichedPtpsByCombination(mockEnrichedPtps)
     expect(manager.enrichedPtpsByCombo).toStrictEqual(mockEnrichedPtpsByPtps)
   })
 
-  test('setEnrichedPtpsByCombos should return an array of ptps grouped by BRCS', () => {
+  test('setEnrichedPtpsByCombos should set an array of ptps grouped by BRCS if hashType is set as brcs', () => {
     const manager = new Manager({ hashType: 'brcs' })
     manager.setEnrichedPtpsByCombination(mockEnrichedPtps)
     expect(manager.enrichedPtpsByCombo).toStrictEqual(mockEnrichedPtpsByBrcs)
   })
 
-  test('setQualityOfAccessHash should return an array of quality of access data grouped by access', () => {
+  test('setQualityOfAccessHash should set an array of quality of access data grouped by access', () => {
     const manager = new Manager({})
     manager.setQualityOfAccessHash(mockAccesses)
     expect(manager.qualityOfAccessHash).toStrictEqual(mockQualityOfAccessHash)
   })
 
-  // test('getFilteredAndEnrichedSheetData should return ', () => {
-  //   const manager = new Manager({ sheetData: [] })
-  //   manager.setOrgsHashBySlug([])
-  //   manager.setEnrichedPtpsByCombination([])
-  //   manager.setQualityOfAccessHash([])
+  test('getFilteredAndEnrichedSheetData should return ', () => {
+    const manager = new Manager({ sheetData: mockSheetData })
+    manager.setOrgsHashBySlug(mockOrganizations)
+    manager.setEnrichedPtpsByCombination(mockEnrichedPtps)
+    manager.setQualityOfAccessHash(mockAccesses)
 
-  // })
+
+  })
 })

@@ -1,5 +1,58 @@
 const mockTimestamp = "2020-04-30"
 
+const mockSheetData = [
+  {
+    slug: "aetna",
+    indication: "Breast Cancer",
+    regimen: "Herceptin",
+    population: "HER2+",
+    line: "Adjuvant",
+    book: "Commercial",
+    coverage: "Medical",
+    mockDataField: "mockDataValue"
+  },
+  {
+    slug: "anthem",
+    indication: "Breast Cancer",
+    regimen: "Herceptin+Perjeta+docetaxel",
+    population: "HER2+",
+    line: "Neoadjuvant",
+    book: "Medicare",
+    coverage: "Medical",
+    mockDataField: "mockDataValue"
+  },
+  {
+    slug: "bcbs-nc",
+    indication: "Breast Cancer",
+    regimen: "Ibrance+Faslodex",
+    population: "HR+, HER2-",
+    line: "2L+ Metastatic",
+    book: "Commercial",
+    coverage: "Pharmacy",
+    mockDataField: "mockDataValue"
+  },
+  {
+    slug: "aetna",
+    indication: "Breast Cancer",
+    regimen: "Herceptin",
+    population: "HER2+",
+    line: "1L+ Metastatic",
+    book: "Commercial",
+    coverage: "Medical",
+    mockDataField: "mockDataValue"
+  },
+  {
+    slug: "anthem",
+    indication: "Breast Cancer",
+    regimen: "Herceptin+Perjeta+docetaxel",
+    population: "HER2+",
+    line: "1L+ Metastatic",
+    book: "Medicare",
+    coverage: "Medical",
+    mockDataField: "mockDataValue"
+  }
+]
+
 const mockOrganizations = [
   {
     _id: "5d825030cc80b15a9476b813",
@@ -141,5 +194,6 @@ module.exports = {
   mockTimestamp,
   mockOrganizations,
   mockEnrichedPtps,
-  mockAccesses
+  mockAccesses,
+  mockSheetData,
 }
