@@ -84,7 +84,7 @@ const mockEnrichedPtps = [
     regimen: "Herceptin+Perjeta+docetaxel",
     population: "HER2+",
     line: "1L+ Metastatic",
-    book: "Commercial",
+    book: "Medicare",
     coverage: "Medical"
   }
 ]

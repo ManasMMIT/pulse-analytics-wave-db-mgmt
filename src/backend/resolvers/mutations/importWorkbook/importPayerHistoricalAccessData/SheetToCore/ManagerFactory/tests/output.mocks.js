@@ -70,7 +70,31 @@ const mockEnrichedPtpsByPtps = {
       book: "Commercial",
       coverage: "Pharmacy"
     }
-  ]
+  ],
+  "aetna|Breast Cancer|Herceptin|1L+ Metastatic|HER2+|Commercial|Medical": [
+    {
+      _id: "5eac293b79e11113da3b6800",
+      slug: "aetna",
+      indication: "Breast Cancer",
+      regimen: "Herceptin",
+      population: "HER2+",
+      line: "1L+ Metastatic",
+      book: "Commercial",
+      coverage: "Medical"
+    }
+  ],
+  "anthem|Breast Cancer|Herceptin+Perjeta+docetaxel|1L+ Metastatic|HER2+|Medicare|Medical": [
+    {
+      _id: "5eac293b79e11113da3b6856",
+      slug: "anthem",
+      indication: "Breast Cancer",
+      regimen: "Herceptin+Perjeta+docetaxel",
+      population: "HER2+",
+      line: "1L+ Metastatic",
+      book: "Medicare",
+      coverage: "Medical"
+    }
+  ],
 }
 
 const mockEnrichedPtpsByBrcs = {
@@ -84,6 +108,16 @@ const mockEnrichedPtpsByBrcs = {
       line: "Adjuvant",
       book: "Commercial",
       coverage: "Medical"
+    },
+    {
+      _id: "5eac293b79e11113da3b6800",
+      slug: "aetna",
+      indication: "Breast Cancer",
+      regimen: "Herceptin",
+      population: "HER2+",
+      line: "1L+ Metastatic",
+      book: "Commercial",
+      coverage: "Medical"
     }
   ],
   "anthem|Herceptin+Perjeta+docetaxel|Medicare|Medical": [
@@ -94,6 +128,16 @@ const mockEnrichedPtpsByBrcs = {
       regimen: "Herceptin+Perjeta+docetaxel",
       population: "HER2+",
       line: "Neoadjuvant",
+      book: "Medicare",
+      coverage: "Medical"
+    },
+    {
+      _id: "5eac293b79e11113da3b6856",
+      slug: "anthem",
+      indication: "Breast Cancer",
+      regimen: "Herceptin+Perjeta+docetaxel",
+      population: "HER2+",
+      line: "1L+ Metastatic",
       book: "Medicare",
       coverage: "Medical"
     }
