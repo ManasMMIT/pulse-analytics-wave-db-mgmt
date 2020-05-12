@@ -12,19 +12,19 @@ const mockQualityOfAccessSheetData = [
     tierRating: "Medical Benefit",
     tierTotal: null
   },
-  // {
-  //   slug: "anthem",
-  //   indication: "Breast Cancer",
-  //   regimen: "Herceptin+Perjeta+docetaxel",
-  //   population: "HER2+",
-  //   line: "Neoadjuvant",
-  //   book: "Medicare",
-  //   coverage: "Medical",
-  //   access: "PA to NCCN",
-  //   tier: "MB",
-  //   tierRating: "Medical Benefit",
-  //   tierTota: null
-  // },
+  {
+    slug: "anthem",
+    indication: "Breast Cancer",
+    regimen: "Herceptin+Perjeta+docetaxel",
+    population: "HER2+",
+    line: "Neoadjuvant",
+    book: "Medicare",
+    coverage: "Medical",
+    access: "PA to NCCN",
+    tier: "MB",
+    tierRating: "Medical Benefit",
+    tierTotal: null
+  },
 ]
 
 module.exports = {

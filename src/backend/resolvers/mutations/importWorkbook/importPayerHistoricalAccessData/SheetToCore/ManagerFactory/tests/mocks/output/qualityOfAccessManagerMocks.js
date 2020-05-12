@@ -35,29 +35,42 @@ const mockPermittedOps = [
       }
     }
   },
-  // {
-  //   findObj: {
-  //     orgTpId: "5eac293b79e11113da3b67f6",
-  //     timestamp: new Date('2020-04-30T04:00:00.000+00:00')
-  //   },
-  //   setObj: {
-  //     orgTpId,
-  //     treatmentPlanId,
-  //     organizationId,
-  //     projectId: this.projectId,
-  //     timestamp: this.timestamp,
-  //     accessData,
-  //     tierData: {
-  //       tier,
-  //       tierRating,
-  //       tierTotal,
-  //     },
-  //     updatedOn,
-  //   },
-  //   $setOnInsert: {
-  //     createdOn: updatedOn,
-  //   }
-  // }
+  {
+    findObj: {
+      orgTpId: "5eac293b79e11113da3b683e",
+      timestamp: new Date('2020-04-30T04:00:00.000+00:00')
+    },
+    setObj: {
+      $set: {
+        orgTpId: "5eac293b79e11113da3b683e",
+        treatmentPlanId: "5eac293a79e11113da3b1b65",
+        organizationId: "5d825030cc80b15a9476b822",
+        projectId: "5eac2a7979e11113da445554",
+        timestamp: new Date('2020-04-30T04:00:00.000+00:00'),
+        accessData: {
+          _id: "5d7f8d1280bba90668ddcb13",
+          score: 4,
+          sortOrder: 5,
+          access: "PA to NCCN",
+          accessTiny: "PA to NCCN",
+          color: "#1DB7D2",
+          caption: {
+            General:
+              "Prior authorization is required, and the regimen has equal access to NCCN guidelines as stated in payer policy"
+          }
+        },
+        tierData: {
+          tier: "MB",
+          tierRating: "Medical Benefit",
+          tierTotal: null
+        },
+        updatedOn: new Date('2020-04-30T04:00:00.000+00:00'),
+      },
+      $setOnInsert: {
+        createdOn: new Date('2020-04-30T04:00:00.000+00:00'),
+      }
+    }
+  },
 ]
 
 
