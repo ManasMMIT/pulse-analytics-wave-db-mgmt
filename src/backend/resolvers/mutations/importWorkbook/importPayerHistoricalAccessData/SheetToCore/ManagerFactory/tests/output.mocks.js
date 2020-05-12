@@ -73,7 +73,47 @@ const mockEnrichedPtpsByPtps = {
   ]
 }
 
+const mockEnrichedPtpsByBrcs = {
+  "aetna|Herceptin|Commercial|Medical": [
+    {
+      _id: "5eac293b79e11113da3b67f6",
+      slug: "aetna",
+      indication: "Breast Cancer",
+      regimen: "Herceptin",
+      population: "HER2+",
+      line: "Adjuvant",
+      book: "Commercial",
+      coverage: "Medical"
+    }
+  ],
+  "anthem|Herceptin+Perjeta+docetaxel|Medicare|Medical": [
+    {
+      _id: "5eac293b79e11113da3b683e",
+      slug: "anthem",
+      indication: "Breast Cancer",
+      regimen: "Herceptin+Perjeta+docetaxel",
+      population: "HER2+",
+      line: "Neoadjuvant",
+      book: "Medicare",
+      coverage: "Medical"
+    }
+  ],
+  "bcbs-nc|Ibrance+Faslodex|Commercial|Pharmacy": [
+    {
+      _id: "5eac293b79e11113da3b687d",
+      slug: "bcbs-nc",
+      indication: "Breast Cancer",
+      regimen: "Ibrance+Faslodex",
+      population: "HR+, HER2-",
+      line: "2L+ Metastatic",
+      book: "Commercial",
+      coverage: "Pharmacy"
+    }
+  ]
+}
+
 module.exports = {
   mockOrgsHashBySlug,
-  mockEnrichedPtpsByPtps
+  mockEnrichedPtpsByPtps,
+  mockEnrichedPtpsByBrcs
 }

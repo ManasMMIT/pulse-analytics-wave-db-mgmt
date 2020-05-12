@@ -8,6 +8,7 @@ const {
 const {
   mockOrgsHashBySlug,
   mockEnrichedPtpsByPtps,
+  mockEnrichedPtpsByBrcs,
 } = require('./output.mocks')
 
 describe('Sheet to Core Manager', () => {
@@ -30,11 +31,11 @@ describe('Sheet to Core Manager', () => {
     expect(manager.enrichedPtpsByCombo).toStrictEqual(mockEnrichedPtpsByPtps)
   })
 
-  // test('setEnrichedPtpsByCombos should return an array of ptps grouped by BRCS', () => {
-  //   const manager = new Manager({ sheetData: [] })
-  //   manager.setEnrichedPtpsByCombination([])
-  //   expect(manager.enrichedPtpsByCombo).toBe(1)
-  // })
+  test('setEnrichedPtpsByCombos should return an array of ptps grouped by BRCS', () => {
+    const manager = new Manager({ hashType: 'brcs' })
+    manager.setEnrichedPtpsByCombination(mockEnrichedPtps)
+    expect(manager.enrichedPtpsByCombo).toStrictEqual(mockEnrichedPtpsByBrcs)
+  })
 
   // test('setQualityOfAccessHash should return an array of quality of access data grouped by access', () => {
   //   const manager = new Manager({ sheetData: [] })
