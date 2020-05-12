@@ -31,9 +31,14 @@ module.exports = ({
 
   const validTps = _.groupBy(treatmentPlans, tpHash)
 
-  const validPtpNotches = _.keyBy(
+  const validBrcsNotches = _.keyBy(
     allowedPolicyLinkNotches,
     doc => [doc.slug, doc.month, doc.year, doc.book, doc.coverage, doc.regimen].join('|')
+  )
+
+  const validPtpNotches = _.keyBy(
+    allowedPolicyLinkNotches,
+    doc => [doc.slug, doc.month, doc.year, doc.book, doc.coverage, doc.regimen, doc.indication, doc.population, doc.line].join('|')
   )
 
   const newCollectionOp = pulseDevStaging
@@ -120,6 +125,14 @@ module.exports = ({
   }) => {
     if (collectionName.includes('AdditionalCriteria')) {
       if (!criteria) return false
+
+      const isPtpNotchValid = validPtpNotches[
+        [slug, month, year, book, coverage, regimen, indication, population, line].join('|')
+      ]
+
+      if (!isPtpNotchValid) {
+        return false
+      }
     }
 
     let comboIsValid = true
@@ -160,7 +173,7 @@ module.exports = ({
         comboIsValid = false
       }
 
-      const isNotchValid = validPtpNotches[
+      const isNotchValid = validBrcsNotches[
         [slug, month, year, book, coverage, regimen].join('|')
       ]
 
