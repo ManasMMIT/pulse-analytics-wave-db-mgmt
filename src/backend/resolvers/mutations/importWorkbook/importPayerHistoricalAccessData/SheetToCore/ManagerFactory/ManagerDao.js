@@ -3,18 +3,6 @@ class ManagerDao {
     this.db = db
   }
 
-  async getOrgsOp() {
-    try {
-      return await this.db 
-        .collection('organizations')
-        .find({ type: 'Payer' })
-        .toArray()
-    } catch (e) {
-      console.error(`Unable to get Orgs Ops: ${e}`)
-      return { error: e }
-    }
-  }
-
   async getAccessesOp() {
     try {
       return await this.db

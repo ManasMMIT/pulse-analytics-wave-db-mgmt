@@ -20,13 +20,13 @@ describe('Additional Criteria Manager', () => {
       mockProjectId
     })
 
-    qoaManager.setHashes({
+    additionalCriteriaManager.setHashes({
       setOrgs: mockOrganizations,
       setEnrichedPtps: mockEnrichedPtps,
       setQualityOfAccesses: mockAccesses
     })
 
-    const permittedOps = qoaManager.getPermittedOps()
+    const permittedOps = additionalCriteriaManager.getPermittedOps()
 
     expect(permittedOps).toStrictEqual(mockPermittedOps)
   })
