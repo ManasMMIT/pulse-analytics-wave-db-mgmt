@@ -2,7 +2,7 @@ const { ObjectId } = require('mongodb')
 
 const mockTimestamp = "2020-04-30"
 
-const mockProjectId = '5eac2a7979e11113da445554'
+const mockProjectId = ObjectId('5eac2a7979e11113da445554')
 
 const mockSheetData = [
   {
