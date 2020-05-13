@@ -1,33 +1,42 @@
 const AdditionalCriteriaManager = require('../AdditionalCriteriaManager')
 const {
   mockTimestamp,
-  mockOrganizations,
   mockEnrichedPtps,
-  mockAccesses,
-  mockSheetData,
   mockProjectId,
+} = require('./mocks/input/managerMocks')
+
+const {
+  mockAdditionalCriteriaSheetData
 } = require('./mocks/input/additionalCriteriaManagerMocks')
 
 const {
   mockPermittedOps
 } = require('./mocks/output/additionalCriteriaManagerMocks')
 
+const { setupDateStub } = require('./test-utils')
+
 describe('Additional Criteria Manager', () => {
+  let realDate
+
+  beforeAll(() => {
+    realDate = Date
+    setupDateStub()
+  })
+
   test('getPermittedOps should return a list of valid operations for upsertion', () => {
     const additionalCriteriaManager = new AdditionalCriteriaManager({
-      sheetData: mockSheetData,
+      sheetData: mockAdditionalCriteriaSheetData,
       timestamp: mockTimestamp,
-      mockProjectId
+      projectId: mockProjectId
     })
 
-    additionalCriteriaManager.setHashes({
-      setOrgs: mockOrganizations,
-      setEnrichedPtps: mockEnrichedPtps,
-      setQualityOfAccesses: mockAccesses
-    })
-
+    additionalCriteriaManager.setEnrichedPtpsByCombination(mockEnrichedPtps)
     const permittedOps = additionalCriteriaManager.getPermittedOps()
 
-    expect(permittedOps).toStrictEqual(mockPermittedOps)
+    expect(permittedOps).toMatchObject(mockPermittedOps)
+  })
+
+  afterAll(() => {
+    global.Date = realDate
   })
 })

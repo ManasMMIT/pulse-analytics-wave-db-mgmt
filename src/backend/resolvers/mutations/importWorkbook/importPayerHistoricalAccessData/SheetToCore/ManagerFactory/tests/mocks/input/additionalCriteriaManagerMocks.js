@@ -1,4 +1,4 @@
-const mockAdditionalCriteriaData = [
+const mockAdditionalCriteriaSheetData = [
   {
     slug: "aetna",
     indication: "Breast Cancer",
@@ -34,5 +34,5 @@ const mockAdditionalCriteriaData = [
 ]
 
 module.exports = {
-  mockAdditionalCriteriaData
+  mockAdditionalCriteriaSheetData
 }
