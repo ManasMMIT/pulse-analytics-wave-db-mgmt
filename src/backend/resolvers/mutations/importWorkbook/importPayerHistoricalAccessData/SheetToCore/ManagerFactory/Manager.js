@@ -38,6 +38,7 @@ class Manager {
       const payerComboString = this.payerCombinationHasher(datum)
       const enrichedPtpsForCombo = this.enrichedPtpsByCombo[payerComboString]
 
+      // this line shouldn't ever execute thanks to validation layer
       if (!enrichedPtpsForCombo) return acc
 
       enrichedPtpsForCombo.forEach(({ 
