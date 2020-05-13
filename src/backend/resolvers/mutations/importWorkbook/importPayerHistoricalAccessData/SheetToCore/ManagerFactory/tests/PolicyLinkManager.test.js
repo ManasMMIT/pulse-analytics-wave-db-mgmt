@@ -1,4 +1,4 @@
-const PolicyLinksManager = require('../PolicyLinksManager')
+const PolicyLinkManager = require('../PolicyLinkManager')
 const {
   mockTimestamp,
   mockEnrichedPtps,
@@ -6,12 +6,12 @@ const {
 } = require('./mocks/input/managerMocks')
 
 const {
-  mockPolicyLinkData
-} = require('./mocks/input/policyLinksManagerMocks')
+  mockPolicyLinkSheetData
+} = require('./mocks/input/policyLinkManagerMocks')
 
 const {
   mockPermittedOps
-} = require('./mocks/output/policyLinksManagerMocks')
+} = require('./mocks/output/policyLinkManagerMocks')
 
 const { setupDateStub } = require('./test-utils')
 
@@ -23,11 +23,12 @@ describe('Policy Links Manager', () => {
     setupDateStub()
   })
 
-  test('getPermittedOps should return a list of valid operations for upsertion', () => {
-    const policyLinksManager = new PolicyLinksManager({
-      sheetData: mockPolicyLinkData,
+  test('getPermittedOps should return a list of valid operations for upsertion for all PTPS that has the BRCS combo', () => {
+    const policyLinksManager = new PolicyLinkManager({
+      sheetData: mockPolicyLinkSheetData,
       timestamp: mockTimestamp,
-      projectId: mockProjectId
+      projectId: mockProjectId,
+      hashType: 'brcs'
     })
 
     policyLinksManager.setEnrichedPtpsByCombination(mockEnrichedPtps)
