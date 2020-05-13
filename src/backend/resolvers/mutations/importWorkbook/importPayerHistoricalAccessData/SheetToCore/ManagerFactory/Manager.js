@@ -27,8 +27,8 @@ class Manager {
     this.timestamp = zonedTimeToUtc(timestamp, DEFAULT_TIMEZONE)
   }
 
-  setEnrichedPtpsByCombination(setEnrichedPtps = []) {
-    this.enrichedPtpsByCombo = _.groupBy(setEnrichedPtps, this.payerCombinationHasher)
+  setEnrichedPtpsByCombination(enrichedPtps = []) {
+    this.enrichedPtpsByCombo = _.groupBy(enrichedPtps, this.payerCombinationHasher)
   }
 
   getFilteredAndEnrichedSheetData() {
