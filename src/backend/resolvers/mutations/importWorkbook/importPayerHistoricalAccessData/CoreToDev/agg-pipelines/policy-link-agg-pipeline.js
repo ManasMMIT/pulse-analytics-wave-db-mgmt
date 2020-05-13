@@ -114,7 +114,7 @@ module.exports = limit => [
       'regimen': '$_id.regimen',
       'slug': '$_id.slug',
       'organization': '$_id.organization',
-      'link': '$data.policyLink',
+      'link': '$data.policyLink', // ! materialized view uses 'link' as the key
       'dateTracked': '$data.dateTracked',
       'paLink': '$data.paLink',
       'project': '$data.project',
