@@ -77,11 +77,12 @@ const importPayerHistoricalAccessData = async ({
     const sheetManager = sheetManagerFactory.getManager(sheetName)
     const sheetManagerDao = new SheetToCoreManagerDao({ db: pulseCoreDb })
 
-    const setQualityOfAccesses = await sheetManagerDao.getAccessesOp()
-
     sheetManager.setEnrichedPtpsByCombination(projectPtps)
 
-    if (isQualityAccessSheet) sheetManager.setQualityOfAccessHash(setQualityOfAccesses)
+    if (isQualityAccessSheet) {
+      const setQualityOfAccesses = await sheetManagerDao.getAccessesOp()
+      sheetManager.setQualityOfAccessHash(setQualityOfAccesses)
+    }
 
     const permittedOps = sheetManager.getPermittedOps()
     await sheetManagerDao.upsertOrgTpHistory(permittedOps)
