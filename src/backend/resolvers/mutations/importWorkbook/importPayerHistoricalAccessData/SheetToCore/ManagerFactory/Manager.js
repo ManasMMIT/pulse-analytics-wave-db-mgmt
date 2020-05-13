@@ -1,4 +1,3 @@
-const { ObjectId } = require('mongodb')
 const _ = require('lodash')
 
 const { zonedTimeToUtc } = require('date-fns-tz')
@@ -30,10 +29,6 @@ class Manager {
 
   setEnrichedPtpsByCombination(setEnrichedPtps = []) {
     this.enrichedPtpsByCombo = _.groupBy(setEnrichedPtps, this.payerCombinationHasher)
-  }
-
-  setQualityOfAccessHash(setQualityOfAccesses = []) {
-    this.qualityOfAccessHash = _.keyBy(setQualityOfAccesses, 'access')
   }
 
   getFilteredAndEnrichedSheetData() {
