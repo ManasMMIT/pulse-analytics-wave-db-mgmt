@@ -80,8 +80,8 @@ const importPayerHistoricalAccessData = async ({
     sheetManager.setEnrichedPtpsByCombination(projectPtps)
 
     if (isQualityAccessSheet) {
-      const setQualityOfAccesses = await sheetManagerDao.getAccessesOp()
-      sheetManager.setQualityOfAccessHash(setQualityOfAccesses)
+      const accessData = await sheetManagerDao.getAccessesOp()
+      sheetManager.setQualityOfAccessHash(accessData)
     }
 
     const permittedOps = sheetManager.getPermittedOps()

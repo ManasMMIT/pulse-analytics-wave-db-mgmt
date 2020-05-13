@@ -6,8 +6,8 @@ class QualityAccessManager extends Manager {
     super(projectConfig)
   }
 
-  setQualityOfAccessHash(setQualityOfAccesses = []) {
-    this.qualityOfAccessHash = _.keyBy(setQualityOfAccesses, 'access')
+  setQualityOfAccessHash(accessData = []) {
+    this.qualityOfAccessHash = _.keyBy(accessData, 'access')
   }
 
   getPermittedOps() {
