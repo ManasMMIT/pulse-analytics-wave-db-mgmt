@@ -1,13 +1,13 @@
 const QualityOfAccessManager = require('../QualityAccessManager')
 const {
   mockTimestamp,
-  mockOrganizations,
   mockEnrichedPtps,
   mockAccesses,
   mockProjectId,
 } = require('./mocks/input/managerMocks')
 const {
-  mockQualityOfAccessSheetData
+  mockQualityOfAccessSheetData,
+  mockQualityOfAccessHash
 } = require('./mocks/input/qualityOfAccessManagerMocks')
 
 const {
@@ -24,6 +24,12 @@ describe('Quality of Access Manager', () => {
     setupDateStub()
   })
 
+  test('setQualityOfAccessHash should set an array of quality of access data grouped by access', () => {
+    const qoaManager = new QualityOfAccessManager({})
+    qoaManager.setQualityOfAccessHash(mockAccesses)
+    expect(qoaManager.qualityOfAccessHash).toStrictEqual(mockQualityOfAccessHash)
+  })
+
   test('getPermittedOps should return a list of valid operations for upsertion', () => {
     const qoaManager = new QualityOfAccessManager({
       sheetData: mockQualityOfAccessSheetData,
@@ -31,12 +37,8 @@ describe('Quality of Access Manager', () => {
       projectId: mockProjectId
     })
 
-    qoaManager.setupHashes({
-      setOrgs: mockOrganizations,
-      setEnrichedPtps: mockEnrichedPtps,
-      setQualityOfAccesses: mockAccesses
-    })
-
+    qoaManager.setQualityOfAccessHash(mockAccesses)
+    qoaManager.setEnrichedPtpsByCombination(mockEnrichedPtps)
     const permittedOps = qoaManager.getPermittedOps()
 
     expect(permittedOps).toMatchObject(mockPermittedOps)

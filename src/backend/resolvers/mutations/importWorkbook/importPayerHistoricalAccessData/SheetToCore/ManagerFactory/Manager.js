@@ -36,12 +36,6 @@ class Manager {
     this.qualityOfAccessHash = _.keyBy(setQualityOfAccesses, 'access')
   }
 
-  setupHashes({ setOrgs, setEnrichedPtps, setQualityOfAccesses }) {
-    // this.setOrgsHashBySlug(setOrgs)
-    this.setEnrichedPtpsByCombination(setEnrichedPtps)
-    this.setQualityOfAccessHash(setQualityOfAccesses)
-  }
-
   getFilteredAndEnrichedSheetData() {
     const copiedSheetData = _.cloneDeep(this.sheetData)
 

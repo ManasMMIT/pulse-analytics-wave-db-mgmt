@@ -1,8 +1,13 @@
 const Manager = require('./Manager')
+const _ = require('lodash')
 
 class QualityAccessManager extends Manager {
   constructor(projectConfig) { // eslint-disable-line
     super(projectConfig)
+  }
+
+  setQualityOfAccessHash(setQualityOfAccesses = []) {
+    this.qualityOfAccessHash = _.keyBy(setQualityOfAccesses, 'access')
   }
 
   getPermittedOps() {
