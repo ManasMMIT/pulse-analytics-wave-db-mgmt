@@ -46,15 +46,12 @@ class Manager {
         organizationId, 
         treatmentPlanId,
       }) => {
-        acc = [
-          ...acc,
-          {
-            ...datum,
-            orgTpId: _id,
-            organizationId,
-            treatmentPlanId,
-          },
-        ]
+        acc.push({
+          ...datum,
+          orgTpId: _id,
+          organizationId,
+          treatmentPlanId,
+        })
       })
 
       return acc
