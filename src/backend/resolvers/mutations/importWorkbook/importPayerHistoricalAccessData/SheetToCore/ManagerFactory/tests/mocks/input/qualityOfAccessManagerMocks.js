@@ -1,3 +1,5 @@
+const { ObjectId } = require('mongodb')
+
 const mockQualityOfAccessSheetData = [
   {
     slug: "aetna",
@@ -29,7 +31,7 @@ const mockQualityOfAccessSheetData = [
 
 const mockAccesses = [
   {
-    _id: "5d7f8d1280bba90668ddcb12",
+    _id: ObjectId("5d7f8d1280bba90668ddcb12"),
     score: 4,
     sortOrder: 6,
     access: "PA to Label; Default to Guidelines",
@@ -41,7 +43,7 @@ const mockAccesses = [
     }
   },
   {
-    _id: "5d7f8d1280bba90668ddcb13",
+    _id: ObjectId("5d7f8d1280bba90668ddcb13"),
     score: 4,
     sortOrder: 5,
     access: "PA to NCCN",
@@ -53,7 +55,7 @@ const mockAccesses = [
     }
   },
   {
-    _id: "5d7f8d1280bba90668ddcb16",
+    _id: ObjectId("5d7f8d1280bba90668ddcb16"),
     score: 10,
     sortOrder: 10,
     access: "PA to Label; Additional Criteria",
