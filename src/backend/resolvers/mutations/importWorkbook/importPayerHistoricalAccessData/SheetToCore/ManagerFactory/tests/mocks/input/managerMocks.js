@@ -1,3 +1,5 @@
+const { ObjectId } = require('mongodb')
+
 const mockTimestamp = "2020-04-30"
 
 const mockProjectId = '5eac2a7979e11113da445554'
@@ -57,7 +59,7 @@ const mockSheetData = [
 
 const mockEnrichedPtps = [
   {
-    _id: "5eac293b79e11113da3b67f6",
+    _id: ObjectId("5eac293b79e11113da3b67f6"),
     slug: "aetna",
     indication: "Breast Cancer",
     regimen: "Herceptin",
@@ -65,11 +67,11 @@ const mockEnrichedPtps = [
     line: "Adjuvant",
     book: "Commercial",
     coverage: "Medical",
-    treatmentPlanId: "5eac293a79e11113da3b1b6b",
-    organizationId: "5d825030cc80b15a9476b813"
+    treatmentPlanId: ObjectId("5eac293a79e11113da3b1b6b"),
+    organizationId: ObjectId("5d825030cc80b15a9476b813"),
   },
   {
-    _id: "5eac293b79e11113da3b683e",
+    _id: ObjectId("5eac293b79e11113da3b683e"),
     slug: "anthem",
     indication: "Breast Cancer",
     regimen: "Herceptin+Perjeta+docetaxel",
@@ -77,11 +79,11 @@ const mockEnrichedPtps = [
     line: "Neoadjuvant",
     book: "Medicare",
     coverage: "Medical",
-    treatmentPlanId: "5eac293a79e11113da3b1b65",
-    organizationId: "5d825030cc80b15a9476b822"
+    treatmentPlanId: ObjectId("5eac293a79e11113da3b1b65"),
+    organizationId: ObjectId("5d825030cc80b15a9476b822"),
   },
   {
-    _id: "5eac293b79e11113da3b687d",
+    _id: ObjectId("5eac293b79e11113da3b687d"),
     slug: "bcbs-nc",
     indication: "Breast Cancer",
     regimen: "Ibrance+Faslodex",
@@ -89,11 +91,11 @@ const mockEnrichedPtps = [
     line: "2L+ Metastatic",
     book: "Commercial",
     coverage: "Pharmacy",
-    treatmentPlanId: "5eac293a79e11113da3b1b83",
-    organizationId: "5d825030cc80b15a9476b83d"
+    treatmentPlanId: ObjectId("5eac293a79e11113da3b1b83"),
+    organizationId: ObjectId("5d825030cc80b15a9476b83d"),
   },
   {
-    _id: "5eac293b79e11113da3b6800",
+    _id: ObjectId("5eac293b79e11113da3b6800"),
     slug: "aetna",
     indication: "Breast Cancer",
     regimen: "Herceptin",
@@ -101,11 +103,11 @@ const mockEnrichedPtps = [
     line: "1L+ Metastatic",
     book: "Commercial",
     coverage: "Medical",
-    treatmentPlanId: "5eac293a79e11113da3b1b73",
-    organizationId: "5d825030cc80b15a9476b813"
+    treatmentPlanId: ObjectId("5eac293a79e11113da3b1b73"),
+    organizationId: ObjectId("5d825030cc80b15a9476b813"),
   },
   {
-    _id: "5eac293b79e11113da3b6856", 
+    _id: ObjectId("5eac293b79e11113da3b6856"),
     slug: "anthem",
     indication: "Breast Cancer",
     regimen: "Herceptin+Perjeta+docetaxel",
@@ -113,8 +115,8 @@ const mockEnrichedPtps = [
     line: "1L+ Metastatic",
     book: "Medicare",
     coverage: "Medical",
-    treatmentPlanId: "5eac293a79e11113da3b1b63",
-    organizationId: "5d825030cc80b15a9476b822"
+    treatmentPlanId: ObjectId("5eac293a79e11113da3b1b63"),
+    organizationId: ObjectId("5d825030cc80b15a9476b822"),
   }
 ];
 
