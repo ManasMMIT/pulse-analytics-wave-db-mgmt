@@ -2,16 +2,16 @@ const QualityOfAccessManager = require('../QualityAccessManager')
 const {
   mockTimestamp,
   mockEnrichedPtps,
-  mockAccesses,
   mockProjectId,
 } = require('./mocks/input/managerMocks')
 const {
   mockQualityOfAccessSheetData,
-  mockQualityOfAccessHash
+  mockAccesses
 } = require('./mocks/input/qualityOfAccessManagerMocks')
 
 const {
-  mockPermittedOps
+  mockPermittedOps,
+  mockQualityOfAccessHash
 } = require('./mocks/output/qualityOfAccessManagerMocks')
 
 const { setupDateStub } = require('./test-utils')
