@@ -1,5 +1,4 @@
 const Manager = require('./Manager')
-const _ = require('lodash')
 
 class PolicyLinkManager extends Manager {
   constructor(projectConfig) { // eslint-disable-line
