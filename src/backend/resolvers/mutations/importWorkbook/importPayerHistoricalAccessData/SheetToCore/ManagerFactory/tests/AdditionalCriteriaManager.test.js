@@ -6,15 +6,15 @@ const {
   mockAccesses,
   mockSheetData,
   mockProjectId,
-} = require('./mocks/inputMockDatackData')
+} = require('./mocks/input/additionalCriteriaManagerMocks')
 
 const {
   mockPermittedOps
-} = require('./mocks/outputMockDatackData')
+} = require('./mocks/output/additionalCriteriaManagerMocks')
 
-describe('Quality of Access Manager', () => {
+describe('Additional Criteria Manager', () => {
   test('getPermittedOps should return a list of valid operations for upsertion', () => {
-    const qoaManager = new AdditionalCriteriaManager({
+    const additionalCriteriaManager = new AdditionalCriteriaManager({
       sheetData: mockSheetData,
       timestamp: mockTimestamp,
       mockProjectId

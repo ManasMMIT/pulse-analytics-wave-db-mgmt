@@ -8,7 +8,6 @@ const {
 } = require('./mocks/input/managerMocks')
 
 const {
-  mockOrgsHashBySlug,
   mockEnrichedPtpsByPtps,
   mockEnrichedPtpsByBrcs,
   mockQualityOfAccessHash,
@@ -21,12 +20,6 @@ describe('Sheet to Core Manager', () => {
     const manager = new Manager({})
     manager.setTimeZone(mockTimestamp)
     expect(manager.timestamp).toStrictEqual(mockFormattedTimestamp)
-  })
-
-  test('setOrgsHashBySlug should set an array of organizations keyed by slug', () => {
-    const manager = new Manager({})
-    manager.setOrgsHashBySlug(mockOrganizations)
-    expect(manager.orgsHashBySlug).toStrictEqual(mockOrgsHashBySlug)
   })
 
   test('setEnrichedPtpsByCombos should set an array of ptps grouped by PTP', () => {

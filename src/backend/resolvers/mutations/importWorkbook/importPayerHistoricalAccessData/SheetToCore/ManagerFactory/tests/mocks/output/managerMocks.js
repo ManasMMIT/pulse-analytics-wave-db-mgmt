@@ -1,41 +1,5 @@
 const mockFormattedTimestamp = new Date('2020-04-30T04:00:00.000+00:00')
 
-const mockOrgsHashBySlug = {
-  aetna: {
-    _id: "5d825030cc80b15a9476b813",
-    slug: "aetna",
-    type: "Payer",
-    organization: "Aetna",
-    organizationTiny: "Aetna",
-    toolIds: [
-      "a3f419de-ca7d-4498-94dd-04fb9f6b8777",
-      "b81f2c08-dfb7-474c-b8db-6b4f1cdac43c"
-    ]
-  },
-  anthem: {
-    _id: "5d825030cc80b15a9476b822",
-    slug: "anthem",
-    type: "Payer",
-    organization: "Anthem",
-    organizationTiny: "Anthem",
-    toolIds: [
-      "a3f419de-ca7d-4498-94dd-04fb9f6b8777",
-      "b81f2c08-dfb7-474c-b8db-6b4f1cdac43c"
-    ]
-  },
-  "bcbs-nc": {
-    _id: "5d825030cc80b15a9476b83d",
-    slug: "bcbs-nc",
-    type: "Payer",
-    organization: "BlueCross BlueShield North Carolina",
-    organizationTiny: "BCBS NC",
-    toolIds: [
-      "a3f419de-ca7d-4498-94dd-04fb9f6b8777",
-      "b81f2c08-dfb7-474c-b8db-6b4f1cdac43c"
-    ]
-  }
-}
-
 const mockEnrichedPtpsByPtps = {
   "aetna|Breast Cancer|Herceptin|Adjuvant|HER2+|Commercial|Medical": [
     {
@@ -293,7 +257,6 @@ const mockFilteredAndEnrichedData = [
 
 module.exports = {
   mockFormattedTimestamp,
-  mockOrgsHashBySlug,
   mockEnrichedPtpsByPtps,
   mockEnrichedPtpsByBrcs,
   mockQualityOfAccessHash,

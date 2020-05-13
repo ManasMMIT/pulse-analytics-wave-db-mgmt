@@ -28,10 +28,6 @@ class Manager {
     this.timestamp = zonedTimeToUtc(timestamp, DEFAULT_TIMEZONE)
   }
 
-  setOrgsHashBySlug(setOrgs = []) {
-    this.orgsHashBySlug = _.keyBy(setOrgs, 'slug')
-  }
-
   setEnrichedPtpsByCombination(setEnrichedPtps = []) {
     this.enrichedPtpsByCombo = _.groupBy(setEnrichedPtps, this.payerCombinationHasher)
   }
@@ -41,7 +37,7 @@ class Manager {
   }
 
   setupHashes({ setOrgs, setEnrichedPtps, setQualityOfAccesses }) {
-    this.setOrgsHashBySlug(setOrgs)
+    // this.setOrgsHashBySlug(setOrgs)
     this.setEnrichedPtpsByCombination(setEnrichedPtps)
     this.setQualityOfAccessHash(setQualityOfAccesses)
   }
