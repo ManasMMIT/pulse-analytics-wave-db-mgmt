@@ -16,7 +16,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - `Orion`: Built out tools timestamp widget on import tool page for updating timestamps globally on core nodes, core teams, dev users.sitemaps; meant to replace collectionsConfig/dashboardsConfig usage in wave-app/wave-api
-- `Orion`: Users can now create Payer Projects and update PTPs for those projects via a configuration modal
+- `Orion`: Payer Project Updates
+  - Create Payer Projects
+  - Update Project PTPs via cross-product configuration modal
+  - Delete selected PTPs via granular table
+
+### Changed
+- `Polaris Frontend`: Payer Projects rose to the top of the app, next to Phoenix, Delphi, Orion.
 
 ## [2.4.0] - Started: 4-30-20
 

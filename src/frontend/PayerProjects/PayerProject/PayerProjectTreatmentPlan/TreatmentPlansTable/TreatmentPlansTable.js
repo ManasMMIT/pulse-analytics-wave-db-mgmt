@@ -1,10 +1,20 @@
 import React, { useState, useEffect } from 'react'
+import { useParams } from 'react-router-dom'
+import { useMutation } from '@apollo/react-hooks'
 import styled from '@emotion/styled'
 import _ from 'lodash'
 
 import Table from '@material-ui/core/Table'
 import TableContainer from '@material-ui/core/TableContainer'
 import TablePagination from '@material-ui/core/TablePagination'
+
+import {
+  REMOVE_PAYER_PROJECT_PTPS,
+} from 'frontend/api/mutations'
+
+import {
+  GET_PAYER_PROJECT_PTPS,
+} from 'frontend/api/queries'
 
 import TreatmentPlansTableHead from './TreatmentPlansTableHead'
 import TreatmentPlansTableBody from './TreatmentPlansTableBody'
@@ -30,6 +40,8 @@ const sortData = ({ data, order, key }) => {
 }
 
 const TreatmentPlansTable = ({ data, checkbox }) => {
+  const { projectId } = useParams()
+
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(10)
   const [selected, setSelected] = useState(new Set([]))
@@ -39,6 +51,21 @@ const TreatmentPlansTable = ({ data, checkbox }) => {
   useEffect(() => {
     setTableData(data)
   }, [data])
+
+  const [removePtps] = useMutation(
+    REMOVE_PAYER_PROJECT_PTPS,
+    {
+      variables: {
+        input: {
+          orgTpIds: Array.from(selected),
+        }
+      },
+      // ! Note: this isn't good enough for updating OTHER projects' tables; we're using 
+      // ! `fetchPolicy: network-only` on the original GET_PAYER_PROJECT_PTPS query also;
+      // ! we still need this tho to refresh the table on the current view
+      refetchQueries: [{ query: GET_PAYER_PROJECT_PTPS, variables: { input: { projectId } } }]
+    }
+  )
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage)
@@ -94,7 +121,9 @@ const TreatmentPlansTable = ({ data, checkbox }) => {
             {selected.size} Payer Treatments Selected
           </h2>
           {selected.size > 0 && (
-            <PlaceholderButton>Remove from Project</PlaceholderButton>
+            <PlaceholderButton onClick={removePtps}>
+              Remove from Project
+            </PlaceholderButton>
           )}
         </section>
       )}

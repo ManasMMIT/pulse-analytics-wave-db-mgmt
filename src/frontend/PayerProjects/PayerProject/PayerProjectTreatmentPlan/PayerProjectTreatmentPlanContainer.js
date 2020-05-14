@@ -22,6 +22,10 @@ const PayerProjectTreatmentPlanContainer = () => {
           projectId,
         },
       },
+      // ! fetchPolicy needed because PayerProjectTreatmentPlan updates 
+      // ! for a single project but may affect other tables and 
+      // ! no easy way to refresh cache for those other tables otherwise
+      fetchPolicy: 'network-only', 
     }
   )
 
