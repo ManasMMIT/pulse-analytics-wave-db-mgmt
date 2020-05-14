@@ -3,7 +3,6 @@ import { Switch, Route, Redirect } from 'react-router-dom'
 
 import BusinessObjectManagement from './BusinessObjectManagement'
 import SheetManagement from './SheetManagement'
-// import PayerProjects from '../../DataManagement/PayerProjects'
 import AddSourceNode from './AddSourceNode'
 import EditRoleNodeView from './EditRoleNodeView'
 

@@ -9,7 +9,6 @@ import Excel from './Excel'
 import Organizations from './Organizations'
 import Configuration from './Configuration'
 
-import DataManagement from './DataManagement'
 import Sidebar from './Sidebar'
 
 class Orion extends React.Component {
@@ -34,7 +33,6 @@ class Orion extends React.Component {
           <Route path="/orion/query" component={Query} />
           <Route path="/orion/excel" component={Excel} />
           <Route path="/orion/organizations" component={Organizations} />
-          <Route path="/orion/data-management" component={DataManagement} />
           <Route path="/orion/configuration" component={Configuration} />
           <Redirect to={'/orion/query'} />
         </Switch>

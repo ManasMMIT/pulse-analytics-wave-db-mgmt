@@ -148,8 +148,6 @@ const ADMIN_SETTINGS_LINKS_CONFIG = [
     label: 'Sheet Management',
     link: '/orion/configuration/admin-settings/sheet-management',
   },
-  // { label: 'Payer Projects', link: '/orion/configuration/admin-settings/payer-projects' },
-  { label: 'Payer Projects', link: '/orion/data-management/payer-projects' },
   { label: 'Add Source Node', link: '/orion/configuration/admin-settings/add-source-node' },
   { label: 'Edit Role Node', link: '/orion/configuration/admin-settings/edit-role-node' },
 ]
