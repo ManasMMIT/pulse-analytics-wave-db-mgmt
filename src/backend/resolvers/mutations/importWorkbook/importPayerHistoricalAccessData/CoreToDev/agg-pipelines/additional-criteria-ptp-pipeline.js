@@ -2,7 +2,8 @@ module.exports = limit => [
   {
     '$match': {
       'additionalCriteriaData': {
-        '$ne': null
+        '$exists': true,
+        '$nin': [null, []],
       }
     }
   }, {

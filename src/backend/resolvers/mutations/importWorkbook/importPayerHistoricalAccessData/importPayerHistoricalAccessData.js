@@ -55,68 +55,74 @@ const importPayerHistoricalAccessData = async ({
     }
   }
 
-  // STEP 3: Clear the PTP-timestamp combos before any upsertion happens
-  const convertedTimestamp = zonedTimeToUtc(importTimestamp, DEFAULT_TIMEZONE)
+  const session = mongoClient.startSession()
+  
+  await session.withTransaction(async () => {
+    // STEP 3: Clear the PTP-timestamp combos before any upsertion happens
+    const convertedTimestamp = zonedTimeToUtc(importTimestamp, DEFAULT_TIMEZONE)
+    const projectPtpIds = projectPtps.map(({ _id }) => _id)
 
-  const projectPtpIds = projectPtps.map(({ _id }) => _id)
-
-  await pulseCoreDb.collection('organizations.treatmentPlans.history')
-    .updateMany(
-      {
-        timestamp: convertedTimestamp,
-        orgTpId: { $in: projectPtpIds },
-      },
-      {
-        $set: {
-          policyLinkData: {},
-          additionalCriteriaData: [],
-          accessData: {},
-          tierData: {},
+    await pulseCoreDb.collection('organizations.treatmentPlans.history')
+      .updateMany(
+        {
+          timestamp: convertedTimestamp,
+          orgTpId: { $in: projectPtpIds },
+        },
+        {
+          $set: {
+            policyLinkData: {},
+            additionalCriteriaData: [],
+            accessData: {},
+            tierData: {},
+          }
+        },
+        {
+          session,
         }
+      )
+
+    // STEP 4: Upsert all the sheets
+    for (const sheetObjWithMetadata of cleanedSheetsWithMetadata) {
+      let {
+        wb,
+        sheet: sheetName,
+        data,
+        timestamp,
+        projectId,
+        skippedRows,
+        originalDataLength,
+      } = sheetObjWithMetadata
+
+      projectId = ObjectId(projectId)
+
+      const projectConfig = {
+        sheetData: data,
+        timestamp,
+        projectId,
+        pulseCore: pulseCoreDb,
       }
-    )
 
-  // STEP 4: Upsert all the sheets
-  for (const sheetObjWithMetadata of cleanedSheetsWithMetadata) {
-    let {
-      wb,
-      sheet: sheetName,
-      data,
-      timestamp,
-      projectId,
-      skippedRows,
-      originalDataLength,
-    } = sheetObjWithMetadata
+      const sheetManagerFactory = new SheetToCoreManager(projectConfig)
+      const sheetManager = sheetManagerFactory.getManager(sheetName)
+      const sheetManagerDao = new SheetToCoreManagerDao({ db: pulseCoreDb })
 
-    projectId = ObjectId(projectId)
+      sheetManager.setEnrichedPtpsByCombination(projectPtps)
 
-    const projectConfig = {
-      sheetData: data,
-      timestamp,
-      projectId,
-      pulseCore: pulseCoreDb,
+      if (isQualityAccessSheet(sheetName)) {
+        const accessData = await sheetManagerDao.getAccessesOp()
+        sheetManager.setQualityOfAccessHash(accessData)
+      }
+
+      const permittedOps = sheetManager.getPermittedOps()
+      await sheetManagerDao.upsertOrgTpHistory(permittedOps, session)
+
+      importFeedback.push(
+        `Import to CORE successful for ${wb}/${sheetName}`
+        + `\n${data.length}/${originalDataLength} rows imported (excluding header)`
+        + `\nSkipped rows were: ${skippedRows.join(', ')}`
+      )
     }
-
-    const sheetManagerFactory = new SheetToCoreManager(projectConfig)
-    const sheetManager = sheetManagerFactory.getManager(sheetName)
-    const sheetManagerDao = new SheetToCoreManagerDao({ db: pulseCoreDb })
-
-    sheetManager.setEnrichedPtpsByCombination(projectPtps)
-
-    if (isQualityAccessSheet(sheetName)) {
-      const accessData = await sheetManagerDao.getAccessesOp()
-      sheetManager.setQualityOfAccessHash(accessData)
-    }
-
-    const permittedOps = sheetManager.getPermittedOps()
-    await sheetManagerDao.upsertOrgTpHistory(permittedOps)
-
-    importFeedback.push(
-      `Import to CORE successful for ${wb}/${sheetName}`
-      + `\n${data.length}/${originalDataLength} rows imported (excluding header)`
-      + `\nSkipped rows were: ${skippedRows.join(', ')}`
-    )
-  }
+  })
 
   // STEP 5: Materialize payer historical access data, CoreToDev
   const coreToDev = new CoreToDev({

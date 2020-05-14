@@ -2,7 +2,8 @@ module.exports = limit => [
   {
     '$match': {
       'policyLinkData': {
-        '$ne': null
+        '$exists': true,
+        '$nin': [null, {}],
       }
     }
   }, {

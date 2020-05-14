@@ -2,7 +2,8 @@ module.exports = limit => [
   {
     '$match': {
       'accessData': {
-        '$ne': null
+        '$exists': true,
+        '$nin': [null, {}],
       }
     }
   }, {
