@@ -7,7 +7,7 @@ import { faTrashAlt } from "@fortawesome/free-solid-svg-icons"
 import { transparentize } from 'polished'
 
 import Modal from '../../../../../components/Modal'
-import Spinner from '../../../../../Phoenix/shared/Spinner'
+import Spinner from 'frontend/components/Spinner'
 
 import { Colors, Spacing } from '../../../../../utils/pulseStyles'
 

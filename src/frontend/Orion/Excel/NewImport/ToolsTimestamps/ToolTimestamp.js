@@ -8,7 +8,7 @@ import Button from 'frontend/components/Button'
 import { GET_SOURCE_TOOLS } from 'frontend/api/queries'
 import { UPDATE_TDG_TIMESTAMPS } from 'frontend/api/mutations'
 
-import Spinner from '../../../../Phoenix/shared/Spinner'
+import Spinner from 'frontend/components/Spinner'
 
 const StyledTd = styled.td({
   padding: '4px 6px',

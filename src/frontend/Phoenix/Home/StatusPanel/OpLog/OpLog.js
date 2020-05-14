@@ -6,7 +6,7 @@ import util from 'util'
 import { GET_OP_LOG } from '../../../../api/queries'
 import { formatDateTime } from '../../../../utils/formatDate'
 
-import Spinner from '../../../shared/Spinner'
+import Spinner from 'frontend/components/Spinner'
 
 import {
   OpLogTitle,

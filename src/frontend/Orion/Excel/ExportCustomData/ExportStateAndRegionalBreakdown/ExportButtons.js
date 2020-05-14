@@ -3,7 +3,7 @@ import { useLazyQuery } from '@apollo/react-hooks'
 import _ from 'lodash'
 
 import ExportExcelButton from '../../../../components/ExportExcelButton'
-import Spinner from '../../../../Phoenix/shared/Spinner'
+import Spinner from 'frontend/components/Spinner'
 
 import { StyledButton } from '../styledComponents'
 import FontSpace from '../../../../utils/fontspace'

@@ -4,7 +4,7 @@ import styled from '@emotion/styled'
 import _ from 'lodash'
 import { lighten, darken } from 'polished'
 
-import Spinner from '../../../Phoenix/shared/Spinner'
+import Spinner from 'frontend/components/Spinner'
 
 import {
   UPLOAD_COLLECTION,

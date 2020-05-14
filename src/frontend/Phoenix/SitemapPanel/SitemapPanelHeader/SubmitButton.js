@@ -12,7 +12,7 @@ import {
   UPDATE_ROLE_SITEMAP,
 } from '../../../api/mutations'
 
-import Spinner from '../../shared/Spinner'
+import Spinner from 'frontend/components/Spinner'
 
 import { Colors, Spacing } from '../../../utils/pulseStyles'
 

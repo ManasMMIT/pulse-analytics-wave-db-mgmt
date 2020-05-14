@@ -6,7 +6,7 @@ import { useQuery } from '@apollo/react-hooks'
 import { GET_PAYER_PROJECT_PTPS } from '../../../../../api/queries'
 
 import ProjectDetailsPanel from './ProjectDetailsPanel'
-import Spinner from '../../../../../Phoenix/shared/Spinner'
+import Spinner from 'frontend/components/Spinner'
 
 import Spacing from '../../../../../utils/spacing'
 

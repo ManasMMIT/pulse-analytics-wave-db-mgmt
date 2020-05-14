@@ -5,7 +5,7 @@ import _ from 'lodash'
 
 import CreateTreatmentPlansButton from './CreateTreatmentPlansButton'
 import ErrorList from './../ErrorList'
-import Spinner from './../../../../Phoenix/shared/Spinner'
+import Spinner from 'frontend/components/Spinner'
 
 import {
   GET_NEW_TREATMENT_PLANS,

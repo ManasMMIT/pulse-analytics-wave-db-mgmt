@@ -3,7 +3,7 @@ import { useQuery } from '@apollo/react-hooks'
 
 import ToolTimestamp from './ToolTimestamp'
 import { GET_SOURCE_TOOLS } from '../../../../api/queries'
-import Spinner from '../../../../Phoenix/shared/Spinner'
+import Spinner from 'frontend/components/Spinner'
 
 const ToolsTimestamps = () => {
   const { data, loading } = useQuery(GET_SOURCE_TOOLS)

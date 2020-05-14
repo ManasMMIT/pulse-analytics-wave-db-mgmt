@@ -6,7 +6,7 @@ import { lighten } from 'polished'
 import TestEmailGroup from './TestEmailGroup'
 import CreateTestGroupButton from './CreateTestGroupButton'
 import { GET_TEST_EMAIL_GROUPS } from '../../api/queries'
-import Spinner from '../../Phoenix/shared/Spinner'
+import Spinner from 'frontend/components/Spinner'
 
 import { Colors, Spacing } from '../../utils/pulseStyles'
 

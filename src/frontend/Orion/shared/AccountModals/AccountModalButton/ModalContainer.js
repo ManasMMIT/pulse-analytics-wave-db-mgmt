@@ -23,7 +23,7 @@ import {
 import {
   SubmitButton,
 } from './styledAccountModalButtonComponents'
-import Spinner from '../../../../Phoenix/shared/Spinner'
+import Spinner from 'frontend/components/Spinner'
 
 const ORG_TYPE_QUERY_MAP = {
   'Pathways': GET_PATHWAYS_ORGANIZATIONS,

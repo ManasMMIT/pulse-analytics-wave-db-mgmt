@@ -7,7 +7,7 @@ import {
 } from '@apollo/react-hooks'
 import { lighten } from 'polished'
 
-import Spinner from '../../../shared/Spinner'
+import Spinner from 'frontend/components/Spinner'
 import { Colors } from '../../../../utils/pulseStyles'
 
 const Button = styled.button({

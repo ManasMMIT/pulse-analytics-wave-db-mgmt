@@ -14,7 +14,7 @@ import { FontFamily } from '../../../../../utils/pulseStyles'
 import { formatDateMonthYearLong } from '../../../../../utils/formatDate'
 
 import { GET_SINGLE_PAYER_PROJECT } from '../../../../../api/queries'
-import Spinner from '../../../../../Phoenix/shared/Spinner'
+import Spinner from 'frontend/components/Spinner'
 
 const Title = styled.h1({
   padding: Spacing.S7,

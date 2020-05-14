@@ -2,7 +2,7 @@ import React, { useState, useRef } from "react"
 import XLSX from 'xlsx'
 
 import Select from 'react-select'
-import Spinner from '../../../Phoenix/shared/Spinner'
+import Spinner from 'frontend/components/Spinner'
 import { IMPORT_WORKBOOK } from '../../../api/mutations'
 
 import { useMutation } from '@apollo/react-hooks'

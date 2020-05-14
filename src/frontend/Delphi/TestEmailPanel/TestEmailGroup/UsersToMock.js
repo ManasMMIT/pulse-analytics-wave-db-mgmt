@@ -5,7 +5,7 @@ import Select from 'react-select'
 import _ from 'lodash'
 import { transparentize } from 'polished'
 
-import Spinner from '../../../Phoenix/shared/Spinner'
+import Spinner from 'frontend/components/Spinner'
 
 import { GET_USERS } from '../../../api/queries'
 

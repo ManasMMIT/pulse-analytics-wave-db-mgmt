@@ -6,7 +6,7 @@ import { GET_SOURCE_TREATMENT_PLANS, GET_TEAMS } from '../../../../api/queries'
 import { customSelectStyles } from '../../../../components/customSelectStyles'
 
 import ExportButtons from './ExportButtons'
-import Spinner from '../../../../Phoenix/shared/Spinner'
+import Spinner from 'frontend/components/Spinner'
 
 import {
   SectionContainer,

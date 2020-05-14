@@ -5,7 +5,7 @@ import {
   GET_CMS_PRIM_SPEC_COUNTS
 } from './../../../../api/queries'
 
-import Spinner from './../../../../Phoenix/shared/Spinner'
+import Spinner from 'frontend/components/Spinner'
 
 const CmsSpecialtyCounts = ({
   groupPracticePacId

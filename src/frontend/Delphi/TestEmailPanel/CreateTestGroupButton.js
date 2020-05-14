@@ -5,7 +5,7 @@ import { useMutation } from '@apollo/react-hooks'
 
 import { GET_TEST_EMAIL_GROUPS } from '../../api/queries'
 import { CREATE_TEST_EMAIL_GROUP } from '../../api/mutations'
-import Spinner from '../../Phoenix/shared/Spinner'
+import Spinner from 'frontend/components/Spinner'
 
 import Color from '../../utils/color'
 import Spacing from '../../utils/spacing'

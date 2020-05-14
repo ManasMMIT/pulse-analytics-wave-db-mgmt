@@ -9,7 +9,7 @@ import SidebarItem from '../../../../components/Sidebar/SidebarItem'
 import Color from '../../../../utils/color'
 
 import { GET_SINGLE_PAYER_PROJECT } from '../../../../api/queries'
-import Spinner from '../../../../Phoenix/shared/Spinner'
+import Spinner from 'frontend/components/Spinner'
 
 const generateSidebarItems = (
   selectedSidebarItem,

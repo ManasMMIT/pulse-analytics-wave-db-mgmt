@@ -4,7 +4,7 @@ import styled from "@emotion/styled"
 import { useMutation, useApolloClient } from '@apollo/react-hooks'
 import { transparentize, lighten } from 'polished'
 
-import Spinner from '../Spinner'
+import Spinner from 'frontend/components/Spinner'
 
 import { Colors, Spacing, FontFamily } from '../../../utils/pulseStyles'
 

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { useQuery } from '@apollo/react-hooks'
 import CreatableSelect from 'react-select/creatable'
 
-import Spinner from '../../../Phoenix/shared/Spinner'
+import Spinner from 'frontend/components/Spinner'
 
 import ImportSelectLabel from './ImportSelectLabel'
 

@@ -3,7 +3,7 @@ import { useQuery } from '@apollo/react-hooks'
 import styled from '@emotion/styled'
 
 import { GET_SINGLE_PAYER_PROJECT } from '../../../../api/queries'
-import Spinner from '../../../../Phoenix/shared/Spinner'
+import Spinner from 'frontend/components/Spinner'
 import ProjectInfo from './ProjectInfo'
 import ProjectContentConfiguration from './ProjectContentConfiguration'
 

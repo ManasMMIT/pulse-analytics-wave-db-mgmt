@@ -4,7 +4,7 @@ import { ReactTabulator } from 'react-tabulator'
 import { useQuery } from '@apollo/react-hooks'
 import { transparentize } from 'polished'
 
-import Spinner from '../../../Phoenix/shared/Spinner'
+import Spinner from 'frontend/components/Spinner'
 
 import { pathwaysEmailSubscription } from '../../../utils/email-subscription-options'
 import { GET_USERS } from '../../../api/queries'

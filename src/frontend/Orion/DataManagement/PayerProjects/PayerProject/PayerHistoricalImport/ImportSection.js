@@ -9,7 +9,7 @@ import { IMPORT_WORKBOOK } from '../../../../../api/mutations'
 
 import Button from '../../../../../components/Button'
 import FieldLabel from '../../../../../components/FieldLabel'
-import Spinner from '../../../../../Phoenix/shared/Spinner'
+import Spinner from 'frontend/components/Spinner'
 
 import Spacing from '../../../../../utils/spacing'
 import FontSpace from '../../../../../utils/fontspace'

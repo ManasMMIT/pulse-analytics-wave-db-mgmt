@@ -14,7 +14,7 @@ import {
   GET_ORGANIZATION_META,
 } from '../../api/queries'
 
-import Spinner from '../../Phoenix/shared/Spinner'
+import Spinner from 'frontend/components/Spinner'
 import ExportExcelButton from './ExportExcelButton'
 import {
   formatDateTime,

@@ -6,7 +6,7 @@ import { transparentize } from 'polished'
 
 import { GET_SELECTED_TEAM } from '../../../../../../../api/queries'
 import { UPDATE_PERMISSIONS } from '../../../../../../../api/mutations/teams'
-import Spinner from '../../../../../../shared/Spinner'
+import Spinner from 'frontend/components/Spinner'
 
 import { Colors, Spacing } from '../../../../../../../utils/pulseStyles'
 

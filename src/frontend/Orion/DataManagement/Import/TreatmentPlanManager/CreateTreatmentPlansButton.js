@@ -6,7 +6,7 @@ import {
   BULK_CREATE_TREATMENT_PLAN,
 } from './../../../../api/mutations'
 
-import Spinner from './../../../../Phoenix/shared/Spinner'
+import Spinner from 'frontend/components/Spinner'
 
 const SUBTITLE = `The following Treatment Plans don't exist. Create them so they can be used in the application.`
 

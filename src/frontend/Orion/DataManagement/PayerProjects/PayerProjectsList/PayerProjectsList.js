@@ -3,7 +3,7 @@ import { useQuery } from '@apollo/react-hooks'
 import styled from '@emotion/styled'
 
 import { GET_PAYER_PROJECTS_LIST } from '../../../../api/queries'
-import Spinner from '../../../../Phoenix/shared/Spinner'
+import Spinner from 'frontend/components/Spinner'
 import { Colors, Spacing } from '../../../../utils/pulseStyles'
 import ProjectPlacard from './ProjectPlacard'
 import CreateProjectButton from './CreateProjectButton'
