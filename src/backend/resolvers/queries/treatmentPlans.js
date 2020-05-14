@@ -83,6 +83,15 @@ const aggPipeline = [
       'book': '$book.name',
       'coverage': '$coverage.name'
     }
+  }, {
+    $sort: {
+      indication: 1,
+      regimen: 1,
+      population: 1,
+      line: 1,
+      book: 1,
+      coverage: 1,
+    }
   }
 ]
 

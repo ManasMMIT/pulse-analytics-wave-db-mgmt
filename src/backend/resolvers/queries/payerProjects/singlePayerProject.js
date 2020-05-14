@@ -6,46 +6,49 @@ const singlePayerProject = async (parent, args, { pulseCoreDb }) => {
     results
   ] = await pulseCoreDb
     .collection('tdgProjects')
-    .aggregate([
-      {
-        $match: {
-          _id: ObjectId(args.projectId)
-        }
-      },
-      {
-        $unwind: '$orgTpIds'
-      },
-      {
-        $lookup: {
-          from: 'organizations.treatmentPlans.history',
-          localField: 'orgTpIds',
-          foreignField: 'orgTpId',
-          as: 'orgTpIds'
-        }
-      },
-      {
-        $project: {
-          name: 1,
-          timestamps: '$orgTpIds.timestamp'
-        }
-      },
-      { $unwind: '$timestamps' },
-      {
-        $group: {
-          _id: { _id: '$_id', name: '$name' },
-          timestamps: {
-            $addToSet: '$timestamps'
+      .aggregate([
+        {
+          $match: {
+            _id: ObjectId(args.projectId)
+          }
+        },
+        {
+          $unwind: {
+            path: '$orgTpIds',
+            preserveNullAndEmptyArrays: true
+          }
+        }, {
+          $lookup: {
+            from: 'organizations.treatmentPlans.history',
+            localField: 'orgTpIds',
+            foreignField: 'orgTpId',
+            as: 'orgTpIds'
+          }
+        }, {
+          $project: {
+            name: 1,
+            timestamps: '$orgTpIds.timestamp'
+          }
+        }, {
+          $unwind: {
+            path: '$timestamps',
+            preserveNullAndEmptyArrays: true
+          }
+        }, {
+          $group: {
+            _id: { _id: '$_id', name: '$name' },
+            timestamps: {
+              $addToSet: '$timestamps'
+            }
+          }
+        }, {
+          '$project': {
+            '_id': '$_id._id',
+            'name': '$_id.name',
+            'timestamps': 1
           }
         }
-      },
-      {
-        $project: {
-          _id: '$_id._id',
-          name: '$_id.name',
-          timestamps: 1
-        }
-      }
-    ])
+      ])
     .toArray()
 
   return results

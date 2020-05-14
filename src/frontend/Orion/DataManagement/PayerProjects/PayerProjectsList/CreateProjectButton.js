@@ -1,14 +1,20 @@
 import React, { useState } from 'react'
+import { useMutation } from '@apollo/react-hooks'
 import styled from '@emotion/styled'
 
-import Color from '../../../../utils/color'
-import FontSpace from '../../../../utils/fontspace'
-import Spacing from '../../../../utils/spacing'
-
-import Modal from '../../../../components/Modal'
-import Button from '../../../../components/Button'
-import FieldLabel from '../../../../components/FieldLabel'
-import Input from '../../../../components/Input'
+import Color from 'frontend/utils/color'
+import FontSpace from 'frontend/utils/fontspace'
+import Spacing from 'frontend/utils/spacing'
+import Modal from 'frontend/components/Modal'
+import Button from 'frontend/components/Button'
+import FieldLabel from 'frontend/components/FieldLabel'
+import Input from 'frontend/components/Input'
+import {
+  CREATE_PAYER_PROJECT,
+} from 'frontend/api/mutations'
+import {
+  GET_PAYER_PROJECTS_LIST,
+} from 'frontend/api/queries'
 
 const modalStyle = {
   width: 400,
@@ -29,6 +35,10 @@ const ButtonWrapper = styled.div({
 
 const CreateProjectButton = () => {
   const [isModalOpen, toggleModal] = useState(false)
+
+  // TODO: Managing the form's state shouldn't be the button's job; 
+  // rather, it should be the form's job, and the form should clear itself
+  // when it unmounts, rather than the button clearing the state for the form
   const [projectName, setProjectName] = useState('')
 
   const openModal = () => toggleModal(true)
@@ -36,8 +46,21 @@ const CreateProjectButton = () => {
     setProjectName('')
     toggleModal(false)
   }
-  
+
   const onChangeHandler = e => setProjectName(e.value)
+
+  const [submit] = useMutation(
+    CREATE_PAYER_PROJECT,
+    {
+      variables: {
+        input: {
+          name: projectName,
+        }
+      },
+      refetchQueries: [{ query: GET_PAYER_PROJECTS_LIST }],
+      onCompleted: closeModal,
+    },
+  )
 
   return (
     <>
@@ -79,7 +102,7 @@ const CreateProjectButton = () => {
           </Button>
           <Button
             type="primary"
-            onClick={() => {}}
+            onClick={submit}
           >
             Create Project
           </Button>

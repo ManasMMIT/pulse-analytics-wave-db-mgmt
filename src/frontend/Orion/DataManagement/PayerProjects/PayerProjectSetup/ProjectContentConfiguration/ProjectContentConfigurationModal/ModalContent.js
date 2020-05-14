@@ -1,59 +1,73 @@
 import React, { useState } from 'react'
-import { useRouteMatch } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { useMutation } from '@apollo/react-hooks'
+
+import {
+  GET_PAYER_PROJECT_PTPS
+} from 'frontend/api/queries'
+import {
+  UPDATE_PAYER_PROJECT_PTPS,
+} from 'frontend/api/mutations'
+
+import Spinner from 'frontend/components/Spinner'
+import SubmitButton from 'frontend/components/SubmitButton'
 
 import PayerSelectionPanel from './PayerSelectionPanel'
 import TreatmentPlanSelectionPanel from './TreatmentPlanSelectionPanel'
 
-import {
-  UPDATE_PAYER_PROJECT_PTPS,
-} from './../../../../../../api/mutations'
+const ModalContent = ({
+  initialPayerIds,
+  initialTpIds,
+  closeModal,
+}) => {
+  const [payerIds, setPayerIds] = useState(initialPayerIds)
+  const [treatmentPlanIds, setTreatmentPlanIds] = useState(initialTpIds)
 
-// ! TODOS:
-// TODO 1: Read all Payers
-// TODO 2: Read all TreatmentPlans, grouped by indications
-// TODO 3: Allow selection and product of two categories to persist in state in array of [{ orgId, tpId }]
-// TODO 4: Trigger mutation to add ptp to care list
+  const stagedPayerIds = Object.keys(payerIds)
+  const stagedTpIds = Object.keys(treatmentPlanIds)
 
-// const mashTogetherPayersAndTps = (payerIds, tpIds) => {}
+  const { projectId } = useParams()
 
-const ModalContent = () => {
-  const [payerIds, setPayerIds] = useState([])
-  const [treatmentPlanIds, setTreatmentPlanIds] = useState([])
-  const {
-    params: {
-      projectId,
-    },
-  } = useRouteMatch()
-
-  const [trackPtps, { loading, data }] = useMutation(UPDATE_PAYER_PROJECT_PTPS)
-
-  // !only mash things together on mutation
-  const submit = () => trackPtps({
-    variables: {
-      input: {
-        projectId,
-        ptps: [
-          {
-            organizationId: '5d825030cc80b15a9476b81a',
-            treatmentPlanId: '5e907c11b4e5d9e58d3ed647',
-          }
-        ]
-        // ptps: mashTogetherPayersAndTps(
-        //   payerIds,
-        //   treatmentPlanIds
-        // )
-      }
+  const [updatePtps, { loading }] = useMutation(
+    UPDATE_PAYER_PROJECT_PTPS,
+    {
+      variables: {
+        input: {
+          projectId,
+          organizationIds: stagedPayerIds,
+          treatmentPlanIds: stagedTpIds,
+        }
+      },
+      refetchQueries: [
+        {
+          query: GET_PAYER_PROJECT_PTPS,
+          variables: { input: { projectId } }
+        }
+      ],
+      awaitRefetchQueries: true,
+      onCompleted: () => closeModal(),
     }
-  })
+  )
 
   return (
-    <div style={{ display: 'flex' }}>
-      <PayerSelectionPanel />
-      <TreatmentPlanSelectionPanel />
-      <button onClick={submit}>
-        Submit Me
-      </button>
+    <div style={{ padding: 12 }}>
+      <div style={{ display: 'flex' }}>
+        <PayerSelectionPanel
+          payerIds={payerIds}
+          setPayerIds={setPayerIds}
+        />
+        <TreatmentPlanSelectionPanel
+          treatmentPlanIds={treatmentPlanIds}
+          setTreatmentPlanIds={setTreatmentPlanIds}
+        />
+      </div>
+
+      <SubmitButton
+        style={{ margin: 12 }}
+        onClick={updatePtps}
+      >
+        { loading ? <Spinner /> : 'Submit' }
+      </SubmitButton>
     </div>
   )
 }
