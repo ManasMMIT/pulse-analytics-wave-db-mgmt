@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Create Payer Projects
   - Update Project PTPs via cross-product configuration modal
   - Delete selected PTPs via granular table
+  - Transfer PTPs ownership between projects
 
 ### Changed
 - `Polaris Frontend`: Payer Projects rose to the top of the app, next to Phoenix, Delphi, Orion.

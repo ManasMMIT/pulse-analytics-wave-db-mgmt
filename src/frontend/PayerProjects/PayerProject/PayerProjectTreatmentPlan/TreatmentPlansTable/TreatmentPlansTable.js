@@ -18,6 +18,7 @@ import {
 
 import TreatmentPlansTableHead from './TreatmentPlansTableHead'
 import TreatmentPlansTableBody from './TreatmentPlansTableBody'
+import TransferPtpsModalButton from './TransferPtpsModalButton'
 
 import { TABLE_HEADER_CONFIG } from '../utils'
 
@@ -60,7 +61,7 @@ const TreatmentPlansTable = ({ data, checkbox }) => {
           orgTpIds: Array.from(selected),
         }
       },
-      // ! Note: this isn't good enough for updating OTHER projects' tables; we're using 
+      // ! Note: this isn't good enough for updating OTHER projects' tables; we're using
       // ! `fetchPolicy: network-only` on the original GET_PAYER_PROJECT_PTPS query also;
       // ! we still need this tho to refresh the table on the current view
       refetchQueries: [{ query: GET_PAYER_PROJECT_PTPS, variables: { input: { projectId } } }]
@@ -121,9 +122,12 @@ const TreatmentPlansTable = ({ data, checkbox }) => {
             {selected.size} Payer Treatments Selected
           </h2>
           {selected.size > 0 && (
-            <PlaceholderButton onClick={removePtps}>
-              Remove from Project
-            </PlaceholderButton>
+            <div>
+              <TransferPtpsModalButton ptpIds={Array.from(selected)} />
+              <PlaceholderButton onClick={removePtps}>
+                Remove from Project
+              </PlaceholderButton>
+            </div>
           )}
         </section>
       )}
