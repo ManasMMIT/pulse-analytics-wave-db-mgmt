@@ -1,0 +1,71 @@
+import React from 'react'
+import PropTypes from 'prop-types'
+import { NavLink } from 'react-router-dom'
+import { useQuery } from '@apollo/react-hooks'
+
+import Sidebar from 'frontend/components/Sidebar'
+import SidebarItem from 'frontend/components/Sidebar/SidebarItem'
+
+import Color from 'frontend/utils/color'
+
+import { GET_SINGLE_PAYER_PROJECT } from 'frontend/api/queries'
+import Spinner from 'frontend/components/Spinner'
+
+const generateSidebarItems = (
+  selectedSidebarItem,
+  url
+) => ({ label, link }) => {
+  const isSelected = selectedSidebarItem === link
+  const option = { label }
+
+  return (
+    <NavLink
+      key={label}
+      to={`${ url }/${ link }`}
+    >
+      <SidebarItem
+        isSelected={isSelected}
+        option={option}
+      />
+    </NavLink>
+  )
+}
+
+const PayerProjectSidebar = ({
+  sidebarConfig,
+  match,
+  location,
+}) => {
+  const { url } = match
+  const { pathname } = location
+  const selectedSidebarItem = pathname.split('/').pop()
+
+  const { data, loading } = useQuery(
+    GET_SINGLE_PAYER_PROJECT,
+    { variables: { projectId: match.params.projectId }}
+  )
+
+  const payerProjectName = loading
+    ? <Spinner />
+    : data.singlePayerProject.name
+
+  return (
+    <Sidebar sidebarStyle={{ borderRight: `1px solid ${ Color.LIGHT_GRAY_1 }`}}>
+      <h3>{ payerProjectName }</h3>
+      { sidebarConfig.map(generateSidebarItems(selectedSidebarItem, url)) }
+    </Sidebar>
+  )
+}
+
+PayerProjectSidebar.propTypes = {
+  sidebarConfig: PropTypes.arrayOf(
+    PropTypes.shape({
+      label: PropTypes.string.isRequired,
+      link: PropTypes.string.isRequired,
+    })
+  ),
+  match: PropTypes.object.isRequired,
+  location: PropTypes.object.isRequired,
+}
+
+export default PayerProjectSidebar

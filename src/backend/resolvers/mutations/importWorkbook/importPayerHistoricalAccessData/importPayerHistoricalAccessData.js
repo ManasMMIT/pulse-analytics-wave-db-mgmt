@@ -1,8 +1,12 @@
 const { ObjectId } = require('mongodb')
+const { zonedTimeToUtc } = require('date-fns-tz')
 
-const SheetToCore = require('./SheetToCore/ManagerFactory')
+const SheetToCoreManager = require('./SheetToCore/ManagerFactory')
+const SheetToCoreManagerDao = require('./SheetToCore/ManagerFactory/ManagerDao')
 
-// const CoreToDev = require('./CoreToDev')
+const CoreToDev = require('./CoreToDev')
+
+const DEFAULT_TIMEZONE = require('../../../../utils/defaultTimeZone')
 
 const {
   validateQualityOfAccess,
@@ -27,7 +31,7 @@ const importPayerHistoricalAccessData = async ({
   importFeedback,
 }) => {
   // STEP 1: Get the project's PTPs; it's going to be used throughout this process
-  let [{ projectId }] = cleanedSheetsWithMetadata
+  let [{ projectId, timestamp: importTimestamp }] = cleanedSheetsWithMetadata
   projectId = ObjectId(projectId)
 
   const projectPtps = await pulseCoreDb
@@ -51,48 +55,84 @@ const importPayerHistoricalAccessData = async ({
     }
   }
 
-  // STEP 3: Upsert all the sheets
-  for (const sheetObjWithMetadata of cleanedSheetsWithMetadata) {
-    let {
-      wb,
-      sheet: sheetName,
-      data,
-      timestamp,
-      projectId,
-      skippedRows,
-      originalDataLength,
-    } = sheetObjWithMetadata
+  const session = mongoClient.startSession()
+  
+  await session.withTransaction(async () => {
+    // STEP 3: Clear the PTP-timestamp combos before any upsertion happens
+    const convertedTimestamp = zonedTimeToUtc(importTimestamp, DEFAULT_TIMEZONE)
+    const projectPtpIds = projectPtps.map(({ _id }) => _id)
 
-    projectId = ObjectId(projectId)
+    await pulseCoreDb.collection('organizations.treatmentPlans.history')
+      .updateMany(
+        {
+          timestamp: convertedTimestamp,
+          orgTpId: { $in: projectPtpIds },
+        },
+        {
+          $set: {
+            policyLinkData: {},
+            additionalCriteriaData: [],
+            accessData: {},
+            tierData: {},
+          }
+        },
+        {
+          session,
+        }
+      )
 
-    const projectConfig = {
-      sheetData: data,
-      sheetName,
-      timestamp,
-      projectId,
-      pulseCore: pulseCoreDb,
+    // STEP 4: Upsert all the sheets
+    for (const sheetObjWithMetadata of cleanedSheetsWithMetadata) {
+      let {
+        wb,
+        sheet: sheetName,
+        data,
+        timestamp,
+        projectId,
+        skippedRows,
+        originalDataLength,
+      } = sheetObjWithMetadata
+
+      projectId = ObjectId(projectId)
+
+      const projectConfig = {
+        sheetData: data,
+        timestamp,
+        projectId,
+        pulseCore: pulseCoreDb,
+      }
+
+      const sheetManagerFactory = new SheetToCoreManager(projectConfig)
+      const sheetManager = sheetManagerFactory.getManager(sheetName)
+      const sheetManagerDao = new SheetToCoreManagerDao({ db: pulseCoreDb })
+
+      sheetManager.setEnrichedPtpsByCombination(projectPtps)
+
+      if (isQualityAccessSheet(sheetName)) {
+        const accessData = await sheetManagerDao.getAccessesOp()
+        sheetManager.setQualityOfAccessHash(accessData)
+      }
+
+      const permittedOps = sheetManager.getPermittedOps()
+      await sheetManagerDao.upsertOrgTpHistory(permittedOps, session)
+
+      importFeedback.push(
+        `Import to CORE successful for ${wb}/${sheetName}`
+        + `\n${data.length}/${originalDataLength} rows imported (excluding header)`
+        + `\nSkipped rows were: ${skippedRows.join(', ')}`
+      )
     }
+  })
 
-    const sheetManager = new SheetToCore(projectConfig).getManager(sheetName)
+  // STEP 5: Materialize payer historical access data, CoreToDev
+  const coreToDev = new CoreToDev({
+    pulseDev: pulseDevDb,
+    pulseCore: pulseCoreDb,
+  })
 
-    await sheetManager.upsertOrgTpHistory()
+  await coreToDev.materializeNonLivesCollections()
 
-    importFeedback.push(
-      `Import to CORE successful for ${wb}/${sheetName}`
-      + `\n${data.length}/${originalDataLength} rows imported (excluding header)`
-      + `\nSkipped rows were: ${skippedRows.join(', ')}`
-    )
-  }
-
-  // STEP 4: Materialize payer historical access data, CoreToDev
-  // const coreToDev = new CoreToDev({
-  //   pulseDev: pulseDevDb,
-  //   pulseCore: pulseCoreDb,
-  // })
-
-  // await coreToDev.materializeNonLivesCollections()
-
-  // importFeedback.push('Payer historical access data successfully materialized to dev')
+  importFeedback.push('Payer historical access data successfully materialized to dev')
 
   return 'Success'
 }

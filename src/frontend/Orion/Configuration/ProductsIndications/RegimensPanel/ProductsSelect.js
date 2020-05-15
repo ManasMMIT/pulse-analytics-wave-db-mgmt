@@ -2,7 +2,7 @@ import React from 'react'
 import { useQuery } from '@apollo/react-hooks'
 import Select from 'react-select'
 import _ from 'lodash'
-import Spinner from '../../../../Phoenix/shared/Spinner'
+import Spinner from 'frontend/components/Spinner'
 import { customSelectStyles } from '../../../../components/customSelectStyles'
 
 import {

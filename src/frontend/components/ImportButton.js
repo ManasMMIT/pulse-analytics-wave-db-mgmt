@@ -3,7 +3,7 @@ import { useMutation } from '@apollo/react-hooks'
 import PropTypes from 'prop-types'
 import XLSX from 'xlsx'
 
-import Spinner from '../Phoenix/shared/Spinner'
+import Spinner from 'frontend/components/Spinner'
 
 import {
   UPSERT_ORGANIZATION_META,

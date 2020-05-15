@@ -10,7 +10,7 @@ import useTreatmentPlanParts from 'frontend/hooks/useTreatmentPlanParts'
 import { GET_SOURCE_TREATMENT_PLANS } from 'frontend/api/queries'
 
 import TreatmentPlanModalButton from './TreatmentPlanModalButton'
-import Spinner from '../../../../Phoenix/shared/Spinner'
+import Spinner from 'frontend/components/Spinner'
 
 import {
   DELETE_SOURCE_TREATMENT_PLAN,

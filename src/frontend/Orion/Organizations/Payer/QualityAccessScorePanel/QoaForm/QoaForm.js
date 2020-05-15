@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { useQuery } from '@apollo/react-hooks'
 
 import CaptionInputs from './CaptionInputs'
-import Spinner from '../../../../../Phoenix/shared/Spinner'
+import Spinner from 'frontend/components/Spinner'
 
 import {
   GET_SOURCE_INDICATIONS,

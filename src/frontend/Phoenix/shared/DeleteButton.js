@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faTrashAlt } from "@fortawesome/free-solid-svg-icons"
 
 import Modal from './../../components/Modal'
-import Spinner from './Spinner'
+import Spinner from 'frontend/components/Spinner'
 
 import { Colors, Spacing, Transitions } from '../../utils/pulseStyles'
 

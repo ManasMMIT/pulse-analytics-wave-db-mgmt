@@ -2,6 +2,7 @@ const { gql } = require('apollo-server-express')
 
 const updateSitemapTypeDefs = require('./update')
 const createSourceNodeTypeDefs = require('./createSourceNode')
+const updateTdgTimestampsTypeDefs = require('./updateTdgTimestamps')
 
 // need to create NodeInput of type Input, otherwise server fails:
 // https://stackoverflow.com/questions/52139654/how-to-deal-with-nested-input-in-graphql
@@ -26,4 +27,5 @@ module.exports = [
   nodeInputTypedef,
   updateSitemapTypeDefs,
   createSourceNodeTypeDefs,
+  updateTdgTimestampsTypeDefs,
 ]

@@ -3,10 +3,8 @@ const _ = require('lodash')
 
 const cleanQualityAccessPtps = require('./cleanQualityAccessPtps')
 
-const seedBooks = require('./seedBooks')
 const seedLines = require('./seedLines')
 const seedPopulations = require('./seedPopulation')
-const seedCoverages = require('./seedCoverages')
 // const seedNewIndications = require('./seedNewIndications')
 // const seedNewRegimens = require('./seedNewRegimens')
 
@@ -51,12 +49,10 @@ const runSeedScripts = async () => {
 
   console.log(`Historical docs loaded\nBeginning seeding\n`);
 
-  // 1. seed all treatment plan parts
+  // 1. seed larger sets of treatment plan parts (ones we can't just hard-code like coverages or books)
   await Promise.all([
-    seedBooks(seedParameters),
     seedLines(seedParameters),
     seedPopulations(seedParameters),
-    seedCoverages(seedParameters),
   ])
 
   // 2. seed actual treatment plan combos

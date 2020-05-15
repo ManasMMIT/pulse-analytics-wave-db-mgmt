@@ -43,6 +43,8 @@ const mutationType = gql`
     createSourceNode(input: CreateSourceNodeInput!): Node
     updateTeamNode(input: UpdateTeamNodeInput!): Node
 
+    updateTdgTimestamps(input: UpdateTdgTimestampsInput!): JSON
+
     updateRoleSitemap(input: UpdateRoleSitemapInput!): UpdateRoleSitemapPayload
     updatePermissions(input: UpdatePermissionsInput!): UpdateTeamPayload
     pushSitemapToDev: String
@@ -114,6 +116,7 @@ const mutationType = gql`
 
     pipeDelimitedScript: JSON
 
+    createPayerProject(input: CreatePayerProjectInput!): CreatePayerProjectPayload
     updatePayerProjectPtps(input: UpdatePayerProjectPtpsInput!): JSON
     removePayerProjectPtps(input: RemovePayerProjectPtpsInput!): [ID]!
     transferPayerProjectPtps(input: TransferPayerProjectPtpsInput!): JSON

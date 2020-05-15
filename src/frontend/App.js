@@ -23,19 +23,22 @@ import Phoenix from './Phoenix'
 import Orion from './Orion'
 import Delphi from './Delphi'
 
+import PayerProjectsList from './PayerProjects/PayerProjectsList'
+import PayerProject from './PayerProjects/PayerProject'
+
 import { Colors, Spacing } from './utils/pulseStyles'
 
 const IconSource = {
   PHOENIX: 'https://res.cloudinary.com/pulsedatatools/image/upload/v1573136582/polaris/icons/phoenix-1-white.svg',
   ORION: 'https://res.cloudinary.com/pulsedatatools/image/upload/v1573136582/polaris/icons/orion-1-white.svg',
   DELPHI: 'https://res.cloudinary.com/pulsedatatools/image/upload/v1573136582/polaris/icons/mercury-1-white.svg',
+  PAYER_PROJECTS: 'https://res.cloudinary.com/pulsedatatools/image/upload/v1573136582/polaris/icons/taurus-1-white.svg',
 }
 
 const PolarisSidebar = styled.div({
   display: 'flex',
   flexDirection: 'column',
   backgroundColor: '#0E2539',
-  height: `calc(100vh - ${Spacing.SMALL})`,
   padding: Spacing.TINY,
 })
 
@@ -140,7 +143,7 @@ const App = () => {
   return (
     <ApolloProvider client={client}>
         <Router>
-          <div style={{ display: 'flex' }}>
+          <div style={{ display: 'flex', height: '100vh' }}>
             <PolarisSidebar>
               <StyledNavLink
                 to="/phoenix"
@@ -158,7 +161,13 @@ const App = () => {
                 to="/delphi"
                 activeStyle={activeLinkStyle(Colors.DELPHI)}
               >
-                <img style={iconStyle} src={IconSource. DELPHI} />
+                <img style={iconStyle} src={IconSource.DELPHI} />
+              </StyledNavLink>
+              <StyledNavLink
+                to="/payer-projects"
+                activeStyle={activeLinkStyle(Colors.DELPHI)}
+              >
+                <img style={iconStyle} src={IconSource.PAYER_PROJECTS} />
               </StyledNavLink>
 
               <div style={sidebarBottomSectionStyle}>
@@ -191,6 +200,8 @@ const App = () => {
               <Route path="/phoenix" component={Phoenix} />
               <Route path="/orion" component={Orion} />
               <Route path="/delphi" component={Delphi} />
+              <Route exact path="/payer-projects" component={PayerProjectsList} />
+              <Route path="/payer-projects/:projectId" component={PayerProject} />
               <Redirect to="/phoenix" />
             </Switch>
           </div>

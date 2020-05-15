@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { useQuery } from '@apollo/react-hooks'
 import _ from 'lodash'
-import Spinner from '../../../../../../shared/Spinner'
+import Spinner from 'frontend/components/Spinner'
 
 import ModalContent from './ModalContent'
 

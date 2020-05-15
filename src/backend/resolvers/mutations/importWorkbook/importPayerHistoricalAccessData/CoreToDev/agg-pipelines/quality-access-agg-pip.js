@@ -1,8 +1,11 @@
+const getLatestWithinEachMonthYearPtp = require('./get-latest-within-each-month-year-ptp')
+
 module.exports = limit => [
   {
     '$match': {
       'accessData': {
-        '$ne': null
+        '$exists': true,
+        '$nin': [null, {}],
       }
     }
   }, {
@@ -17,7 +20,9 @@ module.exports = limit => [
     '$sort': {
       'timestamp': -1
     }
-  }, {
+  },
+  ...getLatestWithinEachMonthYearPtp,
+  {
     '$group': {
       '_id': {
         'orgTpId': '$orgTpId'

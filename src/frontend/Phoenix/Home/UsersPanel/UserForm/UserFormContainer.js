@@ -4,7 +4,7 @@ import {
 } from '@apollo/react-hooks'
 
 import UserForm from './UserForm'
-import Spinner from '../../../shared/Spinner'
+import Spinner from 'frontend/components/Spinner'
 
 import {
   GET_USER_TEAMS,

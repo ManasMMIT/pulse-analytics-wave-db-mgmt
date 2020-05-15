@@ -2,7 +2,8 @@ module.exports = limit => [
   {
     '$match': {
       'policyLinkData': {
-        '$ne': null
+        '$exists': true,
+        '$nin': [null, {}],
       }
     }
   }, {
@@ -80,49 +81,57 @@ module.exports = limit => [
       'organization': '$organization.organization'
     }
   }, {
+    '$sort': {
+      'timestamp': -1
+    }
+  }, {
     '$group': {
       '_id': {
-        'timestamp': '$timestamp',
-        'month': '$dateParts.month',
-        'year': '$dateParts.year',
         'book': '$book',
         'coverage': '$coverage',
         'regimen': '$regimen',
         'slug': '$slug',
-        'organization': '$organization'
+        'month': '$dateParts.month',
+        'year': '$dateParts.year'
       },
-      'data': {
-        '$addToSet': '$policyLinkData'
+      'latestDocsWithinMonthYear': {
+        '$push': '$$ROOT'
       }
     }
   }, {
-    '$project': {
-      'data': {
-        '$arrayElemAt': [
-          '$data', 0
+    '$addFields': {
+      'latestDocsWithinMonthYear': {
+        '$slice': [
+          '$latestDocsWithinMonthYear', 1
         ]
       }
     }
   }, {
-    '$project': {
-      '_id': 0,
-      'timestamp': '$_id.timestamp',
-      'month': '$_id.month',
-      'year': '$_id.year',
-      'book': '$_id.book',
-      'coverage': '$_id.coverage',
-      'regimen': '$_id.regimen',
-      'slug': '$_id.slug',
-      'organization': '$_id.organization',
-      'link': '$data.policyLink',
-      'dateTracked': '$data.dateTracked',
-      'paLink': '$data.paLink',
-      'project': '$data.project',
-      'siteLink': '$data.siteLink'
+    '$unwind': '$latestDocsWithinMonthYear'
+  }, {
+    '$replaceRoot': {
+      'newRoot': '$latestDocsWithinMonthYear'
     }
   }, {
     '$sort': {
       'timestamp': -1
+    }
+  }, {
+    '$project': {
+      '_id': 0,
+      'timestamp': 1,
+      'month': '$dateParts.month',
+      'year': '$dateParts.year',
+      'book': 1,
+      'coverage': 1,
+      'regimen': 1,
+      'slug': 1,
+      'organization': 1,
+      'link': '$policyLinkData.policyLink',
+      'dateTracked': '$policyLinkData.dateTracked',
+      'paLink': '$policyLinkData.paLink',
+      'siteLink': '$policyLinkData.siteLink',
+      'project': null
     }
   },
   {

@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import Spinner from '../../../Phoenix/shared/Spinner'
+import Spinner from 'frontend/components/Spinner'
 import { useAuth0 } from '../../../../react-auth0-spa'
 import FileSaver from 'file-saver'
 import Color from '../../../utils/color'

@@ -1,5 +1,4 @@
 const Manager = require('./Manager')
-const _ = require('lodash')
 
 class PolicyLinkManager extends Manager {
   constructor(projectConfig) { // eslint-disable-line
@@ -14,7 +13,6 @@ class PolicyLinkManager extends Manager {
        orgTpId,
        dateTracked,
        paLink,
-       policyLink,
        siteLink,
        link,
        treatmentPlanId,
@@ -32,9 +30,8 @@ class PolicyLinkManager extends Manager {
         timestamp: this.timestamp,
         policyLinkData: {
           dateTracked,
-          link,
+          policyLink: link,
           paLink,
-          policyLink,
           siteLink,
         },
         updatedOn,

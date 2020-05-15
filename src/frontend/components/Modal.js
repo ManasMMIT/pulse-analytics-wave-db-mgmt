@@ -155,7 +155,7 @@ Modal.defaultProps = {
 Modal.propTypes = {
   handleClose: PropTypes.func,
   show: PropTypes.bool,
-  title: PropTypes.string,
+  title: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
   style: PropTypes.object,
   modalStyle: PropTypes.object,
   padding: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),

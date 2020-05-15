@@ -123,22 +123,25 @@ class CoreToDev {
         nonHtDocs,
       }
     } = this.nonLivesCollectionDocs
-
     await this.pulseDev
       .collection('payerHistoricalQualityAccess')
       .deleteMany()
 
     await this.pulseDev
-      .collection('payerHistoricalQualityAccess')
-      .insertMany(nonHtDocs)
-
-    await this.pulseDev
       .collection('payerHistoricalQualityAccessHt')
       .deleteMany()
 
-    await this.pulseDev
-      .collection('payerHistoricalQualityAccessHt')
-      .insertMany(htDocs)
+    if (nonHtDocs.length) {
+      await this.pulseDev
+        .collection('payerHistoricalQualityAccess')
+        .insertMany(nonHtDocs)
+    }
+
+    if (htDocs.length) {
+      await this.pulseDev
+        .collection('payerHistoricalQualityAccessHt')
+        .insertMany(htDocs)
+    }
   }
 
   async materializeAdditionalCriteria() {
@@ -154,16 +157,20 @@ class CoreToDev {
       .deleteMany()
 
     await this.pulseDev
-      .collection('payerHistoricalAdditionalCriteria')
-      .insertMany(nonHtDocs)
-
-    await this.pulseDev
       .collection('payerHistoricalAdditionalCriteriaHt')
       .deleteMany()
 
-    await this.pulseDev
-      .collection('payerHistoricalAdditionalCriteriaHt')
-      .insertMany(htDocs)
+    if (nonHtDocs.length) {
+      await this.pulseDev
+        .collection('payerHistoricalAdditionalCriteria')
+        .insertMany(nonHtDocs)
+    }
+    
+    if (htDocs.length) {
+      await this.pulseDev
+        .collection('payerHistoricalAdditionalCriteriaHt')
+        .insertMany(htDocs)
+    }
   }
 
   async materializePolicyLinks() {
@@ -179,16 +186,20 @@ class CoreToDev {
       .deleteMany()
 
     await this.pulseDev
-      .collection('payerHistoricalPolicyLinks')
-      .insertMany(nonHtDocs)
-
-    await this.pulseDev
       .collection('payerHistoricalPolicyLinksHt')
       .deleteMany()
 
-    await this.pulseDev
-      .collection('payerHistoricalPolicyLinksHt')
-      .insertMany(htDocs)
+    if (nonHtDocs.length) {
+      await this.pulseDev
+        .collection('payerHistoricalPolicyLinks')
+        .insertMany(nonHtDocs)
+    }
+
+    if (htDocs.length) {
+      await this.pulseDev
+        .collection('payerHistoricalPolicyLinksHt')
+        .insertMany(htDocs)
+    }
   }
 
   async materializeCombinedNonLivesData() {
@@ -198,9 +209,11 @@ class CoreToDev {
       .collection('payerHistoricalCombinedData')
       .deleteMany()
 
-    await this.pulseDev
-      .collection('payerHistoricalCombinedData')
-      .insertMany(combinedData)
+    if (combinedData.length) {
+      await this.pulseDev
+        .collection('payerHistoricalCombinedData')
+        .insertMany(combinedData)
+    }
   }
 
   async materializeNonLivesCollections() {

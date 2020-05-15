@@ -4,7 +4,7 @@ import Inspector from 'react-inspector'
 
 import useAquila from '../../../hooks/useAquila'
 
-import Spinner from './../../Phoenix/shared/Spinner'
+import Spinner from 'frontend/components/Spinner'
 import { useEffect } from 'react'
 
 const NewQueryTool = () => {

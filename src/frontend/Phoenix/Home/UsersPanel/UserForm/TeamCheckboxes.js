@@ -9,7 +9,7 @@ import {
   GET_CLIENT_TEAMS,
 } from '../../../../api/queries'
 
-import Spinner from '../../../shared/Spinner'
+import Spinner from 'frontend/components/Spinner'
 
 const TeamCheckboxes = ({
   checkboxesMap,

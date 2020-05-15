@@ -5,7 +5,7 @@ import { transparentize } from 'polished'
 import { useQuery } from '@apollo/react-hooks'
 import _ from 'lodash'
 
-import Spinner from '../../Phoenix/shared/Spinner'
+import Spinner from 'frontend/components/Spinner'
 
 import ModalButtonWithForm from '../../Orion/shared/ModalButtonWithForm'
 import { GET_USERS } from '../../api/queries'

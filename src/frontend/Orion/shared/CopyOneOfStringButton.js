@@ -2,7 +2,7 @@ import React from 'react'
 import styled from '@emotion/styled'
 import { transparentize } from 'polished'
 import { useQuery } from '@apollo/react-hooks'
-import Spinner from '../../Phoenix/shared/Spinner'
+import Spinner from 'frontend/components/Spinner'
 
 // ! temporary usage of account modal button to emulate style
 import { ButtonLabel } from './AccountModals/AccountModalButton/styledAccountModalButtonComponents'

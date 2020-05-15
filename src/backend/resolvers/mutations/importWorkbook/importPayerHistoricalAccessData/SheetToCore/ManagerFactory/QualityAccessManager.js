@@ -1,8 +1,13 @@
 const Manager = require('./Manager')
+const _ = require('lodash')
 
 class QualityAccessManager extends Manager {
   constructor(projectConfig) { // eslint-disable-line
     super(projectConfig)
+  }
+
+  setQualityOfAccessHash(accessData = []) {
+    this.qualityOfAccessHash = _.keyBy(accessData, 'access')
   }
 
   getPermittedOps() {
@@ -41,6 +46,8 @@ class QualityAccessManager extends Manager {
         },
         $setOnInsert: {
           createdOn: updatedOn,
+          additionalCriteriaData: [], // keep schema stable; additional criteria slice should always be an array
+          policyLinkData: {}, // keep schema stable; policyLinkData should always be an object
         }
       }
 

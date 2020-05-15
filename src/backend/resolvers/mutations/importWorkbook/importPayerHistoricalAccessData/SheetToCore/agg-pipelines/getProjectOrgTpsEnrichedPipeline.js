@@ -112,7 +112,9 @@ module.exports = projectId => [
         '$arrayElemAt': [
           '$coverage', 0
         ]
-      }
+      },
+      'treatmentPlanId': '$treatmentPlanId',
+      'organizationId': '$organizationId'
     }
   }, {
     '$project': {
@@ -122,7 +124,9 @@ module.exports = projectId => [
       'population': '$population.name',
       'line': '$line.name',
       'book': '$book.name',
-      'coverage': '$coverage.name'
+      'coverage': '$coverage.name',
+      'treatmentPlanId': '$treatmentPlanId',
+      'organizationId': '$organizationId'
     }
   }
 ]

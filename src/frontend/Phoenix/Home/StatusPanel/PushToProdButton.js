@@ -13,7 +13,7 @@ import {
   PUSH_SITEMAP_TO_PROD,
 } from '../../../api/mutations'
 
-import Spinner from '../../shared/Spinner'
+import Spinner from 'frontend/components/Spinner'
 
 const StyledButton = styled.button({
   border: 'none',

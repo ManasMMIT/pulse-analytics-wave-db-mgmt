@@ -124,3 +124,9 @@ export const CREATE_SOURCE_NODE = gql`
     }
   }
 `
+
+export const UPDATE_TDG_TIMESTAMPS = gql`
+  mutation UpdateTdgTimestamps($input: UpdateTdgTimestampsInput!) {
+    updateTdgTimestamps(input: $input)
+  }
+`
