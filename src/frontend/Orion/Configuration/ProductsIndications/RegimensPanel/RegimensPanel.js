@@ -1,4 +1,6 @@
 import React from 'react'
+import { useQuery } from '@apollo/react-hooks'
+import _ from 'lodash'
 
 import Panel from '../../../../components/Panel'
 import ModalButtonWithForm from '../../../shared/ModalButtonWithForm'
@@ -15,6 +17,7 @@ import {
   GET_SOURCE_REGIMENS,
   GET_SOURCE_INDICATIONS,
   GET_SELECTED_REGIMENS,
+  GET_SOURCE_TREATMENT_PLANS,
 } from '../../../../api/queries'
 
 import {
@@ -84,8 +87,20 @@ const headerChildren = (
   </div>
 )
 
-const buttonGroupCallback = regimen => (
+const getButtonGroupCallback = treatmentPlansByReg => regimen => (
   <>
+    <span
+      style={{
+        padding: Spacing.S2,
+        margin: Spacing.S7,
+        background: Color.LIGHT_BLUE_GRAY_1,
+        borderRadius: 5,
+        color: Color.ORION,
+      }}
+    >
+      {`(${(treatmentPlansByReg[regimen.name] || []).length} Treatment Plans)`}
+    </span>
+
     <ModalButtonWithForm
       modalTitle="Edit Regimen"
       buttonLabel={editIcon}
@@ -138,25 +153,37 @@ const buttonGroupCallback = regimen => (
   </>
 )
 
-const panelItemConfig = {
-  style: defaultPanelItemStyle,
-  buttonGroupCallback,
-  label1Callback: ({ name }) => name,
-}
+const RegimensPanel = () => {
+  const { data, loading } = useQuery(GET_SOURCE_TREATMENT_PLANS)
 
-const RegimensPanel = () => (
-  <Panel
-    title="Regimens"
-    headerChildren={headerChildren}
-    headerContainerStyle={{
-      background: Color.WHITE,
-      borderBottom: `1px solid ${transparentize(0.9, Color.BLACK)}`
-    }}
-    queryDocs={{
-      fetchAllQueryProps: { query: GET_SOURCE_REGIMENS },
-    }}
-    panelItemConfig={panelItemConfig}
-  />
-)
+  if (loading) return null
+
+  const { treatmentPlans } = data
+
+  const treatmentPlansByReg = _.groupBy(treatmentPlans, 'regimen')
+
+  const buttonGroupCallback = getButtonGroupCallback(treatmentPlansByReg)
+
+  const panelItemConfig = {
+    style: defaultPanelItemStyle,
+    buttonGroupCallback,
+    label1Callback: ({ name }) => name,
+  }
+
+  return (
+    <Panel
+      title="Regimens"
+      headerChildren={headerChildren}
+      headerContainerStyle={{
+        background: Color.WHITE,
+        borderBottom: `1px solid ${transparentize(0.9, Color.BLACK)}`
+      }}
+      queryDocs={{
+        fetchAllQueryProps: { query: GET_SOURCE_REGIMENS },
+      }}
+      panelItemConfig={panelItemConfig}
+    />
+  )
+}
 
 export default RegimensPanel

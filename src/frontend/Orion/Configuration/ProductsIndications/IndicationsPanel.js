@@ -1,4 +1,6 @@
 import React from 'react'
+import { useQuery } from '@apollo/react-hooks'
+import _ from 'lodash'
 import styled from '@emotion/styled'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faEdit } from "@fortawesome/free-solid-svg-icons"
@@ -8,7 +10,11 @@ import Panel from '../../../components/Panel'
 import ModalButtonWithForm from '../../shared/ModalButtonWithForm'
 import DeleteButton from '../../shared/DeleteButton'
 import CopyOneOfStringButton from '../../shared/CopyOneOfStringButton'
-import { GET_SOURCE_INDICATIONS } from '../../../api/queries'
+
+import {
+  GET_SOURCE_TREATMENT_PLANS,
+  GET_SOURCE_INDICATIONS,
+} from '../../../api/queries'
 
 import {
   CREATE_INDICATION,
@@ -84,8 +90,20 @@ const headerChildren = (
   </div>
 )
 
-const buttonGroupCallback = ({ name, _id }) => (
+const getButtonGroupCallback = treatmentPlansByInd => ({ name, _id }) => (
   <>
+    <span
+      style={{
+        padding: Spacing.S2,
+        margin: Spacing.S7,
+        background: Color.LIGHT_BLUE_GRAY_1,
+        borderRadius: 5,
+        color: Color.ORION,
+      }}
+    >
+      {`(${(treatmentPlansByInd[name] || []).length} Treatment Plans)`}
+    </span>
+
     <ModalButtonWithForm
       modalTitle="Edit Indication"
       buttonLabel={editIcon}
@@ -104,25 +122,37 @@ const buttonGroupCallback = ({ name, _id }) => (
   </>
 )
 
-const panelItemConfig = {
-  style: defaultPanelItemStyle,
-  buttonGroupCallback,
-  label1Callback: ({ name }) => name,
-}
+const IndicationsPanel = () => {
+  const { data, loading } = useQuery(GET_SOURCE_TREATMENT_PLANS)
 
-const IndicationsPanel = () => (
-  <Panel
-    title="Indications"
-    headerChildren={headerChildren}
-    headerContainerStyle={{
-      background: Color.WHITE,
-      borderBottom: `1px solid ${transparentize(0.9, Color.BLACK)}`
-    }}
-    queryDocs={{
-      fetchAllQueryProps: { query: GET_SOURCE_INDICATIONS },
-    }}
-    panelItemConfig={panelItemConfig}
-  />
-)
+  if (loading) return null
+
+  const { treatmentPlans } = data
+
+  const treatmentPlansByInd = _.groupBy(treatmentPlans, 'indication')
+
+  const buttonGroupCallback = getButtonGroupCallback(treatmentPlansByInd)
+
+  const panelItemConfig = {
+    style: defaultPanelItemStyle,
+    buttonGroupCallback,
+    label1Callback: ({ name }) => name,
+  }
+
+  return (
+    <Panel
+      title="Indications"
+      headerChildren={headerChildren}
+      headerContainerStyle={{
+        background: Color.WHITE,
+        borderBottom: `1px solid ${transparentize(0.9, Color.BLACK)}`
+      }}
+      queryDocs={{
+        fetchAllQueryProps: { query: GET_SOURCE_INDICATIONS },
+      }}
+      panelItemConfig={panelItemConfig}
+    />
+  )
+}
 
 export default IndicationsPanel
