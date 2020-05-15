@@ -55,6 +55,12 @@ const alertMessageMap = {
   )
 }
 
+const VALID_SHEETS = {
+  'Quality of Access': true,
+  'Additional Criteria': true,
+  'Policy Links': true,
+}
+
 const ImportSection = ({
   projectId,
   setValidationErrorsAndWarnings,
@@ -94,11 +100,18 @@ const ImportSection = ({
       const data = new Uint8Array(e.target.result)
       const nextWorkbook = XLSX.read(data, { type: 'array' })
       
-      const nextSheetNames = nextWorkbook.SheetNames
+      let nextSheetNames = nextWorkbook.SheetNames
+      nextSheetNames = nextSheetNames.filter(sheetName => VALID_SHEETS[sheetName])
 
-      setSheetNames(nextSheetNames)
-      setWorkbook(nextWorkbook)
-      setIsWorkbookUploaded(true)
+      if (nextSheetNames.length !== 3) {
+        if (window.confirm(`Workbook doesn't have required sheets: ${Object.keys(VALID_SHEETS).join(', ')}. Make sure workbook includes those sheets (exact naming), refresh, try again.`)) {
+          window.location.reload()
+        }
+      } else {
+        setSheetNames(nextSheetNames)
+        setWorkbook(nextWorkbook)
+        setIsWorkbookUploaded(true)
+      }
     }
 
     reader.readAsArrayBuffer(file)
