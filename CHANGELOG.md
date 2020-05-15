@@ -12,10 +12,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Fixed** for any bug fixes.
 - **Security** in case of vulnerabilities.
 
-## [Unreleased] - Started: 5-11-20
+## [Unreleased] - Started: 5-15-20
+
+## [2.5.0] - Started: 5-11-20
 
 ### Added
-- `Orion`: Built out tools timestamp widget on import tool page for updating timestamps globally on core nodes, core teams, dev users.sitemaps; meant to replace collectionsConfig/dashboardsConfig usage in wave-app/wave-api
+- `Orion/General Import Tool`: Built out tools timestamp widget on import tool page for updating timestamps globally on core nodes, core teams, dev users.sitemaps; meant to replace collectionsConfig/dashboardsConfig usage in wave-app/wave-api
 - `Orion`: Payer Project Updates
   - Create Payer Projects
   - Update Project PTPs via cross-product configuration modal
@@ -24,6 +26,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - `Polaris Frontend`: Payer Projects rose to the top of the app, next to Phoenix, Delphi, Orion.
+- `Payer Import Tool`: 
+  - Added frontend filtering to import interface to prevent workbook from having fewer than the required three sheets
+  - Refactored SheetToCore logic and added unit tests for it
+  - Added deletion step to payer import flow to account for when a project deletes optional rows from its workbook such as additional criteria and policy links
+  - Adjusted payer materialization pipelines to get the latest month/year within each month/year, then proceed to get the latest 1 or 6 blocks (non-ht vs ht)
 
 ## [2.4.0] - Started: 4-30-20
 
