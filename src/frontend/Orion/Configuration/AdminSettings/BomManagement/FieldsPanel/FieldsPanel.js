@@ -1,0 +1,148 @@
+import React from 'react'
+import { useHistory, useLocation } from 'react-router-dom'
+import { useQuery } from '@apollo/react-hooks'
+import queryString from 'query-string'
+
+import FieldPanelItem from './FieldPanelItem'
+
+import CreateButtonWithForm from './CreateButtonWithForm'
+import UpdateForm from './UpdateForm'
+
+// import DeleteButton from '../shared/DeleteButton'
+import {
+  ListContainer,
+  ListHeader,
+  ListTitle,
+  UpdateFormLabel,
+  StyledUnorderedList,
+  StyledNavHeader,
+} from '../shared/styledComponents'
+
+import { Colors } from 'frontend/utils/pulseStyles'
+
+import { GET_BOM_CONFIGS } from 'frontend/api/queries'
+
+import {
+  CREATE_BOM_CONFIG_FIELD,
+ } from 'frontend/api/mutations'
+
+const FieldsPanel = () => {
+  const history = useHistory()
+  const location = useLocation()
+
+  const {
+    bomId: selectedBomId,
+    sectionId: selectedSectionId,
+    tabId: selectedTabId,
+    fieldId: selectedFieldId,
+  } = (
+    location.search
+    && queryString.parse(location.search)
+  ) || {}
+
+  const { data, loading } = useQuery(GET_BOM_CONFIGS)
+
+  const handleClick = fieldObj => {
+    const prevQueryParams = queryString.parse(location.search)
+    const nextParams = { ...prevQueryParams, fieldId: fieldObj._id }
+
+    history.push({
+      search: queryString.stringify(nextParams),
+    })
+  }
+
+  if (loading) return 'Loading...'
+
+  const selectedBom = data.bomConfigs.find(({ _id }) => (
+    _id === selectedBomId
+  ))
+
+  const tabs = selectedBom ? selectedBom.tags : []
+
+  const selectedTab = tabs.find(({ _id }) => (
+    _id === selectedTabId
+  ))
+
+  const sections = selectedTab ? selectedTab.sections : []
+
+  const selectedSection = sections.find(({ _id }) => (
+    _id === selectedSectionId
+  ))
+
+  const fields = selectedSection ? selectedSection.fields : []
+
+  const selectedField = fields.find(({ _id}) => (
+    _id === selectedFieldId
+  ))
+
+  return (
+    <div style={{ display: 'flex', width: '50%' }}>
+      <ListContainer style={{ width: '50%' }}>
+        <ListHeader>
+          <ListTitle>
+            <span>Fields / </span>
+            <StyledNavHeader>{(selectedSection || {}).label}</StyledNavHeader>
+          </ListTitle>
+          <CreateButtonWithForm
+            selectedBom={selectedBom}
+            mutationDoc={CREATE_BOM_CONFIG_FIELD}
+            mutationVars={{
+              modalId: selectedBomId,
+              tagId: selectedTabId,
+              sectionId: selectedSectionId,
+            }}
+            modalTitle='Create Field'
+            afterMutationHook={handleClick}
+          />
+        </ListHeader>
+
+        <StyledUnorderedList>
+          {
+            fields.map(fieldObj => (
+              <FieldPanelItem
+                key={fieldObj._id}
+                isSelected={fieldObj._id === selectedFieldId}
+                fieldLabel={fieldObj.label}
+                handleClick={() => handleClick(fieldObj)}
+              >
+                {/* <DeleteButton
+                  mutationDoc={DELETE_SHEET_FIELD}
+                  mutationVars={{
+                    fieldId: selectedFieldId,
+                    sheetId: selectedSheetId,
+                    workbookId: selectedWorkbookId,
+                  }}
+                  afterMutationHook={() => {
+                    const targetWorkbook = data.workbooks.find(({ _id }) => _id === selectedWorkbookId)
+                    const targetSheet = targetWorkbook.sheets.find(({ _id }) => _id === selectedSheetId)
+                    const nextFieldSelection = targetSheet.fields.find(({ _id }) => _id !== fieldObj._id)
+
+                    handleClick(nextFieldSelection)
+                  }}
+                /> */}
+              </FieldPanelItem>
+            ))
+          }
+        </StyledUnorderedList>
+      </ListContainer>
+
+      <div style={{ width: '50%', background: Colors.LIGHT_BLUE_GRAY_2, }}>
+        <UpdateFormLabel>Update Field</UpdateFormLabel>
+        <UpdateForm
+          key={selectedFieldId}
+          data={selectedField}
+          selectedBom={selectedBom}
+          mutationDoc={CREATE_BOM_CONFIG_FIELD}
+          mutationVars={{
+            // fieldId: selectedFieldId, // ? commented out b/c update isn't done yet and this is a placeholder component
+            // modalId: selectedBomId,
+            // tagId: selectedTabId,
+            // sectionId: selectedSectionId,
+          }}
+        />
+      </div>
+    </div>
+  )
+}
+
+export default FieldsPanel

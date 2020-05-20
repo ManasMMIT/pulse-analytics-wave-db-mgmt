@@ -48,6 +48,30 @@ export const GET_BOM_SCHEMA = gql`
   }
 `
 
+export const GET_BOM_CONFIGS = gql`
+  query getBomConfigs {
+    bomConfigs {
+      _id
+      boId
+      label
+      tags {
+        _id
+        label
+        sections {
+          _id
+          label
+          fields {
+            _id
+            label
+            inputComponent
+            inputProps
+          }
+        }
+      }
+    }
+  }
+`
+
 export const GET_BUSINESS_OBJECTS = gql`
   query getBusinessObjects {
     businessObjects {

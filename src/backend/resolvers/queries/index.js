@@ -13,6 +13,7 @@ const testEmailGroups = require('./testEmailGroups')
 const alert = require('./alert')
 const opLogs = require('./opLogs')
 const bomSchema = require('./bomSchema')
+const bomConfigs = require('./bomConfigs')
 const businessObjects = require('./businessObjects')
 const workbooks = require('./workbooks')
 const treatmentPlans = require('./treatmentPlans')
@@ -42,6 +43,7 @@ module.exports = {
   alert,
   opLogs,
   bomSchema,
+  bomConfigs,
   businessObjects,
   workbooks,
   treatmentPlans,

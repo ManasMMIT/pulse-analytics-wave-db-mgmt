@@ -1,0 +1,151 @@
+import React, { useEffect } from 'react'
+import { useHistory, useLocation } from 'react-router-dom'
+import { useQuery } from '@apollo/react-hooks'
+import queryString from 'query-string'
+import _ from 'lodash'
+import { transparentize } from 'polished'
+
+import { Colors } from './../../../../../utils/pulseStyles'
+import BomPanelItem from './BomPanelItem'
+import ModalButtonWithForm from './ModalButtonWithForm'
+// import DeleteButton from './../shared/DeleteButton'
+import {
+  ListContainer,
+  ListHeader,
+  ListTitle,
+  StyledUnorderedList,
+} from './../shared/styledComponents'
+
+import {
+  CREATE_BOM_CONFIG,
+} from '../../../../../api/mutations'
+
+import {
+  GET_BUSINESS_OBJECTS,
+  GET_BOM_CONFIGS,
+} from '../../../../../api/queries'
+
+// ? copied from phoenix users panel team boxes
+const boBoxStyle = {
+  margin: '0px 4px',
+  background: transparentize(0.85, Colors.MEDIUM_GRAY_2),
+  borderRadius: 2,
+  color: Colors.MEDIUM_GRAY_2,
+  fontSize: '10px',
+  fontWeight: 500,
+  lineHeight: '16px',
+  padding: '2px 4px',
+}
+
+const getBomTagSectionField = bom => {
+  const bomId = bom._id
+
+  const firstTab = bom.tags[0]
+  const tabId = firstTab._id
+
+  const firstSection = firstTab.sections[0]
+  const sectionId = firstSection._id
+
+  const firstField = firstSection.fields[0]
+
+  const fieldObj = firstField ? { fieldId: firstField._id} : {}
+
+  return {
+    bomId,
+    tabId,
+    sectionId,
+    ...fieldObj,
+  }
+}
+
+const BomsPanel = () => {
+  const history = useHistory()
+  const location = useLocation()
+
+  const selectedBomId = (
+    location.search
+      && queryString.parse(location.search)
+      && queryString.parse(location.search).bomId
+  ) || ''
+
+  const { data, loading } = useQuery(GET_BOM_CONFIGS)
+  const { data: boData, loading: boLoading } = useQuery(GET_BUSINESS_OBJECTS)
+
+  const handleClick = bomObj => {
+    history.push({
+      search: queryString.stringify(
+        getBomTagSectionField(bomObj)
+      ),
+    })
+  }
+
+  useEffect(() => {
+    if (!selectedBomId && !loading) {
+      const firstBom = data.bomConfigs[0]
+
+      handleClick(firstBom)
+    }
+  }, [loading, selectedBomId])
+
+  if (loading || boLoading) return 'Loading...'
+  const businessObjectsById = _.keyBy(boData.businessObjects, '_id')
+
+  const getBomLabel = bomObj => {
+    const underlyingBusinessObject = businessObjectsById[bomObj.boId]
+
+    return (
+      <>
+        <div>{bomObj.label}</div>
+        <div style={boBoxStyle}>
+          {underlyingBusinessObject.name}
+        </div>
+      </>
+    )
+  }
+
+  return (
+    <ListContainer style={{ width: '25%' }}>
+      <ListHeader>
+        <ListTitle>Business Object Modals</ListTitle>
+        <ModalButtonWithForm
+          buttonLabel="+"
+          mutationDoc={CREATE_BOM_CONFIG}
+          afterMutationHook={handleClick}
+          modalTitle="Create Business Object Modal"
+        />
+      </ListHeader>
+
+      <StyledUnorderedList>
+        {
+          data.bomConfigs.map(bomObj => (
+            <BomPanelItem
+              key={bomObj._id}
+              isSelected={bomObj._id === selectedBomId}
+              bomLabel={getBomLabel(bomObj)}
+              handleClick={() => handleClick(bomObj)}
+            >
+              {/* <ModalButtonWithForm
+                buttonLabel="Edit"
+                data={workbookObj}
+                mutationDoc={UPDATE_WORKBOOK}
+                afterMutationHook={handleClick}
+                style={{ fontSize: 10, padding: '4px 8px', marginRight: 8, }}
+              /> */}
+
+              {/* <DeleteButton
+                mutationVars={{ _id: workbookObj._id }}
+                mutationDoc={DELETE_WORKBOOK}
+                afterMutationHook={() => {
+                  const nextWorkbookSelection = data.workbooks.find(({ _id }) => _id !== workbookObj._id)
+                  handleClick(nextWorkbookSelection)
+                }}
+              /> */}
+            </BomPanelItem>
+          ))
+        }
+      </StyledUnorderedList>
+    </ListContainer>
+  )
+}
+
+export default BomsPanel

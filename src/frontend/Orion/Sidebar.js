@@ -145,6 +145,10 @@ const ADMIN_SETTINGS_LINKS_CONFIG = [
     link: '/orion/configuration/admin-settings/bo-management',
   },
   {
+    label: 'Business Object Modal Management',
+    link: '/orion/configuration/admin-settings/bom-management',
+  },
+  {
     label: 'Sheet Management',
     link: '/orion/configuration/admin-settings/sheet-management',
   },

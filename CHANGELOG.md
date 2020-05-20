@@ -26,10 +26,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Update Project PTPs via cross-product configuration modal
   - Delete selected PTPs via granular table
   - Transfer PTPs ownership between projects
+- `Orion`: Business Object Modals
+  - Read from `businessObjects.modals` collection
+  - Create Modals, Tabs, Sections, and Fields
 
 ### Changed
 - `Polaris Frontend`: Payer Projects rose to the top of the app, next to Phoenix, Delphi, Orion.
-- `Payer Import Tool`: 
+- `Payer Import Tool`:
   - Added frontend filtering to import interface to prevent workbook from having fewer than the required three sheets
   - Refactored SheetToCore logic and added unit tests for it
   - Added deletion step to payer import flow to account for when a project deletes optional rows from its workbook such as additional criteria and policy links

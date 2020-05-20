@@ -36,6 +36,8 @@ const queries = gql`
     opLogs: [OpLog]
 
     workbooks: [Workbook]
+
+    bomConfigs: [BomConfig]
     bomSchema(boId: ID): JSON
     businessObjects: [BusinessObject]
 
@@ -254,6 +256,32 @@ const queries = gql`
   #   _id: String!
   #   fieldId: ID!
   # }
+
+  type BomConfig {
+    _id: ID!
+    boId: ID!
+    label: String!
+    tags: [BomTag]!
+  }
+
+  type BomTag {
+    _id: ID!
+    label: String!
+    sections: [BomSection]!
+  }
+
+  type BomSection {
+    _id: ID!
+    label: String!
+    fields: [BomField]!
+  }
+
+  type BomField {
+    _id: ID!
+    label: String!
+    inputComponent: String!
+    inputProps: JSON # highly variable structure
+  }
 
   type BusinessObject {
     _id: ID!
