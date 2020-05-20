@@ -162,6 +162,16 @@ const teamResolvers = {
       data: { selectedTeam: editedTeam }
     })
 
+    // network-only necessary here because we need to force refresh this slice of the cache
+    // after potentially cascade updating the users' default landing -- 
+    // the same force refresh is done upon SELECT_USER, but it's not fast enough; the edit user
+    // modal can open with outdated default landing string
+    await client.query({
+      query: GET_TEAM_USERS,
+      variables: { teamId },
+      fetchPolicy: 'network-only',
+    })
+
     return editedTeam
   }
 }

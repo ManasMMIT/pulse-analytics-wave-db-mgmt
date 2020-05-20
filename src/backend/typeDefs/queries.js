@@ -3,13 +3,17 @@ const { gql } = require('apollo-server-express')
 const queries = gql`
   type Query {
     nodes(parentId: String, type: String): [Node]
+
     clients(_id: String): [Client]
+
     teams(clientId: String, userId: String): [Team]
+
     users(
       teamId: String,
       clientId: String,
       subscriptionId: String
     ): [User]
+
     indications: [Indication]
     products: [Product]
     regimens: [Regimen]
@@ -84,6 +88,7 @@ const queries = gql`
     sitemap: JSON
     client: Client
     resources: JSON
+    defaultLandingPath: String
   }
 
   type User {
@@ -92,11 +97,17 @@ const queries = gql`
     email: String
     client: Client
     emailSubscriptions: [Subscription]
+    defaultLanding: DefaultLanding
   }
 
   type Subscription {
     _id: ID!
     type: String!
+  }
+
+  type DefaultLanding {
+    path: String
+    locked: Boolean
   }
 
   type Indication {

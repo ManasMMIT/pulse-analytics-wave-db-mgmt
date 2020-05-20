@@ -9,7 +9,7 @@ import {
   MANAGE_UPDATED_TEAM,
 } from '../../../api/mutations'
 
-import TextFormButton from '../../shared/TextForm/Button'
+import UpdateTeamButton from './TeamForm/Button'
 
 import { Colors } from '../../../utils/pulseStyles'
 
@@ -29,19 +29,13 @@ const editIcon = (
   />
 )
 
-const UpdateButton = ({
-  team: {
-    _id,
-    description,
-  }
-}) => (
-  <TextFormButton
+const UpdateButton = ({ team }) => (
+  <UpdateTeamButton
     modalTitle="Edit Team"
     buttonLabel={editIcon}
     buttonStyle={{ border: 'none', background: 'none' }}
-    data={{ description }}
+    team={team}
     mutationDoc={UPDATE_TEAM}
-    additionalFormData={{ _id }}
     clientMutation={MANAGE_UPDATED_TEAM}
   />
 )

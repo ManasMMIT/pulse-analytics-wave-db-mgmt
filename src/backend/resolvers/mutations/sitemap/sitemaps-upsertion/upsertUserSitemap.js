@@ -37,6 +37,7 @@ const upsertUserSitemap = async ({
         sitemap: combinedSitemap,
         teams,
         client,
+        defaultLandingPath: user.defaultLanding && user.defaultLanding.path,
         schemaVersion: 'v1.2.0',
         updatedAt: new Date()
       },

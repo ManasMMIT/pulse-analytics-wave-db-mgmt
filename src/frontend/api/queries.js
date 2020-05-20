@@ -112,6 +112,7 @@ export const GET_CLIENT_TEAMS = gql`
         description
       }
       resources
+      defaultLandingPath
     }
     selectedClient @client {
       _id @export(as: "clientId")
@@ -131,6 +132,7 @@ export const GET_SELECTED_TEAM = gql`
         _id
       }
       resources
+      defaultLandingPath
     }
   }
 `
@@ -159,6 +161,10 @@ export const GET_TEAM_USERS = gql`
       emailSubscriptions {
         _id
         type
+      }
+      defaultLanding {
+        locked
+        path
       }
     }
     selectedTeam @client {
@@ -201,6 +207,11 @@ export const GET_SELECTED_USER = gql`
       _id
       username
       email
+      # Note: don't think the below is needed for this
+      # defaultLanding {
+      #   locked
+      #   path
+      # }
     }
   }
 `

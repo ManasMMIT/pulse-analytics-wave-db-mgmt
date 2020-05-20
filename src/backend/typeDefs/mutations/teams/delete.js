@@ -5,10 +5,12 @@ const deleteTeamTypeDefs = gql`
     _id: ID!
     clientId: String
   }
+
    type DeleteTeamPayload {
     _id: ID!
     name: String!
     description: String!
+    defaultLandingPath: String
   }
 `
 
