@@ -8,7 +8,8 @@ import { transparentize } from 'polished'
 import { Colors } from './../../../../../utils/pulseStyles'
 import BomPanelItem from './BomPanelItem'
 import ModalButtonWithForm from './ModalButtonWithForm'
-// import DeleteButton from './../shared/DeleteButton'
+import DeleteButton from './../shared/DeleteButton'
+
 import {
   ListContainer,
   ListHeader,
@@ -18,6 +19,7 @@ import {
 
 import {
   CREATE_BOM_CONFIG,
+  DELETE_BOM_CONFIG,
 } from '../../../../../api/mutations'
 
 import {
@@ -132,14 +134,14 @@ const BomsPanel = () => {
                 style={{ fontSize: 10, padding: '4px 8px', marginRight: 8, }}
               /> */}
 
-              {/* <DeleteButton
-                mutationVars={{ _id: workbookObj._id }}
-                mutationDoc={DELETE_WORKBOOK}
+              <DeleteButton
+                mutationVars={{ modalId: bomObj._id }}
+                mutationDoc={DELETE_BOM_CONFIG}
                 afterMutationHook={() => {
-                  const nextWorkbookSelection = data.workbooks.find(({ _id }) => _id !== workbookObj._id)
-                  handleClick(nextWorkbookSelection)
+                  const nextBomSelection = data.bomConfigs.find(({ _id }) => _id !== bomObj._id)
+                  handleClick(nextBomSelection)
                 }}
-              /> */}
+              />
             </BomPanelItem>
           ))
         }
