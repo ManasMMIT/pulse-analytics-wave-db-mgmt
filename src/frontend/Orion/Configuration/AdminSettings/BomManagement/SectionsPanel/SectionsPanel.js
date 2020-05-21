@@ -23,13 +23,16 @@ import {
 import { GET_BOM_CONFIGS } from 'frontend/api/queries'
 
 const getSectionField = section => {
-  const sectionId = section._id
+  const sectionIdObj = section
+    ? { sectionId: section._id }
+    : {}
 
-  const firstField = section.fields[0]
-  const fieldObj = firstField ? { fieldId: firstField._id } : {}
+  const fieldObj = section && section.fields
+    ? { fieldId: section.fields[0] }
+    : {}
 
   return {
-    sectionId,
+    ...sectionIdObj,
     ...fieldObj,
   }
 }
@@ -80,14 +83,18 @@ const SectionsPanel = () => {
           <StyledNavHeader>{(selectedTab || {}).label}</StyledNavHeader>
         </ListTitle>
 
-        <ModalButtonWithForm
-          buttonLabel="+"
-          mutationDoc={CREATE_BOM_CONFIG_SECTION}
-          mutationVars={{ modalId: selectedBomId, tagId: selectedTabId }}
-          afterMutationHook={handleClick}
-          modalTitle="Create Section"
-          selectedBom={selectedBom}
-        />
+        {
+          tabs.length ? (
+            <ModalButtonWithForm
+              buttonLabel="+"
+              mutationDoc={CREATE_BOM_CONFIG_SECTION}
+              mutationVars={{ modalId: selectedBomId, tagId: selectedTabId }}
+              afterMutationHook={handleClick}
+              modalTitle="Create Section"
+              selectedBom={selectedBom}
+            />
+          ) : null
+        }
       </ListHeader>
 
       <StyledUnorderedList>

@@ -41,23 +41,23 @@ const boBoxStyle = {
 }
 
 const getBomTagSectionField = bom => {
-  const bomId = bom._id
+  const bomIdObj = bom ? { bomId: bom._id } : {}
 
-  const firstTab = bom.tags[0]
-  const tabId = firstTab._id
+  const firstTab = bom ? bom.tags[0] : undefined
+  const tabIdObj = firstTab ? { tabId: firstTab._id } : {}
 
-  const firstSection = firstTab.sections[0]
-  const sectionId = firstSection._id
+  const firstSection = firstTab ? firstTab.sections[0] : undefined
+  const sectionIdObj = firstSection ? { sectionId: firstSection._id } : {}
 
-  const firstField = firstSection.fields[0]
-
-  const fieldObj = firstField ? { fieldId: firstField._id} : {}
+  const fieldIdObj = firstSection && firstSection.fields[0]
+    ? { fieldId: firstSection.fields[0]._id }
+    : {}
 
   return {
-    bomId,
-    tabId,
-    sectionId,
-    ...fieldObj,
+    ...bomIdObj,
+    ...tabIdObj,
+    ...sectionIdObj,
+    ...fieldIdObj,
   }
 }
 

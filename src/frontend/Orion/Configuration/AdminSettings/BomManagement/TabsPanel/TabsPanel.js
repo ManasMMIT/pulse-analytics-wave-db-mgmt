@@ -24,18 +24,18 @@ import {
 import { GET_BOM_CONFIGS } from '../../../../../api/queries'
 
 const getTabSectionField = tabObj => {
-  const tabId = tabObj._id
+  const tabIdObj = tabObj ? { tabId: tabObj._id } : {}
 
-  const firstSection = tabObj.sections[0]
-  const sectionId = firstSection._id
+  const firstSection = tabObj ? tabObj.sections[0] : undefined
+  const sectionIdObj = firstSection ? { sectionId: firstSection._id } : {}
 
-  const firstField = firstSection.fields[0]
-  const fieldObj = firstField ? { fieldId: firstField._id } : {}
+  const firstField = firstSection ? firstSection.fields[0] : undefined
+  const fieldIdObj = firstField ? { fieldId: firstField._id } : {}
 
   return {
-    tabId,
-    sectionId,
-    ...fieldObj,
+    ...tabIdObj,
+    ...sectionIdObj,
+    ...fieldIdObj,
   }
 }
 
@@ -77,14 +77,18 @@ const TabsPanel = () => {
           <span>Tabs / </span>
           <StyledNavHeader>{(selectedBom || {}).label}</StyledNavHeader>
         </ListTitle>
-        <ModalButtonWithForm
-          buttonLabel="+"
-          mutationDoc={CREATE_BOM_CONFIG_TAB}
-          mutationVars={{ modalId: selectedBomId }}
-          afterMutationHook={handleClick}
-          modalTitle="Create Tab"
-          selectedBom={selectedBom}
-        />
+        {
+          data.bomConfigs.length ? (
+            <ModalButtonWithForm
+              buttonLabel="+"
+              mutationDoc={CREATE_BOM_CONFIG_TAB}
+              mutationVars={{ modalId: selectedBomId }}
+              afterMutationHook={handleClick}
+              modalTitle="Create Tab"
+              selectedBom={selectedBom}
+            />
+          ) : null
+        }
       </ListHeader>
 
       <StyledUnorderedList>

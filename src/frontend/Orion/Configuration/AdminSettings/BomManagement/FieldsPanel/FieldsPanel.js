@@ -84,17 +84,21 @@ const FieldsPanel = () => {
             <span>Fields / </span>
             <StyledNavHeader>{(selectedSection || {}).label}</StyledNavHeader>
           </ListTitle>
-          <CreateButtonWithForm
-            selectedBom={selectedBom}
-            mutationDoc={CREATE_BOM_CONFIG_FIELD}
-            mutationVars={{
-              modalId: selectedBomId,
-              tagId: selectedTabId,
-              sectionId: selectedSectionId,
-            }}
-            modalTitle='Create Field'
-            afterMutationHook={handleClick}
-          />
+          {
+            sections.length ? (
+              <CreateButtonWithForm
+                selectedBom={selectedBom}
+                mutationDoc={CREATE_BOM_CONFIG_FIELD}
+                mutationVars={{
+                  modalId: selectedBomId,
+                  tagId: selectedTabId,
+                  sectionId: selectedSectionId,
+                }}
+                modalTitle='Create Field'
+                afterMutationHook={handleClick}
+              />
+            ) : null
+          }
         </ListHeader>
 
         <StyledUnorderedList>

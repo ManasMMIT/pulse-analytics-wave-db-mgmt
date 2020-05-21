@@ -42,6 +42,7 @@ const Form = ({
       afterMutationHook(newOrUpdatedBomConfig)
     },
     awaitRefetchQueries: true,
+    onError: e => alert(e),
   })
 
   const { data: businessObjData, loading } = useQuery(GET_BUSINESS_OBJECTS)
