@@ -130,17 +130,18 @@ const mutationType = gql`
     updateBusinessObject(input: UpdateBusinessObjectInput!): BusinessObject
     updateBusinessObjectField(input: UpdateBusinessObjectFieldInput!): BoField
 
-    createBusinessObjectModal(input: CreateBusinessObjectModalInput!): BomConfig
-    deleteBusinessObjectModal(input: DeleteBusinessObjectModalInput!): BomConfig
-    updateBusinessObjectModal(input: UpdateBusinessObjectModalInput!): BomConfig
-    createBusinessObjectModalTag(input: CreateBusinessObjectModalTagInput!): BomTag
-    deleteBusinessObjectModalTag(input: DeleteBusinessObjectModalTagInput!): BomTag
-    updateBusinessObjectModalTag(input: UpdateBusinessObjectModalTagInput!): BomTag
-    createBusinessObjectModalSection(input: CreateBusinessObjectModalSectionInput!): BomSection
-    deleteBusinessObjectModalSection(input: DeleteBusinessObjectModalSectionInput!): BomSection
-    updateBusinessObjectModalSection(input: UpdateBusinessObjectModalSectionInput!): BomSection
-    createBusinessObjectModalField(input: CreateBusinessObjectModalFieldInput!): BomField
-    updateBusinessObjectModalField(input: UpdateBusinessObjectModalFieldInput!): BomField
+    createBusinessObjectModal(input: CreateBusinessObjectModalInput!): BomConfig!
+    deleteBusinessObjectModal(input: DeleteBusinessObjectModalInput!): BomConfig!
+    updateBusinessObjectModal(input: UpdateBusinessObjectModalInput!): BomConfig!
+    createBusinessObjectModalTag(input: CreateBusinessObjectModalTagInput!): BomTag!
+    deleteBusinessObjectModalTag(input: DeleteBusinessObjectModalTagInput!): BomTag!
+    updateBusinessObjectModalTag(input: UpdateBusinessObjectModalTagInput!): BomTag!
+    createBusinessObjectModalSection(input: CreateBusinessObjectModalSectionInput!): BomSection!
+    deleteBusinessObjectModalSection(input: DeleteBusinessObjectModalSectionInput!): BomSection!
+    updateBusinessObjectModalSection(input: UpdateBusinessObjectModalSectionInput!): BomSection!
+    createBusinessObjectModalField(input: CreateBusinessObjectModalFieldInput!): BomField!
+    deleteBusinessObjectModalField(input: DeleteBusinessObjectModalFieldInput!): BomField!
+    updateBusinessObjectModalField(input: UpdateBusinessObjectModalFieldInput!): BomField!
 
     deleteBook(input: DeleteBookInput!): DeleteBookPayload
     createBook(input: CreateBookInput!): CreateBookPayload

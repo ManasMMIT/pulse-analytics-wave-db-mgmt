@@ -1,5 +1,16 @@
 import gql from 'graphql-tag'
 
+export const DELETE_BOM_CONFIG_FIELD = gql`
+  mutation DeleteBusinessObjectModalField($input: DeleteBusinessObjectModalFieldInput!) {
+    deleteBusinessObjectModalField(input: $input) {
+      _id
+      label
+      inputComponent
+      inputProps
+    }
+  }
+`
+
 export const CREATE_BOM_CONFIG_FIELD = gql`
   mutation CreateBusinessObjectModalField($input: CreateBusinessObjectModalFieldInput!) {
     createBusinessObjectModalField(input: $input) {

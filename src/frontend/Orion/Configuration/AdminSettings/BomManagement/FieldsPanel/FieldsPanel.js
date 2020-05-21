@@ -7,8 +7,7 @@ import FieldPanelItem from './FieldPanelItem'
 
 import CreateButtonWithForm from './CreateButtonWithForm'
 import UpdateForm from './UpdateForm'
-
-// import DeleteButton from '../shared/DeleteButton'
+import DeleteButton from '../shared/DeleteButton'
 import {
   ListContainer,
   ListHeader,
@@ -24,6 +23,7 @@ import { GET_BOM_CONFIGS } from 'frontend/api/queries'
 
 import {
   CREATE_BOM_CONFIG_FIELD,
+  DELETE_BOM_CONFIG_FIELD,
   UPDATE_BOM_CONFIG_FIELD,
  } from 'frontend/api/mutations'
 
@@ -106,21 +106,20 @@ const FieldsPanel = () => {
                 fieldLabel={fieldObj.label}
                 handleClick={() => handleClick(fieldObj)}
               >
-                {/* <DeleteButton
-                  mutationDoc={DELETE_SHEET_FIELD}
+                <DeleteButton
+                  mutationDoc={DELETE_BOM_CONFIG_FIELD}
                   mutationVars={{
-                    fieldId: selectedFieldId,
-                    sheetId: selectedSheetId,
-                    workbookId: selectedWorkbookId,
+                    modalId: selectedBomId,
+                    tagId: selectedTabId,
+                    sectionId: selectedSectionId,
+                    fieldId: fieldObj._id
                   }}
                   afterMutationHook={() => {
-                    const targetWorkbook = data.workbooks.find(({ _id }) => _id === selectedWorkbookId)
-                    const targetSheet = targetWorkbook.sheets.find(({ _id }) => _id === selectedSheetId)
-                    const nextFieldSelection = targetSheet.fields.find(({ _id }) => _id !== fieldObj._id)
+                    const nextFieldSelection = fields.find(({ _id }) => _id !== fieldObj._id)
 
-                    handleClick(nextFieldSelection)
+                    if (nextFieldSelection) handleClick(nextFieldSelection) // breaks if no fields are left
                   }}
-                /> */}
+                />
               </FieldPanelItem>
             ))
           }
