@@ -5,7 +5,7 @@ const deleteBusinessObjectModal = (
   { input: { modalId } },
   { pulseCoreDb }
 ) => pulseCoreDb.collection('businessObjects.modals')
-    .deleteOne({ _id: ObjectId(modalId) })
+    .findOneAndDelete({ _id: ObjectId(modalId) })
     .then(({ value }) => value)
 
 module.exports = deleteBusinessObjectModal
