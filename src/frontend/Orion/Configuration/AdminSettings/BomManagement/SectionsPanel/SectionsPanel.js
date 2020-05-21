@@ -16,6 +16,7 @@ import {
 
 import {
   CREATE_BOM_CONFIG_SECTION,
+  UPDATE_BOM_CONFIG_SECTION,
 } from 'frontend/api/mutations'
 
 import { GET_BOM_CONFIGS } from 'frontend/api/queries'
@@ -96,15 +97,15 @@ const SectionsPanel = () => {
               sectionLabel={sectionObj.label}
               handleClick={() => handleClick(sectionObj)}
             >
-              {/* <ModalButtonWithForm
+              <ModalButtonWithForm
                 buttonLabel="Edit"
-                data={sheetObj}
-                mutationDoc={UPDATE_SHEET}
-                modalTitle="Create or Edit Sheet"
-                mutationVars={{ workbookId: selectedSectionId }}
+                data={sectionObj}
+                mutationDoc={UPDATE_BOM_CONFIG_SECTION}
+                modalTitle="Edit Section"
+                mutationVars={{ modalId: selectedBomId, tagId: selectedTabId, sectionId: selectedSectionId }}
                 afterMutationHook={handleClick}
                 style={{ fontSize: 10, padding: '4px 8px', marginRight: 8 }}
-              /> */}
+              />
 
               {/* <DeleteButton
                 mutationVars={{ workbookId: selectedSectionId, sheetId: sheetObj._id }}
