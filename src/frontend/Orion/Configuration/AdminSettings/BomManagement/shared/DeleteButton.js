@@ -46,7 +46,13 @@ const DeleteButton = props => {
     mutationVars,
     mutationDoc,
     afterMutationHook,
+    selectedBom,
   } = props
+
+  const refetchQueries = [{ query: GET_BOM_CONFIGS }]
+  if (selectedBom) {
+    refetchQueries.push({ query: GET_BOM_SCHEMA, variables: { boId: selectedBom.boId } })
+  }
 
   const [isModalOpen, toggleModal] = useState(false)
   const openModal = () => toggleModal(true)
@@ -57,7 +63,7 @@ const DeleteButton = props => {
     {
       onCompleted: afterMutationHook,
       awaitRefetchQueries: true,
-      refetchQueries: [{ query: GET_BOM_SCHEMA }, { query: GET_BOM_CONFIGS }],
+      refetchQueries,
     }
   )
 

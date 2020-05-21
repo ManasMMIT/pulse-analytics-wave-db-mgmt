@@ -86,6 +86,7 @@ const SectionsPanel = () => {
           mutationVars={{ modalId: selectedBomId, tagId: selectedTabId }}
           afterMutationHook={handleClick}
           modalTitle="Create Section"
+          selectedBom={selectedBom}
         />
       </ListHeader>
 
@@ -106,9 +107,11 @@ const SectionsPanel = () => {
                 mutationVars={{ modalId: selectedBomId, tagId: selectedTabId, sectionId: selectedSectionId }}
                 afterMutationHook={handleClick}
                 style={{ fontSize: 10, padding: '4px 8px', marginRight: 8 }}
+                selectedBom={selectedBom}
               />
 
               <DeleteButton
+                selectedBom={selectedBom}
                 mutationVars={{ modalId: selectedBomId, tagId: selectedTabId, sectionId: selectedSectionId }}
                 mutationDoc={DELETE_BOM_CONFIG_SECTION}
                 afterMutationHook={() => {

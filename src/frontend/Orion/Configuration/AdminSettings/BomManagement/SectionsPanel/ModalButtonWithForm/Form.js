@@ -22,6 +22,7 @@ const Form = ({
   afterMutationHook,
   closeModal,
   mutationVars,
+  selectedBom,
 }) => {
   const [stagedSectionLabel, setSectionLabel] = useState(data.label)
 
@@ -29,7 +30,7 @@ const Form = ({
     variables: {
       input: { label: stagedSectionLabel, ...mutationVars }
     },
-    refetchQueries: [{ query: GET_BOM_CONFIGS }, { query: GET_BOM_SCHEMA }],
+    refetchQueries: [{ query: GET_BOM_CONFIGS }, { query: GET_BOM_SCHEMA, variables: { boId: selectedBom.boId } }],
     onCompleted: result => {
       const targetDataKey = Object.keys(result)[0]
       const newOrUpdatedSection = result[targetDataKey]

@@ -27,11 +27,13 @@ const Form = ({
   const [stagedBomLabel, setBomLabel] = useState(data.label)
   const [stagedBusinessObj, setStagedBusinessObj] = useState(data.boId)
 
+  const boId = (stagedBusinessObj || {}).value
+
   const [saveBom] = useMutation(mutationDoc, {
     variables: {
-      input: { ...mutationVars, label: stagedBomLabel, boId: (stagedBusinessObj || {}).value}
+      input: { ...mutationVars, label: stagedBomLabel, boId }
     },
-    refetchQueries: [{ query: GET_BOM_CONFIGS }, { query: GET_BOM_SCHEMA }],
+    refetchQueries: [{ query: GET_BOM_CONFIGS }, { query: GET_BOM_SCHEMA, variables: { boId } }],
     onCompleted: result => {
       const targetDataKey = Object.keys(result)[0]
       const newOrUpdatedBomConfig = result[targetDataKey]

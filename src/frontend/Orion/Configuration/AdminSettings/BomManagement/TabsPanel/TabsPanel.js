@@ -83,6 +83,7 @@ const TabsPanel = () => {
           mutationVars={{ modalId: selectedBomId }}
           afterMutationHook={handleClick}
           modalTitle="Create Tab"
+          selectedBom={selectedBom}
         />
       </ListHeader>
 
@@ -103,9 +104,11 @@ const TabsPanel = () => {
                 mutationVars={{ modalId: selectedBomId, tagId: selectedTabId }}
                 afterMutationHook={handleClick}
                 style={{ fontSize: 10, padding: '4px 8px', marginRight: 8 }}
+                selectedBom={selectedBom}
               />
 
               <DeleteButton
+                selectedBom={selectedBom}
                 mutationVars={{ modalId: selectedBomId, tagId: selectedTabId }}
                 mutationDoc={DELETE_BOM_CONFIG_TAB}
                 afterMutationHook={() => {

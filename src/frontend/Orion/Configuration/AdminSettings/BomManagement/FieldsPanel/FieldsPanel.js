@@ -107,6 +107,7 @@ const FieldsPanel = () => {
                 handleClick={() => handleClick(fieldObj)}
               >
                 <DeleteButton
+                  selectedBom={selectedBom}
                   mutationDoc={DELETE_BOM_CONFIG_FIELD}
                   mutationVars={{
                     modalId: selectedBomId,
@@ -119,6 +120,7 @@ const FieldsPanel = () => {
 
                     if (nextFieldSelection) handleClick(nextFieldSelection) // breaks if no fields are left
                   }}
+
                 />
               </FieldPanelItem>
             ))

@@ -52,7 +52,7 @@ const Form = ({
         fieldId: (stagedFieldOption || {}).value, // need to wait for query to assign correct initial field
       }
     },
-    refetchQueries: [{ query: GET_BOM_CONFIGS }, { query: GET_BOM_SCHEMA }],
+    refetchQueries: [{ query: GET_BOM_CONFIGS }, { query: GET_BOM_SCHEMA, variables: { boId: selectedBom.boId } }],
     onCompleted: result => {
       const targetDataKey = Object.keys(result)[0]
       const newOrUpdatedBomField = result[targetDataKey]

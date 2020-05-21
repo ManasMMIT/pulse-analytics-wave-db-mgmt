@@ -15,6 +15,7 @@ const ModalButtonWithForm = ({
   afterMutationHook,
   buttonLabel,
   style,
+  selectedBom,
 }) => {
   const [isModalOpen, toggleModal] = useState(false)
   const openModal = () => toggleModal(true)
@@ -41,6 +42,7 @@ const ModalButtonWithForm = ({
           mutationDoc={mutationDoc}
           mutationVars={mutationVars}
           afterMutationHook={afterMutationHook}
+          selectedBom={selectedBom}
         />
       </Modal>
     </>
