@@ -39,7 +39,11 @@ const deleteBusinessObject = async (
         }
       )
 
-    // Step 2: Delete Business Object
+    // Step 2: Delete Modal Configs based on business object
+    await pulseCoreDb.collection('businessObjects.modals')
+        .deleteMany({ boId: _id }, { session })
+
+    // Step 3: Delete Business Object
     result = await pulseCoreDb
       .collection('businessObjects')
       .findOneAndDelete({ _id }, { session })

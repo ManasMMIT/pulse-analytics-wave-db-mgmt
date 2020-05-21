@@ -43,7 +43,28 @@ const deleteBusinessObjectField = async (
           ]
         }
       )
-    // Step 2: Pull Field from Business Object
+
+    // Step 2: Pull Fields from Business Object Modals
+    await pulseCoreDb.collection('businessObjects.modals')
+        .updateMany(
+          { boId: businessObjectId },
+          {
+            $pull: {
+              'tags.$[tag].sections.$[section].fields': {
+                _id: fieldId,
+              }
+            }
+          },
+          {
+            session,
+            arrayFilters: [
+              { tag: { $exists: true } },
+              { section: { $exists: true } },
+            ]
+          },
+        )
+
+    // Step 3: Pull Field from Business Object
     const { value: { fields: oldFields } } = await pulseCoreDb
       .collection('businessObjects')
       .findOneAndUpdate(

@@ -17,7 +17,7 @@ import {
 
 import { Colors } from '../../../../../utils/pulseStyles'
 
-import { GET_BUSINESS_OBJECTS } from '../../../../../api/queries'
+import { GET_BUSINESS_OBJECTS, GET_BOM_SCHEMA } from '../../../../../api/queries'
 
 import {
   CREATE_BUSINESS_OBJECT_FIELD,
@@ -85,6 +85,7 @@ const FieldsPanel = () => {
                 handleClick={() => handleClick(fieldObj)}
               >
                 <DeleteButton
+                  extraRefetchQueries={[{ query: GET_BOM_SCHEMA, variables: { boId: selectedBusinessObjectId} }]}
                   mutationDoc={DELETE_BUSINESS_OBJECT_FIELD}
                   mutationVars={{
                     fieldId: selectedFieldId,
