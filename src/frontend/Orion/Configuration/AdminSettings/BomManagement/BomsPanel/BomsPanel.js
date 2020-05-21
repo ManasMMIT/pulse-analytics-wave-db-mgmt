@@ -20,6 +20,7 @@ import {
 import {
   CREATE_BOM_CONFIG,
   DELETE_BOM_CONFIG,
+  UPDATE_BOM_CONFIG,
 } from '../../../../../api/mutations'
 
 import {
@@ -126,13 +127,15 @@ const BomsPanel = () => {
               bomLabel={getBomLabel(bomObj)}
               handleClick={() => handleClick(bomObj)}
             >
-              {/* <ModalButtonWithForm
+              <ModalButtonWithForm
                 buttonLabel="Edit"
-                data={workbookObj}
-                mutationDoc={UPDATE_WORKBOOK}
+                data={bomObj}
+                modalTitle="Update Business Object Modal"
+                mutationDoc={UPDATE_BOM_CONFIG}
                 afterMutationHook={handleClick}
+                mutationVars={{ modalId: selectedBomId }}
                 style={{ fontSize: 10, padding: '4px 8px', marginRight: 8, }}
-              /> */}
+              />
 
               <DeleteButton
                 mutationVars={{ modalId: bomObj._id }}

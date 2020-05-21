@@ -11,9 +11,35 @@ export const CREATE_BOM_CONFIG_FIELD = gql`
   }
 `
 
+export const UPDATE_BOM_CONFIG_FIELD = gql`
+  mutation UpdateBusinessObjectModalField($input: UpdateBusinessObjectModalFieldInput!) {
+    updateBusinessObjectModalField(input: $input) {
+      _id
+      label
+      inputComponent
+      inputProps
+    }
+  }
+`
+
 export const CREATE_BOM_CONFIG_SECTION = gql`
   mutation CreateBusinessObjectModalSection($input: CreateBusinessObjectModalSectionInput!) {
     createBusinessObjectModalSection(input: $input) {
+      _id
+      label
+      fields {
+        _id
+        label
+        inputComponent
+        inputProps
+      }
+    }
+  }
+`
+
+export const UPDATE_BOM_CONFIG_SECTION = gql`
+  mutation UpdateBusinessObjectModalSection($input: UpdateBusinessObjectModalSectionInput!) {
+    updateBusinessObjectModalSection(input: $input) {
       _id
       label
       fields {
@@ -68,9 +94,51 @@ export const DELETE_BOM_CONFIG = gql`
   }
 `
 
+export const UPDATE_BOM_CONFIG_TAB = gql`
+  mutation UpdateBusinessObjectModalTab($input: UpdateBusinessObjectModalTagInput!) {
+    updateBusinessObjectModalTag(input: $input) {
+      _id
+      label
+      sections {
+        _id
+        label
+        fields {
+          _id
+          label
+          inputComponent
+          inputProps
+        }
+      }
+    }
+  }
+`
+
 export const CREATE_BOM_CONFIG = gql`
   mutation CreateBusinessObjectModal($input: CreateBusinessObjectModalInput!) {
     createBusinessObjectModal(input: $input) {
+      _id
+      label
+      tags {
+        _id
+        label
+        sections {
+          _id
+          label
+          fields {
+            _id
+            label
+            inputComponent
+            inputProps
+          }
+        }
+      }
+    }
+  }
+`
+
+export const UPDATE_BOM_CONFIG = gql`
+  mutation UpdateBusinessObjectModal($input: UpdateBusinessObjectModalInput!) {
+    updateBusinessObjectModal(input: $input) {
       _id
       label
       tags {

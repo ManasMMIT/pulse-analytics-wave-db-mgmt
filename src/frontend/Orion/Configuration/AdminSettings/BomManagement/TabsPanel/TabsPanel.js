@@ -17,6 +17,7 @@ import {
 
 import {
   CREATE_BOM_CONFIG_TAB,
+  UPDATE_BOM_CONFIG_TAB,
 } from '../../../../../api/mutations'
 
 import { GET_BOM_CONFIGS } from '../../../../../api/queries'
@@ -93,15 +94,15 @@ const TabsPanel = () => {
               tabLabel={tabObj.label}
               handleClick={() => handleClick(tabObj)}
             >
-              {/* <ModalButtonWithForm
+              <ModalButtonWithForm
                 buttonLabel="Edit"
-                data={sheetObj}
-                mutationDoc={UPDATE_SHEET}
-                modalTitle="Create or Edit Sheet"
-                mutationVars={{ workbookId: selectedSectionId }}
+                data={tabObj}
+                mutationDoc={UPDATE_BOM_CONFIG_TAB}
+                modalTitle="Edit Tab"
+                mutationVars={{ modalId: selectedBomId, tagId: selectedTabId }}
                 afterMutationHook={handleClick}
                 style={{ fontSize: 10, padding: '4px 8px', marginRight: 8 }}
-              /> */}
+              />
 
               {/* <DeleteButton
                 mutationVars={{ workbookId: selectedSectionId, sheetId: sheetObj._id }}

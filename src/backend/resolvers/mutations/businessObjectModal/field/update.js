@@ -1,6 +1,6 @@
 const { ObjectId } = require('mongodb')
 
-const createBusinessObjectModalField = async (
+const updateBusinessObjectModalField = async (
   parent,
   { input: { label, modalId, tagId, sectionId, fieldId, inputProps, inputComponent } },
   { pulseCoreDb }
@@ -12,35 +12,22 @@ const createBusinessObjectModalField = async (
 
   inputProps = JSON.parse(inputProps)
 
-  const bomConfigToUpdate = await pulseCoreDb.collection('businessObjects.modals')
-    .findOne({ _id: modalId })
-
-  const currentTag = bomConfigToUpdate.tags.find(({ _id }) => _id.equals(tagId))
-
-  const currentSection = currentTag.sections.find(({ _id }) => _id.equals(sectionId))
-
-  const isDupeSectionField = currentSection.fields.find(({ _id }) => _id.equals(fieldId))
-
-  if (isDupeSectionField) throw new Error('Field already in section.')
-
   const { value: updatedBomConfig } = await pulseCoreDb.collection('businessObjects.modals')
     .findOneAndUpdate(
       { _id: modalId },
       {
-        $push: {
-          'tags.$[tag].sections.$[section].fields': {
-            _id: fieldId,
-            label,
-            inputProps,
-            inputComponent,
-          }
+        $set: {
+          'tags.$[tag].sections.$[section].fields.$[field].label': label,
+          'tags.$[tag].sections.$[section].fields.$[field].inputProps': inputProps,
+          'tags.$[tag].sections.$[section].fields.$[field].inputComponent': inputComponent
         }
       },
       {
         returnOriginal: false,
         arrayFilters: [
           { tag: { $exists: true }, 'tag.sections': { $exists: true }, 'tag._id': tagId },
-          { 'section._id': sectionId }
+          { 'section._id': sectionId },
+          { 'field._id': fieldId },
         ]
       }
     )
@@ -54,4 +41,4 @@ const createBusinessObjectModalField = async (
     .find(({ _id }) => _id.equals(fieldId))
 }
 
-module.exports = createBusinessObjectModalField
+module.exports = updateBusinessObjectModalField
