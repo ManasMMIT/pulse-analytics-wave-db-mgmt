@@ -132,6 +132,7 @@ const mutationType = gql`
 
     createBusinessObjectModal(input: CreateBusinessObjectModalInput!): BomConfig
     createBusinessObjectModalTag(input: CreateBusinessObjectModalTagInput!): BomTag
+    updateBusinessObjectModalTag(input: UpdateBusinessObjectModalTagInput!): BomTag
     createBusinessObjectModalSection(input: CreateBusinessObjectModalSectionInput!): BomSection
     createBusinessObjectModalField(input: CreateBusinessObjectModalFieldInput!): BomField
 
