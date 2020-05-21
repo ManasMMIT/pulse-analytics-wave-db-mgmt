@@ -145,6 +145,7 @@ const Form = ({
         <FormLabel>Field Key</FormLabel>
 
         <Select
+          isDisabled={data._id} // not allowed to update fieldId after creation
           styles={{ container: base => ({ ...base, flex: 1 }) }}
           value={stagedFieldOption}
           defaultValue={fieldOptions[0]}

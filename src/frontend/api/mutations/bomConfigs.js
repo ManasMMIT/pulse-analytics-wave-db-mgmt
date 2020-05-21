@@ -11,6 +11,17 @@ export const CREATE_BOM_CONFIG_FIELD = gql`
   }
 `
 
+export const UPDATE_BOM_CONFIG_FIELD = gql`
+  mutation UpdateBusinessObjectModalField($input: UpdateBusinessObjectModalFieldInput!) {
+    updateBusinessObjectModalField(input: $input) {
+      _id
+      label
+      inputComponent
+      inputProps
+    }
+  }
+`
+
 export const CREATE_BOM_CONFIG_SECTION = gql`
   mutation CreateBusinessObjectModalSection($input: CreateBusinessObjectModalSectionInput!) {
     createBusinessObjectModalSection(input: $input) {

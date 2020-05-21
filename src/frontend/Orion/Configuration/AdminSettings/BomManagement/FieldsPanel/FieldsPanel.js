@@ -24,6 +24,7 @@ import { GET_BOM_CONFIGS } from 'frontend/api/queries'
 
 import {
   CREATE_BOM_CONFIG_FIELD,
+  UPDATE_BOM_CONFIG_FIELD,
  } from 'frontend/api/mutations'
 
 const FieldsPanel = () => {
@@ -132,12 +133,12 @@ const FieldsPanel = () => {
           key={selectedFieldId}
           data={selectedField}
           selectedBom={selectedBom}
-          mutationDoc={CREATE_BOM_CONFIG_FIELD}
+          mutationDoc={UPDATE_BOM_CONFIG_FIELD}
           mutationVars={{
-            // fieldId: selectedFieldId, // ? commented out b/c update isn't done yet and this is a placeholder component
-            // modalId: selectedBomId,
-            // tagId: selectedTabId,
-            // sectionId: selectedSectionId,
+            fieldId: selectedFieldId,
+            modalId: selectedBomId,
+            tagId: selectedTabId,
+            sectionId: selectedSectionId,
           }}
         />
       </div>

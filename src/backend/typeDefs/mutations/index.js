@@ -136,6 +136,7 @@ const mutationType = gql`
     createBusinessObjectModalSection(input: CreateBusinessObjectModalSectionInput!): BomSection
     updateBusinessObjectModalSection(input: UpdateBusinessObjectModalSectionInput!): BomSection
     createBusinessObjectModalField(input: CreateBusinessObjectModalFieldInput!): BomField
+    updateBusinessObjectModalField(input: UpdateBusinessObjectModalFieldInput!): BomField
 
     deleteBook(input: DeleteBookInput!): DeleteBookPayload
     createBook(input: CreateBookInput!): CreateBookPayload
