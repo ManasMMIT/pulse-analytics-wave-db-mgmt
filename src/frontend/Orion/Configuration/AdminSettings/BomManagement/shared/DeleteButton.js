@@ -11,7 +11,7 @@ import Spinner from 'frontend/components/Spinner'
 
 import { Colors, Spacing } from '../../../../../utils/pulseStyles'
 
-import { GET_BOM_CONFIGS, GET_BOM_SCHEMA } from '../../../../../api/queries'
+import { GET_BOM_SCHEMA, GET_BOM_CONFIGS } from '../../../../../api/queries'
 
 const trashCan = <FontAwesomeIcon size="lg" icon={faTrashAlt} />
 

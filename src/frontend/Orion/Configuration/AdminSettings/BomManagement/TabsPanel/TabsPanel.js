@@ -6,7 +6,7 @@ import queryString from 'query-string'
 
 import TabPanelItem from './TabPanelItem'
 import ModalButtonWithForm from './ModalButtonWithForm'
-// import DeleteButton from '../shared/DeleteButton'
+import DeleteButton from '../shared/DeleteButton'
 import {
   ListContainer,
   ListHeader,
@@ -17,6 +17,7 @@ import {
 
 import {
   CREATE_BOM_CONFIG_TAB,
+  DELETE_BOM_CONFIG_TAB,
   UPDATE_BOM_CONFIG_TAB,
 } from '../../../../../api/mutations'
 
@@ -104,16 +105,15 @@ const TabsPanel = () => {
                 style={{ fontSize: 10, padding: '4px 8px', marginRight: 8 }}
               />
 
-              {/* <DeleteButton
-                mutationVars={{ workbookId: selectedSectionId, sheetId: sheetObj._id }}
-                mutationDoc={DELETE_SHEET}
+              <DeleteButton
+                mutationVars={{ modalId: selectedBomId, tagId: selectedTabId }}
+                mutationDoc={DELETE_BOM_CONFIG_TAB}
                 afterMutationHook={() => {
-                  const targetWorkbook = data.workbooks.find(({ _id }) => _id === selectedSectionId)
-                  const nextSheetSelection = targetWorkbook.sheets.find(({ _id }) => _id !== sheetObj._id)
+                  const nextTabSelection = tabs.find(({ _id }) => _id !== tabObj._id)
 
-                  handleClick(nextSheetSelection)
+                  handleClick(nextTabSelection)
                 }}
-              /> */}
+              />
             </TabPanelItem>
           ))
         }
