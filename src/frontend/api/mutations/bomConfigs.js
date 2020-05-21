@@ -37,6 +37,21 @@ export const CREATE_BOM_CONFIG_SECTION = gql`
   }
 `
 
+export const DELETE_BOM_CONFIG_SECTION = gql`
+  mutation DeleteBusinessObjectModalSection($input: DeleteBusinessObjectModalSectionInput!) {
+    deleteBusinessObjectModalSection(input: $input) {
+        _id
+        label
+        fields {
+          _id
+          label
+          inputComponent
+          inputProps
+        }
+      }
+  }
+`
+
 export const DELETE_BOM_CONFIG_TAB = gql`
   mutation DeleteBusinessObjectModalTab($input: DeleteBusinessObjectModalTagInput!) {
     deleteBusinessObjectModalTag(input: $input) {

@@ -5,7 +5,7 @@ import queryString from 'query-string'
 
 import SectionPanelItem from './SectionPanelItem'
 import ModalButtonWithForm from './ModalButtonWithForm'
-// import DeleteButton from '../shared/DeleteButton'
+import DeleteButton from '../shared/DeleteButton'
 import {
   ListContainer,
   ListHeader,
@@ -16,6 +16,7 @@ import {
 
 import {
   CREATE_BOM_CONFIG_SECTION,
+  DELETE_BOM_CONFIG_SECTION,
   UPDATE_BOM_CONFIG_SECTION,
 } from 'frontend/api/mutations'
 
@@ -107,16 +108,15 @@ const SectionsPanel = () => {
                 style={{ fontSize: 10, padding: '4px 8px', marginRight: 8 }}
               />
 
-              {/* <DeleteButton
-                mutationVars={{ workbookId: selectedSectionId, sheetId: sheetObj._id }}
-                mutationDoc={DELETE_SHEET}
+              <DeleteButton
+                mutationVars={{ modalId: selectedBomId, tagId: selectedTabId, sectionId: selectedSectionId }}
+                mutationDoc={DELETE_BOM_CONFIG_SECTION}
                 afterMutationHook={() => {
-                  const targetWorkbook = data.workbooks.find(({ _id }) => _id === selectedSectionId)
-                  const nextSheetSelection = targetWorkbook.sheets.find(({ _id }) => _id !== sheetObj._id)
+                  const nextSectionSelection = sections.find(({ _id }) => _id !== selectedSectionId)
 
-                  handleClick(nextSheetSelection)
+                  handleClick(nextSectionSelection)
                 }}
-              /> */}
+              />
             </SectionPanelItem>
           ))
         }

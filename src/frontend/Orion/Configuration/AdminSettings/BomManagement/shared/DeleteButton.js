@@ -57,7 +57,7 @@ const DeleteButton = props => {
     {
       onCompleted: afterMutationHook,
       awaitRefetchQueries: true,
-      refetchQueries: [{ query: GET_BOM_CONFIGS }, { query: GET_BOM_SCHEMA }],
+      refetchQueries: [{ query: GET_BOM_SCHEMA }, { query: GET_BOM_CONFIGS }],
     }
   )
 
