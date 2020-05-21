@@ -1,9 +1,7 @@
 const createBusinessObjectModal = require('./create')
-// const updateWorkbook = require('./update')
-// const deleteWorkbook = require('./delete')
+const updateBusinessObjectModal = require('./update')
 
 module.exports = {
   createBusinessObjectModal,
-  // updateWorkbook,
-  // deleteWorkbook,
+  updateBusinessObjectModal,
 }

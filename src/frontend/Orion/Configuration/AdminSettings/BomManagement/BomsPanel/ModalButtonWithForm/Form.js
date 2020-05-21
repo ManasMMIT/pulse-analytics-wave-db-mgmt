@@ -48,7 +48,15 @@ const Form = ({
     if (!loading) {
       const { businessObjects } = businessObjData
 
-      setStagedBusinessObj({ label: businessObjects[0].name, value: businessObjects[0]._id })
+      let stagedBo = { label: businessObjects[0].name, value: businessObjects[0]._id }
+
+      if (data.boId) {
+        const underlyingBo = businessObjects.find(({ _id }) => _id === data.boId)
+
+        stagedBo = { label: underlyingBo.name, value: underlyingBo._id }
+      }
+
+      setStagedBusinessObj(stagedBo)
     }
   }, [businessObjData, loading])
 
@@ -79,6 +87,7 @@ const Form = ({
       <FieldContainer>
         <FormLabel>Business Object</FormLabel>
         <Select
+          isDisabled={data.boId} // Can only specify underlying bo on create
           styles={{ container: base => ({ ...base, flex: 1 }) }}
           value={stagedBusinessObj}
           defaultValue={boOptions[0]}

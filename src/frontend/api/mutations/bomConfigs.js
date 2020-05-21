@@ -112,3 +112,26 @@ export const CREATE_BOM_CONFIG = gql`
     }
   }
 `
+
+export const UPDATE_BOM_CONFIG = gql`
+  mutation UpdateBusinessObjectModal($input: UpdateBusinessObjectModalInput!) {
+    updateBusinessObjectModal(input: $input) {
+      _id
+      label
+      tags {
+        _id
+        label
+        sections {
+          _id
+          label
+          fields {
+            _id
+            label
+            inputComponent
+            inputProps
+          }
+        }
+      }
+    }
+  }
+`
