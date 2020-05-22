@@ -19,7 +19,7 @@ export default (boId, entityId) => {
 
     // ! needed because we always return all orgs then pick them out for cache mgmt
     entity = Array.isArray(queryResult)
-      ? queryResult.find(({ _id }) => _id === entityId)
+      ? queryResult.find(({ _id }) => _id === entityId) || {}
       : queryResult
   }
 

@@ -6,5 +6,5 @@ import {
 } from './../../api/queries'
 
 export default {
-  '5e46a9784a5ab07ddbe3dc88': GET_PATHWAYS_ORGANIZATIONS
+  '5eac3251ac8a01743081f28d': GET_PATHWAYS_ORGANIZATIONS
 }

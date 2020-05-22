@@ -94,9 +94,12 @@ const Form = ({
         const originalDataField = underlyingBusinessObject.fields
           .find(({ _id }) => _id === data._id)
 
-        const initialOption = originalDataField
-          ? { value: originalDataField._id, label: originalDataField.key }
-          : { value: underlyingBusinessObject[0]._id, label: underlyingBusinessObject[0].key }
+        const { _id, key, type } = originalDataField 
+
+        let initialOption = { 
+          value: _id, 
+          label: `${key} (${type})`,
+        }
 
         setFieldOption(initialOption)
       }
@@ -110,9 +113,9 @@ const Form = ({
 
   let fieldOptions = []
   if (underlyingBusinessObject) {
-    fieldOptions = underlyingBusinessObject.fields.map(({ _id, key }) => ({
+    fieldOptions = underlyingBusinessObject.fields.map(({ _id, key, type }) => ({
       value: _id,
-      label: key,
+      label: `${key} (${type})`, // hint at what the input component should be using boField's type
     }))
   }
 
@@ -121,7 +124,20 @@ const Form = ({
   return (
     <FieldsFormContainer>
       <FieldContainer>
-        <FormLabel>Field Name</FormLabel>
+        <FormLabel>Field Key</FormLabel>
+
+        <Select
+          isDisabled={data._id} // not allowed to update fieldId after creation
+          styles={{ container: base => ({ ...base, flex: 1 }) }}
+          value={stagedFieldOption}
+          defaultValue={fieldOptions[0]}
+          onChange={handleFieldOptionSelection}
+          options={fieldOptions}
+        />
+      </FieldContainer>
+
+      <FieldContainer>
+        <FormLabel>Field Label</FormLabel>
         <StyledInput
           type="text"
           value={stagedFieldLabel}
@@ -138,19 +154,6 @@ const Form = ({
           defaultValue={inputOptions[0]}
           onChange={handleInputComponentSelection}
           options={inputOptions}
-        />
-      </FieldContainer>
-
-      <FieldContainer>
-        <FormLabel>Field Key</FormLabel>
-
-        <Select
-          isDisabled={data._id} // not allowed to update fieldId after creation
-          styles={{ container: base => ({ ...base, flex: 1 }) }}
-          value={stagedFieldOption}
-          defaultValue={fieldOptions[0]}
-          onChange={handleFieldOptionSelection}
-          options={fieldOptions}
         />
       </FieldContainer>
 
