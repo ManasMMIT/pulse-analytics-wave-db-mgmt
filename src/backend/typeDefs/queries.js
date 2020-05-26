@@ -278,6 +278,7 @@ const queries = gql`
 
   type BomField {
     _id: ID!
+    boFieldId: ID!
     label: String!
     inputComponent: String!
     inputProps: JSON # highly variable structure

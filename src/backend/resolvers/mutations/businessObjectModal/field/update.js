@@ -2,13 +2,13 @@ const { ObjectId } = require('mongodb')
 
 const updateBusinessObjectModalField = async (
   parent,
-  { input: { label, modalId, tagId, sectionId, fieldId, inputProps, inputComponent } },
+  { input: { label, modalId, tagId, sectionId, _id, inputProps, inputComponent } },
   { pulseCoreDb }
 ) => {
   modalId = ObjectId(modalId)
   tagId = ObjectId(tagId)
   sectionId = ObjectId(sectionId)
-  fieldId = ObjectId(fieldId)
+  _id = ObjectId(_id)
 
   inputProps = JSON.parse(inputProps)
 
@@ -27,7 +27,7 @@ const updateBusinessObjectModalField = async (
         arrayFilters: [
           { tag: { $exists: true }, 'tag.sections': { $exists: true }, 'tag._id': tagId },
           { 'section._id': sectionId },
-          { 'field._id': fieldId },
+          { 'field._id': _id },
         ]
       }
     )
@@ -38,7 +38,7 @@ const updateBusinessObjectModalField = async (
   const updatedSection = updatedTag.sections.find(({ _id }) => _id.equals(sectionId))
 
   return updatedSection.fields
-    .find(({ _id }) => _id.equals(fieldId))
+    .find(({ _id: localId }) => localId.equals(_id))
 }
 
 module.exports = updateBusinessObjectModalField

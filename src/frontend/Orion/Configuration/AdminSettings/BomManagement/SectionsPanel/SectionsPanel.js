@@ -27,8 +27,8 @@ const getSectionField = section => {
     ? { sectionId: section._id }
     : {}
 
-  const fieldObj = section && section.fields
-    ? { fieldId: section.fields[0] }
+  const fieldObj = section && section.fields && section.fields[0]
+    ? { fieldId: section.fields[0]._id }
     : {}
 
   return {

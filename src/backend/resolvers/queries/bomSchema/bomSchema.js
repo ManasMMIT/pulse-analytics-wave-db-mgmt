@@ -24,10 +24,10 @@ const getMergedSchema = (enrichedModalConfig, boDocs) => {
   clonedModalConfig.tags.forEach(({ sections }) => {
     return sections.forEach(({ fields }) => {
       return fields.forEach(field => {
-        const { 
+        const {
           // type, // arbitrarily avoid using boField's type for now in favor of using COMPONENT_TYPE_TO_HTML_INPUT_TYPE
           key,
-        } = boFieldsRefByIds[field._id.toString()]
+        } = boFieldsRefByIds[field.boFieldId.toString()]
 
         field.inputProps = _.merge(
           {},
@@ -36,7 +36,7 @@ const getMergedSchema = (enrichedModalConfig, boDocs) => {
         )
 
         field.key = key
-        
+
         if (field.inputComponent === 'Select') {
           // if select depends on data, then options will be empty; otherwise, options should've been hardcoded
           // but they still have to be formatted for react-select

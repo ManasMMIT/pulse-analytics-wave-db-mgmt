@@ -2,13 +2,13 @@ const { ObjectId } = require('mongodb')
 
 const deleteBusinessObjectModalField = async (
   parent,
-  { input: { modalId, tagId, sectionId, fieldId } },
+  { input: { modalId, tagId, sectionId, _id } },
   { pulseCoreDb }
 ) => {
   modalId = ObjectId(modalId)
   tagId = ObjectId(tagId)
   sectionId = ObjectId(sectionId)
-  fieldId = ObjectId(fieldId)
+  _id = ObjectId(_id)
 
   const { value: updatedBomConfig } = await pulseCoreDb.collection('businessObjects.modals')
     .findOneAndUpdate(
@@ -16,7 +16,7 @@ const deleteBusinessObjectModalField = async (
       {
         $pull: {
           'tags.$[tag].sections.$[section].fields': {
-            _id: fieldId,
+            _id,
           }
         }
       },
@@ -34,7 +34,7 @@ const deleteBusinessObjectModalField = async (
   const updatedSection = updatedTag.sections.find(({ _id }) => _id.equals(sectionId))
 
   return updatedSection.fields
-    .find(({ _id }) => _id.equals(fieldId))
+    .find(({ _id: localId }) => localId.equals(_id))
 }
 
 module.exports = deleteBusinessObjectModalField

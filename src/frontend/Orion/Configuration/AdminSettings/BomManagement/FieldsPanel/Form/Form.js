@@ -49,7 +49,7 @@ const Form = ({
         label: stagedFieldLabel,
         inputComponent: stagedInputComponent,
         inputProps: stagedInputProps,
-        fieldId: (stagedFieldOption || {}).value, // need to wait for query to assign correct initial field
+        boFieldId: (stagedFieldOption || {}).value, // need to wait for query to assign correct initial field
       }
     },
     refetchQueries: [{ query: GET_BOM_CONFIGS }, { query: GET_BOM_SCHEMA, variables: { boId: selectedBom.boId } }],
@@ -92,12 +92,12 @@ const Form = ({
           .find(({ _id }) => _id === selectedBom.boId)
 
         const originalDataField = underlyingBusinessObject.fields
-          .find(({ _id }) => _id === data._id)
+          .find(({ _id }) => _id === data.boFieldId)
 
-        const { _id, key, type } = originalDataField 
+        const { _id, key, type } = originalDataField
 
-        let initialOption = { 
-          value: _id, 
+        let initialOption = {
+          value: _id,
           label: `${key} (${type})`,
         }
 
@@ -127,7 +127,7 @@ const Form = ({
         <FormLabel>Field Key</FormLabel>
 
         <Select
-          isDisabled={data._id} // not allowed to update fieldId after creation
+          isDisabled={data._id} // not allowed to update boFieldId after creation
           styles={{ container: base => ({ ...base, flex: 1 }) }}
           value={stagedFieldOption}
           defaultValue={fieldOptions[0]}

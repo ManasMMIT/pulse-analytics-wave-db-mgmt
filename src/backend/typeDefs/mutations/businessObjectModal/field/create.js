@@ -6,7 +6,7 @@ const createBusinessObjectModalFieldTypeDefs = gql`
     modalId: ID!
     tagId: ID!
     sectionId: ID!
-    fieldId: ID!
+    boFieldId: ID!
     inputProps: String! # object is passed JSON.stringify from frontend
     inputComponent: String!
   }

@@ -62,6 +62,7 @@ export const GET_BOM_CONFIGS = gql`
           label
           fields {
             _id
+            boFieldId
             label
             inputComponent
             inputProps

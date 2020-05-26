@@ -117,7 +117,7 @@ const FieldsPanel = () => {
                     modalId: selectedBomId,
                     tagId: selectedTabId,
                     sectionId: selectedSectionId,
-                    fieldId: fieldObj._id
+                    _id: fieldObj._id
                   }}
                   afterMutationHook={() => {
                     const nextFieldSelection = fields.find(({ _id }) => _id !== fieldObj._id)
@@ -140,7 +140,7 @@ const FieldsPanel = () => {
           selectedBom={selectedBom}
           mutationDoc={UPDATE_BOM_CONFIG_FIELD}
           mutationVars={{
-            fieldId: selectedFieldId,
+            _id: selectedFieldId,
             modalId: selectedBomId,
             tagId: selectedTabId,
             sectionId: selectedSectionId,

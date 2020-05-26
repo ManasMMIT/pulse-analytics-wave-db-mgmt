@@ -4,6 +4,7 @@ export const DELETE_BOM_CONFIG_FIELD = gql`
   mutation DeleteBusinessObjectModalField($input: DeleteBusinessObjectModalFieldInput!) {
     deleteBusinessObjectModalField(input: $input) {
       _id
+      boFieldId
       label
       inputComponent
       inputProps
@@ -15,6 +16,7 @@ export const CREATE_BOM_CONFIG_FIELD = gql`
   mutation CreateBusinessObjectModalField($input: CreateBusinessObjectModalFieldInput!) {
     createBusinessObjectModalField(input: $input) {
       _id
+      boFieldId
       label
       inputComponent
       inputProps
@@ -26,6 +28,7 @@ export const UPDATE_BOM_CONFIG_FIELD = gql`
   mutation UpdateBusinessObjectModalField($input: UpdateBusinessObjectModalFieldInput!) {
     updateBusinessObjectModalField(input: $input) {
       _id
+      boFieldId
       label
       inputComponent
       inputProps
@@ -40,6 +43,7 @@ export const CREATE_BOM_CONFIG_SECTION = gql`
       label
       fields {
         _id
+        boFieldId
         label
         inputComponent
         inputProps
@@ -55,6 +59,7 @@ export const DELETE_BOM_CONFIG_SECTION = gql`
         label
         fields {
           _id
+          boFieldId
           label
           inputComponent
           inputProps
@@ -73,6 +78,7 @@ export const DELETE_BOM_CONFIG_TAB = gql`
         label
         fields {
           _id
+          boFieldId
           label
           inputComponent
           inputProps
@@ -89,6 +95,7 @@ export const UPDATE_BOM_CONFIG_SECTION = gql`
       label
       fields {
         _id
+        boFieldId
         label
         inputComponent
         inputProps
@@ -107,6 +114,7 @@ export const CREATE_BOM_CONFIG_TAB = gql`
         label
         fields {
           _id
+          boFieldId
           label
           inputComponent
           inputProps
@@ -129,6 +137,7 @@ export const DELETE_BOM_CONFIG = gql`
           label
           fields {
             _id
+            boFieldId
             label
             inputComponent
             inputProps
@@ -149,6 +158,7 @@ export const UPDATE_BOM_CONFIG_TAB = gql`
         label
         fields {
           _id
+          boFieldId
           label
           inputComponent
           inputProps
@@ -171,6 +181,7 @@ export const CREATE_BOM_CONFIG = gql`
           label
           fields {
             _id
+            boFieldId
             label
             inputComponent
             inputProps
@@ -194,6 +205,7 @@ export const UPDATE_BOM_CONFIG = gql`
           label
           fields {
             _id
+            boFieldId
             label
             inputComponent
             inputProps
