@@ -1,1 +1,1 @@
-export { default } from './QueryTool'
+export { default } from './NewQueryTool'

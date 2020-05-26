@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
 import _ from 'lodash'
 import styled from '@emotion/styled'
 
@@ -50,7 +51,7 @@ const FiltersContainer = styled.div({
   background: Color.WHITE,
 })
 
-const QueryTool = () => {
+const PlacardView = () => {
   const [
     filterConfigOptions,
     setFilterConfigOptions,
@@ -83,7 +84,10 @@ const QueryTool = () => {
 
   return (
     <Wrapper>
-      <h1 style={{ padding: Spacing.S4, ...FontSpace.FS4 }}>Query Tool</h1>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <h1 style={{ padding: Spacing.S4, ...FontSpace.FS4 }}>Query Tool</h1>
+        <Link style={{ fontWeight: 700, padding: 4, background: 'blue', color: 'white', borderRadius: 4 }} to="/orion/query/tool/pql">PQL View</Link>
+      </div>
       <Button
         iconName="add"
         iconPosition="left"
@@ -101,4 +105,4 @@ const QueryTool = () => {
   )
 }
 
-export default QueryTool
+export default PlacardView

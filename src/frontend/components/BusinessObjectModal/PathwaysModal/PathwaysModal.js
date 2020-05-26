@@ -11,6 +11,7 @@ const PathwaysModal = ({ closeModal, entityId }) => (
     entityId={entityId}
     boId={PATHWAYS_BOID}
     headerText={HEADER_TEXT}
+    // todo: pass mutationDocs
   />
 )
 
