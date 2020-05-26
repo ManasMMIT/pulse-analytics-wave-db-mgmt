@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - `Phoenix`: Built default landing page feature for roles and/or users with backend cascade updates to pulse-dev.users.sitemaps
 - `Orion`: Business Object Modals Read, Create, and Update for Modals, Tabs, Sections, and Fields
+- `Orion`: BOM Schema switched to live data
 
 ## [2.5.0] - Started: 5-11-20
 
@@ -27,9 +28,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Update Project PTPs via cross-product configuration modal
   - Delete selected PTPs via granular table
   - Transfer PTPs ownership between projects
-- `Orion`: Business Object Modals
-  - Read from `businessObjects.modals` collection
-  - Create Modals, Tabs, Sections, and Fields
 
 ### Changed
 - `Polaris Frontend`: Payer Projects rose to the top of the app, next to Phoenix, Delphi, Orion.
