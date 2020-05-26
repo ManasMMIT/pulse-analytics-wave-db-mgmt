@@ -12,7 +12,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Fixed** for any bug fixes.
 - **Security** in case of vulnerabilities.
 
-## [Unreleased] - Started: 5-15-20
+## [Unreleased] - Started: 5-26-20
+
+## [2.6.0] - Started: 5-15-20
 
 ### Added
 - `Phoenix`: Built default landing page feature for roles and/or users with backend cascade updates to pulse-dev.users.sitemaps
