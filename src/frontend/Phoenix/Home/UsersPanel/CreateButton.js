@@ -21,12 +21,20 @@ const CreateButton = () => {
 
   const { selectedTeam } = data
 
+  const defaultLanding = selectedTeam.defaultLandingPath
+    ? { path: selectedTeam.defaultLandingPath, locked: false }
+    : {}
+
   return (
     <UserFormButton
       modalTitle="Create User"
       buttonLabel="Create User"
       buttonColor={Colors.PRIMARY}
       selectedTeamId={selectedTeam._id}
+      userData={{
+        _id: null, // for create user, _id has to be null bc undefined fetches all teams
+        defaultLanding,
+      }}
       mutationDoc={CREATE_USER}
       additionalFormData={{ clientId: selectedTeam.client._id }}
       clientMutation={MANAGE_CREATED_USER}

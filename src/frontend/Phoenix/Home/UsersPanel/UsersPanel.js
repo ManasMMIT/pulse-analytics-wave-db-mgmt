@@ -1,4 +1,5 @@
 import React from 'react'
+import _ from 'lodash'
 import { useQuery } from '@apollo/react-hooks'
 import { transparentize } from 'polished'
 
@@ -64,6 +65,13 @@ const teamBoxStyle = {
   padding: '2px 4px',
 }
 
+const lockedDefaultPathStyle = {
+  ...teamBoxStyle,
+  color: Colors.WHITE,
+  background: transparentize(0.5, Colors.TOOL_SIDEBAR),
+  padding: '1px 2px',
+}
+
 const UserTeamsLabel = ({ userId }) => {
   const { data, loading, error } = useQuery(
     GET_USER_TEAMS,
@@ -89,7 +97,18 @@ const panelItemConfig = {
   style: defaultPanelItemStyle,
   activeStyle: activePanelItemStyle,
   buttonGroupCallback,
-  label1Callback: ({ username }) => username,
+  label1Callback: ({ username, defaultLanding }) => {
+    return (
+      <>
+        <span>{username}</span>
+        {
+          !_.isEmpty(defaultLanding) 
+            && defaultLanding.locked 
+            && <span style={lockedDefaultPathStyle}>PL</span>
+        }
+      </>
+    )
+  },
   label2Callback: ({ _id }) => <UserTeamsLabel userId={_id} />,
   // ! Note: inactiveStyle not needed until hover effects differ
   // ! between active and inactive states

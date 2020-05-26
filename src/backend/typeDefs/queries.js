@@ -3,13 +3,17 @@ const { gql } = require('apollo-server-express')
 const queries = gql`
   type Query {
     nodes(parentId: String, type: String): [Node]
+
     clients(_id: String): [Client]
+
     teams(clientId: String, userId: String): [Team]
+
     users(
       teamId: String,
       clientId: String,
       subscriptionId: String
     ): [User]
+
     indications: [Indication]
     products: [Product]
     regimens: [Regimen]
@@ -32,6 +36,8 @@ const queries = gql`
     opLogs: [OpLog]
 
     workbooks: [Workbook]
+
+    bomConfigs: [BomConfig]
     bomSchema(boId: ID): JSON
     businessObjects: [BusinessObject]
 
@@ -84,6 +90,7 @@ const queries = gql`
     sitemap: JSON
     client: Client
     resources: JSON
+    defaultLandingPath: String
   }
 
   type User {
@@ -92,11 +99,17 @@ const queries = gql`
     email: String
     client: Client
     emailSubscriptions: [Subscription]
+    defaultLanding: DefaultLanding
   }
 
   type Subscription {
     _id: ID!
     type: String!
+  }
+
+  type DefaultLanding {
+    path: String
+    locked: Boolean
   }
 
   type Indication {
@@ -243,6 +256,33 @@ const queries = gql`
   #   _id: String!
   #   fieldId: ID!
   # }
+
+  type BomConfig {
+    _id: ID!
+    boId: ID!
+    label: String!
+    tags: [BomTag]!
+  }
+
+  type BomTag {
+    _id: ID!
+    label: String!
+    sections: [BomSection]!
+  }
+
+  type BomSection {
+    _id: ID!
+    label: String!
+    fields: [BomField]!
+  }
+
+  type BomField {
+    _id: ID!
+    boFieldId: ID!
+    label: String!
+    inputComponent: String!
+    inputProps: JSON # highly variable structure
+  }
 
   type BusinessObject {
     _id: ID!

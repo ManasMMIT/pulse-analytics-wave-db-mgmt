@@ -10,6 +10,10 @@ export const SELECT_USER = gql`
         _id
         type
       }
+      defaultLanding {
+        locked
+        path
+      }
     }
   }
 `
@@ -23,6 +27,10 @@ export const CREATE_USER = gql`
       emailSubscriptions {
         _id
         type
+      }
+      defaultLanding {
+        locked
+        path
       }
     }
   }
@@ -38,6 +46,10 @@ export const MANAGE_CREATED_USER = gql`
         _id
         type
       }
+      defaultLanding {
+        locked
+        path
+      }
     }
   }
 `
@@ -51,6 +63,10 @@ export const DELETE_USER = gql`
       emailSubscriptions {
         _id
         type
+      }
+      defaultLanding {
+        locked
+        path
       }
     }
   }
@@ -66,6 +82,10 @@ export const MANAGE_DELETED_USER = gql`
         _id
         type
       }
+      defaultLanding {
+        locked
+        path
+      }
     }
   }
 `
@@ -80,6 +100,10 @@ export const UPDATE_USER = gql`
         _id
         type
       }
+      defaultLanding {
+        locked
+        path
+      }
     }
   }
 `
@@ -93,6 +117,10 @@ export const MANAGE_UPDATED_USER = gql`
       emailSubscriptions {
         _id
         type
+      }
+      defaultLanding {
+        locked
+        path
       }
     }
   }

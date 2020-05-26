@@ -27,6 +27,9 @@ const generateCardInput = ({ field, fieldLabelStyle, fieldStyle }) => {
         {label}
       </FieldLabel>
       <InputComponent {...inputProps} />
+      {/* THE BELOW IS HAPPENING FOR REACT-SELECT; THE TYPE DOES NOTHING; SHOULD IT? */}
+      {/* <Select type="string" /> */}
+      {/* <Select type="number" /> */}
     </div>
   )
 }

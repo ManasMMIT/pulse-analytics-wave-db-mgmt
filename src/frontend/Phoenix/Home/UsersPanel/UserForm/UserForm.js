@@ -54,6 +54,7 @@ class UserForm extends React.Component {
         username,
         email,
         emailSubscriptions,
+        defaultLanding = {},
       },
     } = props
 
@@ -70,6 +71,10 @@ class UserForm extends React.Component {
       emailSubscriptions: emailSubscriptions || [],
       password: '',
       checkboxesMap,
+      defaultLanding: {
+        locked: (defaultLanding && defaultLanding.locked) || false,
+        path: (defaultLanding && defaultLanding.path) || '',
+      },
     }
   }
 
@@ -104,6 +109,19 @@ class UserForm extends React.Component {
     this.setState({ emailSubscriptions: emailSubscriptionsCopy })
   }
 
+  handleDefaultLandingChange = e => {
+    const { defaultLanding } = this.state
+    
+    let newDefaultLanding
+    if (e.currentTarget.type === 'checkbox') {
+      newDefaultLanding = _.merge({}, defaultLanding, { locked: e.currentTarget.checked })
+    } else {
+      newDefaultLanding = _.merge({}, defaultLanding, { path: e.currentTarget.value })
+    }
+
+    this.setState({ defaultLanding: newDefaultLanding })
+  }
+
   render() {
     const {
       username,
@@ -111,6 +129,7 @@ class UserForm extends React.Component {
       emailSubscriptions,
       password,
       checkboxesMap,
+      defaultLanding,
     } = this.state
 
     const {
@@ -133,6 +152,7 @@ class UserForm extends React.Component {
       roles: teamsToPersistOnSubmit,
       emailSubscriptions: stripTypename(emailSubscriptions),
       ...additionalFormData,
+      defaultLanding,
     }
 
     return (
@@ -189,6 +209,25 @@ class UserForm extends React.Component {
           />
         </InputSection>
 
+        <InputSection>
+          <Label>Default Landing Page</Label>
+          <div style={{ paddingBottom: 8 }}>
+            <input
+              type='checkbox'
+              checked={defaultLanding.locked}
+              onChange={this.handleDefaultLandingChange}
+            />
+            <label style={{ paddingLeft: 8 }}>Lock Landing Page (skip teams' changes)</label>
+          </div>
+          <Input
+            type="text"
+            name="defaultLandingPath"
+            value={defaultLanding.path}
+            onChange={this.handleDefaultLandingChange}
+            autoComplete="off"
+          />
+        </InputSection>
+
         <SubmitButton
           mutationDoc={mutationDoc}
           afterSubmitHook={afterSubmitHook}
@@ -207,6 +246,10 @@ UserForm.propTypes = {
     username: PropTypes.string,
     email: PropTypes.string,
     emailSubscriptions: PropTypes.arrayOf(PropTypes.object),
+    defaultLanding: PropTypes.shape({
+      path: PropTypes.string,
+      locked: PropTypes.bool,
+    })
   }),
   selectedTeamId: PropTypes.string,
   allTeamsUserIsOn: PropTypes.array,
@@ -218,6 +261,7 @@ UserForm.propTypes = {
 UserForm.defaultProps = {
   userData: {
     _id: null, // for create user, _id has to be null bc undefined fetches all teams
+    defaultLanding: {},
   },
   selectedTeamId: null,
   allTeamsUserIsOn: [],

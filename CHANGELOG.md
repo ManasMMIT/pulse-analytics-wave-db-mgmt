@@ -14,6 +14,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased] - Started: 5-15-20
 
+### Added
+- `Phoenix`: Built default landing page feature for roles and/or users with backend cascade updates to pulse-dev.users.sitemaps
+- `Orion`: Business Object Modals Read, Create, and Update for Modals, Tabs, Sections, and Fields
+- `Orion`: BOM Schema switched to live data
+
 ## [2.5.0] - Started: 5-11-20
 
 ### Added
@@ -26,7 +31,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - `Polaris Frontend`: Payer Projects rose to the top of the app, next to Phoenix, Delphi, Orion.
-- `Payer Import Tool`: 
+- `Payer Import Tool`:
   - Added frontend filtering to import interface to prevent workbook from having fewer than the required three sheets
   - Refactored SheetToCore logic and added unit tests for it
   - Added deletion step to payer import flow to account for when a project deletes optional rows from its workbook such as additional criteria and policy links

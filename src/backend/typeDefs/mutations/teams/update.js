@@ -4,6 +4,7 @@ const updateTeamTypeDefs = gql`
   input UpdateTeamInput {
     _id: ID!
     description: String!
+    defaultLandingPath: String!
   }
 
   type UpdateTeamPayload {
@@ -13,6 +14,7 @@ const updateTeamTypeDefs = gql`
     sitemap: JSON
     client: Client
     resources: JSON
+    defaultLandingPath: String
   }
 `
 

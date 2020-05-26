@@ -118,7 +118,7 @@ const mockEnrichedPtps = [
     treatmentPlanId: ObjectId("5eac293a79e11113da3b1b63"),
     organizationId: ObjectId("5d825030cc80b15a9476b822"),
   }
-];
+]
 
 module.exports = {
   mockTimestamp,

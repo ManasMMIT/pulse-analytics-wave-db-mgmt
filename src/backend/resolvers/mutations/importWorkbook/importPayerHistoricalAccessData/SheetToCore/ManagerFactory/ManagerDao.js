@@ -15,12 +15,14 @@ class ManagerDao {
     }
   }
 
-  async upsertOrgTpHistory(permittedOps, session) {
+  async upsertOrgTpHistory(
+    permittedOps, session, collectionName = 'organizations.treatmentPlans.history'
+  ) {
     try {
       const ops = permittedOps
         .map(({ findObj, setObj }) => (
           this.db
-            .collection('organizations.treatmentPlans.history')
+            .collection(collectionName)
             .updateOne(findObj, setObj, { upsert: true, session })
         ))
   

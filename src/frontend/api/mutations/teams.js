@@ -20,6 +20,7 @@ export const SELECT_TEAM = gql`
       _id
       name
       description
+      defaultLandingPath
     }
   }
 `
@@ -35,6 +36,7 @@ export const CREATE_TEAM = gql`
       client {
         _id
       }
+      defaultLandingPath
     }
   }
 `
@@ -50,6 +52,7 @@ export const MANAGE_CREATED_TEAM = gql`
       client {
         _id
       }
+      defaultLandingPath
     }
   }
 `
@@ -60,6 +63,7 @@ export const DELETE_TEAM = gql`
       _id
       name
       description
+      defaultLandingPath
     }
   }
 `
@@ -70,6 +74,7 @@ export const MANAGE_DELETED_TEAM = gql`
       _id
       name
       description
+      defaultLandingPath
     }
   }
 `
@@ -84,6 +89,7 @@ export const UPDATE_TEAM = gql`
       client {
         _id
       }
+      defaultLandingPath
     }
   }
 `
@@ -98,6 +104,7 @@ export const MANAGE_UPDATED_TEAM = gql`
       client {
         _id
       }
+      defaultLandingPath
     }
   }
 `
@@ -115,6 +122,7 @@ export const UPDATE_PERMISSIONS = gql`
         _id
       }
       resources
+      defaultLandingPath
     }
   }
 `

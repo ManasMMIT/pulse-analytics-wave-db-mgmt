@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react'
+// import { useMutation } from '@apollo/react-hooks'
 import styled from '@emotion/styled'
 import PropTypes from 'prop-types'
+// import _ from 'lodash'
+// import gql from 'graphql-tag'
+
 import useBom from '../../../hooks/useBom'
 
 import Color from '../../../utils/color'
@@ -33,6 +37,40 @@ const BusinessObjectModal = ({ entityId, boId, closeModal, headerText }) => {
 
   const [selectedTab, setSelectedTab] = useState({})
   const [inputFields, setInputField] = useState({})
+
+  // 1. Upsertion dynamic mutation
+  // 2. Deletion dynamic mutation
+  // const [save] = useMutation(SUPER_DYNAMIC_ENDPOINT_EITHER_DELETE_OR_UPSERT, // make a dynamic modal mutation
+  //   {
+  //     variables: {
+  //       input: {
+  //         boId,// get to correct collection
+  //         entityId, // search to upsert
+  //         inputFields // set obj
+  //       },
+  //     },
+  //     update: (cache, { data }) => {
+  //       const { __typename, ...newOrUpdatedEntity } = data[Object.keys(data)[0]]
+
+  //       const cacheId = `${__typename}:${newOrUpdatedEntity._id}`
+
+  //       cache.writeFragment({
+  //         // id: 'PathwaysOrganization:5d825338cc80b15a9476ba84', // ! example format
+  //         id: cacheId,
+  //         fragment: gql`
+  //           fragment ${ __typename + _.uniqueId() } on ${ __typename } {
+  //             ${ Object.keys(newOrUpdatedEntity).join('\n') }
+  //             __typename
+  //           }
+  //         `,
+  //         data: {
+  //           ...newOrUpdatedEntity,
+  //           __typename,
+  //         },
+  //       });
+  //     }
+  //     // refetchQueries: [{ query: MAP_QUERY_THINGY[boId] }]
+  //   })
 
   useEffect(() => {
     if (!loading) {

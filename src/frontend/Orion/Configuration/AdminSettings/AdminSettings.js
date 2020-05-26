@@ -2,6 +2,7 @@ import React from 'react'
 import { Switch, Route, Redirect } from 'react-router-dom'
 
 import BusinessObjectManagement from './BusinessObjectManagement'
+import BomManagement from './BomManagement'
 import SheetManagement from './SheetManagement'
 import AddSourceNode from './AddSourceNode'
 import EditRoleNodeView from './EditRoleNodeView'
@@ -13,13 +14,13 @@ const AdminSettings = () => (
       component={BusinessObjectManagement}
     />
     <Route
+      path={'/orion/configuration/admin-settings/bom-management'}
+      component={BomManagement}
+    />
+    <Route
       path={'/orion/configuration/admin-settings/sheet-management'}
       component={SheetManagement}
     />
-    {/* <Route
-      path={'/orion/configuration/admin-settings/payer-projects/:projectId?'}
-      component={PayerProjects}
-    /> */}
     <Route
       path={'/orion/configuration/admin-settings/add-source-node'}
       component={AddSourceNode}

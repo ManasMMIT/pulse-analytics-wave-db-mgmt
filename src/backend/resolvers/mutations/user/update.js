@@ -13,6 +13,7 @@ const updateUser = async (
       password,
       roles,
       emailSubscriptions,
+      defaultLanding,
     }
   },
   {
@@ -58,7 +59,14 @@ const updateUser = async (
     // ! rather than { returnNewDocument: true }
     const { value: updatedResult } = await coreUsers.findOneAndUpdate(
       { _id },
-      { $set: { username, email, emailSubscriptions } },
+      { 
+        $set: { 
+          username, 
+          email, 
+          emailSubscriptions, 
+          defaultLanding, 
+        } 
+      },
       { returnOriginal: false, session }
     )
 
@@ -77,25 +85,38 @@ const updateUser = async (
     await coreRoles.updateMany(
       { _id: { $in: incomingRoles } }, // query all incoming roles from edit
       {
-        $push: { users: { _id, username, email, emailSubscriptions } }
+        $push: { 
+          users: { 
+            _id, 
+            username, 
+            email, 
+            emailSubscriptions,
+            defaultLanding,
+          } 
+        }
       },
       { session }
     )
 
     // 4. Update a user's sitemap and resources docs
-    await upsertUsersPermissions({
-      users: [updatedResult],
+    const sitemapOp = upsertUsersSitemaps({
+      users: [updatedMongoUser],
+      session,
+      pulseDevDb,
+      pulseCoreDb,
+    })
+
+    const nodesResourcesOp = upsertUsersPermissions({
+      users: [updatedMongoUser],
       pulseDevDb,
       pulseCoreDb,
       session,
     })
 
-    await upsertUsersSitemaps({
-      users: [updatedResult],
-      session,
-      pulseDevDb,
-      pulseCoreDb,
-    })
+    await Promise.all([
+      sitemapOp,
+      nodesResourcesOp,
+    ])
   })
 
   return updatedMongoUser

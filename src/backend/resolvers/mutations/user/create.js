@@ -13,6 +13,7 @@ const createUser = async (
       clientId,
       roles,
       emailSubscriptions,
+      defaultLanding,
     }
   },
   {
@@ -60,6 +61,7 @@ const createUser = async (
         email,
         emailSubscriptions,
         client,
+        defaultLanding,
         schemaVersion: 'v1.1.1',
       }, { session })
 
@@ -82,6 +84,7 @@ const createUser = async (
                 username,
                 email,
                 emailSubscriptions,
+                defaultLanding,
               }
             }
           },

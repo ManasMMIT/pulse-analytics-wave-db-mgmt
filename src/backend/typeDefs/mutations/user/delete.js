@@ -10,6 +10,7 @@ const deleteUserTypeDefs = gql`
     username: String
     email: String
     emailSubscriptions: [Subscription]
+    defaultLanding: DefaultLanding
   }
 `
 

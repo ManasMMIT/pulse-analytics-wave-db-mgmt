@@ -2,7 +2,7 @@ const uuid = require('uuid/v4')
 
 const createTeam = async (
   parent,
-  { input: { description, clientId } },
+  { input: { description, clientId, defaultLandingPath } },
   { mongoClient, coreClients, coreRoles },
   info,
 ) => {
@@ -31,6 +31,7 @@ const createTeam = async (
         cards: [],
       },
       users: [],
+      defaultLandingPath,
       schemaVersion: 'v1.1.0'
     }, { session })
 

@@ -11,7 +11,7 @@ import Spinner from 'frontend/components/Spinner'
 
 import { Colors, Spacing } from '../../../../../utils/pulseStyles'
 
-import { GET_BUSINESS_OBJECTS, GET_WORKBOOKS } from '../../../../../api/queries'
+import { GET_BUSINESS_OBJECTS, GET_WORKBOOKS, GET_BOM_CONFIGS } from '../../../../../api/queries'
 
 const trashCan = <FontAwesomeIcon size="lg" icon={faTrashAlt} />
 
@@ -46,6 +46,7 @@ const DeleteButton = props => {
     mutationVars,
     mutationDoc,
     afterMutationHook,
+    extraRefetchQueries,
   } = props
 
   const [isModalOpen, toggleModal] = useState(false)
@@ -57,7 +58,12 @@ const DeleteButton = props => {
     {
       onCompleted: afterMutationHook,
       awaitRefetchQueries: true,
-      refetchQueries: [{ query: GET_BUSINESS_OBJECTS }, { query: GET_WORKBOOKS }],
+      refetchQueries: [
+        { query: GET_BUSINESS_OBJECTS },
+        { query: GET_WORKBOOKS },
+        { query: GET_BOM_CONFIGS },
+        ...extraRefetchQueries,
+      ],
     }
   )
 
@@ -103,6 +109,11 @@ DeleteButton.propTypes = {
   mutationVars: PropTypes.object,
   modalTitle: PropTypes.string,
   modalText: PropTypes.string,
-};
+  extraRefetchQueries: PropTypes.array,
+}
+
+DeleteButton.defaultProps = {
+  extraRefetchQueries: [],
+}
 
 export default DeleteButton

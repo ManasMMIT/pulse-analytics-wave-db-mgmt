@@ -19,6 +19,7 @@ const queryResolvers = require('./query')
 const payerProjectResolvers = require('./payerProject')
 
 const businessObjectResolvers = require('./businessObject')
+const businessObjectModalResolvers = require('./businessObjectModal')
 
 const bookResolvers = require('./book')
 const coverageResolvers = require('./coverage')
@@ -50,11 +51,12 @@ module.exports = {
   ...payerProjectResolvers,
 
   ...businessObjectResolvers,
+  ...businessObjectModalResolvers,
 
   ...bookResolvers,
   ...coverageResolvers,
   ...lineResolvers,
   ...populationResolvers,
-  
+
   importWorkbook,
 }

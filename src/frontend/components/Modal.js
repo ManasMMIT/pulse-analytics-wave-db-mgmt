@@ -20,20 +20,15 @@ const Wrapper = styled.div({
   cursor: 'default',
   fontWeight: 400,
   color: Colors.BLACK,
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
 })
 
 const Main = styled.section({
-  position: "fixed",
   background: '#F0F6F9',
   borderRadius: 4,
   boxShadow: `0 6px 24px 0 ${transparentize(0.7, Colors.BLACK)}`,
-  height: "auto",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  display: "inline-flex",
-  flexDirection: 'column',
-  justifyContent: "space-between",
   overflowY: 'auto',
   maxHeight: '90vh',
   margin: 32,

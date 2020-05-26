@@ -48,6 +48,31 @@ export const GET_BOM_SCHEMA = gql`
   }
 `
 
+export const GET_BOM_CONFIGS = gql`
+  query getBomConfigs {
+    bomConfigs {
+      _id
+      boId
+      label
+      tags {
+        _id
+        label
+        sections {
+          _id
+          label
+          fields {
+            _id
+            boFieldId
+            label
+            inputComponent
+            inputProps
+          }
+        }
+      }
+    }
+  }
+`
+
 export const GET_BUSINESS_OBJECTS = gql`
   query getBusinessObjects {
     businessObjects {
@@ -112,6 +137,7 @@ export const GET_CLIENT_TEAMS = gql`
         description
       }
       resources
+      defaultLandingPath
     }
     selectedClient @client {
       _id @export(as: "clientId")
@@ -131,6 +157,7 @@ export const GET_SELECTED_TEAM = gql`
         _id
       }
       resources
+      defaultLandingPath
     }
   }
 `
@@ -159,6 +186,10 @@ export const GET_TEAM_USERS = gql`
       emailSubscriptions {
         _id
         type
+      }
+      defaultLanding {
+        locked
+        path
       }
     }
     selectedTeam @client {
@@ -201,6 +232,11 @@ export const GET_SELECTED_USER = gql`
       _id
       username
       email
+      # Note: don't think the below is needed for this
+      # defaultLanding {
+      #   locked
+      #   path
+      # }
     }
   }
 `

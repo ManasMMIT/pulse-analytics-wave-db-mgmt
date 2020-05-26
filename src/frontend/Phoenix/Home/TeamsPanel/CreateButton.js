@@ -1,7 +1,7 @@
 import React from 'react'
 import { useQuery } from '@apollo/react-hooks'
 
-import TextFormButton from '../../shared/TextForm/Button'
+import CreateTeamButton from './TeamForm/Button'
 
 import {
   CREATE_TEAM,
@@ -21,10 +21,10 @@ const CreateButton = () => {
   const { selectedClient: { _id: clientId } } = data
 
   return (
-    <TextFormButton
+    <CreateTeamButton
       modalTitle="Create Team"
       buttonLabel="Create Team"
-      additionalFormData={{ clientId }}
+      clientId={clientId}
       buttonColor={Colors.PRIMARY}
       mutationDoc={CREATE_TEAM}
       clientMutation={MANAGE_CREATED_TEAM}

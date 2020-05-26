@@ -9,6 +9,7 @@ const createUserTypeDefs = gql`
     clientId: String!
     roles: [ID!]!
     emailSubscriptions: [SubscriptionInput]
+    defaultLanding: DefaultLandingInput
   }
 
   input SubscriptionInput {
@@ -16,11 +17,17 @@ const createUserTypeDefs = gql`
     type: String!
   }
 
+  input DefaultLandingInput {
+    path: String!
+    locked: Boolean!
+  }
+
   type CreateUserPayload {
     _id: ID!
     username: String!
     email: String
     emailSubscriptions: [Subscription]
+    defaultLanding: DefaultLanding
   }
 `
 
