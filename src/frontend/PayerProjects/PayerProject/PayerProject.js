@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import _ from 'lodash'
+import { useQuery } from '@apollo/react-hooks'
 
 import { Route, Switch } from 'react-router-dom'
 
@@ -8,6 +9,7 @@ import PayerProjectSidebar from './PayerProjectSidebar'
 import PayerHistoricalImport from './PayerHistoricalImport'
 import PayerProjectTreatmentPlan from './PayerProjectTreatmentPlan'
 import PayerProjectSetup from '../PayerProjectSetup'
+import { GET_SINGLE_PAYER_PROJECT } from 'frontend/api/queries'
 
 const sidebarConfig = [
   { label: 'Import Historical Data', component: PayerHistoricalImport },
@@ -21,16 +23,22 @@ const sidebarConfig = [
   link: _.kebabCase(item.label),
 }))
 
-const generateRoutes = matchPath => ({ label, link, component }) => (
+const generateRoutes = (matchPath, projectName) => ({ label, link, component: Component }) => (
   <Route
     key={`route-${label}`}
     path={`${matchPath}/${link}`}
-    component={component}
+    component={(routeProps) => <Component {...routeProps} projectName={projectName} />}
   />
 )
 
 const PayerProject = ({ match, location }) => {
   const { path } = match
+  const { data, loading } = useQuery(
+    GET_SINGLE_PAYER_PROJECT,
+    { variables: { projectId: match.params.projectId }}
+  )
+
+  const projectName = loading ? '' : data.singlePayerProject.name
 
   return (
     <>
@@ -38,8 +46,9 @@ const PayerProject = ({ match, location }) => {
         match={match}
         location={location}
         sidebarConfig={sidebarConfig}
+        projectName={projectName}
       />
-      <Switch>{sidebarConfig.map(generateRoutes(path))}</Switch>
+      <Switch>{sidebarConfig.map(generateRoutes(path, projectName))}</Switch>
     </>
   )
 }

@@ -1,20 +1,58 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import styled from '@emotion/styled'
 import { NavLink } from 'react-router-dom'
-import { useQuery } from '@apollo/react-hooks'
 
 import Sidebar from 'frontend/components/Sidebar'
 import SidebarItem from 'frontend/components/Sidebar/SidebarItem'
 
 import Color from 'frontend/utils/color'
+import Spacing from 'frontend/utils/spacing'
+import FontSpace from 'frontend/utils/fontspace'
+import { AlphaColors } from 'frontend/utils/pulseStyles'
+import Icon from 'frontend/components/Icon'
 
-import { GET_SINGLE_PAYER_PROJECT } from 'frontend/api/queries'
-import Spinner from 'frontend/components/Spinner'
+const SidebarWrapper = styled.div({
+  display: 'flex',
+  flexDirection: 'column',
+  borderRight: `1px solid ${ AlphaColors.Black10 }`,
+})
 
-const generateSidebarItems = (
+const HeaderWrapper = styled.div({
+  padding: `${ Spacing.S4 } ${ Spacing.S7 }`,
+  borderBottom: `1px solid ${ AlphaColors.Black10 }`
+})
+
+const HeaderLabel = styled.h3({
+  ...FontSpace.FS1,
+  color: AlphaColors.Black30,
+  textTransform: 'uppercase'
+})
+
+const Header = styled.h3({
+  ...FontSpace.FS2,
+  fontWeight: 700,
+  color: Color.PRIMARY
+})
+
+const NavWrapper = styled.div({
+  display: 'flex',
+  alignItems: 'center',
+  padding: Spacing.S4,
+  borderBottom: `1px solid ${ AlphaColors.Black10 }`
+})
+
+const BackNavLabel = styled.h1({
+  color: AlphaColors.Black30,
+  fontWeight: 700,
+  textTransform: 'uppercase',
+  ...FontSpace.FS1,
+})
+
+const generateSidebarItems = ({
   selectedSidebarItem,
-  url
-) => ({ label, link }) => {
+  url,
+}) => ({ label, link }) => {
   const isSelected = selectedSidebarItem === link
   const option = { label }
 
@@ -35,25 +73,34 @@ const PayerProjectSidebar = ({
   sidebarConfig,
   match,
   location,
+  projectName
 }) => {
   const { url } = match
   const { pathname } = location
   const selectedSidebarItem = pathname.split('/').pop()
 
-  const { data, loading } = useQuery(
-    GET_SINGLE_PAYER_PROJECT,
-    { variables: { projectId: match.params.projectId }}
-  )
-
-  const payerProjectName = loading
-    ? <Spinner />
-    : data.singlePayerProject.name
-
   return (
-    <Sidebar sidebarStyle={{ borderRight: `1px solid ${ Color.LIGHT_GRAY_1 }`}}>
-      <h3>{ payerProjectName }</h3>
-      { sidebarConfig.map(generateSidebarItems(selectedSidebarItem, url)) }
-    </Sidebar>
+    <SidebarWrapper>
+      <NavLink to="/payer-projects">
+        <NavWrapper>
+          <Icon
+            iconName="arrow-drop-left"
+            width={16} color1={AlphaColors.Black10}
+            style={{ marginRight: Spacing.S2 }}
+          />
+          <BackNavLabel>
+            All Payer Projects
+          </BackNavLabel>
+        </NavWrapper>
+      </NavLink>
+      <HeaderWrapper>
+          <HeaderLabel>Payer Project</HeaderLabel>
+          <Header>{ projectName }</Header>
+        </HeaderWrapper>
+      <Sidebar>
+        { sidebarConfig.map(generateSidebarItems({ selectedSidebarItem, url })) }
+      </Sidebar>
+    </SidebarWrapper>
   )
 }
 

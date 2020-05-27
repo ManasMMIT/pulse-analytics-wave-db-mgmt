@@ -4,17 +4,26 @@ import PropTypes from 'prop-types'
 import { useMutation } from '@apollo/react-hooks'
 import styled from '@emotion/styled'
 import Alert from '@material-ui/lab/Alert'
-
+import {
+  MuiPickersUtilsProvider,
+  KeyboardDatePicker,
+} from '@material-ui/pickers'
+import DateFnsUtils from '@date-io/date-fns'
+import { createMuiTheme } from "@material-ui/core"
+import { ThemeProvider } from "@material-ui/styles"
 import { IMPORT_WORKBOOK } from 'frontend/api/mutations'
 
 import Button from 'frontend/components/Button'
 import FieldLabel from 'frontend/components/FieldLabel'
 import Spinner from 'frontend/components/Spinner'
+import Icon from 'frontend/components/Icon'
+import Title from 'frontend/components/Title'
 
 import Spacing from 'frontend/utils/spacing'
-import FontSpace from 'frontend/utils/fontspace'
 import Color from 'frontend/utils/color'
 import alertStatuses from 'frontend/utils/alertStatuses'
+
+import './importSection.css'
 
 const { ERROR, INFO, SUCCESS } = alertStatuses
 
@@ -27,13 +36,8 @@ const ImportSectionWrapper = styled.div({
   borderBottom: `1px solid ${ Color.LIGHT_GRAY_1 }`,
 })
 
-const Header = styled.h1({
-  ...FontSpace.FS4
-})
-
-// TODO: Replace Input with input component
 const InputWrapper = styled.div({
-  margin: `${ Spacing.S7 } 0px`,
+  margin: `${ Spacing.S3 } 0px`,
 })
 
 const LoadingWrapper = styled.div({
@@ -41,6 +45,12 @@ const LoadingWrapper = styled.div({
   justifyContent: 'center',
   alignItems: 'center',
 })
+
+const importBtnStyle = {
+  width: 'fit-content',
+  marginBottom: Spacing.S7,
+  marginTop: Spacing.S3
+}
 
 const alertMessageMap = {
   success: 'Import Successful',
@@ -61,13 +71,30 @@ const VALID_SHEETS = {
   'Policy Links': true,
 }
 
+const datePickerTheme = createMuiTheme({
+  palette: {
+    primary: {
+      main: Color.PRIMARY,
+    }
+  },
+  overrides: {
+    MuiFormControl: {
+      root: {
+        width: '100%',
+      }
+    }
+  }
+})
+
 const ImportSection = ({
   projectId,
+  projectName,
   setValidationErrorsAndWarnings,
 }) => {
   const fileInputRef = useRef(null)
 
   const [workbook, setWorkbook] = useState(null)
+  const [workbookName, setWorkbookName] = useState(null)
   const [isWorkbookUploaded, setIsWorkbookUploaded] = useState(false)
   const [sheetNames, setSheetNames] = useState([])
   const [timestamp, setTimestamp] = useState(null)
@@ -95,6 +122,7 @@ const ImportSection = ({
     setIsWorkbookUploaded(false)
     const file = fileInputRef.current.files[0]
     const reader = new FileReader()
+    setWorkbookName(file.name)
 
     reader.onload = e => {
       const data = new Uint8Array(e.target.result)
@@ -117,8 +145,8 @@ const ImportSection = ({
     reader.readAsArrayBuffer(file)
   }
 
-  const handleDateSelection = (e) => {
-    setTimestamp(e.target.value)
+  const handleDateSelection = (date) => {
+    setTimestamp(date)
   }
 
   const handleSubmit = () => {
@@ -152,10 +180,19 @@ const ImportSection = ({
 
   return (
     <ImportSectionWrapper>
-      <Header>Import Data</Header>
+      <Title
+        titleStyle={{ paddingLeft: 0, paddingTop: 0 }}
+        title={'Import Data'}
+        titleModifiers={[projectName]}
+        size={'FS3'}
+      />
       <InputWrapper>
-        <FieldLabel>Pick an Excel File</FieldLabel>
+        <FieldLabel>Select File</FieldLabel>
+        <label htmlFor="file-upload" className="custom-file-upload">
+          { isWorkbookUploaded ? workbookName : 'Choose a File' }
+        </label>
         <input
+          id="file-upload"
           ref={fileInputRef}
           type="file"
           multiple
@@ -164,15 +201,27 @@ const ImportSection = ({
       </InputWrapper>
       <InputWrapper>
         <FieldLabel>Select Timestamp</FieldLabel>
-        <input
-          type="date"
-          id="select-timestamp"
-          name="select-timestamp"
-          onChange={handleDateSelection}
-        />
+        <ThemeProvider theme={datePickerTheme}>
+          <MuiPickersUtilsProvider utils={DateFnsUtils}>
+            <KeyboardDatePicker
+              disableToolbar
+              variant="inline"
+              format="MM/dd/yyyy"
+              id="date-picker-inline"
+              label="MM/dd/yyyy"
+              style={{ borderBottom: 'none' }}
+              value={timestamp}
+              onChange={handleDateSelection}
+              KeyboardButtonProps={{
+                'aria-label': 'change date',
+              }}
+              keyboardIcon={<Icon iconName="arrow-drop-down"/>}
+            />
+          </MuiPickersUtilsProvider>
+        </ThemeProvider>
       </InputWrapper>
       <Button
-        buttonStyle={{ width: 'fit-content', marginBottom: Spacing.S7 }}
+        buttonStyle={importBtnStyle}
         hoverStyle={buttonHoverStyle}
         onClick={handleSubmit}
       >

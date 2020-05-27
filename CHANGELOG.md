@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `Phoenix`: Built default landing page feature for roles and/or users with backend cascade updates to pulse-dev.users.sitemaps
 - `Orion`: Business Object Modals Read, Create, and Update for Modals, Tabs, Sections, and Fields
 - `Orion`: BOM Schema switched to live data
+- `Payer Import Tool`: Installed `@date-io/date-fns` and `@material-ui/pickers` for Calendar and timestamp input components.
 
 ## [2.5.0] - Started: 5-11-20
 

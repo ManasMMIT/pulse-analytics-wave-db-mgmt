@@ -1,0 +1,19 @@
+input[type="file"] {
+  display: none;
+}
+
+.custom-file-upload:hover {
+  cursor: pointer;
+  background-color: rgba(10,46,77, 0.08);
+}
+
+.custom-file-upload {
+  background-color: rgba(10,46,77,0.05);
+  display: inline-block;
+  font-size: 12px;
+  line-height: 22px;
+  width: 100%;
+  border-radius: 4px;
+  padding: 4px 12px;
+  margin: 8px 0px;
+}
