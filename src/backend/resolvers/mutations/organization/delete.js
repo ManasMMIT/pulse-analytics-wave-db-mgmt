@@ -15,7 +15,7 @@ const deleteOrganization = async (
   let deletedOrg
 
   await session.withTransaction(async () => {
-    // STEP 0: Delete all org-treatmentPlans connections and trash historical docs
+    // STEP 0: Delete all affiliated org-treatmentPlans and trash historical docs
     await deleteTreatmentPlanConnectionsAndHistory({
       db: pulseCoreDb,
       session,
@@ -33,9 +33,6 @@ const deleteOrganization = async (
     deletedOrg = value
 
     // STEP 2: Delete the org across all teams' resources' accounts
-    // ! Note: After this deletion, we still have to push dev to prod 
-    // ! (thereby dropping and replacing permissions) to actually 
-    // ! disable the deleted permissions on the live app
     await coreRoles.updateMany(
       {
         'resources.accounts._id': _id,
@@ -48,21 +45,16 @@ const deleteOrganization = async (
       { session },
     )
 
-    const connectionIds = (deletedOrg.connections || [])
-      .map(({ _id }) => _id)
-
-    // ! STEP 3: TO DEPRECATE: Remove the org's connections' twins
-    await pulseCoreDb
-      .collection('organizations')
+    // STEP 3: Delete the org across all pulse-dev.users.nodes.resources
+    await pulseDevDb
+      .collection('users.nodes.resources')
       .updateMany(
         {
-          'connections._id': { $in: connectionIds },
+          'resources.accounts._id': _id,
         },
         {
           $pull: {
-            connections: {
-              _id: { $in: connectionIds }
-            },
+            'resources.$[].accounts': { _id }
           }
         },
         { session },

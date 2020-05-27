@@ -5,10 +5,35 @@ module.exports = async ({
   session,
   organizationId,
 }) => {
-  // 0. safety first!
   organizationId = new ObjectId(organizationId)
 
-  // 1. delete all organization-treatmentPlan connections
+  // STEP 1: find all affiliated `organizations.treatmentPlans` docs 
+  const orgTps = await db
+    .collection('organizations.treatmentPlans')
+    .find(
+      {
+        organizationId,
+      },
+      { session },
+    ).toArray()
+
+  const orgTpIds = orgTps.map(({ _id }) => _id)
+
+  // STEP 2: Delete any affiliated PTPs from the tdgProjects collection
+  await db
+    .collection('tdgProjects')
+    .updateMany(
+      {},
+      {
+        $pull: {
+          orgTpIds: { $in: orgTpIds },
+          extraOrgTpIds: { $in: orgTpIds },
+        }
+      },
+      { session }
+    )
+
+  // STEP 3: Delete affiliated `organizations.treatmentPlans` docs 
   await db
     .collection('organizations.treatmentPlans')
     .deleteMany(
@@ -16,7 +41,7 @@ module.exports = async ({
       { session },
     )
 
-  // 2. find all historical documents for organization in history and enrich with data
+  // STEP 4: Find historical docs for organization in history and enrich with data
   const enrichedTrashDocs = await db
     .collection('organizations.treatmentPlans.history')
     .aggregate(getEnrichOrgTpHistoryTrashPipeline(organizationId), { session })
@@ -24,7 +49,7 @@ module.exports = async ({
 
   const trashDocsToInsert = enrichedTrashDocs.map(({ _id, ...doc }) => doc)
 
-  // 3. insert trash docs only if there are any
+  // STEP 5: Insert trash docs only if there are any
   if (trashDocsToInsert.length) {
     await db
       .collection('trash.organizations.treatmentPlans.history')
@@ -36,10 +61,8 @@ module.exports = async ({
       .deleteMany({ organizationId }, { session })
   }
 
-
   return enrichedTrashDocs
 }
-
 
 const getEnrichOrgTpHistoryTrashPipeline = _id => [
   {
