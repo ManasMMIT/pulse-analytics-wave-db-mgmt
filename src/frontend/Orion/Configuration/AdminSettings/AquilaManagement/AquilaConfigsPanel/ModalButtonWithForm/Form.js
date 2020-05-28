@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import Select from 'react-select'
 import { useMutation, useQuery } from '@apollo/react-hooks'
-import _ from 'lodash'
 
 import {
   FieldContainer,
@@ -13,8 +12,7 @@ import {
 
 import {
   GET_BUSINESS_OBJECTS,
-  GET_BOM_CONFIGS,
-  GET_BOM_SCHEMA,
+  GET_AQUILA_CONFIGS,
 } from '../../../../../../api/queries'
 
 const Form = ({
@@ -24,30 +22,23 @@ const Form = ({
   closeModal,
   mutationVars,
 }) => {
-  const [stagedBomLabel, setBomLabel] = useState(data.label)
-  
-  // Make this null on mount because even if this is the update form,
-  // we don't know the bo name needed in the react-select label 
-  // 'till after bo is fetched; another reason to not store react-select's
-  // formatting in React local state
-  const [stagedBusinessObj, setStagedBusinessObj] = useState(null) 
+  const [stagedLabel, setLabel] = useState(data.label)
+  const [stagedBusinessObjId, setStagedBusinessObjId] = useState(data.boId)
 
-  const boId = (stagedBusinessObj || {}).value
-  
   const [saveBom] = useMutation(mutationDoc, {
     variables: {
-      input: { ...mutationVars, label: stagedBomLabel, boId }
+      input: { ...mutationVars, label: stagedLabel, boId: stagedBusinessObjId }
     },
-    refetchQueries: [{ query: GET_BOM_CONFIGS }, { query: GET_BOM_SCHEMA, variables: { boId } }],
+    refetchQueries: [{ query: GET_AQUILA_CONFIGS }],
+    awaitRefetchQueries: true,
     onCompleted: result => {
       const targetDataKey = Object.keys(result)[0]
-      const newOrUpdatedBomConfig = result[targetDataKey]
+      const newAquilaConfig = result[targetDataKey]
 
       closeModal()
-      afterMutationHook(newOrUpdatedBomConfig)
+      afterMutationHook(newAquilaConfig)
     },
-    awaitRefetchQueries: true,
-    onError: e => alert(e),
+    onError: alert,
   })
 
   const { data: businessObjData, loading } = useQuery(GET_BUSINESS_OBJECTS)
@@ -60,11 +51,10 @@ const Form = ({
 
       if (data.boId) {
         const underlyingBo = businessObjects.find(({ _id }) => _id === data.boId)
-
         stagedBo = { label: underlyingBo.name, value: underlyingBo._id }
       }
 
-      setStagedBusinessObj(stagedBo)
+      setStagedBusinessObjId(stagedBo.value)
     }
   }, [businessObjData, loading])
 
@@ -73,7 +63,7 @@ const Form = ({
   const handleChange = e => {
     e.persist()
     const value = e.currentTarget && e.currentTarget.value
-    setBomLabel(value)
+    setLabel(value)
   }
 
   const boOptions = businessObjData.businessObjects
@@ -88,7 +78,7 @@ const Form = ({
         <FormLabel>Label</FormLabel>
         <StyledInput
           type="text"
-          value={stagedBomLabel}
+          value={stagedLabel}
           onChange={handleChange}
         />
       </FieldContainer>
@@ -97,9 +87,8 @@ const Form = ({
         <Select
           isDisabled={data.boId} // Can only specify underlying bo on create
           styles={{ container: base => ({ ...base, flex: 1 }) }}
-          value={stagedBusinessObj}
-          defaultValue={boOptions[0]}
-          onChange={setStagedBusinessObj}
+          value={boOptions.find(({ value }) => value === stagedBusinessObjId)}
+          onChange={({ value }) => setStagedBusinessObjId(value)}
           options={boOptions}
         />
       </FieldContainer>

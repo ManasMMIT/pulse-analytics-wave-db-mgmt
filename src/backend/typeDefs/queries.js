@@ -40,6 +40,7 @@ const queries = gql`
     bomConfigs: [BomConfig]
     bomSchema(boId: ID): JSON
     businessObjects: [BusinessObject]
+    aquilaConfigs: [AquilaConfig]!
 
     singlePayerProject(projectId: String): SinglePayerProject
     payerProjectsList: [PayerProjectsList]
@@ -300,6 +301,20 @@ const queries = gql`
     _id: ID!
     key: String
     type: String
+  }
+
+  type AquilaConfig {
+    _id: ID!
+    boId: ID!
+    label: String!
+    fields: [AquilaConfigField]!
+  }
+
+  type AquilaConfigField {
+    _id: ID!
+    boFieldId: ID!
+    label: String!
+    inputProps: JSON # highly variable structure
   }
 
   type SinglePayerProject {

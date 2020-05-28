@@ -129,6 +129,7 @@ export const DELETE_BOM_CONFIG = gql`
     deleteBusinessObjectModal(input: $input) {
       _id
       label
+      boId
       tags {
         _id
         label
@@ -173,6 +174,7 @@ export const CREATE_BOM_CONFIG = gql`
     createBusinessObjectModal(input: $input) {
       _id
       label
+      boId
       tags {
         _id
         label
@@ -197,6 +199,7 @@ export const UPDATE_BOM_CONFIG = gql`
     updateBusinessObjectModal(input: $input) {
       _id
       label
+      boId
       tags {
         _id
         label

@@ -20,6 +20,7 @@ const payerProjects = require('./payerProject')
 
 const businessObject = require('./businessObject')
 const businessObjectModal = require('./businessObjectModal')
+const aquilaConfig = require('./aquilaConfig')
 
 const book = require('./book')
 const coverage = require('./coverage')
@@ -143,6 +144,13 @@ const mutationType = gql`
     deleteBusinessObjectModalField(input: DeleteBusinessObjectModalFieldInput!): BomField!
     updateBusinessObjectModalField(input: UpdateBusinessObjectModalFieldInput!): BomField!
 
+    createAquilaConfig(input: CreateAquilaConfigInput!): AquilaConfig!
+    createAquilaConfigField(input: CreateAquilaConfigFieldInput!): AquilaConfigField!
+    updateAquilaConfig(input: UpdateAquilaConfigInput!): AquilaConfig!
+    updateAquilaConfigField(input: UpdateAquilaConfigFieldInput!): AquilaConfigField!
+    deleteAquilaConfig(input: DeleteAquilaConfigInput!): AquilaConfig!
+    deleteAquilaConfigField(input: DeleteAquilaConfigFieldInput!): AquilaConfigField!
+
     deleteBook(input: DeleteBookInput!): DeleteBookPayload
     createBook(input: CreateBookInput!): CreateBookPayload
     updateBook(input: UpdateBookInput!): UpdateBookPayload
@@ -184,6 +192,7 @@ module.exports = [
 
   ...businessObject,
   ...businessObjectModal,
+  ...aquilaConfig,
 
   ...book,
   ...coverage,

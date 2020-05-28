@@ -73,6 +73,22 @@ export const GET_BOM_CONFIGS = gql`
   }
 `
 
+export const GET_AQUILA_CONFIGS = gql`
+  query getAquilaConfigs {
+    aquilaConfigs {
+      _id
+      boId
+      label
+      fields {
+        _id
+        boFieldId
+        label
+        inputProps
+      }
+    }
+  }
+`
+
 export const GET_BUSINESS_OBJECTS = gql`
   query getBusinessObjects {
     businessObjects {
