@@ -20,7 +20,19 @@ const Input = ({ name, type, value, onChange }) => {
   const onEventChange = event => {
     event.persist()
     const { type, name, value, checked } = event.target
-    const stateVal = type === 'checkbox' ? checked : value
+
+    let stateVal
+    switch (type) {
+      case 'checkbox':
+        stateVal = checked
+        break;
+      case 'number':
+        stateVal = parseInt(value)
+        break;
+      default:
+        stateVal = value
+        break;
+    }
 
     onChange({ name, value: stateVal })
   }

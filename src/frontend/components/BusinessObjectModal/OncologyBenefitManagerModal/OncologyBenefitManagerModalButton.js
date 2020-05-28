@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 
-import PathwaysModal from './PathwaysModal'
+import OncologyBenefitManagerModal from './OncologyBenefitManagerModal'
 
-const PathwaysModalButton = ({
+const OncologyBenefitManagerModalButton = ({
   children,
   entityId,
   refetchQueries,
@@ -14,7 +14,7 @@ const PathwaysModalButton = ({
     <>
       <button onClick={() => setModal(!showModal)}>{children}</button>
       {showModal && (
-        <PathwaysModal
+        <OncologyBenefitManagerModal
           entityId={entityId}
           closeModal={() => setModal(false)}
           refetchQueries={refetchQueries}
@@ -25,4 +25,4 @@ const PathwaysModalButton = ({
   )
 }
 
-export default PathwaysModalButton
+export default OncologyBenefitManagerModalButton

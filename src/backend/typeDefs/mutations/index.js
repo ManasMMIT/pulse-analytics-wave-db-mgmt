@@ -82,6 +82,9 @@ const mutationType = gql`
     deleteApmOrganization(input: DeleteApmOrganizationInput!): DeleteApmOrganizationPayload
     updateApmOrganization(input: UpdateApmOrganizationInput!): UpdateApmOrganizationPayload
 
+    createObmOrganization(input: CreateObmOrganizationInput!): CreateObmOrganizationPayload!
+    updateObmOrganization(input: UpdateObmOrganizationInput!): UpdateObmOrganizationPayload!
+
     upsertOrganizationMeta(input: UpsertOrganizationMetaInput!): [UpsertOrganizationMetaPayload]
 
     createQualityOfAccessScore(input: CreateQualityOfAccessScoreInput!): CreateQualityOfAccessScorePayload

@@ -581,6 +581,20 @@ export const GET_APM_ORGANIZATIONS = gql`
   }
 `
 
+export const GET_OBM_ORGANIZATIONS = gql`
+  query getObmOrganizations {
+    obmOrganizations {
+      _id
+      slug
+      organization
+      organizationTiny
+      type
+      start
+      businessModel
+    }
+  }
+`
+
 export const GET_RAW_COLLECTION_NAMES = gql`
   query getRawCollectionNames {
     collections(type: "raw")

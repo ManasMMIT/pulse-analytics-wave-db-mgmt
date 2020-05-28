@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
 import _ from 'lodash'
 import styled from '@emotion/styled'
 
+// ! Don't use table until filters can be loaded from pql
+// import QueryToolTable from './QueryToolTable'
 import useAquila from '../../../hooks/useAquila'
 
 import Spacing from '../../../utils/spacing'
-import FontSpace from '../../../utils/fontspace'
 import Color from '../../../utils/color'
 
 import FieldsSectionCard from '../../../components/FieldsSectionCard'
@@ -35,12 +35,6 @@ const generatePanel = filterOption => {
     />
   )
 }
-
-const Wrapper = styled.div({
-  width: '100%',
-  padding: Spacing.S4,
-  background: Color.LIGHT_BLUE_GRAY_1,
-})
 
 const FiltersContainer = styled.div({
   display: 'flex',
@@ -82,12 +76,10 @@ const PlacardView = () => {
 
   const optionsLoaded = !_.isEmpty(placardOptions)
 
+  // const businessObjectName = pql.match(/[\w\s]+={.*}/) && pql.match(/[\w\s]+=/)[0].replace('=', '')
+
   return (
-    <Wrapper>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <h1 style={{ padding: Spacing.S4, ...FontSpace.FS4 }}>Query Tool</h1>
-        <Link style={{ fontWeight: 700, padding: 4, background: 'blue', color: 'white', borderRadius: 4 }} to="/orion/query/tool/pql">PQL View</Link>
-      </div>
+    <>
       <Button
         iconName="add"
         iconPosition="left"
@@ -101,7 +93,13 @@ const PlacardView = () => {
       <FiltersContainer>
         { optionsLoaded && generatePanel(placardOptions) }
       </FiltersContainer>
-    </Wrapper>
+      {/* <QueryToolTable
+        data={results}
+        loading={loading}
+        businessObjectName={businessObjectName}
+        afterMutationHook={() => submitPql(pql)}
+      /> */}
+    </>
   )
 }
 

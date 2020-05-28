@@ -13,7 +13,7 @@ const DialogOverlay = styled.div({
   top: 0,
   left: 0,
   background: AlphaColors.Black70,
-  zIndex: ZIndexes.Modal,
+  zIndex: ZIndexes.MODAL,
   padding: Spacing.S7,
 })
 

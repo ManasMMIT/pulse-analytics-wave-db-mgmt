@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - `Orion`: Built out Phase 1 of Query Tool (Aquila) Management CRUD; limiting what fields are filterable in query tool placard field; no support yet for custom display text or default columns
+- `Orion`: Query Tool now supports business object modals, limited to create and update, and not fully dynamic yet.
 
 ## [2.6.0] - Started: 5-15-20
 
