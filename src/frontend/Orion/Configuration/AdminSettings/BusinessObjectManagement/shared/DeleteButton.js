@@ -11,7 +11,12 @@ import Spinner from 'frontend/components/Spinner'
 
 import { Colors, Spacing } from '../../../../../utils/pulseStyles'
 
-import { GET_BUSINESS_OBJECTS, GET_WORKBOOKS, GET_BOM_CONFIGS } from '../../../../../api/queries'
+import { 
+  GET_BUSINESS_OBJECTS, 
+  GET_WORKBOOKS, 
+  GET_BOM_CONFIGS,
+  GET_AQUILA_CONFIGS,
+} from '../../../../../api/queries'
 
 const trashCan = <FontAwesomeIcon size="lg" icon={faTrashAlt} />
 
@@ -62,6 +67,7 @@ const DeleteButton = props => {
         { query: GET_BUSINESS_OBJECTS },
         { query: GET_WORKBOOKS },
         { query: GET_BOM_CONFIGS },
+        { query: GET_AQUILA_CONFIGS },
         ...extraRefetchQueries,
       ],
     }
