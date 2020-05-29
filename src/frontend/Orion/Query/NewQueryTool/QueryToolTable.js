@@ -54,7 +54,7 @@ const QueryToolTable = ({
   businessObjectName,
   afterMutationHook,
 }) => {
-  if(_.isEmpty(data) || !data[0]) return null
+  if (_.isEmpty(data) || !data[0]) return null
 
   const { _id, ...columnsSample } = data[0]
   const columns = Object.keys(columnsSample).slice(0, MAX_COL_LENGTH)
@@ -83,16 +83,16 @@ const QueryToolTable = ({
             loading
               ? null
               : (
-                data.map(row => {
+                data.map((row, rowIdx) => {
                   const rowStyle = getRowStyle(columnWidth)
 
                   const cells = columns
-                    .map((columnKey, idx) => {
+                    .map((columnKey, colIdx) => {
                       let extraStyles = {}
 
                       // ! react errors loudly when passed improper children
                       let cell = coerceToString(row[columnKey])
-                      if (idx === 0) {
+                      if (colIdx === 0) {
                         extraStyles = { marginLeft: 24 }
 
                         cell = (
@@ -104,19 +104,19 @@ const QueryToolTable = ({
                             {cell}
                           </UpdateModalButton>
                         )
-                      } else if (idx === columns.length - 1) {
+                      } else if (colIdx === columns.length - 1) {
                         extraStyles = { marginRight: 24 }
                       }
 
                       return (
-                        <span style={{ ...rowStyle, ...extraStyles }}>
+                        <span key={`${rowIdx}-${colIdx}`} style={{ ...rowStyle, ...extraStyles }}>
                           {cell}
                         </span>
                       )
                     })
 
                   return (
-                    <div key={_id} style={{ display: 'flex' }}>
+                    <div key={row._id} style={{ display: 'flex' }}>
                       {cells}
                     </div>
                   )

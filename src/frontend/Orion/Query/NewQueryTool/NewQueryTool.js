@@ -2,6 +2,7 @@ import React from 'react'
 import { useLocation, Link } from 'react-router-dom'
 import styled from '@emotion/styled'
 import { Switch, Route, Redirect } from 'react-router-dom'
+import queryString from 'query-string'
 
 import FontSpace from '../../../utils/fontspace'
 import Color from '../../../utils/color'
@@ -27,13 +28,23 @@ const ViewButton = styled(Link)({
 const NewQueryTool = () => {
   const { pathname, search } = useLocation()
 
-  const viewButtonLink = pathname.includes('placard')
+  const isPlacardView = pathname.includes('placard')
+
+  const viewButtonLink = isPlacardView
     ? '/orion/query/tool/pql'
     : '/orion/query/tool/placard'
 
-  const viewButtonLabel = pathname.includes('placard')
+  const viewButtonLabel = isPlacardView
     ? 'PQL View'
     : 'Back'
+
+  const { pql } = queryString.parse(search)
+
+  let searchValue = search
+  if (pql && !isPlacardView) {
+    const businessObjectName = pql.match(/[\w\s]+={.*}/) && pql.match(/[\w\s]+=/)[0].replace('=', '')
+    searchValue = queryString.stringify({ pql: businessObjectName ? `${businessObjectName}={}` : null })
+  }
 
   return (
     <Wrapper>
@@ -41,7 +52,7 @@ const NewQueryTool = () => {
         <h1 style={{ padding: Spacing.S4, ...FontSpace.FS4 }}>Query Tool</h1>
         <ViewButton to={{
           pathname: viewButtonLink,
-          search,
+          search: searchValue,
         }}>
           {viewButtonLabel}
         </ViewButton>

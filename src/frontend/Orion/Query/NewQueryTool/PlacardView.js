@@ -1,40 +1,19 @@
 import React, { useState, useEffect } from 'react'
+import Select from 'react-select'
 import _ from 'lodash'
 import styled from '@emotion/styled'
 
 // ! Don't use table until filters can be loaded from pql
-// import QueryToolTable from './QueryToolTable'
+import QueryToolTable from './QueryToolTable'
 import useAquila from '../../../hooks/useAquila'
+
+import generatePanel from './utils/generatePanel'
 
 import Spacing from '../../../utils/spacing'
 import Color from '../../../utils/color'
 
-import FieldsSectionCard from '../../../components/FieldsSectionCard'
 import Button from '../../../components/Button'
 import Icon from '../../../components/Icon'
-
-const generatePanel = filterOption => {
-  const { name, fields } = filterOption
-
-  const fieldsConfig = fields.map(field => {
-    const { key, label, inputComponent, inputProps } = field
-    return ({
-      key,
-      label,
-      inputComponent,
-      inputProps,
-    })
-  })
-
-  return (
-    <FieldsSectionCard
-      key={`query-tool-${ name }-card`}
-      label={name}
-      fields={fieldsConfig}
-      containerStyle={{ width: '50%' }}
-    />
-  )
-}
 
 const FiltersContainer = styled.div({
   display: 'flex',
@@ -50,9 +29,15 @@ const PlacardView = () => {
     filterConfigOptions,
     setFilterConfigOptions,
   ] = useState([])
+
   const [
     placardOptions,
     setPlacardOptions,
+  ] = useState([])
+
+  const [
+    filtersState,
+    setFiltersState,
   ] = useState([])
 
   const {
@@ -65,18 +50,29 @@ const PlacardView = () => {
   } = useAquila()
 
   useEffect(() => {
-    getPlacardOptions().then(result => {
-      setPlacardOptions(result)
-    })
-
-    getFilterConfigOptions().then(result => {
-      setFilterConfigOptions(result)
-    })
+    getFilterConfigOptions().then(setFilterConfigOptions)
   }, [])
 
-  const optionsLoaded = !_.isEmpty(placardOptions)
+  const businessObjectName = pql.match(/[\w\s]+={.*}/) && pql.match(/[\w\s]+=/)[0].replace('=', '')
 
-  // const businessObjectName = pql.match(/[\w\s]+={.*}/) && pql.match(/[\w\s]+=/)[0].replace('=', '')
+  const options = filterConfigOptions.map(({ boName, boId }) => ({ label: boName, value: boId }))
+
+  let selectedOption = null
+  if (businessObjectName) {
+    selectedOption = options.find(({ label: boName }) => boName === businessObjectName)
+  }
+
+  useEffect(() => {
+    const shouldFetchPlacardOptions = filterConfigOptions.length && selectedOption
+
+    if (shouldFetchPlacardOptions) {
+      getPlacardOptions(selectedOption.value).then(setPlacardOptions)
+    }
+
+    submitPql(pql)
+  }, [pql, filterConfigOptions])
+
+  if (_.isEmpty(filterConfigOptions)) return null
 
   return (
     <>
@@ -84,21 +80,38 @@ const PlacardView = () => {
         iconName="add"
         iconPosition="left"
         iconColor1={Color.WHITE}
+        onClick={() => submitPql(pql)}
       >
         Submit Form
       </Button>
       <Icon
         iconName="check-box"
       />
+
+      <Select
+        value={selectedOption}
+        options={options}
+        onChange={({ label }) => {
+          setFiltersState([])
+          setPql(`${label}={}`)
+        }}
+      />
+
       <FiltersContainer>
-        { optionsLoaded && generatePanel(placardOptions) }
+        {!_.isEmpty(placardOptions) && generatePanel({
+          placardOptions,
+          setFiltersState,
+          filtersState,
+          setPql,
+          businessObjectName,
+        }) }
       </FiltersContainer>
-      {/* <QueryToolTable
+      <QueryToolTable
         data={results}
         loading={loading}
         businessObjectName={businessObjectName}
         afterMutationHook={() => submitPql(pql)}
-      /> */}
+      />
     </>
   )
 }
