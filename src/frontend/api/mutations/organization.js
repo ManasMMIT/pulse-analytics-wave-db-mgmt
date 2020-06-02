@@ -168,3 +168,30 @@ export const UPDATE_APM_ORGANIZATION = gql`
     }
   }
 `
+
+
+export const CREATE_OBM_ORGANIZATION = gql`
+  mutation CreateObmOrganization($input: CreateObmOrganizationInput!) {
+    createObmOrganization(input: $input) {
+      _id
+      slug
+      organization
+      organizationTiny
+      start
+      businessModel
+    }
+  }
+`
+
+export const UPDATE_OBM_ORGANIZATION = gql`
+  mutation UpdateObmOrganization($input: UpdateObmOrganizationInput!) {
+    updateObmOrganization(input: $input) {
+      _id
+      slug
+      organization
+      organizationTiny
+      start
+      businessModel
+    }
+  }
+`

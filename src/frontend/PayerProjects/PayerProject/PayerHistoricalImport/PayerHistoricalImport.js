@@ -20,6 +20,8 @@ const SectionWrapper = styled.div({
 
 const PayerHistoricalImport = ({
   match,
+  location,
+  projectName
 }) => {
   const { projectId } = match.params
   const [validationErrors, setValidationErrorsAndWarnings] = useState('')
@@ -29,6 +31,7 @@ const PayerHistoricalImport = ({
       <SectionWrapper style={{ maxHeight: 500 }}>
         <ImportSection
           projectId={projectId}
+          projectName={projectName}
           setValidationErrorsAndWarnings={setValidationErrorsAndWarnings}
         />
         <TimestampSection projectId={projectId} />

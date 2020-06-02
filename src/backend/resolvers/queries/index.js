@@ -27,6 +27,8 @@ const payerProjects = require('./payerProjects')
 
 const cMsOrgPrimarySpecialtyCounts = require('./cMsOrgPrimarySpecialtyCounts')
 
+const aquila = require('./aquila')
+
 module.exports = {
   collections,
   clients,
@@ -54,4 +56,5 @@ module.exports = {
   ...payerProjects,
   regionalTargetingData,
   cMsOrgPrimarySpecialtyCounts,
+  ...aquila,
 }

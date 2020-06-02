@@ -22,6 +22,7 @@ const queries = gql`
     payerOrganizations: [PayerOrganization]
     pathwaysOrganizations: [PathwaysOrganization]
     apmOrganizations: [ApmOrganization]
+    obmOrganizations: [ObmOrganization]
 
     qualityOfAccessScores: [QualityOfAccessScore]
     collections(type: String): [String]
@@ -40,6 +41,11 @@ const queries = gql`
     bomConfigs: [BomConfig]
     bomSchema(boId: ID): JSON
     businessObjects: [BusinessObject]
+
+    aquilaConfigs: [AquilaConfig]!
+    aquilaPqlResults(pql: String!): JSON
+    aquilaBusinessObjects: [AquilaBusinessObject]
+    aquilaBoFilterSettings(boId: ID!): BoFilterSettings
 
     singlePayerProject(projectId: String): SinglePayerProject
     payerProjectsList: [PayerProjectsList]
@@ -183,6 +189,16 @@ const queries = gql`
     connections: JSON
   }
 
+  type ObmOrganization {
+    _id: ID!
+    slug: String!
+    type: String
+    organization: String
+    organizationTiny: String
+    start: Int
+    businessModel: String
+  }
+
   type Connection {
     _id: ID!
     org: JSON # could be various shapes, depending on how much dupe org data we want here
@@ -300,6 +316,41 @@ const queries = gql`
     _id: ID!
     key: String
     type: String
+  }
+
+  type BoFilterSettings {
+    _id: ID!
+    label: String
+    fields: [BoFilterSettingsField]
+  }
+
+  type BoFilterSettingsField {
+    _id: ID
+    boFieldId: ID
+    boFieldKey: String
+    inputProps: JSON # too dynamic to track all props
+    label: String
+  }
+
+  type AquilaBusinessObject {
+    _id: ID!
+    boId: ID!
+    boName: String
+    label: String
+  }
+
+  type AquilaConfig {
+    _id: ID!
+    boId: ID!
+    label: String!
+    fields: [AquilaConfigField]!
+  }
+
+  type AquilaConfigField {
+    _id: ID!
+    boFieldId: ID!
+    label: String!
+    inputProps: JSON # highly variable structure
   }
 
   type SinglePayerProject {

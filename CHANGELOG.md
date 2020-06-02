@@ -12,7 +12,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Fixed** for any bug fixes.
 - **Security** in case of vulnerabilities.
 
-## [Unreleased] - Started: 5-26-20
+## [Unreleased] - Started: 6-2-20
+
+## [2.7.0] - Started: 5-26-20
+
+### Added
+- `Orion`: Built out Phase 1 of Query Tool (Aquila) Management CRUD; limiting what fields are filterable in query tool placard field; no support yet for custom display text or default columns
+- `Orion`: Query Tool now supports business object modals, limited to create and update, and not fully dynamic yet
+- `Orion`: Basic Query Tool Placard View functionality wired in
+
+### Changed
+- `Orion`: Updated org deletion cascade by removing deprecated connections logic, making sure to cascade through to the `accounts` slice in `users.nodes.resources`, delete affiliated PTPs in `tdgProjects`
 
 ## [2.6.0] - Started: 5-15-20
 
@@ -20,6 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `Phoenix`: Built default landing page feature for roles and/or users with backend cascade updates to pulse-dev.users.sitemaps
 - `Orion`: Business Object Modals Read, Create, and Update for Modals, Tabs, Sections, and Fields
 - `Orion`: BOM Schema switched to live data
+- `Payer Import Tool`: Installed `@date-io/date-fns` and `@material-ui/pickers` for Calendar and timestamp input components.
 
 ## [2.5.0] - Started: 5-11-20
 

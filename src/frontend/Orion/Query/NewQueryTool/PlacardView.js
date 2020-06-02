@@ -1,46 +1,26 @@
 import React, { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import Select from 'react-select'
 import _ from 'lodash'
 import styled from '@emotion/styled'
 
+// ! Only for refetchQueries
+import {
+  GET_AQUILA_BO_FILTER_SETTINGS,
+  GET_AQUILA_PQL_RESULTS,
+} from 'frontend/api/queries'
+
+// import usePqlObject from './utils/usePqlObject'
+
+import QueryToolTable from './QueryToolTable'
 import useAquila from '../../../hooks/useAquila'
 
+import generatePanel from './utils/generatePanel'
+
 import Spacing from '../../../utils/spacing'
-import FontSpace from '../../../utils/fontspace'
 import Color from '../../../utils/color'
 
-import FieldsSectionCard from '../../../components/FieldsSectionCard'
 import Button from '../../../components/Button'
 import Icon from '../../../components/Icon'
-
-const generatePanel = filterOption => {
-  const { name, fields } = filterOption
-
-  const fieldsConfig = fields.map(field => {
-    const { key, label, inputComponent, inputProps } = field
-    return ({
-      key,
-      label,
-      inputComponent,
-      inputProps,
-    })
-  })
-
-  return (
-    <FieldsSectionCard
-      key={`query-tool-${ name }-card`}
-      label={name}
-      fields={fieldsConfig}
-      containerStyle={{ width: '50%' }}
-    />
-  )
-}
-
-const Wrapper = styled.div({
-  width: '100%',
-  padding: Spacing.S4,
-  background: Color.LIGHT_BLUE_GRAY_1,
-})
 
 const FiltersContainer = styled.div({
   display: 'flex',
@@ -53,55 +33,95 @@ const FiltersContainer = styled.div({
 
 const PlacardView = () => {
   const [
-    filterConfigOptions,
-    setFilterConfigOptions,
-  ] = useState([])
-  const [
-    placardOptions,
-    setPlacardOptions,
+    filtersState,
+    setFiltersState,
   ] = useState([])
 
   const {
     setPql,
-    data: { pql, results },
-    getFilterConfigOptions,
+    data: {
+      pql,
+      results,
+      filterConfigOptions,
+      placardOptions,
+    },
     getPlacardOptions,
     loading,
     submitPql,
   } = useAquila()
 
+  // const {
+  //   data: configsData,
+  //   loading: zipperLoading,
+  // } = usePqlObject(pql)
+
+  const businessObjectName = pql.match(/[\w\s]+={.*}/) && pql.match(/[\w\s]+=/)[0].replace('=', '')
+
+  const options = filterConfigOptions.map(({ boName, boId }) => ({ label: boName, value: boId }))
+
+  let selectedOption = null
+  if (businessObjectName) {
+    selectedOption = options.find(({ label: boName }) => boName === businessObjectName)
+  }
+
   useEffect(() => {
-    getPlacardOptions().then(result => {
-      setPlacardOptions(result)
-    })
+    const shouldFetchPlacardOptions = filterConfigOptions.length && selectedOption
 
-    getFilterConfigOptions().then(result => {
-      setFilterConfigOptions(result)
-    })
-  }, [])
+    if (shouldFetchPlacardOptions) {
+      getPlacardOptions({
+        variables: {
+          boId: selectedOption.value,
+        }
+      })
+    }
 
-  const optionsLoaded = !_.isEmpty(placardOptions)
+    submitPql(pql)
+  }, [pql, filterConfigOptions])
+
+  if (_.isEmpty(filterConfigOptions)) return null
 
   return (
-    <Wrapper>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <h1 style={{ padding: Spacing.S4, ...FontSpace.FS4 }}>Query Tool</h1>
-        <Link style={{ fontWeight: 700, padding: 4, background: 'blue', color: 'white', borderRadius: 4 }} to="/orion/query/tool/pql">PQL View</Link>
-      </div>
+    <>
       <Button
         iconName="add"
         iconPosition="left"
         iconColor1={Color.WHITE}
+        onClick={() => submitPql(pql)}
       >
         Submit Form
       </Button>
       <Icon
         iconName="check-box"
       />
+
+      <Select
+        value={selectedOption}
+        options={options}
+        onChange={({ label }) => {
+          setFiltersState([])
+          setPql(`${label}={}`)
+        }}
+      />
+
       <FiltersContainer>
-        { optionsLoaded && generatePanel(placardOptions) }
+        {!_.isEmpty(placardOptions) && generatePanel({
+          placardOptions,
+          setFiltersState,
+          filtersState,
+          setPql,
+          businessObjectName,
+        }) }
       </FiltersContainer>
-    </Wrapper>
+      <QueryToolTable
+        data={results}
+        loading={loading}
+        businessObjectName={businessObjectName}
+        refetchQueries={[
+          { query: GET_AQUILA_BO_FILTER_SETTINGS, variables: { boId: (selectedOption || {}).value } },
+          { query: GET_AQUILA_PQL_RESULTS, variables: { pql } },
+        ]}
+      />
+    </>
   )
 }
 

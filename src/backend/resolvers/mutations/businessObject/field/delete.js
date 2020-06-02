@@ -51,7 +51,7 @@ const deleteBusinessObjectField = async (
           {
             $pull: {
               'tags.$[tag].sections.$[section].fields': {
-                _id: fieldId,
+                boFieldId: fieldId,
               }
             }
           },
@@ -64,7 +64,21 @@ const deleteBusinessObjectField = async (
           },
         )
 
-    // Step 3: Pull Field from Business Object
+    // Step 3: Pull Fields from Aquila Configs
+    await pulseCoreDb.collection('businessObjects.aquilaConfigs')
+        .updateMany(
+          { boId: businessObjectId },
+          {
+            $pull: {
+              fields: {
+                boFieldId: fieldId,
+              }
+            }
+          },
+          { session },
+        )
+
+    // Step 4: Pull Field from Business Object
     const { value: { fields: oldFields } } = await pulseCoreDb
       .collection('businessObjects')
       .findOneAndUpdate(

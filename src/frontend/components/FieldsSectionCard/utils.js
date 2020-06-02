@@ -14,7 +14,6 @@ const INPUT_MAP = {
   TimeInput: Input,
   CheckboxInput: Input,
 }
-
 const generateCardInput = ({ field, fieldLabelStyle, fieldStyle }) => {
   const { key, label, inputComponent, inputProps } = field
 

@@ -20,6 +20,7 @@ const payerProjectResolvers = require('./payerProject')
 
 const businessObjectResolvers = require('./businessObject')
 const businessObjectModalResolvers = require('./businessObjectModal')
+const aquilaConfigResolvers = require('./aquilaConfig')
 
 const bookResolvers = require('./book')
 const coverageResolvers = require('./coverage')
@@ -52,6 +53,7 @@ module.exports = {
 
   ...businessObjectResolvers,
   ...businessObjectModalResolvers,
+  ...aquilaConfigResolvers,
 
   ...bookResolvers,
   ...coverageResolvers,

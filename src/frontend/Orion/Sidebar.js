@@ -141,6 +141,10 @@ const PRODUCT_INDICATION_LINKS_CONFIG = [
 
 const ADMIN_SETTINGS_LINKS_CONFIG = [
   {
+    label: 'Sheet Management',
+    link: '/orion/configuration/admin-settings/sheet-management',
+  },
+  {
     label: 'Business Object Management',
     link: '/orion/configuration/admin-settings/bo-management',
   },
@@ -149,8 +153,8 @@ const ADMIN_SETTINGS_LINKS_CONFIG = [
     link: '/orion/configuration/admin-settings/bom-management',
   },
   {
-    label: 'Sheet Management',
-    link: '/orion/configuration/admin-settings/sheet-management',
+    label: 'Query Tool Management',
+    link: '/orion/configuration/admin-settings/aquila-management',
   },
   { label: 'Add Source Node', link: '/orion/configuration/admin-settings/add-source-node' },
   { label: 'Edit Role Node', link: '/orion/configuration/admin-settings/edit-role-node' },

@@ -3,6 +3,7 @@ import { Switch, Route, Redirect } from 'react-router-dom'
 
 import BusinessObjectManagement from './BusinessObjectManagement'
 import BomManagement from './BomManagement'
+import AquilaManagement from './AquilaManagement'
 import SheetManagement from './SheetManagement'
 import AddSourceNode from './AddSourceNode'
 import EditRoleNodeView from './EditRoleNodeView'
@@ -20,6 +21,10 @@ const AdminSettings = () => (
     <Route
       path={'/orion/configuration/admin-settings/sheet-management'}
       component={SheetManagement}
+    />
+    <Route
+      path={'/orion/configuration/admin-settings/aquila-management'}
+      component={AquilaManagement}
     />
     <Route
       path={'/orion/configuration/admin-settings/add-source-node'}

@@ -73,6 +73,55 @@ export const GET_BOM_CONFIGS = gql`
   }
 `
 
+export const GET_AQUILA_CONFIGS = gql`
+  query getAquilaConfigs {
+    aquilaConfigs {
+      _id
+      boId
+      label
+      fields {
+        _id
+        boFieldId
+        label
+        inputProps
+      }
+    }
+  }
+`
+
+export const GET_AQUILA_BO_FILTER_SETTINGS = gql`
+  query getAquilaBoFilterSettings($boId: ID!) {
+    aquilaBoFilterSettings(boId: $boId) {
+      _id
+      label
+      fields {
+        _id
+        boFieldId
+        boFieldKey
+        inputProps
+        label
+      }
+    }
+  }
+`
+
+export const GET_AQUILA_PQL_RESULTS = gql`
+  query getAquilaPqlResults($pql: String!) {
+    aquilaPqlResults(pql: $pql)
+  }
+`
+
+export const GET_AQUILA_BUSINESS_OBJECTS = gql`
+  query getAquilaBusinessObjects {
+    aquilaBusinessObjects {
+      _id
+      boId
+      label
+      boName
+    }
+  }
+`
+
 export const GET_BUSINESS_OBJECTS = gql`
   query getBusinessObjects {
     businessObjects {
@@ -561,6 +610,20 @@ export const GET_APM_ORGANIZATIONS = gql`
       organizationTiny
       type
       connections
+    }
+  }
+`
+
+export const GET_OBM_ORGANIZATIONS = gql`
+  query getObmOrganizations {
+    obmOrganizations {
+      _id
+      slug
+      organization
+      organizationTiny
+      type
+      start
+      businessModel
     }
   }
 `
