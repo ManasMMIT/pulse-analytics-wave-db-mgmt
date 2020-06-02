@@ -145,7 +145,7 @@ const BusinessObjectModal = ({
 
   if (loading) return null
 
-  const modalTitle = `Edit ${headerText}`
+  const modalTitle = `${entityId ? 'Edit' : 'Create'} ${headerText}`
   const modalTitleModifier = [entity.organization]
   console.log(inputFields)
 

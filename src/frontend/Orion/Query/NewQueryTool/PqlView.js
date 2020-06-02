@@ -1,5 +1,6 @@
 import React from 'react'
 
+import { GET_AQUILA_PQL_RESULTS } from 'frontend/api/queries'
 import useAquila from '../../../hooks/useAquila'
 import { Colors } from '../../../utils/pulseStyles'
 
@@ -41,7 +42,7 @@ const PqlView = () => {
         data={results}
         loading={loading}
         businessObjectName={businessObjectName}
-        afterMutationHook={() => submitPql(pql)}
+        refetchQueries={[{ query: GET_AQUILA_PQL_RESULTS, variables: { pql } }]}
       />
     </>
   )

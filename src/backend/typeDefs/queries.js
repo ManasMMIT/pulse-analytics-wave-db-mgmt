@@ -41,7 +41,11 @@ const queries = gql`
     bomConfigs: [BomConfig]
     bomSchema(boId: ID): JSON
     businessObjects: [BusinessObject]
+
     aquilaConfigs: [AquilaConfig]!
+    aquilaPqlResults(pql: String!): JSON
+    aquilaBusinessObjects: [AquilaBusinessObject]
+    aquilaBoFilterSettings(boId: ID!): BoFilterSettings
 
     singlePayerProject(projectId: String): SinglePayerProject
     payerProjectsList: [PayerProjectsList]
@@ -312,6 +316,27 @@ const queries = gql`
     _id: ID!
     key: String
     type: String
+  }
+
+  type BoFilterSettings {
+    _id: ID!
+    label: String
+    fields: [BoFilterSettingsField]
+  }
+
+  type BoFilterSettingsField {
+    _id: ID
+    boFieldId: ID
+    boFieldKey: String
+    inputProps: JSON # too dynamic to track all props
+    label: String
+  }
+
+  type AquilaBusinessObject {
+    _id: ID!
+    boId: ID!
+    boName: String
+    label: String
   }
 
   type AquilaConfig {

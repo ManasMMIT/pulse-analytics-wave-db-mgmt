@@ -53,6 +53,7 @@ const QueryToolTable = ({
   loading,
   businessObjectName,
   afterMutationHook,
+  refetchQueries,
 }) => {
   if (_.isEmpty(data) || !data[0]) return null
 
@@ -66,6 +67,7 @@ const QueryToolTable = ({
       <CreateModalButton
         businessObjectName={businessObjectName}
         afterMutationHook={afterMutationHook}
+        refetchQueries={refetchQueries}
       />
       <Wrapper>
         <div style={columnHeaderStyle}>
@@ -100,6 +102,7 @@ const QueryToolTable = ({
                             businessObjectName={businessObjectName}
                             afterMutationHook={afterMutationHook}
                             entityId={row._id}
+                            refetchQueries={refetchQueries}
                           >
                             {cell}
                           </UpdateModalButton>

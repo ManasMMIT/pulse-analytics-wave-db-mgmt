@@ -70,6 +70,7 @@ MongoClient.connect(LOADER_URI, { useUnifiedTopology: true }, (err, client) => {
       return {
         ...twoGuysInAHorseCostume,
         user,
+        authorization: req.headers.authorization,
       }
     },
   })

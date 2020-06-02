@@ -1,110 +1,84 @@
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
 import { useHistory, useLocation } from 'react-router-dom'
+import { useLazyQuery } from '@apollo/react-hooks'
 import queryString from 'query-string'
-import _ from 'lodash'
 
-import { useAuth0 } from '../../react-auth0-spa'
-
-const AQUILA_ROOT = 'http://localhost:1500'
-const PQL_ENDPOINT = `${ AQUILA_ROOT }/pql`
-
-const PLACARD_OPTIONS_ENDPOINT = `${AQUILA_ROOT}/placard-options`
-const FILTER_CONFIG_ENDPOINT = `${AQUILA_ROOT }/filter-config-options`
+import {
+  GET_AQUILA_PQL_RESULTS,
+  GET_AQUILA_BUSINESS_OBJECTS,
+  GET_AQUILA_BO_FILTER_SETTINGS,
+} from 'frontend/api/queries'
 
 export default () => {
   const history = useHistory()
   const location = useLocation()
-  const { accessToken } = useAuth0()
 
-  const [pql, pqlSetter] = useState('')
+  const pql = getPqlFromLocation(location)
 
-  const [pqlResult, setPqlResult] = useState([])
-  const [loadingPql, setPqlLoading] = useState(false)
+  const [
+    getAquilaPqlResults,
+    {
+      data: pqlResult,
+      loading: loadingPql,
+    },
+  ] = useLazyQuery(GET_AQUILA_PQL_RESULTS, { variables: { pql } })
 
-  const submitPql = getSubmitPql(accessToken, setPqlResult, setPqlLoading)
-  const setPql = getSetPql(history, pqlSetter)
-
-  const getPlacardOptions = getPlacardOptionsFunction(accessToken)
-
-  const getFilterConfigOptions = getFilterConfigOptionsFunction(accessToken)
-
-  useEffect(() => {
-    const queryStringVars = location.search && queryString.parse(location.search)
-    const pqlOnLoad = queryStringVars && queryStringVars.pql
-      ? queryStringVars.pql
-      : ''
-
-    if (pqlOnLoad.length) {
-      submitPql(pqlOnLoad)
-      setPql(pqlOnLoad)
+  const [
+    getFilterConfigOptions,
+    {
+      data: filterConfigOptionsData,
+      loading: loadingFilterConfigOptions,
     }
+  ] = useLazyQuery(GET_AQUILA_BUSINESS_OBJECTS)
+
+  const [
+    getPlacardOptions,
+    {
+      data: placardOptionsData,
+      loading: loadingPlacardOptions,
+    }
+  ] = useLazyQuery(GET_AQUILA_BO_FILTER_SETTINGS)
+
+  // On mount: 1. If pql exists, get results; 2. always get filterConfigOptions
+  useEffect(() => {
+    if (pql.length) getAquilaPqlResults()
+
+    getFilterConfigOptions()
   }, [])
+
+  const setPql = getSetPql(history)
 
   return {
     data: {
       pql,
-      results: pqlResult,
+      results: pqlResult
+        ? pqlResult.aquilaPqlResults
+        : [],
+      filterConfigOptions: filterConfigOptionsData
+        ? filterConfigOptionsData.aquilaBusinessObjects
+        : [],
+      placardOptions: placardOptionsData
+        ? placardOptionsData.aquilaBoFilterSettings
+        : [],
     },
     setPql,
-    loading: loadingPql,
-    submitPql,
-    getFilterConfigOptions,
+    loading: loadingPql || loadingFilterConfigOptions || loadingPlacardOptions,
+    submitPql: getAquilaPqlResults,
     getPlacardOptions,
   }
 }
 
-const getSubmitPql = (accessToken, setPqlResult, setPqlLoading) => pql => {
-  setPqlLoading(true)
-
-  fetch(
-    PQL_ENDPOINT,
-    {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json; charset=utf-8',
-        Authorization: `Bearer ${accessToken}`,
-      },
-      body: JSON.stringify({ pql })
-    }
-  )
-    .then(res => res.json())
-    .then(res => {
-      const sampledResults = res.error
-        ? res
-        : _.sampleSize(res, 50)
-      setPqlResult(sampledResults)
-
-      setPqlLoading(false)
-    })
-}
-
-const getSetPql = (history, pqlSetter) => pql => {
+const getSetPql = (history) => pql => {
   history.push({
     search: queryString.stringify({ pql }),
   })
-
-  pqlSetter(pql)
 }
 
-const getFilterConfigOptionsFunction = accessToken => () => fetch(
-  FILTER_CONFIG_ENDPOINT,
-  {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json; charset=utf-8',
-      Authorization: `Bearer ${accessToken}`,
-    },
-  }
-).then(res => res.json())
+const getPqlFromLocation = location => {
+  const queryStringVars = location.search && queryString.parse(location.search)
+  const pql = queryStringVars && queryStringVars.pql
+    ? queryStringVars.pql
+    : ''
 
-const getPlacardOptionsFunction = accessToken => boId => fetch(
-  PLACARD_OPTIONS_ENDPOINT,
-  {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json; charset=utf-8',
-      Authorization: `Bearer ${accessToken}`,
-    },
-    body: JSON.stringify({ boId })
-  }
-).then(res => res.json())
+  return pql
+}

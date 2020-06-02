@@ -3,6 +3,12 @@ import Select from 'react-select'
 import _ from 'lodash'
 import styled from '@emotion/styled'
 
+// ! Only for refetchQueries
+import {
+  GET_AQUILA_BO_FILTER_SETTINGS,
+  GET_AQUILA_PQL_RESULTS,
+} from 'frontend/api/queries'
+
 // ! Don't use table until filters can be loaded from pql
 import QueryToolTable from './QueryToolTable'
 import useAquila from '../../../hooks/useAquila'
@@ -26,32 +32,22 @@ const FiltersContainer = styled.div({
 
 const PlacardView = () => {
   const [
-    filterConfigOptions,
-    setFilterConfigOptions,
-  ] = useState([])
-
-  const [
-    placardOptions,
-    setPlacardOptions,
-  ] = useState([])
-
-  const [
     filtersState,
     setFiltersState,
   ] = useState([])
 
   const {
     setPql,
-    data: { pql, results },
-    getFilterConfigOptions,
+    data: {
+      pql,
+      results,
+      filterConfigOptions,
+      placardOptions,
+    },
     getPlacardOptions,
     loading,
     submitPql,
   } = useAquila()
-
-  useEffect(() => {
-    getFilterConfigOptions().then(setFilterConfigOptions)
-  }, [])
 
   const businessObjectName = pql.match(/[\w\s]+={.*}/) && pql.match(/[\w\s]+=/)[0].replace('=', '')
 
@@ -66,7 +62,11 @@ const PlacardView = () => {
     const shouldFetchPlacardOptions = filterConfigOptions.length && selectedOption
 
     if (shouldFetchPlacardOptions) {
-      getPlacardOptions(selectedOption.value).then(setPlacardOptions)
+      getPlacardOptions({
+        variables: {
+          boId: selectedOption.value,
+        }
+      })
     }
 
     submitPql(pql)
@@ -110,7 +110,10 @@ const PlacardView = () => {
         data={results}
         loading={loading}
         businessObjectName={businessObjectName}
-        afterMutationHook={() => submitPql(pql)}
+        refetchQueries={[
+          { query: GET_AQUILA_BO_FILTER_SETTINGS, variables: { boId: (selectedOption || {}).value } },
+          { query: GET_AQUILA_PQL_RESULTS, variables: { pql } },
+        ]}
       />
     </>
   )
