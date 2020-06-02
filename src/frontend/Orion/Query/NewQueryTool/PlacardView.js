@@ -9,7 +9,8 @@ import {
   GET_AQUILA_PQL_RESULTS,
 } from 'frontend/api/queries'
 
-// ! Don't use table until filters can be loaded from pql
+// import usePqlObject from './utils/usePqlObject'
+
 import QueryToolTable from './QueryToolTable'
 import useAquila from '../../../hooks/useAquila'
 
@@ -48,6 +49,11 @@ const PlacardView = () => {
     loading,
     submitPql,
   } = useAquila()
+
+  // const {
+  //   data: configsData,
+  //   loading: zipperLoading,
+  // } = usePqlObject(pql)
 
   const businessObjectName = pql.match(/[\w\s]+={.*}/) && pql.match(/[\w\s]+=/)[0].replace('=', '')
 
