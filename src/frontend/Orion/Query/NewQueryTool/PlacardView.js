@@ -75,7 +75,7 @@ const PlacardView = () => {
       })
     }
 
-    submitPql(pql)
+    if (pql.length) submitPql(pql)
   }, [pql, filterConfigOptions])
 
   if (_.isEmpty(filterConfigOptions)) return null
