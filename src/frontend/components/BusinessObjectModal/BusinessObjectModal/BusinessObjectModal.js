@@ -127,7 +127,8 @@ const BusinessObjectModal = ({
   //   })
 
   useEffect(() => {
-    if (!loading) {
+    // ! When useBom errors, it will pass back an empty schema
+    if (!loading && !_.isEmpty(schema) && !_.isEmpty(schema.tags)) {
       const firstTab = schema.tags[0]
       const mappedEntitiesToFields = schema.tags.reduce((acc, { sections }) => {
         sections.forEach(({ fields }) => {
@@ -143,7 +144,7 @@ const BusinessObjectModal = ({
     }
   }, [loading])
 
-  if (loading) return null
+  if (loading || _.isEmpty(schema)) return null
 
   const modalTitle = `${entityId ? 'Edit' : 'Create'} ${headerText}`
   const modalTitleModifier = [entity.organization]
