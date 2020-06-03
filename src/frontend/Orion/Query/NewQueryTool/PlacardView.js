@@ -9,7 +9,7 @@ import {
   GET_AQUILA_PQL_RESULTS,
 } from 'frontend/api/queries'
 
-// import usePqlObject from './utils/usePqlObject'
+import usePqlObject from './utils/usePqlObject'
 
 import QueryToolTable from './QueryToolTable'
 import useAquila from '../../../hooks/useAquila'
@@ -50,10 +50,10 @@ const PlacardView = () => {
     submitPql,
   } = useAquila()
 
-  // const {
-  //   data: configsData,
-  //   loading: zipperLoading,
-  // } = usePqlObject(pql)
+  const {
+    data: pqlObjectData,
+    loading: pqlObjectLoading,
+  } = usePqlObject(pql)
 
   const businessObjectName = pql.match(/[\w\s]+={.*}/) && pql.match(/[\w\s]+=/)[0].replace('=', '')
 
@@ -104,7 +104,8 @@ const PlacardView = () => {
       />
 
       <FiltersContainer>
-        {!_.isEmpty(placardOptions) && generatePanel({
+        {!_.isEmpty(placardOptions) && !pqlObjectLoading && generatePanel({
+          pqlObject: pqlObjectData.pqlObject,
           placardOptions,
           setFiltersState,
           filtersState,

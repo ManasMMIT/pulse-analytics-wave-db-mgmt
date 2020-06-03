@@ -10,24 +10,37 @@ export default (pql) => {
   const [loading, setLoading] = useState(true)
   const { accessToken } = useAuth0()
 
+  const fetchPqlObject = () => fetch(
+    PQL_ENDPOINT,
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json; charset=utf-8',
+        Authorization: `Bearer ${accessToken}`,
+      },
+      body: JSON.stringify({ pql })
+    }
+  )
+    .then(res => res.json())
+    .then(res => {
+      setPqlObject(res)
+      setLoading(false)
+    })
+
   useEffect(() => {
-    fetch(
-      PQL_ENDPOINT,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json; charset=utf-8',
-          Authorization: `Bearer ${accessToken}`,
-        },
-        body: JSON.stringify({ pql })
-      }
-    )
-      .then(res => res.json())
-      .then(res => {
-        setPqlObject(res)
-        setLoading(false)
-      })
+    fetchPqlObject()
   }, [])
+
+  // ! Reset to empty pqlObject whenever inner pql is empty
+  const innerPqlWithCurlies = pql.match(/\{.*?\}/g)
+  const innerPql = innerPqlWithCurlies && innerPqlWithCurlies[0].slice(1, -1)
+  const pqlIsEmpty = !innerPql || !innerPql.length
+
+  useEffect(() => {
+    if (pqlIsEmpty && !_.isEmpty(pqlObject)) {
+      fetchPqlObject()
+    }
+  }, [pql])
 
   let params = []
   if (!_.isEmpty(pqlObject)) {
