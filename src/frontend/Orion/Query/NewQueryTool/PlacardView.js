@@ -9,10 +9,11 @@ import {
   GET_AQUILA_PQL_RESULTS,
 } from 'frontend/api/queries'
 
-import usePqlObject from './utils/usePqlObject'
-
 import QueryToolTable from './QueryToolTable'
-import useAquila from '../../../hooks/useAquila'
+
+import usePql from '../../../hooks/usePql'
+import useAquilaBusinessObjects from './utils/useAquilaBusinessObjects'
+import usePqlObject from './utils/usePqlObject'
 
 import generatePanel from './utils/generatePanel'
 
@@ -39,16 +40,16 @@ const PlacardView = () => {
 
   const {
     setPql,
-    data: {
-      pql,
-      results,
-      filterConfigOptions,
-      placardOptions,
-    },
-    getPlacardOptions,
-    loading,
+    data: { pql, results },
+    loading: pqlLoading,
     submitPql,
-  } = useAquila()
+  } = usePql()
+
+  const {
+    data: { aquilaBusinessObjects, boFilterSettings },
+    getBoFilterSettings,
+    loading: boFilterSettingsLoading,
+  } = useAquilaBusinessObjects()
 
   const {
     data: pqlObjectData,
@@ -57,7 +58,7 @@ const PlacardView = () => {
 
   const businessObjectName = pql.match(/[\w\s]+={.*}/) && pql.match(/[\w\s]+=/)[0].replace('=', '')
 
-  const options = filterConfigOptions.map(({ boName, boId }) => ({ label: boName, value: boId }))
+  const options = aquilaBusinessObjects.map(({ boName, boId }) => ({ label: boName, value: boId }))
 
   let selectedOption = null
   if (businessObjectName) {
@@ -73,10 +74,10 @@ const PlacardView = () => {
   }, [pqlObjectLoading])
 
   useEffect(() => {
-    const shouldFetchPlacardOptions = filterConfigOptions.length && selectedOption
+    const shouldFetchBoFilterSettings = aquilaBusinessObjects.length && selectedOption
 
-    if (shouldFetchPlacardOptions) {
-      getPlacardOptions({
+    if (shouldFetchBoFilterSettings) {
+      getBoFilterSettings({
         variables: {
           boId: selectedOption.value,
         }
@@ -84,9 +85,9 @@ const PlacardView = () => {
     }
 
     if (pql.length) submitPql(pql)
-  }, [pql, filterConfigOptions])
+  }, [pql, aquilaBusinessObjects])
 
-  if (_.isEmpty(filterConfigOptions)) return null
+  if (_.isEmpty(aquilaBusinessObjects)) return null
 
   return (
     <>
@@ -112,9 +113,9 @@ const PlacardView = () => {
       />
 
       <FiltersContainer>
-        {!_.isEmpty(placardOptions) && !pqlObjectLoading && generatePanel({
+        {!_.isEmpty(boFilterSettings) && !pqlObjectLoading && generatePanel({
           pqlObject: pqlObjectData.pqlObject,
-          placardOptions,
+          boFilterSettings,
           setFiltersState,
           filtersState,
           setPql,
@@ -123,7 +124,7 @@ const PlacardView = () => {
       </FiltersContainer>
       <QueryToolTable
         data={results}
-        loading={loading}
+        loading={pqlLoading || boFilterSettingsLoading}
         businessObjectName={businessObjectName}
         refetchQueries={[
           { query: GET_AQUILA_BO_FILTER_SETTINGS, variables: { boId: (selectedOption || {}).value } },

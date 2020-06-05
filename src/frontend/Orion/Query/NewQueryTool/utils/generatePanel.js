@@ -6,13 +6,13 @@ import FieldsSectionCard from '../../../../components/FieldsSectionCard'
 
 const generatePanel = ({
   pqlObject,
-  placardOptions,
+  boFilterSettings,
   setFiltersState,
   filtersState,
   setPql,
   businessObjectName,
 }) => {
-  const { label, fields } = placardOptions
+  const { label, fields } = boFilterSettings
 
   const fieldsConfig = fields
     .map(({ boFieldKey, label, inputProps }) => {

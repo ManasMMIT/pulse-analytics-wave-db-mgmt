@@ -1,7 +1,7 @@
 const fetch = require('node-fetch')
 
 const AQUILA_ROOT = 'http://localhost:1500'
-const PLACARD_OPTIONS_ENDPOINT = `${AQUILA_ROOT}/placard-options`
+const BO_FILTER_SETTINGS_ENDPOINT = `${AQUILA_ROOT}/bo-filter-settings`
 
 const aquilaBoFilterSettings = (
   parent,
@@ -9,7 +9,7 @@ const aquilaBoFilterSettings = (
   { authorization }
 ) => {
   return fetch(
-    PLACARD_OPTIONS_ENDPOINT,
+    BO_FILTER_SETTINGS_ENDPOINT,
     {
       method: 'POST',
       headers: {

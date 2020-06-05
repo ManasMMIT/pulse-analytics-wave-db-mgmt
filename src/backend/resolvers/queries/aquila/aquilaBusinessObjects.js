@@ -1,7 +1,7 @@
 const fetch = require('node-fetch')
 
 const AQUILA_ROOT = 'http://localhost:1500'
-const FILTER_CONFIG_ENDPOINT = `${AQUILA_ROOT}/filter-config-options`
+const FILTER_CONFIG_ENDPOINT = `${AQUILA_ROOT}/business-objects`
 
 const aquilaBusinessObjects = (
   parent,
