@@ -65,6 +65,14 @@ const PlacardView = () => {
   }
 
   useEffect(() => {
+    if (!pqlObjectLoading) {
+      const { pqlObject: { params } } = pqlObjectData
+
+      setFiltersState(params)
+    }
+  }, [pqlObjectLoading])
+
+  useEffect(() => {
     const shouldFetchPlacardOptions = filterConfigOptions.length && selectedOption
 
     if (shouldFetchPlacardOptions) {
