@@ -14,6 +14,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased] - Started: 6-2-20
 
+### Added
+- `Orion`: Built out OBM Service and OBM Service Category Placards, queries, mutations.
+
 ## [2.7.0] - Started: 5-26-20
 
 ### Added

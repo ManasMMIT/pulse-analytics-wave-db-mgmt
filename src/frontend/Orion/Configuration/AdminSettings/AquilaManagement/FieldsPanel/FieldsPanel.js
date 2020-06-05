@@ -70,7 +70,7 @@ const FieldsPanel = () => {
             <span>Fields / </span>
             <StyledNavHeader>{(selectedAquilaConfig || {}).label}</StyledNavHeader>
           </ListTitle>
-          
+
           <CreateButtonWithForm
             selectedAquilaConfig={selectedAquilaConfig}
             mutationDoc={CREATE_AQUILA_CONFIG_FIELD}
@@ -101,6 +101,7 @@ const FieldsPanel = () => {
                     const nextFieldSelection = fields.find(({ _id }) => _id !== fieldObj._id)
                     if (nextFieldSelection) handleClick(nextFieldSelection) // breaks if no fields are left
                   }}
+                  boId={selectedAquilaConfig.boId}
                 />
               </FieldPanelItem>
             ))

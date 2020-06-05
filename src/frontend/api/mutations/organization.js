@@ -169,6 +169,41 @@ export const UPDATE_APM_ORGANIZATION = gql`
   }
 `
 
+export const UPDATE_OBM_SERVICE_CATEGORY = gql`
+  mutation UpdateObmServiceCategory($input: UpdateObmServiceCategoryInput!) {
+    updateObmServiceCategory(input: $input) {
+      _id
+      name
+    }
+  }
+`
+
+export const UPDATE_OBM_SERVICE = gql`
+  mutation UpdateObmService($input: UpdateObmServiceInput!) {
+    updateObmService(input: $input) {
+      _id
+      name
+    }
+  }
+`
+
+export const CREATE_OBM_SERVICE_CATEGORY = gql`
+  mutation CreateObmServiceCategory($input: CreateObmServiceCategoryInput!) {
+    createObmServiceCategory(input: $input) {
+      _id
+      name
+    }
+  }
+`
+
+export const CREATE_OBM_SERVICE = gql`
+  mutation CreateObmService($input: CreateObmServiceInput!) {
+    createObmService(input: $input) {
+      _id
+      name
+    }
+  }
+`
 
 export const CREATE_OBM_ORGANIZATION = gql`
   mutation CreateObmOrganization($input: CreateObmOrganizationInput!) {

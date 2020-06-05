@@ -22,7 +22,10 @@ const queries = gql`
     payerOrganizations: [PayerOrganization]
     pathwaysOrganizations: [PathwaysOrganization]
     apmOrganizations: [ApmOrganization]
+
     obmOrganizations: [ObmOrganization]
+    obmServices: [ObmService]
+    obmServicesCategories: [ObmServiceCategory]
 
     qualityOfAccessScores: [QualityOfAccessScore]
     collections(type: String): [String]
@@ -197,6 +200,16 @@ const queries = gql`
     organizationTiny: String
     start: Int
     businessModel: String
+  }
+
+  type ObmService {
+    _id: ID!
+    name: String!
+  }
+
+  type ObmServiceCategory {
+    _id: ID!
+    name: String!
   }
 
   type Connection {

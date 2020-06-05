@@ -1,4 +1,4 @@
-const { OBM_TOOL_ID } = require('../../../global-tool-ids')
+const { OBM_TOOL_ID } = require('../../../../global-tool-ids')
 
 const obmOrganizations = async (
   parent,

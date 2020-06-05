@@ -614,6 +614,24 @@ export const GET_APM_ORGANIZATIONS = gql`
   }
 `
 
+export const GET_OBM_SERVICES = gql`
+  query getObmServices {
+    obmServices {
+      _id
+      name
+    }
+  }
+`
+
+export const GET_OBM_SERVICES_CATEGORIES = gql`
+  query getObmServicesCategories {
+    obmServicesCategories {
+      _id
+      name
+    }
+  }
+`
+
 export const GET_OBM_ORGANIZATIONS = gql`
   query getObmOrganizations {
     obmOrganizations {
