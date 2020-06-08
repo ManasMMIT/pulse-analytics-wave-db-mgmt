@@ -58,7 +58,7 @@ const PlacardView = () => {
 
   const businessObjectName = pql.match(/[\w\s]+={.*}/) && pql.match(/[\w\s]+=/)[0].replace('=', '')
 
-  const options = aquilaBusinessObjects.map(({ boName, boId }) => ({ label: boName, value: boId }))
+  const options = (aquilaBusinessObjects || []).map(({ boName, boId }) => ({ label: boName, value: boId }))
 
   let selectedOption = null
   if (businessObjectName) {
@@ -74,7 +74,7 @@ const PlacardView = () => {
   }, [pqlObjectLoading])
 
   useEffect(() => {
-    const shouldFetchBoFilterSettings = aquilaBusinessObjects.length && selectedOption
+    const shouldFetchBoFilterSettings = aquilaBusinessObjects && selectedOption
 
     if (shouldFetchBoFilterSettings) {
       getBoFilterSettings({

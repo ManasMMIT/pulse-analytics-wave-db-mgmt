@@ -27,7 +27,7 @@ const useAquilaBusinessObjects = () => {
 
   const aquilaBusinessObjects = businessObjectsData
     ? businessObjectsData.aquilaBusinessObjects
-    : []
+    : null // ! used in dependency array, so an empty array would trigger infinite renders
   const boFilterSettings = boFilterSettingsData
     ? boFilterSettingsData.aquilaBoFilterSettings
     : []
