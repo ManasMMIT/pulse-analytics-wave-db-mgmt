@@ -43,7 +43,7 @@ export default (pql) => {
   }, [pql])
 
   let params = []
-  if (!_.isEmpty(pqlObject)) {
+  if (!_.isEmpty(pqlObject) && !pqlObject.error) {
     params = pqlObject.params.map(({ key, values }) => {
       const options = values.map(value => ({ value, label: value }))
 
