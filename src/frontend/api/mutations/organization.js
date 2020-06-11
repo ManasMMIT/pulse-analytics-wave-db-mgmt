@@ -230,3 +230,24 @@ export const UPDATE_OBM_ORGANIZATION = gql`
     }
   }
 `
+
+export const CONNECT_OBM_SERVICE_AND_OBM_SERVICE_CATEGORY = gql`
+  mutation ConnectObmServiceAndObmServiceCategory($input: ConnectObmServiceAndObmServiceCategoryInput!) {
+    connectObmServiceAndObmServiceCategory(input: $input) {
+      _id
+      obmServiceId
+      obmServiceCategoryId
+    }
+  }
+`
+
+export const CONNECT_OBM_AND_OBM_SERVICE = gql`
+  mutation ConnectObmAndObmService($input: [ConnectObmAndObmServiceInput!]!) {
+    connectObmAndObmService(input: $input) {
+      _id
+      obmId
+      obmServiceId
+      rating
+    }
+  }
+`

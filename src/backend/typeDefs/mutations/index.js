@@ -88,6 +88,8 @@ const mutationType = gql`
     updateObmService(input: UpdateObmServiceInput!): UpdateObmServicePayload!
     createObmServiceCategory(input: CreateObmServiceCategoryInput!): CreateObmServiceCategoryPayload!
     updateObmServiceCategory(input: UpdateObmServiceCategoryInput!): UpdateObmServiceCategoryPayload!
+    connectObmServiceAndObmServiceCategory(input: ConnectObmServiceAndObmServiceCategoryInput!): ConnectObmServiceAndObmServiceCategoryPayload!
+    connectObmAndObmService(input: [ConnectObmAndObmServiceInput!]!): [ConnectObmAndObmServicePayload!]!
 
     upsertOrganizationMeta(input: UpsertOrganizationMetaInput!): [UpsertOrganizationMetaPayload]
 

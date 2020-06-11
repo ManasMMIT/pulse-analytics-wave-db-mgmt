@@ -30,10 +30,6 @@ const BoContent = styled.div({
   height: '100%',
 })
 
-const formatSchemaItems = schema => {
-  return schema.tags.map(tag => ({ label: tag.label, value: tag._id }))
-}
-
 const BusinessObjectModal = ({
   entityId,
   boId,
@@ -42,6 +38,7 @@ const BusinessObjectModal = ({
   mutationDocs,
   refetchQueries,
   afterMutationHook,
+  widgets,
 }) => {
   const { schema, entity, loading } = useBom(boId, entityId)
 
@@ -94,6 +91,10 @@ const BusinessObjectModal = ({
   const modalTitle = `${entityId ? 'Edit' : 'Create'} ${headerText}`
   const modalTitleModifier = [entity.organization]
 
+  // Can't allow relationalizing data on create yet; needs to be planned out more
+  const allTags = _.isEmpty(entity) ? schema.tags : schema.tags.concat(widgets)
+  const sidebarOptions = allTags.map(tag => ({ label: tag.label, value: tag._id }))
+
   return (
     <Dialog>
       <Header>
@@ -117,18 +118,26 @@ const BusinessObjectModal = ({
       </Header>
       <BoContent>
         <BomSidebar
-          options={formatSchemaItems(schema)}
+          options={sidebarOptions}
           onClick={({ value }) => {
-            const nextTab = schema.tags.find(({ _id }) => _id === value)
+            const nextTab = allTags.find(({ _id }) => _id === value)
             setSelectedTab(nextTab)
           }}
           selectedTab={{ value: selectedTab._id, label: selectedTab.label }}
         />
-        <BomSections
-          inputFields={inputFields}
-          selectedTab={selectedTab}
-          setInputField={setInputField}
-        />
+
+        {
+          selectedTab._id && selectedTab._id.includes('RELATIONAL')
+            ? (
+              <selectedTab.Component entity={entity} />
+            ) : (
+              <BomSections
+                inputFields={inputFields}
+                selectedTab={selectedTab}
+                setInputField={setInputField}
+              />
+            )
+        }
       </BoContent>
     </Dialog>
   )
@@ -142,6 +151,7 @@ BusinessObjectModal.propTypes = {
   mutationDocs: PropTypes.object,
   refetchQueries: PropTypes.array,
   afterMutationHook: PropTypes.func,
+  widgets: PropTypes.array,
 }
 
 BusinessObjectModal.defaultProps = {
@@ -150,6 +160,7 @@ BusinessObjectModal.defaultProps = {
   mutationDocs: {},
   refetchQueries: [],
   afterMutationHook: () => {},
+  widgets: [],
 }
 
 export default BusinessObjectModal

@@ -772,3 +772,24 @@ export const GET_REGIONAL_TARGETING_DATA = gql`
    regionalTargetingData(input: $input)
  }
 `
+
+export const GET_OBM_SERVICE_AND_OBM_SERVICE_CATEGORY_CONNECTIONS = gql`
+ query getObmServiceAndObmServiceCategoryConnections($obmServiceId: String) {
+   obmServiceAndObmServiceCategoryConnections(obmServiceId: $obmServiceId) {
+     _id
+     obmServiceId
+     obmServiceCategoryId
+   }
+ }
+`
+
+export const GET_OBM_AND_OBM_SERVICE_CONNECTIONS = gql`
+ query getObmAndObmServiceConnections($obmId: String) {
+   obmAndObmServiceConnections(obmId: $obmId) {
+     _id
+     obmId
+     obmServiceId
+     rating
+   }
+ }
+`

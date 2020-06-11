@@ -26,6 +26,8 @@ const queries = gql`
     obmOrganizations: [ObmOrganization]
     obmServices: [ObmService]
     obmServicesCategories: [ObmServiceCategory]
+    obmServiceAndObmServiceCategoryConnections(obmServiceId: String): [ObmServiceAndObmServiceCategoryConnection]
+    obmAndObmServiceConnections(obmId: String): [ObmAndObmServiceConnection]
 
     qualityOfAccessScores: [QualityOfAccessScore]
     collections(type: String): [String]
@@ -210,6 +212,19 @@ const queries = gql`
   type ObmServiceCategory {
     _id: ID!
     name: String!
+  }
+
+  type ObmServiceAndObmServiceCategoryConnection {
+    _id: ID!
+    obmServiceId: String!
+    obmServiceCategoryId: String!
+  }
+
+  type ObmAndObmServiceConnection {
+    _id: ID!
+    obmId: String!
+    obmServiceId: String!
+    rating: Int!
   }
 
   type Connection {
