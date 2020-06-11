@@ -30,6 +30,8 @@ const importPayerHistoricalAccessData = async ({
   dbsConfig: { pulseCoreDb, pulseDevDb, mongoClient },
   importFeedback,
 }) => {
+
+  console.time('Step 2: QOA Combo Validation')
   // STEP 1: Get the project's PTPs; it's going to be used throughout this process
   let [{ projectId, timestamp: importTimestamp }] = cleanedSheetsWithMetadata
   projectId = ObjectId(projectId)
@@ -55,9 +57,13 @@ const importPayerHistoricalAccessData = async ({
     }
   }
 
+  console.timeEnd('Step 2: QOA Combo Validation')
+
   const session = mongoClient.startSession()
   
   await session.withTransaction(async () => {
+
+    console.time('Step 3: Clear PTP-timestamp combos')
     // STEP 3: Clear the PTP-timestamp combos before any upsertion happens
     const convertedTimestamp = zonedTimeToUtc(importTimestamp, DEFAULT_TIMEZONE)
     const projectPtpIds = projectPtps.map(({ _id }) => _id)
@@ -81,6 +87,8 @@ const importPayerHistoricalAccessData = async ({
         }
       )
 
+    console.timeEnd('Step 3: Clear PTP-timestamp combos')
+
     // STEP 4: Upsert all the sheets
     for (const sheetObjWithMetadata of cleanedSheetsWithMetadata) {
       let {
@@ -92,6 +100,9 @@ const importPayerHistoricalAccessData = async ({
         skippedRows,
         originalDataLength,
       } = sheetObjWithMetadata
+
+      const timerLabel = `Step 4: Upsertion - ${ sheetName }`
+      console.time(timerLabel)
 
       projectId = ObjectId(projectId)
 
@@ -116,6 +127,8 @@ const importPayerHistoricalAccessData = async ({
       const permittedOps = sheetManager.getPermittedOps()
       await sheetManagerDao.upsertOrgTpHistory(permittedOps, session)
 
+      console.timeEnd(timerLabel)
+
       importFeedback.push(
         `Import to CORE successful for ${wb}/${sheetName}`
         + `\n${data.length}/${originalDataLength} rows imported (excluding header)`
@@ -130,10 +143,11 @@ const importPayerHistoricalAccessData = async ({
     pulseCore: pulseCoreDb,
   })
 
-  await coreToDev.materializeNonLivesCollections()
+  // HOTFIX: await is removed so that the response does not timeout while it waits for data to materialize
+  coreToDev.materializeNonLivesCollections()
 
   importFeedback.push('Payer historical access data successfully materialized to dev')
-
+  
   return 'Success'
 }
 
