@@ -2,14 +2,21 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import styled from '@emotion/styled'
+import { darken } from 'polished'
 
-import { Colors, Spacing } from 'frontend/utils/pulseStyles'
+import { Spacing } from 'frontend/utils/pulseStyles'
 
-const Placard = styled.div({
-  border: `1px solid ${ Colors.BLACK }`,
+const Placard = styled(Link)({
   padding: Spacing.NORMAL,
   margin: Spacing.NORMAL,
   width: '20%',
+  background: '#EEF4FA',
+  borderRadius: 4,
+  fontSize: 14,
+  fontWeight:700,
+  ':hover': {
+    background: darken(0.1, '#EEF4FA'),
+  }
 })
 
 const ProjectPlacard = ({
@@ -17,12 +24,8 @@ const ProjectPlacard = ({
   projectId,
 }) => {
   return (
-    <Placard>
-      <Link
-        to={`/payer-projects/${ projectId }/import-historical-data`}
-      >
+    <Placard to={`/payer-projects/${ projectId }/import-historical-data`}>
       { projectName }
-      </Link>
     </Placard>
   )
 }
