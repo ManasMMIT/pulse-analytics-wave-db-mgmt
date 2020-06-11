@@ -1,5 +1,4 @@
-import { useEffect } from 'react'
-import { useLazyQuery } from '@apollo/react-hooks'
+import { useLazyQuery, useQuery } from '@apollo/react-hooks'
 
 import {
   GET_AQUILA_BUSINESS_OBJECTS,
@@ -7,15 +6,10 @@ import {
 } from 'frontend/api/queries'
 
 const useAquilaBusinessObjects = () => {
-  const [
-    getBusinessObjects,
-    {
-      data: businessObjectsData,
-      loading: loadingBusinessObjects,
-    }
-  ] = useLazyQuery(GET_AQUILA_BUSINESS_OBJECTS)
-
-  useEffect(getBusinessObjects, [])
+  const {
+    data: aquilaBusinessObjectsData,
+    loading: loadingAquilaBusinessObjects,
+  } = useQuery(GET_AQUILA_BUSINESS_OBJECTS)
 
   const [
     getBoFilterSettings,
@@ -25,14 +19,14 @@ const useAquilaBusinessObjects = () => {
     }
   ] = useLazyQuery(GET_AQUILA_BO_FILTER_SETTINGS)
 
-  const aquilaBusinessObjects = businessObjectsData
-    ? businessObjectsData.aquilaBusinessObjects
+  const aquilaBusinessObjects = aquilaBusinessObjectsData
+    ? aquilaBusinessObjectsData.aquilaBusinessObjects
     : null // ! used in dependency array, so an empty array would trigger infinite renders
   const boFilterSettings = boFilterSettingsData
     ? boFilterSettingsData.aquilaBoFilterSettings
     : []
 
-  const loading = loadingBusinessObjects || loadingBoFilterSettings
+  const loading = loadingAquilaBusinessObjects || loadingBoFilterSettings
 
   return {
     data: {

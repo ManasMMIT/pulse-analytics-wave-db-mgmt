@@ -89,6 +89,8 @@ const PlacardView = () => {
 
   if (_.isEmpty(aquilaBusinessObjects)) return null
 
+  const shouldRenderPanel = !_.isEmpty(boFilterSettings) && !pqlObjectLoading
+
   return (
     <>
       <Button
@@ -113,7 +115,7 @@ const PlacardView = () => {
       />
 
       <FiltersContainer>
-        {!_.isEmpty(boFilterSettings) && !pqlObjectLoading && generatePanel({
+        {shouldRenderPanel && generatePanel({
           pqlObject: pqlObjectData.pqlObject,
           boFilterSettings,
           setFiltersState,

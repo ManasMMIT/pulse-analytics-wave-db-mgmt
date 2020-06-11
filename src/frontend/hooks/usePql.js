@@ -36,7 +36,7 @@ const usePql = () => {
     })
   }
 
-  const results = pqlResult
+  const results = pqlResult && !pqlResult.aquilaPqlResults.error
     ? pqlResult.aquilaPqlResults
     : []
 
