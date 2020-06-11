@@ -14,19 +14,20 @@ const usePql = () => {
   const pql = getPqlFromLocation(location)
 
   const [
-    getAquilaPqlResults,
+    getAquilaPqlResultsRaw,
     {
       data: pqlResult,
       loading: loadingPql,
     },
-  ] = useLazyQuery(
-    GET_AQUILA_PQL_RESULTS,
-    { variables: { pql } },
-  )
+  ] = useLazyQuery(GET_AQUILA_PQL_RESULTS)
+
+  // ! passing variables to useLazyQuery triggers the query whenever vars change.
+  // ? https://stackoverflow.com/questions/57499553/is-it-possible-to-prevent-uselazyquery-queries-from-being-re-fetched-on-compon
+  const getAquilaPqlResults = pql => getAquilaPqlResultsRaw({ variables: { pql } })
 
   // On mount, if pql exists, get results
   useEffect(() => {
-    if (pql.length) getAquilaPqlResults()
+    if (pql.length) getAquilaPqlResults(pql)
   }, [])
 
   const setPql = pql => {
