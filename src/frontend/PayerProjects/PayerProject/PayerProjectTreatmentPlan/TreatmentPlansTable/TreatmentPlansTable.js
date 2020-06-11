@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom'
 import { useMutation } from '@apollo/react-hooks'
 import styled from '@emotion/styled'
 import _ from 'lodash'
+import {lighten, darken } from 'polished'
 
 import Table from '@material-ui/core/Table'
 import TableContainer from '@material-ui/core/TableContainer'
@@ -15,6 +16,8 @@ import {
 import {
   GET_PAYER_PROJECT_PTPS,
 } from 'frontend/api/queries'
+
+import { Colors } from 'frontend/utils/pulseStyles'
 
 import TreatmentPlansTableHead from './TreatmentPlansTableHead'
 import TreatmentPlansTableBody from './TreatmentPlansTableBody'
@@ -30,10 +33,19 @@ const TableWrapper = styled.section({
 // ! TODO: to be replaced with reusable button component
 const PlaceholderButton = styled.button({
   margin: 12,
-  padding: 6,
+  padding: '8px 12px',
   color: 'white',
   fontWeight: 700,
-  backgroundColor: 'red',
+  backgroundColor: Colors.RED,
+  borderRadius: 4,
+  fontSize: 12,
+  cursor: 'pointer',
+  ':hover': {
+    backgroundColor: lighten(0.1, Colors.RED),
+  },
+  ':active': {
+    backgroundColor: darken(0.1, Colors.RED),
+  }
 })
 
 const sortData = ({ data, order, key }) => {
