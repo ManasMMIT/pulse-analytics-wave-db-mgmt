@@ -7,7 +7,7 @@ import Spacing from '../../../utils/spacing'
 
 export const PageContainer = styled.div({
   padding: Spacing.EXTRA_LARGE,
-  backgroundColor: '#e8ebec',
+  // backgroundColor: '#e8ebec',
   flex: '1 1 auto',
   overflowY: 'scroll',
   boxSizing: 'border-box',
@@ -33,6 +33,13 @@ export const FileInput = styled.input({
   color: Color.PRIMARY,
   fontWeight: 700,
   width: '100%',
+  background: transparentize(0.85, Color.BLUE),
+  borderRadius: 4,
+  padding: 8,
+  cursor: 'pointer',
+  ':hover': {
+    background: transparentize(0.90, Color.BLUE),
+  }
 })
 
 export const ErrorContainer = styled.div({
@@ -48,9 +55,9 @@ export const ErrorContainer = styled.div({
 })
 
 export const CardHeader = styled.div({
-  fontSize: 14,
+  fontSize: 16,
   fontWeight: 700,
-  padding: `${Spacing.S4} ${Spacing.S7}`,
-  textTransform: 'uppercase',
-  borderBottom: `1px solid ${transparentize(0.9, Color.BLACK)}`,
+  padding: `${Spacing.S6} ${Spacing.S7}`,
+  // textTransform: 'uppercase',
+  // borderBottom: `1px solid ${transparentize(0.9, Color.BLACK)}`,
 })

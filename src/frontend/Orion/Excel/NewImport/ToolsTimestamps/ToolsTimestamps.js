@@ -11,12 +11,12 @@ const ToolsTimestamps = () => {
   if (loading) return <Spinner />
 
   return (
-    <div style={{ padding: 24 }}>
+    <div style={{ padding: 0 }}>
       <table style={{ width: '100%' }}>
         <tbody>
           {
             data.nodes.map(({ _id, name, text }) => (
-              <ToolTimestamp 
+              <ToolTimestamp
                 key={_id}
                 toolId={_id}
                 toolName={name}

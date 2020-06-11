@@ -1,5 +1,6 @@
 import React, { useState, useRef } from "react"
 import XLSX from 'xlsx'
+import { transparentize } from 'polished'
 
 import Select from 'react-select'
 import Spinner from 'frontend/components/Spinner'
@@ -9,7 +10,6 @@ import { useMutation } from '@apollo/react-hooks'
 
 import Button from '../../../components/Button'
 import { customSelectStyles } from '../../../components/customSelectStyles'
-import FontSpace from '../../../utils/fontspace'
 import Color from '../../../utils/color'
 
 import {
@@ -23,6 +23,13 @@ import {
 } from './styledImportComponents'
 
 import ToolsTimestamps from './ToolsTimestamps'
+
+const borderStyle = `1px solid ${transparentize(0.9, Color.BLACK)}`
+
+const listItemStyle = {
+  marginBottom: 8,
+  marginTop: 8,
+}
 
 const Import = () => {
   const fileInputRef = useRef(null)
@@ -95,15 +102,8 @@ const Import = () => {
   return (
     <PageContainer>
       <div style={{ display: 'flex' }}>
-        <div style={{ flex: 1, margin: '24px 12px 24px 24px', backgroundColor: '#FFFFFF', borderRadius: 4 }}>
-          <CardHeader>Import Excel Sheet</CardHeader>
-
-          <div style={{ padding: '24px 12px 0 36px', color: Color.RED, ...FontSpace.FS3 }}>
-            <ul style={{ listStyle: 'circle' }}>
-              <li>Second and third rows are always skipped</li>
-              <li>If an error message says "should be null,number", it means cell should either be empty or in the format specified</li>
-            </ul>
-          </div>
+        <div style={{ flex: 1, borderRight: borderStyle, }}>
+          <CardHeader style={{ paddingBottom: 0, }}>Import Excel Sheets</CardHeader>
 
           <ImportFormContainer>
             <FieldContainer>
@@ -111,13 +111,12 @@ const Import = () => {
               <FileInput
                 ref={fileInputRef}
                 type="file"
-                multiple
                 onChange={onFileAdded}
               />
             </FieldContainer>
 
               <FieldContainer>
-                <FieldLabel>Sheets to Upload:</FieldLabel>
+                <FieldLabel>Sheet to Upload:</FieldLabel>
                 {
                   <Select
                     value={selectedSheet}
@@ -132,33 +131,52 @@ const Import = () => {
                 Import Sheet
               </Button>
           </ImportFormContainer>
+
+          <div style={{ padding: '12px 24px 0', color: Color.PURPLE, }}>
+            <ul style={{ listStyle: 'none', fontSize: 11, background: transparentize(0.9, Color.PURPLE), padding: '4px 12px', borderRadius: 4, fontWeight: 500, }}>
+              <li style={listItemStyle}>Second and third rows are always skipped</li>
+              <li style={listItemStyle}>If an error message says "should be null,number", it means cell should either be empty or in the format specified</li>
+            </ul>
+          </div>
         </div>
 
-        <div style={{ flex: 1, margin: '24px 24px 24px 12px', backgroundColor: '#FFFFFF', borderRadius: 4 }}>
-          <CardHeader>Last Updated Dates</CardHeader>
+        <div style={{ flex: 1 }}>
+          <CardHeader>Tool Last Updated Dates</CardHeader>
           <ToolsTimestamps />
         </div>
       </div>
 
-      <div 
-        style={{ 
+      <div
+        style={{
           flex: '1 0 0%',
-          margin: '0px 24px 24px 24px',
-          backgroundColor: '#FFFFFF',
-          borderRadius: 4,
+          borderTop: borderStyle,
           padding: 24,
           overflow: 'auto',
         }}
       >
         {
           errors && (
-            <ErrorContainer>
-              {errors}
-            </ErrorContainer>
+            <div>
+              <div style={{ width: '100%', padding: 12, background: transparentize(0, Color.RED), borderRadius: 4, display: 'flex', justifyContent: 'space-between' }}>
+                <h3 style={{ color: Color.WHITE, fontSize: 12, fontWeight: 700, }}>Import Failed: <span style={{ marginLeft: 12 }}>1) Fix errors below</span> <span style={{ marginLeft: 12 }}>2) Reload this page</span> <span style={{ marginLeft: 12 }}>3) Reimport</span></h3>
+                <p style={{ color: Color.WHITE, fontSize: 12, fontWeight: 400, }}>If the errors persist or are unable to resolve them, please contact PULSE</p>
+              </div>
+              <ErrorContainer>
+                {errors}
+              </ErrorContainer>
+            </div>
           )
         }
 
-        {loading && <Spinner />}
+        {loading && (
+          <div style={{ height: '100%', width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+              <Spinner size="32px" />
+              <p style={{ fontSize: 12, fontWeight: 700, color: Color.BLUE, marginTop: 8 }}>Loading...</p>
+            </div>
+          </div>
+        )
+      }
       </div>
     </PageContainer>
   )
