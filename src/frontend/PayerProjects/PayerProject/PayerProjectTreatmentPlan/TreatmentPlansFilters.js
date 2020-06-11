@@ -6,6 +6,8 @@ import Color from 'frontend/utils/color'
 import Spacing from 'frontend/utils/spacing'
 import FontSpace from 'frontend/utils/fontspace'
 
+import { customSelectStyles } from '../../../components/customSelectStyles'
+
 const Wrapper = styled.div({
   display: 'flex',
   flexWrap: 'wrap',
@@ -20,12 +22,12 @@ const SelectContainer = styled.div({
   ...FontSpace.FS3,
 })
 
-const colorStyles = {
-  menu: provided => ({
-    ...provided,
-    zIndex: 3,
-  }),
-}
+// const colorStyles = {
+//   menu: provided => ({
+//     ...provided,
+//     zIndex: 3,
+//   }),
+// }
 
 const TreatmentPlansFilters = ({
   selectedFilters,
@@ -44,7 +46,7 @@ const TreatmentPlansFilters = ({
           value={selectedVal}
           options={options}
           onChange={e => setFilter(e, value)}
-          styles={colorStyles}
+          styles={customSelectStyles}
         />
       </SelectContainer>
     )

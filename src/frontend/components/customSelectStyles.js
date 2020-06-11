@@ -3,6 +3,10 @@ import { transparentize } from 'polished'
 import { Colors, Spacing } from '../utils/pulseStyles'
 
 export const customSelectStyles = {
+  menu: (provided) => ({
+    ...provided,
+    zIndex: 3,
+  }),
   control: (provided,) => ({
     ...provided,
     borderRadius: 4,
@@ -12,6 +16,7 @@ export const customSelectStyles = {
     ...provided,
     background: transparentize(0.9, Colors.BLACK),
     borderRadius: 4,
+    lineHeight: '12px',
     display: 'flex',
     marginRight: Spacing.SMALL
   }),
