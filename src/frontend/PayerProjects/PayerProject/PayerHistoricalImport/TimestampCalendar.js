@@ -5,6 +5,7 @@ import { MuiPickersUtilsProvider, Calendar } from '@material-ui/pickers'
 import DateFnsUtils from '@date-io/date-fns'
 import { createMuiTheme } from '@material-ui/core'
 import { ThemeProvider } from '@material-ui/styles'
+import { transparentize } from 'polished'
 
 import Spacing from 'frontend/utils/spacing'
 import Color from 'frontend/utils/color'
@@ -17,9 +18,10 @@ const CalendarWrapper = styled.div({
 })
 
 const DayWrapper = styled.div({
-  textDecoration: 'underline',
   fontWeight: 700,
-  color: Color.PRIMARY
+  color: Color.PRIMARY,
+  background: transparentize(0.85, Color.PRIMARY),
+  borderRadius: 20,
 })
 
 const datePickerTheme = createMuiTheme({

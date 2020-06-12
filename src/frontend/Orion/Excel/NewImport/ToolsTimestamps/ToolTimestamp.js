@@ -2,17 +2,23 @@ import React, { useState } from "react"
 import PropTypes from 'prop-types'
 import { useMutation } from '@apollo/react-hooks'
 import styled from '@emotion/styled'
+import { transparentize } from 'polished'
 
 import Button from 'frontend/components/Button'
 
 import { GET_SOURCE_TOOLS } from 'frontend/api/queries'
 import { UPDATE_TDG_TIMESTAMPS } from 'frontend/api/mutations'
 
+import Color from '../../../../utils/color'
+
 import Spinner from 'frontend/components/Spinner'
 
 const StyledTd = styled.td({
-  padding: '4px 6px',
+  padding: '8px 12px',
+  fontSize: 12,
+  fontWeight: 500,
   verticalAlign: 'middle',
+  borderTop: `1px solid ${transparentize(0.92, Color.BLUE)}`
 })
 
 const ToolTimestamp = ({ toolId, toolName, prevTimestamp }) => {
@@ -35,22 +41,22 @@ const ToolTimestamp = ({ toolId, toolName, prevTimestamp }) => {
 
   return (
     <tr>
-      <StyledTd>{toolName}</StyledTd>
+      <StyledTd style={{ padding: '8px 12px 8px 24px' }}>{toolName}</StyledTd>
       <StyledTd>
-        <input 
+        <input
           value={timestamp}
           type="date"
           onChange={e => setTimestamp(e.target.value)}
-          style={{ padding: 6, border: '1px solid black' }}
+          style={{ padding: 4, border: 'none', background: transparentize(0.85, Color.BLUE), color: Color.BLUE, fontWeight: 700, }}
         />
       </StyledTd>
       <StyledTd>
         {
-          loading 
-            ? <Spinner /> 
+          loading
+            ? <Spinner />
             : (
-              <Button onClick={save}>
-                Save
+              <Button type="secondary" onClick={save}>
+                Update
               </Button>
             )
         }

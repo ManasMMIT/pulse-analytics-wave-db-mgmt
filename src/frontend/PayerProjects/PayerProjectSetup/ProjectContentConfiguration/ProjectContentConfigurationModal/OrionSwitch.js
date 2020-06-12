@@ -5,7 +5,7 @@ import { transparentize, mix } from 'polished'
 
 import { Colors } from 'frontend/utils/pulseStyles'
 
-const switchColor = Colors.PRIMARY
+const switchColor = Colors.GREEN
 
 // Material UI Custom Switch Styling
 const OrionSwitch = withStyles({

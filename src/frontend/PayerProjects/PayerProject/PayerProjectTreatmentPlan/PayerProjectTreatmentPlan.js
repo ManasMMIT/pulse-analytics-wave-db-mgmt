@@ -13,8 +13,6 @@ import TreatmentPlansFilters from './TreatmentPlansFilters'
 import TreatmentPlansTable from './TreatmentPlansTable'
 
 const PAYER_TITLE = 'PAYER TREATMENT PLANS (PTP)'
-const SUBTITLE_TEXT =
-  'The following are all Payer Treatment Plans (Payer + Indication + Subtype + Line + Regimen + Book + Coverage) that this project is tracking. If a PTP is owned by another project, this means that you will not be able to import data for that PTP.'
 
 const Wrapper = styled.div({
   display: 'flex',
@@ -26,12 +24,6 @@ const Wrapper = styled.div({
 const Header = styled.div({
   display: 'flex',
   justifyContent: 'space-between',
-})
-
-const Subtitle = styled.div({
-  padding: `0 ${Spacing.S4} ${Spacing.S4}`,
-  color: AlphaColors.Black60,
-  ...FontSpace.FS3,
 })
 
 const PayerProjectTreatmentPlan = ({
@@ -89,7 +81,6 @@ const PayerProjectTreatmentPlan = ({
           <Title title={PAYER_TITLE} titleModifiers={[payerOrg]} />
           <button style={{ outline: '1px solid red' }}>Configure PTPs</button>
         </Header>
-        <Subtitle> {SUBTITLE_TEXT}</Subtitle>
       </section>
       <TreatmentPlansFilters
         selectedFilters={selectedFilters}

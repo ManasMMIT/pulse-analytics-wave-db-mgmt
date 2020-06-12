@@ -1,9 +1,21 @@
 import React from 'react'
+import { transparentize } from 'polished'
 
 import TableBody from '@material-ui/core/TableBody'
 import TableCell from '@material-ui/core/TableCell'
 import TableRow from '@material-ui/core/TableRow'
 import Checkbox from '@material-ui/core/Checkbox'
+import { withStyles } from '@material-ui/core/styles';
+
+import { Colors } from 'frontend/utils/pulseStyles'
+
+const StyledTableCell = withStyles({
+  body: {
+    fontSize: 12,
+    color: Colors.BLACK,
+    borderBottom: `1px solid ${transparentize(0.9, Colors.BLACK)}`
+  },
+})(TableCell);
 
 const TreatmentPlansTableBody = ({
   tableData,
@@ -30,19 +42,20 @@ const TreatmentPlansTableBody = ({
             selected={isItemSelected}
           >
             {checkbox && (
-              <TableCell padding="checkbox">
+              <StyledTableCell padding="checkbox">
                 <Checkbox
                   checked={isItemSelected}
+                  size="small"
                   inputProps={{ 'aria-labelledby': labelId }}
                 />
-              </TableCell>
+              </StyledTableCell>
             )}
             {headerData.map(column => {
               const label = column.value
                 .split('.')
                 .reduce((prev, key) => prev[key], row)
 
-              return <TableCell key={`${row._id}-${label}`}>{label}</TableCell>
+              return <StyledTableCell key={`${row._id}-${label}`}>{label}</StyledTableCell>
             })}
           </TableRow>
         )

@@ -12,6 +12,7 @@ const SidebarLabel = styled.div(
     padding: Spacing.S4,
     color: AlphaColors.Black70,
     fontWeight: 500,
+    borderRadius: 4,
     cursor: 'pointer',
     ...FontSpace.FS2,
   },
