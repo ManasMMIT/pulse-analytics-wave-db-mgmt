@@ -693,6 +693,18 @@ export const GET_OP_LOG = gql`
   }
 `
 
+export const GET_FULL_OP_LOGS = gql`
+  query getFullOpLogs($maxLineCount: Int) {
+    fullOpLogs(maxLineCount: $maxLineCount) {
+      timestamp
+      username
+      userId
+      operationName
+      operationVariables
+    }
+  }
+`
+
 export const GET_WORKBOOKS = gql`
   query getWorkbooks {
     workbooks {

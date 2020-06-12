@@ -40,6 +40,7 @@ const queries = gql`
     organizationMeta(_ids: [ID]): [OrganizationMeta]
 
     opLogs: [OpLog]
+    fullOpLogs(maxLineCount: Int): [OpLog]
 
     workbooks: [Workbook]
 

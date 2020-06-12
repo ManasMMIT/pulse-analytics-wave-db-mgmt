@@ -7,6 +7,8 @@ import { SELECT_CLIENT, SELECT_TOOL } from './../api/mutations'
 
 import Home from './Home'
 import SitemapPanel from './SitemapPanel'
+import FullOpLog from './Home/StatusPanel/OpLog/FullOpLog'
+
 class Phoenix extends Component {
   state = {
     isLoading: true,
@@ -30,6 +32,7 @@ class Phoenix extends Component {
         <Switch>
           <Route exact path="/phoenix" component={Home} />
           <Route path="/phoenix/sitemap/:teamId" component={SitemapPanel} />
+          <Route path="/phoenix/oplog" component={FullOpLog} />
         </Switch>
       </div>
     )
