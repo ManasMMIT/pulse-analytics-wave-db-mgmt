@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - `Payer Import Tool`: Fixed import error formatting by adding a # delimiter to each line of error description
+- `Orion`: Query Tool placard filters can no longer receive invalid items and are up-to-date post mutation of rows
 
 ## [2.7.0] - Started: 5-26-20
 

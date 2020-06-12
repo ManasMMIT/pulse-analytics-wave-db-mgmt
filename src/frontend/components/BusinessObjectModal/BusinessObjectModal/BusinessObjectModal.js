@@ -59,8 +59,8 @@ const BusinessObjectModal = ({
     {
       variables: { input: inputToUse },
       refetchQueries,
-      onCompleted: () => {
-        afterMutationHook()
+      onCompleted: data => {
+        afterMutationHook(data)
         closeModal()
       },
       awaitRefetchQueries: true,

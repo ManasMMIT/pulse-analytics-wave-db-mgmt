@@ -5,7 +5,6 @@ import getPqlFromConfigs from './getPqlFromConfigs'
 import FieldsSectionCard from '../../../../components/FieldsSectionCard'
 
 const generatePanel = ({
-  pqlObject,
   boFilterSettings,
   setFiltersState,
   filtersState,
@@ -28,14 +27,12 @@ const generatePanel = ({
         setPql,
       })
 
-      let defaultValue
-      if (pqlObject && pqlObject.params && pqlObject.params.length) {
-        const matchingKeyParams = pqlObject.params
-          .find(({ key }) => key === boFieldKey)
+      const matchingKeyParamsInState = filtersState
+        .find(({ key }) => key === boFieldKey)
 
-        defaultValue = matchingKeyParams
-          ? matchingKeyParams.options
-          : null
+      let value = null
+      if (matchingKeyParamsInState) {
+        value = matchingKeyParamsInState.options
       }
 
       return {
@@ -48,7 +45,7 @@ const generatePanel = ({
           isClearable: true,
 
           // ! injected on mount by placard view
-          defaultValue,
+          value,
 
           // * likely fixed props
           ...clonedInputProps,

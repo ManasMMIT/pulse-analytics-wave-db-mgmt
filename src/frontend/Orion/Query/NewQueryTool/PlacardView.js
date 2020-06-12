@@ -14,6 +14,7 @@ import QueryToolTable from './QueryToolTable'
 import usePql from '../../../hooks/usePql'
 import useAquilaBusinessObjects from './utils/useAquilaBusinessObjects'
 import usePqlObject from './utils/usePqlObject'
+import getPqlFromConfigs from './utils/getPqlFromConfigs'
 
 import generatePanel from './utils/generatePanel'
 
@@ -66,12 +67,26 @@ const PlacardView = () => {
   }
 
   useEffect(() => {
-    if (!pqlObjectLoading) {
+    const shouldClean = !filtersState.length
+      && !_.isEmpty(boFilterSettings)
+      && !pqlObjectLoading
+
+    if (shouldClean) {
       const { pqlObject: { params } } = pqlObjectData
 
-      setFiltersState(params)
+      const cleanFiltersState = getCleanFiltersState(boFilterSettings, params)
+
+      setFiltersState(cleanFiltersState)
+
+      const cleanPql = getPqlFromConfigs({
+        businessObjectName,
+        configs: cleanFiltersState,
+      })
+
+      setPql(cleanPql)
     }
-  }, [pqlObjectLoading])
+    // ! on mount or when business objects are selected, the dependency array will recognize a diff
+  }, [pqlObjectLoading, boFilterSettings])
 
   useEffect(() => {
     const shouldFetchBoFilterSettings = aquilaBusinessObjects && selectedOption
@@ -87,7 +102,20 @@ const PlacardView = () => {
     if (pql.length) submitPql(pql)
   }, [pql, aquilaBusinessObjects])
 
+  useEffect(() => {
+    const cleanFiltersState = getCleanFiltersState(boFilterSettings, filtersState)
+
+    setFiltersState(cleanFiltersState)
+  }, [pql])
+
   if (_.isEmpty(aquilaBusinessObjects)) return null
+
+  const setFiltersAndPqlPostMutation = getSetFiltersAndPqlPostMutation(
+    filtersState,
+    setFiltersState,
+    businessObjectName,
+    setPql,
+  )
 
   const shouldRenderPanel = !_.isEmpty(boFilterSettings) && !pqlObjectLoading
 
@@ -132,9 +160,71 @@ const PlacardView = () => {
           { query: GET_AQUILA_BO_FILTER_SETTINGS, variables: { boId: (selectedOption || {}).value } },
           { query: GET_AQUILA_PQL_RESULTS, variables: { pql } },
         ]}
+        afterMutationHook={setFiltersAndPqlPostMutation}
       />
     </>
   )
 }
 
 export default PlacardView
+
+const getCleanFiltersState = (
+  boFilterSettings,
+  filtersState
+) => {
+  const boFilterFieldsByKey = _.keyBy(
+    boFilterSettings.fields,
+    'boFieldKey'
+  )
+
+  const cleanFiltersState = filtersState.map(({
+    key,
+    options
+  }) => {
+    if (!boFilterFieldsByKey[key]) return { key, options }
+
+    const { inputProps: { options: filterOptions } } = boFilterFieldsByKey[key]
+
+    const cleanOptions = options.filter(({ value }) => {
+      return filterOptions.includes(value)
+    })
+
+    return { key, options: cleanOptions }
+  })
+
+  return cleanFiltersState
+}
+
+const getSetFiltersAndPqlPostMutation = (
+  filtersState,
+  setFiltersState,
+  businessObjectName,
+  setPql,
+) => {
+  return data => {
+    const datum = Object.values(data)[0]
+    const newFiltersState = _.cloneDeep(filtersState)
+
+    newFiltersState.forEach(filter => addNewOptions(filter, datum))
+
+    setFiltersState(newFiltersState)
+
+    const pqlWithAdditionalOptions = getPqlFromConfigs({
+      businessObjectName,
+      configs: newFiltersState,
+    })
+
+    setPql(pqlWithAdditionalOptions)
+  }
+}
+
+const addNewOptions = ({ key, options }, datum) => {
+  const datumValue = datum[key]
+
+  if (!datumValue) return
+
+  const isInOptions = options.find(({ value: filterOptionValue }) => filterOptionValue === datumValue)
+  if (_.isEmpty(isInOptions)) {
+    options.push({ label: datumValue, value: datumValue })
+  }
+}
