@@ -7,7 +7,6 @@ import Spacing from '../../../utils/spacing'
 
 export const PageContainer = styled.div({
   padding: Spacing.EXTRA_LARGE,
-  // backgroundColor: '#e8ebec',
   flex: '1 1 auto',
   overflowY: 'scroll',
   boxSizing: 'border-box',
@@ -58,6 +57,4 @@ export const CardHeader = styled.div({
   fontSize: 16,
   fontWeight: 700,
   padding: `${Spacing.S6} ${Spacing.S7}`,
-  // textTransform: 'uppercase',
-  // borderBottom: `1px solid ${transparentize(0.9, Color.BLACK)}`,
 })

@@ -22,13 +22,6 @@ const SelectContainer = styled.div({
   ...FontSpace.FS3,
 })
 
-// const colorStyles = {
-//   menu: provided => ({
-//     ...provided,
-//     zIndex: 3,
-//   }),
-// }
-
 const TreatmentPlansFilters = ({
   selectedFilters,
   filtersConfig,
