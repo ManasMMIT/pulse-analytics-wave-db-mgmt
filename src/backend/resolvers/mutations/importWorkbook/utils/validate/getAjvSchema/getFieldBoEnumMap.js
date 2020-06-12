@@ -63,11 +63,15 @@ const getFieldBoEnumMap = async (fields, db) => {
   // STEP 5: Replace the businessObjRef values in the result obj with the unique
   // list of data values we've gotten. Use the two hashes from Steps 3 and 4.
   fieldBoEnumMap = _.mapValues(fieldBoEnumMap, businessObjRef => {
-    const { _id, fieldId } = businessObjRef
+    const { _id, fieldId, allowBlankValues } = businessObjRef
     const rawCollectionData = businessObjToCollectionMap[_id]
     const fieldKey = businessObjIdToFieldsMap[_id][fieldId].key
     
     const uniqueValues = _.uniqBy(rawCollectionData, fieldKey).map(doc => doc[fieldKey])
+
+    // if 'allowBlankValues' is true, add an empty string to uniqueValues
+    // which is later picked up as a proxy to allow for null values
+    if (allowBlankValues) uniqueValues.push('')
 
     return uniqueValues
   })

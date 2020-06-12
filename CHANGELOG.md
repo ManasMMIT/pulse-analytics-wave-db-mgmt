@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - `Orion`: Built out OBM Service and OBM Service Category Placards, queries, mutations.
+- `Sheet Management System`: Add option to allow blank rows through even if using business object validation on a field
 
 ### Fixed
 - `Payer Import Tool`: Fixed import error formatting by adding a # delimiter to each line of error description
