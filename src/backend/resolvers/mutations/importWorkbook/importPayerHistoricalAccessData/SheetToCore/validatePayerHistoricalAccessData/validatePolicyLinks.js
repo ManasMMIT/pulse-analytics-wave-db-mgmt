@@ -20,8 +20,8 @@ const validatePolicyLinks = ({ sheetData, allowedBrcs }) => {
 
   if (dupeBrcs.length) {
     throw new Error(
-      'Incoming Book, Regimen, Coverage, and Slug combos did not pass validation\n'
-      + `The following combinations were duplicate:\n${dupeBrcs}\n`
+      '\n#Incoming Book, Regimen, Coverage, and Slug combos did not pass validation\n'
+      + `#The following combinations were duplicate in the Policy Links Sheet:\n${dupeBrcs}\n`
     )
   }
 
@@ -33,8 +33,8 @@ const validatePolicyLinks = ({ sheetData, allowedBrcs }) => {
 
   if (invalidBrcs.length) {
     throw new Error(
-      'Incoming Book, Regimen, Coverage, and Slug combos did not pass validation\n'
-      + `The following combinations were invalid:\n${invalidBrcs}\n`
+      '\n#Incoming Book, Regimen, Coverage, and Slug combos did not pass validation\n'
+      + `#The following combinations were invalid in the Policy Links Sheet:\n${invalidBrcs}\n`
     )
   }
 

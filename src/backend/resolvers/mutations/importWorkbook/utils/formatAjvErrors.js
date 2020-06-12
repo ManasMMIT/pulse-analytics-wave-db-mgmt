@@ -1,7 +1,7 @@
 const stringSimilarity = require('string-similarity')
 
 const formatAjvErrors = ({ errors, wb, sheet }) => {
-  let errorString = `${wb}/${sheet} failed validation for the following rows:\n\n`
+  let errorString = `#${wb}/${sheet} failed validation for the following rows:\n\n`
 
   errorString = errors.reduce((acc, { error, rowNum, datum }) => {
     if (typeof error === 'string') {
@@ -36,7 +36,7 @@ const formatAjvErrors = ({ errors, wb, sheet }) => {
       suggestion = target
     }
 
-    acc += `Row ${rowNum}`
+    acc += `#Row ${rowNum}`
     if (key) acc += `, key '${key}'`
     acc += `${extraErrorStr}${message}\n`
 

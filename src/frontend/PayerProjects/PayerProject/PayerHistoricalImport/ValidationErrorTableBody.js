@@ -7,24 +7,25 @@ import TableCell from '@material-ui/core/TableCell'
 import TableRow from '@material-ui/core/TableRow'
 
 const ValidationErrorTableBody = ({
-  headerData,
   tableData,
   page,
   rowsPerPage,
 }) => {
-  const { message, error } = headerData
   const paginateStartIdx = page * rowsPerPage
   const paginateEndIdx = page * rowsPerPage + rowsPerPage
 
   const renderErrors = tableData
     .slice(paginateStartIdx, paginateEndIdx)
-    .map(combo => (
-      <TableRow key={_.kebabCase(combo)}>
+    .map(({ scenario, message, suggestion }) => (
+      <TableRow key={`${ message }-${_.kebabCase(suggestion)}`}>
         <TableCell>
-          { message + error }
+          { scenario }
         </TableCell>
         <TableCell>
-          { combo }
+          { message }
+        </TableCell>
+        <TableCell>
+          { suggestion }
         </TableCell>
       </TableRow>
     ))
@@ -37,7 +38,6 @@ const ValidationErrorTableBody = ({
 }
 
 ValidationErrorTableBody.propTypes = {
-  headerData: PropTypes.object.isRequired,
   page: PropTypes.number.isRequired,
   rowsPerPage: PropTypes.number.isRequired,
   tableData: PropTypes.array.isRequired,

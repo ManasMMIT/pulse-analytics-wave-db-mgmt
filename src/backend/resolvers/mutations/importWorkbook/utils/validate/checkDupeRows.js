@@ -41,7 +41,7 @@ const checkDupeRows = (data, skippedRows) => {
   dupeRows.forEach(groupOfDupes => {
     const { datum, rowNum } = groupOfDupes[0]
 
-    let errorMessage = `Row ${rowNum} is duplicated on row(s) `
+    let errorMessage = `#Duplication Row Error\nRow ${rowNum} is duplicated on row(s) `
     const rowNums = groupOfDupes.slice(1).map(({ rowNum }) => rowNum).join(', ')
 
     errorMessage += rowNums

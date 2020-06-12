@@ -31,7 +31,6 @@ const SectionWrapper = styled.div({
   width: '100%',
   flexDirection: 'column',
   borderBottom: `1px solid ${ Color.LIGHT_GRAY_1 }`,
-  overflowY: 'scroll'
 })
 
 const TimestampSection = ({
@@ -66,11 +65,11 @@ const TimestampSection = ({
         activeTabStyle={{ color: Color.PRIMARY }}
         tabsContainerStyle={{
           borderBottom: `1px solid ${ AlphaColors.Black10 }`,
-          paddingLeft: Spacing.S4
+          paddingLeft: Spacing.S4,
         }}
       >
-        <TimestampPanel timestamps={payerProjectTimestampsLong} />
-        <TimestampCalendar timestamps={payerProjectTimestampsShort} />
+        <TimestampPanel timestamps={_.uniq(payerProjectTimestampsLong)} />
+        <TimestampCalendar timestamps={_.uniq(payerProjectTimestampsShort)} />
       </UnderlinedTabs >
     </SectionWrapper>
   )

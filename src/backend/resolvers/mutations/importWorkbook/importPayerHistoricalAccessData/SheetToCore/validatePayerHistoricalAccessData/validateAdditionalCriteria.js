@@ -24,8 +24,8 @@ const validateAdditionalCriteria = ({ sheetData, allowedPtps }) => {
 
   if (invalidOrgTpCombos.length) {
     throw new Error(
-      'Incoming Payer Treatment Plan combos did not pass validation\n'
-      + `The following combinations were invalid:\n${ invalidOrgTpCombos }\n`
+      '\n#Incoming Payer Treatment Plan combos did not pass validation\n'
+      + `#The following combinations were invalid in the Additional Criteria Sheet:\n${ invalidOrgTpCombos }\n`
     )
   }
 

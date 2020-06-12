@@ -20,13 +20,27 @@ const TableWrapper = styled.section({
 const ValidationErrorTable = ({
   validationErrors
 }) => {
-  const formattedErrors = validationErrors.split('\n').filter(line => !!line)
-  const [message, error, ...combinations] = formattedErrors
+  const formattedErrors = validationErrors.split('#')
+  const [, scenario, ...errorGroups] = formattedErrors
+
+  const tableData = errorGroups.reduce((acc, errorGroup) => {
+    const [message, ...suggestions] = errorGroup.split('\n').filter(line => !!line)
+    const errorData = suggestions.map(suggestion => ({
+      scenario,
+      message,
+      suggestion: suggestion.replace(/\|/g, ' | ')
+    }))
+
+    return [
+      ...acc,
+      ...errorData
+    ]
+  }, [])
+
   const shouldShowTable = validationErrors.length !== 0
-  const headerData = { error, message }
 
   const [page, setPage] = useState(0)
-  const [rowsPerPage, setRowsPerPage] = useState(10)
+  const [rowsPerPage, setRowsPerPage] = useState(100)
   
   const handleChangePage = (_, newPage) => {
     setPage(newPage)
@@ -36,20 +50,20 @@ const ValidationErrorTable = ({
     setRowsPerPage(parseInt(event.target.value))
     setPage(0)
   }
-
+  
   return shouldShowTable && (
     <TableWrapper>
       <TableContainer style={{ maxHeight: 400 }}>
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>
-              <TableCell> Error </TableCell>
-              <TableCell> Combinations </TableCell>
+              <TableCell> Scenario/Error </TableCell>
+              <TableCell> Message </TableCell>
+              <TableCell> Suggestion/Consideration </TableCell>
             </TableRow>
           </TableHead>
           <ValidationErrorTableBody
-            tableData={combinations}
-            headerData={headerData}
+            tableData={tableData}
             page={page}
             rowsPerPage={rowsPerPage}
           />
@@ -58,7 +72,7 @@ const ValidationErrorTable = ({
       <TablePagination
         rowsPerPageOptions={[10, 25, 100]}
         component="div"
-        count={formattedErrors.length}
+        count={tableData.length}
         rowsPerPage={rowsPerPage}
         page={page}
         onChangePage={handleChangePage}

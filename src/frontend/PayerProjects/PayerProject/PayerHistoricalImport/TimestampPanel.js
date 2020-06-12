@@ -36,6 +36,7 @@ const LatestLabel = styled.div({
 
 const Wrapper = styled.div({
   margin: Spacing.S4,
+  overflowY: 'scroll'
 })
 
 const TimestampPanel = ({

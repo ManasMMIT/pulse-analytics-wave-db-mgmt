@@ -32,7 +32,7 @@ const IconSource = {
   PHOENIX: 'https://res.cloudinary.com/pulsedatatools/image/upload/v1573136582/polaris/icons/phoenix-1-white.svg',
   ORION: 'https://res.cloudinary.com/pulsedatatools/image/upload/v1573136582/polaris/icons/orion-1-white.svg',
   DELPHI: 'https://res.cloudinary.com/pulsedatatools/image/upload/v1573136582/polaris/icons/mercury-1-white.svg',
-  PAYER_PROJECTS: 'https://res.cloudinary.com/pulsedatatools/image/upload/v1573136582/polaris/icons/taurus-1-white.svg',
+  PAYER_PROJECTS: 'https://res.cloudinary.com/pulsedatatools/image/upload/v1591273667/polaris/icons/payer-1-white.svg',
 }
 
 const PolarisSidebar = styled.div({
