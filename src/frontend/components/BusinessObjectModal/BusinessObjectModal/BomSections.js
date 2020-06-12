@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from '@emotion/styled'
 import PropTypes from 'prop-types'
+import _ from 'lodash'
 
 import Spacing from '../../../utils/spacing'
 import Color from '../../../utils/color'
@@ -42,7 +43,7 @@ const BomSections = ({ selectedTab, inputFields, setInputField }) => {
   const onSelectChange = (selected, { name }) => {
     setInputField(inputs => ({
       ...inputs,
-      [name]: selected,
+      [name]: selected.value,
     }))
   }
 
@@ -52,15 +53,24 @@ const BomSections = ({ selectedTab, inputFields, setInputField }) => {
       const onChange =
         inputComponent !== 'Select' ? onEventChange : onSelectChange
 
+      let value = inputFields[key]
+      let clonedInputProps = _.cloneDeep(inputProps)
+
+      if (inputComponent === 'Select') {
+        value = { value: inputFields[key], label: inputFields[key] }
+        clonedInputProps.options = clonedInputProps.options.map(value => ({ value, label: value }))
+      }
+
       const props = {
-        ...inputProps,
+        ...clonedInputProps,
         onChange,
-        value: inputFields[key],
+        value,
         name: key,
       }
 
       return { ...field, inputProps: props }
     })
+
     return { ...section, fields: fieldsWithProps }
   })
 

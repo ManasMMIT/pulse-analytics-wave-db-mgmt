@@ -1,9 +1,9 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import XLSX from 'xlsx'
 import PropTypes from 'prop-types'
 import { useMutation } from '@apollo/react-hooks'
 import styled from '@emotion/styled'
-import Alert from '@material-ui/lab/Alert'
+import { Alert, AlertTitle } from '@material-ui/lab'
 import {
   MuiPickersUtilsProvider,
   KeyboardDatePicker,
@@ -93,20 +93,34 @@ const ImportSection = ({
 }) => {
   const fileInputRef = useRef(null)
 
+  // Add Reload warning
+  const beforeunload = e => {
+    e.preventDefault()
+  }
+
+  useEffect(() => {
+    window.addEventListener('beforeunload', beforeunload)
+  
+    return () => {
+      window.removeEventListener('beforeunload', beforeunload)
+    }
+  }, [])
+
   const [workbook, setWorkbook] = useState(null)
   const [workbookName, setWorkbookName] = useState(null)
   const [isWorkbookUploaded, setIsWorkbookUploaded] = useState(false)
   const [sheetNames, setSheetNames] = useState([])
   const [timestamp, setTimestamp] = useState(null)
   const [alertStatus, setAlertStatus] = useState({
-    status: null, message: null
+    status: null, message: null, description: null
   })
   
   const [importWorkbook] = useMutation(IMPORT_WORKBOOK, {
     onCompleted: ({ importWorkbook: importFeedback }) => {
       setAlertStatus({
         status: SUCCESS,
-        message: alertMessageMap[SUCCESS]
+        message: alertMessageMap[SUCCESS],
+        description: 'Compiling data for the app. This process usually takes around 2 ½ to 3 minutes.'
       })
     },
     onError: (errorMessage, ...rest) => {
@@ -228,8 +242,11 @@ const ImportSection = ({
         Import File
       </Button>
       {alertStatus.status && (
-        <Alert severity={alertStatus.status}>
-          { alertStatus.message }
+        <Alert
+          severity={alertStatus.status}
+          >
+          <AlertTitle>{ alertStatus.message }</AlertTitle>
+          { alertStatus.description }
         </Alert>
       )}
     </ImportSectionWrapper>

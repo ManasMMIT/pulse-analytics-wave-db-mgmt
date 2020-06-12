@@ -16,6 +16,7 @@ import {
   GET_BUSINESS_OBJECTS,
   GET_AQUILA_CONFIGS,
   GET_AQUILA_BUSINESS_OBJECTS,
+  GET_AQUILA_BO_FILTER_SETTINGS,
 } from 'frontend/api/queries'
 
 const Form = ({
@@ -39,7 +40,11 @@ const Form = ({
         boFieldId: stagedBoFieldId, // need to wait for query to assign correct initial field
       }
     },
-    refetchQueries: [{ query: GET_AQUILA_CONFIGS }, { query: GET_AQUILA_BUSINESS_OBJECTS }],
+    refetchQueries: [
+      { query: GET_AQUILA_CONFIGS },
+      { query: GET_AQUILA_BUSINESS_OBJECTS },
+      { query: GET_AQUILA_BO_FILTER_SETTINGS, variables: { boId: selectedAquilaConfig.boId }}
+    ],
     awaitRefetchQueries: true,
     onCompleted: result => {
       const targetDataKey = Object.keys(result)[0]

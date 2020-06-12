@@ -1,6 +1,7 @@
 const additionalCriteriaAggPip = require('./agg-pipelines/additional-criteria-ptp-pipeline')
 const qualityAccessAggPip = require('./agg-pipelines/quality-access-agg-pip')
 const policyLinkAggPipeline = require('./agg-pipelines/policy-link-agg-pipeline')
+const _ = require('lodash')
 
 const {
   formatQualityAccessDoc,
@@ -217,6 +218,8 @@ class CoreToDev {
   }
 
   async materializeNonLivesCollections() {
+    const uniqueIdLabel = `Step 5: Materialization ${ _.uniqueId() }`
+    console.time(uniqueIdLabel)
     this.nonLivesCollectionDocs = await this.getNonLivesCollectionDocs()
 
     console.log('quality access, additional criteria, policy links, and combined collection docs finished formatting')
@@ -233,6 +236,7 @@ class CoreToDev {
       this.materializeCombinedNonLivesData(),
     ])
 
+    console.timeEnd(uniqueIdLabel)
     console.log('non-lives historical collections have finished materializing')
   }
 }

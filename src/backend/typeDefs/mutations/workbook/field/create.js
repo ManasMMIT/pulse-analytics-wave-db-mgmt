@@ -13,6 +13,7 @@ const createSheetFieldTypeDefs = gql`
   input BusinessObjRefInput {
     _id: ID!
     fieldId: ID!
+    allowBlankValues: Boolean
   }
 `
 

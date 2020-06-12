@@ -13,7 +13,7 @@ module.exports = ({ businessObjectName, configs }) => {
 
 const getInnerPqlFromOptions = (key, options) => {
   const formattedOptions = options
-    .map(({ label }) => `"${label}"`)
+    .map(({ value }) => typeof value === 'number' ? value : `"${value}"`)
     .join(', ')
 
   return `${ key }=(${ formattedOptions })`

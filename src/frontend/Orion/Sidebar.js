@@ -5,6 +5,8 @@ import { transparentize } from 'polished'
 
 import Dropdown from './shared/Dropdown'
 
+import { useAuth0 } from '../../react-auth0-spa'
+import superUsersById from '../utils/super-users'
 import { Colors, Spacing } from '../utils/pulseStyles'
 
 const OrionHeader = styled.div({
@@ -172,6 +174,9 @@ const renderStyledNavLink = ({ label, link }) => (
 )
 
 const Sidebar = () => {
+  const { user } = useAuth0()
+  const isSuperUser = user.sub in superUsersById
+
   return (
     <Wrapper>
       <OrionHeader>
@@ -261,14 +266,18 @@ const Sidebar = () => {
             {PRODUCT_INDICATION_LINKS_CONFIG.map(renderStyledNavLink)}
           </div>
         </StyledDropdown>
-        <StyledDropdown
-          style={inactiveLinkStyle}
-          label={'Admin Settings'}
-        >
-          <div style={{ display: 'flex', flexDirection: 'column' }}>
-            {ADMIN_SETTINGS_LINKS_CONFIG.map(renderStyledNavLink)}
-          </div>
-        </StyledDropdown>
+        {
+          isSuperUser && (
+            <StyledDropdown
+              style={inactiveLinkStyle}
+              label={'Admin Settings'}
+            >
+              <div style={{ display: 'flex', flexDirection: 'column' }}>
+                {ADMIN_SETTINGS_LINKS_CONFIG.map(renderStyledNavLink)}
+              </div>
+            </StyledDropdown>
+          )
+        }
       </div>
     </Wrapper>
   )

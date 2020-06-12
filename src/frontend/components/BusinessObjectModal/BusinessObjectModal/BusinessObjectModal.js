@@ -30,29 +30,6 @@ const BoContent = styled.div({
   height: '100%',
 })
 
-const formatSchemaItems = schema => {
-  return schema.tags.map(tag => ({ label: tag.label, value: tag._id }))
-}
-
-const isOptionsInput = input => (
-  _.isObject(input)
-  && Object.keys(input).length === 2
-  && input.label
-  && input.value
-)
-
-const getInputValues = inputFields => {
-  const cloneIdInputFields = _.cloneDeep(inputFields)
-
-  Object.entries(inputFields).forEach(([key, value]) => {
-    if (isOptionsInput(value)) {
-      cloneIdInputFields[key] = value.value
-    }
-  })
-
-  return cloneIdInputFields
-}
-
 const BusinessObjectModal = ({
   entityId,
   boId,
@@ -61,6 +38,7 @@ const BusinessObjectModal = ({
   mutationDocs,
   refetchQueries,
   afterMutationHook,
+  widgets,
 }) => {
   const { schema, entity, loading } = useBom(boId, entityId)
 
@@ -75,16 +53,14 @@ const BusinessObjectModal = ({
     ? { _id: entityId, ...inputFields }
     : inputFields
 
-  // todo: only clean input onClick
-  const input = getInputValues(inputToUse)
-
+  console.log('Mutation Input: ', inputToUse)
   const [save] = useMutation(
     mutationToUse,
     {
-      variables: { input },
+      variables: { input: inputToUse },
       refetchQueries,
-      onCompleted: () => {
-        afterMutationHook()
+      onCompleted: data => {
+        afterMutationHook(data)
         closeModal()
       },
       awaitRefetchQueries: true,
@@ -92,42 +68,9 @@ const BusinessObjectModal = ({
     }
   )
 
-  // 1. Upsertion dynamic mutation
-  // 2. Deletion dynamic mutation
-  // const [save] = useMutation(SUPER_DYNAMIC_ENDPOINT_EITHER_DELETE_OR_UPSERT, // make a dynamic modal mutation
-  //   {
-  //     variables: {
-  //       input: {
-  //         boId,// get to correct collection
-  //         entityId, // search to upsert
-  //         inputFields // set obj
-  //       },
-  //     },
-  //     update: (cache, { data }) => {
-  //       const { __typename, ...newOrUpdatedEntity } = data[Object.keys(data)[0]]
-
-  //       const cacheId = `${__typename}:${newOrUpdatedEntity._id}`
-
-  //       cache.writeFragment({
-  //         // id: 'PathwaysOrganization:5d825338cc80b15a9476ba84', // ! example format
-  //         id: cacheId,
-  //         fragment: gql`
-  //           fragment ${ __typename + _.uniqueId() } on ${ __typename } {
-  //             ${ Object.keys(newOrUpdatedEntity).join('\n') }
-  //             __typename
-  //           }
-  //         `,
-  //         data: {
-  //           ...newOrUpdatedEntity,
-  //           __typename,
-  //         },
-  //       });
-  //     }
-  //     // refetchQueries: [{ query: MAP_QUERY_THINGY[boId] }]
-  //   })
-
   useEffect(() => {
-    if (!loading) {
+    // ! When useBom errors, it will pass back an empty schema
+    if (!loading && !_.isEmpty(schema) && !_.isEmpty(schema.tags)) {
       const firstTab = schema.tags[0]
       const mappedEntitiesToFields = schema.tags.reduce((acc, { sections }) => {
         sections.forEach(({ fields }) => {
@@ -143,11 +86,14 @@ const BusinessObjectModal = ({
     }
   }, [loading])
 
-  if (loading) return null
+  if (loading || _.isEmpty(schema)) return null
 
   const modalTitle = `${entityId ? 'Edit' : 'Create'} ${headerText}`
   const modalTitleModifier = [entity.organization]
-  console.log(inputFields)
+
+  // Can't allow relationalizing data on create yet; needs to be planned out more
+  const allTags = _.isEmpty(entity) ? schema.tags : schema.tags.concat(widgets)
+  const sidebarOptions = allTags.map(tag => ({ label: tag.label, value: tag._id }))
 
   return (
     <Dialog>
@@ -172,18 +118,26 @@ const BusinessObjectModal = ({
       </Header>
       <BoContent>
         <BomSidebar
-          options={formatSchemaItems(schema)}
+          options={sidebarOptions}
           onClick={({ value }) => {
-            const nextTab = schema.tags.find(({ _id }) => _id === value)
+            const nextTab = allTags.find(({ _id }) => _id === value)
             setSelectedTab(nextTab)
           }}
           selectedTab={{ value: selectedTab._id, label: selectedTab.label }}
         />
-        <BomSections
-          inputFields={inputFields}
-          selectedTab={selectedTab}
-          setInputField={setInputField}
-        />
+
+        {
+          selectedTab._id && selectedTab._id.includes('RELATIONAL')
+            ? (
+              <selectedTab.Component entity={entity} />
+            ) : (
+              <BomSections
+                inputFields={inputFields}
+                selectedTab={selectedTab}
+                setInputField={setInputField}
+              />
+            )
+        }
       </BoContent>
     </Dialog>
   )
@@ -197,6 +151,7 @@ BusinessObjectModal.propTypes = {
   mutationDocs: PropTypes.object,
   refetchQueries: PropTypes.array,
   afterMutationHook: PropTypes.func,
+  widgets: PropTypes.array,
 }
 
 BusinessObjectModal.defaultProps = {
@@ -205,6 +160,42 @@ BusinessObjectModal.defaultProps = {
   mutationDocs: {},
   refetchQueries: [],
   afterMutationHook: () => {},
+  widgets: [],
 }
 
 export default BusinessObjectModal
+
+// ! thoughts on more dynamic model:
+// 1. Upsertion dynamic mutation
+// 2. Deletion dynamic mutation
+// const [save] = useMutation(SUPER_DYNAMIC_ENDPOINT_EITHER_DELETE_OR_UPSERT, // make a dynamic modal mutation
+//   {
+//     variables: {
+//       input: {
+//         boId,// get to correct collection
+//         entityId, // search to upsert
+//         inputFields // set obj
+//       },
+//     },
+//     update: (cache, { data }) => {
+//       const { __typename, ...newOrUpdatedEntity } = data[Object.keys(data)[0]]
+
+//       const cacheId = `${__typename}:${newOrUpdatedEntity._id}`
+
+//       cache.writeFragment({
+//         // id: 'PathwaysOrganization:5d825338cc80b15a9476ba84', // ! example format
+//         id: cacheId,
+//         fragment: gql`
+//           fragment ${ __typename + _.uniqueId() } on ${ __typename } {
+//             ${ Object.keys(newOrUpdatedEntity).join('\n') }
+//             __typename
+//           }
+//         `,
+//         data: {
+//           ...newOrUpdatedEntity,
+//           __typename,
+//         },
+//       });
+//     }
+//     // refetchQueries: [{ query: MAP_QUERY_THINGY[boId] }]
+//   })

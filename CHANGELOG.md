@@ -12,7 +12,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Fixed** for any bug fixes.
 - **Security** in case of vulnerabilities.
 
-## [Unreleased] - Started: 6-2-20
+## [Unreleased] - Started: 6-12-20
+
+## [2.8.0] - Started: 6-2-20
+
+### Added
+- `Orion`: Built out OBM Service and OBM Service Category Placards, queries, mutations.
+- `Sheet Management System`: Add option to allow blank rows through even if using business object validation on a field
+- `Phoenix`: Added first iteration full oplog view to request arbitrary number of logs
+
+### Fixed
+- `Payer Import Tool`: Fixed import error formatting by adding a # delimiter to each line of error description
+- `Orion`: Query Tool placard filters can no longer receive invalid items and are up-to-date post mutation of rows
 
 ## [2.7.0] - Started: 5-26-20
 

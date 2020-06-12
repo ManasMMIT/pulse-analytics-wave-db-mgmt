@@ -17,6 +17,7 @@ const importWorkbook = async (
   { pulseCoreDb, pulseDevDb, mongoClient },
   info
 ) => {
+  console.time('Step 1: Validate Sheet')
   // Step 1: Completely sanitize and validate the data (across all incoming sheets)
   // If anything fails, error is thrown right away and no further code executes.
   const cleanedSheetsWithMetadata = []
@@ -66,6 +67,8 @@ const importWorkbook = async (
   const isIncomingDataPayerWorkbook = isQualityAccessSheet(input[0].sheet)
     || isAdditionalCriteriaSheet(input[0].sheet)
     || isPolicyLinksSheet(input[0].sheet)
+
+  console.timeEnd('Step 1: Validate Sheet')
 
   if (isIncomingDataPayerWorkbook) {
     await importPayerHistoricalAccessData({

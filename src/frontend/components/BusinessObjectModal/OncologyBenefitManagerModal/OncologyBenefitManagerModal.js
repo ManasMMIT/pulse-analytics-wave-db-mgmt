@@ -9,10 +9,19 @@ import {
   GET_OBM_ORGANIZATIONS,
 } from 'frontend/api/queries'
 
+import ObmServicesWidget from './relational-widgets/ObmServicesWidget'
 import BusinessObjectModal from '../BusinessObjectModal/BusinessObjectModal'
 
 const OBM_BOID = '5ec81a40b2cfb87bb15373ec'
 const HEADER_TEXT = 'Oncology Benefit Manager Accounts'
+
+const WIDGETS = [
+  {
+    _id: 'RELATIONAL_obmServicesWidget',
+    label: 'Connect to OBM Services',
+    Component: ObmServicesWidget,
+  },
+]
 
 const OncologyBenefitManagerModal = ({
   closeModal,
@@ -31,6 +40,7 @@ const OncologyBenefitManagerModal = ({
     }}
     refetchQueries={[...refetchQueries, { query: GET_OBM_ORGANIZATIONS }]}
     afterMutationHook={afterMutationHook}
+    widgets={WIDGETS}
   />
 )
 

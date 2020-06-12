@@ -614,6 +614,24 @@ export const GET_APM_ORGANIZATIONS = gql`
   }
 `
 
+export const GET_OBM_SERVICES = gql`
+  query getObmServices {
+    obmServices {
+      _id
+      name
+    }
+  }
+`
+
+export const GET_OBM_SERVICES_CATEGORIES = gql`
+  query getObmServicesCategories {
+    obmServicesCategories {
+      _id
+      name
+    }
+  }
+`
+
 export const GET_OBM_ORGANIZATIONS = gql`
   query getObmOrganizations {
     obmOrganizations {
@@ -666,6 +684,18 @@ export const GET_ALERT = gql`
 export const GET_OP_LOG = gql`
   query getOpLog {
     opLogs {
+      timestamp
+      username
+      userId
+      operationName
+      operationVariables
+    }
+  }
+`
+
+export const GET_FULL_OP_LOGS = gql`
+  query getFullOpLogs($maxLineCount: Int) {
+    fullOpLogs(maxLineCount: $maxLineCount) {
       timestamp
       username
       userId
@@ -752,5 +782,26 @@ export const GET_PAYER_PROJECT_PTPS = gql`
 export const GET_REGIONAL_TARGETING_DATA = gql`
  query getRegionalTargetingData($input: JSON) {
    regionalTargetingData(input: $input)
+ }
+`
+
+export const GET_OBM_SERVICE_AND_OBM_SERVICE_CATEGORY_CONNECTIONS = gql`
+ query getObmServiceAndObmServiceCategoryConnections($obmServiceId: String) {
+   obmServiceAndObmServiceCategoryConnections(obmServiceId: $obmServiceId) {
+     _id
+     obmServiceId
+     obmServiceCategoryId
+   }
+ }
+`
+
+export const GET_OBM_AND_OBM_SERVICE_CONNECTIONS = gql`
+ query getObmAndObmServiceConnections($obmId: String) {
+   obmAndObmServiceConnections(obmId: $obmId) {
+     _id
+     obmId
+     obmServiceId
+     rating
+   }
  }
 `

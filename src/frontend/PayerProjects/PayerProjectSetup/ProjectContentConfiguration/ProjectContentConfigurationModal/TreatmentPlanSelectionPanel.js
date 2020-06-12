@@ -79,12 +79,12 @@ const TreatmentPlanSelectionPanel = ({
           {
             enabledTps.map(tp => (
               <RowItem key={tp._id}>
-                <span>{getTpLabel(tp)}</span>
                 <OrionSwitch
                   _id={tp._id}
                   isChecked={isTreatmentPlanChecked(tp._id)}
                   handleToggle={handleToggle}
                 />
+                <span>{getTpLabel(tp)}</span>
               </RowItem>
             ))
           }
@@ -95,12 +95,12 @@ const TreatmentPlanSelectionPanel = ({
           {
             disabledTps.map(tp => (
               <RowItem key={tp._id}>
-                <span>{getTpLabel(tp)}</span>
                 <OrionSwitch
                   _id={tp._id}
                   isChecked={isTreatmentPlanChecked(tp._id)}
                   handleToggle={handleToggle}
                 />
+                <span>{getTpLabel(tp)}</span>
               </RowItem>
             ))
           }

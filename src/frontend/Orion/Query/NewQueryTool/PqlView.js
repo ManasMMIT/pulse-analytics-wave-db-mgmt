@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { GET_AQUILA_PQL_RESULTS } from 'frontend/api/queries'
-import useAquila from '../../../hooks/useAquila'
+import usePql from '../../../hooks/usePql'
 import { Colors } from '../../../utils/pulseStyles'
 
 import QueryToolTable from './QueryToolTable'
@@ -12,7 +12,7 @@ const PqlView = () => {
     data: { pql, results },
     loading,
     submitPql,
-  } = useAquila()
+  } = usePql()
 
   const businessObjectName = pql.match(/[\w\s]+={.*}/) && pql.match(/[\w\s]+=/)[0].replace('=', '')
 

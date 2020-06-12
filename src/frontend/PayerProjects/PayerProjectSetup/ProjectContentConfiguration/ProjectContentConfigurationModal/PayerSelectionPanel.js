@@ -71,12 +71,12 @@ const PayerSelectionPanel = ({
           {
             enabledAccounts.map(account => (
               <AccountRowItem key={account._id}>
-                <span>{account.organization} ({account.slug})</span>
                 <OrionSwitch
                   _id={account._id}
                   isChecked={isPayerChecked(account._id)}
                   handleToggle={handleToggle}
                 />
+                <span>{account.organization} ({account.slug})</span>
               </AccountRowItem>
             ))
           }
@@ -87,12 +87,12 @@ const PayerSelectionPanel = ({
           {
             disabledAccounts.map(account => (
               <AccountRowItem key={account._id}>
-                <span>{account.organization} ({account.slug})</span>
                 <OrionSwitch
                   _id={account._id}
                   isChecked={isPayerChecked(account._id)}
                   handleToggle={handleToggle}
                 />
+                <span>{account.organization} ({account.slug})</span>
               </AccountRowItem>
             ))
           }

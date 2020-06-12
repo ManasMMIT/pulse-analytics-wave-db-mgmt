@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom'
 import { useMutation, useQuery } from '@apollo/react-hooks'
 import styled from '@emotion/styled'
 import Select from 'react-select'
+import {lighten, darken } from 'polished'
 
 import {
   GET_PAYER_PROJECTS_LIST,
@@ -14,13 +15,24 @@ import {
 import Modal from 'frontend/components/Modal'
 import SubmitButton from 'frontend/components/SubmitButton'
 
+import { Colors } from 'frontend/utils/pulseStyles'
+
 // ! TODO: to be replaced with reusable button component
 const PlaceholderButton = styled.button({
   margin: 12,
-  padding: 6,
+  padding: '8px 12px',
   color: 'white',
   fontWeight: 700,
-  backgroundColor: 'blue',
+  backgroundColor: Colors.BLUE,
+  borderRadius: 4,
+  fontSize: 12,
+  cursor: 'pointer',
+  ':hover': {
+    backgroundColor: lighten(0.1, Colors.BLUE),
+  },
+  ':active': {
+    backgroundColor: darken(0.1, Colors.BLUE),
+  }
 })
 
 const MODAL_TITLE = 'Transfer PTP Ownership'

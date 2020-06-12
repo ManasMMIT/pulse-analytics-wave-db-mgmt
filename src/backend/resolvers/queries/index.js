@@ -43,7 +43,7 @@ module.exports = {
   ...organizations,
   testEmailGroups,
   alert,
-  opLogs,
+  ...opLogs,
   bomSchema,
   bomConfigs,
   businessObjects,

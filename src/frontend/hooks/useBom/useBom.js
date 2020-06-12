@@ -1,4 +1,5 @@
 import { useQuery } from '@apollo/react-hooks'
+import _ from 'lodash'
 
 import BOID_QUERY_MAP from './boid-query-map'
 
@@ -8,14 +9,30 @@ import {
 
 export default (boId, entityId) => {
   const { loading: loadingSchema, data: schemaData } = useQuery(GET_BOM_SCHEMA, {
-    variables: { boId }
+    variables: { boId },
+    onError: e => alert(`Maybe the business object doesn't have modal in modal mgmt\nFull Error: ${e}`),
   })
 
-  const { loading: loadingEntity, data } = useQuery(BOID_QUERY_MAP[boId])
+  let loadingEntity, entityData
+  try {
+    const { loading, data } = useQuery(BOID_QUERY_MAP[boId])
+
+    loadingEntity = loading
+    entityData = data
+  } catch(e) {
+    alert(`Business object likely has no modal button built for it\nFull Error: ${e}`)
+
+    return {
+      schema: {},
+      entity: {},
+      loading: false
+    }
+  }
+
 
   let entity = {}
-  if (!loadingEntity) {
-    const queryResult = data[Object.keys(data)[0]]
+  if (!loadingEntity && !_.isEmpty(entityData)) {
+    const queryResult = entityData[Object.keys(entityData)[0]]
 
     // ! needed because we always return all orgs then pick them out for cache mgmt
     entity = Array.isArray(queryResult)
@@ -24,7 +41,7 @@ export default (boId, entityId) => {
   }
 
   let schema = {}
-  if (!loadingSchema) schema = schemaData.bomSchema
+  if (!loadingSchema && schemaData) schema = schemaData.bomSchema || {}
 
   return {
     schema,

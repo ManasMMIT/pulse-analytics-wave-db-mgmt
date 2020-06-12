@@ -11,7 +11,10 @@ import Spinner from 'frontend/components/Spinner'
 
 import { Colors, Spacing } from '../../../../../utils/pulseStyles'
 
-import { GET_AQUILA_CONFIGS } from '../../../../../api/queries'
+import {
+  GET_AQUILA_CONFIGS,
+  GET_AQUILA_BO_FILTER_SETTINGS,
+} from '../../../../../api/queries'
 
 const trashCan = <FontAwesomeIcon size="lg" icon={faTrashAlt} />
 
@@ -46,6 +49,7 @@ const DeleteButton = props => {
     mutationVars,
     mutationDoc,
     afterMutationHook,
+    boId,
   } = props
 
   const [isModalOpen, toggleModal] = useState(false)
@@ -57,7 +61,10 @@ const DeleteButton = props => {
     {
       onCompleted: afterMutationHook,
       awaitRefetchQueries: true,
-      refetchQueries: [{ query: GET_AQUILA_CONFIGS }],
+      refetchQueries: [
+        { query: GET_AQUILA_CONFIGS },
+        { query: GET_AQUILA_BO_FILTER_SETTINGS, variables: { boId } }
+      ],
     }
   )
 

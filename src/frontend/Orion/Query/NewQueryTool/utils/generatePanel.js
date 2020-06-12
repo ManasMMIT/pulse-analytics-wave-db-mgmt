@@ -5,13 +5,13 @@ import getPqlFromConfigs from './getPqlFromConfigs'
 import FieldsSectionCard from '../../../../components/FieldsSectionCard'
 
 const generatePanel = ({
-  placardOptions,
+  boFilterSettings,
   setFiltersState,
   filtersState,
   setPql,
   businessObjectName,
 }) => {
-  const { label, fields } = placardOptions
+  const { label, fields } = boFilterSettings
 
   const fieldsConfig = fields
     .map(({ boFieldKey, label, inputProps }) => {
@@ -27,6 +27,14 @@ const generatePanel = ({
         setPql,
       })
 
+      const matchingKeyParamsInState = filtersState
+        .find(({ key }) => key === boFieldKey)
+
+      let value = null
+      if (matchingKeyParamsInState) {
+        value = matchingKeyParamsInState.options
+      }
+
       return {
         key: boFieldKey,
         inputComponent: "Select",
@@ -36,7 +44,10 @@ const generatePanel = ({
           isMulti: true,
           isClearable: true,
 
-          // ! likely fixed props
+          // ! injected on mount by placard view
+          value,
+
+          // * likely fixed props
           ...clonedInputProps,
           onChange: onChangeHandler,
         },

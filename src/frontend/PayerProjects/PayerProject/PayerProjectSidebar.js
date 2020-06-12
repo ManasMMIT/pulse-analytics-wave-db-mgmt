@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
 import { NavLink } from 'react-router-dom'
+import { transparentize } from 'polished'
 
 import Sidebar from 'frontend/components/Sidebar'
 import SidebarItem from 'frontend/components/Sidebar/SidebarItem'
@@ -47,7 +48,18 @@ const BackNavLabel = styled.h1({
   fontWeight: 700,
   textTransform: 'uppercase',
   ...FontSpace.FS1,
+  ':hover': {
+    color: Color.BLUE,
+    background: transparentize(0.9, Color.BLUE)
+  }
 })
+
+const sidebarItemStyle = {
+  ':hover': {
+    background: transparentize(0.9, Color.BLACK),
+    color: Color.BLACK,
+  }
+}
 
 const generateSidebarItems = ({
   selectedSidebarItem,
@@ -64,6 +76,7 @@ const generateSidebarItems = ({
       <SidebarItem
         isSelected={isSelected}
         option={option}
+        itemStyle={sidebarItemStyle}
       />
     </NavLink>
   )

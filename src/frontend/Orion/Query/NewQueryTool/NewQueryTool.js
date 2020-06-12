@@ -40,19 +40,13 @@ const NewQueryTool = () => {
 
   const { pql } = queryString.parse(search)
 
-  let searchValue = search
-  if (pql && !isPlacardView) {
-    const businessObjectName = pql.match(/[\w\s]+={.*}/) && pql.match(/[\w\s]+=/)[0].replace('=', '')
-    searchValue = queryString.stringify({ pql: businessObjectName ? `${businessObjectName}={}` : null })
-  }
-
   return (
     <Wrapper>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <h1 style={{ padding: Spacing.S4, ...FontSpace.FS4 }}>Query Tool</h1>
         <ViewButton to={{
           pathname: viewButtonLink,
-          search: searchValue,
+          search: queryString.stringify({ pql }),
         }}>
           {viewButtonLabel}
         </ViewButton>

@@ -22,7 +22,12 @@ const queries = gql`
     payerOrganizations: [PayerOrganization]
     pathwaysOrganizations: [PathwaysOrganization]
     apmOrganizations: [ApmOrganization]
+
     obmOrganizations: [ObmOrganization]
+    obmServices: [ObmService]
+    obmServicesCategories: [ObmServiceCategory]
+    obmServiceAndObmServiceCategoryConnections(obmServiceId: String): [ObmServiceAndObmServiceCategoryConnection]
+    obmAndObmServiceConnections(obmId: String): [ObmAndObmServiceConnection]
 
     qualityOfAccessScores: [QualityOfAccessScore]
     collections(type: String): [String]
@@ -35,6 +40,7 @@ const queries = gql`
     organizationMeta(_ids: [ID]): [OrganizationMeta]
 
     opLogs: [OpLog]
+    fullOpLogs(maxLineCount: Int): [OpLog]
 
     workbooks: [Workbook]
 
@@ -197,6 +203,29 @@ const queries = gql`
     organizationTiny: String
     start: Int
     businessModel: String
+  }
+
+  type ObmService {
+    _id: ID!
+    name: String!
+  }
+
+  type ObmServiceCategory {
+    _id: ID!
+    name: String!
+  }
+
+  type ObmServiceAndObmServiceCategoryConnection {
+    _id: ID!
+    obmServiceId: String!
+    obmServiceCategoryId: String!
+  }
+
+  type ObmAndObmServiceConnection {
+    _id: ID!
+    obmId: String!
+    obmServiceId: String!
+    rating: Int!
   }
 
   type Connection {

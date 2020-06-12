@@ -20,9 +20,9 @@ const validateQualityOfAccess = ({ sheetData, strictlyRequiredPtps }) => {
 
   if (missingOrgTpCombos.length || invalidOrgTpCombos.length) {
     throw new Error(
-      'Incoming Payer Treatment Plan combos did not pass validation\n'
-      + `The following combinations were expected, but missing:\n${missingOrgTpCombos}\n`
-      + `The following combinations were invalid:\n${invalidOrgTpCombos}\n`
+      '\n#Incoming Payer Treatment Plan combos did not pass validation\n'
+      + `#The following combinations were expected, but missing in the Quality of Access sheet:\n${missingOrgTpCombos}\n`
+      + `#The following combinations were invalid in the Quality of Access sheet:\n${invalidOrgTpCombos}\n`
     )
   }
 
@@ -43,8 +43,8 @@ const validateQualityOfAccess = ({ sheetData, strictlyRequiredPtps }) => {
     }
 
     throw new Error(
-      'Incoming Payer Treatment Plan combos did not pass validation\n'
-      + `The following combinations were duplicated: ${ orgTpsThatHaveDupes }\n`
+      '\n#Incoming Payer Treatment Plan combos did not pass validation\n'
+      + `#The following combinations were duplicated in the Quality of Access sheet: ${ orgTpsThatHaveDupes }\n`
     )
   }
 

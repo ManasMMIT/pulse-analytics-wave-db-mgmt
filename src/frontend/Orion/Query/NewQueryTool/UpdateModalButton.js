@@ -1,12 +1,6 @@
 import React from 'react'
 
-import PathwaysModalButton from 'frontend/components/BusinessObjectModal/PathwaysModal/PathwaysModalButton'
-import OncologyBenefitManagerModalButton from 'frontend/components/BusinessObjectModal/OncologyBenefitManagerModal/OncologyBenefitManagerModalButton'
-
-const BO_NAME_BOM_MAP = {
-  'Pathways': PathwaysModalButton,
-  'Oncology Benefit Manager': OncologyBenefitManagerModalButton,
-}
+import BO_NAME_BOM_MAP from './bo-name-bom-map'
 
 const UpdateModalButton = ({
   businessObjectName,

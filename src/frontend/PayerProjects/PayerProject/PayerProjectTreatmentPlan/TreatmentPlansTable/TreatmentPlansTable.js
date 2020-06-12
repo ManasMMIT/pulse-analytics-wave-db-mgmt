@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom'
 import { useMutation } from '@apollo/react-hooks'
 import styled from '@emotion/styled'
 import _ from 'lodash'
+import {lighten, darken, transparentize } from 'polished'
 
 import Table from '@material-ui/core/Table'
 import TableContainer from '@material-ui/core/TableContainer'
@@ -15,6 +16,8 @@ import {
 import {
   GET_PAYER_PROJECT_PTPS,
 } from 'frontend/api/queries'
+
+import { Colors } from 'frontend/utils/pulseStyles'
 
 import TreatmentPlansTableHead from './TreatmentPlansTableHead'
 import TreatmentPlansTableBody from './TreatmentPlansTableBody'
@@ -30,10 +33,19 @@ const TableWrapper = styled.section({
 // ! TODO: to be replaced with reusable button component
 const PlaceholderButton = styled.button({
   margin: 12,
-  padding: 6,
+  padding: '8px 12px',
   color: 'white',
   fontWeight: 700,
-  backgroundColor: 'red',
+  backgroundColor: Colors.RED,
+  borderRadius: 4,
+  fontSize: 12,
+  cursor: 'pointer',
+  ':hover': {
+    backgroundColor: lighten(0.1, Colors.RED),
+  },
+  ':active': {
+    backgroundColor: darken(0.1, Colors.RED),
+  }
 })
 
 const sortData = ({ data, order, key }) => {
@@ -44,7 +56,7 @@ const TreatmentPlansTable = ({ data, checkbox }) => {
   const { projectId } = useParams()
 
   const [page, setPage] = useState(0)
-  const [rowsPerPage, setRowsPerPage] = useState(10)
+  const [rowsPerPage, setRowsPerPage] = useState(100)
   const [selected, setSelected] = useState(new Set([]))
   const [order, setOrder] = useState('asc')
   const [tableData, setTableData] = useState(data)
@@ -117,8 +129,8 @@ const TreatmentPlansTable = ({ data, checkbox }) => {
   return (
     <TableWrapper>
       {checkbox && (
-        <section style={{ display: 'flex', justifyContent: 'space-between' }}>
-          <h2 style={{ padding: 12 }}>
+        <section style={{ display: 'flex', justifyContent: 'space-between', padding: '0 12px' }}>
+          <h2 style={{ padding: 12, fontSize: 14, fontWeight: 800, color: Colors.BLACK, lineHeight: '32px' }}>
             {selected.size} Payer Treatments Selected
           </h2>
           {selected.size > 0 && (
@@ -131,8 +143,8 @@ const TreatmentPlansTable = ({ data, checkbox }) => {
           )}
         </section>
       )}
-      <TableContainer style={{ height: 500 }}>
-        <Table stickyHeader aria-label="sticky table">
+      <TableContainer style={{ height: 600 }}>
+        <Table stickyHeader aria-label="sticky table" size="small">
           <TreatmentPlansTableHead
             checkbox={checkbox}
             handleSelectAllClick={handleSelectAllClick}
@@ -160,6 +172,7 @@ const TreatmentPlansTable = ({ data, checkbox }) => {
         page={page}
         onChangePage={handleChangePage}
         onChangeRowsPerPage={handleChangeRowsPerPage}
+        style={{ borderTop: `2px solid ${transparentize(0.5, Colors.BLACK)}`}}
       />
     </TableWrapper>
   )

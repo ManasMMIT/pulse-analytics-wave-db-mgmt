@@ -10,7 +10,7 @@ import CreateProjectButton from './CreateProjectButton'
 
 const PlacardContainer = styled.div({
   display: 'flex',
-  flexWrap: 'wrap', 
+  flexWrap: 'wrap',
   backgroundColor: Colors.WHITE,
   borderRadius: 4,
 })
@@ -24,6 +24,7 @@ const Header = styled.div({
   display: 'flex',
   justifyContent: 'space-between',
   alignItems: 'center',
+  fontWeight: 700,
 })
 
 const generatePlacards = ({ _id, name, }) => {

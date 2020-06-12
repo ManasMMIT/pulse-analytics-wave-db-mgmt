@@ -38,14 +38,11 @@ const getMergedSchema = (enrichedModalConfig, boDocs) => {
         field.key = key
 
         if (field.inputComponent === 'Select') {
-          // if select depends on data, then options will be empty; otherwise, options should've been hardcoded
-          // but they still have to be formatted for react-select
-          // ! not ideal: need to format inputProps.options to follow react-select; STOP THIS later
+          // ? if select depends on data, then options will be empty;
+          // ? otherwise, options should've been hardcoded
           if (_.isEmpty(field.inputProps.options)) {
             const selectValues = _.uniqBy(boDocs, key).map(({ [key]: targetValue }) => targetValue)
-            field.inputProps.options = selectValues.map(value => ({ label: value, value }))
-          } else {
-            field.inputProps.options = field.inputProps.options.map(value => ({ label: value, value }))
+            field.inputProps.options = _.compact(selectValues)
           }
         }
       })

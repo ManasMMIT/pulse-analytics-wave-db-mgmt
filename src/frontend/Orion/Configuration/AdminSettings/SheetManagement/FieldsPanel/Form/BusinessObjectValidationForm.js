@@ -47,7 +47,7 @@ const BusinessObjectValidationForm = ({
         _id: value,
         fieldId: newSelectedBo.fields[0]._id,
       })
-    } else { // user allowed to clear the bo selection; clearing it clears both dropdowns
+    } else { // user allowed to clear the bo selection; clearing it clears both dropdowns and checkbox
       setBusinessObjFields([])
       setBusinessObjRef(null)
     }
@@ -55,6 +55,16 @@ const BusinessObjectValidationForm = ({
 
   const handleBoFieldChange = ({ value }) => {
     const updatedBoRef = Object.assign({}, stagedBusinessObjRef, { fieldId: value })
+    setBusinessObjRef(updatedBoRef)
+  }
+
+  const handleCheckboxChange = e => {
+    const updatedBoRef = Object.assign(
+      {}, 
+      stagedBusinessObjRef, 
+      { allowBlankValues: e.currentTarget.checked },
+    )
+
     setBusinessObjRef(updatedBoRef)
   }
 
@@ -107,6 +117,17 @@ const BusinessObjectValidationForm = ({
                 options={formattedBoFields}
               />
             </FieldContainer>
+
+            <div style={{ display: 'flex' }}>
+              <input
+                disabled={!Boolean(stagedBusinessObjRef)}
+                checked={Boolean(stagedBusinessObjRef && stagedBusinessObjRef.allowBlankValues)}
+                type="checkbox"
+                onChange={handleCheckboxChange}
+                style={{ marginRight: 12, cursor: stagedBusinessObjRef ? 'pointer' : 'not-allowed' }}
+              />
+              <FormLabel>Allow blank values</FormLabel>
+            </div>
           </div>
         )
       }
