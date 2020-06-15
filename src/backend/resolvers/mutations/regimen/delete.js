@@ -1,11 +1,13 @@
 const { ObjectId } = require('mongodb')
+const _ = require('lodash')
 
+const upsertUsersPermissions = require('./../sitemap/permissions-upsertion/upsertUsersPermissions')
 const deleteTreatmentPlansCascade = require('./../utils/deleteTreatmentPlansCascade')
 
 const deleteSourceRegimen = async (
   parent,
   { input: { _id: regimenId } },
-  { mongoClient, coreRoles, pulseCoreDb },
+  { mongoClient, coreRoles, pulseCoreDb, pulseDevDb },
   info,
 ) => {
   const _id = ObjectId(regimenId)
@@ -39,7 +41,21 @@ const deleteSourceRegimen = async (
       },
     )
 
-    // STEP 3: find all treatmentPlans with deleted regimen and handle cascade deletion steps
+    // STEP 3: Regenerate user nodes resources to dev with updated team resources
+    // ! find all relevant teams OUTSIDE of transaction (pre-op)
+    const teamsWithRegimenResource = await coreRoles.find({ 'resources.treatmentPlans.regimens._id': _id }).toArray()
+    let allTeamUsers = teamsWithRegimenResource.reduce((acc, { users }) => [...acc, ...users], [])
+    allTeamUsers = _.uniqBy(allTeamUsers, '_id')
+
+    // ! might take longer than a minute and error on frontend
+    await upsertUsersPermissions({
+      users: allTeamUsers,
+      session,
+      pulseCoreDb,
+      pulseDevDb,
+    })
+
+    // STEP 4: find all treatmentPlans with deleted regimen and handle cascade deletion steps
     const treatmentPlans = await pulseCoreDb.collection('treatmentPlans')
       .find(
         { regimen: _id },
@@ -55,7 +71,7 @@ const deleteSourceRegimen = async (
       treatmentPlanIds: tpIds,
     })
 
-    // STEP 4: Delete the regimen from `regimens` collection
+    // STEP 5: Delete the regimen from `regimens` collection
     result = await pulseCoreDb.collection('regimens').findOneAndDelete(
       { _id },
       { session },
