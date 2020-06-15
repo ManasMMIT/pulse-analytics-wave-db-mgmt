@@ -14,6 +14,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased] - Started: 6-12-20
 
+### Changed
+- `Orion`: Edit Role Node now also cascades changes to the role's users' sitemaps.
+
 ## [2.8.0] - Started: 6-2-20
 
 ### Added
