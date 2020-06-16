@@ -34,7 +34,7 @@ class Orion extends React.Component {
           <Route path="/orion/excel" component={Excel} />
           <Route path="/orion/organizations" component={Organizations} />
           <Route path="/orion/configuration" component={Configuration} />
-          <Redirect to={'/orion/query'} />
+          <Redirect to={'/orion/excel'} />
         </Switch>
       </div>
     )

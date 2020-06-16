@@ -183,10 +183,10 @@ const Sidebar = () => {
         <OrionLogo src="https://res.cloudinary.com/pulsedatatools/image/upload/v1573837414/polaris/icons/orion-1-color.svg" />
         Orion DB
       </OrionHeader>
-      <Header>Query</Header>
-      {QUERY_LINKS_CONFIG.map(renderStyledNavLink)}
       <Header>Excel</Header>
       {EXCEL_LINKS_CONFIG.map(renderStyledNavLink)}
+      <Header>Query</Header>
+      {QUERY_LINKS_CONFIG.map(renderStyledNavLink)}
       <div>
         <Header>Organizations</Header>
         <StyledDropdown
