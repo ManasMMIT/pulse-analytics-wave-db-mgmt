@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - `Orion`: Edit Role Node now also cascades changes to the role's users' sitemaps.
+- `Orion`: Excel import view is now the default landing page in orion and top of the sidebar.
 
 ## [2.8.0] - Started: 6-2-20
 
