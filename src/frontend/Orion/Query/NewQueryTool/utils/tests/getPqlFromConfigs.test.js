@@ -60,3 +60,16 @@ test('Takes empty config array and returns just business object wrapper', () => 
 
   expect(resultToTest).toBe(outputThree)
 })
+
+const inputFour = {
+  businessObjectName: "Animal",
+  configs: [{ key: 'age', options: [{ label: 1, value: 1 }, { label: 5, value: 5 }]}],
+}
+
+const outputFour = 'Animal={age=(1, 5)}'
+
+test('Takes config object with int options and forms valid int pql', () => {
+  const resultToTest = getPqlFromConfigs(inputFour)
+
+  expect(resultToTest).toBe(outputFour)
+})
