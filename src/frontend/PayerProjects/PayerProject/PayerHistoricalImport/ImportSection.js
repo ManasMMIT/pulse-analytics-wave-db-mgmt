@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 import { useMutation } from '@apollo/react-hooks'
 import styled from '@emotion/styled'
 import { Alert, AlertTitle } from '@material-ui/lab'
+import socket from 'frontend/api/socket'
 import {
   MuiPickersUtilsProvider,
   KeyboardDatePicker,
@@ -86,12 +87,26 @@ const datePickerTheme = createMuiTheme({
   }
 })
 
+const DEFAULT_ALERT_STATUS = {
+  status: null, message: null, description: null
+}
+
+const DEFAULT_NOTIFICATION = 'Good to import!'
+
 const ImportSection = ({
   projectId,
   projectName,
   setValidationErrorsAndWarnings,
 }) => {
   const fileInputRef = useRef(null)
+
+  const [notification, setNotification] = useState(DEFAULT_NOTIFICATION)
+  const [workbook, setWorkbook] = useState(null)
+  const [workbookName, setWorkbookName] = useState(null)
+  const [isWorkbookUploaded, setIsWorkbookUploaded] = useState(false)
+  const [sheetNames, setSheetNames] = useState([])
+  const [timestamp, setTimestamp] = useState(null)
+  const [alertStatus, setAlertStatus] = useState(DEFAULT_ALERT_STATUS)
 
   // Add Reload warning
   const beforeunload = e => {
@@ -100,29 +115,45 @@ const ImportSection = ({
 
   useEffect(() => {
     window.addEventListener('beforeunload', beforeunload)
-  
+
     return () => {
       window.removeEventListener('beforeunload', beforeunload)
     }
   }, [])
 
-  const [workbook, setWorkbook] = useState(null)
-  const [workbookName, setWorkbookName] = useState(null)
-  const [isWorkbookUploaded, setIsWorkbookUploaded] = useState(false)
-  const [sheetNames, setSheetNames] = useState([])
-  const [timestamp, setTimestamp] = useState(null)
-  const [alertStatus, setAlertStatus] = useState({
-    status: null, message: null, description: null
-  })
-  
-  const [importWorkbook] = useMutation(IMPORT_WORKBOOK, {
-    onCompleted: ({ importWorkbook: importFeedback }) => {
+  useEffect(() => {
+    socket.on('PAYER_DATA_IMPORT', setNotification)
+  }, [])
+
+  useEffect(() => {
+    if (notification.includes('is importing')) {
       setAlertStatus({
-        status: SUCCESS,
-        message: alertMessageMap[SUCCESS],
+        status: INFO,
+        message: alertMessageMap[INFO],
         description: 'Compiling data for the app. This process usually takes around 2 ½ to 3 minutes.'
       })
-    },
+    } else if (notification.includes('finished importing')) {
+        setAlertStatus({
+          status: SUCCESS,
+          message: alertMessageMap[SUCCESS],
+        })
+
+        setTimeout(() => {
+          setAlertStatus(DEFAULT_ALERT_STATUS)
+          setNotification(DEFAULT_NOTIFICATION)
+        }, 30000)
+    } else if (notification.includes('error')) {
+      // this setAlertStatus should happen right before onError in the mutation;
+      // and is meant to allow OTHER USERS to press import on their data
+      // if the current user's import fails (for current user, import will remain
+      // disabled); if in worst case due to race condition this op happens after onError,
+      // the consequence would be import button re-appears for current user
+      setAlertStatus(DEFAULT_ALERT_STATUS)
+    }
+  }, [notification])
+
+  
+  const [importWorkbook] = useMutation(IMPORT_WORKBOOK, {
     onError: (errorMessage, ...rest) => {
       setValidationErrorsAndWarnings(errorMessage.message)
       setAlertStatus({
@@ -181,11 +212,6 @@ const ImportSection = ({
 
     console.log(workbookData)
 
-    setAlertStatus({
-      status: INFO,
-      message: alertMessageMap[INFO]
-    })
-
     importWorkbook({ variables: { input: workbookData } })
   }
 
@@ -234,21 +260,34 @@ const ImportSection = ({
           </MuiPickersUtilsProvider>
         </ThemeProvider>
       </InputWrapper>
-      <Button
-        buttonStyle={importBtnStyle}
-        hoverStyle={buttonHoverStyle}
-        onClick={handleSubmit}
-      >
-        Import File
-      </Button>
-      {alertStatus.status && (
-        <Alert
-          severity={alertStatus.status}
+
+      {
+        [ERROR, INFO].includes(alertStatus.status) || (
+          <Button
+            buttonStyle={importBtnStyle}
+            hoverStyle={buttonHoverStyle}
+            onClick={handleSubmit}
           >
-          <AlertTitle>{ alertStatus.message }</AlertTitle>
-          { alertStatus.description }
-        </Alert>
-      )}
+            Import File
+          </Button>
+        )
+      }
+
+      {
+        alertStatus.status && (
+          <Alert
+            severity={alertStatus.status}
+          >
+            <AlertTitle>{alertStatus.message}</AlertTitle>
+            {alertStatus.description}
+          </Alert>
+        )
+      }
+
+      <div style={{ whiteSpace: 'pre-line', padding: 12, border: '1px solid black', marginTop: 12 }}>
+        <p><b>IMPORT LOG</b></p>
+        {notification}
+      </div>
     </ImportSectionWrapper>
   )
 }

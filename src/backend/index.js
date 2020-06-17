@@ -8,10 +8,15 @@ const fs = require('fs')
 const jwt = require('express-jwt')
 const jwksRsa = require('jwks-rsa')
 const morgan = require('morgan')
-const routes = require('./routes')
+const http = require('http')
 
 const app = express()
+const server = http.createServer(app)
+const io = require('socket.io')(server)
 const port = 1337
+
+const routes = require('./routes')
+routes.set('io', io)
 
 var checkJwt = jwt({
   secret: jwksRsa.expressJwtSecret({
@@ -85,4 +90,4 @@ if (process.env.NODE_ENV === 'production') {
   })
 }
 
-app.listen(port, () => console.log(`PHOENIX ONLINE. PORT ${port}!`))
+server.listen(port, () => console.log(`PHOENIX ONLINE. PORT ${port}!`))

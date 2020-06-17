@@ -14,6 +14,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased] - Started: 6-16-20
 
+### Added
+- `Backend/Payer Import Tool`: Built out socket.io feature to emit payer import status to frontend
+
 ## [2.8.1] - Started: 6-12-20
 
 ### Changed
