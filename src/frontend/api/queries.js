@@ -1,5 +1,15 @@
 import gql from 'graphql-tag'
 
+export const GET_PEOPLE = gql`
+  query getPeople {
+    people {
+      _id
+      name
+      nationalProviderIdentifier
+    }
+  }
+`
+
 export const GET_BOOKS = gql`
   query getBooks {
     books {
@@ -810,6 +820,17 @@ export const GET_OBM_AND_OBM_SERVICE_CONNECTIONS = gql`
      obmId
      obmServiceId
      rating
+   }
+ }
+`
+
+export const GET_OBM_AND_PERSON_CONNECTIONS = gql`
+ query getObmAndPersonConnections($obmId: ID) {
+   obmAndPersonConnections(obmId: $obmId) {
+     _id
+     obmId
+     personId
+     position
    }
  }
 `

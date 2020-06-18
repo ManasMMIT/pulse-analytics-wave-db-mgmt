@@ -10,6 +10,7 @@ import {
 } from 'frontend/api/queries'
 
 import ObmServicesWidget from './relational-widgets/ObmServicesWidget'
+import ObmInfluencersWidget from './relational-widgets/ObmInfluencersWidget'
 import BusinessObjectModal from '../BusinessObjectModal/BusinessObjectModal'
 
 const OBM_BOID = '5ec81a40b2cfb87bb15373ec'
@@ -20,6 +21,11 @@ const WIDGETS = [
     _id: 'RELATIONAL_obmServicesWidget',
     label: 'Connect to OBM Services',
     Component: ObmServicesWidget,
+  },
+  {
+    _id: 'RELATIONAL_obmInfluencersWidget',
+    label: 'Connect to OBM Influencers',
+    Component: ObmInfluencersWidget,
   },
 ]
 

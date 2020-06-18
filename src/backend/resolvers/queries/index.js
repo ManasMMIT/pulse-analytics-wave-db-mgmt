@@ -29,6 +29,8 @@ const cMsOrgPrimarySpecialtyCounts = require('./cMsOrgPrimarySpecialtyCounts')
 
 const aquila = require('./aquila')
 
+const people = require('./people')
+
 module.exports = {
   collections,
   clients,
@@ -57,4 +59,5 @@ module.exports = {
   regionalTargetingData,
   cMsOrgPrimarySpecialtyCounts,
   ...aquila,
+  people,
 }

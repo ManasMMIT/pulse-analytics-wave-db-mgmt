@@ -28,6 +28,7 @@ const queries = gql`
     obmServicesCategories: [ObmServiceCategory]
     obmServiceAndObmServiceCategoryConnections(obmServiceId: String): [ObmServiceAndObmServiceCategoryConnection]
     obmAndObmServiceConnections(obmId: String): [ObmAndObmServiceConnection]
+    obmAndPersonConnections(obmId: ID): [ObmAndPersonConnection]
 
     qualityOfAccessScores: [QualityOfAccessScore]
     collections(type: String): [String]
@@ -72,6 +73,14 @@ const queries = gql`
     regionalTargetingData(input: JSON): JSON
 
     cMsOrgPrimarySpecialtyCounts(orgPacId: String): JSON
+
+    people: [Person]
+  }
+
+  type Person {
+    _id: ID!
+    name: String
+    nationalProviderIdentifier: Float
   }
 
   type Node {
@@ -227,6 +236,13 @@ const queries = gql`
     obmId: String!
     obmServiceId: String!
     rating: Int!
+  }
+
+  type ObmAndPersonConnection {
+    _id: ID!
+    obmId: ID!
+    personId: ID!
+    position: String
   }
 
   type Connection {

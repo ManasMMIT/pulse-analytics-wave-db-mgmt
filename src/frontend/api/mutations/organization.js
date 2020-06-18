@@ -251,3 +251,14 @@ export const CONNECT_OBM_AND_OBM_SERVICE = gql`
     }
   }
 `
+
+export const CONNECT_OBM_AND_PERSON = gql`
+  mutation ConnectObmAndPerson($input: [ConnectObmAndPersonInput!]!) {
+    connectObmAndPerson(input: $input) {
+      _id
+      obmId
+      personId
+      position
+    }
+  }
+`

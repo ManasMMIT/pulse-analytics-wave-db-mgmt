@@ -29,6 +29,8 @@ const line = require('./line')
 
 const importWorkbook = require('./importWorkbook')
 
+const person = require('./person')
+
 const mutationType = gql`
   type Mutation {
     createUser(input: CreateUserInput!): CreateUserPayload
@@ -90,6 +92,7 @@ const mutationType = gql`
     updateObmServiceCategory(input: UpdateObmServiceCategoryInput!): UpdateObmServiceCategoryPayload!
     connectObmServiceAndObmServiceCategory(input: ConnectObmServiceAndObmServiceCategoryInput!): ConnectObmServiceAndObmServiceCategoryPayload!
     connectObmAndObmService(input: [ConnectObmAndObmServiceInput!]!): [ConnectObmAndObmServicePayload!]!
+    connectObmAndPerson(input: [ConnectObmAndPersonInput!]!): [ConnectObmAndPersonPayload!]!
 
     upsertOrganizationMeta(input: UpsertOrganizationMetaInput!): [UpsertOrganizationMetaPayload]
 
@@ -175,6 +178,9 @@ const mutationType = gql`
     deleteLine(input: DeleteLineInput!): DeleteLinePayload
     createLine(input: CreateLineInput!): CreateLinePayload
     updateLine(input: UpdateLineInput!): UpdateLinePayload
+
+    createPerson(input: CreatePersonInput!): CreatePersonPayload
+    updatePerson(input: UpdatePersonInput!): UpdatePersonPayload
   }
 `
 
@@ -209,4 +215,5 @@ module.exports = [
   ...population,
 
   importWorkbook,
+  ...person,
 ]
