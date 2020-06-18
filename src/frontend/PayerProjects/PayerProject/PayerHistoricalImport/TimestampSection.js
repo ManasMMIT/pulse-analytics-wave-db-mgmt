@@ -27,7 +27,7 @@ const Title = styled.h1({
   borderBottom: `1px solid ${ AlphaColors.Black10 }`
 })
 
-const TABS_DATA = ['Import Timeline', 'Import Calendar', 'PTP Timeline']
+const TABS_DATA = ['Project Timeline', 'Project Calendar', 'PTP Timeline']
 
 const SectionWrapper = styled.div({
   display: 'flex',

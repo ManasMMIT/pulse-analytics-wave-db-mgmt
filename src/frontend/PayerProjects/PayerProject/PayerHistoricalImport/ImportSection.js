@@ -13,6 +13,7 @@ import DateFnsUtils from '@date-io/date-fns'
 import { createMuiTheme } from "@material-ui/core"
 import { ThemeProvider } from "@material-ui/styles"
 import { IMPORT_WORKBOOK } from 'frontend/api/mutations'
+import { darken } from 'polished'
 
 import Button from 'frontend/components/Button'
 import FieldLabel from 'frontend/components/FieldLabel'
@@ -47,6 +48,28 @@ const LoadingWrapper = styled.div({
   alignItems: 'center',
 })
 
+const ImportLogContainer = styled.div({
+  background: darken(0.03, Color.TOOL_SIDEBAR),
+  borderRadius: 4,
+  whiteSpace: 'pre-line',
+  padding: 12,
+  marginTop: 12,
+  color: Color.WHITE,
+})
+
+const ImportLogTitle = styled.h6({
+  fontSize: 12,
+  fontWeight: 800,
+  marginTop: 0,
+  marginBottom: 12,
+  opacity: 0.5,
+})
+
+const ImportLogText = styled.p({
+  fontSize: 12,
+  fontWeight: 600,
+})
+
 const importBtnStyle = {
   width: 'fit-content',
   marginBottom: Spacing.S7,
@@ -55,7 +78,7 @@ const importBtnStyle = {
 
 const alertMessageMap = {
   success: 'Import Successful',
-  error: 'Import Failed. Please try importing again',
+  error: 'Import Failed. See errors in the table below. Once fixed, reload the page and try again.',
   info: (
     <LoadingWrapper>
       <span style={{ marginRight: Spacing.S3 }}>
@@ -91,7 +114,7 @@ const DEFAULT_ALERT_STATUS = {
   status: null, message: null, description: null
 }
 
-const DEFAULT_NOTIFICATION = 'Good to import!'
+const DEFAULT_NOTIFICATION = '✅ Good to import'
 
 const ImportSection = ({
   projectId,
@@ -130,7 +153,7 @@ const ImportSection = ({
       setAlertStatus({
         status: INFO,
         message: alertMessageMap[INFO],
-        description: 'Compiling data for the app. This process usually takes around 2 ½ to 3 minutes.'
+        description: 'Compiling data for the app. This process usually takes around 2 ½ to 3 minutes. Once this process completes, visit or reload dev.pulse-tools.com.'
       })
     } else if (notification.includes('finished importing')) {
         setAlertStatus({
@@ -152,7 +175,7 @@ const ImportSection = ({
     }
   }, [notification])
 
-  
+
   const [importWorkbook] = useMutation(IMPORT_WORKBOOK, {
     onError: (errorMessage, ...rest) => {
       setValidationErrorsAndWarnings(errorMessage.message)
@@ -172,7 +195,7 @@ const ImportSection = ({
     reader.onload = e => {
       const data = new Uint8Array(e.target.result)
       const nextWorkbook = XLSX.read(data, { type: 'array' })
-      
+
       let nextSheetNames = nextWorkbook.SheetNames
       nextSheetNames = nextSheetNames.filter(sheetName => VALID_SHEETS[sheetName])
 
@@ -196,7 +219,7 @@ const ImportSection = ({
 
   const handleSubmit = () => {
     const workbookData = []
-    
+
     sheetNames.forEach(sheet => {
       const selectedSheetObj = workbook.Sheets[sheet]
       const json = XLSX.utils.sheet_to_json(selectedSheetObj, { blankrows: true, defval: null })
@@ -278,16 +301,16 @@ const ImportSection = ({
           <Alert
             severity={alertStatus.status}
           >
-            <AlertTitle>{alertStatus.message}</AlertTitle>
-            {alertStatus.description}
+            <AlertTitle style={{ fontSize: 12, fontWeight: 700 }}>{alertStatus.message}</AlertTitle>
+            <div style={{ fontSize: 12, lineHeight: 1.5, fontWeight: 400, }}>{alertStatus.description}</div>
           </Alert>
         )
       }
 
-      <div style={{ whiteSpace: 'pre-line', padding: 12, border: '1px solid black', marginTop: 12 }}>
-        <p><b>IMPORT LOG</b></p>
-        {notification}
-      </div>
+      <ImportLogContainer>
+        <ImportLogTitle>Import System Status</ImportLogTitle>
+        <ImportLogText>{notification}</ImportLogText>
+      </ImportLogContainer>
     </ImportSectionWrapper>
   )
 }

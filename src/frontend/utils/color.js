@@ -16,6 +16,7 @@ const Color = {
   PHOENIX: '#FA8969',
   ORION: '#38B59A',
   DELPHI: '#30B2DC',
+  TOOL_SIDEBAR: '#093357',
 }
 
 export default Color
