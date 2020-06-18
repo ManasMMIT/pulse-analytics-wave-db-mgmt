@@ -12,7 +12,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Fixed** for any bug fixes.
 - **Security** in case of vulnerabilities.
 
-## [Unreleased] - Started: 6-16-20
+## [Unreleased] - Started: 6-18-20
+
+## [2.9.0] - Started: 6-16-20
 
 ### Added
 - `Backend/Payer Import Tool`: Built out socket.io feature to emit payer import status to frontend
