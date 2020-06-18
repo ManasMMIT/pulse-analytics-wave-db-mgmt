@@ -201,6 +201,18 @@ const Sidebar = () => {
             Accounts
           </StyledNavLink>
         </StyledDropdown>
+        <StyledDropdown
+          style={inactiveLinkStyle}
+          label={'Oncology Benefit Managers'}
+        >
+          <StyledNavLink
+            style={dropdownInactiveLinkStyle}
+            activeStyle={dropdownActiveLinkStyle}
+            to={getToolItemPath('obm', 'account-overview')}
+          >
+            Account Overview
+          </StyledNavLink>
+        </StyledDropdown>
         <StyledDropdown style={inactiveLinkStyle} label={'Pathways'}>
           <StyledNavLink
             style={dropdownInactiveLinkStyle}
