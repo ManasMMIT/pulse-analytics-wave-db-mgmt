@@ -57,6 +57,7 @@ const queries = gql`
     payerProjectsList: [PayerProjectsList]
 
     payerProjectPtps(input: PayerProjectPtpsInput!): [PayerProjectPtp]
+    payerProjectPtpsImportTimestamps(projectId: ID!): PtpsImportTimestamps
 
     treatmentPlans: [TreatmentPlan]
 
@@ -380,6 +381,10 @@ const queries = gql`
     boFieldId: ID!
     label: String!
     inputProps: JSON # highly variable structure
+  }
+
+  type PtpsImportTimestamps {
+    timestamps: [DateTime]
   }
 
   type SinglePayerProject {

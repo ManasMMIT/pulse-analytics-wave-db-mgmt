@@ -14,7 +14,10 @@ import {
 } from 'frontend/utils/formatDate'
 import { UnderlinedTabs } from 'frontend/components/Tabs'
 
-import { GET_SINGLE_PAYER_PROJECT } from 'frontend/api/queries'
+import {
+  GET_SINGLE_PAYER_PROJECT,
+  GET_PAYER_PROJECT_IMPORT_TIMESTAMPS,
+} from 'frontend/api/queries'
 import TimestampCalendar from './TimestampCalendar'
 import TimestampPanel from './TimestampPanel'
 
@@ -24,7 +27,7 @@ const Title = styled.h1({
   borderBottom: `1px solid ${ AlphaColors.Black10 }`
 })
 
-const TABS_DATA = ['List', 'Calendar']
+const TABS_DATA = ['Import Timeline', 'Import Calendar', 'PTP Timeline']
 
 const SectionWrapper = styled.div({
   display: 'flex',
@@ -36,26 +39,22 @@ const SectionWrapper = styled.div({
 const TimestampSection = ({
   projectId
 }) => {
-  const { data, loading } = useQuery(
-    GET_SINGLE_PAYER_PROJECT,
+  const { data: importTimestampData, loading: loadingImportData } = useQuery(
+    GET_PAYER_PROJECT_IMPORT_TIMESTAMPS,
     { variables: { projectId }}
   )
 
-  let payerProjectTimestampsShort = []
-  let payerProjectTimestampsLong = []
+  const { data: ptpData, loading: loadingPtpData } = useQuery(
+    GET_SINGLE_PAYER_PROJECT,
+    { variables: { projectId } }
+  )
 
-  if (!loading) {
-    const sortedDates = data.singlePayerProject.timestamps.sort().reverse()
-    payerProjectTimestampsShort = _.map(
-      sortedDates,
-      timestamp => formatDayMonthYearShort(timestamp)
-    )
+  const [
+    importTimestampsLong,
+    importTimestampsShort
+  ] = getShortAndLongTimestamps(loadingImportData, importTimestampData)
 
-    payerProjectTimestampsLong = _.map(
-      sortedDates,
-      timestamp => formatDateMonthYearLong(timestamp)
-    )
-  }
+  const [ptpTimestampsLong] = getShortAndLongTimestamps(loadingPtpData, ptpData)
 
   return (
     <SectionWrapper>
@@ -68,8 +67,9 @@ const TimestampSection = ({
           paddingLeft: Spacing.S4,
         }}
       >
-        <TimestampPanel timestamps={_.uniq(payerProjectTimestampsLong)} />
-        <TimestampCalendar timestamps={_.uniq(payerProjectTimestampsShort)} />
+        <TimestampPanel timestamps={_.uniq(importTimestampsLong)} />
+        <TimestampCalendar timestamps={_.uniq(importTimestampsShort)} />
+        <TimestampPanel timestamps={_.uniq(ptpTimestampsLong)} />
       </UnderlinedTabs >
     </SectionWrapper>
   )
@@ -80,3 +80,19 @@ TimestampSection.propTypes = {
 }
 
 export default TimestampSection
+
+const getShortAndLongTimestamps = (loading, data) => {
+  let payerProjectTimestampsShort = []
+  let payerProjectTimestampsLong = []
+
+  if (!loading) {
+    const timestamps = Object.values(data)[0] && Object.values(data)[0].timestamps
+    if (!timestamps) return [payerProjectTimestampsLong, payerProjectTimestampsShort]
+
+    const sortedDates = timestamps.sort().reverse()
+    payerProjectTimestampsShort = _.map(sortedDates, timestamp => formatDayMonthYearShort(timestamp))
+    payerProjectTimestampsLong = _.map(sortedDates, timestamp => formatDateMonthYearLong(timestamp))
+  }
+
+  return [payerProjectTimestampsLong, payerProjectTimestampsShort]
+}
