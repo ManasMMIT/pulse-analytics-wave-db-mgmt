@@ -735,6 +735,14 @@ export const GET_PAYER_PROJECTS_LIST = gql`
  }
 `
 
+export const GET_PAYER_PROJECT_IMPORT_TIMESTAMPS = gql`
+  query getPayerProjectImportTimestamps($projectId: ID!) {
+  payerProjectPtpsImportTimestamps(projectId: $projectId) {
+    timestamps
+  }
+}
+`
+
 export const GET_SINGLE_PAYER_PROJECT = gql`
   query getSinglePayerProject($projectId: String) {
     singlePayerProject(projectId: $projectId) {

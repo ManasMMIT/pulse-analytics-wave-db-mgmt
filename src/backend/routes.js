@@ -30,7 +30,10 @@ const auth0 = require('./auth0')
 const subApp = express()
 
 MongoClient.connect(LOADER_URI, { useUnifiedTopology: true }, (err, client) => {
-  if (err) throw err;
+  if (err) throw err
+
+  console.log(`Connected to MongoDB cluster: ${process.env.DB_CLUSTER_ENV}`)
+
   const mongoClient = client
   const pulseRawDb = client.db('pulse-raw')
   const pulseDevDb = client.db('pulse-dev')
@@ -41,8 +44,6 @@ MongoClient.connect(LOADER_URI, { useUnifiedTopology: true }, (err, client) => {
   const coreRoles = pulseCoreDb.collection('roles')
   const coreNodes = pulseCoreDb.collection('nodes')
   const coreClients = pulseCoreDb.collection('clients')
-
-  console.log(`Connected to MongoDB cluster: ${process.env.DB_CLUSTER_ENV}`)
 
   const twoGuysInAHorseCostume = {
     // Head + front-hooves
@@ -61,6 +62,8 @@ MongoClient.connect(LOADER_URI, { useUnifiedTopology: true }, (err, client) => {
     coreNodes,
   }
 
+  const io = subApp.get('io')
+
   const apolloServer = new ApolloServer({
     typeDefs,
     resolvers,
@@ -71,6 +74,7 @@ MongoClient.connect(LOADER_URI, { useUnifiedTopology: true }, (err, client) => {
         ...twoGuysInAHorseCostume,
         user,
         authorization: req.headers.authorization,
+        io,
       }
     },
   })

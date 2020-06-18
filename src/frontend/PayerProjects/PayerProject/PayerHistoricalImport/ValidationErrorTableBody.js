@@ -1,10 +1,22 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import _ from 'lodash'
+import {transparentize} from 'polished'
 
 import TableBody from '@material-ui/core/TableBody'
 import TableCell from '@material-ui/core/TableCell'
 import TableRow from '@material-ui/core/TableRow'
+import { withStyles } from '@material-ui/core/styles';
+
+import { Colors } from 'frontend/utils/pulseStyles'
+
+const StyledTableCell = withStyles({
+  body: {
+    fontSize: 12,
+    color: Colors.BLACK,
+    borderBottom: `1px solid ${transparentize(0.9, Colors.BLACK)}`
+  },
+})(TableCell);
 
 const ValidationErrorTableBody = ({
   tableData,
@@ -18,15 +30,15 @@ const ValidationErrorTableBody = ({
     .slice(paginateStartIdx, paginateEndIdx)
     .map(({ scenario, message, suggestion }) => (
       <TableRow key={`${ message }-${_.kebabCase(suggestion)}`}>
-        <TableCell>
+        <StyledTableCell style={{ color: Colors.RED, fontWeight: 600 }}>
           { scenario }
-        </TableCell>
-        <TableCell>
+        </StyledTableCell>
+        <StyledTableCell>
           { message }
-        </TableCell>
-        <TableCell>
+        </StyledTableCell>
+        <StyledTableCell>
           { suggestion }
-        </TableCell>
+        </StyledTableCell>
       </TableRow>
     ))
 

@@ -4,6 +4,7 @@ const enrich = require('./utils/enrich')
 const getSheetConfig = require('./utils/getSheetConfig')
 const formatAjvErrors = require('./utils/formatAjvErrors')
 const importPayerHistoricalAccessData = require('./importPayerHistoricalAccessData')
+const PayerImportEmitter = require('./PayerImportEmitter')
 
 const {
   isQualityAccessSheet,
@@ -14,9 +15,26 @@ const {
 const importWorkbook = async (
   parent,
   { input }, // schema is [ { wb, sheet, data, timestamp, projectId }, etc. ]
-  { pulseCoreDb, pulseDevDb, mongoClient },
+  { pulseCoreDb, pulseDevDb, mongoClient, io, user },
   info
 ) => {
+  const isIncomingDataPayerWorkbook = isQualityAccessSheet(input[0].sheet)
+    || isAdditionalCriteriaSheet(input[0].sheet)
+    || isPolicyLinksSheet(input[0].sheet)
+
+  let payerImportEmitter
+  if (isIncomingDataPayerWorkbook) {
+    payerImportEmitter = new PayerImportEmitter({
+      io,
+      pulseCoreDb,
+      user,
+      projectTimestamp: input[0].timestamp,
+      projectId: input[0].projectId,
+    })
+    
+    await payerImportEmitter.start()
+  }
+
   console.time('Step 1: Validate Sheet')
   // Step 1: Completely sanitize and validate the data (across all incoming sheets)
   // If anything fails, error is thrown right away and no further code executes.
@@ -42,6 +60,7 @@ const importWorkbook = async (
 
     if (!valid) {
       const errorString = formatAjvErrors({ errors, wb, sheet })
+      if (isIncomingDataPayerWorkbook) payerImportEmitter.error()
       throw new Error(errorString)
     }
 
@@ -64,10 +83,6 @@ const importWorkbook = async (
   //  - Else persist straight to pulse-dev for now.
   const importFeedback = []
 
-  const isIncomingDataPayerWorkbook = isQualityAccessSheet(input[0].sheet)
-    || isAdditionalCriteriaSheet(input[0].sheet)
-    || isPolicyLinksSheet(input[0].sheet)
-
   console.timeEnd('Step 1: Validate Sheet')
 
   if (isIncomingDataPayerWorkbook) {
@@ -75,6 +90,7 @@ const importWorkbook = async (
       cleanedSheetsWithMetadata,
       dbsConfig: { pulseCoreDb, pulseDevDb, mongoClient },
       importFeedback,
+      payerImportEmitter,
     })
   } else {
     for (const sheetObjWithMetadata of cleanedSheetsWithMetadata) {
