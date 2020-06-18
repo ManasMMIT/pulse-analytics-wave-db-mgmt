@@ -14,6 +14,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased] - Started: 6-18-20
 
+## [2.9.1] - Started: 6-18-20
+
+### Fixed
+- `Payer Import Tool`: Fix socket connection on client-side
+
 ## [2.9.0] - Started: 6-16-20
 
 ### Added
