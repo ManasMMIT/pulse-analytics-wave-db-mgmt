@@ -66,8 +66,6 @@ MongoClient.connect(LOADER_URI, { useUnifiedTopology: true }, (err, client) => {
 
   const io = subApp.get('io')
 
-  processUserActivitySocket(io)
-
   const apolloServer = new ApolloServer({
     typeDefs,
     resolvers,
@@ -139,6 +137,8 @@ MongoClient.connect(LOADER_URI, { useUnifiedTopology: true }, (err, client) => {
 
     res.json(persistedData)
   })
+
+  processUserActivitySocket(io)
 })
 
 module.exports = subApp
