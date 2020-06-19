@@ -12,6 +12,7 @@ const Wrapper = styled.div({
   padding: Spacing.S7,
   background: Color.WHITE,
   color: Color.BLACK,
+  maxHeight: 500,
 })
 
 const Header = styled.div({
@@ -35,7 +36,7 @@ const DeviceMetric = ({ chartData }) => {
 
   const monthData = emailDeviceMetrics[selectedMonth]
   const chartConfig = {
-    type: 'pie',
+    type: 'polarArea',
     data: {
       labels: Object.keys(monthData),
       datasets: [
@@ -93,7 +94,7 @@ const DeviceMetric = ({ chartData }) => {
           />
         </div>
       </Header>
-      <canvas ref={chartContainer} />
+      <canvas ref={chartContainer} height="100" />
     </Wrapper>
   )
 }

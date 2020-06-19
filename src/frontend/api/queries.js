@@ -846,3 +846,8 @@ export const GET_CLIENT_METRICS = gql`
     clientMetrics
   }
 `
+export const GET_OVERVIEW_METRICS = gql`
+  query getOverviewMetrics {
+    overviewMetrics
+  }
+`

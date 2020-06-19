@@ -1,8 +1,5 @@
 const sgClient = require('@sendgrid/client')
-const sub = require('date-fns/sub')
-const format = require('date-fns/format')
 const _ = require('lodash')
-const d3 = require('d3-collection')
 
 const getEmailData = async email => {
   const uri = `to_email="${email}"`
