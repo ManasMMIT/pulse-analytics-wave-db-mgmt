@@ -29,6 +29,8 @@ const auth0 = require('./auth0')
 
 const subApp = express()
 
+const processUserActivitySocket = require('./utils/processUserActivitySocket')
+
 MongoClient.connect(LOADER_URI, { useUnifiedTopology: true }, (err, client) => {
   if (err) throw err
 
@@ -63,6 +65,8 @@ MongoClient.connect(LOADER_URI, { useUnifiedTopology: true }, (err, client) => {
   }
 
   const io = subApp.get('io')
+
+  processUserActivitySocket(io)
 
   const apolloServer = new ApolloServer({
     typeDefs,
