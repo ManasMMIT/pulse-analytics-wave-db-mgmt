@@ -5,19 +5,21 @@ import { useAuth0 } from "../react-auth0-spa"
 const Avatar = styled.img({
   clipPath: `circle(20px at center)`,
   width: 40,
+}, ({ style }) => style)
 
-})
+const UserProfile = ({ user, style }) => {
+  const { loading, user: currentUser } = useAuth0()
 
-const UserProfile = () => {
-  const { loading, user } = useAuth0()
+  if (loading || !currentUser) return null
 
-  if (loading || !user) return null
+  let finalUser = user || currentUser
 
   return (
     <Avatar
-      src={user.picture}
+      style={style}
+      src={finalUser.picture}
       alt="Profile"
-      title={user.name}
+      title={finalUser.name}
     />
   )
 }
