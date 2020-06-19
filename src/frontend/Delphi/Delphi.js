@@ -7,6 +7,7 @@ import { Colors, Spacing } from '../utils/pulseStyles'
 
 import SendEmailPanel from './SendEmailPanel'
 import TestEmailPanel from './TestEmailPanel'
+import EmailDashboardPanel from './EmailDashboardPanel'
 
 const DelphiLogoSrc = 'https://res.cloudinary.com/pulsedatatools/image/upload/v1573837414/polaris/icons/mercury-1-color.svg'
 
@@ -85,11 +86,19 @@ const Delphi = () => (
       >
         Client Emails
       </StyledNavLink>
+      <StyledNavLink
+        to="/delphi/dashboard"
+        style={inactiveLinkStyle}
+        activeStyle={activeLinkStyle}
+      >
+        Dashboard
+      </StyledNavLink>
     </Wrapper>
 
     <Switch>
       <Route path="/delphi/test-emails" component={TestEmailPanel} />
       <Route path="/delphi/real-emails" component={SendEmailPanel} />
+      <Route path="/delphi/dashboard" component={EmailDashboardPanel} />
       <Redirect to="/delphi/test-emails"  />
     </Switch>
   </div>
