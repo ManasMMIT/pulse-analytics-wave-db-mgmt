@@ -26,7 +26,7 @@ import Delphi from './Delphi'
 import PayerProjectsList from './PayerProjects/PayerProjectsList'
 import PayerProject from './PayerProjects/PayerProject'
 
-import SocketListener, { clearUserProfileTracker } from './SocketListener'
+import UserTracker, { clearUserProfileTracker } from './UserTracker'
 
 import { Colors, Spacing } from './utils/pulseStyles'
 
@@ -145,7 +145,7 @@ const App = () => {
   return (
     <ApolloProvider client={client}>
         <Router>
-          <SocketListener />
+          <UserTracker />
           <div style={{ display: 'flex', height: '100vh' }}>
             <PolarisSidebar>
               <StyledNavLink

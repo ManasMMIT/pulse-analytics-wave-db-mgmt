@@ -8,22 +8,24 @@ module.exports = io => {
   const userActivity = {}
 
   io.on('connection', socket => {
-    socket.on(LISTEN_USER_TRACKER, ({ user, pathname }) => {
-      updateUserActivity(userActivity, user, pathname)
+    onNavigation(socket, userActivity)
+  })
+}
 
-      socket.emit(EMIT_USER_TRACKER, userActivity)
-    })
+function onNavigation(socket, userActivity) {
+  socket.on(LISTEN_USER_TRACKER, ({ user, pathname }) => {
+    updateUserActivity(userActivity, user, pathname)
+    socket.emit(EMIT_USER_TRACKER, userActivity)
+  })
 
-    socket.on(LOGIN_USER_TRACKER, ({ user, pathname }) => {
-      updateUserActivity(userActivity, user, pathname)
+  socket.on(LOGIN_USER_TRACKER, ({ user, pathname }) => {
+    updateUserActivity(userActivity, user, pathname)
+    socket.broadcast.emit(EMIT_USER_TRACKER, userActivity)
+  })
 
-      socket.broadcast.emit(EMIT_USER_TRACKER, userActivity)
-    })
-
-    socket.on(LOGOUT_USER_TRACKER, userId => {
-      delete userActivity[userId]
-      socket.broadcast.emit(EMIT_USER_TRACKER, userActivity)
-    })
+  socket.on(LOGOUT_USER_TRACKER, userId => {
+    delete userActivity[userId]
+    socket.broadcast.emit(EMIT_USER_TRACKER, userActivity)
   })
 }
 
