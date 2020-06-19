@@ -26,7 +26,7 @@ import Delphi from './Delphi'
 import PayerProjectsList from './PayerProjects/PayerProjectsList'
 import PayerProject from './PayerProjects/PayerProject'
 
-import SocketListener from './SocketListener'
+import SocketListener, { clearUserProfileTracker } from './SocketListener'
 
 import { Colors, Spacing } from './utils/pulseStyles'
 
@@ -179,6 +179,10 @@ const App = () => {
                   <FontAwesomeIcon
                     style={logoutButtonStyle}
                     onClick={() => {
+                      let userId = localStorage.getItem('user')
+                      userId = JSON.parse(userId).sub
+
+                      clearUserProfileTracker(userId)
                       localStorage.clear()
                       client.clearStore().then(logoutWithRedirect)
                     }}
