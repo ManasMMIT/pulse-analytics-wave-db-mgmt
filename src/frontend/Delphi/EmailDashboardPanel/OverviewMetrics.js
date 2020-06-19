@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react'
+import React, { useRef, useEffect, useState } from 'react'
 import styled from '@emotion/styled'
 import Chartjs from 'chart.js'
 
@@ -32,6 +32,9 @@ const lineLabels = [
 ]
 
 const OverviewMetrics = ({ overviewData }) => {
+  const [chartInstance, setChartInstance] = useState(null)
+  const [chartType, setChartType] = useState('bar')
+
   const chartContainer = useRef(null)
   const { overviewMetrics } = overviewData
   const dates = overviewMetrics.map(({ date }) => date)
@@ -48,7 +51,7 @@ const OverviewMetrics = ({ overviewData }) => {
   }, {})
 
   const chartConfig = {
-    type: 'line',
+    type: chartType,
     data: {
       labels: dates,
       datasets: [
@@ -56,30 +59,35 @@ const OverviewMetrics = ({ overviewData }) => {
           data: aggDataSet['delivered'],
           label: 'Delivered',
           borderColor: '#3e95cd',
+          backgroundColor: '#3e95cd',
           fill: false,
         },
         {
           data: aggDataSet['opens'],
           label: 'Opens',
           borderColor: '#8e5ea2',
+          backgroundColor: '#8e5ea2',
           fill: false,
         },
         {
           data: aggDataSet['unique_opens'],
           label: 'Unique Opens',
           borderColor: '#3cba9f',
+          backgroundColor: '#3cba9f',
           fill: false,
         },
         {
           data: aggDataSet['unique_clicks'],
           label: 'Unique Clicks',
           borderColor: '#e8c3b9',
+          backgroundColor: '#e8c3b9',
           fill: false,
         },
         {
           data: aggDataSet['blocks'],
           label: 'Blocked',
           borderColor: '#c45850',
+          backgroundColor: '#c45850',
           fill: false,
         },
       ],
@@ -88,14 +96,25 @@ const OverviewMetrics = ({ overviewData }) => {
 
   useEffect(() => {
     if (chartContainer && chartContainer.current) {
-      new Chartjs(chartContainer.current, chartConfig)
+      const newChartInstance = new Chartjs(chartContainer.current, chartConfig)
+      setChartInstance(newChartInstance)
     }
   }, [chartContainer]) //eslint-disable-line
+
+  const changeChartType = () => {
+    const newType = chartType === 'bar' ? 'line' : 'bar'
+    chartInstance.config.type = newType
+    chartInstance.update()
+    setChartType(newType)
+  }
 
   return (
     <Wrapper>
       <Header>
         <Title>Overview Metrics: Past 6 Months</Title>
+        <button onClick={changeChartType}>
+          Display as {chartType === 'bar' ? 'line' : 'bar'}
+        </button>
       </Header>
       <canvas ref={chartContainer} />
     </Wrapper>
