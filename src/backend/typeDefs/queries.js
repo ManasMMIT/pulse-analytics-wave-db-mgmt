@@ -75,6 +75,7 @@ const queries = gql`
     people: [Person]
 
     emailDeviceMetrics: JSON
+    clientMetrics: JSON
   }
 
   type Person {

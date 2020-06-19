@@ -12,7 +12,6 @@ const Wrapper = styled.div({
   padding: Spacing.S7,
   background: Color.WHITE,
   color: Color.BLACK,
-  borderBottom: `1px solid ${Color.LIGHT_GRAY_1}`,
 })
 
 const Header = styled.div({

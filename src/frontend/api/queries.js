@@ -840,3 +840,9 @@ export const GET_EMAIL_DEVICE_METRICS = gql`
     emailDeviceMetrics
   }
 `
+
+export const GET_CLIENT_METRICS = gql`
+  query getClientMetrics {
+    clientMetrics
+  }
+`
