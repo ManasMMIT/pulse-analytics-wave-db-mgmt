@@ -352,7 +352,7 @@ export const GET_SELECTED_TOOL = gql`
 `
 
 export const GET_TOOL_DASHBOARDS = gql`
-  query getToolDashboards($parentId: String)  {
+  query getToolDashboards($parentId: String) {
     nodes(type: "dashboard", parentId: $parentId) {
       _id
       name
@@ -389,7 +389,7 @@ export const GET_SELECTED_DASHBOARD = gql`
 `
 
 export const GET_DASHBOARD_PAGES = gql`
-  query getDashboardPages($parentId: String)  {
+  query getDashboardPages($parentId: String) {
     nodes(type: "page", parentId: $parentId) {
       _id
       name
@@ -426,7 +426,7 @@ export const GET_SELECTED_PAGE = gql`
 `
 
 export const GET_PAGE_CARDS = gql`
-  query getPageCards($parentId: String)  {
+  query getPageCards($parentId: String) {
     nodes(type: "card", parentId: $parentId) {
       _id
       name
@@ -739,98 +739,104 @@ export const GET_WORKBOOKS = gql`
 export const GET_PAYER_PROJECTS_LIST = gql`
   query getPayerProjectsList {
     payerProjectsList {
-       _id
+      _id
       name
     }
- }
+  }
 `
 
 export const GET_PAYER_PROJECT_IMPORT_TIMESTAMPS = gql`
   query getPayerProjectImportTimestamps($projectId: ID!) {
-  payerProjectPtpsImportTimestamps(projectId: $projectId) {
-    timestamps
+    payerProjectPtpsImportTimestamps(projectId: $projectId) {
+      timestamps
+    }
   }
-}
 `
 
 export const GET_SINGLE_PAYER_PROJECT = gql`
   query getSinglePayerProject($projectId: String) {
     singlePayerProject(projectId: $projectId) {
-       _id
+      _id
       name
       timestamps
     }
- }
+  }
 `
 
 export const GET_SOURCE_TREATMENT_PLANS = gql`
- query getSourceTreatmentPlans {
-   treatmentPlans {
-    _id
-    indication
-    regimen
-    line
-    population
-    book
-    coverage
-   }
- }
+  query getSourceTreatmentPlans {
+    treatmentPlans {
+      _id
+      indication
+      regimen
+      line
+      population
+      book
+      coverage
+    }
+  }
 `
 
 export const GET_PAYER_PROJECT_PTPS = gql`
- query getPayerProjectPtps($input: PayerProjectPtpsInput!) {
-   payerProjectPtps(input: $input) {
-    _id
-    treatmentPlanId,
-    organizationId,
-    slug
-    organization
-    organizationTiny
-    indication
-    population
-    line
-    regimen
-    book
-    coverage
-    project
+  query getPayerProjectPtps($input: PayerProjectPtpsInput!) {
+    payerProjectPtps(input: $input) {
+      _id
+      treatmentPlanId
+      organizationId
+      slug
+      organization
+      organizationTiny
+      indication
+      population
+      line
+      regimen
+      book
+      coverage
+      project
+    }
   }
- }
 `
 
 export const GET_REGIONAL_TARGETING_DATA = gql`
- query getRegionalTargetingData($input: JSON) {
-   regionalTargetingData(input: $input)
- }
+  query getRegionalTargetingData($input: JSON) {
+    regionalTargetingData(input: $input)
+  }
 `
 
 export const GET_OBM_SERVICE_AND_OBM_SERVICE_CATEGORY_CONNECTIONS = gql`
- query getObmServiceAndObmServiceCategoryConnections($obmServiceId: String) {
-   obmServiceAndObmServiceCategoryConnections(obmServiceId: $obmServiceId) {
-     _id
-     obmServiceId
-     obmServiceCategoryId
-   }
- }
+  query getObmServiceAndObmServiceCategoryConnections($obmServiceId: String) {
+    obmServiceAndObmServiceCategoryConnections(obmServiceId: $obmServiceId) {
+      _id
+      obmServiceId
+      obmServiceCategoryId
+    }
+  }
 `
 
 export const GET_OBM_AND_OBM_SERVICE_CONNECTIONS = gql`
- query getObmAndObmServiceConnections($obmId: String) {
-   obmAndObmServiceConnections(obmId: $obmId) {
-     _id
-     obmId
-     obmServiceId
-     rating
-   }
- }
+  query getObmAndObmServiceConnections($obmId: String) {
+    obmAndObmServiceConnections(obmId: $obmId) {
+      _id
+      obmId
+      obmServiceId
+      rating
+    }
+  }
 `
 
 export const GET_OBM_AND_PERSON_CONNECTIONS = gql`
- query getObmAndPersonConnections($obmId: ID) {
-   obmAndPersonConnections(obmId: $obmId) {
-     _id
-     obmId
-     personId
-     position
-   }
- }
+  query getObmAndPersonConnections($obmId: ID) {
+    obmAndPersonConnections(obmId: $obmId) {
+      _id
+      obmId
+      personId
+      position
+    }
+  }
+`
+
+export const GET_EMAIL_DEVICE_METRICS = gql`
+  query getEmailDeviceMetrics {
+    emailDeviceMetrics
+  }
 `

@@ -31,6 +31,8 @@ const aquila = require('./aquila')
 
 const people = require('./people')
 
+const emailMetrics = require('./emailsMetrics')
+
 module.exports = {
   collections,
   clients,
@@ -60,4 +62,5 @@ module.exports = {
   cMsOrgPrimarySpecialtyCounts,
   ...aquila,
   people,
+  ...emailMetrics,
 }
