@@ -21,6 +21,7 @@ const wrapperStyle = {
   display: 'flex',
   color: '#8266fa',
   background: 'rgb(242, 239, 254)',
+  zIndex: 50,
 }
 
 const profileStyle = {
@@ -72,10 +73,10 @@ export default () => {
 
   return (
     <div style={isOpen ? { ...wrapperStyle, opacity: 0.7 } : wrapperStyle}>
-      <div style={{ margin: 12, alignSelf: 'center', opacity: .8 }} onClick={() => setIsOpen(!isOpen)}>{"<"}</div>
+      <div style={{ margin: 12, alignSelf: 'center', opacity: .8, cursor: 'pointer' }} onClick={() => setIsOpen(!isOpen)}>{"<"}</div>
       { isOpen && (
         <div>
-          <div style={{ fontSize: 12, margin: 6, opacity: 1 }}>
+          <div style={{ fontWeight: 700, fontSize: 12, margin: 6, opacity: 1 }}>
             Users on this page
           </div>
           <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
