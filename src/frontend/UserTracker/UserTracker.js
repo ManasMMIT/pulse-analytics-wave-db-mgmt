@@ -17,18 +17,24 @@ const wrapperStyle = {
 
 export default () => {
   const [isOpen, setIsOpen] = useState(false)
-  const { otherUsersOnPage } = useTrackerSocket()
+  const { otherUsersOnPage, otherUsersOnTool } = useTrackerSocket()
 
-  if (!otherUsersOnPage.length) return null
+  if (!otherUsersOnTool.length && !otherUsersOnPage.length) return null
 
   return (
     <div style={isOpen ? { ...wrapperStyle, opacity: 0.7 } : wrapperStyle}>
       <div style={{ margin: 12, alignSelf: 'center', opacity: .8, cursor: 'pointer' }} onClick={() => setIsOpen(!isOpen)}>{"<"}</div>
       { isOpen && (
-        <UsersSection
-          title="Users on this page"
-          users={otherUsersOnPage}
-        />
+        <>
+          <UsersSection
+            title="Users on this page"
+            users={otherUsersOnPage}
+          />
+          <UsersSection
+            title="Users on this tool"
+            users={otherUsersOnTool}
+          />
+        </>
       )}
     </div>
   )
