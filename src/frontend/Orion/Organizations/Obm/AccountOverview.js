@@ -9,6 +9,15 @@ import {
 import PanelHeader from '../../../components/Panel/PanelHeader'
 import ObmModalButton from '../../../components/BusinessObjectModal/OncologyBenefitManagerModal/OncologyBenefitManagerModalButton'
 
+import {
+  useTable,
+  useGroupBy,
+  useFilters,
+  useSortBy,
+  useExpanded,
+  usePagination,
+} from 'react-table'
+
 import Color from './../../../utils/color'
 
 const StyledTd = styled.td({
@@ -36,9 +45,93 @@ const buttonStyle = {
   fontSize: 12,
 }
 
+const tableStyle = {
+  margin: '12px 24px',
+  width: '100%',
+  display: 'block',
+  height: 650,
+  overflowY: 'scroll',
+  borderCollapse: 'collapse',
+}
+
 const PAGE_TITLE = 'Oncology Benefit Manager Account Overview'
 
+const MODAL_TO_COL_MAP = {
+  'organization': ObmModalButton,
+  'start': ObmModalButton,
+  'businessModel': ObmModalButton,
+}
+
+function Table({ columns, data }) {
+  // Use the state and functions returned from useTable to build your UI
+  const {
+    getTableProps,
+    getTableBodyProps,
+    headerGroups,
+    rows,
+    prepareRow,
+  } = useTable({
+    columns,
+    data,
+  })
+
+  // Render the UI for your table
+  return (
+    <table style={tableStyle} {...getTableProps()}>
+      <thead>
+        {headerGroups.map(headerGroup => (
+          <tr {...headerGroup.getHeaderGroupProps()}>
+            {headerGroup.headers.map(column => (
+              <StyledTh {...column.getHeaderProps()}>{column.render('Header')}</StyledTh>
+            ))}
+          </tr>
+        ))}
+      </thead>
+      <tbody {...getTableBodyProps()}>
+        {rows.map((row, i) => {
+          prepareRow(row)
+          return (
+            <tr {...row.getRowProps()}>
+              {row.cells.map(cell => {
+                const ModalButtonWrapper = MODAL_TO_COL_MAP[cell.column.id]
+                const datumId = cell.row.original._id
+
+                return (
+                  <StyledTd {...cell.getCellProps()}>
+                    <ModalButtonWrapper buttonStyle={buttonStyle} entityId={datumId}>
+                      {cell.render('Cell')}
+                    </ModalButtonWrapper>
+                  </StyledTd>
+                )
+              })}
+            </tr>
+          )
+        })}
+      </tbody>
+    </table>
+  )
+}
+
 const AccountOverview = () => {
+  // ? useMemo is from the basic sandbox -- wonder if it's okay to just pull out of render
+  const columns = React.useMemo(
+    () => [
+      {
+        Header: 'Account',
+        accessor: 'organization',
+      },
+      {
+        Header: 'Start',
+        accessor: 'start',
+      },
+      {
+        Header: 'Business Model',
+        accessor: 'businessModel',
+      },
+    ],
+    []
+  )
+
   const { data, loading } = useQuery(GET_OBM_ORGANIZATIONS)
 
   let obms = []
@@ -51,45 +144,7 @@ const AccountOverview = () => {
           Create OBM
         </ObmModalButton>
       </PanelHeader>
-      <table style={{
-        margin: '12px 24px',
-        width: '100%',
-        display: 'block',
-        height: 650,
-        overflowY: 'scroll',
-        borderCollapse: 'collapse',
-      }}>
-        <tbody>
-          <tr style={{ border: '1px solid black' }}>
-            <StyledTh>Account</StyledTh>
-            <StyledTh>Start</StyledTh>
-            <StyledTh>Business Model</StyledTh>
-          </tr>
-          {
-            obms.map(({ _id, organization, start, businessModel }) => {
-              return (
-                <tr key={_id + organization} style={{ border: '1px solid black' }}>
-                  <StyledTd>
-                    <ObmModalButton buttonStyle={buttonStyle} entityId={_id}>
-                      {organization}
-                    </ObmModalButton>
-                  </StyledTd>
-                  <StyledTd>
-                    <ObmModalButton buttonStyle={buttonStyle} entityId={_id}>
-                      {start}
-                    </ObmModalButton>
-                  </StyledTd>
-                  <StyledTd>
-                    <ObmModalButton buttonStyle={buttonStyle} entityId={_id}>
-                      {businessModel}
-                    </ObmModalButton>
-                  </StyledTd>
-                </tr>
-              )
-            })
-          }
-        </tbody>
-      </table>
+      <Table columns={columns} data={obms} />
     </div>
   )
 }
