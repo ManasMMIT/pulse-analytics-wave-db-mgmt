@@ -58,6 +58,7 @@
     "react-scripts": "3.4.0",
     "react-select": "^3.0.8",
     "react-sortable-hoc": "^1.11.0",
+    "react-table": "^7.2.1",
     "react-tabulator": "^0.10.3",
     "reverse-line-reader": "^0.2.6",
     "socket.io": "^2.3.0",
