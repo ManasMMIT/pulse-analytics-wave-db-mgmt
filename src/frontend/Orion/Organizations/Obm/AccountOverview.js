@@ -1,6 +1,5 @@
 import React from 'react'
 import { useQuery } from '@apollo/react-hooks'
-import styled from '@emotion/styled'
 
 import {
   GET_OBM_ORGANIZATIONS,
@@ -8,27 +7,12 @@ import {
 
 import PanelHeader from '../../../components/Panel/PanelHeader'
 import ObmModalButton from '../../../components/BusinessObjectModal/OncologyBenefitManagerModal/OncologyBenefitManagerModalButton'
-
-import {
-  useTable,
-  useGroupBy,
-  useFilters,
-  useSortBy,
-  useExpanded,
-  usePagination,
-} from 'react-table'
+import TemplateTable from './TemplateTable'
+import SelectColumnFilter from './TemplateTable/SelectColumnFilter'
+import MultiSelectColumnFilter from './TemplateTable/MultiSelectColumnFilter'
 
 import Color from './../../../utils/color'
 
-const StyledTd = styled.td({
-  padding: 12,
-})
-
-const StyledTh = styled.th({
-  fontWeight: 700,
-  fontSize: 14,
-  padding: 12,
-})
 
 const createButtonStyle = {
   background: Color.PRIMARY,
@@ -40,76 +24,19 @@ const createButtonStyle = {
   cursor: 'pointer',
 }
 
-const buttonStyle = {
-  cursor: 'pointer',
-  fontSize: 12,
-}
-
-const tableStyle = {
-  margin: '12px 24px',
-  width: '100%',
-  display: 'block',
-  height: 650,
-  overflowY: 'scroll',
-  borderCollapse: 'collapse',
-}
-
 const PAGE_TITLE = 'Oncology Benefit Manager Account Overview'
 
-const MODAL_TO_COL_MAP = {
-  'organization': ObmModalButton,
-  'start': ObmModalButton,
-  'businessModel': ObmModalButton,
-}
+const customMultiSelectFilterFn = (filter, row, filterValue) => {
+  if (!filterValue) return filter
 
-function Table({ columns, data }) {
-  // Use the state and functions returned from useTable to build your UI
-  const {
-    getTableProps,
-    getTableBodyProps,
-    headerGroups,
-    rows,
-    prepareRow,
-  } = useTable({
-    columns,
-    data,
+  const rowKey = row[0]
+
+  const filterValueArray = filterValue.split(', ')
+
+  return filter.filter(rowDatum => {
+    return rowDatum.values[rowKey] === filterValue ||
+      filterValueArray.includes(rowDatum.values[rowKey])
   })
-
-  // Render the UI for your table
-  return (
-    <table style={tableStyle} {...getTableProps()}>
-      <thead>
-        {headerGroups.map(headerGroup => (
-          <tr {...headerGroup.getHeaderGroupProps()}>
-            {headerGroup.headers.map(column => (
-              <StyledTh {...column.getHeaderProps()}>{column.render('Header')}</StyledTh>
-            ))}
-          </tr>
-        ))}
-      </thead>
-      <tbody {...getTableBodyProps()}>
-        {rows.map((row, i) => {
-          prepareRow(row)
-          return (
-            <tr {...row.getRowProps()}>
-              {row.cells.map(cell => {
-                const ModalButtonWrapper = MODAL_TO_COL_MAP[cell.column.id]
-                const datumId = cell.row.original._id
-
-                return (
-                  <StyledTd {...cell.getCellProps()}>
-                    <ModalButtonWrapper buttonStyle={buttonStyle} entityId={datumId}>
-                      {cell.render('Cell')}
-                    </ModalButtonWrapper>
-                  </StyledTd>
-                )
-              })}
-            </tr>
-          )
-        })}
-      </tbody>
-    </table>
-  )
 }
 
 const AccountOverview = () => {
@@ -119,14 +46,21 @@ const AccountOverview = () => {
       {
         Header: 'Account',
         accessor: 'organization',
+        Filter: MultiSelectColumnFilter,
+        sortType: 'basic',
+        filter: customMultiSelectFilterFn,
       },
       {
         Header: 'Start',
         accessor: 'start',
+        Filter: SelectColumnFilter,
+        sortType: 'basic',
       },
       {
         Header: 'Business Model',
         accessor: 'businessModel',
+        Filter: SelectColumnFilter,
+        sortType: 'basic',
       },
     ],
     []
@@ -144,7 +78,7 @@ const AccountOverview = () => {
           Create OBM
         </ObmModalButton>
       </PanelHeader>
-      <Table columns={columns} data={obms} />
+      <TemplateTable columns={columns} data={obms} />
     </div>
   )
 }
