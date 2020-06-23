@@ -55,7 +55,6 @@ const Services = () => {
         Header: 'Account',
         accessor: 'organization',
         Filter: MultiSelectColumnFilter,
-        sortType: 'basic',
         filter: customMultiSelectFilterFn,
       },
       {
@@ -63,21 +62,18 @@ const Services = () => {
         accessor: 'serviceCategory',
         Filter: MultiSelectColumnFilter,
         filter: customMultiSelectFilterFn,
-        sortType: 'basic',
       },
       {
         Header: 'Service',
         accessor: 'service',
         Filter: MultiSelectColumnFilter,
         filter: customMultiSelectFilterFn,
-        sortType: 'basic',
       },
       {
         Header: 'Service Rating',
         accessor: 'serviceRating',
         Filter: SelectColumnFilter,
         filter: customSelectNumberFilterFn,
-        sortType: 'basic',
       },
     ],
     []
