@@ -98,39 +98,17 @@ function TemplateTable({ columns, data }) {
       <thead>
         {headerGroups.map(headerGroup => (
           <tr {...headerGroup.getHeaderGroupProps()}>
-            {headerGroup.headers.map(column => (
-              <StyledTh {...column.getHeaderProps(column.getSortByToggleProps())}>
-                {column.render('Header')}
-                <span>
-                  {column.isSorted
-                    ? column.isSortedDesc
-                      ? ' 🔽'
-                      : ' 🔼'
-                    : ''}
-                </span>
-                <div>{column.canFilter ? column.render('Filter') : null}</div>
-              </StyledTh>
-            ))}
+            {getHeaders(headerGroup)}
           </tr>
         ))}
       </thead>
       <tbody {...getTableBodyProps()}>
         {rows.map((row, i) => {
           prepareRow(row)
+
           return (
             <tr {...row.getRowProps()}>
-              {row.cells.map(cell => {
-                const ModalButtonWrapper = MODAL_TO_COL_MAP[cell.column.id]
-                const datumId = cell.row.original._id
-
-                return (
-                  <StyledTd {...cell.getCellProps()}>
-                    <ModalButtonWrapper buttonStyle={buttonStyle} entityId={datumId}>
-                      {cell.render('Cell')}
-                    </ModalButtonWrapper>
-                  </StyledTd>
-                )
-              })}
+              {getRowCells(row)}
             </tr>
           )
         })}
@@ -140,3 +118,33 @@ function TemplateTable({ columns, data }) {
 }
 
 export default TemplateTable
+
+function getHeaders(headerGroup) {
+  return headerGroup.headers.map(column => (
+    <StyledTh {...column.getHeaderProps(column.getSortByToggleProps())}>
+      {column.render('Header')}
+      <span>
+        {column.isSorted
+          ? column.isSortedDesc
+            ? ' 🔽'
+            : ' 🔼'
+          : ''}
+      </span>
+      <div onClick={e => e.stopPropagation()}>{column.canFilter ? column.render('Filter') : null}</div>
+    </StyledTh>
+  ))
+}
+
+function getRowCells(row) {
+  return row.cells.map(cell => {
+    const ModalButtonWrapper = MODAL_TO_COL_MAP[cell.column.id]
+    const datumId = cell.row.original._id
+    return (
+      <StyledTd {...cell.getCellProps()}>
+        <ModalButtonWrapper buttonStyle={buttonStyle} entityId={datumId}>
+          {cell.render('Cell')}
+        </ModalButtonWrapper>
+      </StyledTd>
+    )
+  })
+}
