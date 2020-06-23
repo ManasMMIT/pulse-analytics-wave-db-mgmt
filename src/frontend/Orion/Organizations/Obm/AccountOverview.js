@@ -27,6 +27,12 @@ const createButtonStyle = {
 
 const PAGE_TITLE = 'Oncology Benefit Manager Account Overview'
 
+const MODAL_TO_COL_MAP = {
+  organization: { Modal: ObmModalButton, idKey: '_id' },
+  start: { Modal: ObmModalButton, idKey: '_id' },
+  businessModel: { Modal: ObmModalButton, idKey: '_id' },
+}
+
 const AccountOverview = () => {
   const columns = React.useMemo(
     () => [
@@ -67,7 +73,11 @@ const AccountOverview = () => {
           Create OBM
         </ObmModalButton>
       </PanelHeader>
-      <TemplateTable columns={columns} data={obms} />
+      <TemplateTable
+        columns={columns}
+        data={obms}
+        modalColMap={MODAL_TO_COL_MAP}
+      />
     </div>
   )
 }
