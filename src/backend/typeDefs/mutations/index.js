@@ -93,6 +93,7 @@ const mutationType = gql`
     connectObmServiceAndObmServiceCategory(input: ConnectObmServiceAndObmServiceCategoryInput!): ConnectObmServiceAndObmServiceCategoryPayload!
     connectObmAndObmService(input: [ConnectObmAndObmServiceInput!]!): [ConnectObmAndObmServicePayload!]!
     connectObmAndPerson(input: [ConnectObmAndPersonInput!]!): [ConnectObmAndPersonPayload!]!
+    connectObmAndPayer(input: ConnectObmAndPayerInput!): [ConnectObmAndPayerPayload!]!
 
     upsertOrganizationMeta(input: UpsertOrganizationMetaInput!): [UpsertOrganizationMetaPayload]
 

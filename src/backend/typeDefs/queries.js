@@ -29,6 +29,7 @@ const queries = gql`
     obmServiceAndObmServiceCategoryConnections(obmServiceId: String): [ObmServiceAndObmServiceCategoryConnection]
     obmAndObmServiceConnections(obmId: String): [ObmAndObmServiceConnection]
     obmAndPersonConnections(obmId: ID): [ObmAndPersonConnection]
+    obmAndPayerConnections(obmId: ID): [ObmAndPayerConnection]
 
     serviceTemplateObms: [ServiceTemplateObms]
 
@@ -247,6 +248,12 @@ const queries = gql`
     position: String
   }
 
+  type ObmAndPayerConnection {
+    _id: ID!
+    obmId: String!
+    payerId: String!
+  }
+  
   type ServiceTemplateObms {
     obmServiceJoinId: ID # returning obms without connections, with no join table id
     obmId: ID!

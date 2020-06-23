@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Installed `pre-commit`,`lint-staged` and `prettier`
 - Adds the ignoring of `App.test.js` and `deleteTreatmentPlansCascade.test.js` when the `test` script is run
+- `Orion`: Added obm/payer relational widget to OBM modal
 
 ## [2.9.1] - Started: 6-18-20
 

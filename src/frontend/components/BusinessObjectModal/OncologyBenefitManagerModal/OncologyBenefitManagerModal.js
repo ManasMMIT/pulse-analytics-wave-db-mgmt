@@ -12,6 +12,7 @@ import {
 
 import ObmServicesWidget from './relational-widgets/ObmServicesWidget'
 import ObmInfluencersWidget from './relational-widgets/ObmInfluencersWidget'
+import ObmPayersWidget from './relational-widgets/ObmPayersWidget'
 import BusinessObjectModal from '../BusinessObjectModal/BusinessObjectModal'
 
 const OBM_BOID = '5ec81a40b2cfb87bb15373ec'
@@ -27,6 +28,11 @@ const WIDGETS = [
     _id: 'RELATIONAL_obmInfluencersWidget',
     label: 'Connect to OBM Influencers',
     Component: ObmInfluencersWidget,
+  },
+  {
+    _id: 'RELATIONAL_obmPayersWidget',
+    label: 'Connect to Payers',
+    Component: ObmPayersWidget,
   },
 ]
 
