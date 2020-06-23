@@ -40,7 +40,6 @@ const AccountOverview = () => {
         Header: 'Account',
         accessor: 'organization',
         Filter: MultiSelectColumnFilter,
-        sortType: 'basic',
         filter: customMultiSelectFilterFn,
       },
       {
@@ -48,14 +47,12 @@ const AccountOverview = () => {
         accessor: 'start',
         Filter: SelectColumnFilter,
         filter: customSelectNumberFilterFn,
-        sortType: 'basic',
       },
       {
         Header: 'Business Model',
         accessor: 'businessModel',
         Filter: SelectColumnFilter,
         filter: customSelectFilterFn,
-        sortType: 'basic',
       },
     ],
     []
