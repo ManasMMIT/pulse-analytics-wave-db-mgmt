@@ -7,6 +7,7 @@ import { useQuery, useMutation } from '@apollo/react-hooks'
 import {
   GET_OBM_SERVICES,
   GET_OBM_AND_OBM_SERVICE_CONNECTIONS,
+  GET_SERVICE_TEMPLATE_OBMS,
 } from '../../../../api/queries'
 
 import {
@@ -23,7 +24,7 @@ const ObmServicesWidget = ({ entity }) => {
     data: connectionsData,
     loading: connectionsLoading,
   } = useQuery(
-    GET_OBM_AND_OBM_SERVICE_CONNECTIONS, 
+    GET_OBM_AND_OBM_SERVICE_CONNECTIONS,
     { variables: { obmId: entity._id } },
   )
 
@@ -36,10 +37,13 @@ const ObmServicesWidget = ({ entity }) => {
       input: stagedConnections
     },
     refetchQueries: [
-      { 
+      {
         query: GET_OBM_AND_OBM_SERVICE_CONNECTIONS,
         variables: { obmId: entity._id }
       },
+      {
+        query: GET_SERVICE_TEMPLATE_OBMS,
+      }
     ],
     onError: alert,
   })
@@ -85,12 +89,12 @@ const ObmServicesWidget = ({ entity }) => {
               </div>
 
               <div style={{ display: 'flex', alignItems: 'center', marginLeft: 12 }}>
-                <label style={{ marginRight: 12 }}>Rating:</label> 
+                <label style={{ marginRight: 12 }}>Rating:</label>
 
-                <input 
-                  type="number" 
-                  value={String(rating)} 
-                  style={{ marginLeft: 12, border: '1px solid black', padding: 6, width: 50 }} 
+                <input
+                  type="number"
+                  value={String(rating)}
+                  style={{ marginLeft: 12, border: '1px solid black', padding: 6, width: 50 }}
                   onChange={e => {
                     const newDoc = _.merge(clonedStagedConnections[idx], { rating: Number(e.currentTarget.value) })
                     clonedStagedConnections.splice(idx, 1, newDoc)
@@ -116,9 +120,9 @@ const ObmServicesWidget = ({ entity }) => {
       }
 
       <div>
-        <button 
-          style={{ border: '1px solid black', cursor: 'pointer', padding: 8, marginTop: 12 }} 
-          onClick={() => { 
+        <button
+          style={{ border: '1px solid black', cursor: 'pointer', padding: 8, marginTop: 12 }}
+          onClick={() => {
             const newConnection = { _id: ObjectId(), obmServiceId: null, rating: 0, obmId: entity._id }
             clonedStagedConnections.push(newConnection)
             stageConnections(clonedStagedConnections)
@@ -129,8 +133,8 @@ const ObmServicesWidget = ({ entity }) => {
       </div>
 
       <div>
-        <button 
-          style={{ border: '1px solid black', cursor: 'pointer', padding: 4, marginTop: 12 }} 
+        <button
+          style={{ border: '1px solid black', cursor: 'pointer', padding: 4, marginTop: 12 }}
           onClick={save}
         >
           Save

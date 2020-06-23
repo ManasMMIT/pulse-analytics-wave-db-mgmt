@@ -834,3 +834,18 @@ export const GET_OBM_AND_PERSON_CONNECTIONS = gql`
    }
  }
 `
+
+export const GET_SERVICE_TEMPLATE_OBMS = gql`
+ query getServiceTemplateObms {
+   serviceTemplateObms {
+      obmServiceJoinId
+      obmId
+      serviceId
+      serviceCategoryId
+      organization
+      serviceCategory
+      service
+      serviceRating
+   }
+ }
+`

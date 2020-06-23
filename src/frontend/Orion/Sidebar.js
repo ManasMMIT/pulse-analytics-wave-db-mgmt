@@ -212,6 +212,13 @@ const Sidebar = () => {
           >
             Account Overview
           </StyledNavLink>
+          <StyledNavLink
+            style={dropdownInactiveLinkStyle}
+            activeStyle={dropdownActiveLinkStyle}
+            to={getToolItemPath('obm', 'services')}
+          >
+            Services
+          </StyledNavLink>
         </StyledDropdown>
         <StyledDropdown style={inactiveLinkStyle} label={'Pathways'}>
           <StyledNavLink

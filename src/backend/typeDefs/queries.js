@@ -30,6 +30,8 @@ const queries = gql`
     obmAndObmServiceConnections(obmId: String): [ObmAndObmServiceConnection]
     obmAndPersonConnections(obmId: ID): [ObmAndPersonConnection]
 
+    serviceTemplateObms: [ServiceTemplateObms]
+
     qualityOfAccessScores: [QualityOfAccessScore]
     collections(type: String): [String]
     newTreatmentPlans(data: JSON): JSON
@@ -243,6 +245,17 @@ const queries = gql`
     obmId: ID!
     personId: ID!
     position: String
+  }
+
+  type ServiceTemplateObms {
+    obmServiceJoinId: ID # returning obms without connections, with no join table id
+    obmId: ID!
+    serviceId: ID
+    serviceCategoryId: ID
+    organization: String!
+    serviceCategory: String
+    service: String
+    serviceRating: Int
   }
 
   type Connection {
