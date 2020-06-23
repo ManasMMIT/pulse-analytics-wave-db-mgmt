@@ -1,8 +1,6 @@
 import React from 'react'
 import styled from '@emotion/styled'
 
-import ObmModalButton from 'frontend/components/BusinessObjectModal/OncologyBenefitManagerModal/OncologyBenefitManagerModalButton'
-
 import {
   useTable,
   // useGroupBy,
@@ -39,15 +37,15 @@ const tableStyle = {
 }
 
 // Define a default UI for filtering
-function DefaultColumnFilter({
+const DefaultColumnFilter = ({
   column: { filterValue, preFilteredRows, setFilter },
-}) {
+}) => {
   const count = preFilteredRows.length
 
   return (
     <input
       value={filterValue || ''}
-      onChange={e => {
+      onChange={(e) => {
         setFilter(e.target.value || undefined) // Set undefined to remove the filter entirely
       }}
       placeholder={`Search ${count} records...`}
@@ -55,13 +53,36 @@ function DefaultColumnFilter({
   )
 }
 
-const MODAL_TO_COL_MAP = {
-  'organization': ObmModalButton,
-  'start': ObmModalButton,
-  'businessModel': ObmModalButton,
+const getHeaders = (headerGroup) => {
+  return headerGroup.headers.map((column) => (
+    <StyledTh {...column.getHeaderProps(column.getSortByToggleProps())}>
+      {column.render('Header')}
+      <span>
+        {column.isSorted ? (column.isSortedDesc ? ' 🔽' : ' 🔼') : ''}
+      </span>
+      <div onClick={(e) => e.stopPropagation()}>
+        {column.canFilter ? column.render('Filter') : null}
+      </div>
+    </StyledTh>
+  ))
 }
 
-function TemplateTable({ columns, data }) {
+const getRowCells = (row, modalColMap) => {
+  return row.cells.map((cell) => {
+    const { Modal, idKey } = modalColMap[cell.column.id]
+    const datumId = cell.row.original[idKey]
+
+    return (
+      <StyledTd {...cell.getCellProps()}>
+        <Modal buttonStyle={buttonStyle} entityId={datumId}>
+          {cell.render('Cell')}
+        </Modal>
+      </StyledTd>
+    )
+  })
+}
+
+const TemplateTable = ({ columns, data, modalColMap }) => {
   const defaultColumn = React.useMemo(
     () => ({
       // Let's set up our default Filter UI
@@ -88,7 +109,7 @@ function TemplateTable({ columns, data }) {
       defaultColumn, // Be sure to pass the defaultColumn option
     },
     useFilters, // useFilters!
-    useSortBy, // ! must be after filter hooks. Throws error, if not.
+    useSortBy // ! must be after filter hooks. Throws error, if not.
     // useGlobalFilter,
   )
 
@@ -96,7 +117,7 @@ function TemplateTable({ columns, data }) {
   return (
     <table style={tableStyle} {...getTableProps()}>
       <thead>
-        {headerGroups.map(headerGroup => (
+        {headerGroups.map((headerGroup) => (
           <tr {...headerGroup.getHeaderGroupProps()}>
             {getHeaders(headerGroup)}
           </tr>
@@ -106,11 +127,7 @@ function TemplateTable({ columns, data }) {
         {rows.map((row, i) => {
           prepareRow(row)
 
-          return (
-            <tr {...row.getRowProps()}>
-              {getRowCells(row)}
-            </tr>
-          )
+          return <tr {...row.getRowProps()}>{getRowCells(row, modalColMap)}</tr>
         })}
       </tbody>
     </table>
@@ -118,33 +135,3 @@ function TemplateTable({ columns, data }) {
 }
 
 export default TemplateTable
-
-function getHeaders(headerGroup) {
-  return headerGroup.headers.map(column => (
-    <StyledTh {...column.getHeaderProps(column.getSortByToggleProps())}>
-      {column.render('Header')}
-      <span>
-        {column.isSorted
-          ? column.isSortedDesc
-            ? ' 🔽'
-            : ' 🔼'
-          : ''}
-      </span>
-      <div onClick={e => e.stopPropagation()}>{column.canFilter ? column.render('Filter') : null}</div>
-    </StyledTh>
-  ))
-}
-
-function getRowCells(row) {
-  return row.cells.map(cell => {
-    const ModalButtonWrapper = MODAL_TO_COL_MAP[cell.column.id]
-    const datumId = cell.row.original._id
-    return (
-      <StyledTd {...cell.getCellProps()}>
-        <ModalButtonWrapper buttonStyle={buttonStyle} entityId={datumId}>
-          {cell.render('Cell')}
-        </ModalButtonWrapper>
-      </StyledTd>
-    )
-  })
-}
