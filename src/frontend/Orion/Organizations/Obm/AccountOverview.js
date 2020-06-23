@@ -1,15 +1,17 @@
 import React from 'react'
 import { useQuery } from '@apollo/react-hooks'
 
-import {
-  GET_OBM_ORGANIZATIONS,
-} from 'frontend/api/queries'
+import { GET_OBM_ORGANIZATIONS } from 'frontend/api/queries'
 
 import PanelHeader from '../../../components/Panel/PanelHeader'
 import ObmModalButton from '../../../components/BusinessObjectModal/OncologyBenefitManagerModal/OncologyBenefitManagerModalButton'
 import TemplateTable from './TemplateTable'
 import SelectColumnFilter from './TemplateTable/SelectColumnFilter'
 import MultiSelectColumnFilter from './TemplateTable/MultiSelectColumnFilter'
+
+import customSelectFilterFn from './TemplateTable/custom-filters/customSelectFilterFn'
+import customMultiSelectFilterFn from './TemplateTable/custom-filters/customMultiSelectFilterFn'
+import customSelectNumberFilterFn from './TemplateTable/custom-filters/customSelectNumberFilterFn'
 
 import Color from './../../../utils/color'
 
@@ -25,35 +27,7 @@ const createButtonStyle = {
 
 const PAGE_TITLE = 'Oncology Benefit Manager Account Overview'
 
-const customMultiSelectFilterFn = (filter, row, filterValue) => {
-  if (!filterValue) return filter
-
-  const colKey = row[0]
-
-  const filterValueArray = filterValue.split(', ')
-
-  return filter.filter(rowDatum => {
-    return rowDatum.values[colKey] === filterValue ||
-      filterValueArray.includes(rowDatum.values[colKey])
-  })
-}
-
-const customSelectFilterFn = (filter, row, filterValue) => {
-  const [colKey] = row
-  if (filterValue === 'All') return filter
-  return filter.filter(datum => datum.values[colKey] === filterValue)
-}
-
-const customSelectNumberFilterFn = (filter, row, filterValue) => {
-  const [colKey] = row
-  if (filterValue === 'All') return filter
-  filterValue = Number(filterValue)
-
-  return filter.filter(datum => datum.values[colKey] === filterValue)
-}
-
 const AccountOverview = () => {
-  // ? useMemo is from the basic sandbox -- wonder if it's okay to just pull out of render
   const columns = React.useMemo(
     () => [
       {
