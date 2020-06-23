@@ -13,7 +13,6 @@ import MultiSelectColumnFilter from './TemplateTable/MultiSelectColumnFilter'
 
 import Color from './../../../utils/color'
 
-
 const createButtonStyle = {
   background: Color.PRIMARY,
   color: Color.WHITE,
@@ -29,14 +28,28 @@ const PAGE_TITLE = 'Oncology Benefit Manager Account Overview'
 const customMultiSelectFilterFn = (filter, row, filterValue) => {
   if (!filterValue) return filter
 
-  const rowKey = row[0]
+  const colKey = row[0]
 
   const filterValueArray = filterValue.split(', ')
 
   return filter.filter(rowDatum => {
-    return rowDatum.values[rowKey] === filterValue ||
-      filterValueArray.includes(rowDatum.values[rowKey])
+    return rowDatum.values[colKey] === filterValue ||
+      filterValueArray.includes(rowDatum.values[colKey])
   })
+}
+
+const customSelectFilterFn = (filter, row, filterValue) => {
+  const [colKey] = row
+  if (filterValue === 'All') return filter
+  return filter.filter(datum => datum.values[colKey] === filterValue)
+}
+
+const customSelectNumberFilterFn = (filter, row, filterValue) => {
+  const [colKey] = row
+  if (filterValue === 'All') return filter
+  filterValue = Number(filterValue)
+
+  return filter.filter(datum => datum.values[colKey] === filterValue)
 }
 
 const AccountOverview = () => {
@@ -54,12 +67,14 @@ const AccountOverview = () => {
         Header: 'Start',
         accessor: 'start',
         Filter: SelectColumnFilter,
+        filter: customSelectNumberFilterFn,
         sortType: 'basic',
       },
       {
         Header: 'Business Model',
         accessor: 'businessModel',
         Filter: SelectColumnFilter,
+        filter: customSelectFilterFn,
         sortType: 'basic',
       },
     ],
