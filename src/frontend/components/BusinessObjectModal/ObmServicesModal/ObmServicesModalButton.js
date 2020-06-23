@@ -7,12 +7,13 @@ const ObmServicesModalButton = ({
   entityId,
   refetchQueries,
   afterMutationHook,
+  buttonStyle = {},
 }) => {
   const [showModal, setModal] = useState(false)
 
   return (
     <>
-      <button onClick={() => setModal(!showModal)}>{children}</button>
+      <button style={buttonStyle} onClick={() => setModal(!showModal)}>{children}</button>
       {showModal && (
         <ObmServicesModal
           entityId={entityId}

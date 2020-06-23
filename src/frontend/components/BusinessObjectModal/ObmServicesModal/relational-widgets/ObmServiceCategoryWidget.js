@@ -5,6 +5,7 @@ import { useQuery, useMutation } from '@apollo/react-hooks'
 import {
   GET_OBM_SERVICES_CATEGORIES,
   GET_OBM_SERVICE_AND_OBM_SERVICE_CATEGORY_CONNECTIONS,
+  GET_SERVICE_TEMPLATE_OBMS,
 } from '../../../../api/queries'
 
 import {
@@ -21,14 +22,14 @@ const ObmServiceCategoryWidget = ({ entity }) => {
     data: connectionsData,
     loading: connectionsLoading,
   } = useQuery(
-    GET_OBM_SERVICE_AND_OBM_SERVICE_CATEGORY_CONNECTIONS, 
+    GET_OBM_SERVICE_AND_OBM_SERVICE_CATEGORY_CONNECTIONS,
     { variables: { obmServiceId: entity._id } },
   )
 
   const [selectedCategoryId, selectCategoryId] = useState(null)
 
   const { obmServiceAndObmServiceCategoryConnections: connections } = (connectionsData || {})
-  
+
   const connectionId = connections && connections[0] && connections[0]._id
 
   const [save] = useMutation(CONNECT_OBM_SERVICE_AND_OBM_SERVICE_CATEGORY, {
@@ -42,10 +43,13 @@ const ObmServiceCategoryWidget = ({ entity }) => {
       }
     },
     refetchQueries: [
-      { 
+      {
         query: GET_OBM_SERVICE_AND_OBM_SERVICE_CATEGORY_CONNECTIONS,
         variables: { obmServiceId: entity._id },
       },
+      {
+        query: GET_SERVICE_TEMPLATE_OBMS,
+      }
     ],
     onError: alert,
   })
@@ -71,8 +75,8 @@ const ObmServiceCategoryWidget = ({ entity }) => {
         onChange={({ value }) => selectCategoryId(value)}
       />
 
-      <button 
-        style={{ border: '1px solid black', cursor: 'pointer', padding: 4, marginTop: 12 }} 
+      <button
+        style={{ border: '1px solid black', cursor: 'pointer', padding: 4, marginTop: 12 }}
         onClick={save}
       >
         Save

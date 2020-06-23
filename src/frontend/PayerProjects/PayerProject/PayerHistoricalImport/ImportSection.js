@@ -10,8 +10,8 @@ import {
   KeyboardDatePicker,
 } from '@material-ui/pickers'
 import DateFnsUtils from '@date-io/date-fns'
-import { createMuiTheme } from "@material-ui/core"
-import { ThemeProvider } from "@material-ui/styles"
+import { createMuiTheme } from '@material-ui/core'
+import { ThemeProvider } from '@material-ui/styles'
 import { IMPORT_WORKBOOK } from 'frontend/api/mutations'
 import { darken } from 'polished'
 
@@ -34,12 +34,12 @@ const ImportSectionWrapper = styled.div({
   width: '50%',
   padding: Spacing.S7,
   flexDirection: 'column',
-  borderRight: `1px solid ${ Color.LIGHT_GRAY_1 }`,
-  borderBottom: `1px solid ${ Color.LIGHT_GRAY_1 }`,
+  borderRight: `1px solid ${Color.LIGHT_GRAY_1}`,
+  borderBottom: `1px solid ${Color.LIGHT_GRAY_1}`,
 })
 
 const InputWrapper = styled.div({
-  margin: `${ Spacing.S3 } 0px`,
+  margin: `${Spacing.S3} 0px`,
 })
 
 const LoadingWrapper = styled.div({
@@ -73,7 +73,7 @@ const ImportLogText = styled.p({
 const importBtnStyle = {
   width: 'fit-content',
   marginBottom: Spacing.S7,
-  marginTop: Spacing.S3
+  marginTop: Spacing.S3,
 }
 
 const alertMessageMap = {
@@ -81,12 +81,10 @@ const alertMessageMap = {
   error: 'Import Failed. See errors in the table below. Once fixed, reload the page and try again.',
   info: (
     <LoadingWrapper>
-      <span style={{ marginRight: Spacing.S3 }}>
-        Importing
-      </span>
+      <span style={{ marginRight: Spacing.S3 }}>Importing</span>
       <Spinner size={14} />
     </LoadingWrapper>
-  )
+  ),
 }
 
 const VALID_SHEETS = {
@@ -99,15 +97,15 @@ const datePickerTheme = createMuiTheme({
   palette: {
     primary: {
       main: Color.PRIMARY,
-    }
+    },
   },
   overrides: {
     MuiFormControl: {
       root: {
         width: '100%',
-      }
-    }
-  }
+      },
+    },
+  },
 })
 
 const DEFAULT_ALERT_STATUS = {
@@ -181,7 +179,7 @@ const ImportSection = ({
       setValidationErrorsAndWarnings(errorMessage.message)
       setAlertStatus({
         status: ERROR,
-        message: alertMessageMap[ERROR]
+        message: alertMessageMap[ERROR],
       })
     },
   })
@@ -192,15 +190,25 @@ const ImportSection = ({
     const reader = new FileReader()
     setWorkbookName(file.name)
 
-    reader.onload = e => {
+    reader.onload = (e) => {
       const data = new Uint8Array(e.target.result)
       const nextWorkbook = XLSX.read(data, { type: 'array' })
 
       let nextSheetNames = nextWorkbook.SheetNames
-      nextSheetNames = nextSheetNames.filter(sheetName => VALID_SHEETS[sheetName])
+      nextSheetNames = nextSheetNames.filter(
+        (sheetName) => VALID_SHEETS[sheetName]
+      )
 
       if (nextSheetNames.length !== 3) {
-        if (window.confirm(`Workbook doesn't have required sheets: ${Object.keys(VALID_SHEETS).join(', ')}. Make sure workbook includes those sheets (exact naming), refresh, try again.`)) {
+        if (
+          window.confirm(
+            `Workbook doesn't have required sheets: ${Object.keys(
+              VALID_SHEETS
+            ).join(
+              ', '
+            )}. Make sure workbook includes those sheets (exact naming), refresh, try again.`
+          )
+        ) {
           window.location.reload()
         }
       } else {
@@ -222,14 +230,17 @@ const ImportSection = ({
 
     sheetNames.forEach(sheet => {
       const selectedSheetObj = workbook.Sheets[sheet]
-      const json = XLSX.utils.sheet_to_json(selectedSheetObj, { blankrows: true, defval: null })
+      const json = XLSX.utils.sheet_to_json(selectedSheetObj, {
+        blankrows: true,
+        defval: null,
+      })
 
       workbookData.push({
         wb: 'Payer Data Master',
         sheet,
         data: json,
         timestamp,
-        projectId
+        projectId,
       })
     })
 
@@ -239,7 +250,9 @@ const ImportSection = ({
   }
 
   const shouldDisableButton = !isWorkbookUploaded || !timestamp
-  const buttonHoverStyle = { cursor: shouldDisableButton ? 'not-allowed' : 'pointer' }
+  const buttonHoverStyle = {
+    cursor: shouldDisableButton ? 'not-allowed' : 'pointer',
+  }
 
   return (
     <ImportSectionWrapper>
@@ -252,7 +265,7 @@ const ImportSection = ({
       <InputWrapper>
         <FieldLabel>Select File</FieldLabel>
         <label htmlFor="file-upload" className="custom-file-upload">
-          { isWorkbookUploaded ? workbookName : 'Choose a File' }
+          {isWorkbookUploaded ? workbookName : 'Choose a File'}
         </label>
         <input
           id="file-upload"
@@ -278,7 +291,7 @@ const ImportSection = ({
               KeyboardButtonProps={{
                 'aria-label': 'change date',
               }}
-              keyboardIcon={<Icon iconName="arrow-drop-down"/>}
+              keyboardIcon={<Icon iconName="arrow-drop-down" />}
             />
           </MuiPickersUtilsProvider>
         </ThemeProvider>

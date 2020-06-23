@@ -19,7 +19,7 @@ const usePql = () => {
       data: pqlResult,
       loading: loadingPql,
     },
-  ] = useLazyQuery(GET_AQUILA_PQL_RESULTS)
+  ] = useLazyQuery(GET_AQUILA_PQL_RESULTS, { fetchPolicy: 'network-only' })
 
   // ! passing variables to useLazyQuery triggers the query whenever vars change.
   // ? https://stackoverflow.com/questions/57499553/is-it-possible-to-prevent-uselazyquery-queries-from-being-re-fetched-on-compon

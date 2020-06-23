@@ -77,12 +77,27 @@
     "repl": "node --inspect=127.0.0.1:2000 ./pulse-core-psql/sequelizeConsole.js",
     "phoenix": "nodemon --inspect=127.0.0.1:2000 ./src/backend",
     "phoenix-prod": "node --inspect=127.0.0.1:2000 ./src/backend",
-    "test": "jest",
+    "test": "jest --testPathIgnorePatterns src/frontend/App.test.js src/backend/resolvers/mutations/utils/tests/deleteTreatmentPlansCascade.test.js",
     "test:debug": "node --inspect node_modules/.bin/jest --runInBand",
-    "start:prod": "NODE_ENV=production node ./src/backend"
+    "start:prod": "NODE_ENV=production node ./src/backend",
+    "lint-staged": "lint-staged"
   },
   "eslintConfig": {
     "extends": "react-app"
+  },
+  "lint-staged": {
+    "src/**/*.{js,css}": [
+      "prettier --write"
+    ]
+  },
+  "pre-commit": [
+    "lint-staged",
+    "test"
+  ],
+  "prettier": {
+    "semi": false,
+    "singleQuote": true,
+    "trailingComma": "es5"
   },
   "browserslist": {
     "production": [
@@ -95,5 +110,10 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "lint-staged": "^10.2.11",
+    "pre-commit": "^1.2.2",
+    "prettier": "2.0.5"
   }
 }
