@@ -107,6 +107,8 @@ const TemplateTable = ({ columns, data, modalColMap }) => {
       columns,
       data,
       defaultColumn, // Be sure to pass the defaultColumn option
+      maxMultiSortColCount: 5,
+      disableMultiRemove: true,
     },
     useFilters, // useFilters!
     useSortBy // ! must be after filter hooks. Throws error, if not.
