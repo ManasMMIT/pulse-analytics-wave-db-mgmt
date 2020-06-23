@@ -13,7 +13,7 @@ const SelectColumnFilter =({
       options.add(row.values[id])
     })
     return [...options.values()]
-  }, [id, preFilteredRows])
+  }, [id, preFilteredRows, filterValue])
 
   // Render a multi-select box
   return (
