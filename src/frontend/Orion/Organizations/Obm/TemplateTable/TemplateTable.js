@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from '@emotion/styled'
+import _ from 'lodash'
 import { useTable, useFilters, useSortBy } from 'react-table'
 
 const TableWrapper = styled.div({
@@ -88,6 +89,19 @@ const defaultColumn = {
   Filter: DefaultColumnFilter,
 }
 
+const SORT_TYPES = {
+  text: (rowA, rowB, columnId, desc) => {
+    const valueA = rowA.values[columnId]
+    const valueB = rowB.values[columnId]
+
+    if (_.isEmpty(valueA) && _.isEmpty(valueB)) return 0
+    if (_.isEmpty(valueB)) return -1
+    if (_.isEmpty(valueA)) return 1
+
+    return valueA.toLowerCase().localeCompare(valueB.toLowerCase())
+  },
+}
+
 const TemplateTable = ({ columns, data, modalColMap }) => {
   const {
     getTableProps,
@@ -102,6 +116,7 @@ const TemplateTable = ({ columns, data, modalColMap }) => {
       defaultColumn,
       maxMultiSortColCount: 5,
       disableMultiRemove: true,
+      sortTypes: SORT_TYPES,
     },
     useFilters,
     useSortBy
