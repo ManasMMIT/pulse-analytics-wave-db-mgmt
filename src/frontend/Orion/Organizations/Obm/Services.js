@@ -47,37 +47,34 @@ const MODAL_TO_COL_MAP = {
   },
 }
 
-const Services = () => {
-  const columns = React.useMemo(
-    () => [
-      {
-        Header: 'Account',
-        accessor: 'organization',
-        Filter: MultiSelectColumnFilter,
-        filter: customMultiSelectFilterFn,
-      },
-      {
-        Header: 'Service Category',
-        accessor: 'serviceCategory',
-        Filter: MultiSelectColumnFilter,
-        filter: customMultiSelectFilterFn,
-      },
-      {
-        Header: 'Service',
-        accessor: 'service',
-        Filter: MultiSelectColumnFilter,
-        filter: customMultiSelectFilterFn,
-      },
-      {
-        Header: 'Service Rating',
-        accessor: 'serviceRating',
-        Filter: NumberRangeColumnFilter,
-        filter: 'between',
-      },
-    ],
-    []
-  )
+const COLUMNS = [
+  {
+    Header: 'Account',
+    accessor: 'organization',
+    Filter: MultiSelectColumnFilter,
+    filter: customMultiSelectFilterFn,
+  },
+  {
+    Header: 'Service Category',
+    accessor: 'serviceCategory',
+    Filter: MultiSelectColumnFilter,
+    filter: customMultiSelectFilterFn,
+  },
+  {
+    Header: 'Service',
+    accessor: 'service',
+    Filter: MultiSelectColumnFilter,
+    filter: customMultiSelectFilterFn,
+  },
+  {
+    Header: 'Service Rating',
+    accessor: 'serviceRating',
+    Filter: NumberRangeColumnFilter,
+    filter: 'between',
+  },
+]
 
+const Services = () => {
   const { data, loading } = useQuery(GET_SERVICE_TEMPLATE_OBMS)
 
   let serviceTemplateData = []
@@ -94,8 +91,8 @@ const Services = () => {
         </ObmServicesCategoriesModalButton>
       </PanelHeader>
       <TemplateTable
-        columns={columns}
         data={serviceTemplateData}
+        columns={COLUMNS}
         modalColMap={MODAL_TO_COL_MAP}
       />
     </div>

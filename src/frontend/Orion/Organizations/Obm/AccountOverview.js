@@ -33,31 +33,28 @@ const MODAL_TO_COL_MAP = {
   businessModel: { Modal: ObmModalButton, idKey: '_id' },
 }
 
-const AccountOverview = () => {
-  const columns = React.useMemo(
-    () => [
-      {
-        Header: 'Account',
-        accessor: 'organization',
-        Filter: MultiSelectColumnFilter,
-        filter: customMultiSelectFilterFn,
-      },
-      {
-        Header: 'Start',
-        accessor: 'start',
-        Filter: SelectColumnFilter,
-        filter: customSelectNumberFilterFn,
-      },
-      {
-        Header: 'Business Model',
-        accessor: 'businessModel',
-        Filter: SelectColumnFilter,
-        filter: customSelectFilterFn,
-      },
-    ],
-    []
-  )
+const COLUMNS = [
+  {
+    Header: 'Account',
+    accessor: 'organization',
+    Filter: MultiSelectColumnFilter,
+    filter: customMultiSelectFilterFn,
+  },
+  {
+    Header: 'Start',
+    accessor: 'start',
+    Filter: SelectColumnFilter,
+    filter: customSelectNumberFilterFn,
+  },
+  {
+    Header: 'Business Model',
+    accessor: 'businessModel',
+    Filter: SelectColumnFilter,
+    filter: customSelectFilterFn,
+  },
+]
 
+const AccountOverview = () => {
   const { data, loading } = useQuery(GET_OBM_ORGANIZATIONS)
 
   let obms = []
@@ -71,8 +68,8 @@ const AccountOverview = () => {
         </ObmModalButton>
       </PanelHeader>
       <TemplateTable
-        columns={columns}
         data={obms}
+        columns={COLUMNS}
         modalColMap={MODAL_TO_COL_MAP}
       />
     </div>
