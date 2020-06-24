@@ -4,15 +4,13 @@ import _ from 'lodash'
 import { useTable, useFilters, useSortBy } from 'react-table'
 
 const TableWrapper = styled.div({
-  height: '90%',
+  flex: 1,
   overflow: 'auto',
 })
 
 const tableStyle = {
-  margin: '12px 24px',
   width: '100%',
-  display: 'block',
-  height: 650,
+  height: '98%',
   overflowY: 'scroll',
   borderCollapse: 'collapse',
 }

@@ -84,7 +84,13 @@ const Services = () => {
   if (data && !loading) serviceTemplateData = Object.values(data)[0] || []
 
   return (
-    <div style={{ width: '100%' }}>
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        flex: 1,
+      }}
+    >
       <PanelHeader title={PAGE_TITLE}>
         <ObmServicesModalButton buttonStyle={createButtonStyle}>
           Create Service
