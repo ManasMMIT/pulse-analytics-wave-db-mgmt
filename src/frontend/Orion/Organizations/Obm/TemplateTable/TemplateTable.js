@@ -1,16 +1,7 @@
 import React from 'react'
 import styled from '@emotion/styled'
 
-import {
-  useTable,
-  // useGroupBy,
-  useFilters,
-  useSortBy,
-  // useExpanded,
-  // usePagination,
-  // useGlobalFilter,
-  // useAsyncDebounce,
-} from 'react-table'
+import { useTable, useFilters, useSortBy } from 'react-table'
 
 const StyledTd = styled.td({
   padding: 12,
@@ -53,7 +44,7 @@ const DefaultColumnFilter = ({
   )
 }
 
-const getHeaders = (headerGroup) => {
+const Headers = ({ headerGroup }) => {
   return headerGroup.headers.map((column) => (
     <StyledTh {...column.getHeaderProps(column.getSortByToggleProps())}>
       {column.render('Header')}
@@ -98,30 +89,24 @@ const TemplateTable = ({ columns, data, modalColMap }) => {
     headerGroups,
     rows,
     prepareRow,
-    // state,
-    // visibleColumns,
-    // preGlobalFilteredRows,
-    // setGlobalFilter,
   } = useTable(
     {
       columns,
       data,
-      defaultColumn, // Be sure to pass the defaultColumn option
+      defaultColumn,
       maxMultiSortColCount: 5,
       disableMultiRemove: true,
     },
-    useFilters, // useFilters!
-    useSortBy // ! must be after filter hooks. Throws error, if not.
-    // useGlobalFilter,
+    useFilters,
+    useSortBy
   )
 
-  // Render the UI for your table
   return (
     <table style={tableStyle} {...getTableProps()}>
       <thead>
         {headerGroups.map((headerGroup) => (
           <tr {...headerGroup.getHeaderGroupProps()}>
-            {getHeaders(headerGroup)}
+            <Headers headerGroup={headerGroup} />
           </tr>
         ))}
       </thead>
