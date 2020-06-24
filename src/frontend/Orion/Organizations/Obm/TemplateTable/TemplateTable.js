@@ -1,24 +1,11 @@
 import React from 'react'
 import styled from '@emotion/styled'
-
 import { useTable, useFilters, useSortBy } from 'react-table'
 
-const StyledTd = styled.td({
-  padding: 12,
-  border: '1px solid black',
+const TableWrapper = styled.div({
+  height: '90%',
+  overflow: 'auto',
 })
-
-const StyledTh = styled.th({
-  fontWeight: 700,
-  fontSize: 14,
-  padding: 12,
-  border: '1px solid black',
-})
-
-const buttonStyle = {
-  cursor: 'pointer',
-  fontSize: 12,
-}
 
 const tableStyle = {
   margin: '12px 24px',
@@ -27,6 +14,29 @@ const tableStyle = {
   height: 650,
   overflowY: 'scroll',
   borderCollapse: 'collapse',
+}
+
+const StyledTh = styled.th({
+  fontWeight: 700,
+  fontSize: 14,
+  padding: 12,
+  position: 'sticky',
+  top: 0,
+  borderTop: '1px solid black',
+  borderLeft: '1px solid rgba(200, 209, 224, 0.6)',
+  borderBottom: '1px solid #e8e8e8',
+  background: 'white',
+  boxShadow: '0px 0px 0 2px #e8e8e8',
+})
+
+const StyledTd = styled.td({
+  padding: 12,
+  border: '1px solid #e8e8e8',
+})
+
+const buttonStyle = {
+  cursor: 'pointer',
+  fontSize: 12,
 }
 
 const DefaultColumnFilter = ({
@@ -98,26 +108,28 @@ const TemplateTable = ({ columns, data, modalColMap }) => {
   )
 
   return (
-    <table style={tableStyle} {...getTableProps()}>
-      <thead>
-        {headerGroups.map((headerGroup) => (
-          <tr {...headerGroup.getHeaderGroupProps()}>
-            <Headers headerGroup={headerGroup} />
-          </tr>
-        ))}
-      </thead>
-      <tbody {...getTableBodyProps()}>
-        {rows.map((row, i) => {
-          prepareRow(row)
-
-          return (
-            <tr {...row.getRowProps()}>
-              <Cells row={row} modalColMap={modalColMap} />
+    <TableWrapper>
+      <table style={tableStyle} {...getTableProps()}>
+        <thead>
+          {headerGroups.map((headerGroup) => (
+            <tr {...headerGroup.getHeaderGroupProps()}>
+              <Headers headerGroup={headerGroup} />
             </tr>
-          )
-        })}
-      </tbody>
-    </table>
+          ))}
+        </thead>
+        <tbody {...getTableBodyProps()}>
+          {rows.map((row, i) => {
+            prepareRow(row)
+
+            return (
+              <tr {...row.getRowProps()}>
+                <Cells row={row} modalColMap={modalColMap} />
+              </tr>
+            )
+          })}
+        </tbody>
+      </table>
+    </TableWrapper>
   )
 }
 
