@@ -53,18 +53,21 @@ const COLUMNS = [
     accessor: 'organization',
     Filter: MultiSelectColumnFilter,
     filter: customMultiSelectFilterFn,
+    sortType: 'text',
   },
   {
     Header: 'Service Category',
     accessor: 'serviceCategory',
     Filter: MultiSelectColumnFilter,
     filter: customMultiSelectFilterFn,
+    sortType: 'text',
   },
   {
     Header: 'Service',
     accessor: 'service',
     Filter: MultiSelectColumnFilter,
     filter: customMultiSelectFilterFn,
+    sortType: 'text',
   },
   {
     Header: 'Service Rating',

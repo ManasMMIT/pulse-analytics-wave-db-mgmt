@@ -6,12 +6,10 @@ import { GET_OBM_ORGANIZATIONS } from 'frontend/api/queries'
 import PanelHeader from '../../../components/Panel/PanelHeader'
 import ObmModalButton from '../../../components/BusinessObjectModal/OncologyBenefitManagerModal/OncologyBenefitManagerModalButton'
 import TemplateTable from './TemplateTable'
-import SelectColumnFilter from './TemplateTable/SelectColumnFilter'
+import NumberRangeColumnFilter from './TemplateTable/NumberRangeColumnFilter'
 import MultiSelectColumnFilter from './TemplateTable/MultiSelectColumnFilter'
 
-import customSelectFilterFn from './TemplateTable/custom-filters/customSelectFilterFn'
 import customMultiSelectFilterFn from './TemplateTable/custom-filters/customMultiSelectFilterFn'
-import customSelectNumberFilterFn from './TemplateTable/custom-filters/customSelectNumberFilterFn'
 
 import Color from './../../../utils/color'
 
@@ -39,18 +37,20 @@ const COLUMNS = [
     accessor: 'organization',
     Filter: MultiSelectColumnFilter,
     filter: customMultiSelectFilterFn,
+    sortType: 'text',
   },
   {
     Header: 'Start',
     accessor: 'start',
-    Filter: SelectColumnFilter,
-    filter: customSelectNumberFilterFn,
+    Filter: NumberRangeColumnFilter,
+    filter: 'between',
   },
   {
     Header: 'Business Model',
     accessor: 'businessModel',
-    Filter: SelectColumnFilter,
-    filter: customSelectFilterFn,
+    Filter: MultiSelectColumnFilter,
+    filter: customMultiSelectFilterFn,
+    sortType: 'text',
   },
 ]
 
