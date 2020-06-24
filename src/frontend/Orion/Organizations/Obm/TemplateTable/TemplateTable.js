@@ -5,12 +5,14 @@ import { useTable, useFilters, useSortBy } from 'react-table'
 
 const StyledTd = styled.td({
   padding: 12,
+  border: '1px solid black',
 })
 
 const StyledTh = styled.th({
   fontWeight: 700,
   fontSize: 14,
   padding: 12,
+  border: '1px solid black',
 })
 
 const buttonStyle = {
@@ -27,7 +29,6 @@ const tableStyle = {
   borderCollapse: 'collapse',
 }
 
-// Define a default UI for filtering
 const DefaultColumnFilter = ({
   column: { filterValue, preFilteredRows, setFilter },
 }) => {
@@ -58,7 +59,7 @@ const Headers = ({ headerGroup }) => {
   ))
 }
 
-const getRowCells = (row, modalColMap) => {
+const Cells = ({ row, modalColMap }) => {
   return row.cells.map((cell) => {
     const { Modal, idKey } = modalColMap[cell.column.id]
     const datumId = cell.row.original[idKey]
@@ -73,16 +74,11 @@ const getRowCells = (row, modalColMap) => {
   })
 }
 
-const TemplateTable = ({ columns, data, modalColMap }) => {
-  const defaultColumn = React.useMemo(
-    () => ({
-      // Let's set up our default Filter UI
-      Filter: DefaultColumnFilter,
-    }),
-    []
-  )
+const defaultColumn = {
+  Filter: DefaultColumnFilter,
+}
 
-  // Use the state and functions returned from useTable to build your UI
+const TemplateTable = ({ columns, data, modalColMap }) => {
   const {
     getTableProps,
     getTableBodyProps,
@@ -114,7 +110,11 @@ const TemplateTable = ({ columns, data, modalColMap }) => {
         {rows.map((row, i) => {
           prepareRow(row)
 
-          return <tr {...row.getRowProps()}>{getRowCells(row, modalColMap)}</tr>
+          return (
+            <tr {...row.getRowProps()}>
+              <Cells row={row} modalColMap={modalColMap} />
+            </tr>
+          )
         })}
       </tbody>
     </table>
