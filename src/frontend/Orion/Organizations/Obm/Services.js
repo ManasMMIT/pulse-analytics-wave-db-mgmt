@@ -9,11 +9,10 @@ import ObmServicesModalButton from '../../../components/BusinessObjectModal/ObmS
 import ObmServicesCategoriesModalButton from '../../../components/BusinessObjectModal/ObmServicesCategoriesModal/ObmServicesCategoriesModalButton'
 
 import TemplateTable from './TemplateTable'
-import SelectColumnFilter from './TemplateTable/SelectColumnFilter'
 import MultiSelectColumnFilter from './TemplateTable/MultiSelectColumnFilter'
+import NumberRangeColumnFilter from './TemplateTable/NumberRangeColumnFilter'
 
 import customMultiSelectFilterFn from './TemplateTable/custom-filters/customMultiSelectFilterFn'
-import customSelectNumberFilterFn from './TemplateTable/custom-filters/customSelectNumberFilterFn'
 
 import Color from './../../../utils/color'
 
@@ -72,8 +71,8 @@ const Services = () => {
       {
         Header: 'Service Rating',
         accessor: 'serviceRating',
-        Filter: SelectColumnFilter,
-        filter: customSelectNumberFilterFn,
+        Filter: NumberRangeColumnFilter,
+        filter: 'between',
       },
     ],
     []
