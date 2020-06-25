@@ -9,8 +9,6 @@ const Styles = styled.div`
   padding: 1rem;
 
   .table {
-    border: 1px solid #ddd;
-
     .tr {
       :hover {
         background: grey;
@@ -20,14 +18,9 @@ const Styles = styled.div`
     .th,
     .td {
       padding: 5px;
-      border-bottom: 1px solid #ddd;
-      border-right: 1px solid #ddd;
+      border: 1px solid #ddd;
       background-color: #fff;
       overflow: hidden;
-
-      :last-child {
-        border-right: 0;
-      }
 
       .resizer {
         display: inline-block;
