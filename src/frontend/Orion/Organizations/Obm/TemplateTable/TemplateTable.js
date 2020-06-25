@@ -1,6 +1,4 @@
 import React, { useRef, useEffect, useState } from 'react'
-
-import _ from 'lodash'
 import { useTable, useFilters, useSortBy, useFlexLayout } from 'react-table'
 import { useSticky } from 'react-table-sticky'
 
@@ -32,11 +30,12 @@ const DEFAULT_COLUMN = {
 
 const MINIMUM_COLUMN_WIDTH = 200
 
-function TemplateTable({ columns, data, modalColMap }) {
+const TemplateTable = ({ columns, data, modalColMap }) => {
   const [modalCell, setModalCell] = useState(null)
   const [ø, forceRender] = useState(0)
   const ref = useRef(null)
 
+  // ! used to keep ref size updated on mount and on window resize
   useEffect(() => {
     const handleResize = () => {
       forceRender(ref.current.offsetWidth)
@@ -49,6 +48,7 @@ function TemplateTable({ columns, data, modalColMap }) {
     }
   }, [data, ref])
 
+  // ! calculate column width based on parent, then restrict width to set minimum (min-width css not working in table)
   const columnWidthBasedOnParent = Math.floor(
     (ref.current ? ref.current.offsetWidth : 0) / columns.length
   )
