@@ -32,9 +32,9 @@ const cellStyle = {
 const MINIMUM_COLUMN_WIDTH = 200
 
 function TemplateTable({ columns, data, modalColMap }) {
-  const ref = useRef(null)
-  const [ø, forceRender] = useState(0)
   const [modalCell, setModalCell] = useState(null)
+  const [ø, forceRender] = useState(0)
+  const ref = useRef(null)
 
   useEffect(() => {
     const handleResize = () => {
@@ -86,39 +86,7 @@ function TemplateTable({ columns, data, modalColMap }) {
         className="table sticky"
         style={{ minWidth: 200, width: 'calc(100vw - 320px)', height: 400 }}
       >
-        <div className="header">
-          {headerGroups.map((headerGroup) => {
-            return (
-              <div {...headerGroup.getHeaderGroupProps()} className="tr">
-                {headerGroup.headers.map((column) => {
-                  const headerProps = column.getHeaderProps(
-                    column.getSortByToggleProps()
-                  )
-
-                  headerProps.style.width = `${columnWidth}px`
-                  headerProps.style.overflow = 'visible'
-
-                  return (
-                    <div {...headerProps} className="th">
-                      {column.render('Header')}
-                      <span>
-                        {column.isSorted
-                          ? column.isSortedDesc
-                            ? ' 🔽'
-                            : ' 🔼'
-                          : ''}
-                      </span>
-                      <div onClick={(e) => e.stopPropagation()}>
-                        {column.canFilter ? column.render('Filter') : null}
-                      </div>
-                    </div>
-                  )
-                })}
-              </div>
-            )
-          })}
-        </div>
-
+        <Headers headerGroups={headerGroups} columnWidth={columnWidth} />
         <div {...getTableBodyProps()} className="body">
           {rows.map((row, i) => {
             prepareRow(row)
@@ -157,3 +125,35 @@ function TemplateTable({ columns, data, modalColMap }) {
 }
 
 export default TemplateTable
+
+const Header = ({ headerProps, column }) => (
+  <div {...headerProps} className="th">
+    {column.render('Header')}
+    <span>{column.isSorted ? (column.isSortedDesc ? ' 🔽' : ' 🔼') : ''}</span>
+    <div onClick={(e) => e.stopPropagation()}>
+      {column.canFilter ? column.render('Filter') : null}
+    </div>
+  </div>
+)
+
+const Headers = ({ headerGroups, columnWidth }) => {
+  return (
+    <div className="header">
+      {headerGroups.map((headerGroup) => {
+        return (
+          <div {...headerGroup.getHeaderGroupProps()} className="tr">
+            {headerGroup.headers.map((column) => {
+              const headerProps = column.getHeaderProps(
+                column.getSortByToggleProps()
+              )
+              headerProps.style.width = `${columnWidth}px`
+              headerProps.style.overflow = 'visible'
+
+              return <Header headerProps={headerProps} column={column} />
+            })}
+          </div>
+        )
+      })}
+    </div>
+  )
+}
