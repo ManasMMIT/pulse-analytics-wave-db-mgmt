@@ -4,9 +4,13 @@ import { useQuery } from '@apollo/react-hooks'
 import { GET_SERVICE_TEMPLATE_OBMS } from 'frontend/api/queries'
 
 import PanelHeader from '../../../components/Panel/PanelHeader'
-import ObmModalButton from '../../../components/BusinessObjectModal/OncologyBenefitManagerModal/OncologyBenefitManagerModalButton'
+
 import ObmServicesModalButton from '../../../components/BusinessObjectModal/ObmServicesModal/ObmServicesModalButton'
 import ObmServicesCategoriesModalButton from '../../../components/BusinessObjectModal/ObmServicesCategoriesModal/ObmServicesCategoriesModalButton'
+
+import OncologyBenefitManagerModal from '../../../components/BusinessObjectModal/OncologyBenefitManagerModal'
+import ObmServicesModal from '../../../components/BusinessObjectModal/ObmServicesModal'
+import ObmServicesCategoriesModal from '../../../components/BusinessObjectModal/ObmServicesCategoriesModal'
 
 import TemplateTable from './TemplateTable'
 import MultiSelectColumnFilter from './TemplateTable/MultiSelectColumnFilter'
@@ -30,19 +34,19 @@ const PAGE_TITLE = 'Oncology Benefit Manager Account Services'
 
 const MODAL_TO_COL_MAP = {
   organization: {
-    Modal: ObmModalButton,
+    Modal: OncologyBenefitManagerModal,
     idKey: 'obmId',
   },
   serviceCategory: {
-    Modal: ObmServicesCategoriesModalButton,
+    Modal: ObmServicesCategoriesModal,
     idKey: 'serviceCategoryId',
   },
   service: {
-    Modal: ObmServicesModalButton,
+    Modal: ObmServicesModal,
     idKey: 'serviceId',
   },
   serviceRating: {
-    Modal: ObmModalButton,
+    Modal: OncologyBenefitManagerModal,
     idKey: 'obmId',
   },
 }
