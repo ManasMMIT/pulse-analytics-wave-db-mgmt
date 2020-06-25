@@ -12,10 +12,8 @@ const Styles = styled.div`
     border: 1px solid #ddd;
 
     .tr {
-      :last-child {
-        .td {
-          border-bottom: 0;
-        }
+      :hover {
+        background: grey;
       }
     }
 
@@ -115,7 +113,7 @@ const SORT_TYPES = {
   },
 }
 
-const buttonStyle = {
+const cellStyle = {
   cursor: 'pointer',
   fontSize: 12,
 }
@@ -217,8 +215,11 @@ function TemplateTable({ columns, data, modalColMap }) {
               <div {...row.getRowProps()} className="tr">
                 {row.cells.map((cell) => {
                   const cellProps = cell.getCellProps()
-                  cellProps.style.width = `${columnWidth}px`
 
+                  cellProps.style = _.merge({}, cellProps.style, {
+                    ...cellStyle,
+                    width: `${columnWidth}px`,
+                  })
                   const handleModalCellClick = (e, cell) => {
                     e.stopPropagation()
                     setModalCell(cell)
@@ -263,11 +264,7 @@ const ModalManager = ({ modalColMap, modalCell }) => {
 
   const entityId = modalCell.row.original[idKey]
 
-  return (
-    <Modal
-      buttonStyle={buttonStyle}
-      entityId={entityId}
-      closeModal={() => setIsOpen(false)}
-    />
-  )
+  if (!entityId) return null
+
+  return <Modal entityId={entityId} closeModal={() => setIsOpen(false)} />
 }
