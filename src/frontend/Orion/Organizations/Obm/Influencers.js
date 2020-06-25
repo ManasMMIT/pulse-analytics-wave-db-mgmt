@@ -1,16 +1,14 @@
 import React from 'react'
 import { useQuery } from '@apollo/react-hooks'
 
-import { GET_SERVICE_TEMPLATE_OBMS } from 'frontend/api/queries'
+import { GET_INFLUENCER_TEMPLATE_OBMS } from 'frontend/api/queries'
 
 import PanelHeader from '../../../components/Panel/PanelHeader'
 import ObmModalButton from '../../../components/BusinessObjectModal/OncologyBenefitManagerModal/OncologyBenefitManagerModalButton'
-import ObmServicesModalButton from '../../../components/BusinessObjectModal/ObmServicesModal/ObmServicesModalButton'
-import ObmServicesCategoriesModalButton from '../../../components/BusinessObjectModal/ObmServicesCategoriesModal/ObmServicesCategoriesModalButton'
+import PeopleModalButton from '../../../components/BusinessObjectModal/PeopleModal/PeopleModalButton'
 
 import TemplateTable from './TemplateTable'
 import MultiSelectColumnFilter from './TemplateTable/MultiSelectColumnFilter'
-import NumberRangeColumnFilter from './TemplateTable/NumberRangeColumnFilter'
 
 import customMultiSelectFilterFn from './TemplateTable/custom-filters/customMultiSelectFilterFn'
 
@@ -26,22 +24,22 @@ const createButtonStyle = {
   cursor: 'pointer',
 }
 
-const PAGE_TITLE = 'Oncology Benefit Manager Services'
+const PAGE_TITLE = 'Oncology Benefit Manager Influencers'
 
 const MODAL_TO_COL_MAP = {
-  organization: {
+  obmOrganization: {
     Modal: ObmModalButton,
     idKey: 'obmId',
   },
-  serviceCategory: {
-    Modal: ObmServicesCategoriesModalButton,
-    idKey: 'serviceCategoryId',
+  influencerName: {
+    Modal: PeopleModalButton,
+    idKey: 'influencerId',
   },
-  service: {
-    Modal: ObmServicesModalButton,
-    idKey: 'serviceId',
+  influencerNpiNumber: {
+    Modal: PeopleModalButton,
+    idKey: 'influencerId',
   },
-  serviceRating: {
+  influencerPosition: {
     Modal: ObmModalButton,
     idKey: 'obmId',
   },
@@ -50,38 +48,39 @@ const MODAL_TO_COL_MAP = {
 const COLUMNS = [
   {
     Header: 'Account',
-    accessor: 'organization',
+    accessor: 'obmOrganization',
     Filter: MultiSelectColumnFilter,
     filter: customMultiSelectFilterFn,
     sortType: 'text',
   },
   {
-    Header: 'Service Category',
-    accessor: 'serviceCategory',
+    Header: 'Influencer Name',
+    accessor: 'influencerName',
     Filter: MultiSelectColumnFilter,
     filter: customMultiSelectFilterFn,
     sortType: 'text',
   },
   {
-    Header: 'Service',
-    accessor: 'service',
+    Header: 'NPI #',
+    accessor: 'influencerNpiNumber',
     Filter: MultiSelectColumnFilter,
     filter: customMultiSelectFilterFn,
     sortType: 'text',
   },
   {
-    Header: 'Service Rating',
-    accessor: 'serviceRating',
-    Filter: NumberRangeColumnFilter,
-    filter: 'between',
+    Header: 'Positioning within OBM',
+    accessor: 'influencerPosition',
+    Filter: MultiSelectColumnFilter,
+    filter: customMultiSelectFilterFn,
+    sortType: 'text',
   },
 ]
 
-const Services = () => {
-  const { data, loading } = useQuery(GET_SERVICE_TEMPLATE_OBMS)
+const Influencers = () => {
+  const { data, loading } = useQuery(GET_INFLUENCER_TEMPLATE_OBMS)
 
-  let serviceTemplateData = []
-  if (data && !loading) serviceTemplateData = Object.values(data)[0] || []
+  let influencerTemplateData = []
+  if (data && !loading) influencerTemplateData = Object.values(data)[0] || []
 
   return (
     <div
@@ -92,15 +91,12 @@ const Services = () => {
       }}
     >
       <PanelHeader title={PAGE_TITLE}>
-        <ObmServicesModalButton buttonStyle={createButtonStyle}>
-          Create Service
-        </ObmServicesModalButton>
-        <ObmServicesCategoriesModalButton buttonStyle={createButtonStyle}>
-          Create Service Category
-        </ObmServicesCategoriesModalButton>
+        <PeopleModalButton buttonStyle={createButtonStyle}>
+          Create Influencer
+        </PeopleModalButton>
       </PanelHeader>
       <TemplateTable
-        data={serviceTemplateData}
+        data={influencerTemplateData}
         columns={COLUMNS}
         modalColMap={MODAL_TO_COL_MAP}
       />
@@ -108,4 +104,4 @@ const Services = () => {
   )
 }
 
-export default Services
+export default Influencers

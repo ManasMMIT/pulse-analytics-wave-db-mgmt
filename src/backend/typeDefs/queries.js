@@ -8,11 +8,7 @@ const queries = gql`
 
     teams(clientId: String, userId: String): [Team]
 
-    users(
-      teamId: String,
-      clientId: String,
-      subscriptionId: String
-    ): [User]
+    users(teamId: String, clientId: String, subscriptionId: String): [User]
 
     indications: [Indication]
     products: [Product]
@@ -26,12 +22,15 @@ const queries = gql`
     obmOrganizations: [ObmOrganization]
     obmServices: [ObmService]
     obmServicesCategories: [ObmServiceCategory]
-    obmServiceAndObmServiceCategoryConnections(obmServiceId: String): [ObmServiceAndObmServiceCategoryConnection]
+    obmServiceAndObmServiceCategoryConnections(
+      obmServiceId: String
+    ): [ObmServiceAndObmServiceCategoryConnection]
     obmAndObmServiceConnections(obmId: String): [ObmAndObmServiceConnection]
     obmAndPersonConnections(obmId: ID): [ObmAndPersonConnection]
     obmAndPayerConnections(obmId: ID): [ObmAndPayerConnection]
 
     serviceTemplateObms: [ServiceTemplateObms]
+    influencerTemplateObms: [InfluencerTemplateObms]
 
     qualityOfAccessScores: [QualityOfAccessScore]
     collections(type: String): [String]
@@ -253,7 +252,16 @@ const queries = gql`
     obmId: String!
     payerId: String!
   }
-  
+
+  type InfluencerTemplateObms {
+    obmId: ID!
+    obmOrganization: String!
+    influencerPosition: String
+    influencerId: ID
+    influencerName: String
+    influencerNpiNumber: Float
+  }
+
   type ServiceTemplateObms {
     obmServiceJoinId: ID # returning obms without connections, with no join table id
     obmId: ID!
@@ -466,8 +474,8 @@ const queries = gql`
 
   type PayerProjectPtp {
     _id: ID!
-    organizationId: ID,
-    treatmentPlanId: ID,
+    organizationId: ID
+    treatmentPlanId: ID
     slug: String
     organization: String
     organizationTiny: String
@@ -490,6 +498,4 @@ const queries = gql`
   }
 `
 
-module.exports = [
-  queries,
-]
+module.exports = [queries]

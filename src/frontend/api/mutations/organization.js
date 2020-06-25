@@ -20,7 +20,9 @@ export const BULK_IMPORT_PROVIDER_ORGANIZATIONS = gql`
 `
 
 export const CREATE_PROVIDER_ORGANIZATION = gql`
-  mutation CreateProviderOrganization($input: CreateProviderOrganizationInput!) {
+  mutation CreateProviderOrganization(
+    $input: CreateProviderOrganizationInput!
+  ) {
     createProviderOrganization(input: $input) {
       _id
       slug
@@ -36,7 +38,9 @@ export const CREATE_PROVIDER_ORGANIZATION = gql`
 `
 
 export const DELETE_PROVIDER_ORGANIZATION = gql`
-  mutation DeleteProviderOrganization($input: DeleteProviderOrganizationInput!) {
+  mutation DeleteProviderOrganization(
+    $input: DeleteProviderOrganizationInput!
+  ) {
     deleteProviderOrganization(input: $input) {
       _id
       slug
@@ -51,7 +55,9 @@ export const DELETE_PROVIDER_ORGANIZATION = gql`
 `
 
 export const UPDATE_PROVIDER_ORGANIZATION = gql`
-  mutation UpdateProviderOrganization($input: UpdateProviderOrganizationInput!) {
+  mutation UpdateProviderOrganization(
+    $input: UpdateProviderOrganizationInput!
+  ) {
     updateProviderOrganization(input: $input) {
       _id
       slug
@@ -102,7 +108,9 @@ export const UPDATE_PAYER_ORGANIZATION = gql`
 `
 
 export const CREATE_PATHWAYS_ORGANIZATION = gql`
-  mutation CreatePathwaysOrganization($input: CreatePathwaysOrganizationInput!) {
+  mutation CreatePathwaysOrganization(
+    $input: CreatePathwaysOrganizationInput!
+  ) {
     createPathwaysOrganization(input: $input) {
       _id
       slug
@@ -113,7 +121,9 @@ export const CREATE_PATHWAYS_ORGANIZATION = gql`
 `
 
 export const DELETE_PATHWAYS_ORGANIZATION = gql`
-  mutation DeletePathwaysOrganization($input: DeletePathwaysOrganizationInput!) {
+  mutation DeletePathwaysOrganization(
+    $input: DeletePathwaysOrganizationInput!
+  ) {
     deletePathwaysOrganization(input: $input) {
       _id
       slug
@@ -124,7 +134,9 @@ export const DELETE_PATHWAYS_ORGANIZATION = gql`
 `
 
 export const UPDATE_PATHWAYS_ORGANIZATION = gql`
-  mutation UpdatePathwaysOrganization($input: UpdatePathwaysOrganizationInput!) {
+  mutation UpdatePathwaysOrganization(
+    $input: UpdatePathwaysOrganizationInput!
+  ) {
     updatePathwaysOrganization(input: $input) {
       _id
       slug
@@ -232,7 +244,9 @@ export const UPDATE_OBM_ORGANIZATION = gql`
 `
 
 export const CONNECT_OBM_SERVICE_AND_OBM_SERVICE_CATEGORY = gql`
-  mutation ConnectObmServiceAndObmServiceCategory($input: ConnectObmServiceAndObmServiceCategoryInput!) {
+  mutation ConnectObmServiceAndObmServiceCategory(
+    $input: ConnectObmServiceAndObmServiceCategoryInput!
+  ) {
     connectObmServiceAndObmServiceCategory(input: $input) {
       _id
       obmServiceId

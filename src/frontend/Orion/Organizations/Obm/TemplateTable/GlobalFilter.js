@@ -1,8 +1,6 @@
 import React from 'react'
 
-import {
-  useAsyncDebounce,
-} from 'react-table'
+import { useAsyncDebounce } from 'react-table'
 
 const GlobalFilter = ({
   preGlobalFilteredRows,
@@ -11,7 +9,7 @@ const GlobalFilter = ({
 }) => {
   const count = preGlobalFilteredRows.length
   const [value, setValue] = React.useState(globalFilter)
-  const onChange = useAsyncDebounce(value => {
+  const onChange = useAsyncDebounce((value) => {
     setGlobalFilter(value || undefined)
   }, 200)
 
@@ -19,10 +17,10 @@ const GlobalFilter = ({
     <span>
       Search:{' '}
       <input
-        value={value || ""}
-        onChange={e => {
-          setValue(e.target.value);
-          onChange(e.target.value);
+        value={value || ''}
+        onChange={(e) => {
+          setValue(e.target.value)
+          onChange(e.target.value)
         }}
         placeholder={`${count} records...`}
         style={{

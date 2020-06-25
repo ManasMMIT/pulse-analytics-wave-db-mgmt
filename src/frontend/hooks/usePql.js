@@ -3,9 +3,7 @@ import { useHistory, useLocation } from 'react-router-dom'
 import { useLazyQuery } from '@apollo/react-hooks'
 import queryString from 'query-string'
 
-import {
-  GET_AQUILA_PQL_RESULTS,
-} from 'frontend/api/queries'
+import { GET_AQUILA_PQL_RESULTS } from 'frontend/api/queries'
 
 const usePql = () => {
   const history = useHistory()
@@ -15,30 +13,29 @@ const usePql = () => {
 
   const [
     getAquilaPqlResultsRaw,
-    {
-      data: pqlResult,
-      loading: loadingPql,
-    },
+    { data: pqlResult, loading: loadingPql },
   ] = useLazyQuery(GET_AQUILA_PQL_RESULTS, { fetchPolicy: 'network-only' })
 
   // ! passing variables to useLazyQuery triggers the query whenever vars change.
   // ? https://stackoverflow.com/questions/57499553/is-it-possible-to-prevent-uselazyquery-queries-from-being-re-fetched-on-compon
-  const getAquilaPqlResults = pql => getAquilaPqlResultsRaw({ variables: { pql } })
+  const getAquilaPqlResults = (pql) =>
+    getAquilaPqlResultsRaw({ variables: { pql } })
 
   // On mount, if pql exists, get results
   useEffect(() => {
     if (pql.length) getAquilaPqlResults(pql)
   }, [])
 
-  const setPql = pql => {
+  const setPql = (pql) => {
     history.push({
       search: queryString.stringify({ pql }),
     })
   }
 
-  const results = pqlResult && !pqlResult.aquilaPqlResults.error
-    ? pqlResult.aquilaPqlResults
-    : []
+  const results =
+    pqlResult && !pqlResult.aquilaPqlResults.error
+      ? pqlResult.aquilaPqlResults
+      : []
 
   return {
     data: { pql, results },
@@ -48,11 +45,9 @@ const usePql = () => {
   }
 }
 
-const getPqlFromLocation = location => {
+const getPqlFromLocation = (location) => {
   const queryStringVars = location.search && queryString.parse(location.search)
-  const pql = queryStringVars && queryStringVars.pql
-    ? queryStringVars.pql
-    : ''
+  const pql = queryStringVars && queryStringVars.pql ? queryStringVars.pql : ''
 
   return pql
 }

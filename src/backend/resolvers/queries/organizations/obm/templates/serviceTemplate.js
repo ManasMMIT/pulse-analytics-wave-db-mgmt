@@ -27,7 +27,7 @@ const SERVICE_TEMPLATE_AGG = [
     }
   }, {
     '$project': {
-      '_id': '$obmServices._id',
+      '_id': 0,
       'obmId': '$_id',
       'organization': '$organization',
       'obmServiceId': '$obmServices.obmServiceId',
@@ -86,8 +86,6 @@ const SERVICE_TEMPLATE_AGG = [
     }
   }, {
     '$project': {
-      '_id': 0,
-      'obmServiceJoinId': '$_id',
       'obmId': 1,
       'serviceId': 1,
       'serviceCategoryId': 1,

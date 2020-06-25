@@ -1,13 +1,8 @@
 import React from 'react'
 
-import {
-  CREATE_PERSON,
-  UPDATE_PERSON,
-} from 'frontend/api/mutations'
+import { CREATE_PERSON, UPDATE_PERSON } from 'frontend/api/mutations'
 
-import {
-  GET_PEOPLE,
-} from '../../../api/queries'
+import { GET_PEOPLE, GET_INFLUENCER_TEMPLATE_OBMS } from '../../../api/queries'
 
 import BusinessObjectModal from '../BusinessObjectModal/BusinessObjectModal'
 
@@ -29,7 +24,11 @@ const PeopleModal = ({
       create: CREATE_PERSON,
       update: UPDATE_PERSON,
     }}
-    refetchQueries={[...refetchQueries, { query: GET_PEOPLE }]}
+    refetchQueries={[
+      ...refetchQueries,
+      { query: GET_PEOPLE },
+      { query: GET_INFLUENCER_TEMPLATE_OBMS },
+    ]}
     afterMutationHook={afterMutationHook}
   />
 )

@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import PeopleModal from './PeopleModal'
 
 const PeopleModalButton = ({
+  buttonStyle = {},
   children,
   entityId,
   refetchQueries,
@@ -12,7 +13,9 @@ const PeopleModalButton = ({
 
   return (
     <>
-      <button onClick={() => setModal(!showModal)}>{children}</button>
+      <button style={buttonStyle} onClick={() => setModal(!showModal)}>
+        {children}
+      </button>
       {showModal && (
         <PeopleModal
           entityId={entityId}

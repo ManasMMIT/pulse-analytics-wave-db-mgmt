@@ -78,7 +78,8 @@ const importBtnStyle = {
 
 const alertMessageMap = {
   success: 'Import Successful',
-  error: 'Import Failed. See errors in the table below. Once fixed, reload the page and try again.',
+  error:
+    'Import Failed. See errors in the table below. Once fixed, reload the page and try again.',
   info: (
     <LoadingWrapper>
       <span style={{ marginRight: Spacing.S3 }}>Importing</span>
@@ -109,7 +110,9 @@ const datePickerTheme = createMuiTheme({
 })
 
 const DEFAULT_ALERT_STATUS = {
-  status: null, message: null, description: null
+  status: null,
+  message: null,
+  description: null,
 }
 
 const DEFAULT_NOTIFICATION = '✅ Good to import'
@@ -130,7 +133,7 @@ const ImportSection = ({
   const [alertStatus, setAlertStatus] = useState(DEFAULT_ALERT_STATUS)
 
   // Add Reload warning
-  const beforeunload = e => {
+  const beforeunload = (e) => {
     e.preventDefault()
   }
 
@@ -151,18 +154,19 @@ const ImportSection = ({
       setAlertStatus({
         status: INFO,
         message: alertMessageMap[INFO],
-        description: 'Compiling data for the app. This process usually takes around 2 ½ to 3 minutes. Once this process completes, visit or reload dev.pulse-tools.com.'
+        description:
+          'Compiling data for the app. This process usually takes around 2 ½ to 3 minutes. Once this process completes, visit or reload dev.pulse-tools.com.',
       })
     } else if (notification.includes('finished importing')) {
-        setAlertStatus({
-          status: SUCCESS,
-          message: alertMessageMap[SUCCESS],
-        })
+      setAlertStatus({
+        status: SUCCESS,
+        message: alertMessageMap[SUCCESS],
+      })
 
-        setTimeout(() => {
-          setAlertStatus(DEFAULT_ALERT_STATUS)
-          setNotification(DEFAULT_NOTIFICATION)
-        }, 30000)
+      setTimeout(() => {
+        setAlertStatus(DEFAULT_ALERT_STATUS)
+        setNotification(DEFAULT_NOTIFICATION)
+      }, 30000)
     } else if (notification.includes('error')) {
       // this setAlertStatus should happen right before onError in the mutation;
       // and is meant to allow OTHER USERS to press import on their data
@@ -172,7 +176,6 @@ const ImportSection = ({
       setAlertStatus(DEFAULT_ALERT_STATUS)
     }
   }, [notification])
-
 
   const [importWorkbook] = useMutation(IMPORT_WORKBOOK, {
     onError: (errorMessage, ...rest) => {
@@ -228,7 +231,7 @@ const ImportSection = ({
   const handleSubmit = () => {
     const workbookData = []
 
-    sheetNames.forEach(sheet => {
+    sheetNames.forEach((sheet) => {
       const selectedSheetObj = workbook.Sheets[sheet]
       const json = XLSX.utils.sheet_to_json(selectedSheetObj, {
         blankrows: true,
@@ -297,28 +300,26 @@ const ImportSection = ({
         </ThemeProvider>
       </InputWrapper>
 
-      {
-        [ERROR, INFO].includes(alertStatus.status) || (
-          <Button
-            buttonStyle={importBtnStyle}
-            hoverStyle={buttonHoverStyle}
-            onClick={handleSubmit}
-          >
-            Import File
-          </Button>
-        )
-      }
+      {[ERROR, INFO].includes(alertStatus.status) || (
+        <Button
+          buttonStyle={importBtnStyle}
+          hoverStyle={buttonHoverStyle}
+          onClick={handleSubmit}
+        >
+          Import File
+        </Button>
+      )}
 
-      {
-        alertStatus.status && (
-          <Alert
-            severity={alertStatus.status}
-          >
-            <AlertTitle style={{ fontSize: 12, fontWeight: 700 }}>{alertStatus.message}</AlertTitle>
-            <div style={{ fontSize: 12, lineHeight: 1.5, fontWeight: 400, }}>{alertStatus.description}</div>
-          </Alert>
-        )
-      }
+      {alertStatus.status && (
+        <Alert severity={alertStatus.status}>
+          <AlertTitle style={{ fontSize: 12, fontWeight: 700 }}>
+            {alertStatus.message}
+          </AlertTitle>
+          <div style={{ fontSize: 12, lineHeight: 1.5, fontWeight: 400 }}>
+            {alertStatus.description}
+          </div>
+        </Alert>
+      )}
 
       <ImportLogContainer>
         <ImportLogTitle>Import System Status</ImportLogTitle>

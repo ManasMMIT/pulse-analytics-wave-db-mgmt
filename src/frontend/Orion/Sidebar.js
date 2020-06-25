@@ -158,8 +158,14 @@ const ADMIN_SETTINGS_LINKS_CONFIG = [
     label: 'Query Tool Management',
     link: '/orion/configuration/admin-settings/aquila-management',
   },
-  { label: 'Add Source Node', link: '/orion/configuration/admin-settings/add-source-node' },
-  { label: 'Edit Role Node', link: '/orion/configuration/admin-settings/edit-role-node' },
+  {
+    label: 'Add Source Node',
+    link: '/orion/configuration/admin-settings/add-source-node',
+  },
+  {
+    label: 'Edit Role Node',
+    link: '/orion/configuration/admin-settings/edit-role-node',
+  },
 ]
 
 const renderStyledNavLink = ({ label, link }) => (
@@ -218,6 +224,13 @@ const Sidebar = () => {
             to={getToolItemPath('obm', 'services')}
           >
             Services
+          </StyledNavLink>
+          <StyledNavLink
+            style={dropdownInactiveLinkStyle}
+            activeStyle={dropdownActiveLinkStyle}
+            to={getToolItemPath('obm', 'influencers')}
+          >
+            Influencers
           </StyledNavLink>
         </StyledDropdown>
         <StyledDropdown style={inactiveLinkStyle} label={'Pathways'}>
@@ -285,18 +298,13 @@ const Sidebar = () => {
             {PRODUCT_INDICATION_LINKS_CONFIG.map(renderStyledNavLink)}
           </div>
         </StyledDropdown>
-        {
-          isSuperUser && (
-            <StyledDropdown
-              style={inactiveLinkStyle}
-              label={'Admin Settings'}
-            >
-              <div style={{ display: 'flex', flexDirection: 'column' }}>
-                {ADMIN_SETTINGS_LINKS_CONFIG.map(renderStyledNavLink)}
-              </div>
-            </StyledDropdown>
-          )
-        }
+        {isSuperUser && (
+          <StyledDropdown style={inactiveLinkStyle} label={'Admin Settings'}>
+            <div style={{ display: 'flex', flexDirection: 'column' }}>
+              {ADMIN_SETTINGS_LINKS_CONFIG.map(renderStyledNavLink)}
+            </div>
+          </StyledDropdown>
+        )}
       </div>
     </Wrapper>
   )

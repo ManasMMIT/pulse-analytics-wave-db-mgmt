@@ -30,7 +30,11 @@ const ObmServicesCategoriesModal = ({
       create: CREATE_OBM_SERVICE_CATEGORY,
       update: UPDATE_OBM_SERVICE_CATEGORY,
     }}
-    refetchQueries={[...refetchQueries, { query: GET_OBM_SERVICES_CATEGORIES }, { query: GET_SERVICE_TEMPLATE_OBMS }]}
+    refetchQueries={[
+      ...refetchQueries,
+      { query: GET_OBM_SERVICES_CATEGORIES },
+      { query: GET_SERVICE_TEMPLATE_OBMS },
+    ]}
     afterMutationHook={afterMutationHook}
   />
 )

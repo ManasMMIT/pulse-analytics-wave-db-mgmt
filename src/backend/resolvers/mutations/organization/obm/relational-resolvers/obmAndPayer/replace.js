@@ -3,14 +3,9 @@ const { ObjectId } = require('mongodb')
 // ! ASSUMPTION: this resolver is for connecting a SINGLE OBM to many payers
 const connectObmAndPayer = async (
   parent,
-  { 
-    input: {
-      obmId,
-      connections,
-    }
-  },
+  { input: { obmId, connections } },
   { pulseCoreDb, mongoClient },
-  info,
+  info
 ) => {
   obmId = ObjectId(obmId)
 
@@ -23,11 +18,13 @@ const connectObmAndPayer = async (
   }))
 
   await session.withTransaction(async () => {
-    await pulseCoreDb.collection('obm_payers')
+    await pulseCoreDb
+      .collection('obm_payers')
       .deleteMany({ obmId }, { session })
 
     if (docsToInsert.length) {
-      await pulseCoreDb.collection('obm_payers')
+      await pulseCoreDb
+        .collection('obm_payers')
         .insertMany(docsToInsert, { session })
     }
   })

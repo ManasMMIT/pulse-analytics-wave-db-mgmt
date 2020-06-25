@@ -1,5 +1,3 @@
 const connectObmAndPayer = require('./replace')
 
-module.exports = [
-  connectObmAndPayer,
-]
+module.exports = [connectObmAndPayer]
