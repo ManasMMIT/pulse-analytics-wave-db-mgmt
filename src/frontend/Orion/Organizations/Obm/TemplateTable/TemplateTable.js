@@ -1,42 +1,90 @@
-import React from 'react'
+import React, { useRef, useEffect, useState } from 'react'
 import styled from '@emotion/styled'
+
 import _ from 'lodash'
-import { useTable, useFilters, useSortBy } from 'react-table'
+import { useTable, useFilters, useSortBy, useFlexLayout } from 'react-table'
+import { useSticky } from 'react-table-sticky'
 
-const TableWrapper = styled.div({
-  flex: 1,
-  overflow: 'auto',
-})
+const Styles = styled.div`
+  padding: 1rem;
 
-const tableStyle = {
-  width: '100%',
-  height: '98%',
-  overflowY: 'scroll',
-  borderCollapse: 'collapse',
-}
+  .table {
+    border: 1px solid #ddd;
 
-const StyledTh = styled.th({
-  fontWeight: 700,
-  fontSize: 14,
-  padding: 12,
-  position: 'sticky',
-  top: 0,
-  borderTop: '1px solid black',
-  borderLeft: '1px solid rgba(200, 209, 224, 0.6)',
-  borderBottom: '1px solid #e8e8e8',
-  background: 'white',
-  boxShadow: '0px 0px 0 2px #e8e8e8',
-})
+    .tr {
+      :last-child {
+        .td {
+          border-bottom: 0;
+        }
+      }
+    }
 
-const StyledTd = styled.td({
-  padding: 12,
-  border: '1px solid #e8e8e8',
-})
+    .th,
+    .td {
+      padding: 5px;
+      border-bottom: 1px solid #ddd;
+      border-right: 1px solid #ddd;
+      background-color: #fff;
+      overflow: hidden;
 
-const buttonStyle = {
-  cursor: 'pointer',
-  fontSize: 12,
-}
+      :last-child {
+        border-right: 0;
+      }
+
+      .resizer {
+        display: inline-block;
+        width: 5px;
+        height: 100%;
+        position: absolute;
+        right: 0;
+        top: 0;
+        transform: translateX(50%);
+        z-index: 1;
+
+        &.isResizing {
+          background: red;
+        }
+      }
+    }
+
+    &.sticky {
+      overflow: scroll;
+      .header,
+      .footer {
+        position: sticky;
+        z-index: 1;
+        width: fit-content;
+      }
+
+      .header {
+        top: 0;
+        box-shadow: 0px 3px 3px #ccc;
+      }
+
+      .footer {
+        bottom: 0;
+        box-shadow: 0px -3px 3px #ccc;
+      }
+
+      .body {
+        position: relative;
+        z-index: 0;
+      }
+
+      [data-sticky-td] {
+        position: sticky;
+      }
+
+      [data-sticky-last-left-td] {
+        box-shadow: 2px 0px 3px #ccc;
+      }
+
+      [data-sticky-first-right-td] {
+        box-shadow: -2px 0px 3px #ccc;
+      }
+    }
+  }
+`
 
 const DefaultColumnFilter = ({
   column: { filterValue, preFilteredRows, setFilter },
@@ -54,39 +102,6 @@ const DefaultColumnFilter = ({
   )
 }
 
-const Headers = ({ headerGroup }) => {
-  return headerGroup.headers.map((column) => (
-    <StyledTh {...column.getHeaderProps(column.getSortByToggleProps())}>
-      {column.render('Header')}
-      <span>
-        {column.isSorted ? (column.isSortedDesc ? ' 🔽' : ' 🔼') : ''}
-      </span>
-      <div onClick={(e) => e.stopPropagation()}>
-        {column.canFilter ? column.render('Filter') : null}
-      </div>
-    </StyledTh>
-  ))
-}
-
-const Cells = ({ row, modalColMap }) => {
-  return row.cells.map((cell) => {
-    const { Modal, idKey } = modalColMap[cell.column.id]
-    const datumId = cell.row.original[idKey]
-
-    return (
-      <StyledTd {...cell.getCellProps()}>
-        <Modal buttonStyle={buttonStyle} entityId={datumId}>
-          {cell.render('Cell')}
-        </Modal>
-      </StyledTd>
-    )
-  })
-}
-
-const defaultColumn = {
-  Filter: DefaultColumnFilter,
-}
-
 const SORT_TYPES = {
   text: (rowA, rowB, columnId, desc) => {
     const valueA = rowA.values[columnId]
@@ -100,7 +115,43 @@ const SORT_TYPES = {
   },
 }
 
-const TemplateTable = ({ columns, data, modalColMap }) => {
+const buttonStyle = {
+  cursor: 'pointer',
+  fontSize: 12,
+}
+
+const MINIMUM_COLUMN_WIDTH = 200
+
+// TODO: Fix header z-index issue
+// Manage button modals via state and render modal at top of page
+
+function TemplateTable({ columns, data, modalColMap }) {
+  const ref = useRef(null)
+
+  const [width, setWidth] = useState(0)
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWidth(ref.current.offsetWidth)
+    }
+
+    window.addEventListener('resize', handleResize)
+
+    return () => {
+      window.removeEventListener('resize', handleResize)
+    }
+  }, [data, ref])
+
+  const defaultColumn = {
+    Filter: DefaultColumnFilter,
+  }
+
+  const columnWidthBasedOnParent = Math.floor(
+    (ref.current ? ref.current.offsetWidth : 0) / columns.length
+  )
+  const columnWidth = Math.max(columnWidthBasedOnParent, MINIMUM_COLUMN_WIDTH)
+
+  console.log(columnWidth, width)
   const {
     getTableProps,
     getTableBodyProps,
@@ -116,33 +167,89 @@ const TemplateTable = ({ columns, data, modalColMap }) => {
       disableMultiRemove: true,
       sortTypes: SORT_TYPES,
     },
+    useSticky,
+    useFlexLayout,
     useFilters,
     useSortBy
   )
 
   return (
-    <TableWrapper>
-      <table style={tableStyle} {...getTableProps()}>
-        <thead>
-          {headerGroups.map((headerGroup) => (
-            <tr {...headerGroup.getHeaderGroupProps()}>
-              <Headers headerGroup={headerGroup} />
-            </tr>
-          ))}
-        </thead>
-        <tbody {...getTableBodyProps()}>
-          {rows.map((row, i) => {
-            prepareRow(row)
-
+    <Styles>
+      <div
+        ref={ref}
+        {...getTableProps()}
+        className="table sticky"
+        style={{ minWidth: 200, width: 'calc(100vw - 320px)', height: 400 }}
+      >
+        <div className="header">
+          {headerGroups.map((headerGroup) => {
             return (
-              <tr {...row.getRowProps()}>
-                <Cells row={row} modalColMap={modalColMap} />
-              </tr>
+              <div {...headerGroup.getHeaderGroupProps()} className="tr">
+                {headerGroup.headers.map((column) => {
+                  const headerProps = column.getHeaderProps(
+                    column.getSortByToggleProps()
+                  )
+
+                  headerProps.style.width = `${columnWidth}px`
+                  headerProps.style.overflow = 'visible'
+
+                  return (
+                    <div {...headerProps} className="th">
+                      {column.render('Header')}
+                      <span>
+                        {column.isSorted
+                          ? column.isSortedDesc
+                            ? ' 🔽'
+                            : ' 🔼'
+                          : ''}
+                      </span>
+                      <div onClick={(e) => e.stopPropagation()}>
+                        {column.canFilter ? column.render('Filter') : null}
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
             )
           })}
-        </tbody>
-      </table>
-    </TableWrapper>
+        </div>
+
+        <div {...getTableBodyProps()} className="body">
+          {rows.map((row, i) => {
+            prepareRow(row)
+            return (
+              <div {...row.getRowProps()} className="tr">
+                {row.cells.map((cell) => {
+                  const cellProps = cell.getCellProps()
+                  cellProps.style.width = `${columnWidth}px`
+
+                  const cellModalInfo = modalColMap[cell.column.id]
+
+                  if (cellModalInfo) {
+                    const { Modal, idKey } = cellModalInfo
+                    const datumId = cell.row.original[idKey]
+
+                    return (
+                      <div {...cellProps} className="td">
+                        <Modal buttonStyle={buttonStyle} entityId={datumId}>
+                          {cell.render('Cell')}
+                        </Modal>
+                      </div>
+                    )
+                  }
+
+                  return (
+                    <div {...cellProps} className="td">
+                      {cell.render('Cell')}
+                    </div>
+                  )
+                })}
+              </div>
+            )
+          })}
+        </div>
+      </div>
+    </Styles>
   )
 }
 
