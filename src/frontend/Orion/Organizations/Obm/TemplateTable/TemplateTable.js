@@ -5,8 +5,8 @@ import { useTable, useFilters, useSortBy, useFlexLayout } from 'react-table'
 import { useSticky } from 'react-table-sticky'
 
 import ModalManager from './ModalManager'
-
 import TableStyle from './TableStyle'
+import sortTypes from './custom-sort-types'
 
 const DefaultColumnFilter = ({
   column: { filterValue, preFilteredRows, setFilter },
@@ -22,19 +22,6 @@ const DefaultColumnFilter = ({
       placeholder={`Search ${count} records...`}
     />
   )
-}
-
-const SORT_TYPES = {
-  text: (rowA, rowB, columnId, desc) => {
-    const valueA = rowA.values[columnId]
-    const valueB = rowB.values[columnId]
-
-    if (_.isEmpty(valueA) && _.isEmpty(valueB)) return 0
-    if (_.isEmpty(valueB)) return -1
-    if (_.isEmpty(valueA)) return 1
-
-    return valueA.toLowerCase().localeCompare(valueB.toLowerCase())
-  },
 }
 
 const cellStyle = {
@@ -83,7 +70,7 @@ function TemplateTable({ columns, data, modalColMap }) {
       defaultColumn,
       maxMultiSortColCount: 5,
       disableMultiRemove: true,
-      sortTypes: SORT_TYPES,
+      sortTypes,
     },
     useSticky,
     useFlexLayout,
