@@ -13,10 +13,9 @@ import ObmServicesModal from '../../../components/BusinessObjectModal/ObmService
 import ObmServicesCategoriesModal from '../../../components/BusinessObjectModal/ObmServicesCategoriesModal'
 
 import TemplateTable from './TemplateTable'
-import MultiSelectColumnFilter from './TemplateTable/MultiSelectColumnFilter'
-import NumberRangeColumnFilter from './TemplateTable/NumberRangeColumnFilter'
-
-import customMultiSelectFilterFn from './TemplateTable/custom-filters/customMultiSelectFilterFn'
+import MultiSelectColumnFilter from './TemplateTable/custom-filters/MultiSelect/MultiSelectColumnFilter'
+import customMultiSelectFilterFn from './TemplateTable/custom-filters/MultiSelect/customMultiSelectFilterFn'
+import NumberRangeColumnFilter from './TemplateTable/custom-filters/NumberRangeColumnFilter'
 
 import Color from './../../../utils/color'
 

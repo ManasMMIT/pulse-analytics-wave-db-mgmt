@@ -6,11 +6,11 @@ import { GET_OBM_ORGANIZATIONS } from 'frontend/api/queries'
 import PanelHeader from '../../../components/Panel/PanelHeader'
 import ObmModalButton from '../../../components/BusinessObjectModal/OncologyBenefitManagerModal/OncologyBenefitManagerModalButton'
 import ObmModal from '../../../components/BusinessObjectModal/OncologyBenefitManagerModal'
-import TemplateTable from './TemplateTable'
-import NumberRangeColumnFilter from './TemplateTable/NumberRangeColumnFilter'
-import MultiSelectColumnFilter from './TemplateTable/MultiSelectColumnFilter'
 
-import customMultiSelectFilterFn from './TemplateTable/custom-filters/customMultiSelectFilterFn'
+import TemplateTable from './TemplateTable'
+import NumberRangeColumnFilter from './TemplateTable/custom-filters/NumberRangeColumnFilter'
+import MultiSelectColumnFilter from './TemplateTable/custom-filters/MultiSelect/MultiSelectColumnFilter'
+import customMultiSelectFilterFn from './TemplateTable/custom-filters/MultiSelect/customMultiSelectFilterFn'
 
 import Color from './../../../utils/color'
 
