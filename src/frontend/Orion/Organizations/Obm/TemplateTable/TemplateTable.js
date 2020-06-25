@@ -4,8 +4,8 @@ import _ from 'lodash'
 import { useTable, useFilters, useSortBy } from 'react-table'
 
 const TableWrapper = styled.div({
-  flex: 1,
   overflow: 'auto',
+  margin: '0 24px 24px 24px',
 })
 
 const tableStyle = {
@@ -67,16 +67,24 @@ const Headers = ({ headerGroup }) => {
 
 const Cells = ({ row, modalColMap }) => {
   return row.cells.map((cell) => {
-    const { Modal, idKey } = modalColMap[cell.column.id]
-    const datumId = cell.row.original[idKey]
+    if (cell.column.id in modalColMap) {
+      const { Modal, idKey } = modalColMap[cell.column.id]
+      const datumId = cell.row.original[idKey]
 
-    return (
-      <StyledTd {...cell.getCellProps()}>
-        <Modal buttonStyle={buttonStyle} entityId={datumId}>
-          {cell.render('Cell')}
-        </Modal>
-      </StyledTd>
-    )
+      return (
+        <StyledTd {...cell.getCellProps()}>
+          <Modal
+            key={_.uniqueId()}
+            buttonStyle={buttonStyle}
+            entityId={datumId}
+          >
+            {cell.render('Cell')}
+          </Modal>
+        </StyledTd>
+      )
+    }
+
+    return <StyledTd {...cell.getCellProps()}>{cell.render('Cell')}</StyledTd>
   })
 }
 

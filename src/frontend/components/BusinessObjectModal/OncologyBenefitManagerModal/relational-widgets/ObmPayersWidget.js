@@ -7,6 +7,7 @@ import { useQuery, useMutation } from '@apollo/react-hooks'
 import {
   GET_PAYER_ORGANIZATIONS,
   GET_OBM_AND_PAYER_CONNECTIONS,
+  GET_OBM_PAYER_PARTNERSHIPS,
 } from '../../../../api/queries'
 
 import { CONNECT_OBM_AND_PAYER } from '../../../../api/mutations'
@@ -38,6 +39,9 @@ const ObmPayersWidget = ({ entity }) => {
       {
         query: GET_OBM_AND_PAYER_CONNECTIONS,
         variables: { obmId: entity._id },
+      },
+      {
+        query: GET_OBM_PAYER_PARTNERSHIPS,
       },
     ],
     onError: alert,

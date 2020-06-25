@@ -860,6 +860,24 @@ export const GET_SERVICE_TEMPLATE_OBMS = gql`
   }
 `
 
+export const GET_OBM_PAYER_PARTNERSHIPS = gql`
+  query getObmPayerPartnerships {
+    obmPayerPartnerships {
+      obmId
+      obmOrganization
+      payerId
+      payerSlug
+      payerOrganization
+      commercialMedicalLives
+      commercialMedicalLivesPercent
+      medicareMedicalLives
+      medicareMedicalLivesPercent
+      managedMedicaidMedicalLives
+      managedMedicaidMedicalLivesPercent
+    }
+  }
+`
+
 export const GET_INFLUENCER_TEMPLATE_OBMS = gql`
   query getInfluencerTemplateObms {
     influencerTemplateObms {

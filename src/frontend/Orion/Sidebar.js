@@ -232,6 +232,13 @@ const Sidebar = () => {
           >
             Influencers
           </StyledNavLink>
+          <StyledNavLink
+            style={dropdownInactiveLinkStyle}
+            activeStyle={dropdownActiveLinkStyle}
+            to={getToolItemPath('obm', 'payer-partnerships')}
+          >
+            Payer Partnerships
+          </StyledNavLink>
         </StyledDropdown>
         <StyledDropdown style={inactiveLinkStyle} label={'Pathways'}>
           <StyledNavLink

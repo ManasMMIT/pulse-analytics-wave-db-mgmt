@@ -15,12 +15,12 @@ import { CONNECT_OBM_AND_PERSON } from '../../../../api/mutations'
 const ObmInfluencersWidget = ({ entity }) => {
   const { data: peopleData, loading: peopleLoading } = useQuery(GET_PEOPLE)
 
-  const {
-    data: connectionsData,
-    loading: connectionsLoading,
-  } = useQuery(GET_OBM_AND_PERSON_CONNECTIONS, {
-    variables: { obmId: entity._id },
-  })
+  const { data: connectionsData, loading: connectionsLoading } = useQuery(
+    GET_OBM_AND_PERSON_CONNECTIONS,
+    {
+      variables: { obmId: entity._id },
+    }
+  )
 
   const [stagedConnections, stageConnections] = useState([])
 

@@ -30,6 +30,7 @@ const queries = gql`
     obmAndPayerConnections(obmId: ID): [ObmAndPayerConnection]
 
     serviceTemplateObms: [ServiceTemplateObms]
+    obmPayerPartnerships: [ObmPayerPartnership]
     influencerTemplateObms: [InfluencerTemplateObms]
 
     qualityOfAccessScores: [QualityOfAccessScore]
@@ -271,6 +272,20 @@ const queries = gql`
     serviceCategory: String
     service: String
     serviceRating: Int
+  }
+
+  type ObmPayerPartnership {
+    obmId: String!
+    obmOrganization: String!
+    payerId: String
+    payerSlug: String
+    payerOrganization: String
+    commercialMedicalLives: Float
+    commercialMedicalLivesPercent: Float
+    medicareMedicalLives: Float
+    medicareMedicalLivesPercent: Float
+    managedMedicaidMedicalLives: Float
+    managedMedicaidMedicalLivesPercent: Float
   }
 
   type Connection {

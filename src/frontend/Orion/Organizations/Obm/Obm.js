@@ -4,6 +4,7 @@ import { Switch, Route, Redirect } from 'react-router-dom'
 import AccountOverview from './AccountOverview'
 import Services from './Services'
 import Influencers from './Influencers'
+import PayerPartnerships from './PayerPartnerships'
 
 const Obm = () => (
   <Switch>
@@ -15,6 +16,10 @@ const Obm = () => (
     <Route
       path={'/orion/organizations/obm/influencers'}
       component={Influencers}
+    />
+    <Route
+      path={'/orion/organizations/obm/payer-partnerships'}
+      component={PayerPartnerships}
     />
     <Redirect to={'/orion/organizations/obm/account-overview'} />
   </Switch>

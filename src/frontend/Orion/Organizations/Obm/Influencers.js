@@ -87,7 +87,6 @@ const Influencers = () => {
       style={{
         display: 'flex',
         flexDirection: 'column',
-        flex: 1,
       }}
     >
       <PanelHeader title={PAGE_TITLE}>

@@ -8,6 +8,7 @@ import {
 import {
   GET_OBM_ORGANIZATIONS,
   GET_SERVICE_TEMPLATE_OBMS,
+  GET_OBM_PAYER_PARTNERSHIPS,
   GET_INFLUENCER_TEMPLATE_OBMS,
 } from 'frontend/api/queries'
 
@@ -56,6 +57,7 @@ const OncologyBenefitManagerModal = ({
       ...refetchQueries,
       { query: GET_OBM_ORGANIZATIONS },
       { query: GET_SERVICE_TEMPLATE_OBMS },
+      { query: GET_OBM_PAYER_PARTNERSHIPS },
       { query: GET_INFLUENCER_TEMPLATE_OBMS },
     ]}
     afterMutationHook={afterMutationHook}
