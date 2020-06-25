@@ -1,15 +1,12 @@
-const customMultiSelectFilterFn = (filter, row, filterValue) => {
-  if (!filterValue) return filter
+import _ from 'lodash'
 
+const customMultiSelectFilterFn = (filter, row, filterValue) => {
+  if (_.isEmpty(filterValue)) return filter
   const colKey = row[0]
 
-  const filterValueArray = filterValue.split(', ')
-
   return filter.filter((rowDatum) => {
-    return (
-      rowDatum.values[colKey] === filterValue ||
-      filterValueArray.includes(rowDatum.values[colKey])
-    )
+    const rowValue = rowDatum.values[colKey]
+    return filterValue.includes(rowValue)
   })
 }
 

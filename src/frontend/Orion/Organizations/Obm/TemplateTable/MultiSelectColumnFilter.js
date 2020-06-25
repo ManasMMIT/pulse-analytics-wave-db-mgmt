@@ -5,8 +5,6 @@ import _ from 'lodash'
 const MultiSelectColumnFilter = ({
   column: { filterValue, setFilter, preFilteredRows, id },
 }) => {
-  // Calculate the options for filtering
-  // using the preFilteredRows
   const options = React.useMemo(() => {
     const options = new Set()
     preFilteredRows.forEach((row) => {
@@ -20,15 +18,14 @@ const MultiSelectColumnFilter = ({
     value: option,
   }))
 
-  const cleanFilterValue = filterValue ? filterValue.split(', ') : []
-  const selectedOptions = cleanFilterValue.length
-    ? cleanFilterValue.map((filterValue) => ({
-        value: filterValue,
-        label: filterValue,
-      }))
-    : null
+  const selectedOptions =
+    filterValue && filterValue.length
+      ? filterValue.map((filterValue) => ({
+          value: filterValue,
+          label: filterValue,
+        }))
+      : null
 
-  // Render a multi-select box
   return (
     <Select
       isMulti
@@ -40,13 +37,9 @@ const MultiSelectColumnFilter = ({
           return
         }
 
-        const options = _.isArray(option) ? option : [option]
-
-        const finalJoinedOptions = options
-          .reduce((acc, { value }) => [...acc, value], [])
-          .join(', ')
-
-        setFilter(finalJoinedOptions)
+        let options = _.isArray(option) ? option : [option]
+        options = options.map(({ value }) => value)
+        setFilter(options)
 
         return option
       }}
