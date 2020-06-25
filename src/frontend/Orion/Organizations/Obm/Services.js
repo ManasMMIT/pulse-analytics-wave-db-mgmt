@@ -67,11 +67,58 @@ const COLUMNS = [
     accessor: 'service',
     Filter: MultiSelectColumnFilter,
     filter: customMultiSelectFilterFn,
-    sortType: 'text',
   },
   {
     Header: 'Service Rating',
     accessor: 'serviceRating',
+    Filter: NumberRangeColumnFilter,
+    filter: 'between',
+  },
+]
+
+const COLUMNS2 = [
+  {
+    Header: 'Account',
+    accessor: 'organization',
+    Filter: MultiSelectColumnFilter,
+    filter: customMultiSelectFilterFn,
+    sortType: 'text',
+    sticky: 'left',
+  },
+  {
+    Header: 'Service Category',
+    accessor: 'serviceCategory',
+    Filter: MultiSelectColumnFilter,
+    filter: customMultiSelectFilterFn,
+    sortType: 'text',
+  },
+  {
+    Header: 'Service',
+    accessor: 'service',
+    Filter: MultiSelectColumnFilter,
+    filter: customMultiSelectFilterFn,
+  },
+  {
+    Header: 'Service Rating',
+    accessor: 'serviceRating',
+    Filter: NumberRangeColumnFilter,
+    filter: 'between',
+  },
+  {
+    Header: 'Service Rating0',
+    accessor: 'extra',
+    Filter: NumberRangeColumnFilter,
+    filter: 'between',
+  },
+  {
+    Header: 'Service Rating1',
+    accessor: 'extra1',
+    Filter: NumberRangeColumnFilter,
+    filter: 'between',
+  },
+  {
+    Header: 'Service Rating2',
+    accessor: 'extra2',
     Filter: NumberRangeColumnFilter,
     filter: 'between',
   },
@@ -102,6 +149,11 @@ const Services = () => {
       <TemplateTable
         data={serviceTemplateData}
         columns={COLUMNS}
+        modalColMap={MODAL_TO_COL_MAP}
+      />
+      <TemplateTable
+        data={serviceTemplateData}
+        columns={COLUMNS2}
         modalColMap={MODAL_TO_COL_MAP}
       />
     </div>
