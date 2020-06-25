@@ -1,25 +1,17 @@
 import React from 'react'
 import { useQuery } from '@apollo/react-hooks'
-import styled from '@emotion/styled'
 
-import {
-  GET_OBM_ORGANIZATIONS,
-} from 'frontend/api/queries'
+import { GET_OBM_ORGANIZATIONS } from 'frontend/api/queries'
 
 import PanelHeader from '../../../components/Panel/PanelHeader'
 import ObmModalButton from '../../../components/BusinessObjectModal/OncologyBenefitManagerModal/OncologyBenefitManagerModalButton'
+import TemplateTable from './TemplateTable'
+import NumberRangeColumnFilter from './TemplateTable/NumberRangeColumnFilter'
+import MultiSelectColumnFilter from './TemplateTable/MultiSelectColumnFilter'
+
+import customMultiSelectFilterFn from './TemplateTable/custom-filters/customMultiSelectFilterFn'
 
 import Color from './../../../utils/color'
-
-const StyledTd = styled.td({
-  padding: 12,
-})
-
-const StyledTh = styled.th({
-  fontWeight: 700,
-  fontSize: 14,
-  padding: 12,
-})
 
 const createButtonStyle = {
   background: Color.PRIMARY,
@@ -31,12 +23,36 @@ const createButtonStyle = {
   cursor: 'pointer',
 }
 
-const buttonStyle = {
-  cursor: 'pointer',
-  fontSize: 12,
+const PAGE_TITLE = 'Oncology Benefit Manager Account Overview'
+
+const MODAL_TO_COL_MAP = {
+  organization: { Modal: ObmModalButton, idKey: '_id' },
+  start: { Modal: ObmModalButton, idKey: '_id' },
+  businessModel: { Modal: ObmModalButton, idKey: '_id' },
 }
 
-const PAGE_TITLE = 'Oncology Benefit Manager Account Overview'
+const COLUMNS = [
+  {
+    Header: 'Account',
+    accessor: 'organization',
+    Filter: MultiSelectColumnFilter,
+    filter: customMultiSelectFilterFn,
+    sortType: 'text',
+  },
+  {
+    Header: 'Start',
+    accessor: 'start',
+    Filter: NumberRangeColumnFilter,
+    filter: 'between',
+  },
+  {
+    Header: 'Business Model',
+    accessor: 'businessModel',
+    Filter: MultiSelectColumnFilter,
+    filter: customMultiSelectFilterFn,
+    sortType: 'text',
+  },
+]
 
 const AccountOverview = () => {
   const { data, loading } = useQuery(GET_OBM_ORGANIZATIONS)
@@ -45,51 +61,23 @@ const AccountOverview = () => {
   if (!loading) obms = Object.values(data)[0] || []
 
   return (
-    <div style={{ width: '100%' }}>
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        flex: 1,
+      }}
+    >
       <PanelHeader title={PAGE_TITLE}>
         <ObmModalButton buttonStyle={createButtonStyle}>
           Create OBM
         </ObmModalButton>
       </PanelHeader>
-      <table style={{
-        margin: '12px 24px',
-        width: '100%',
-        display: 'block',
-        height: 650,
-        overflowY: 'scroll',
-        borderCollapse: 'collapse',
-      }}>
-        <tbody>
-          <tr style={{ border: '1px solid black' }}>
-            <StyledTh>Account</StyledTh>
-            <StyledTh>Start</StyledTh>
-            <StyledTh>Business Model</StyledTh>
-          </tr>
-          {
-            obms.map(({ _id, organization, start, businessModel }) => {
-              return (
-                <tr key={_id + organization} style={{ border: '1px solid black' }}>
-                  <StyledTd>
-                    <ObmModalButton buttonStyle={buttonStyle} entityId={_id}>
-                      {organization}
-                    </ObmModalButton>
-                  </StyledTd>
-                  <StyledTd>
-                    <ObmModalButton buttonStyle={buttonStyle} entityId={_id}>
-                      {start}
-                    </ObmModalButton>
-                  </StyledTd>
-                  <StyledTd>
-                    <ObmModalButton buttonStyle={buttonStyle} entityId={_id}>
-                      {businessModel}
-                    </ObmModalButton>
-                  </StyledTd>
-                </tr>
-              )
-            })
-          }
-        </tbody>
-      </table>
+      <TemplateTable
+        data={obms}
+        columns={COLUMNS}
+        modalColMap={MODAL_TO_COL_MAP}
+      />
     </div>
   )
 }

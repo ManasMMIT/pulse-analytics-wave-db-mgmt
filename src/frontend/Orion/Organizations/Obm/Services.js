@@ -1,27 +1,20 @@
 import React from 'react'
 import { useQuery } from '@apollo/react-hooks'
-import styled from '@emotion/styled'
 
-import {
-  GET_SERVICE_TEMPLATE_OBMS,
-} from 'frontend/api/queries'
+import { GET_SERVICE_TEMPLATE_OBMS } from 'frontend/api/queries'
 
 import PanelHeader from '../../../components/Panel/PanelHeader'
 import ObmModalButton from '../../../components/BusinessObjectModal/OncologyBenefitManagerModal/OncologyBenefitManagerModalButton'
 import ObmServicesModalButton from '../../../components/BusinessObjectModal/ObmServicesModal/ObmServicesModalButton'
 import ObmServicesCategoriesModalButton from '../../../components/BusinessObjectModal/ObmServicesCategoriesModal/ObmServicesCategoriesModalButton'
 
+import TemplateTable from './TemplateTable'
+import MultiSelectColumnFilter from './TemplateTable/MultiSelectColumnFilter'
+import NumberRangeColumnFilter from './TemplateTable/NumberRangeColumnFilter'
+
+import customMultiSelectFilterFn from './TemplateTable/custom-filters/customMultiSelectFilterFn'
+
 import Color from './../../../utils/color'
-
-const StyledTd = styled.td({
-  padding: 12,
-})
-
-const StyledTh = styled.th({
-  fontWeight: 700,
-  fontSize: 14,
-  padding: 12,
-})
 
 const createButtonStyle = {
   background: Color.PRIMARY,
@@ -33,12 +26,56 @@ const createButtonStyle = {
   cursor: 'pointer',
 }
 
-const buttonStyle = {
-  cursor: 'pointer',
-  fontSize: 12,
+const PAGE_TITLE = 'Oncology Benefit Manager Account Services'
+
+const MODAL_TO_COL_MAP = {
+  organization: {
+    Modal: ObmModalButton,
+    idKey: 'obmId',
+  },
+  serviceCategory: {
+    Modal: ObmServicesCategoriesModalButton,
+    idKey: 'serviceCategoryId',
+  },
+  service: {
+    Modal: ObmServicesModalButton,
+    idKey: 'serviceId',
+  },
+  serviceRating: {
+    Modal: ObmModalButton,
+    idKey: 'obmId',
+  },
 }
 
-const PAGE_TITLE = 'Oncology Benefit Manager Account Services'
+const COLUMNS = [
+  {
+    Header: 'Account',
+    accessor: 'organization',
+    Filter: MultiSelectColumnFilter,
+    filter: customMultiSelectFilterFn,
+    sortType: 'text',
+  },
+  {
+    Header: 'Service Category',
+    accessor: 'serviceCategory',
+    Filter: MultiSelectColumnFilter,
+    filter: customMultiSelectFilterFn,
+    sortType: 'text',
+  },
+  {
+    Header: 'Service',
+    accessor: 'service',
+    Filter: MultiSelectColumnFilter,
+    filter: customMultiSelectFilterFn,
+    sortType: 'text',
+  },
+  {
+    Header: 'Service Rating',
+    accessor: 'serviceRating',
+    Filter: NumberRangeColumnFilter,
+    filter: 'between',
+  },
+]
 
 const Services = () => {
   const { data, loading } = useQuery(GET_SERVICE_TEMPLATE_OBMS)
@@ -47,83 +84,26 @@ const Services = () => {
   if (data && !loading) serviceTemplateData = Object.values(data)[0] || []
 
   return (
-    <div style={{ width: '100%' }}>
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        flex: 1,
+      }}
+    >
       <PanelHeader title={PAGE_TITLE}>
-        <ObmServicesModalButton buttonStyle={createButtonStyle} >
+        <ObmServicesModalButton buttonStyle={createButtonStyle}>
           Create Service
         </ObmServicesModalButton>
-        <ObmServicesCategoriesModalButton buttonStyle={createButtonStyle} >
+        <ObmServicesCategoriesModalButton buttonStyle={createButtonStyle}>
           Create Service Category
         </ObmServicesCategoriesModalButton>
       </PanelHeader>
-      <table style={{
-        margin: '12px 24px',
-        width: '100%',
-        display: 'block',
-        height: 650,
-        overflowY: 'scroll',
-        borderCollapse: 'collapse',
-      }}>
-        <tbody>
-          <tr style={{ border: '1px solid black' }}>
-            <StyledTh>Account</StyledTh>
-            <StyledTh>Service Category</StyledTh>
-            <StyledTh>Service</StyledTh>
-            <StyledTh>Service Rating</StyledTh>
-          </tr>
-          {
-            serviceTemplateData.map(({
-              obmServiceJoinId,
-              obmId,
-              serviceId,
-              serviceCategoryId,
-              organization,
-              serviceCategory,
-              service,
-              serviceRating
-            }) => {
-              const keyId = obmServiceJoinId || obmId
-
-              return (
-                <tr key={keyId} style={{ border: '1px solid black' }}>
-                  <StyledTd>
-                    <ObmModalButton
-                      buttonStyle={buttonStyle}
-                      entityId={obmId}
-                    >
-                      {organization}
-                    </ObmModalButton>
-                  </StyledTd>
-                  <StyledTd>
-                    <ObmServicesCategoriesModalButton
-                      buttonStyle={buttonStyle}
-                      entityId={serviceCategoryId}
-                    >
-                      {serviceCategory}
-                    </ObmServicesCategoriesModalButton>
-                  </StyledTd>
-                  <StyledTd>
-                    <ObmServicesModalButton
-                      buttonStyle={buttonStyle}
-                      entityId={serviceId}
-                    >
-                      {service}
-                    </ObmServicesModalButton>
-                  </StyledTd>
-                  <StyledTd>
-                    <ObmModalButton
-                      buttonStyle={buttonStyle}
-                      entityId={obmId}
-                    >
-                      {serviceRating}
-                    </ObmModalButton>
-                  </StyledTd>
-                </tr>
-              )
-            })
-          }
-        </tbody>
-      </table>
+      <TemplateTable
+        data={serviceTemplateData}
+        columns={COLUMNS}
+        modalColMap={MODAL_TO_COL_MAP}
+      />
     </div>
   )
 }
