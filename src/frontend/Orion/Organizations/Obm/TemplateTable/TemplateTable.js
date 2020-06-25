@@ -122,17 +122,14 @@ const buttonStyle = {
 
 const MINIMUM_COLUMN_WIDTH = 200
 
-// TODO: Fix header z-index issue
-// Manage button modals via state and render modal at top of page
-
 function TemplateTable({ columns, data, modalColMap }) {
   const ref = useRef(null)
-
-  const [width, setWidth] = useState(0)
+  const [ø, forceRender] = useState(0)
+  const [modalCell, setModalCell] = useState(null)
 
   useEffect(() => {
     const handleResize = () => {
-      setWidth(ref.current.offsetWidth)
+      forceRender(ref.current.offsetWidth)
     }
 
     window.addEventListener('resize', handleResize)
@@ -151,7 +148,6 @@ function TemplateTable({ columns, data, modalColMap }) {
   )
   const columnWidth = Math.max(columnWidthBasedOnParent, MINIMUM_COLUMN_WIDTH)
 
-  console.log(columnWidth, width)
   const {
     getTableProps,
     getTableBodyProps,
@@ -223,23 +219,17 @@ function TemplateTable({ columns, data, modalColMap }) {
                   const cellProps = cell.getCellProps()
                   cellProps.style.width = `${columnWidth}px`
 
-                  const cellModalInfo = modalColMap[cell.column.id]
-
-                  if (cellModalInfo) {
-                    const { Modal, idKey } = cellModalInfo
-                    const datumId = cell.row.original[idKey]
-
-                    return (
-                      <div {...cellProps} className="td">
-                        <Modal buttonStyle={buttonStyle} entityId={datumId}>
-                          {cell.render('Cell')}
-                        </Modal>
-                      </div>
-                    )
+                  const handleModalCellClick = (e, cell) => {
+                    e.stopPropagation()
+                    setModalCell(cell)
                   }
 
                   return (
-                    <div {...cellProps} className="td">
+                    <div
+                      className="td"
+                      onClick={(e) => handleModalCellClick(e, cell)}
+                      {...cellProps}
+                    >
                       {cell.render('Cell')}
                     </div>
                   )
@@ -249,8 +239,35 @@ function TemplateTable({ columns, data, modalColMap }) {
           })}
         </div>
       </div>
+      <ModalManager modalColMap={modalColMap} modalCell={modalCell} />
     </Styles>
   )
 }
 
 export default TemplateTable
+
+const ModalManager = ({ modalColMap, modalCell }) => {
+  const [isOpen, setIsOpen] = useState(true)
+
+  useEffect(() => {
+    if (modalCell) setIsOpen(true)
+  }, [modalCell])
+
+  if (!modalCell || !isOpen) return null
+
+  const cellModalInfo = modalColMap[modalCell.column.id]
+
+  if (!cellModalInfo) return null
+
+  const { Modal, idKey } = cellModalInfo
+
+  const entityId = modalCell.row.original[idKey]
+
+  return (
+    <Modal
+      buttonStyle={buttonStyle}
+      entityId={entityId}
+      closeModal={() => setIsOpen(false)}
+    />
+  )
+}
