@@ -88,35 +88,12 @@ function TemplateTable({ columns, data, modalColMap }) {
       >
         <Headers headerGroups={headerGroups} columnWidth={columnWidth} />
         <div {...getTableBodyProps()} className="body">
-          {rows.map((row, i) => {
-            prepareRow(row)
-            return (
-              <div {...row.getRowProps()} className="tr">
-                {row.cells.map((cell) => {
-                  const cellProps = cell.getCellProps()
-
-                  cellProps.style = _.merge({}, cellProps.style, {
-                    ...cellStyle,
-                    width: `${columnWidth}px`,
-                  })
-                  const handleModalCellClick = (e, cell) => {
-                    e.stopPropagation()
-                    setModalCell(cell)
-                  }
-
-                  return (
-                    <div
-                      className="td"
-                      onClick={(e) => handleModalCellClick(e, cell)}
-                      {...cellProps}
-                    >
-                      {cell.render('Cell')}
-                    </div>
-                  )
-                })}
-              </div>
-            )
-          })}
+          <Rows
+            rows={rows}
+            prepareRow={prepareRow}
+            columnWidth={columnWidth}
+            setModalCell={setModalCell}
+          />
         </div>
       </div>
       <ModalManager modalColMap={modalColMap} modalCell={modalCell} />
@@ -154,6 +131,54 @@ const Headers = ({ headerGroups, columnWidth }) => {
           </div>
         )
       })}
+    </div>
+  )
+}
+const Rows = ({ rows, prepareRow, columnWidth, setModalCell }) => {
+  return rows.map((row) => {
+    prepareRow(row)
+    return (
+      <Row row={row} columnWidth={columnWidth} setModalCell={setModalCell} />
+    )
+  })
+}
+
+const Row = ({ row, columnWidth, setModalCell }) => {
+  return (
+    <div {...row.getRowProps()} className="tr">
+      {row.cells.map((cell) => {
+        return (
+          <Cell
+            cell={cell}
+            columnWidth={columnWidth}
+            setModalCell={setModalCell}
+          />
+        )
+      })}
+    </div>
+  )
+}
+
+const Cell = ({ cell, columnWidth, setModalCell }) => {
+  const cellProps = cell.getCellProps()
+
+  cellProps.style = _.merge({}, cellProps.style, {
+    ...cellStyle,
+    width: `${columnWidth}px`,
+  })
+
+  const handleModalCellClick = (e, cell) => {
+    e.stopPropagation()
+    setModalCell(cell)
+  }
+
+  return (
+    <div
+      className="td"
+      onClick={(e) => handleModalCellClick(e, cell)}
+      {...cellProps}
+    >
+      {cell.render('Cell')}
     </div>
   )
 }
