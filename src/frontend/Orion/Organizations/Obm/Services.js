@@ -142,7 +142,10 @@ const Services = () => {
         flex: 1,
       }}
     >
-      <PanelHeader title={PAGE_TITLE}>
+      <PanelHeader
+        headerContainerStyle={{ position: 'initial' }}
+        title={PAGE_TITLE}
+      >
         <ObmServicesModalButton buttonStyle={createButtonStyle}>
           Create Service
         </ObmServicesModalButton>

@@ -5,6 +5,7 @@ import { GET_OBM_ORGANIZATIONS } from 'frontend/api/queries'
 
 import PanelHeader from '../../../components/Panel/PanelHeader'
 import ObmModalButton from '../../../components/BusinessObjectModal/OncologyBenefitManagerModal/OncologyBenefitManagerModalButton'
+import ObmModal from '../../../components/BusinessObjectModal/OncologyBenefitManagerModal'
 import TemplateTable from './TemplateTable'
 import NumberRangeColumnFilter from './TemplateTable/NumberRangeColumnFilter'
 import MultiSelectColumnFilter from './TemplateTable/MultiSelectColumnFilter'
@@ -26,9 +27,9 @@ const createButtonStyle = {
 const PAGE_TITLE = 'Oncology Benefit Manager Account Overview'
 
 const MODAL_TO_COL_MAP = {
-  organization: { Modal: ObmModalButton, idKey: '_id' },
-  start: { Modal: ObmModalButton, idKey: '_id' },
-  businessModel: { Modal: ObmModalButton, idKey: '_id' },
+  organization: { Modal: ObmModal, idKey: '_id' },
+  start: { Modal: ObmModal, idKey: '_id' },
+  businessModel: { Modal: ObmModal, idKey: '_id' },
 }
 
 const COLUMNS = [
@@ -68,7 +69,10 @@ const AccountOverview = () => {
         flex: 1,
       }}
     >
-      <PanelHeader title={PAGE_TITLE}>
+      <PanelHeader
+        headerContainerStyle={{ position: 'initial' }}
+        title={PAGE_TITLE}
+      >
         <ObmModalButton buttonStyle={createButtonStyle}>
           Create OBM
         </ObmModalButton>
