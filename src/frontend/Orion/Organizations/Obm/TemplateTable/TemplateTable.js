@@ -4,6 +4,8 @@ import _ from 'lodash'
 import { useTable, useFilters, useSortBy, useFlexLayout } from 'react-table'
 import { useSticky } from 'react-table-sticky'
 
+import Headers from './Headers'
+import Rows from './Rows'
 import ModalManager from './ModalManager'
 import TableStyle from './TableStyle'
 import sortTypes from './custom-sort-types'
@@ -24,9 +26,8 @@ const DefaultColumnFilter = ({
   )
 }
 
-const cellStyle = {
-  cursor: 'pointer',
-  fontSize: 12,
+const DEFAULT_COLUMN = {
+  Filter: DefaultColumnFilter,
 }
 
 const MINIMUM_COLUMN_WIDTH = 200
@@ -48,10 +49,6 @@ function TemplateTable({ columns, data, modalColMap }) {
     }
   }, [data, ref])
 
-  const defaultColumn = {
-    Filter: DefaultColumnFilter,
-  }
-
   const columnWidthBasedOnParent = Math.floor(
     (ref.current ? ref.current.offsetWidth : 0) / columns.length
   )
@@ -67,7 +64,7 @@ function TemplateTable({ columns, data, modalColMap }) {
     {
       columns,
       data,
-      defaultColumn,
+      defaultColumn: DEFAULT_COLUMN,
       maxMultiSortColCount: 5,
       disableMultiRemove: true,
       sortTypes,
@@ -102,83 +99,3 @@ function TemplateTable({ columns, data, modalColMap }) {
 }
 
 export default TemplateTable
-
-const Header = ({ headerProps, column }) => (
-  <div {...headerProps} className="th">
-    {column.render('Header')}
-    <span>{column.isSorted ? (column.isSortedDesc ? ' 🔽' : ' 🔼') : ''}</span>
-    <div onClick={(e) => e.stopPropagation()}>
-      {column.canFilter ? column.render('Filter') : null}
-    </div>
-  </div>
-)
-
-const Headers = ({ headerGroups, columnWidth }) => {
-  return (
-    <div className="header">
-      {headerGroups.map((headerGroup) => {
-        return (
-          <div {...headerGroup.getHeaderGroupProps()} className="tr">
-            {headerGroup.headers.map((column) => {
-              const headerProps = column.getHeaderProps(
-                column.getSortByToggleProps()
-              )
-              headerProps.style.width = `${columnWidth}px`
-              headerProps.style.overflow = 'visible'
-
-              return <Header headerProps={headerProps} column={column} />
-            })}
-          </div>
-        )
-      })}
-    </div>
-  )
-}
-const Rows = ({ rows, prepareRow, columnWidth, setModalCell }) => {
-  return rows.map((row) => {
-    prepareRow(row)
-    return (
-      <Row row={row} columnWidth={columnWidth} setModalCell={setModalCell} />
-    )
-  })
-}
-
-const Row = ({ row, columnWidth, setModalCell }) => {
-  return (
-    <div {...row.getRowProps()} className="tr">
-      {row.cells.map((cell) => {
-        return (
-          <Cell
-            cell={cell}
-            columnWidth={columnWidth}
-            setModalCell={setModalCell}
-          />
-        )
-      })}
-    </div>
-  )
-}
-
-const Cell = ({ cell, columnWidth, setModalCell }) => {
-  const cellProps = cell.getCellProps()
-
-  cellProps.style = _.merge({}, cellProps.style, {
-    ...cellStyle,
-    width: `${columnWidth}px`,
-  })
-
-  const handleModalCellClick = (e, cell) => {
-    e.stopPropagation()
-    setModalCell(cell)
-  }
-
-  return (
-    <div
-      className="td"
-      onClick={(e) => handleModalCellClick(e, cell)}
-      {...cellProps}
-    >
-      {cell.render('Cell')}
-    </div>
-  )
-}
