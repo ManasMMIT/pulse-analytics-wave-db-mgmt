@@ -1,7 +1,7 @@
 import React from 'react'
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faEdit } from "@fortawesome/free-solid-svg-icons"
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faEdit } from '@fortawesome/free-solid-svg-icons'
 import { transparentize } from 'polished'
 
 import Panel from '../../../components/Panel'
@@ -9,14 +9,13 @@ import { PayerAccountModalButton } from './../../shared/AccountModals'
 import DeleteButton from './../../shared/DeleteButton'
 import CopyOneOfStringButton from './../../shared/CopyOneOfStringButton'
 
-import {
-  DELETE_PAYER_ORGANIZATION,
-} from './../../../api/mutations'
+import { DELETE_PAYER_ORGANIZATION } from './../../../api/mutations'
 
 import {
   GET_PAYER_ORGANIZATIONS,
   GET_PATHWAYS_ORGANIZATIONS,
   GET_APM_ORGANIZATIONS,
+  GET_OBM_PAYER_PARTNERSHIPS,
 } from './../../../api/queries'
 
 import Color from './../../../utils/color'
@@ -42,7 +41,7 @@ const defaultPanelItemStyle = {
   borderBottom: `1px solid ${transparentize(0.9, Color.BLACK)}`,
   ':hover': {
     background: transparentize(0.95, Color.BLACK),
-  }
+  },
 }
 
 const headerChildren = (
@@ -60,7 +59,7 @@ const headerChildren = (
   </div>
 )
 
-const buttonGroupCallback = entity => (
+const buttonGroupCallback = (entity) => (
   <>
     <PayerAccountModalButton
       account={entity}
@@ -75,6 +74,7 @@ const buttonGroupCallback = entity => (
         { query: GET_PAYER_ORGANIZATIONS },
         { query: GET_PATHWAYS_ORGANIZATIONS },
         { query: GET_APM_ORGANIZATIONS },
+        { query: GET_OBM_PAYER_PARTNERSHIPS },
       ]}
     />
   </>
@@ -83,11 +83,7 @@ const buttonGroupCallback = entity => (
 const panelItemConfig = {
   style: defaultPanelItemStyle,
   buttonGroupCallback,
-  label1Callback: ({ organization }) => (
-    <div>
-      {organization}
-    </div>
-  )
+  label1Callback: ({ organization }) => <div>{organization}</div>,
 }
 
 const PayerAccounts = () => (
@@ -96,7 +92,7 @@ const PayerAccounts = () => (
     headerChildren={headerChildren}
     headerContainerStyle={{
       background: Color.WHITE,
-      borderBottom: `1px solid ${ transparentize(0.9, Color.BLACK) }`
+      borderBottom: `1px solid ${transparentize(0.9, Color.BLACK)}`,
     }}
     queryDocs={{
       fetchAllQueryProps: { query: GET_PAYER_ORGANIZATIONS },

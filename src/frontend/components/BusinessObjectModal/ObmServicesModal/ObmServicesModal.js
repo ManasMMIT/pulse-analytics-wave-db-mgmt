@@ -3,10 +3,12 @@ import React from 'react'
 import {
   CREATE_OBM_SERVICE,
   UPDATE_OBM_SERVICE,
+  DELETE_OBM_SERVICE,
 } from 'frontend/api/mutations'
 
 import {
   GET_OBM_SERVICES,
+  GET_SERVICE_TEMPLATE_OBMS,
 } from '../../../api/queries'
 
 import ObmServiceCategoryWidget from './relational-widgets/ObmServiceCategoryWidget'
@@ -37,8 +39,13 @@ const ObmServicesModal = ({
     mutationDocs={{
       create: CREATE_OBM_SERVICE,
       update: UPDATE_OBM_SERVICE,
+      delete: DELETE_OBM_SERVICE,
     }}
-    refetchQueries={[...refetchQueries, { query: GET_OBM_SERVICES }]}
+    refetchQueries={[
+      ...refetchQueries,
+      { query: GET_OBM_SERVICES },
+      { query: GET_SERVICE_TEMPLATE_OBMS },
+    ]}
     afterMutationHook={afterMutationHook}
     widgets={WIDGETS}
   />

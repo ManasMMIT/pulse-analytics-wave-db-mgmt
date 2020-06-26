@@ -3,10 +3,12 @@ import React from 'react'
 import {
   CREATE_OBM_SERVICE_CATEGORY,
   UPDATE_OBM_SERVICE_CATEGORY,
+  DELETE_OBM_SERVICE_CATEGORY,
 } from 'frontend/api/mutations'
 
 import {
   GET_OBM_SERVICES_CATEGORIES,
+  GET_SERVICE_TEMPLATE_OBMS,
 } from '../../../api/queries'
 
 import BusinessObjectModal from '../BusinessObjectModal/BusinessObjectModal'
@@ -28,8 +30,13 @@ const ObmServicesCategoriesModal = ({
     mutationDocs={{
       create: CREATE_OBM_SERVICE_CATEGORY,
       update: UPDATE_OBM_SERVICE_CATEGORY,
+      delete: DELETE_OBM_SERVICE_CATEGORY,
     }}
-    refetchQueries={[...refetchQueries, { query: GET_OBM_SERVICES_CATEGORIES }]}
+    refetchQueries={[
+      ...refetchQueries,
+      { query: GET_OBM_SERVICES_CATEGORIES },
+      { query: GET_SERVICE_TEMPLATE_OBMS },
+    ]}
     afterMutationHook={afterMutationHook}
   />
 )

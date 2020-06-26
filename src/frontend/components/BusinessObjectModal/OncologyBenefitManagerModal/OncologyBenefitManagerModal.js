@@ -7,9 +7,14 @@ import {
 
 import {
   GET_OBM_ORGANIZATIONS,
+  GET_SERVICE_TEMPLATE_OBMS,
+  GET_OBM_PAYER_PARTNERSHIPS,
+  GET_INFLUENCER_TEMPLATE_OBMS,
 } from 'frontend/api/queries'
 
 import ObmServicesWidget from './relational-widgets/ObmServicesWidget'
+import ObmInfluencersWidget from './relational-widgets/ObmInfluencersWidget'
+import ObmPayersWidget from './relational-widgets/ObmPayersWidget'
 import BusinessObjectModal from '../BusinessObjectModal/BusinessObjectModal'
 
 const OBM_BOID = '5ec81a40b2cfb87bb15373ec'
@@ -20,6 +25,16 @@ const WIDGETS = [
     _id: 'RELATIONAL_obmServicesWidget',
     label: 'Connect to OBM Services',
     Component: ObmServicesWidget,
+  },
+  {
+    _id: 'RELATIONAL_obmInfluencersWidget',
+    label: 'Connect to OBM Influencers',
+    Component: ObmInfluencersWidget,
+  },
+  {
+    _id: 'RELATIONAL_obmPayersWidget',
+    label: 'Connect to Payers',
+    Component: ObmPayersWidget,
   },
 ]
 
@@ -38,7 +53,13 @@ const OncologyBenefitManagerModal = ({
       create: CREATE_OBM_ORGANIZATION,
       update: UPDATE_OBM_ORGANIZATION,
     }}
-    refetchQueries={[...refetchQueries, { query: GET_OBM_ORGANIZATIONS }]}
+    refetchQueries={[
+      ...refetchQueries,
+      { query: GET_OBM_ORGANIZATIONS },
+      { query: GET_SERVICE_TEMPLATE_OBMS },
+      { query: GET_OBM_PAYER_PARTNERSHIPS },
+      { query: GET_INFLUENCER_TEMPLATE_OBMS },
+    ]}
     afterMutationHook={afterMutationHook}
     widgets={WIDGETS}
   />

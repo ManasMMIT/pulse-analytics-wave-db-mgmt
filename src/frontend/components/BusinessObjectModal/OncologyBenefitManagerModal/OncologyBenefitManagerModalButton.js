@@ -4,6 +4,7 @@ import OncologyBenefitManagerModal from './OncologyBenefitManagerModal'
 
 const OncologyBenefitManagerModalButton = ({
   children,
+  buttonStyle = {},
   entityId,
   refetchQueries,
   afterMutationHook,
@@ -12,7 +13,7 @@ const OncologyBenefitManagerModalButton = ({
 
   return (
     <>
-      <button onClick={() => setModal(!showModal)}>{children}</button>
+      <button style={buttonStyle} onClick={() => setModal(!showModal)}>{children}</button>
       {showModal && (
         <OncologyBenefitManagerModal
           entityId={entityId}

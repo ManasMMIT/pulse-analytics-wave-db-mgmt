@@ -8,11 +8,7 @@ const queries = gql`
 
     teams(clientId: String, userId: String): [Team]
 
-    users(
-      teamId: String,
-      clientId: String,
-      subscriptionId: String
-    ): [User]
+    users(teamId: String, clientId: String, subscriptionId: String): [User]
 
     indications: [Indication]
     products: [Product]
@@ -26,8 +22,16 @@ const queries = gql`
     obmOrganizations: [ObmOrganization]
     obmServices: [ObmService]
     obmServicesCategories: [ObmServiceCategory]
-    obmServiceAndObmServiceCategoryConnections(obmServiceId: String): [ObmServiceAndObmServiceCategoryConnection]
+    obmServiceAndObmServiceCategoryConnections(
+      obmServiceId: String
+    ): [ObmServiceAndObmServiceCategoryConnection]
     obmAndObmServiceConnections(obmId: String): [ObmAndObmServiceConnection]
+    obmAndPersonConnections(obmId: ID): [ObmAndPersonConnection]
+    obmAndPayerConnections(obmId: ID): [ObmAndPayerConnection]
+
+    serviceTemplateObms: [ServiceTemplateObms]
+    obmPayerPartnerships: [ObmPayerPartnership]
+    influencerTemplateObms: [InfluencerTemplateObms]
 
     qualityOfAccessScores: [QualityOfAccessScore]
     collections(type: String): [String]
@@ -72,6 +76,14 @@ const queries = gql`
     regionalTargetingData(input: JSON): JSON
 
     cMsOrgPrimarySpecialtyCounts(orgPacId: String): JSON
+
+    people: [Person]
+  }
+
+  type Person {
+    _id: ID!
+    name: String
+    nationalProviderIdentifier: Float
   }
 
   type Node {
@@ -227,6 +239,55 @@ const queries = gql`
     obmId: String!
     obmServiceId: String!
     rating: Int!
+  }
+
+  type ObmAndPersonConnection {
+    _id: ID!
+    obmId: ID!
+    personId: ID!
+    position: String
+  }
+
+  type ObmAndPayerConnection {
+    _id: ID!
+    obmId: String!
+    payerId: String!
+  }
+
+  type InfluencerTemplateObms {
+    _id: ID!
+    obmId: String!
+    obmOrganization: String!
+    influencerPosition: String
+    influencerId: String!
+    influencerName: String!
+    influencerNpiNumber: Float
+  }
+
+  type ServiceTemplateObms {
+    _id: ID!
+    obmId: String!
+    serviceId: String!
+    serviceCategoryId: String
+    organization: String!
+    serviceCategory: String
+    service: String!
+    serviceRating: Int!
+  }
+
+  type ObmPayerPartnership {
+    _id: ID!
+    obmId: String!
+    obmOrganization: String!
+    payerId: String!
+    payerSlug: String!
+    payerOrganization: String!
+    commercialMedicalLives: Float
+    commercialMedicalLivesPercent: Float
+    medicareMedicalLives: Float
+    medicareMedicalLivesPercent: Float
+    managedMedicaidMedicalLives: Float
+    managedMedicaidMedicalLivesPercent: Float
   }
 
   type Connection {
@@ -430,8 +491,8 @@ const queries = gql`
 
   type PayerProjectPtp {
     _id: ID!
-    organizationId: ID,
-    treatmentPlanId: ID,
+    organizationId: ID
+    treatmentPlanId: ID
     slug: String
     organization: String
     organizationTiny: String
@@ -454,6 +515,4 @@ const queries = gql`
   }
 `
 
-module.exports = [
-  queries,
-]
+module.exports = [queries]

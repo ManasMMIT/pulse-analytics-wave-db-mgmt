@@ -10,8 +10,8 @@ import {
   KeyboardDatePicker,
 } from '@material-ui/pickers'
 import DateFnsUtils from '@date-io/date-fns'
-import { createMuiTheme } from "@material-ui/core"
-import { ThemeProvider } from "@material-ui/styles"
+import { createMuiTheme } from '@material-ui/core'
+import { ThemeProvider } from '@material-ui/styles'
 import { IMPORT_WORKBOOK } from 'frontend/api/mutations'
 import { darken } from 'polished'
 
@@ -34,12 +34,12 @@ const ImportSectionWrapper = styled.div({
   width: '50%',
   padding: Spacing.S7,
   flexDirection: 'column',
-  borderRight: `1px solid ${ Color.LIGHT_GRAY_1 }`,
-  borderBottom: `1px solid ${ Color.LIGHT_GRAY_1 }`,
+  borderRight: `1px solid ${Color.LIGHT_GRAY_1}`,
+  borderBottom: `1px solid ${Color.LIGHT_GRAY_1}`,
 })
 
 const InputWrapper = styled.div({
-  margin: `${ Spacing.S3 } 0px`,
+  margin: `${Spacing.S3} 0px`,
 })
 
 const LoadingWrapper = styled.div({
@@ -73,20 +73,19 @@ const ImportLogText = styled.p({
 const importBtnStyle = {
   width: 'fit-content',
   marginBottom: Spacing.S7,
-  marginTop: Spacing.S3
+  marginTop: Spacing.S3,
 }
 
 const alertMessageMap = {
   success: 'Import Successful',
-  error: 'Import Failed. See errors in the table below. Once fixed, reload the page and try again.',
+  error:
+    'Import Failed. See errors in the table below. Once fixed, reload the page and try again.',
   info: (
     <LoadingWrapper>
-      <span style={{ marginRight: Spacing.S3 }}>
-        Importing
-      </span>
+      <span style={{ marginRight: Spacing.S3 }}>Importing</span>
       <Spinner size={14} />
     </LoadingWrapper>
-  )
+  ),
 }
 
 const VALID_SHEETS = {
@@ -99,19 +98,21 @@ const datePickerTheme = createMuiTheme({
   palette: {
     primary: {
       main: Color.PRIMARY,
-    }
+    },
   },
   overrides: {
     MuiFormControl: {
       root: {
         width: '100%',
-      }
-    }
-  }
+      },
+    },
+  },
 })
 
 const DEFAULT_ALERT_STATUS = {
-  status: null, message: null, description: null
+  status: null,
+  message: null,
+  description: null,
 }
 
 const DEFAULT_NOTIFICATION = '✅ Good to import'
@@ -132,7 +133,7 @@ const ImportSection = ({
   const [alertStatus, setAlertStatus] = useState(DEFAULT_ALERT_STATUS)
 
   // Add Reload warning
-  const beforeunload = e => {
+  const beforeunload = (e) => {
     e.preventDefault()
   }
 
@@ -153,18 +154,19 @@ const ImportSection = ({
       setAlertStatus({
         status: INFO,
         message: alertMessageMap[INFO],
-        description: 'Compiling data for the app. This process usually takes around 2 ½ to 3 minutes. Once this process completes, visit or reload dev.pulse-tools.com.'
+        description:
+          'Compiling data for the app. This process usually takes around 2 ½ to 3 minutes. Once this process completes, visit or reload dev.pulse-tools.com.',
       })
     } else if (notification.includes('finished importing')) {
-        setAlertStatus({
-          status: SUCCESS,
-          message: alertMessageMap[SUCCESS],
-        })
+      setAlertStatus({
+        status: SUCCESS,
+        message: alertMessageMap[SUCCESS],
+      })
 
-        setTimeout(() => {
-          setAlertStatus(DEFAULT_ALERT_STATUS)
-          setNotification(DEFAULT_NOTIFICATION)
-        }, 30000)
+      setTimeout(() => {
+        setAlertStatus(DEFAULT_ALERT_STATUS)
+        setNotification(DEFAULT_NOTIFICATION)
+      }, 30000)
     } else if (notification.includes('error')) {
       // this setAlertStatus should happen right before onError in the mutation;
       // and is meant to allow OTHER USERS to press import on their data
@@ -175,13 +177,12 @@ const ImportSection = ({
     }
   }, [notification])
 
-
   const [importWorkbook] = useMutation(IMPORT_WORKBOOK, {
     onError: (errorMessage, ...rest) => {
       setValidationErrorsAndWarnings(errorMessage.message)
       setAlertStatus({
         status: ERROR,
-        message: alertMessageMap[ERROR]
+        message: alertMessageMap[ERROR],
       })
     },
   })
@@ -192,15 +193,25 @@ const ImportSection = ({
     const reader = new FileReader()
     setWorkbookName(file.name)
 
-    reader.onload = e => {
+    reader.onload = (e) => {
       const data = new Uint8Array(e.target.result)
       const nextWorkbook = XLSX.read(data, { type: 'array' })
 
       let nextSheetNames = nextWorkbook.SheetNames
-      nextSheetNames = nextSheetNames.filter(sheetName => VALID_SHEETS[sheetName])
+      nextSheetNames = nextSheetNames.filter(
+        (sheetName) => VALID_SHEETS[sheetName]
+      )
 
       if (nextSheetNames.length !== 3) {
-        if (window.confirm(`Workbook doesn't have required sheets: ${Object.keys(VALID_SHEETS).join(', ')}. Make sure workbook includes those sheets (exact naming), refresh, try again.`)) {
+        if (
+          window.confirm(
+            `Workbook doesn't have required sheets: ${Object.keys(
+              VALID_SHEETS
+            ).join(
+              ', '
+            )}. Make sure workbook includes those sheets (exact naming), refresh, try again.`
+          )
+        ) {
           window.location.reload()
         }
       } else {
@@ -220,16 +231,19 @@ const ImportSection = ({
   const handleSubmit = () => {
     const workbookData = []
 
-    sheetNames.forEach(sheet => {
+    sheetNames.forEach((sheet) => {
       const selectedSheetObj = workbook.Sheets[sheet]
-      const json = XLSX.utils.sheet_to_json(selectedSheetObj, { blankrows: true, defval: null })
+      const json = XLSX.utils.sheet_to_json(selectedSheetObj, {
+        blankrows: true,
+        defval: null,
+      })
 
       workbookData.push({
         wb: 'Payer Data Master',
         sheet,
         data: json,
         timestamp,
-        projectId
+        projectId,
       })
     })
 
@@ -239,7 +253,9 @@ const ImportSection = ({
   }
 
   const shouldDisableButton = !isWorkbookUploaded || !timestamp
-  const buttonHoverStyle = { cursor: shouldDisableButton ? 'not-allowed' : 'pointer' }
+  const buttonHoverStyle = {
+    cursor: shouldDisableButton ? 'not-allowed' : 'pointer',
+  }
 
   return (
     <ImportSectionWrapper>
@@ -252,7 +268,7 @@ const ImportSection = ({
       <InputWrapper>
         <FieldLabel>Select File</FieldLabel>
         <label htmlFor="file-upload" className="custom-file-upload">
-          { isWorkbookUploaded ? workbookName : 'Choose a File' }
+          {isWorkbookUploaded ? workbookName : 'Choose a File'}
         </label>
         <input
           id="file-upload"
@@ -278,34 +294,32 @@ const ImportSection = ({
               KeyboardButtonProps={{
                 'aria-label': 'change date',
               }}
-              keyboardIcon={<Icon iconName="arrow-drop-down"/>}
+              keyboardIcon={<Icon iconName="arrow-drop-down" />}
             />
           </MuiPickersUtilsProvider>
         </ThemeProvider>
       </InputWrapper>
 
-      {
-        [ERROR, INFO].includes(alertStatus.status) || (
-          <Button
-            buttonStyle={importBtnStyle}
-            hoverStyle={buttonHoverStyle}
-            onClick={handleSubmit}
-          >
-            Import File
-          </Button>
-        )
-      }
+      {[ERROR, INFO].includes(alertStatus.status) || (
+        <Button
+          buttonStyle={importBtnStyle}
+          hoverStyle={buttonHoverStyle}
+          onClick={handleSubmit}
+        >
+          Import File
+        </Button>
+      )}
 
-      {
-        alertStatus.status && (
-          <Alert
-            severity={alertStatus.status}
-          >
-            <AlertTitle style={{ fontSize: 12, fontWeight: 700 }}>{alertStatus.message}</AlertTitle>
-            <div style={{ fontSize: 12, lineHeight: 1.5, fontWeight: 400, }}>{alertStatus.description}</div>
-          </Alert>
-        )
-      }
+      {alertStatus.status && (
+        <Alert severity={alertStatus.status}>
+          <AlertTitle style={{ fontSize: 12, fontWeight: 700 }}>
+            {alertStatus.message}
+          </AlertTitle>
+          <div style={{ fontSize: 12, lineHeight: 1.5, fontWeight: 400 }}>
+            {alertStatus.description}
+          </div>
+        </Alert>
+      )}
 
       <ImportLogContainer>
         <ImportLogTitle>Import System Status</ImportLogTitle>

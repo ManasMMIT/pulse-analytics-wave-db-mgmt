@@ -6,6 +6,7 @@ import {
   GET_OBM_ORGANIZATIONS,
   GET_OBM_SERVICES,
   GET_OBM_SERVICES_CATEGORIES,
+  GET_PEOPLE,
 } from './../../api/queries'
 
 export default {
@@ -13,4 +14,5 @@ export default {
   '5ec81a40b2cfb87bb15373ec': GET_OBM_ORGANIZATIONS,
   '5ed81e5fb8ebf33703463750': GET_OBM_SERVICES,
   '5ed81ed8bcfdf6381562c17e': GET_OBM_SERVICES_CATEGORIES,
+  '5eea22d5adbf920fa4320487': GET_PEOPLE,
 }
