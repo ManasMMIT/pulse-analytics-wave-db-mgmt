@@ -185,7 +185,7 @@ import {
 
 import { IMPORT_WORKBOOK } from './importWorkbook'
 
-import { CREATE_PERSON, UPDATE_PERSON } from './people'
+import { CREATE_PERSON, UPDATE_PERSON, DELETE_PERSON } from './people'
 
 export {
   SELECT_CLIENT,
@@ -324,4 +324,5 @@ export {
   IMPORT_WORKBOOK,
   CREATE_PERSON,
   UPDATE_PERSON,
+  DELETE_PERSON,
 }

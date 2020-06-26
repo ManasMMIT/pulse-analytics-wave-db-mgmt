@@ -19,3 +19,13 @@ export const UPDATE_PERSON = gql`
     }
   }
 `
+
+export const DELETE_PERSON = gql`
+  mutation DeletePerson($input: DeletePersonInput!) {
+    deletePerson(input: $input) {
+      _id
+      name
+      nationalProviderIdentifier
+    }
+  }
+`

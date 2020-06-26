@@ -281,6 +281,7 @@ const mutationType = gql`
 
     createPerson(input: CreatePersonInput!): CreatePersonPayload
     updatePerson(input: UpdatePersonInput!): UpdatePersonPayload
+    deletePerson(input: DeletePersonInput!): DeletePersonPayload
   }
 `
 

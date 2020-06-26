@@ -1,6 +1,10 @@
 import React from 'react'
 
-import { CREATE_PERSON, UPDATE_PERSON } from 'frontend/api/mutations'
+import {
+  CREATE_PERSON,
+  UPDATE_PERSON,
+  DELETE_PERSON,
+} from 'frontend/api/mutations'
 
 import { GET_PEOPLE, GET_INFLUENCER_TEMPLATE_OBMS } from '../../../api/queries'
 
@@ -23,6 +27,7 @@ const PeopleModal = ({
     mutationDocs={{
       create: CREATE_PERSON,
       update: UPDATE_PERSON,
+      delete: DELETE_PERSON,
     }}
     refetchQueries={[
       ...refetchQueries,
