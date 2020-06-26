@@ -134,6 +134,9 @@ const mutationType = gql`
     updateObmServiceCategory(
       input: UpdateObmServiceCategoryInput!
     ): UpdateObmServiceCategoryPayload!
+    deleteObmServiceCategory(
+      input: DeleteObmServiceCategoryInput!
+    ): DeleteObmServiceCategoryPayload!
     connectObmServiceAndObmServiceCategory(
       input: ConnectObmServiceAndObmServiceCategoryInput!
     ): ConnectObmServiceAndObmServiceCategoryPayload!

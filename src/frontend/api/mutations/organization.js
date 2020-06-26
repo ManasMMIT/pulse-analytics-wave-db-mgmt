@@ -181,6 +181,15 @@ export const UPDATE_APM_ORGANIZATION = gql`
   }
 `
 
+export const DELETE_OBM_SERVICE_CATEGORY = gql`
+  mutation DeleteObmServiceCategory($input: DeleteObmServiceCategoryInput!) {
+    deleteObmServiceCategory(input: $input) {
+      _id
+      name
+    }
+  }
+`
+
 export const UPDATE_OBM_SERVICE_CATEGORY = gql`
   mutation UpdateObmServiceCategory($input: UpdateObmServiceCategoryInput!) {
     updateObmServiceCategory(input: $input) {

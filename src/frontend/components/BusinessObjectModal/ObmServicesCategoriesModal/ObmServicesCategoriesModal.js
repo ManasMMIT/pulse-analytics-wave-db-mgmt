@@ -3,6 +3,7 @@ import React from 'react'
 import {
   CREATE_OBM_SERVICE_CATEGORY,
   UPDATE_OBM_SERVICE_CATEGORY,
+  DELETE_OBM_SERVICE_CATEGORY,
 } from 'frontend/api/mutations'
 
 import {
@@ -29,6 +30,7 @@ const ObmServicesCategoriesModal = ({
     mutationDocs={{
       create: CREATE_OBM_SERVICE_CATEGORY,
       update: UPDATE_OBM_SERVICE_CATEGORY,
+      delete: DELETE_OBM_SERVICE_CATEGORY,
     }}
     refetchQueries={[
       ...refetchQueries,

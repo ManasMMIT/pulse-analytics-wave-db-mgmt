@@ -3,7 +3,7 @@ import { useMutation } from '@apollo/react-hooks'
 import styled from '@emotion/styled'
 import PropTypes from 'prop-types'
 import _ from 'lodash'
-// import gql from 'graphql-tag'
+import gql from 'graphql-tag'
 
 import useBom from '../../../hooks/useBom'
 
@@ -16,6 +16,12 @@ import Title from '../../Title'
 import Dialog from '../../Dialog'
 import Button from '../../Button'
 import { Colors } from '../../../utils/pulseStyles'
+
+const STUB_DOC = gql`
+  mutation STUBBED_NO_OP {
+    stub
+  }
+`
 
 const Header = styled.div({
   display: 'flex',
@@ -45,28 +51,32 @@ const BusinessObjectModal = ({
   const [selectedTab, setSelectedTab] = useState({})
   const [inputFields, setInputField] = useState({})
 
-  const mutationToUse = entityId
-    ? mutationDocs.update
-    : mutationDocs.create
+  const saveMutationToUse = entityId ? mutationDocs.update : mutationDocs.create
 
-  const inputToUse = entityId
-    ? { _id: entityId, ...inputFields }
-    : inputFields
+  const inputToUse = entityId ? { _id: entityId, ...inputFields } : inputFields
 
   console.log('Mutation Input: ', inputToUse)
-  const [save] = useMutation(
-    mutationToUse,
-    {
-      variables: { input: inputToUse },
-      refetchQueries,
-      onCompleted: data => {
-        afterMutationHook(data)
-        closeModal()
-      },
-      awaitRefetchQueries: true,
-      onError: alert,
-    }
-  )
+  const [save] = useMutation(saveMutationToUse, {
+    variables: { input: inputToUse },
+    refetchQueries,
+    onCompleted: (data) => {
+      afterMutationHook(data)
+      closeModal()
+    },
+    awaitRefetchQueries: true,
+    onError: alert,
+  })
+
+  const [deleteHandler] = useMutation(mutationDocs.delete || STUB_DOC, {
+    variables: { input: { _id: entityId } },
+    refetchQueries,
+    onCompleted: (data) => {
+      afterMutationHook(data)
+      closeModal()
+    },
+    awaitRefetchQueries: true,
+    onError: alert,
+  })
 
   useEffect(() => {
     // ! When useBom errors, it will pass back an empty schema
@@ -93,7 +103,10 @@ const BusinessObjectModal = ({
 
   // Can't allow relationalizing data on create yet; needs to be planned out more
   const allTags = _.isEmpty(entity) ? schema.tags : schema.tags.concat(widgets)
-  const sidebarOptions = allTags.map(tag => ({ label: tag.label, value: tag._id }))
+  const sidebarOptions = allTags.map((tag) => ({
+    label: tag.label,
+    value: tag._id,
+  }))
 
   return (
     <Dialog>
@@ -107,6 +120,15 @@ const BusinessObjectModal = ({
           >
             Cancel + Close
           </Button>
+          {mutationDocs.delete && (
+            <Button
+              buttonStyle={{ margin: Spacing.S4 }}
+              color={Colors.RED}
+              onClick={deleteHandler}
+            >
+              Delete
+            </Button>
+          )}
           <Button
             buttonStyle={{ margin: Spacing.S4 }}
             color={Colors.GREEN}
@@ -126,18 +148,15 @@ const BusinessObjectModal = ({
           selectedTab={{ value: selectedTab._id, label: selectedTab.label }}
         />
 
-        {
-          selectedTab._id && selectedTab._id.includes('RELATIONAL')
-            ? (
-              <selectedTab.Component entity={entity} />
-            ) : (
-              <BomSections
-                inputFields={inputFields}
-                selectedTab={selectedTab}
-                setInputField={setInputField}
-              />
-            )
-        }
+        {selectedTab._id && selectedTab._id.includes('RELATIONAL') ? (
+          <selectedTab.Component entity={entity} />
+        ) : (
+          <BomSections
+            inputFields={inputFields}
+            selectedTab={selectedTab}
+            setInputField={setInputField}
+          />
+        )}
       </BoContent>
     </Dialog>
   )

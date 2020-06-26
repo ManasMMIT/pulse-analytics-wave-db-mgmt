@@ -268,9 +268,9 @@ const queries = gql`
     _id: ID!
     obmId: String!
     serviceId: String!
-    serviceCategoryId: String!
+    serviceCategoryId: String
     organization: String!
-    serviceCategory: String!
+    serviceCategory: String
     service: String!
     serviceRating: Int!
   }
