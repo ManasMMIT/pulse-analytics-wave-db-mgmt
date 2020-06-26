@@ -52,6 +52,7 @@ const BusinessObjectModal = ({
 
   const [selectedTab, setSelectedTab] = useState({})
   const [inputFields, setInputField] = useState({})
+  const [showDeleteConfirmation, toggleDeleteConfirmation] = useState(false)
 
   const saveMutationToUse = isEditModal
     ? mutationDocs.update
@@ -130,9 +131,9 @@ const BusinessObjectModal = ({
             <Button
               buttonStyle={{ margin: Spacing.S4 }}
               color={Colors.RED}
-              onClick={deleteHandler}
+              onClick={() => toggleDeleteConfirmation(!showDeleteConfirmation)}
             >
-              Delete
+              {showDeleteConfirmation ? 'Cancel Delete' : 'Delete'}
             </Button>
           )}
           <Button
@@ -144,27 +145,42 @@ const BusinessObjectModal = ({
           </Button>
         </div>
       </Header>
-      <BoContent>
-        <BomSidebar
-          options={sidebarOptions}
-          onClick={({ value }) => {
-            const nextTab = allTags.find(({ _id }) => _id === value)
-            setSelectedTab(nextTab)
-          }}
-          selectedTab={{ value: selectedTab._id, label: selectedTab.label }}
-        />
 
-        {selectedTab._id && selectedTab._id.includes('RELATIONAL') ? (
-          <selectedTab.Component entity={entity} />
-        ) : (
-          <BomSections
-            isEditModal={isEditModal}
-            inputFields={inputFields}
-            selectedTab={selectedTab}
-            setInputField={setInputField}
+      {showDeleteConfirmation ? (
+        <div style={{ padding: 24, margin: '0 auto' }}>
+          <p>Are you sure you want to delete?</p>
+          <p>Any connections to this business object will also be deleted.</p>
+          <Button
+            buttonStyle={{ margin: 24 }}
+            color={Colors.RED}
+            onClick={deleteHandler}
+          >
+            Delete Forever
+          </Button>
+        </div>
+      ) : (
+        <BoContent>
+          <BomSidebar
+            options={sidebarOptions}
+            onClick={({ value }) => {
+              const nextTab = allTags.find(({ _id }) => _id === value)
+              setSelectedTab(nextTab)
+            }}
+            selectedTab={{ value: selectedTab._id, label: selectedTab.label }}
           />
-        )}
-      </BoContent>
+
+          {selectedTab._id && selectedTab._id.includes('RELATIONAL') ? (
+            <selectedTab.Component entity={entity} />
+          ) : (
+            <BomSections
+              isEditModal={isEditModal}
+              inputFields={inputFields}
+              selectedTab={selectedTab}
+              setInputField={setInputField}
+            />
+          )}
+        </BoContent>
+      )}
     </Dialog>
   )
 }
