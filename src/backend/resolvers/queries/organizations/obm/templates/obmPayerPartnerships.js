@@ -81,10 +81,7 @@ const JOIN_OBMS_TO_PAYERS_AGG = [
     },
   },
   {
-    $unwind: {
-      path: '$obmPayerJoinEntries',
-      preserveNullAndEmptyArrays: true,
-    },
+    $unwind: '$obmPayerJoinEntries',
   },
   {
     $lookup: {
@@ -96,7 +93,7 @@ const JOIN_OBMS_TO_PAYERS_AGG = [
   },
   {
     $project: {
-      _id: 0,
+      _id: '$obmPayerJoinEntries._id',
       obm: {
         _id: '$_id',
         organization: '$organization',

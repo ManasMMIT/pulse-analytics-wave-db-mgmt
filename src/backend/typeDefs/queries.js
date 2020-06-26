@@ -275,11 +275,12 @@ const queries = gql`
   }
 
   type ObmPayerPartnership {
+    _id: ID!
     obmId: String!
     obmOrganization: String!
-    payerId: String
-    payerSlug: String
-    payerOrganization: String
+    payerId: String!
+    payerSlug: String!
+    payerOrganization: String!
     commercialMedicalLives: Float
     commercialMedicalLivesPercent: Float
     medicareMedicalLives: Float

@@ -863,6 +863,7 @@ export const GET_SERVICE_TEMPLATE_OBMS = gql`
 export const GET_OBM_PAYER_PARTNERSHIPS = gql`
   query getObmPayerPartnerships {
     obmPayerPartnerships {
+      _id
       obmId
       obmOrganization
       payerId
