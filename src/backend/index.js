@@ -12,7 +12,7 @@ const http = require('http')
 
 const app = express()
 const server = http.createServer(app)
-const io = require('socket.io')(server)
+const io = require('socket.io')(server, { cookie: false })
 const port = 1337
 
 const routes = require('./routes')
