@@ -22,7 +22,7 @@ export default () => {
   if (!otherUsersOnTool.length && !otherUsersOnPage.length) return null
 
   return (
-    <div style={isOpen ? { ...wrapperStyle, opacity: 0.7 } : wrapperStyle}>
+    <div style={isOpen ? { ...wrapperStyle, opacity: 1 } : wrapperStyle}>
       <div style={{ margin: 12, alignSelf: 'center', opacity: .8, cursor: 'pointer' }} onClick={() => setIsOpen(!isOpen)}>{"<"}</div>
       { isOpen && (
         <>
