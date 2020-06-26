@@ -12,13 +12,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Fixed** for any bug fixes.
 - **Security** in case of vulnerabilities.
 
-## [Unreleased] - Started: 6-18-20
+## [Unreleased] - Started: 6-26-20
+
+## [2.10.0] - Started: 6-18-20
 
 ### Added
 - Installed `pre-commit`,`lint-staged` and `prettier`
 - Adds the ignoring of `App.test.js` and `deleteTreatmentPlansCascade.test.js` when the `test` script is run
 - `Orion`: Added obm/payer relational widget to OBM modal
-- `Orion`: Add ability to delete business objects with confirmation (if delete mutation is passed)
+- `Orion`: Added obm/influencer relational widget to OBM modal
+- `Orion`: Scaffolded out working OBM templates with integrated business obj modal CRUD
+  - Account Overview
+  - Services
+  - Influencers
+  - Payer Partnerships
+- `Orion`: Installed `react-table` library and componentized it for OBM template views
+
+### Changed
+- `Orion`: Edit BusinessObjectModal to have delete functionality with confirmation (if delete mutation is passed)
+- `Orion`: Altered cascade delete logic in payer delete resolver to also include deleting obm/payer relationships
 
 ## [2.9.1] - Started: 6-18-20
 
