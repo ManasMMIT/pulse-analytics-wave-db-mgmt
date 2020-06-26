@@ -17,12 +17,12 @@ const ObmPayersWidget = ({ entity }) => {
     GET_PAYER_ORGANIZATIONS
   )
 
-  const {
-    data: connectionsData,
-    loading: connectionsLoading,
-  } = useQuery(GET_OBM_AND_PAYER_CONNECTIONS, {
-    variables: { obmId: entity._id },
-  })
+  const { data: connectionsData, loading: connectionsLoading } = useQuery(
+    GET_OBM_AND_PAYER_CONNECTIONS,
+    {
+      variables: { obmId: entity._id },
+    }
+  )
 
   const [stagedConnections, stageConnections] = useState([])
 

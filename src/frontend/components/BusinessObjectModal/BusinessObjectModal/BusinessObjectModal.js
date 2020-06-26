@@ -46,14 +46,20 @@ const BusinessObjectModal = ({
   afterMutationHook,
   widgets,
 }) => {
+  const isEditModal = Boolean(entityId)
+
   const { schema, entity, loading } = useBom(boId, entityId)
 
   const [selectedTab, setSelectedTab] = useState({})
   const [inputFields, setInputField] = useState({})
 
-  const saveMutationToUse = entityId ? mutationDocs.update : mutationDocs.create
+  const saveMutationToUse = isEditModal
+    ? mutationDocs.update
+    : mutationDocs.create
 
-  const inputToUse = entityId ? { _id: entityId, ...inputFields } : inputFields
+  const inputToUse = isEditModal
+    ? { _id: entityId, ...inputFields }
+    : inputFields
 
   console.log('Mutation Input: ', inputToUse)
   const [save] = useMutation(saveMutationToUse, {
@@ -98,11 +104,11 @@ const BusinessObjectModal = ({
 
   if (loading || _.isEmpty(schema)) return null
 
-  const modalTitle = `${entityId ? 'Edit' : 'Create'} ${headerText}`
+  const modalTitle = `${isEditModal ? 'Edit' : 'Create'} ${headerText}`
   const modalTitleModifier = [entity.organization]
 
   // Can't allow relationalizing data on create yet; needs to be planned out more
-  const allTags = _.isEmpty(entity) ? schema.tags : schema.tags.concat(widgets)
+  const allTags = isEditModal ? schema.tags.concat(widgets) : schema.tags
   const sidebarOptions = allTags.map((tag) => ({
     label: tag.label,
     value: tag._id,
@@ -152,6 +158,7 @@ const BusinessObjectModal = ({
           <selectedTab.Component entity={entity} />
         ) : (
           <BomSections
+            isEditModal={isEditModal}
             inputFields={inputFields}
             selectedTab={selectedTab}
             setInputField={setInputField}

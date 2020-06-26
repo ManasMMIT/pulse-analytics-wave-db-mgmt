@@ -29,26 +29,31 @@ const fieldStyle = {
   padding: '12px 0',
 }
 
-const BomSections = ({ selectedTab, inputFields, setInputField }) => {
+const BomSections = ({
+  isEditModal,
+  selectedTab,
+  inputFields,
+  setInputField,
+}) => {
   if (!selectedTab.sections) return null
   const { sections } = selectedTab
 
   const onEventChange = ({ name, value }) => {
-    setInputField(inputs => ({
+    setInputField((inputs) => ({
       ...inputs,
       [name]: value,
     }))
   }
 
   const onSelectChange = (selected, { name }) => {
-    setInputField(inputs => ({
+    setInputField((inputs) => ({
       ...inputs,
       [name]: selected.value,
     }))
   }
 
-  const hydrateSections = sections.map(section => {
-    const fieldsWithProps = section.fields.map(field => {
+  const hydrateSections = sections.map((section) => {
+    const fieldsWithProps = section.fields.map((field) => {
       const { inputComponent, key, inputProps } = field
       const onChange =
         inputComponent !== 'Select' ? onEventChange : onSelectChange
@@ -58,7 +63,10 @@ const BomSections = ({ selectedTab, inputFields, setInputField }) => {
 
       if (inputComponent === 'Select') {
         value = { value: inputFields[key], label: inputFields[key] }
-        clonedInputProps.options = clonedInputProps.options.map(value => ({ value, label: value }))
+        clonedInputProps.options = clonedInputProps.options.map((value) => ({
+          value,
+          label: value,
+        }))
       }
 
       const props = {
@@ -89,7 +97,7 @@ const BomSections = ({ selectedTab, inputFields, setInputField }) => {
     <div style={{ width: '100%', height: '100%' }}>
       <Title
         titleStyle={{ borderBottom: `1px solid ${Color.LIGHT_BLUE_GRAY_1}` }}
-        title={'Edit'}
+        title={isEditModal ? 'Edit' : 'Create'}
         titleModifiers={[selectedTab.label]}
         size={'FS3'}
       />
