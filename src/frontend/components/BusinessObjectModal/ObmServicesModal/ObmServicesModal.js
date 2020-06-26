@@ -1,6 +1,10 @@
 import React from 'react'
 
-import { CREATE_OBM_SERVICE, UPDATE_OBM_SERVICE } from 'frontend/api/mutations'
+import {
+  CREATE_OBM_SERVICE,
+  UPDATE_OBM_SERVICE,
+  DELETE_OBM_SERVICE,
+} from 'frontend/api/mutations'
 
 import {
   GET_OBM_SERVICES,
@@ -35,6 +39,7 @@ const ObmServicesModal = ({
     mutationDocs={{
       create: CREATE_OBM_SERVICE,
       update: UPDATE_OBM_SERVICE,
+      delete: DELETE_OBM_SERVICE,
     }}
     refetchQueries={[
       ...refetchQueries,
