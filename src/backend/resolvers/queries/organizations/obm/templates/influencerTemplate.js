@@ -23,12 +23,11 @@ const INFLUENCER_TEMPLATE_AGG = [
   {
     $unwind: {
       path: '$obmInfluencers',
-      preserveNullAndEmptyArrays: true,
     },
   },
   {
     $project: {
-      _id: 0,
+      _id: '$obmInfluencers._id',
       obmId: '$_id',
       obmOrganization: '$organization',
       influencerId: '$obmInfluencers.personId',

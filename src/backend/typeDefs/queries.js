@@ -255,11 +255,12 @@ const queries = gql`
   }
 
   type InfluencerTemplateObms {
-    obmId: ID!
+    _id: ID!
+    obmId: String!
     obmOrganization: String!
     influencerPosition: String
-    influencerId: ID
-    influencerName: String
+    influencerId: String!
+    influencerName: String!
     influencerNpiNumber: Float
   }
 

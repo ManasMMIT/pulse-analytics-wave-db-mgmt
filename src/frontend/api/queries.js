@@ -882,6 +882,7 @@ export const GET_OBM_PAYER_PARTNERSHIPS = gql`
 export const GET_INFLUENCER_TEMPLATE_OBMS = gql`
   query getInfluencerTemplateObms {
     influencerTemplateObms {
+      _id
       obmId
       obmOrganization
       influencerPosition
