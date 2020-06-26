@@ -848,7 +848,7 @@ export const GET_OBM_AND_PAYER_CONNECTIONS = gql`
 export const GET_SERVICE_TEMPLATE_OBMS = gql`
   query getServiceTemplateObms {
     serviceTemplateObms {
-      obmServiceJoinId
+      _id
       obmId
       serviceId
       serviceCategoryId

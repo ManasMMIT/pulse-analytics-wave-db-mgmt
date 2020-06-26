@@ -264,14 +264,14 @@ const queries = gql`
   }
 
   type ServiceTemplateObms {
-    obmServiceJoinId: ID # returning obms without connections, with no join table id
-    obmId: ID!
-    serviceId: ID
-    serviceCategoryId: ID
+    _id: ID!
+    obmId: String!
+    serviceId: String!
+    serviceCategoryId: String!
     organization: String!
-    serviceCategory: String
-    service: String
-    serviceRating: Int
+    serviceCategory: String!
+    service: String!
+    serviceRating: Int!
   }
 
   type ObmPayerPartnership {

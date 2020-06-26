@@ -23,12 +23,11 @@ const SERVICE_TEMPLATE_AGG = [
   {
     $unwind: {
       path: '$obmServices',
-      preserveNullAndEmptyArrays: true,
     },
   },
   {
     $project: {
-      _id: 0,
+      _id: '$obmServices._id',
       obmId: '$_id',
       organization: '$organization',
       obmServiceId: '$obmServices.obmServiceId',

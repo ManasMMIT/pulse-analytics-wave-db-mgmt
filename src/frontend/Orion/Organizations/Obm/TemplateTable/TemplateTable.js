@@ -74,7 +74,7 @@ const Cells = ({ row, modalColMap }) => {
       return (
         <StyledTd {...cell.getCellProps()}>
           <Modal
-            key={_.uniqueId()}
+            key={cell.row.original._id}
             buttonStyle={buttonStyle}
             entityId={datumId}
           >
