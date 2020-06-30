@@ -24,6 +24,7 @@ const PeopleModal = ({
     entityId={entityId}
     boId={PEOPLE_BOID}
     headerText={HEADER_TEXT}
+    getEntityTitle={(entity) => `${entity.firstName} ${entity.lastName}`}
     mutationDocs={{
       create: CREATE_PERSON,
       update: UPDATE_PERSON,

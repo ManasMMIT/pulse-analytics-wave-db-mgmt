@@ -22,6 +22,7 @@ const PathwaysModal = ({
     entityId={entityId}
     boId={PATHWAYS_BOID}
     headerText={HEADER_TEXT}
+    getEntityTitle={(entity) => entity.organization}
     mutationDocs={{
       create: CREATE_PATHWAYS_ORGANIZATION,
       update: UPDATE_PATHWAYS_ORGANIZATION,
