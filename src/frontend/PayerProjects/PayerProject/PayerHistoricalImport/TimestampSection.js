@@ -95,9 +95,9 @@ const TimestampSection = ({ projectId }) => {
           paddingLeft: Spacing.S4,
         }}
       >
-        <TimestampPanel timestamps={_.uniq(importTimestampsLong)} />
-        <TimestampCalendar timestamps={_.uniq(importTimestampsShort)} />
-        <TimestampPanel timestamps={_.uniq(ptpTimestampsLong)} />
+        <TimestampPanel timestamps={importTimestampsLong} />
+        <TimestampCalendar timestamps={importTimestampsShort} />
+        <TimestampPanel timestamps={ptpTimestampsLong} />
       </UnderlinedTabs>
     </SectionWrapper>
   )

@@ -24,6 +24,7 @@ import Title from 'frontend/components/Title'
 import Spacing from 'frontend/utils/spacing'
 import Color from 'frontend/utils/color'
 import alertStatuses from 'frontend/utils/alertStatuses'
+import { formatDateMonthYearDash } from 'frontend/utils/formatDate'
 
 import './importSection.css'
 
@@ -225,7 +226,8 @@ const ImportSection = ({
   }
 
   const handleDateSelection = (date) => {
-    setTimestamp(date)
+    const formattedDate = formatDateMonthYearDash(date)
+    setTimestamp(formattedDate)
   }
 
   const handleSubmit = () => {
