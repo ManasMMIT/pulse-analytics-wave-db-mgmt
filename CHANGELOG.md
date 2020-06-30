@@ -14,6 +14,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased] - Started: 6-30-20
 
+## [2.10.2] - Started: 6-30-20
+
+### Changed
+- `API Logging`: Blank out any workbook data for API logging so huge amounts of raw data aren't persisted and then read back to polling requests from frontend
+
 ## [2.10.1] - Started: 6-26-20
 
 ### Added

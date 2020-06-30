@@ -23,35 +23,45 @@ var checkJwt = jwt({
     cache: true,
     rateLimit: true,
     jwksRequestsPerMinute: 5,
-    jwksUri: 'https://pulse-polaris.auth0.com/.well-known/jwks.json'
+    jwksUri: 'https://pulse-polaris.auth0.com/.well-known/jwks.json',
   }),
   // ! not sure what audience line is needed for;
   // ! initializing auth0 client on frontend with audience gets tokens that expire as expected without this line in the backend
   audience: 'https://polaris-api.com/',
   issuer: 'https://pulse-polaris.auth0.com/',
-  algorithms: ['RS256']
+  algorithms: ['RS256'],
 })
 
-const accessLogStream = fs.createWriteStream(
-  path.join(__dirname, 'api.log'),
-  { flags: 'a' },
-)
+const accessLogStream = fs.createWriteStream(path.join(__dirname, 'api.log'), { flags: 'a' })
 
 // Custom morgan token inspired by https://github.com/expressjs/morgan/issues/116
-morgan.token('graphql-query', req => {
+morgan.token('graphql-query', (req) => {
   const user = req.user['https://random-url-for-extra-user-info']
   const { user_id, username } = user
   const { operationName, variables } = req.body
 
   const copyOfVariables = _.cloneDeep(variables)
 
-  // ! Don't persist passwords in nested input
-  if (
-    copyOfVariables.input
-    && copyOfVariables.input.password
-  ) copyOfVariables.input.password = true
+  if (copyOfVariables.input) {
+    // ! Don't persist passwords in nested input
+    if (copyOfVariables.input.password) copyOfVariables.input.password = true
 
-  return `username: ${username} / userId: ${user_id} / operationName: ${operationName} / operationVariables: ${JSON.stringify(copyOfVariables)}`
+    // ! Don't persist huge amounts of workbook data in the oplog,
+    // ! also results in VERY heavy reads
+    if (
+      Array.isArray(copyOfVariables.input) &&
+      !_.isEmpty(copyOfVariables.input[0]) &&
+      copyOfVariables.input[0].wb
+    ) {
+      copyOfVariables.input.forEach((workbookObj) => {
+        workbookObj.data = []
+      })
+    }
+  }
+
+  return `username: ${username} / userId: ${user_id} / operationName: ${operationName} / operationVariables: ${JSON.stringify(
+    copyOfVariables
+  )}`
 })
 
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }))
@@ -67,26 +77,23 @@ app.use(
       next()
     }
   },
-  morgan(
-    '[:date[iso]] :graphql-query\n',
-    {
-      // skip any query that doesn't have a body, body.query, or whose body.query isn't a mutation
-      skip: req => {
-        if (!req.body) return true
-        if (!req.body.query) return true
-        if (!req.body.query.match(/mutation/)) return true
-      },
-      stream: accessLogStream,
-    }
-  ),
+  morgan('[:date[iso]] :graphql-query\n', {
+    // skip any query that doesn't have a body, body.query, or whose body.query isn't a mutation
+    skip: (req) => {
+      if (!req.body) return true
+      if (!req.body.query) return true
+      if (!req.body.query.match(/mutation/)) return true
+    },
+    stream: accessLogStream,
+  }),
   routes
 )
 
 if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(path.join(process.cwd(), 'build')));
+  app.use(express.static(path.join(process.cwd(), 'build')))
 
   app.get('/*', (req, res) => {
-    res.sendFile(path.join(process.cwd(), 'build', 'index.html'));
+    res.sendFile(path.join(process.cwd(), 'build', 'index.html'))
   })
 }
 
