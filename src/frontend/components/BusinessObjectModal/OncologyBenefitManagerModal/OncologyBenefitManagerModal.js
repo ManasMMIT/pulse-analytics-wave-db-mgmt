@@ -49,6 +49,7 @@ const OncologyBenefitManagerModal = ({
     entityId={entityId}
     boId={OBM_BOID}
     headerText={HEADER_TEXT}
+    getEntityTitle={(entity) => entity.organization}
     mutationDocs={{
       create: CREATE_OBM_ORGANIZATION,
       update: UPDATE_OBM_ORGANIZATION,

@@ -41,6 +41,7 @@ const BusinessObjectModal = ({
   boId,
   closeModal,
   headerText,
+  getEntityTitle,
   mutationDocs,
   refetchQueries,
   afterMutationHook,
@@ -106,7 +107,7 @@ const BusinessObjectModal = ({
   if (loading || _.isEmpty(schema)) return null
 
   const modalTitle = `${isEditModal ? 'Edit' : 'Create'} ${headerText}`
-  const modalTitleModifier = [entity.organization]
+  const titleModifiers = [getEntityTitle(entity)]
 
   // Can't allow relationalizing data on create yet; needs to be planned out more
   const allTags = isEditModal ? schema.tags.concat(widgets) : schema.tags
@@ -118,7 +119,7 @@ const BusinessObjectModal = ({
   return (
     <Dialog>
       <Header>
-        <Title title={modalTitle} titleModifiers={modalTitleModifier} />
+        <Title title={modalTitle} titleModifiers={titleModifiers} />
         <div style={{ margin: Spacing.S4 }}>
           <Button
             buttonStyle={{ margin: Spacing.S4 }}
@@ -127,7 +128,7 @@ const BusinessObjectModal = ({
           >
             Cancel + Close
           </Button>
-          {mutationDocs.delete && (
+          {isEditModal && mutationDocs.delete && (
             <Button
               buttonStyle={{ margin: Spacing.S4 }}
               color={Colors.RED}
@@ -190,6 +191,7 @@ BusinessObjectModal.propTypes = {
   boId: PropTypes.string.isRequired,
   closeModal: PropTypes.func,
   headerText: PropTypes.string,
+  getEntityTitle: PropTypes.func,
   mutationDocs: PropTypes.object,
   refetchQueries: PropTypes.array,
   afterMutationHook: PropTypes.func,
@@ -199,6 +201,7 @@ BusinessObjectModal.propTypes = {
 BusinessObjectModal.defaultProps = {
   closeModal: () => null,
   headerText: '',
+  getEntityTitle: (entity) => (entity ? entity.name : ''),
   mutationDocs: {},
   refetchQueries: [],
   afterMutationHook: () => {},

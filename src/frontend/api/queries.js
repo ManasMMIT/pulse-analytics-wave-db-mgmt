@@ -4,7 +4,8 @@ export const GET_PEOPLE = gql`
   query getPeople {
     people {
       _id
-      name
+      firstName
+      lastName
       nationalProviderIdentifier
     }
   }
@@ -887,7 +888,8 @@ export const GET_INFLUENCER_TEMPLATE_OBMS = gql`
       obmOrganization
       influencerPosition
       influencerId
-      influencerName
+      influencerFirstName
+      influencerLastName
       influencerNpiNumber
     }
   }

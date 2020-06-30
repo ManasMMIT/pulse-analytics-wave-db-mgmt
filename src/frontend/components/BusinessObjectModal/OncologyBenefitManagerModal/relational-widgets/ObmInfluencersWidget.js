@@ -60,10 +60,12 @@ const ObmInfluencersWidget = ({ entity }) => {
 
   if (peopleLoading || connectionsLoading) return 'Loading...'
 
-  const peopleDropdownOptions = peopleData.people.map(({ _id, name }) => ({
-    value: _id,
-    label: name,
-  }))
+  const peopleDropdownOptions = peopleData.people.map(
+    ({ _id, firstName, lastName }) => ({
+      value: _id,
+      label: `${firstName} ${lastName}`,
+    })
+  )
 
   const clonedStagedConnections = _.cloneDeep(stagedConnections)
 

@@ -1,0 +1,41 @@
+# This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
+
+name: Polaris CI
+
+on:
+  push:
+    branches: [ develop ]
+  pull_request:
+    branches: [ develop ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [10.15.3]
+
+    steps:
+    - name: Setup timezone # Set timezone so tests containing date packages will pass
+      uses: zcong1993/setup-timezone@master
+      with:
+        timezone: America/New_York
+    - uses: actions/checkout@v2
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - uses: actions/cache@v2 # cache node modules
+      with:
+        path: '**/node_modules'
+        key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+    - name: Install project dependencies
+      run: yarn
+    - name: Run tests
+      env:
+        DB_CLUSTER_ENV: ${{ secrets.DB_CLUSTER_ENV }}
+        MONGO_KEY: ${{ secrets.MONGO_KEY }}
+      run: yarn test

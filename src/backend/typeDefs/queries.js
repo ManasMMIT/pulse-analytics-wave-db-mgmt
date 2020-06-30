@@ -82,7 +82,8 @@ const queries = gql`
 
   type Person {
     _id: ID!
-    name: String
+    firstName: String
+    lastName: String
     nationalProviderIdentifier: Float
   }
 
@@ -260,7 +261,8 @@ const queries = gql`
     obmOrganization: String!
     influencerPosition: String
     influencerId: String!
-    influencerName: String!
+    influencerFirstName: String!
+    influencerLastName: String!
     influencerNpiNumber: Float
   }
 
