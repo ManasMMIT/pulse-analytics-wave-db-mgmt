@@ -98,7 +98,7 @@
     "semi": false,
     "singleQuote": true,
     "trailingComma": "es5",
-    "pritnWidth": 100
+    "printWidth": 100
   },
   "browserslist": {
     "production": [
