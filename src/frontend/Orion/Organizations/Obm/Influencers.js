@@ -31,7 +31,11 @@ const MODAL_TO_COL_MAP = {
     Modal: ObmModalButton,
     idKey: 'obmId',
   },
-  influencerName: {
+  influencerFirstName: {
+    Modal: PeopleModalButton,
+    idKey: 'influencerId',
+  },
+  influencerLastName: {
     Modal: PeopleModalButton,
     idKey: 'influencerId',
   },
@@ -54,8 +58,15 @@ const COLUMNS = [
     sortType: 'text',
   },
   {
-    Header: 'Influencer Name',
-    accessor: 'influencerName',
+    Header: 'Influencer First Name',
+    accessor: 'influencerFirstName',
+    Filter: MultiSelectColumnFilter,
+    filter: customMultiSelectFilterFn,
+    sortType: 'text',
+  },
+  {
+    Header: 'Influencer Last Name',
+    accessor: 'influencerLastName',
     Filter: MultiSelectColumnFilter,
     filter: customMultiSelectFilterFn,
     sortType: 'text',

@@ -7,7 +7,8 @@ const deletePersonTypeDefs = gql`
 
   type DeletePersonPayload {
     _id: ID
-    name: String
+    firstName: String
+    lastName: String
     nationalProviderIdentifier: Float
   }
 `
