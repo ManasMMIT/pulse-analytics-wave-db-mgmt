@@ -8,4 +8,4 @@ export const formatDateTimeDotted = (str) => format(new Date(str), 'M.d.yy_h.mm.
 
 export const formatDateMonthYearLong = (str) => format(new Date(str), 'MMMM do, yyyy')
 
-export const formatDateMonthYearDash = (str) => format(new Date(str), 'M-d-yy')
+export const formatDateMonthYearDash = (str) => format(new Date(str), 'yyyy-MM-dd')
