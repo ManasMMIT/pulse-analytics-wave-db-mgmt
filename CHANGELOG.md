@@ -14,6 +14,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased] - Started: 6-26-20
 
+### Added
+- Adds `continuous-integration.yml` file for github actions
+
 ## [2.10.0] - Started: 6-18-20
 
 ### Added

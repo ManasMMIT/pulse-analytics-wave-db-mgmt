@@ -10,7 +10,7 @@ const {
 } = require('./mocks/output/managerDaoMocks')
 
 const qualityAccessMocks = require('./mocks/output/qualityOfAccessManagerMocks')
-const additionalCriteriaMocks = require('./mocks/output/AdditionalCriteriaManagerMocks')
+const additionalCriteriaMocks = require('./mocks/output/additionalCriteriaManagerMocks')
 const policyLinksMocks = require('./mocks/output/policyLinkManagerMocks')
 const connectToMongoDb = require('../../../../../../../../../connect-to-mongodb')
 
