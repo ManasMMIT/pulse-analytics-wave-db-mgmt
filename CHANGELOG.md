@@ -12,10 +12,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Fixed** for any bug fixes.
 - **Security** in case of vulnerabilities.
 
-## [Unreleased] - Started: 6-26-20
+## [Unreleased] - Started: 6-30-20
+
+## [2.10.1] - Started: 6-26-20
 
 ### Added
 - Adds `continuous-integration.yml` file for github actions
+
+### Fixed
+- `Payer Projects`: historical import will now only pass month, year, day _and not_ local hour, minute, seconds to backend
 
 ## [2.10.0] - Started: 6-18-20
 
