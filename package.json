@@ -97,7 +97,8 @@
   "prettier": {
     "semi": false,
     "singleQuote": true,
-    "trailingComma": "es5"
+    "trailingComma": "es5",
+    "pritnWidth": 100
   },
   "browserslist": {
     "production": [
