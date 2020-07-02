@@ -3,27 +3,24 @@ import { useQuery } from '@apollo/react-hooks'
 
 import { GET_OBM_PAYER_PARTNERSHIPS } from 'frontend/api/queries'
 
-import PanelHeader from '../../../components/Panel/PanelHeader'
-import ObmModalButton from '../../../components/BusinessObjectModal/OncologyBenefitManagerModal/OncologyBenefitManagerModalButton'
+import PanelHeader from 'frontend/components/Panel/PanelHeader'
+import ObmModal from 'frontend/components/BusinessObjectModal/OncologyBenefitManagerModal'
 
 import TemplateTable from './TemplateTable'
-import MultiSelectColumnFilter from './TemplateTable/MultiSelectColumnFilter'
-import NumberRangeColumnFilter from './TemplateTable/NumberRangeColumnFilter'
-
-import customMultiSelectFilterFn from './TemplateTable/custom-filters/customMultiSelectFilterFn'
+import MultiSelectColumnFilter from './TemplateTable/custom-filters/MultiSelect/MultiSelectColumnFilter'
+import customMultiSelectFilterFn from './TemplateTable/custom-filters/MultiSelect/customMultiSelectFilterFn'
+import NumberRangeColumnFilter from './TemplateTable/custom-filters/NumberRangeColumnFilter'
 
 const percentageFormatter = (value, decimals = 0) =>
   // #toFixed may result in imperfect rounding,
   // example: 859.385 doesn't round correctly for two decimal places
-  [undefined, null].includes(value)
-    ? null
-    : `${(value * 100).toFixed(decimals)}%`
+  [undefined, null].includes(value) ? null : `${(value * 100).toFixed(decimals)}%`
 
 const PAGE_TITLE = 'Oncology Benefit Manager Payer Partnerships'
 
 const MODAL_TO_COL_MAP = {
   obmOrganization: {
-    Modal: ObmModalButton,
+    Modal: ObmModal,
     idKey: 'obmId',
   },
 }
@@ -35,6 +32,7 @@ const COLUMNS = [
     Filter: MultiSelectColumnFilter,
     filter: customMultiSelectFilterFn,
     sortType: 'text',
+    sticky: 'left',
   },
   {
     Header: 'Payer Participant',
@@ -42,6 +40,7 @@ const COLUMNS = [
     Filter: MultiSelectColumnFilter,
     filter: customMultiSelectFilterFn,
     sortType: 'text',
+    sticky: 'left',
   },
   {
     Header: 'Payer Slug',
@@ -105,9 +104,10 @@ const PayerPartnerships = () => {
       style={{
         display: 'flex',
         flexDirection: 'column',
+        width: 'calc(100vw - 318px)',
       }}
     >
-      <PanelHeader title={PAGE_TITLE} />
+      <PanelHeader title={PAGE_TITLE} headerContainerStyle={{ flex: '0 0 auto' }} />
 
       <TemplateTable
         data={payerPartnershipsData}

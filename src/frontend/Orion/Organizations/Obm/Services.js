@@ -4,15 +4,16 @@ import { useQuery } from '@apollo/react-hooks'
 import { GET_SERVICE_TEMPLATE_OBMS } from 'frontend/api/queries'
 
 import PanelHeader from '../../../components/Panel/PanelHeader'
-import ObmModalButton from '../../../components/BusinessObjectModal/OncologyBenefitManagerModal/OncologyBenefitManagerModalButton'
+import ObmModal from '../../../components/BusinessObjectModal/OncologyBenefitManagerModal'
+import ObmServicesModal from '../../../components/BusinessObjectModal/ObmServicesModal'
+import ObmServicesCategoriesModal from '../../../components/BusinessObjectModal/ObmServicesCategoriesModal'
 import ObmServicesModalButton from '../../../components/BusinessObjectModal/ObmServicesModal/ObmServicesModalButton'
 import ObmServicesCategoriesModalButton from '../../../components/BusinessObjectModal/ObmServicesCategoriesModal/ObmServicesCategoriesModalButton'
 
 import TemplateTable from './TemplateTable'
-import MultiSelectColumnFilter from './TemplateTable/MultiSelectColumnFilter'
-import NumberRangeColumnFilter from './TemplateTable/NumberRangeColumnFilter'
-
-import customMultiSelectFilterFn from './TemplateTable/custom-filters/customMultiSelectFilterFn'
+import MultiSelectColumnFilter from './TemplateTable/custom-filters/MultiSelect/MultiSelectColumnFilter'
+import customMultiSelectFilterFn from './TemplateTable/custom-filters/MultiSelect/customMultiSelectFilterFn'
+import NumberRangeColumnFilter from './TemplateTable/custom-filters/NumberRangeColumnFilter'
 
 import Color from './../../../utils/color'
 
@@ -30,19 +31,19 @@ const PAGE_TITLE = 'Oncology Benefit Manager Services'
 
 const MODAL_TO_COL_MAP = {
   organization: {
-    Modal: ObmModalButton,
+    Modal: ObmModal,
     idKey: 'obmId',
   },
   serviceCategory: {
-    Modal: ObmServicesCategoriesModalButton,
+    Modal: ObmServicesCategoriesModal,
     idKey: 'serviceCategoryId',
   },
   service: {
-    Modal: ObmServicesModalButton,
+    Modal: ObmServicesModal,
     idKey: 'serviceId',
   },
   serviceRating: {
-    Modal: ObmModalButton,
+    Modal: ObmModal,
     idKey: 'obmId',
   },
 }
@@ -88,6 +89,7 @@ const Services = () => {
       style={{
         display: 'flex',
         flexDirection: 'column',
+        width: 'calc(100vw - 318px)',
       }}
     >
       <PanelHeader title={PAGE_TITLE}>
@@ -98,11 +100,7 @@ const Services = () => {
           Create Service Category
         </ObmServicesCategoriesModalButton>
       </PanelHeader>
-      <TemplateTable
-        data={serviceTemplateData}
-        columns={COLUMNS}
-        modalColMap={MODAL_TO_COL_MAP}
-      />
+      <TemplateTable data={serviceTemplateData} columns={COLUMNS} modalColMap={MODAL_TO_COL_MAP} />
     </div>
   )
 }
