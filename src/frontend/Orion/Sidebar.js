@@ -297,6 +297,13 @@ const Sidebar = () => {
       </div>
       <div>
         <Header>Configuration</Header>
+        <StyledNavLink
+          style={dropdownInactiveLinkStyle}
+          activeStyle={dropdownActiveLinkStyle}
+          to={'/orion/configuration/people'}
+        >
+          People
+        </StyledNavLink>
         <StyledDropdown
           style={inactiveLinkStyle}
           label={'Products + Indications'}

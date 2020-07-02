@@ -10,6 +10,8 @@ const updatePersonTypeDefs = gql`
 
   type UpdatePersonPayload {
     _id: ID!
+    createdOn: DateTime
+    updatedOn: DateTime
     firstName: String
     lastName: String
     nationalProviderIdentifier: Int

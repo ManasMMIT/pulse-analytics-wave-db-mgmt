@@ -9,7 +9,9 @@ const createPersonTypeDefs = gql`
   }
 
   type CreatePersonPayload {
-    _id: ID
+    _id: ID!
+    createdOn: DateTime
+    updatedOn: DateTime
     firstName: String
     lastName: String
     nationalProviderIdentifier: Int
