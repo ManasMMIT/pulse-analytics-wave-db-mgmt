@@ -7,7 +7,7 @@ export const customSelectStyles = {
     ...provided,
     zIndex: 3,
   }),
-  control: (provided,) => ({
+  control: (provided) => ({
     ...provided,
     borderRadius: 4,
     border: `1px solid ${transparentize(0.9, Colors.BLACK)}`,
@@ -18,7 +18,7 @@ export const customSelectStyles = {
     borderRadius: 4,
     lineHeight: '12px',
     display: 'flex',
-    marginRight: Spacing.SMALL
+    marginRight: Spacing.SMALL,
   }),
   multiValueLabel: (provided) => ({
     ...provided,
@@ -47,5 +47,6 @@ export const customSelectStyles = {
   singleValue: (provided) => ({
     ...provided,
     fontSize: 12,
+    color: Colors.BLACK,
   }),
 }

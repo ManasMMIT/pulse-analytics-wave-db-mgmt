@@ -13,6 +13,7 @@ const SectionsWrapper = styled.div({
   padding: Spacing.S4,
   display: 'flex',
   flexWrap: 'wrap',
+  overflowY: 'auto',
 })
 
 const sectionStyle = {
@@ -29,12 +30,7 @@ const fieldStyle = {
   padding: '12px 0',
 }
 
-const BomSections = ({
-  isEditModal,
-  selectedTab,
-  inputFields,
-  setInputField,
-}) => {
+const BomSections = ({ isEditModal, selectedTab, inputFields, setInputField }) => {
   if (!selectedTab.sections) return null
   const { sections } = selectedTab
 
@@ -55,8 +51,7 @@ const BomSections = ({
   const hydrateSections = sections.map((section) => {
     const fieldsWithProps = section.fields.map((field) => {
       const { inputComponent, key, inputProps } = field
-      const onChange =
-        inputComponent !== 'Select' ? onEventChange : onSelectChange
+      const onChange = inputComponent !== 'Select' ? onEventChange : onSelectChange
 
       let value = inputFields[key]
       let clonedInputProps = _.cloneDeep(inputProps)

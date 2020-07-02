@@ -4,6 +4,9 @@ import _ from 'lodash'
 import Select from 'react-select'
 import { useQuery, useMutation } from '@apollo/react-hooks'
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faTrashAlt } from '@fortawesome/free-solid-svg-icons'
+
 import {
   GET_PEOPLE,
   GET_OBM_AND_PERSON_CONNECTIONS,
@@ -11,6 +14,23 @@ import {
 } from '../../../../api/queries'
 
 import { CONNECT_OBM_AND_PERSON } from '../../../../api/mutations'
+
+import { customSelectStyles } from '../../../../components/customSelectStyles'
+import Button from '../../../../components/Button'
+import Color from '../../../../utils/color'
+
+import {
+  RelationalRow,
+  InputContainer,
+  InputLabel,
+  RowInput,
+  FixedControlRow,
+  SaveWarningBox,
+  SaveContainer,
+  WidgetPanelHeader,
+  WidgetPanelTitle,
+  DeleteButton,
+} from './styledComponents'
 
 const ObmInfluencersWidget = ({ entity }) => {
   const { data: peopleData, loading: peopleLoading } = useQuery(GET_PEOPLE)
@@ -68,47 +88,38 @@ const ObmInfluencersWidget = ({ entity }) => {
   const clonedStagedConnections = _.cloneDeep(stagedConnections)
 
   return (
-    <div style={{ padding: 24, width: '100%', height: '100%' }}>
+    <div style={{ width: '100%', height: '100%', overflowY: 'auto' }}>
+      <WidgetPanelHeader>
+        <WidgetPanelTitle>OBM Influencers</WidgetPanelTitle>
+      </WidgetPanelHeader>
       {stagedConnections.map((connection, idx) => {
         const { _id, personId, position } = connection
 
         return (
-          <div
-            key={_id}
-            style={{
-              display: 'flex',
-              border: '1px solid black',
-              padding: 12,
-              alignItems: 'center',
-            }}
-          >
-            <div style={{ display: 'flex', width: 400, alignItems: 'center' }}>
-              <label style={{ marginRight: 12 }}>OBM Influencer:</label>
-              <Select
-                styles={{ container: (base) => ({ ...base, flex: 1 }) }}
-                options={peopleDropdownOptions}
-                value={peopleDropdownOptions.find(({ value }) => value === personId)}
-                onChange={({ value }) => {
-                  const newDoc = _.merge(clonedStagedConnections[idx], {
-                    personId: value,
-                  })
-                  clonedStagedConnections.splice(idx, 1, newDoc)
-                  stageConnections(clonedStagedConnections)
-                }}
-              />
-            </div>
+          <RelationalRow key={_id}>
+            <InputContainer>
+              <InputLabel>OBM Influencer:</InputLabel>
+              <div style={{ width: 300 }}>
+                <Select
+                  styles={customSelectStyles}
+                  options={peopleDropdownOptions}
+                  value={peopleDropdownOptions.find(({ value }) => value === personId)}
+                  onChange={({ value }) => {
+                    const newDoc = _.merge(clonedStagedConnections[idx], {
+                      personId: value,
+                    })
+                    clonedStagedConnections.splice(idx, 1, newDoc)
+                    stageConnections(clonedStagedConnections)
+                  }}
+                />
+              </div>
+            </InputContainer>
 
             <div style={{ display: 'flex', alignItems: 'center', marginLeft: 12 }}>
-              <label style={{ marginRight: 12 }}>Position:</label>
+              <InputLabel>Position:</InputLabel>
 
-              <input
+              <RowInput
                 value={position}
-                style={{
-                  marginLeft: 12,
-                  border: '1px solid black',
-                  padding: 6,
-                  width: 300,
-                }}
                 onChange={(e) => {
                   const newDoc = _.merge(clonedStagedConnections[idx], {
                     position: e.currentTarget.value,
@@ -120,61 +131,46 @@ const ObmInfluencersWidget = ({ entity }) => {
             </div>
 
             <div style={{ marginLeft: 'auto' }}>
-              <button
-                style={{
-                  marginLeft: 12,
-                  border: '1px solid black',
-                  cursor: 'pointer',
-                  padding: 4,
-                }}
+              <DeleteButton
                 onClick={() => {
                   clonedStagedConnections.splice(idx, 1)
                   stageConnections(clonedStagedConnections)
                 }}
               >
-                X
-              </button>
+                <FontAwesomeIcon size="lg" icon={faTrashAlt} />
+              </DeleteButton>
             </div>
-          </div>
+          </RelationalRow>
         )
       })}
 
-      <div>
-        <button
-          style={{
-            border: '1px solid black',
-            cursor: 'pointer',
-            padding: 8,
-            marginTop: 12,
-          }}
-          onClick={() => {
-            const newConnection = {
-              _id: ObjectId(),
-              personId: null,
-              position: null,
-              obmId: entity._id,
-            }
-            clonedStagedConnections.push(newConnection)
-            stageConnections(clonedStagedConnections)
-          }}
-        >
-          +
-        </button>
-      </div>
+      <FixedControlRow>
+        <div>
+          <Button
+            onClick={() => {
+              const newConnection = {
+                _id: ObjectId(),
+                personId: null,
+                position: null,
+                obmId: entity._id,
+              }
+              clonedStagedConnections.push(newConnection)
+              stageConnections(clonedStagedConnections)
+            }}
+          >
+            + Add Influencer
+          </Button>
+        </div>
 
-      <div>
-        <button
-          style={{
-            border: '1px solid black',
-            cursor: 'pointer',
-            padding: 4,
-            marginTop: 12,
-          }}
-          onClick={save}
-        >
-          Save
-        </button>
-      </div>
+        <SaveContainer>
+          <SaveWarningBox>
+            IMPORTANT: You must click this save button to persist influencer changes.
+          </SaveWarningBox>
+          <Button onClick={save} color={Color.GREEN}>
+            Save Influencer Changes
+          </Button>
+        </SaveContainer>
+      </FixedControlRow>
     </div>
   )
 }
