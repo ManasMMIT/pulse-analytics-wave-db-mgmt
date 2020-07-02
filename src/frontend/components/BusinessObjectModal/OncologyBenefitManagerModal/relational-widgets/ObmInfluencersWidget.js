@@ -60,12 +60,10 @@ const ObmInfluencersWidget = ({ entity }) => {
 
   if (peopleLoading || connectionsLoading) return 'Loading...'
 
-  const peopleDropdownOptions = peopleData.people.map(
-    ({ _id, firstName, lastName }) => ({
-      value: _id,
-      label: `${firstName} ${lastName}`,
-    })
-  )
+  const peopleDropdownOptions = peopleData.people.map(({ _id, firstName, lastName }) => ({
+    value: _id,
+    label: `${firstName} ${lastName}`,
+  }))
 
   const clonedStagedConnections = _.cloneDeep(stagedConnections)
 
@@ -89,9 +87,7 @@ const ObmInfluencersWidget = ({ entity }) => {
               <Select
                 styles={{ container: (base) => ({ ...base, flex: 1 }) }}
                 options={peopleDropdownOptions}
-                value={peopleDropdownOptions.find(
-                  ({ value }) => value === personId
-                )}
+                value={peopleDropdownOptions.find(({ value }) => value === personId)}
                 onChange={({ value }) => {
                   const newDoc = _.merge(clonedStagedConnections[idx], {
                     personId: value,
@@ -102,9 +98,7 @@ const ObmInfluencersWidget = ({ entity }) => {
               />
             </div>
 
-            <div
-              style={{ display: 'flex', alignItems: 'center', marginLeft: 12 }}
-            >
+            <div style={{ display: 'flex', alignItems: 'center', marginLeft: 12 }}>
               <label style={{ marginRight: 12 }}>Position:</label>
 
               <input

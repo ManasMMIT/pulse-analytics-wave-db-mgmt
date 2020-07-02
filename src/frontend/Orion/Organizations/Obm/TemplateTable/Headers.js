@@ -2,14 +2,9 @@ import React from 'react'
 
 const Header = ({ headerGroup }) => {
   return headerGroup.headers.map((column) => (
-    <div
-      {...column.getHeaderProps(column.getSortByToggleProps())}
-      className="th"
-    >
+    <div {...column.getHeaderProps(column.getSortByToggleProps())} className="th">
       {column.render('Header')}
-      <span>
-        {column.isSorted ? (column.isSortedDesc ? ' 🔽' : ' 🔼') : ''}
-      </span>
+      <span>{column.isSorted ? (column.isSortedDesc ? ' 🔽' : ' 🔼') : ''}</span>
       <div onClick={(e) => e.stopPropagation()}>
         {column.canFilter ? column.render('Filter') : null}
       </div>

@@ -1,12 +1,9 @@
 const ManagerDao = require('../ManagerDao')
-const {
-  mockOrgTpsHistory,
-  mockTestCollectionName,
-} = require('./mocks/input/managerDaoMocks')
+const { mockOrgTpsHistory, mockTestCollectionName } = require('./mocks/input/managerDaoMocks')
 const {
   mockUpsertQualityOfAccessData,
   mockUpsertAdditionalCriteriaData,
-  mockUpsertPolicyLinkData
+  mockUpsertPolicyLinkData,
 } = require('./mocks/output/managerDaoMocks')
 
 const qualityAccessMocks = require('./mocks/output/qualityOfAccessManagerMocks')
@@ -25,14 +22,12 @@ describe('ManagerDao', () => {
   })
 
   beforeEach(async () => {
-    await db.collection(mockTestCollectionName)
-      .insertMany(mockOrgTpsHistory)
+    await db.collection(mockTestCollectionName).insertMany(mockOrgTpsHistory)
     session = mongoConnection.startSession()
   })
 
   afterEach(async () => {
-    await db.collection(mockTestCollectionName)
-      .deleteMany()
+    await db.collection(mockTestCollectionName).deleteMany()
     session.endSession()
   })
 
@@ -47,9 +42,7 @@ describe('ManagerDao', () => {
       )
     })
 
-    const result = await db.collection(mockTestCollectionName)
-      .find()
-      .toArray()
+    const result = await db.collection(mockTestCollectionName).find().toArray()
 
     expect(result).toMatchObject(mockUpsertQualityOfAccessData)
   })
@@ -65,9 +58,7 @@ describe('ManagerDao', () => {
       )
     })
 
-    const result = await db.collection(mockTestCollectionName)
-      .find()
-      .toArray()
+    const result = await db.collection(mockTestCollectionName).find().toArray()
 
     expect(result).toMatchObject(mockUpsertAdditionalCriteriaData)
   })
@@ -82,9 +73,7 @@ describe('ManagerDao', () => {
       )
     })
 
-    const result = await db.collection(mockTestCollectionName)
-      .find()
-      .toArray()
+    const result = await db.collection(mockTestCollectionName).find().toArray()
 
     expect(result).toMatchObject(mockUpsertPolicyLinkData)
   })

@@ -55,13 +55,9 @@ const BusinessObjectModal = ({
   const [inputFields, setInputField] = useState({})
   const [showDeleteConfirmation, toggleDeleteConfirmation] = useState(false)
 
-  const saveMutationToUse = isEditModal
-    ? mutationDocs.update
-    : mutationDocs.create
+  const saveMutationToUse = isEditModal ? mutationDocs.update : mutationDocs.create
 
-  const inputToUse = isEditModal
-    ? { _id: entityId, ...inputFields }
-    : inputFields
+  const inputToUse = isEditModal ? { _id: entityId, ...inputFields } : inputFields
 
   console.log('Mutation Input: ', inputToUse)
   const [save] = useMutation(saveMutationToUse, {
@@ -137,11 +133,7 @@ const BusinessObjectModal = ({
               {showDeleteConfirmation ? 'Cancel Delete' : 'Delete'}
             </Button>
           )}
-          <Button
-            buttonStyle={{ margin: Spacing.S4 }}
-            color={Colors.GREEN}
-            onClick={save}
-          >
+          <Button buttonStyle={{ margin: Spacing.S4 }} color={Colors.GREEN} onClick={save}>
             Save + Close
           </Button>
         </div>
@@ -151,11 +143,7 @@ const BusinessObjectModal = ({
         <div style={{ padding: 24, margin: '0 auto' }}>
           <p>Are you sure you want to delete?</p>
           <p>Any connections to this business object will also be deleted.</p>
-          <Button
-            buttonStyle={{ margin: 24 }}
-            color={Colors.RED}
-            onClick={deleteHandler}
-          >
+          <Button buttonStyle={{ margin: 24 }} color={Colors.RED} onClick={deleteHandler}>
             Delete Forever
           </Button>
         </div>

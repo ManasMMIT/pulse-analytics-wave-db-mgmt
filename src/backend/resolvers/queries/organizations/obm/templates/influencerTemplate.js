@@ -1,8 +1,5 @@
 const influencerTemplateObms = async (parent, args, { pulseCoreDb }) =>
-  pulseCoreDb
-    .collection('organizations')
-    .aggregate(INFLUENCER_TEMPLATE_AGG)
-    .toArray()
+  pulseCoreDb.collection('organizations').aggregate(INFLUENCER_TEMPLATE_AGG).toArray()
 
 module.exports = influencerTemplateObms
 

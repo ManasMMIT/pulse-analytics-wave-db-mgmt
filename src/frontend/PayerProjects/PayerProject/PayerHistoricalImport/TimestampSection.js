@@ -9,16 +9,10 @@ import Spacing from 'frontend/utils/spacing'
 import FontSpace from 'frontend/utils/fontspace'
 import Color from 'frontend/utils/color'
 import { AlphaColors } from 'frontend/utils/pulseStyles'
-import {
-  formatDayMonthYearShort,
-  formatDateMonthYearLong,
-} from 'frontend/utils/formatDate'
+import { formatDayMonthYearShort, formatDateMonthYearLong } from 'frontend/utils/formatDate'
 import { UnderlinedTabs } from 'frontend/components/Tabs'
 
-import {
-  GET_SINGLE_PAYER_PROJECT,
-  GET_PAYER_PROJECT_IMPORT_TIMESTAMPS,
-} from 'frontend/api/queries'
+import { GET_SINGLE_PAYER_PROJECT, GET_PAYER_PROJECT_IMPORT_TIMESTAMPS } from 'frontend/api/queries'
 import TimestampCalendar from './TimestampCalendar'
 import TimestampPanel from './TimestampPanel'
 
@@ -57,15 +51,14 @@ const TimestampSection = ({ projectId }) => {
     }
   )
 
-  const {
-    data: ptpData,
-    loading: loadingPtpData,
-  } = useQuery(GET_SINGLE_PAYER_PROJECT, { variables: { projectId } })
+  const { data: ptpData, loading: loadingPtpData } = useQuery(GET_SINGLE_PAYER_PROJECT, {
+    variables: { projectId },
+  })
 
-  const [
-    importTimestampsLong,
-    importTimestampsShort,
-  ] = getShortAndLongTimestamps(loadingImportData, importTimestampData)
+  const [importTimestampsLong, importTimestampsShort] = getShortAndLongTimestamps(
+    loadingImportData,
+    importTimestampData
+  )
 
   const [ptpTimestampsLong] = getShortAndLongTimestamps(loadingPtpData, ptpData)
 
@@ -114,10 +107,8 @@ const getShortAndLongTimestamps = (loading, data) => {
   let payerProjectTimestampsLong = []
 
   if (!loading) {
-    const timestamps =
-      Object.values(data)[0] && Object.values(data)[0].timestamps
-    if (!timestamps)
-      return [payerProjectTimestampsLong, payerProjectTimestampsShort]
+    const timestamps = Object.values(data)[0] && Object.values(data)[0].timestamps
+    if (!timestamps) return [payerProjectTimestampsLong, payerProjectTimestampsShort]
 
     const sortedDates = timestamps.sort().reverse()
     payerProjectTimestampsShort = _.map(sortedDates, (timestamp) =>

@@ -1,9 +1,6 @@
 import React from 'react'
 
-import {
-  CREATE_OBM_ORGANIZATION,
-  UPDATE_OBM_ORGANIZATION,
-} from 'frontend/api/mutations'
+import { CREATE_OBM_ORGANIZATION, UPDATE_OBM_ORGANIZATION } from 'frontend/api/mutations'
 
 import {
   GET_OBM_ORGANIZATIONS,

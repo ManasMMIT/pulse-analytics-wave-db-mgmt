@@ -58,14 +58,14 @@ const COLUMNS = [
     sortType: 'text',
   },
   {
-    Header: 'Influencer First Name',
+    Header: 'First Name',
     accessor: 'influencerFirstName',
     Filter: MultiSelectColumnFilter,
     filter: customMultiSelectFilterFn,
     sortType: 'text',
   },
   {
-    Header: 'Influencer Last Name',
+    Header: 'Last Name',
     accessor: 'influencerLastName',
     Filter: MultiSelectColumnFilter,
     filter: customMultiSelectFilterFn,
@@ -102,7 +102,7 @@ const Influencers = () => {
       }}
     >
       <PanelHeader title={PAGE_TITLE}>
-        <PeopleModalButton buttonStyle={createButtonStyle}>Create Influencer</PeopleModalButton>
+        <PeopleModalButton buttonStyle={createButtonStyle}>Create Person</PeopleModalButton>
       </PanelHeader>
       <TemplateTable
         data={influencerTemplateData}

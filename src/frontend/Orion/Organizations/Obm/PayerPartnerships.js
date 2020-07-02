@@ -7,14 +7,19 @@ import PanelHeader from 'frontend/components/Panel/PanelHeader'
 import ObmModal from 'frontend/components/BusinessObjectModal/OncologyBenefitManagerModal'
 
 import TemplateTable from './TemplateTable'
+
 import MultiSelectColumnFilter from './TemplateTable/custom-filters/MultiSelect/MultiSelectColumnFilter'
 import customMultiSelectFilterFn from './TemplateTable/custom-filters/MultiSelect/customMultiSelectFilterFn'
 import NumberRangeColumnFilter from './TemplateTable/custom-filters/NumberRangeColumnFilter'
+import customBetweenPercentsFilterFn from './TemplateTable/custom-filters/customBetweenPercentsFilterFn'
 
 const percentageFormatter = (value, decimals = 0) =>
   // #toFixed may result in imperfect rounding,
   // example: 859.385 doesn't round correctly for two decimal places
   [undefined, null].includes(value) ? null : `${(value * 100).toFixed(decimals)}%`
+
+const numberFormatter = (value) =>
+  typeof value === 'number' && !isNaN(value) ? value.toLocaleString() : null
 
 const PAGE_TITLE = 'Oncology Benefit Manager Payer Partnerships'
 
@@ -52,6 +57,7 @@ const COLUMNS = [
   {
     Header: 'Commercial Medical Lives',
     accessor: 'commercialMedicalLives',
+    Cell: (props) => <div style={{ textAlign: 'right' }}>{numberFormatter(props.value)}</div>,
     Filter: NumberRangeColumnFilter,
     filter: 'between',
   },
@@ -59,13 +65,14 @@ const COLUMNS = [
     Header: 'Commercial Medical Lives Percent',
     accessor: 'commercialMedicalLivesPercent',
     Cell: (props) => percentageFormatter(props.value, 2),
-    sortType: 'basic',
-    // Filter: NumberRangeColumnFilter,
-    // filter: 'between',
+    sortType: 'float',
+    Filter: NumberRangeColumnFilter,
+    filter: customBetweenPercentsFilterFn,
   },
   {
     Header: 'Medicare Medical Lives',
     accessor: 'medicareMedicalLives',
+    Cell: (props) => <div style={{ textAlign: 'right' }}>{numberFormatter(props.value)}</div>,
     Filter: NumberRangeColumnFilter,
     filter: 'between',
   },
@@ -73,13 +80,14 @@ const COLUMNS = [
     Header: 'Medicare Medical Lives Percent',
     accessor: 'medicareMedicalLivesPercent',
     Cell: (props) => percentageFormatter(props.value, 2),
-    sortType: 'basic',
-    // Filter: NumberRangeColumnFilter,
-    // filter: 'between',
+    sortType: 'float',
+    Filter: NumberRangeColumnFilter,
+    filter: customBetweenPercentsFilterFn,
   },
   {
     Header: 'Medicaid Medical Lives',
     accessor: 'managedMedicaidMedicalLives',
+    Cell: (props) => <div style={{ textAlign: 'right' }}>{numberFormatter(props.value)}</div>,
     Filter: NumberRangeColumnFilter,
     filter: 'between',
   },
@@ -87,9 +95,9 @@ const COLUMNS = [
     Header: 'Medicaid Medical Lives Percent',
     accessor: 'managedMedicaidMedicalLivesPercent',
     Cell: (props) => percentageFormatter(props.value, 2),
-    sortType: 'basic',
-    // Filter: NumberRangeColumnFilter,
-    // filter: 'between',
+    sortType: 'float',
+    Filter: NumberRangeColumnFilter,
+    filter: customBetweenPercentsFilterFn,
   },
 ]
 
