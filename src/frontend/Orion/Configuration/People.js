@@ -117,6 +117,7 @@ const People = () => {
         data={influencerTemplateData}
         columns={COLUMNS}
         modalColMap={MODAL_TO_COL_MAP}
+        exportProps={{ filename: 'Influencers', sheetName: 'Influencers' }}
       />
     </div>
   )

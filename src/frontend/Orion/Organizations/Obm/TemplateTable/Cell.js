@@ -1,10 +1,9 @@
 import styled from '@emotion/styled'
-import Color from 'frontend/utils/color'
 
 const Cell = styled.div({
   padding: 8,
   fontSize: 12,
-  ':first-child': {
+  ':first-of-type': {
     paddingLeft: 24,
   },
   ':last-child': {

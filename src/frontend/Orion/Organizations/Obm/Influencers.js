@@ -104,6 +104,7 @@ const Influencers = () => {
         data={influencerTemplateData}
         columns={COLUMNS}
         modalColMap={MODAL_TO_COL_MAP}
+        exportProps={{ filename: 'ObmInfluencers', sheetName: 'Influencers' }}
       />
     </div>
   )

@@ -12,7 +12,7 @@ const HeaderCell = styled.div({
   display: 'flex !important',
   flexDirection: 'column',
   justifyContent: 'space-between',
-  ':first-child': {
+  ':first-of-type': {
     paddingLeft: 24,
   },
   ':last-child': {

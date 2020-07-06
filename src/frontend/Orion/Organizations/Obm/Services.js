@@ -95,7 +95,13 @@ const Services = () => {
           Create Service Category
         </ObmServicesCategoriesModalButton>
       </PanelHeader>
-      <TemplateTable data={serviceTemplateData} columns={COLUMNS} modalColMap={MODAL_TO_COL_MAP} />
+
+      <TemplateTable
+        data={serviceTemplateData}
+        columns={COLUMNS}
+        modalColMap={MODAL_TO_COL_MAP}
+        exportProps={{ filename: 'ObmServices', sheetName: 'Services' }}
+      />
     </div>
   )
 }

@@ -65,7 +65,13 @@ const AccountOverview = () => {
       <PanelHeader title={PAGE_TITLE}>
         <ObmModalButton buttonStyle={createButtonStyle}>Create OBM</ObmModalButton>
       </PanelHeader>
-      <TemplateTable data={obms} columns={COLUMNS} modalColMap={MODAL_TO_COL_MAP} />
+
+      <TemplateTable
+        data={obms}
+        columns={COLUMNS}
+        modalColMap={MODAL_TO_COL_MAP}
+        exportProps={{ filename: 'ObmAccountOverview', sheetName: 'Account Overview' }}
+      />
     </div>
   )
 }

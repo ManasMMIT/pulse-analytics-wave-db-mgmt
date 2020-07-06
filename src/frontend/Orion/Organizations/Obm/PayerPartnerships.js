@@ -129,6 +129,7 @@ const PayerPartnerships = () => {
         data={payerPartnershipsData}
         columns={COLUMNS}
         modalColMap={MODAL_TO_COL_MAP}
+        exportProps={{ filename: 'ObmPayerPartnerships', sheetName: 'Payer Partnerships' }}
       />
     </div>
   )
