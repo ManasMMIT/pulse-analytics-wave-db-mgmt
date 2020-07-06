@@ -12,17 +12,7 @@ import NumberRangeColumnFilter from './TemplateTable/custom-filters/NumberRangeC
 import MultiSelectColumnFilter from './TemplateTable/custom-filters/MultiSelect/MultiSelectColumnFilter'
 import customMultiSelectFilterFn from './TemplateTable/custom-filters/MultiSelect/customMultiSelectFilterFn'
 
-import Color from './../../../utils/color'
-
-const createButtonStyle = {
-  background: Color.PRIMARY,
-  color: Color.WHITE,
-  fontWeight: 700,
-  margin: 12,
-  padding: 12,
-  borderRadius: 4,
-  cursor: 'pointer',
-}
+import createButtonStyle from './create-button-style'
 
 const PAGE_TITLE = 'Oncology Benefit Manager Account Overview'
 
@@ -46,6 +36,7 @@ const COLUMNS = [
     accessor: 'start',
     Filter: NumberRangeColumnFilter,
     filter: 'between',
+    Cell: (props) => <div style={{ textAlign: 'right' }}>{props.value}</div>,
   },
   {
     Header: 'Business Model',

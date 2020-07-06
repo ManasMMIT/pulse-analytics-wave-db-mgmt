@@ -38,6 +38,7 @@ const COLUMNS = [
     filter: customMultiSelectFilterFn,
     sortType: 'text',
     sticky: 'left',
+    width: 200,
   },
   {
     Header: 'Payer Participant',
@@ -46,6 +47,7 @@ const COLUMNS = [
     filter: customMultiSelectFilterFn,
     sortType: 'text',
     sticky: 'left',
+    width: 200,
   },
   {
     Header: 'Payer Slug',
@@ -64,7 +66,9 @@ const COLUMNS = [
   {
     Header: 'Commercial Medical Lives Percent',
     accessor: 'commercialMedicalLivesPercent',
-    Cell: (props) => percentageFormatter(props.value, 2),
+    Cell: (props) => (
+      <div style={{ textAlign: 'right' }}>{percentageFormatter(props.value, 2)}</div>
+    ),
     sortType: 'float',
     Filter: NumberRangeColumnFilter,
     filter: customBetweenPercentsFilterFn,
@@ -79,7 +83,9 @@ const COLUMNS = [
   {
     Header: 'Medicare Medical Lives Percent',
     accessor: 'medicareMedicalLivesPercent',
-    Cell: (props) => percentageFormatter(props.value, 2),
+    Cell: (props) => (
+      <div style={{ textAlign: 'right' }}>{percentageFormatter(props.value, 2)}</div>
+    ),
     sortType: 'float',
     Filter: NumberRangeColumnFilter,
     filter: customBetweenPercentsFilterFn,
@@ -94,7 +100,9 @@ const COLUMNS = [
   {
     Header: 'Medicaid Medical Lives Percent',
     accessor: 'managedMedicaidMedicalLivesPercent',
-    Cell: (props) => percentageFormatter(props.value, 2),
+    Cell: (props) => (
+      <div style={{ textAlign: 'right' }}>{percentageFormatter(props.value, 2)}</div>
+    ),
     sortType: 'float',
     Filter: NumberRangeColumnFilter,
     filter: customBetweenPercentsFilterFn,

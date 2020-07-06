@@ -1,6 +1,7 @@
 import React from 'react'
 import Select from 'react-select'
 import _ from 'lodash'
+import { customTableSelectStyles } from './customTableSelectStyles'
 
 const MultiSelectColumnFilter = ({ column: { filterValue, setFilter, preFilteredRows, id } }) => {
   // Calculate the options for filtering
@@ -31,6 +32,7 @@ const MultiSelectColumnFilter = ({ column: { filterValue, setFilter, preFiltered
       isMulti
       value={selectedOptions}
       options={reactSelectOptions}
+      styles={customTableSelectStyles}
       onChange={(option) => {
         if (_.isEmpty(option)) {
           setFilter(undefined)

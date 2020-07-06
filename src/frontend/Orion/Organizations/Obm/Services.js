@@ -15,17 +15,7 @@ import MultiSelectColumnFilter from './TemplateTable/custom-filters/MultiSelect/
 import customMultiSelectFilterFn from './TemplateTable/custom-filters/MultiSelect/customMultiSelectFilterFn'
 import NumberRangeColumnFilter from './TemplateTable/custom-filters/NumberRangeColumnFilter'
 
-import Color from './../../../utils/color'
-
-const createButtonStyle = {
-  background: Color.PRIMARY,
-  color: Color.WHITE,
-  fontWeight: 700,
-  margin: 12,
-  padding: 12,
-  borderRadius: 4,
-  cursor: 'pointer',
-}
+import createButtonStyle from './create-button-style'
 
 const PAGE_TITLE = 'Oncology Benefit Manager Services'
 
@@ -55,6 +45,7 @@ const COLUMNS = [
     Filter: MultiSelectColumnFilter,
     filter: customMultiSelectFilterFn,
     sortType: 'text',
+    width: 200,
   },
   {
     Header: 'Service Category',
@@ -62,6 +53,7 @@ const COLUMNS = [
     Filter: MultiSelectColumnFilter,
     filter: customMultiSelectFilterFn,
     sortType: 'text',
+    width: 280,
   },
   {
     Header: 'Service',
@@ -69,12 +61,14 @@ const COLUMNS = [
     Filter: MultiSelectColumnFilter,
     filter: customMultiSelectFilterFn,
     sortType: 'text',
+    width: 280,
   },
   {
     Header: 'Service Rating',
     accessor: 'serviceRating',
     Filter: NumberRangeColumnFilter,
     filter: 'between',
+    Cell: (props) => <div style={{ textAlign: 'right' }}>{props.value}</div>,
   },
 ]
 
@@ -96,7 +90,8 @@ const Services = () => {
         <ObmServicesModalButton buttonStyle={createButtonStyle}>
           Create Service
         </ObmServicesModalButton>
-        <ObmServicesCategoriesModalButton buttonStyle={createButtonStyle}>
+
+        <ObmServicesCategoriesModalButton buttonStyle={{ ...createButtonStyle, marginLeft: 12 }}>
           Create Service Category
         </ObmServicesCategoriesModalButton>
       </PanelHeader>

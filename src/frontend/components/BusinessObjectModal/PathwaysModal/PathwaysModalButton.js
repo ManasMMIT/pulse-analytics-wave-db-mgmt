@@ -1,3 +1,5 @@
+/** @jsx jsx */
+import { jsx } from '@emotion/core'
 import React, { useState } from 'react'
 
 import PathwaysModal from './PathwaysModal'
@@ -7,12 +9,16 @@ const PathwaysModalButton = ({
   entityId,
   refetchQueries,
   afterMutationHook,
+  buttonStyle = {},
 }) => {
   const [showModal, setModal] = useState(false)
 
   return (
     <>
-      <button onClick={() => setModal(!showModal)}>{children}</button>
+      <button css={buttonStyle} onClick={() => setModal(!showModal)}>
+        {children}
+      </button>
+
       {showModal && (
         <PathwaysModal
           entityId={entityId}

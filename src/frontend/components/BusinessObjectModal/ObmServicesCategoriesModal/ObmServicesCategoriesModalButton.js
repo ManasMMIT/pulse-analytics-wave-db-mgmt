@@ -1,3 +1,5 @@
+/** @jsx jsx */
+import { jsx } from '@emotion/core'
 import React, { useState } from 'react'
 
 import ObmServicesCategoriesModal from './ObmServicesCategoriesModal'
@@ -13,7 +15,10 @@ const ObmServicesCategoriesModalButton = ({
 
   return (
     <>
-      <button style={buttonStyle} onClick={() => setModal(!showModal)}>{children}</button>
+      <button css={buttonStyle} onClick={() => setModal(!showModal)}>
+        {children}
+      </button>
+
       {showModal && (
         <ObmServicesCategoriesModal
           entityId={entityId}

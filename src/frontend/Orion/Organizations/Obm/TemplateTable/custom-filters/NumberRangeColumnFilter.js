@@ -1,4 +1,25 @@
 import React from 'react'
+import styled from '@emotion/styled'
+import { transparentize } from 'polished'
+
+import Color from 'frontend/utils/color'
+
+const StyledInput = styled.input({
+  width: 60,
+  border: `1px solid ${transparentize(0.9, Color.BLACK)}`,
+  borderRadius: 2,
+  padding: 4,
+  fontSize: 11,
+  ':placeholder': {
+    color: transparentize(0.5, Color.BLACK),
+  },
+  ':hover': {
+    border: `1px solid ${transparentize(0.85, Color.BLACK)}`,
+  },
+  ':focus': {
+    boxShadow: `0 0 0 2px ${Color.BLUE}`,
+  },
+})
 
 const NumberRangeColumnFilter = ({
   column: { filterValue = [], preFilteredRows, setFilter, id },
@@ -19,7 +40,7 @@ const NumberRangeColumnFilter = ({
         display: 'flex',
       }}
     >
-      <input
+      <StyledInput
         value={filterValue[0] || ''}
         type="number"
         onChange={(e) => {
@@ -27,13 +48,16 @@ const NumberRangeColumnFilter = ({
           setFilter((old = []) => [val ? parseInt(val, 10) : undefined, old[1]])
         }}
         placeholder={`Min (${min})`}
-        style={{
-          width: '70px',
-          marginRight: '0.5rem',
-        }}
+        style={{ marginRight: 4 }}
       />
-      to
-      <input
+      <span
+        style={{
+          opacity: 0.5,
+        }}
+      >
+        to
+      </span>
+      <StyledInput
         value={filterValue[1] || ''}
         type="number"
         onChange={(e) => {
@@ -41,10 +65,7 @@ const NumberRangeColumnFilter = ({
           setFilter((old = []) => [old[0], val ? parseInt(val, 10) : undefined])
         }}
         placeholder={`Max (${max})`}
-        style={{
-          width: '70px',
-          marginLeft: '0.5rem',
-        }}
+        style={{ marginLeft: 4 }}
       />
     </div>
   )

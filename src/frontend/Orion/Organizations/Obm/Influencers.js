@@ -12,17 +12,7 @@ import TemplateTable from './TemplateTable'
 import MultiSelectColumnFilter from './TemplateTable/custom-filters/MultiSelect/MultiSelectColumnFilter'
 import customMultiSelectFilterFn from './TemplateTable/custom-filters/MultiSelect/customMultiSelectFilterFn'
 
-import Color from './../../../utils/color'
-
-const createButtonStyle = {
-  background: Color.PRIMARY,
-  color: Color.WHITE,
-  fontWeight: 700,
-  margin: 12,
-  padding: 12,
-  borderRadius: 4,
-  cursor: 'pointer',
-}
+import createButtonStyle from './create-button-style'
 
 const PAGE_TITLE = 'Oncology Benefit Manager Influencers'
 
@@ -56,6 +46,8 @@ const COLUMNS = [
     Filter: MultiSelectColumnFilter,
     filter: customMultiSelectFilterFn,
     sortType: 'text',
+    sticky: 'left',
+    width: 200,
   },
   {
     Header: 'First Name',
@@ -63,6 +55,7 @@ const COLUMNS = [
     Filter: MultiSelectColumnFilter,
     filter: customMultiSelectFilterFn,
     sortType: 'text',
+    sticky: 'left',
   },
   {
     Header: 'Last Name',
@@ -70,6 +63,7 @@ const COLUMNS = [
     Filter: MultiSelectColumnFilter,
     filter: customMultiSelectFilterFn,
     sortType: 'text',
+    sticky: 'left',
   },
   {
     Header: 'NPI #',
@@ -77,6 +71,7 @@ const COLUMNS = [
     Filter: MultiSelectColumnFilter,
     filter: customMultiSelectFilterFn,
     sortType: 'text',
+    Cell: (props) => <div style={{ textAlign: 'right' }}>{props.value}</div>,
   },
   {
     Header: 'Positioning within OBM',
@@ -84,6 +79,7 @@ const COLUMNS = [
     Filter: MultiSelectColumnFilter,
     filter: customMultiSelectFilterFn,
     sortType: 'text',
+    width: 700,
   },
 ]
 

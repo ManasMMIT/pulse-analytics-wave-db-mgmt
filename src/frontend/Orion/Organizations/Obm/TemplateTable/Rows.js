@@ -1,9 +1,16 @@
 import React from 'react'
 import styled from '@emotion/styled'
+import { transparentize } from 'polished'
+
+import Color from 'frontend/utils/color'
 
 import Cell from './Cell'
 
-const Row = styled.div({})
+const Row = styled.div({
+  ':hover': {
+    backgroundColor: `${transparentize(0.5, Color.LIGHT_GRAY_1)} !important`,
+  },
+})
 
 const Rows = ({ rows, prepareRow, setModalCell, modalColMap }) => {
   return rows.map((row) => {
