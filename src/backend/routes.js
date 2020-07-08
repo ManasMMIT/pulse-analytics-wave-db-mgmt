@@ -17,11 +17,7 @@ const { ApolloServer } = require('apollo-server-express')
 const typeDefs = require('./typeDefs')
 const resolvers = require('./resolvers')
 
-const {
-  getNodeController,
-  MerckPipeDelimitedCtrl,
-  NovartisCsvCtrl,
-} = require('./controllers')
+const { getNodeController, MerckPipeDelimitedCtrl, NovartisCsvCtrl } = require('./controllers')
 
 const MongoClient = require('mongodb').MongoClient
 
@@ -67,7 +63,8 @@ MongoClient.connect(LOADER_URI, { useUnifiedTopology: true }, (err, client) => {
   const apolloServer = new ApolloServer({
     typeDefs,
     resolvers,
-    context: ({ req }) => { // req/res comes in here https://www.apollographql.com/docs/apollo-server/api/apollo-server/#apolloserver
+    context: ({ req }) => {
+      // req/res comes in here https://www.apollographql.com/docs/apollo-server/api/apollo-server/#apolloserver
       const user = req.user['https://random-url-for-extra-user-info']
 
       return {
@@ -76,6 +73,10 @@ MongoClient.connect(LOADER_URI, { useUnifiedTopology: true }, (err, client) => {
         authorization: req.headers.authorization,
         io,
       }
+    },
+    formatError: (err) => {
+      console.error(`Server Error:\n${err}`)
+      return err
     },
   })
 
@@ -103,13 +104,8 @@ MongoClient.connect(LOADER_URI, { useUnifiedTopology: true }, (err, client) => {
 
   const getErrorObj = require('./validation/getErrorObj')
 
-  subApp.post('/upload', async ({
-    body: {
-      data,
-      collectionName,
-    }
-  }, res, next) => {
-    const errorObj = await getErrorObj(data,pulseCoreDb)
+  subApp.post('/upload', async ({ body: { data, collectionName } }, res, next) => {
+    const errorObj = await getErrorObj(data, pulseCoreDb)
 
     /*
       ! Note on Error Management
