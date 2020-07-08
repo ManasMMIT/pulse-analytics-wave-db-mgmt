@@ -3,9 +3,12 @@ import { useQuery } from '@apollo/react-hooks'
 
 import { GET_OBM_ORGANIZATIONS } from 'frontend/api/queries'
 
-import PanelHeader from '../../../components/Panel/PanelHeader'
-import ObmModalButton from '../../../components/BusinessObjectModal/OncologyBenefitManagerModal/OncologyBenefitManagerModalButton'
-import ObmModal from '../../../components/BusinessObjectModal/OncologyBenefitManagerModal'
+import PanelHeader from 'frontend/components/Panel/PanelHeader'
+import ObmModalButton from 'frontend/components/BusinessObjectModal/OncologyBenefitManagerModal/OncologyBenefitManagerModalButton'
+import ObmModal from 'frontend/components/BusinessObjectModal/OncologyBenefitManagerModal'
+import Icon from 'frontend/components/Icon'
+
+import Color from 'frontend/utils/color'
 
 import TemplateTable from './TemplateTable'
 import NumberRangeColumnFilter from './TemplateTable/custom-filters/NumberRangeColumnFilter'
@@ -63,7 +66,10 @@ const AccountOverview = () => {
       }}
     >
       <PanelHeader title={PAGE_TITLE}>
-        <ObmModalButton buttonStyle={createButtonStyle}>Create OBM</ObmModalButton>
+        <ObmModalButton buttonStyle={createButtonStyle}>
+          <Icon iconName="add" color1={Color.WHITE} width={16} style={{ marginRight: 8 }} />
+          Create OBM
+        </ObmModalButton>
       </PanelHeader>
 
       <TemplateTable

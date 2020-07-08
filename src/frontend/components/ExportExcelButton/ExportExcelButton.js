@@ -5,9 +5,10 @@ import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
 import { transparentize } from 'polished'
 
-import { Colors } from '../../utils/pulseStyles'
+import Color from 'frontend/utils/color'
+import Transitions from 'frontend/utils/transitions'
 
-const primaryColor = Colors.PRIMARY
+const primaryColor = Color.PRIMARY
 
 const ExportButton = styled.button(
   {
@@ -19,14 +20,18 @@ const ExportButton = styled.button(
     borderRadius: 4,
     cursor: 'pointer',
     margin: '12px 0px',
+    transition: Transitions.NORMAL,
     ':hover': {
       background: transparentize(0.65, primaryColor),
+    },
+    ':active': {
+      background: transparentize(0.75, primaryColor),
     },
   },
   ({ disabled }) => {
     return disabled
       ? {
-          background: transparentize(0.85, Colors.MEDIUM_GRAY_2),
+          background: transparentize(0.85, Color.MEDIUM_GRAY_2),
           color: 'grey',
           cursor: 'not-allowed',
         }

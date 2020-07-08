@@ -24,54 +24,51 @@ const baseButtonStyle = {
 }
 
 // Primary Button Style
-const getPrimaryButtonStyle = color => ({
+const getPrimaryButtonStyle = (color) => ({
   ...baseButtonStyle,
   background: color,
   color: Color.WHITE,
   transition: `background ${Transitions.NORMAL}`,
   ':hover': {
-	  background: lighten(0.1, color),
+    background: lighten(0.1, color),
   },
   ':active': {
-     background: mix(0.1, Color.BLACK, color),
-  }
+    background: mix(0.1, Color.BLACK, color),
+  },
 })
 
 // Secondary Button Style
-const getSecondaryButtonStyle = color => ({
+const getSecondaryButtonStyle = (color) => ({
   ...baseButtonStyle,
-  background: transparentize(0.9, color),
+  background: transparentize(0.85, color),
   color: color,
-  transition: `background, color ${Transitions.NORMAL}`,
+  transition: `background ${Transitions.NORMAL}`,
   ':hover': {
-    background: color,
-    color: Color.WHITE,
-  }
+    background: transparentize(0.65, color),
+  },
+  active: {
+    background: transparentize(0.75, color),
+  },
 })
 
 const StyledButton = styled.button(({ type, color, buttonStyle, hoverStyle }) => {
-  const typeStyle = type === 'primary' ? getPrimaryButtonStyle(color) : getSecondaryButtonStyle(color)
+  const typeStyle =
+    type === 'primary' ? getPrimaryButtonStyle(color) : getSecondaryButtonStyle(color)
   const combinedHoverStyle = {
     ...typeStyle[':hover'],
     ...hoverStyle,
   }
 
-  return ({
+  return {
     ...typeStyle,
     ...buttonStyle,
     ':hover': {
-      ...combinedHoverStyle
-    }
-  })
+      ...combinedHoverStyle,
+    },
+  }
 })
 
-const generateButtonContent = ({
-  iconName,
-  iconPosition,
-  iconColor1,
-  iconColor2,
-  children,
-}) => {
+const generateButtonContent = ({ iconName, iconPosition, iconColor1, iconColor2, children }) => {
   if (!iconName) return children
 
   const iconProps = {
@@ -84,20 +81,11 @@ const generateButtonContent = ({
   if (children) {
     const iconStyle = iconPosition === 'left' ? { marginRight: 8 } : { marginLeft: 8 }
 
-    const content = [
-      <Icon
-        iconName={iconName}
-        style={iconStyle}
-        {...iconProps}
-      />,
-      children
-    ]
+    const content = [<Icon iconName={iconName} style={iconStyle} {...iconProps} />, children]
 
     return iconPosition === 'left' ? content : content.reverse()
   } else {
-    return (
-      <Icon iconName={iconName} {...iconProps} />
-    )
+    return <Icon iconName={iconName} {...iconProps} />
   }
 }
 
@@ -118,7 +106,7 @@ const Button = ({
     iconPosition,
     iconColor1,
     iconColor2,
-    children
+    children,
   })
 
   const combinedButtonStyle = children
@@ -133,7 +121,7 @@ const Button = ({
       buttonStyle={combinedButtonStyle}
       hoverStyle={hoverStyle}
     >
-      { buttonContent }
+      {buttonContent}
     </StyledButton>
   )
 }

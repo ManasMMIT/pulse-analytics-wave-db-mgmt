@@ -12,6 +12,8 @@ const policyLinksMocks = require('./mocks/output/policyLinkManagerMocks')
 const connectToMongoDb = require('../../../../../../../../../connect-to-mongodb')
 
 describe('ManagerDao', () => {
+  jest.setTimeout(60000) // ! needed to adjust jest timeout for slower connections
+
   let db
   let mongoConnection
   let session

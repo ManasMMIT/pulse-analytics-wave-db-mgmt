@@ -7,22 +7,14 @@ import { GET_PEOPLE } from 'frontend/api/queries'
 import PanelHeader from 'frontend/components/Panel/PanelHeader'
 import PeopleModalButton from 'frontend/components/BusinessObjectModal/PeopleModal/PeopleModalButton'
 import PeopleModal from 'frontend/components/BusinessObjectModal/PeopleModal'
+import Icon from 'frontend/components/Icon'
 
 import TemplateTable from '../Organizations/Obm/TemplateTable'
 import MultiSelectColumnFilter from '../Organizations/Obm/TemplateTable/custom-filters/MultiSelect/MultiSelectColumnFilter'
 import customMultiSelectFilterFn from '../Organizations/Obm/TemplateTable/custom-filters/MultiSelect/customMultiSelectFilterFn'
 
 import Color from 'frontend/utils/color'
-
-const createButtonStyle = {
-  background: Color.PRIMARY,
-  color: Color.WHITE,
-  fontWeight: 700,
-  margin: 12,
-  padding: 12,
-  borderRadius: 4,
-  cursor: 'pointer',
-}
+import createButtonStyle from '../Organizations/Obm/create-button-style'
 
 const editButtonStyle = {
   background: Color.LIGHT_BLUE_GRAY_2,
@@ -48,8 +40,9 @@ const COLUMNS = [
   {
     Header: 'Date Updated',
     accessor: 'updatedOn',
-    Cell: (props) => format(new Date(props.value), 'M/d/yy'),
+    Cell: (props) => format(new Date(props.value), 'M/d/yyyy h:mm:ss a'),
     disableFilters: true,
+    width: 180,
   },
   {
     Header: 'First Name',
@@ -111,7 +104,10 @@ const People = () => {
       }}
     >
       <PanelHeader title={PAGE_TITLE}>
-        <PeopleModalButton buttonStyle={createButtonStyle}>{CREATE_BTN_TXT}</PeopleModalButton>
+        <PeopleModalButton buttonStyle={createButtonStyle}>
+          <Icon iconName="add" color1={Color.WHITE} width={16} style={{ marginRight: 8 }} />
+          {CREATE_BTN_TXT}
+        </PeopleModalButton>
       </PanelHeader>
       <TemplateTable
         data={influencerTemplateData}

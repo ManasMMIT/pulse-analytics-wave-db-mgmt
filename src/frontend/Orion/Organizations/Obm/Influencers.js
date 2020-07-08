@@ -3,10 +3,13 @@ import { useQuery } from '@apollo/react-hooks'
 
 import { GET_INFLUENCER_TEMPLATE_OBMS } from 'frontend/api/queries'
 
-import PanelHeader from '../../../components/Panel/PanelHeader'
-import ObmModal from '../../../components/BusinessObjectModal/OncologyBenefitManagerModal'
-import PeopleModal from '../../../components/BusinessObjectModal/PeopleModal'
-import PeopleModalButton from '../../../components/BusinessObjectModal/PeopleModal/PeopleModalButton'
+import PanelHeader from 'frontend/components/Panel/PanelHeader'
+import ObmModal from 'frontend/components/BusinessObjectModal/OncologyBenefitManagerModal'
+import PeopleModal from 'frontend/components/BusinessObjectModal/PeopleModal'
+import PeopleModalButton from 'frontend/components/BusinessObjectModal/PeopleModal/PeopleModalButton'
+import Icon from 'frontend/components/Icon'
+
+import Color from 'frontend/utils/color'
 
 import TemplateTable from './TemplateTable'
 import MultiSelectColumnFilter from './TemplateTable/custom-filters/MultiSelect/MultiSelectColumnFilter'
@@ -74,7 +77,7 @@ const COLUMNS = [
     Cell: (props) => <div style={{ textAlign: 'right' }}>{props.value}</div>,
   },
   {
-    Header: 'Positioning within OBM',
+    Header: 'Position within OBM',
     accessor: 'influencerPosition',
     Filter: MultiSelectColumnFilter,
     filter: customMultiSelectFilterFn,
@@ -98,7 +101,10 @@ const Influencers = () => {
       }}
     >
       <PanelHeader title={PAGE_TITLE}>
-        <PeopleModalButton buttonStyle={createButtonStyle}>Create Person</PeopleModalButton>
+        <PeopleModalButton buttonStyle={createButtonStyle}>
+          <Icon iconName="add" color1={Color.WHITE} width={16} style={{ marginRight: 8 }} />
+          Create Person
+        </PeopleModalButton>
       </PanelHeader>
       <TemplateTable
         data={influencerTemplateData}

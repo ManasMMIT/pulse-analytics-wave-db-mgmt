@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import { transparentize, mix } from 'polished'
+import { lighten, transparentize, mix } from 'polished'
 
 import Color from 'frontend/utils/color'
 
@@ -14,19 +14,11 @@ const TableWrapper = styled.div`
   display: flex;
   height: 100%;
 
-  .td.clickable-cell {
-    cursor: pointer;
-    font-weight: 500;
-    :hover {
-      color: ${mix(0.15, Color.BLACK, Color.BLUE)};
-      background: ${transparentize(0.85, Color.BLUE)} !important;
-    }
-  }
-
   padding: 0;
 
   .table {
     /* border: 1px solid ${borderColor}; */
+    color: ${Color.BLACK};
     border-top: 1px solid ${borderColor};
     border-bottom: 1px solid ${borderColor};
 
@@ -99,6 +91,27 @@ const TableWrapper = styled.div`
         }
         .th {
           background-color: ${Color.WHITE} !important;
+        }
+      }
+
+      .td.clickable-cell {
+        cursor: pointer !important;
+        font-weight: 500;
+        position: relative;
+        :hover {
+          color: ${mix(0.15, Color.BLACK, Color.BLUE)};
+          background: ${lighten(0.5, Color.BLUE)} !important;
+          /* :after {
+            background: ${lighten(0.65, Color.BLUE)};
+            borderRadius: 4px;
+            content: "OPEN";
+            font-size: 8;
+            font-weight: 700;
+            padding: 2px 4px;
+            position: absolute;
+            right: 4px;
+            top: 4px;
+          } */
         }
       }
 

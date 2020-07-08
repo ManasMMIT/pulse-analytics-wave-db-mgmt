@@ -11,6 +11,8 @@ import ModalManager from './ModalManager'
 import sortTypes from './custom-sort-types'
 
 import ExportExcelButton from 'frontend/components/ExportExcelButton'
+import Icon from 'frontend/components/Icon'
+import Color from 'frontend/utils/color'
 import formatDataForExport from './formatDataForExport'
 
 const DefaultColumnFilter = ({ column: { filterValue, preFilteredRows, setFilter } }) => {
@@ -56,10 +58,17 @@ const TemplateTable = ({ columns, data, modalColMap, exportProps }) => {
       <div style={{ margin: '0 24px 0 auto' }}>
         <ExportExcelButton
           data={dataFormattedForExport}
-          // buttonStyle={} // if custom button styling is needed, style here
+          buttonStyle={{ margin: '0 0 12px', display: 'flex', alignItems: 'center' }}
           {...exportProps}
         >
-          Export Current View to Excel
+          <Icon
+            iconName="export"
+            color1={Color.PRIMARY}
+            width={16}
+            height={16}
+            style={{ marginRight: 8 }}
+          />
+          Export to Excel
         </ExportExcelButton>
       </div>
 
