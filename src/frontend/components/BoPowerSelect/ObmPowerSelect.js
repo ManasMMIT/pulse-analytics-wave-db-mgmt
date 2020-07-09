@@ -7,7 +7,7 @@ import BoPowerSelect from 'frontend/components/BoPowerSelect/BoPowerSelect'
 
 const ObmPowerSelect = () => (
   <BoPowerSelect
-    placeholder={'Select OBM to Edit'}
+    placeholder={'Select OBM'}
     getLabel={({ organization }) => organization}
     queryDoc={GET_OBM_ORGANIZATIONS}
     Modal={OncologyBenefitManagerModal}

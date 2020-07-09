@@ -7,7 +7,7 @@ import BoPowerSelect from 'frontend/components/BoPowerSelect/BoPowerSelect'
 
 const PeoplePowerSelect = () => (
   <BoPowerSelect
-    placeholder={'Select Person to Edit'}
+    placeholder={'Select Person'}
     getLabel={({ firstName, lastName }) => `${firstName} ${lastName}`}
     queryDoc={GET_PEOPLE}
     Modal={PeopleModal}
