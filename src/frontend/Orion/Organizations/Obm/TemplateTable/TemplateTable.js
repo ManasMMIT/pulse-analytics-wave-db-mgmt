@@ -1,43 +1,21 @@
-import React from 'react'
-import styled from '@emotion/styled'
+import React, { useState } from 'react'
 import _ from 'lodash'
-import { useTable, useFilters, useSortBy } from 'react-table'
 
-const TableWrapper = styled.div({
-  overflow: 'auto',
-  margin: '0 24px 24px 24px',
-})
+import { useTable, useBlockLayout, useFilters, useSortBy } from 'react-table'
+import { useSticky } from 'react-table-sticky'
 
-const tableStyle = {
-  borderCollapse: 'collapse',
-}
+import TableWrapper from './TableWrapper'
+import Headers from './Headers'
+import Rows from './Rows'
+import ModalManager from './ModalManager'
+import sortTypes from './custom-sort-types'
 
-const StyledTh = styled.th({
-  fontWeight: 700,
-  fontSize: 14,
-  padding: 12,
-  position: 'sticky',
-  top: 0,
-  borderTop: '1px solid black',
-  borderLeft: '1px solid rgba(200, 209, 224, 0.6)',
-  borderBottom: '1px solid #e8e8e8',
-  background: 'white',
-  boxShadow: '0px 0px 0 2px #e8e8e8',
-})
+import ExportExcelButton from 'frontend/components/ExportExcelButton'
+import Icon from 'frontend/components/Icon'
+import Color from 'frontend/utils/color'
+import formatDataForExport from './formatDataForExport'
 
-const StyledTd = styled.td({
-  padding: 12,
-  border: '1px solid #e8e8e8',
-})
-
-const buttonStyle = {
-  cursor: 'pointer',
-  fontSize: 12,
-}
-
-const DefaultColumnFilter = ({
-  column: { filterValue, preFilteredRows, setFilter },
-}) => {
+const DefaultColumnFilter = ({ column: { filterValue, preFilteredRows, setFilter } }) => {
   const count = preFilteredRows.length
 
   return (
@@ -51,103 +29,66 @@ const DefaultColumnFilter = ({
   )
 }
 
-const Headers = ({ headerGroup }) => {
-  return headerGroup.headers.map((column) => (
-    <StyledTh {...column.getHeaderProps(column.getSortByToggleProps())}>
-      {column.render('Header')}
-      <span>
-        {column.isSorted ? (column.isSortedDesc ? ' 🔽' : ' 🔼') : ''}
-      </span>
-      <div onClick={(e) => e.stopPropagation()}>
-        {column.canFilter ? column.render('Filter') : null}
-      </div>
-    </StyledTh>
-  ))
-}
-
-const Cells = ({ row, modalColMap }) => {
-  return row.cells.map((cell) => {
-    if (cell.column.id in modalColMap) {
-      const { Modal, idKey } = modalColMap[cell.column.id]
-      const datumId = cell.row.original[idKey]
-
-      return (
-        <StyledTd {...cell.getCellProps()}>
-          <Modal
-            key={cell.row.original._id}
-            buttonStyle={buttonStyle}
-            entityId={datumId}
-          >
-            {cell.render('Cell')}
-          </Modal>
-        </StyledTd>
-      )
-    }
-
-    return <StyledTd {...cell.getCellProps()}>{cell.render('Cell')}</StyledTd>
-  })
-}
-
-const defaultColumn = {
+const DEFAULT_COLUMN = {
   Filter: DefaultColumnFilter,
 }
 
-const SORT_TYPES = {
-  text: (rowA, rowB, columnId, desc) => {
-    const valueA = rowA.values[columnId]
-    const valueB = rowB.values[columnId]
+const TemplateTable = ({ columns, data, modalColMap, exportProps }) => {
+  const [modalCell, setModalCell] = useState(null)
 
-    if (_.isEmpty(valueA) && _.isEmpty(valueB)) return 0
-    if (_.isEmpty(valueB)) return -1
-    if (_.isEmpty(valueA)) return 1
-
-    return valueA.toLowerCase().localeCompare(valueB.toLowerCase())
-  },
-}
-
-const TemplateTable = ({ columns, data, modalColMap }) => {
-  const {
-    getTableProps,
-    getTableBodyProps,
-    headerGroups,
-    rows,
-    prepareRow,
-  } = useTable(
+  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow, sortedRows } = useTable(
     {
       columns,
       data,
-      defaultColumn,
+      defaultColumn: DEFAULT_COLUMN,
       maxMultiSortColCount: 5,
       disableMultiRemove: true,
-      sortTypes: SORT_TYPES,
+      sortTypes,
     },
     useFilters,
-    useSortBy
+    useSortBy,
+    useBlockLayout,
+    useSticky
   )
 
-  return (
-    <TableWrapper>
-      <table style={tableStyle} {...getTableProps()}>
-        <thead>
-          {headerGroups.map((headerGroup) => (
-            <tr {...headerGroup.getHeaderGroupProps()}>
-              <Headers headerGroup={headerGroup} />
-            </tr>
-          ))}
-        </thead>
-        <tbody {...getTableBodyProps()}>
-          {rows.map((row, i) => {
-            prepareRow(row)
+  const dataFormattedForExport = formatDataForExport(sortedRows, columns)
 
-            return (
-              <tr {...row.getRowProps()}>
-                <Cells row={row} modalColMap={modalColMap} />
-              </tr>
-            )
-          })}
-        </tbody>
-      </table>
-    </TableWrapper>
+  return (
+    <>
+      <div style={{ margin: '0 24px 0 auto' }}>
+        <ExportExcelButton
+          data={dataFormattedForExport}
+          buttonStyle={{ margin: '0 0 12px', display: 'flex', alignItems: 'center' }}
+          {...exportProps}
+        >
+          <Icon
+            iconName="export"
+            color1={Color.PRIMARY}
+            width={16}
+            height={16}
+            style={{ marginRight: 8 }}
+          />
+          Export to Excel
+        </ExportExcelButton>
+      </div>
+
+      <TableWrapper>
+        <div className="table sticky" style={{ height: '100%' }} {...getTableProps()}>
+          <Headers headerGroups={headerGroups} />
+
+          <div {...getTableBodyProps()} className="body">
+            <Rows
+              rows={rows}
+              prepareRow={prepareRow}
+              setModalCell={setModalCell}
+              modalColMap={modalColMap}
+            />
+          </div>
+        </div>
+      </TableWrapper>
+
+      <ModalManager modalColMap={modalColMap} modalCell={modalCell} />
+    </>
   )
 }
 

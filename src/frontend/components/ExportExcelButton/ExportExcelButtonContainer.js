@@ -5,28 +5,20 @@ import _ from 'lodash'
 import XLSX from 'xlsx'
 import { saveAs } from 'file-saver'
 
-import {
-  BACKUP_EXPORT,
-  UPSERT_ORGANIZATION_META,
-} from '../../api/mutations'
+import { BACKUP_EXPORT, UPSERT_ORGANIZATION_META } from '../../api/mutations'
 
-import {
-  GET_ORGANIZATION_META,
-} from '../../api/queries'
+import { GET_ORGANIZATION_META } from '../../api/queries'
 
 import Spinner from 'frontend/components/Spinner'
 import ExportExcelButton from './ExportExcelButton'
-import {
-  formatDateTime,
-  formatDateTimeDotted,
-} from '../../utils/formatDate'
+import { formatDateTime, formatDateTimeDotted } from '../../utils/formatDate'
 
 // taken from https://redstapler.co/sheetjs-tutorial-create-xlsx/
-const s2ab = s => {
-  var buf = new ArrayBuffer(s.length);
-  var view = new Uint8Array(buf);
-  for (var i = 0; i !== s.length; ++i) view[i] = s.charCodeAt(i) & 0xFF;
-  return buf;
+const s2ab = (s) => {
+  var buf = new ArrayBuffer(s.length)
+  var view = new Uint8Array(buf)
+  for (var i = 0; i !== s.length; ++i) view[i] = s.charCodeAt(i) & 0xff
+  return buf
 }
 
 // ! needs to be pulled out to make this component more reusable
@@ -35,7 +27,7 @@ const getOrgsWithMetaData = (data, metaData) => {
 
   const clonedData = _.cloneDeep(data)
 
-  const dataWithMetaFields = clonedData.map(clonedDatum => {
+  const dataWithMetaFields = clonedData.map((clonedDatum) => {
     const metaFields = metaDataGroupedByOrgId[clonedDatum._id]
       ? metaDataGroupedByOrgId[clonedDatum._id][0]
       : {}
@@ -44,11 +36,11 @@ const getOrgsWithMetaData = (data, metaData) => {
 
     const metaFieldObj = metaFields
       ? {
-        exportedAt: exportedAt ? formatDateTime(exportedAt) : null,
-        exporter: exporter ? exporter.name : null,
-        updatedAt: updatedAt ? formatDateTime(updatedAt) : null,
-        updater: updater ? updater.name : null,
-      }
+          exportedAt: exportedAt ? formatDateTime(exportedAt) : null,
+          exporter: exporter ? exporter.name : null,
+          updatedAt: updatedAt ? formatDateTime(updatedAt) : null,
+          updater: updater ? updater.name : null,
+        }
       : {}
 
     return {
@@ -67,6 +59,7 @@ const ExportExcelButtonContainer = ({
   createBackup,
   children,
   sheetName,
+  buttonStyle,
 }) => {
   const user = JSON.parse(localStorage.getItem('user'))
 
@@ -87,15 +80,9 @@ const ExportExcelButtonContainer = ({
     return acc
   }, [])
 
-  const {
-    data: metaData,
-    loading: isMetaDataLoading,
-  } = useQuery(
-    GET_ORGANIZATION_META,
-    {
-      variables: { _ids: dataIds },
-    }
-  )
+  const { data: metaData, loading: isMetaDataLoading } = useQuery(GET_ORGANIZATION_META, {
+    variables: { _ids: dataIds },
+  })
 
   let dataWithMetaFields = data
   if (!isMetaDataLoading && createBackup) {
@@ -115,17 +102,14 @@ const ExportExcelButtonContainer = ({
       input: {
         action: 'export',
         _ids: dataIds,
-      }
+      },
     },
   })
 
   const saveFile = () => {
-    const blob = new Blob(
-      [s2ab(wbOut)],
-      {
-        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-      }
-    )
+    const blob = new Blob([s2ab(wbOut)], {
+      type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    })
 
     saveAs(blob, finalFilename + '.xlsx')
   }
@@ -141,9 +125,9 @@ const ExportExcelButtonContainer = ({
           // ...dataIds.map(dataId => ({
           //   query: GET_ORGANIZATION_META, variables: { _ids: [dataId] }
           // }))
-        ]
+        ],
       })
-    }
+    },
   })
 
   const backupExportWithTimestamp = () => {
@@ -154,7 +138,7 @@ const ExportExcelButtonContainer = ({
         input: {
           filename: finalFileName,
           data: dataWithMetaFields,
-        }
+        },
       },
     })
   }
@@ -163,19 +147,10 @@ const ExportExcelButtonContainer = ({
 
   return (
     <>
-      <ExportExcelButton
-        isDisabled={isDisabled}
-        onClick={onClick}
-      >
-        {
-          isBackingUp
-            ? <Spinner />
-            : children
-        }
+      <ExportExcelButton buttonStyle={buttonStyle} isDisabled={isDisabled} onClick={onClick}>
+        {isBackingUp ? <Spinner /> : children}
       </ExportExcelButton>
-      {
-        error && <div style={{ color: 'red', fontSize: 10, padding: 4 }}>Export Failed</div>
-      }
+      {error && <div style={{ color: 'red', fontSize: 10, padding: 4 }}>Export Failed</div>}
     </>
   )
 }
@@ -192,12 +167,9 @@ ExportExcelButtonContainer.defaultProps = {
   ...ExportExcelButton.defaultProps,
 }
 
-const ExportExcelButtonSuperContainer = props => {
-  if (!props.data.length) return (
-    <ExportExcelButton isDisabled={true}>
-      {props.children}
-    </ExportExcelButton>
-  )
+const ExportExcelButtonSuperContainer = (props) => {
+  if (!props.data.length)
+    return <ExportExcelButton isDisabled={true}>{props.children}</ExportExcelButton>
 
   return <ExportExcelButtonContainer {...props} />
 }

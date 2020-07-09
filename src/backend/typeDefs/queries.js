@@ -82,6 +82,8 @@ const queries = gql`
 
   type Person {
     _id: ID!
+    createdOn: DateTime
+    updatedOn: DateTime
     firstName: String
     lastName: String
     nationalProviderIdentifier: Float

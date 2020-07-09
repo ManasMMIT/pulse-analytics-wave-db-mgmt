@@ -11442,6 +11442,11 @@ react-sortable-hoc@^1.11.0:
     invariant "^2.2.4"
     prop-types "^15.5.7"
 
+react-table-sticky@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/react-table-sticky/-/react-table-sticky-1.1.2.tgz#0f23453271a72fe9d05564e123f352ea69bf72f7"
+  integrity sha512-XnVB4Yf6r8L10YC0Ccu2GrY57IxVWofy19m7s8+q5xzZOudYvyADXsBj6+EenHOvBWTYSviLe8RfaLFIp1lC9w==
+
 react-table@^7.2.1:
   version "7.2.1"
   resolved "https://registry.yarnpkg.com/react-table/-/react-table-7.2.1.tgz#d85f5a59b6441ccd9e0acddc93c288c54a7de7ee"

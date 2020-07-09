@@ -4,6 +4,9 @@ import _ from 'lodash'
 import Select from 'react-select'
 import { useQuery, useMutation } from '@apollo/react-hooks'
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faTrashAlt } from '@fortawesome/free-solid-svg-icons'
+
 import {
   GET_PAYER_ORGANIZATIONS,
   GET_OBM_AND_PAYER_CONNECTIONS,
@@ -12,10 +15,25 @@ import {
 
 import { CONNECT_OBM_AND_PAYER } from '../../../../api/mutations'
 
+import { customSelectStyles } from '../../../../components/customSelectStyles'
+import Button from '../../../../components/Button'
+import Color from '../../../../utils/color'
+
+import {
+  RelationalRow,
+  InputContainer,
+  InputLabel,
+  RowInput,
+  FixedControlRow,
+  SaveWarningBox,
+  SaveContainer,
+  WidgetPanelHeader,
+  WidgetPanelTitle,
+  DeleteButton,
+} from './styledComponents'
+
 const ObmPayersWidget = ({ entity }) => {
-  const { data: payersData, loading: payersLoading } = useQuery(
-    GET_PAYER_ORGANIZATIONS
-  )
+  const { data: payersData, loading: payersLoading } = useQuery(GET_PAYER_ORGANIZATIONS)
 
   const { data: connectionsData, loading: connectionsLoading } = useQuery(
     GET_OBM_AND_PAYER_CONNECTIONS,
@@ -50,9 +68,10 @@ const ObmPayersWidget = ({ entity }) => {
   useEffect(() => {
     if (!payersLoading && !connectionsLoading) {
       // clean data of __typename and anything else
-      const initialConnections = connectionsData.obmAndPayerConnections.map(
-        ({ _id, payerId }) => ({ _id, payerId })
-      )
+      const initialConnections = connectionsData.obmAndPayerConnections.map(({ _id, payerId }) => ({
+        _id,
+        payerId,
+      }))
 
       stageConnections(initialConnections)
     }
@@ -60,96 +79,77 @@ const ObmPayersWidget = ({ entity }) => {
 
   if (payersLoading || connectionsLoading) return 'Loading...'
 
-  const payerDropdownOptions = payersData.payerOrganizations.map(
-    ({ _id, organization }) => ({ value: _id, label: organization })
-  )
+  const payerDropdownOptions = payersData.payerOrganizations.map(({ _id, organization }) => ({
+    value: _id,
+    label: organization,
+  }))
 
   const clonedStagedConnections = _.cloneDeep(stagedConnections)
 
   return (
-    <div style={{ padding: 24, width: '100%', height: '100%' }}>
+    <div style={{ width: '100%', height: '100%', overflowY: 'auto' }}>
+      <WidgetPanelHeader>
+        <WidgetPanelTitle>OBM Payer Partnerships</WidgetPanelTitle>
+      </WidgetPanelHeader>
       {stagedConnections.map((connection, idx) => {
         const { _id, payerId } = connection
 
         return (
-          <div
-            key={_id}
-            style={{
-              display: 'flex',
-              border: '1px solid black',
-              padding: 12,
-              alignItems: 'center',
-            }}
-          >
-            <div style={{ display: 'flex', width: 400, alignItems: 'center' }}>
-              <label style={{ marginRight: 12 }}>Payer:</label>
-              <Select
-                styles={{ container: (base) => ({ ...base, flex: 1 }) }}
-                options={payerDropdownOptions}
-                value={payerDropdownOptions.find(
-                  ({ value }) => value === payerId
-                )}
-                onChange={({ value }) => {
-                  const newDoc = _.merge(clonedStagedConnections[idx], {
-                    payerId: value,
-                  })
-                  clonedStagedConnections.splice(idx, 1, newDoc)
-                  stageConnections(clonedStagedConnections)
-                }}
-              />
-            </div>
+          <RelationalRow key={_id}>
+            <InputContainer>
+              <InputLabel>Payer:</InputLabel>
+              <div style={{ width: 300 }}>
+                <Select
+                  styles={customSelectStyles}
+                  options={payerDropdownOptions}
+                  value={payerDropdownOptions.find(({ value }) => value === payerId)}
+                  onChange={({ value }) => {
+                    const newDoc = _.merge(clonedStagedConnections[idx], {
+                      payerId: value,
+                    })
+                    clonedStagedConnections.splice(idx, 1, newDoc)
+                    stageConnections(clonedStagedConnections)
+                  }}
+                />
+              </div>
+            </InputContainer>
 
             <div style={{ marginLeft: 'auto' }}>
-              <button
-                style={{
-                  marginLeft: 12,
-                  border: '1px solid black',
-                  cursor: 'pointer',
-                  padding: 4,
-                }}
+              <DeleteButton
                 onClick={() => {
                   clonedStagedConnections.splice(idx, 1)
                   stageConnections(clonedStagedConnections)
                 }}
               >
-                X
-              </button>
+                <FontAwesomeIcon size="lg" icon={faTrashAlt} />
+              </DeleteButton>
             </div>
-          </div>
+          </RelationalRow>
         )
       })}
 
-      <div>
-        <button
-          style={{
-            border: '1px solid black',
-            cursor: 'pointer',
-            padding: 8,
-            marginTop: 12,
-          }}
-          onClick={() => {
-            const newConnection = { _id: ObjectId(), payerId: null }
-            clonedStagedConnections.push(newConnection)
-            stageConnections(clonedStagedConnections)
-          }}
-        >
-          +
-        </button>
-      </div>
+      <FixedControlRow>
+        <div>
+          <Button
+            onClick={() => {
+              const newConnection = { _id: ObjectId(), payerId: null }
+              clonedStagedConnections.push(newConnection)
+              stageConnections(clonedStagedConnections)
+            }}
+          >
+            + Add Payer
+          </Button>
+        </div>
 
-      <div>
-        <button
-          style={{
-            border: '1px solid black',
-            cursor: 'pointer',
-            padding: 4,
-            marginTop: 12,
-          }}
-          onClick={save}
-        >
-          Save
-        </button>
-      </div>
+        <SaveContainer>
+          <SaveWarningBox>
+            IMPORTANT: You must click this save button to persist payer changes.
+          </SaveWarningBox>
+          <Button color={Color.GREEN} onClick={save}>
+            Save
+          </Button>
+        </SaveContainer>
+      </FixedControlRow>
     </div>
   )
 }

@@ -4,6 +4,8 @@ export const GET_PEOPLE = gql`
   query getPeople {
     people {
       _id
+      createdOn
+      updatedOn
       firstName
       lastName
       nationalProviderIdentifier

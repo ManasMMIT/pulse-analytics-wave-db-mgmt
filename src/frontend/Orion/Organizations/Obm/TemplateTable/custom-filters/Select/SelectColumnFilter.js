@@ -2,9 +2,7 @@ import React from 'react'
 
 // This is a custom filter UI for selecting
 // a unique option from a list
-const SelectColumnFilter = ({
-  column: { filterValue, setFilter, preFilteredRows, id },
-}) => {
+const SelectColumnFilter = ({ column: { filterValue, setFilter, preFilteredRows, id } }) => {
   // Calculate the options for filtering
   // using the preFilteredRows
   const options = React.useMemo(() => {

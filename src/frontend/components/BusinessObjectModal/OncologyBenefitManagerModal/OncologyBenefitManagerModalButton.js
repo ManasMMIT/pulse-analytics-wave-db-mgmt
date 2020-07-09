@@ -1,3 +1,5 @@
+/** @jsx jsx */
+import { jsx } from '@emotion/core'
 import React, { useState } from 'react'
 
 import OncologyBenefitManagerModal from './OncologyBenefitManagerModal'
@@ -13,7 +15,10 @@ const OncologyBenefitManagerModalButton = ({
 
   return (
     <>
-      <button style={buttonStyle} onClick={() => setModal(!showModal)}>{children}</button>
+      <button css={buttonStyle} onClick={() => setModal(!showModal)}>
+        {children}
+      </button>
+
       {showModal && (
         <OncologyBenefitManagerModal
           entityId={entityId}

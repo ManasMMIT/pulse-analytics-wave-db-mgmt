@@ -8,11 +8,17 @@ const Color = {
   ORANGE: '#FD9651',
   YELLOW: '#FFDC6C',
   PURPLE: '#7C5EFA',
+  // Old Grays
   LIGHT_GRAY_1: '#DFE3EA',
   LIGHT_BLUE_GRAY_1: '#F0F6F9',
   LIGHT_BLUE_GRAY_2: '#EEF4FA',
   MEDIUM_GRAY_1: '#CDD8E6',
   MEDIUM_GRAY_2: '#A3BBDA',
+  // New Grays
+  GRAY_DARK: '#849CB2',
+  GRAY_MEDIUM: '#BBC8D6',
+  GRAY_LIGHT: '#F1F5FA',
+  // Custom Colors
   PHOENIX: '#FA8969',
   ORION: '#38B59A',
   DELPHI: '#30B2DC',

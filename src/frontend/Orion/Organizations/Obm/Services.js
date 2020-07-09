@@ -3,46 +3,43 @@ import { useQuery } from '@apollo/react-hooks'
 
 import { GET_SERVICE_TEMPLATE_OBMS } from 'frontend/api/queries'
 
-import PanelHeader from '../../../components/Panel/PanelHeader'
-import ObmModalButton from '../../../components/BusinessObjectModal/OncologyBenefitManagerModal/OncologyBenefitManagerModalButton'
-import ObmServicesModalButton from '../../../components/BusinessObjectModal/ObmServicesModal/ObmServicesModalButton'
-import ObmServicesCategoriesModalButton from '../../../components/BusinessObjectModal/ObmServicesCategoriesModal/ObmServicesCategoriesModalButton'
+import PanelHeader from 'frontend/components/Panel/PanelHeader'
+import ObmModal from 'frontend/components/BusinessObjectModal/OncologyBenefitManagerModal'
+import ObmServicesModal from 'frontend/components/BusinessObjectModal/ObmServicesModal'
+import ObmServicesCategoriesModal from 'frontend/components/BusinessObjectModal/ObmServicesCategoriesModal'
+import ObmServicesModalButton from 'frontend/components/BusinessObjectModal/ObmServicesModal/ObmServicesModalButton'
+import ObmServicesCategoriesModalButton from 'frontend/components/BusinessObjectModal/ObmServicesCategoriesModal/ObmServicesCategoriesModalButton'
+import ObmPowerSelect from 'frontend/components/BoPowerSelect/ObmPowerSelect'
+import ObmServicePowerSelect from 'frontend/components/BoPowerSelect/ObmServicePowerSelect'
+import ObmServiceCategoryPowerSelect from 'frontend/components/BoPowerSelect/ObmServiceCategoryPowerSelect'
+import Icon from 'frontend/components/Icon'
+
+import Color from 'frontend/utils/color'
 
 import TemplateTable from './TemplateTable'
-import MultiSelectColumnFilter from './TemplateTable/MultiSelectColumnFilter'
-import NumberRangeColumnFilter from './TemplateTable/NumberRangeColumnFilter'
+import MultiSelectColumnFilter from './TemplateTable/custom-filters/MultiSelect/MultiSelectColumnFilter'
+import customMultiSelectFilterFn from './TemplateTable/custom-filters/MultiSelect/customMultiSelectFilterFn'
+import NumberRangeColumnFilter from './TemplateTable/custom-filters/NumberRangeColumnFilter'
 
-import customMultiSelectFilterFn from './TemplateTable/custom-filters/customMultiSelectFilterFn'
-
-import Color from './../../../utils/color'
-
-const createButtonStyle = {
-  background: Color.PRIMARY,
-  color: Color.WHITE,
-  fontWeight: 700,
-  margin: 12,
-  padding: 12,
-  borderRadius: 4,
-  cursor: 'pointer',
-}
+import createButtonStyle from './create-button-style'
 
 const PAGE_TITLE = 'Oncology Benefit Manager Services'
 
 const MODAL_TO_COL_MAP = {
   organization: {
-    Modal: ObmModalButton,
+    Modal: ObmModal,
     idKey: 'obmId',
   },
   serviceCategory: {
-    Modal: ObmServicesCategoriesModalButton,
+    Modal: ObmServicesCategoriesModal,
     idKey: 'serviceCategoryId',
   },
   service: {
-    Modal: ObmServicesModalButton,
+    Modal: ObmServicesModal,
     idKey: 'serviceId',
   },
   serviceRating: {
-    Modal: ObmModalButton,
+    Modal: ObmModal,
     idKey: 'obmId',
   },
 }
@@ -54,6 +51,7 @@ const COLUMNS = [
     Filter: MultiSelectColumnFilter,
     filter: customMultiSelectFilterFn,
     sortType: 'text',
+    width: 200,
   },
   {
     Header: 'Service Category',
@@ -61,6 +59,7 @@ const COLUMNS = [
     Filter: MultiSelectColumnFilter,
     filter: customMultiSelectFilterFn,
     sortType: 'text',
+    width: 280,
   },
   {
     Header: 'Service',
@@ -68,12 +67,14 @@ const COLUMNS = [
     Filter: MultiSelectColumnFilter,
     filter: customMultiSelectFilterFn,
     sortType: 'text',
+    width: 280,
   },
   {
     Header: 'Service Rating',
     accessor: 'serviceRating',
     Filter: NumberRangeColumnFilter,
     filter: 'between',
+    Cell: (props) => <div style={{ textAlign: 'right' }}>{props.value}</div>,
   },
 ]
 
@@ -88,20 +89,31 @@ const Services = () => {
       style={{
         display: 'flex',
         flexDirection: 'column',
+        width: 'calc(100vw - 318px)',
       }}
     >
       <PanelHeader title={PAGE_TITLE}>
-        <ObmServicesModalButton buttonStyle={createButtonStyle}>
-          Create Service
-        </ObmServicesModalButton>
-        <ObmServicesCategoriesModalButton buttonStyle={createButtonStyle}>
-          Create Service Category
-        </ObmServicesCategoriesModalButton>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <ObmPowerSelect />
+          <ObmServicePowerSelect />
+          <ObmServiceCategoryPowerSelect />
+          <ObmServicesModalButton buttonStyle={createButtonStyle}>
+            <Icon iconName="add" color1={Color.WHITE} width={16} style={{ marginRight: 8 }} />
+            Create Service
+          </ObmServicesModalButton>
+
+          <ObmServicesCategoriesModalButton buttonStyle={{ ...createButtonStyle, marginLeft: 12 }}>
+            <Icon iconName="add" color1={Color.WHITE} width={16} style={{ marginRight: 8 }} />
+            Create Service Category
+          </ObmServicesCategoriesModalButton>
+        </div>
       </PanelHeader>
+
       <TemplateTable
         data={serviceTemplateData}
         columns={COLUMNS}
         modalColMap={MODAL_TO_COL_MAP}
+        exportProps={{ filename: 'ObmServices', sheetName: 'Services' }}
       />
     </div>
   )

@@ -12,7 +12,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Fixed** for any bug fixes.
 - **Security** in case of vulnerabilities.
 
-## [Unreleased] - Started: 6-30-20
+## [Unreleased] - Started: 7-9-20
+
+## [2.11.0] - Started: 6-30-20
+
+### Added
+- `Orion/Obm`: Improve Obm Template Table
+  - Add ability to set sticky columns
+  - Refactor table components
+  - Add export to excel functionality
+- `Orion`: People view and CRUD
+- `Orion/Obm`: Add power selects for editing business object entities
+- `Import Process`: Add new transition CoreToDev materialization step to payer import process
+- `Payer Projects`: Update for payer project name
+
+### Changed
+- `Polaris Scripts`: improvements to regional breakdown hotfix script
 
 ## [2.10.2] - Started: 6-30-20
 

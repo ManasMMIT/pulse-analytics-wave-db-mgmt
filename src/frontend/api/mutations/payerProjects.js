@@ -28,3 +28,9 @@ export const TRANSFER_PAYER_PROJECT_PTPS = gql`
     transferPayerProjectPtps(input: $input)
   }
 `
+
+export const UPDATE_PAYER_PROJECT_NAME = gql`
+  mutation UpdatePayerProjectName($input: UpdatePayerProjectNameInput!) {
+    updatePayerProjectName(input: $input)
+  }
+`

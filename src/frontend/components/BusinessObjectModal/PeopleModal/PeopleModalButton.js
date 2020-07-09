@@ -1,3 +1,5 @@
+/** @jsx jsx */
+import { jsx } from '@emotion/core'
 import React, { useState } from 'react'
 
 import PeopleModal from './PeopleModal'
@@ -13,9 +15,10 @@ const PeopleModalButton = ({
 
   return (
     <>
-      <button style={buttonStyle} onClick={() => setModal(!showModal)}>
+      <button css={buttonStyle} onClick={() => setModal(!showModal)}>
         {children}
       </button>
+
       {showModal && (
         <PeopleModal
           entityId={entityId}

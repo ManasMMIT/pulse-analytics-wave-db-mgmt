@@ -3,48 +3,43 @@ import { useQuery } from '@apollo/react-hooks'
 
 import { GET_INFLUENCER_TEMPLATE_OBMS } from 'frontend/api/queries'
 
-import PanelHeader from '../../../components/Panel/PanelHeader'
-import ObmModalButton from '../../../components/BusinessObjectModal/OncologyBenefitManagerModal/OncologyBenefitManagerModalButton'
-import PeopleModalButton from '../../../components/BusinessObjectModal/PeopleModal/PeopleModalButton'
+import PanelHeader from 'frontend/components/Panel/PanelHeader'
+import ObmModal from 'frontend/components/BusinessObjectModal/OncologyBenefitManagerModal'
+import PeopleModal from 'frontend/components/BusinessObjectModal/PeopleModal'
+import PeopleModalButton from 'frontend/components/BusinessObjectModal/PeopleModal/PeopleModalButton'
+import ObmPowerSelect from 'frontend/components/BoPowerSelect/ObmPowerSelect'
+import PeoplePowerSelect from 'frontend/components/BoPowerSelect/PeoplePowerSelect'
+import Icon from 'frontend/components/Icon'
+
+import Color from 'frontend/utils/color'
 
 import TemplateTable from './TemplateTable'
-import MultiSelectColumnFilter from './TemplateTable/MultiSelectColumnFilter'
+import MultiSelectColumnFilter from './TemplateTable/custom-filters/MultiSelect/MultiSelectColumnFilter'
+import customMultiSelectFilterFn from './TemplateTable/custom-filters/MultiSelect/customMultiSelectFilterFn'
 
-import customMultiSelectFilterFn from './TemplateTable/custom-filters/customMultiSelectFilterFn'
-
-import Color from './../../../utils/color'
-
-const createButtonStyle = {
-  background: Color.PRIMARY,
-  color: Color.WHITE,
-  fontWeight: 700,
-  margin: 12,
-  padding: 12,
-  borderRadius: 4,
-  cursor: 'pointer',
-}
+import createButtonStyle from './create-button-style'
 
 const PAGE_TITLE = 'Oncology Benefit Manager Influencers'
 
 const MODAL_TO_COL_MAP = {
   obmOrganization: {
-    Modal: ObmModalButton,
+    Modal: ObmModal,
     idKey: 'obmId',
   },
   influencerFirstName: {
-    Modal: PeopleModalButton,
+    Modal: PeopleModal,
     idKey: 'influencerId',
   },
   influencerLastName: {
-    Modal: PeopleModalButton,
+    Modal: PeopleModal,
     idKey: 'influencerId',
   },
   influencerNpiNumber: {
-    Modal: PeopleModalButton,
+    Modal: PeopleModal,
     idKey: 'influencerId',
   },
   influencerPosition: {
-    Modal: ObmModalButton,
+    Modal: ObmModal,
     idKey: 'obmId',
   },
 }
@@ -56,20 +51,24 @@ const COLUMNS = [
     Filter: MultiSelectColumnFilter,
     filter: customMultiSelectFilterFn,
     sortType: 'text',
+    sticky: 'left',
+    width: 200,
   },
   {
-    Header: 'Influencer First Name',
+    Header: 'First Name',
     accessor: 'influencerFirstName',
     Filter: MultiSelectColumnFilter,
     filter: customMultiSelectFilterFn,
     sortType: 'text',
+    sticky: 'left',
   },
   {
-    Header: 'Influencer Last Name',
+    Header: 'Last Name',
     accessor: 'influencerLastName',
     Filter: MultiSelectColumnFilter,
     filter: customMultiSelectFilterFn,
     sortType: 'text',
+    sticky: 'left',
   },
   {
     Header: 'NPI #',
@@ -77,13 +76,15 @@ const COLUMNS = [
     Filter: MultiSelectColumnFilter,
     filter: customMultiSelectFilterFn,
     sortType: 'text',
+    Cell: (props) => <div style={{ textAlign: 'right' }}>{props.value}</div>,
   },
   {
-    Header: 'Positioning within OBM',
+    Header: 'Position within OBM',
     accessor: 'influencerPosition',
     Filter: MultiSelectColumnFilter,
     filter: customMultiSelectFilterFn,
     sortType: 'text',
+    width: 700,
   },
 ]
 
@@ -98,17 +99,24 @@ const Influencers = () => {
       style={{
         display: 'flex',
         flexDirection: 'column',
+        width: 'calc(100vw - 318px)',
       }}
     >
       <PanelHeader title={PAGE_TITLE}>
-        <PeopleModalButton buttonStyle={createButtonStyle}>
-          Create Influencer
-        </PeopleModalButton>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <ObmPowerSelect />
+          <PeoplePowerSelect />
+          <PeopleModalButton buttonStyle={createButtonStyle}>
+            <Icon iconName="add" color1={Color.WHITE} width={16} style={{ marginRight: 8 }} />
+            Create Person
+          </PeopleModalButton>
+        </div>
       </PanelHeader>
       <TemplateTable
         data={influencerTemplateData}
         columns={COLUMNS}
         modalColMap={MODAL_TO_COL_MAP}
+        exportProps={{ filename: 'ObmInfluencers', sheetName: 'Influencers' }}
       />
     </div>
   )

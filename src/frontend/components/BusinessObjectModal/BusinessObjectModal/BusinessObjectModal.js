@@ -7,15 +7,15 @@ import gql from 'graphql-tag'
 
 import useBom from '../../../hooks/useBom'
 
-import Color from '../../../utils/color'
-import Spacing from '../../../utils/spacing'
+import Color from 'frontend/utils/color'
+import Spacing from 'frontend/utils/spacing'
 
 import BomSidebar from './BomSidebar'
 import BomSections from './BomSections'
 import Title from '../../Title'
 import Dialog from '../../Dialog'
 import Button from '../../Button'
-import { Colors } from '../../../utils/pulseStyles'
+import Icon from '../../Icon'
 
 const STUB_DOC = gql`
   mutation STUBBED_NO_OP {
@@ -26,6 +26,7 @@ const STUB_DOC = gql`
 const Header = styled.div({
   display: 'flex',
   justifyContent: 'space-between',
+  alignItems: 'center',
   padding: Spacing.S4,
   borderBottom: `1px solid ${Color.LIGHT_BLUE_GRAY_1}`,
 })
@@ -34,6 +35,36 @@ const BoContent = styled.div({
   display: 'flex',
   overflowY: 'auto',
   height: '100%',
+})
+
+const DeleteConfirmationContainer = styled.div({
+  alignItems: 'center',
+  display: 'flex',
+  flexDirection: 'column',
+  margin: '0 auto',
+  padding: 24,
+  textAlign: 'center',
+})
+
+const DeleteMessageText = styled.p({
+  color: Color.BLACK,
+  fontSize: 13,
+  fontWeight: 500,
+  lineHeight: 1.5,
+  marginBottom: 12,
+})
+
+const DeleteMessageBO = styled.span({
+  color: Color.PRIMARY,
+  fontWeight: 800,
+})
+
+const DeleteMessageCaption = styled.p({
+  color: Color.RED,
+  fontSize: 12,
+  fontWeight: 800,
+  lineHeight: 1.5,
+  marginTop: 12,
 })
 
 const BusinessObjectModal = ({
@@ -55,13 +86,9 @@ const BusinessObjectModal = ({
   const [inputFields, setInputField] = useState({})
   const [showDeleteConfirmation, toggleDeleteConfirmation] = useState(false)
 
-  const saveMutationToUse = isEditModal
-    ? mutationDocs.update
-    : mutationDocs.create
+  const saveMutationToUse = isEditModal ? mutationDocs.update : mutationDocs.create
 
-  const inputToUse = isEditModal
-    ? { _id: entityId, ...inputFields }
-    : inputFields
+  const inputToUse = isEditModal ? { _id: entityId, ...inputFields } : inputFields
 
   console.log('Mutation Input: ', inputToUse)
   const [save] = useMutation(saveMutationToUse, {
@@ -107,7 +134,7 @@ const BusinessObjectModal = ({
   if (loading || _.isEmpty(schema)) return null
 
   const modalTitle = `${isEditModal ? 'Edit' : 'Create'} ${headerText}`
-  const titleModifiers = [getEntityTitle(entity)]
+  const titleModifiers = isEditModal ? [getEntityTitle(entity)] : []
 
   // Can't allow relationalizing data on create yet; needs to be planned out more
   const allTags = isEditModal ? schema.tags.concat(widgets) : schema.tags
@@ -120,45 +147,56 @@ const BusinessObjectModal = ({
     <Dialog>
       <Header>
         <Title title={modalTitle} titleModifiers={titleModifiers} />
-        <div style={{ margin: Spacing.S4 }}>
-          <Button
-            buttonStyle={{ margin: Spacing.S4 }}
-            color={Colors.MEDIUM_GRAY_2}
-            onClick={closeModal}
-          >
-            Cancel + Close
-          </Button>
+        <div style={{ margin: `0 ${Spacing.S4}`, display: 'flex', alignItems: 'center' }}>
           {isEditModal && mutationDocs.delete && (
             <Button
-              buttonStyle={{ margin: Spacing.S4 }}
-              color={Colors.RED}
+              buttonStyle={{ margin: Spacing.S3 }}
+              color={Color.RED}
+              type="secondary"
+              iconName="delete"
+              iconColor1={Color.RED}
               onClick={() => toggleDeleteConfirmation(!showDeleteConfirmation)}
             >
               {showDeleteConfirmation ? 'Cancel Delete' : 'Delete'}
             </Button>
           )}
           <Button
-            buttonStyle={{ margin: Spacing.S4 }}
-            color={Colors.GREEN}
-            onClick={save}
+            buttonStyle={{ margin: Spacing.S3 }}
+            color={Color.GRAY_DARK}
+            type="secondary"
+            onClick={closeModal}
           >
+            Cancel + Close
+          </Button>
+          <Button buttonStyle={{ margin: Spacing.S3 }} color={Color.GREEN} onClick={save}>
             Save + Close
           </Button>
         </div>
       </Header>
 
       {showDeleteConfirmation ? (
-        <div style={{ padding: 24, margin: '0 auto' }}>
-          <p>Are you sure you want to delete?</p>
-          <p>Any connections to this business object will also be deleted.</p>
-          <Button
-            buttonStyle={{ margin: 24 }}
-            color={Colors.RED}
-            onClick={deleteHandler}
-          >
-            Delete Forever
-          </Button>
-        </div>
+        <DeleteConfirmationContainer>
+          <div>
+            <DeleteMessageText>
+              Are you sure you want to delete <DeleteMessageBO>{titleModifiers}</DeleteMessageBO>?
+            </DeleteMessageText>
+            <DeleteMessageText>
+              Any connections to <DeleteMessageBO>{titleModifiers}</DeleteMessageBO> will also be
+              deleted.
+            </DeleteMessageText>
+          </div>
+          <div style={{ marginTop: 24 }}>
+            <Button
+              color={Color.RED}
+              iconName="delete"
+              iconColor1={Color.WHITE}
+              onClick={deleteHandler}
+            >
+              Delete Forever
+            </Button>
+            <DeleteMessageCaption>This cannot be undone.</DeleteMessageCaption>
+          </div>
+        </DeleteConfirmationContainer>
       ) : (
         <BoContent>
           <BomSidebar
@@ -201,7 +239,7 @@ BusinessObjectModal.propTypes = {
 BusinessObjectModal.defaultProps = {
   closeModal: () => null,
   headerText: '',
-  getEntityTitle: (entity) => (entity ? entity.name : ''),
+  getEntityTitle: (entity) => entity.name,
   mutationDocs: {},
   refetchQueries: [],
   afterMutationHook: () => {},

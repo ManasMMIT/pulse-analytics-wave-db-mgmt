@@ -1,10 +1,12 @@
 const { ObjectId } = require('mongodb')
+const _ = require('lodash')
 const { zonedTimeToUtc } = require('date-fns-tz')
 
 const SheetToCoreManager = require('./SheetToCore/ManagerFactory')
 const SheetToCoreManagerDao = require('./SheetToCore/ManagerFactory/ManagerDao')
 
 const CoreToDev = require('./CoreToDev')
+const TRANSITION_materializeCoreToDev = require('./TRANSITION_CoreToDev')
 
 const DEFAULT_TIMEZONE = require('../../../../utils/defaultTimeZone')
 
@@ -14,9 +16,7 @@ const {
   validatePolicyLinks,
 } = require('./SheetToCore/validatePayerHistoricalAccessData')
 
-const {
-  getProjectOrgTpsEnrichedPipeline,
-} = require('./SheetToCore/agg-pipelines')
+const { getProjectOrgTpsEnrichedPipeline } = require('./SheetToCore/agg-pipelines')
 
 const {
   isQualityAccessSheet,
@@ -61,32 +61,30 @@ const importPayerHistoricalAccessData = async ({
     console.timeEnd('Step 2: QOA Combo Validation')
 
     const session = mongoClient.startSession()
+    const projectPtpIds = projectPtps.map(({ _id }) => _id)
 
     await session.withTransaction(async () => {
-
       console.time('Step 3: Clear PTP-timestamp combos')
       // STEP 3: Clear the PTP-timestamp combos before any upsertion happens
       const convertedTimestamp = zonedTimeToUtc(importTimestamp, DEFAULT_TIMEZONE)
-      const projectPtpIds = projectPtps.map(({ _id }) => _id)
 
-      await pulseCoreDb.collection('organizations.treatmentPlans.history')
-        .updateMany(
-          {
-            timestamp: convertedTimestamp,
-            orgTpId: { $in: projectPtpIds },
+      await pulseCoreDb.collection('organizations.treatmentPlans.history').updateMany(
+        {
+          timestamp: convertedTimestamp,
+          orgTpId: { $in: projectPtpIds },
+        },
+        {
+          $set: {
+            policyLinkData: {},
+            additionalCriteriaData: [],
+            accessData: {},
+            tierData: {},
           },
-          {
-            $set: {
-              policyLinkData: {},
-              additionalCriteriaData: [],
-              accessData: {},
-              tierData: {},
-            }
-          },
-          {
-            session,
-          }
-        )
+        },
+        {
+          session,
+        }
+      )
 
       console.timeEnd('Step 3: Clear PTP-timestamp combos')
 
@@ -131,26 +129,36 @@ const importPayerHistoricalAccessData = async ({
         console.timeEnd(timerLabel)
 
         importFeedback.push(
-          `Import to CORE successful for ${wb}/${sheetName}`
-          + `\n${data.length}/${originalDataLength} rows imported (excluding header)`
-          + `\nSkipped rows were: ${skippedRows.join(', ')}`
+          `Import to CORE successful for ${wb}/${sheetName}` +
+            `\n${data.length}/${originalDataLength} rows imported (excluding header)` +
+            `\nSkipped rows were: ${skippedRows.join(', ')}`
         )
       }
     })
 
-    // STEP 5: Materialize payer historical access data, CoreToDev
+    // STEP 5: Execute NEW CoreToDev materialization process (transition/experimental)
+    const newMaterializationOpTimerId = `Step 5: New Materialization`
+    console.time(newMaterializationOpTimerId)
+
+    await TRANSITION_materializeCoreToDev({ pulseCoreDb, pulseDevDb, projectPtpIds })
+
+    console.timeEnd(newMaterializationOpTimerId)
+
+    // STEP 6: Execute OLD CoreToDev materialization process without await to prevent blocking
     const coreToDev = new CoreToDev({
       pulseDev: pulseDevDb,
       pulseCore: pulseCoreDb,
     })
 
-    // HOTFIX: await is removed so that the response does not timeout while it waits for data to materialize
-    coreToDev.materializeNonLivesCollections()
-      .then(() => payerImportEmitter.success()) // need to keep original context; can't just pass payerImportEmitter.success
+    const oldMaterializationOpTimerId = `Step 6: Old Materialization ${_.uniqueId()}`
+    console.time(oldMaterializationOpTimerId)
 
-    // ! in light of above hotfix, don't add this message to importFeedback
-    // importFeedback.push('Payer historical access data successfully materialized to dev')
-  } catch(e) {
+    // await is removed so the response does not timeout while it waits for data to materialize
+    coreToDev.materializeNonLivesCollections().then(() => {
+      console.timeEnd(oldMaterializationOpTimerId)
+      payerImportEmitter.success()
+    })
+  } catch (e) {
     payerImportEmitter.error()
     throw new Error(e)
   }

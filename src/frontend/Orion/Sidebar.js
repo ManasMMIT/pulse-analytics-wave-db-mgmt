@@ -169,12 +169,7 @@ const ADMIN_SETTINGS_LINKS_CONFIG = [
 ]
 
 const renderStyledNavLink = ({ label, link }) => (
-  <StyledNavLink
-    key={link}
-    style={inactiveLinkStyle}
-    activeStyle={activeLinkStyle}
-    to={link}
-  >
+  <StyledNavLink key={link} style={inactiveLinkStyle} activeStyle={activeLinkStyle} to={link}>
     {label}
   </StyledNavLink>
 )
@@ -189,16 +184,36 @@ const Sidebar = () => {
         <OrionLogo src="https://res.cloudinary.com/pulsedatatools/image/upload/v1573837414/polaris/icons/orion-1-color.svg" />
         Orion DB
       </OrionHeader>
+
       <Header>Excel</Header>
       {EXCEL_LINKS_CONFIG.map(renderStyledNavLink)}
-      <Header>Query</Header>
-      {QUERY_LINKS_CONFIG.map(renderStyledNavLink)}
+
+      <div>
+        <Header>Configuration</Header>
+        <StyledNavLink
+          style={dropdownInactiveLinkStyle}
+          activeStyle={dropdownActiveLinkStyle}
+          to={'/orion/configuration/people'}
+        >
+          People
+        </StyledNavLink>
+        <StyledDropdown style={inactiveLinkStyle} label={'Products + Indications'}>
+          <div style={{ display: 'flex', flexDirection: 'column' }}>
+            {PRODUCT_INDICATION_LINKS_CONFIG.map(renderStyledNavLink)}
+          </div>
+        </StyledDropdown>
+        {isSuperUser && (
+          <StyledDropdown style={inactiveLinkStyle} label={'Admin Settings'}>
+            <div style={{ display: 'flex', flexDirection: 'column' }}>
+              {ADMIN_SETTINGS_LINKS_CONFIG.map(renderStyledNavLink)}
+            </div>
+          </StyledDropdown>
+        )}
+      </div>
+
       <div>
         <Header>Organizations</Header>
-        <StyledDropdown
-          style={inactiveLinkStyle}
-          label={'Alternative Payment Models'}
-        >
+        <StyledDropdown style={inactiveLinkStyle} label={'Alternative Payment Models'}>
           <StyledNavLink
             style={dropdownInactiveLinkStyle}
             activeStyle={dropdownActiveLinkStyle}
@@ -207,10 +222,7 @@ const Sidebar = () => {
             Accounts
           </StyledNavLink>
         </StyledDropdown>
-        <StyledDropdown
-          style={inactiveLinkStyle}
-          label={'Oncology Benefit Managers'}
-        >
+        <StyledDropdown style={inactiveLinkStyle} label={'Oncology Benefit Managers'}>
           <StyledNavLink
             style={dropdownInactiveLinkStyle}
             activeStyle={dropdownActiveLinkStyle}
@@ -256,10 +268,7 @@ const Sidebar = () => {
             New Pathways Accounts
           </StyledNavLink>
         </StyledDropdown>
-        <StyledDropdown
-          style={inactiveLinkStyle}
-          label={'Payer Quality of Access'}
-        >
+        <StyledDropdown style={inactiveLinkStyle} label={'Payer Quality of Access'}>
           <StyledNavLink
             style={dropdownInactiveLinkStyle}
             activeStyle={dropdownActiveLinkStyle}
@@ -282,10 +291,7 @@ const Sidebar = () => {
             Quality of Access Scores
           </StyledNavLink>
         </StyledDropdown>
-        <StyledDropdown
-          style={inactiveLinkStyle}
-          label={'Provider Key Accounts'}
-        >
+        <StyledDropdown style={inactiveLinkStyle} label={'Provider Key Accounts'}>
           <StyledNavLink
             style={dropdownInactiveLinkStyle}
             activeStyle={dropdownActiveLinkStyle}
@@ -295,24 +301,9 @@ const Sidebar = () => {
           </StyledNavLink>
         </StyledDropdown>
       </div>
-      <div>
-        <Header>Configuration</Header>
-        <StyledDropdown
-          style={inactiveLinkStyle}
-          label={'Products + Indications'}
-        >
-          <div style={{ display: 'flex', flexDirection: 'column' }}>
-            {PRODUCT_INDICATION_LINKS_CONFIG.map(renderStyledNavLink)}
-          </div>
-        </StyledDropdown>
-        {isSuperUser && (
-          <StyledDropdown style={inactiveLinkStyle} label={'Admin Settings'}>
-            <div style={{ display: 'flex', flexDirection: 'column' }}>
-              {ADMIN_SETTINGS_LINKS_CONFIG.map(renderStyledNavLink)}
-            </div>
-          </StyledDropdown>
-        )}
-      </div>
+
+      <Header>Query</Header>
+      {QUERY_LINKS_CONFIG.map(renderStyledNavLink)}
     </Wrapper>
   )
 }

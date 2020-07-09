@@ -49,7 +49,9 @@ const STATE_ID_BY_ABBREV = {
   WA: 53,
   WI: 55,
   WV: 54,
-  WY: 56
+  WY: 56,
+  PR: 72,
+  VI: 78,
 }
 
 const STATE_LONG_BY_ABBREV = {
@@ -107,6 +109,7 @@ const STATE_LONG_BY_ABBREV = {
   Other: 'Other',
   PR: 'Puerto Rico',
   GU: 'Guam',
+  VI: 'Virgin Islands',
 }
 
 module.exports = {
