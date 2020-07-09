@@ -5,6 +5,7 @@ import { GET_OBM_PAYER_PARTNERSHIPS } from 'frontend/api/queries'
 
 import PanelHeader from 'frontend/components/Panel/PanelHeader'
 import ObmModal from 'frontend/components/BusinessObjectModal/OncologyBenefitManagerModal'
+import ObmPowerSelect from 'frontend/components/BoPowerSelect/ObmPowerSelect'
 
 import TemplateTable from './TemplateTable'
 
@@ -123,7 +124,9 @@ const PayerPartnerships = () => {
         width: 'calc(100vw - 318px)',
       }}
     >
-      <PanelHeader title={PAGE_TITLE} headerContainerStyle={{ flex: '0 0 auto' }} />
+      <PanelHeader title={PAGE_TITLE} headerContainerStyle={{ flex: '0 0 auto' }}>
+        <ObmPowerSelect />
+      </PanelHeader>
 
       <TemplateTable
         data={payerPartnershipsData}

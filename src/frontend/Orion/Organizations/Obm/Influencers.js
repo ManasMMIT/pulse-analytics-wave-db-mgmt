@@ -7,6 +7,8 @@ import PanelHeader from 'frontend/components/Panel/PanelHeader'
 import ObmModal from 'frontend/components/BusinessObjectModal/OncologyBenefitManagerModal'
 import PeopleModal from 'frontend/components/BusinessObjectModal/PeopleModal'
 import PeopleModalButton from 'frontend/components/BusinessObjectModal/PeopleModal/PeopleModalButton'
+import ObmPowerSelect from 'frontend/components/BoPowerSelect/ObmPowerSelect'
+import PeoplePowerSelect from 'frontend/components/BoPowerSelect/PeoplePowerSelect'
 import Icon from 'frontend/components/Icon'
 
 import Color from 'frontend/utils/color'
@@ -101,10 +103,14 @@ const Influencers = () => {
       }}
     >
       <PanelHeader title={PAGE_TITLE}>
-        <PeopleModalButton buttonStyle={createButtonStyle}>
-          <Icon iconName="add" color1={Color.WHITE} width={16} style={{ marginRight: 8 }} />
-          Create Person
-        </PeopleModalButton>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <ObmPowerSelect />
+          <PeoplePowerSelect />
+          <PeopleModalButton buttonStyle={createButtonStyle}>
+            <Icon iconName="add" color1={Color.WHITE} width={16} style={{ marginRight: 8 }} />
+            Create Person
+          </PeopleModalButton>
+        </div>
       </PanelHeader>
       <TemplateTable
         data={influencerTemplateData}

@@ -9,6 +9,9 @@ import ObmServicesModal from 'frontend/components/BusinessObjectModal/ObmService
 import ObmServicesCategoriesModal from 'frontend/components/BusinessObjectModal/ObmServicesCategoriesModal'
 import ObmServicesModalButton from 'frontend/components/BusinessObjectModal/ObmServicesModal/ObmServicesModalButton'
 import ObmServicesCategoriesModalButton from 'frontend/components/BusinessObjectModal/ObmServicesCategoriesModal/ObmServicesCategoriesModalButton'
+import ObmPowerSelect from 'frontend/components/BoPowerSelect/ObmPowerSelect'
+import ObmServicePowerSelect from 'frontend/components/BoPowerSelect/ObmServicePowerSelect'
+import ObmServiceCategoryPowerSelect from 'frontend/components/BoPowerSelect/ObmServiceCategoryPowerSelect'
 import Icon from 'frontend/components/Icon'
 
 import Color from 'frontend/utils/color'
@@ -90,15 +93,20 @@ const Services = () => {
       }}
     >
       <PanelHeader title={PAGE_TITLE}>
-        <ObmServicesModalButton buttonStyle={createButtonStyle}>
-          <Icon iconName="add" color1={Color.WHITE} width={16} style={{ marginRight: 8 }} />
-          Create Service
-        </ObmServicesModalButton>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <ObmPowerSelect />
+          <ObmServicePowerSelect />
+          <ObmServiceCategoryPowerSelect />
+          <ObmServicesModalButton buttonStyle={createButtonStyle}>
+            <Icon iconName="add" color1={Color.WHITE} width={16} style={{ marginRight: 8 }} />
+            Create Service
+          </ObmServicesModalButton>
 
-        <ObmServicesCategoriesModalButton buttonStyle={{ ...createButtonStyle, marginLeft: 12 }}>
-          <Icon iconName="add" color1={Color.WHITE} width={16} style={{ marginRight: 8 }} />
-          Create Service Category
-        </ObmServicesCategoriesModalButton>
+          <ObmServicesCategoriesModalButton buttonStyle={{ ...createButtonStyle, marginLeft: 12 }}>
+            <Icon iconName="add" color1={Color.WHITE} width={16} style={{ marginRight: 8 }} />
+            Create Service Category
+          </ObmServicesCategoriesModalButton>
+        </div>
       </PanelHeader>
 
       <TemplateTable
