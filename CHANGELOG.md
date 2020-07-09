@@ -15,11 +15,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased] - Started: 6-30-20
 
 ### Added
-- Improve Obm Template Table
+- `Orion/Obm`: Improve Obm Template Table
   - Add ability to set sticky columns
   - Refactor table components
   - Add export to excel functionality
-  - Add power selects for editing business object entities
+- `Orion/Obm`: Add power selects for editing business object entities
+- `Import Process`: Add new transition CoreToDev materialization step to payer import process
 
 ## [2.10.2] - Started: 6-30-20
 
