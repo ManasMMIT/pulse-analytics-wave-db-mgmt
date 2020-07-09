@@ -81,7 +81,10 @@ const generateButtonContent = ({ iconName, iconPosition, iconColor1, iconColor2,
   if (children) {
     const iconStyle = iconPosition === 'left' ? { marginRight: 8 } : { marginLeft: 8 }
 
-    const content = [<Icon iconName={iconName} style={iconStyle} {...iconProps} />, children]
+    const content = [
+      <Icon key={`icon-${iconName}`} iconName={iconName} style={iconStyle} {...iconProps} />,
+      children,
+    ]
 
     return iconPosition === 'left' ? content : content.reverse()
   } else {
