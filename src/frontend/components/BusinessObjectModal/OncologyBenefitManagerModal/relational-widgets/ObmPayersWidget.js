@@ -67,8 +67,14 @@ const ObmPayersWidget = ({ entity }) => {
 
   useEffect(() => {
     if (!payersLoading && !connectionsLoading) {
+      // ! HOTFIX: make sure there are no connections in the cache for removed payers
+      const payersById = _.keyBy(Object.values(payersData)[0], '_id')
+      const validConnections = connectionsData.obmAndPayerConnections.filter(
+        (connection) => payersById[connection.payerId]
+      )
+
       // clean data of __typename and anything else
-      const initialConnections = connectionsData.obmAndPayerConnections.map(({ _id, payerId }) => ({
+      const initialConnections = validConnections.map(({ _id, payerId }) => ({
         _id,
         payerId,
       }))

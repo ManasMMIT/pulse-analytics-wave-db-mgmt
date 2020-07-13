@@ -62,10 +62,19 @@ const ObmServicesWidget = ({ entity }) => {
 
   useEffect(() => {
     if (!servicesLoading && !connectionsLoading) {
-      // clean data of __typename and anything else
-      const initialConnections = connectionsData.obmAndObmServiceConnections.map(
-        ({ _id, obmServiceId, obmId, rating }) => ({ _id, obmServiceId, obmId, rating })
+      // ! HOTFIX: make sure there are no connections in the cache for removed services
+      const servicesById = _.keyBy(Object.values(servicesData)[0], '_id')
+      const validConnections = connectionsData.obmAndObmServiceConnections.filter(
+        (connection) => servicesById[connection.obmServiceId]
       )
+
+      // clean data of __typename and anything else
+      const initialConnections = validConnections.map(({ _id, obmServiceId, obmId, rating }) => ({
+        _id,
+        obmServiceId,
+        obmId,
+        rating,
+      }))
 
       stageConnections(initialConnections)
     }

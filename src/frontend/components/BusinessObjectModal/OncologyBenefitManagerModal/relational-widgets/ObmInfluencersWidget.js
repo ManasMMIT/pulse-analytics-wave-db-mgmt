@@ -64,15 +64,19 @@ const ObmInfluencersWidget = ({ entity }) => {
 
   useEffect(() => {
     if (!peopleLoading && !connectionsLoading) {
-      // clean data of __typename and anything else
-      const initialConnections = connectionsData.obmAndPersonConnections.map(
-        ({ _id, personId, obmId, position }) => ({
-          _id,
-          personId,
-          obmId,
-          position,
-        })
+      // ! HOTFIX: make sure there are no connections in the cache for removed people
+      const peopleById = _.keyBy(peopleData.people, '_id')
+      const validConnections = connectionsData.obmAndPersonConnections.filter(
+        (connection) => peopleById[connection.personId]
       )
+
+      // clean data of __typename and anything else
+      const initialConnections = validConnections.map(({ _id, personId, obmId, position }) => ({
+        _id,
+        personId,
+        obmId,
+        position,
+      }))
 
       stageConnections(initialConnections)
     }
