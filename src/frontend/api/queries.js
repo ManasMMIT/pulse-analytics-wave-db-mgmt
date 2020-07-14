@@ -13,6 +13,18 @@ export const GET_PEOPLE = gql`
   }
 `
 
+export const GET_DEV_PATHWAYS_INFLUENCERS = gql`
+  query getDevPathwaysInfluencers {
+    DEV_pathwaysInfluencers
+  }
+`
+
+export const GET_DEV_PROVIDER_INFLUENCERS = gql`
+  query getDevProviderInfluencers {
+    DEV_providerInfluencers
+  }
+`
+
 export const GET_BOOKS = gql`
   query getBooks {
     books {
@@ -828,8 +840,8 @@ export const GET_OBM_AND_OBM_SERVICE_CONNECTIONS = gql`
 `
 
 export const GET_OBM_AND_PERSON_CONNECTIONS = gql`
-  query getObmAndPersonConnections($obmId: ID) {
-    obmAndPersonConnections(obmId: $obmId) {
+  query getObmAndPersonConnections {
+    obmAndPersonConnections {
       _id
       obmId
       personId

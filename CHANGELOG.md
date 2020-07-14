@@ -14,6 +14,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased] - Started: 7-9-20
 
+### Added
+- `Orion`: Add data source columns to People view
+- `Frontend`: Build out hook data sourcing structure around people data
+
 ## [2.11.0] - Started: 6-30-20
 
 ### Added

@@ -26,7 +26,7 @@ const queries = gql`
       obmServiceId: String
     ): [ObmServiceAndObmServiceCategoryConnection]
     obmAndObmServiceConnections(obmId: String): [ObmAndObmServiceConnection]
-    obmAndPersonConnections(obmId: ID): [ObmAndPersonConnection]
+    obmAndPersonConnections: [ObmAndPersonConnection]
     obmAndPayerConnections(obmId: ID): [ObmAndPayerConnection]
 
     serviceTemplateObms: [ServiceTemplateObms]
@@ -78,6 +78,8 @@ const queries = gql`
     cMsOrgPrimarySpecialtyCounts(orgPacId: String): JSON
 
     people: [Person]
+    DEV_pathwaysInfluencers: JSON # grabbing sheet data directly from dev. type def is in wave-api
+    DEV_providerInfluencers: JSON # grabbing sheet data directly from dev. type def is in wave-api
   }
 
   type Person {

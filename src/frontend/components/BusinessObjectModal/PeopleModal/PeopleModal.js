@@ -2,7 +2,11 @@ import React from 'react'
 
 import { CREATE_PERSON, UPDATE_PERSON, DELETE_PERSON } from 'frontend/api/mutations'
 
-import { GET_PEOPLE, GET_INFLUENCER_TEMPLATE_OBMS } from '../../../api/queries'
+import {
+  GET_PEOPLE,
+  GET_INFLUENCER_TEMPLATE_OBMS,
+  GET_OBM_AND_PERSON_CONNECTIONS,
+} from '../../../api/queries'
 
 import BusinessObjectModal from '../BusinessObjectModal/BusinessObjectModal'
 
@@ -25,6 +29,7 @@ const PeopleModal = ({ closeModal, entityId, refetchQueries, afterMutationHook }
       ...refetchQueries,
       { query: GET_PEOPLE },
       { query: GET_INFLUENCER_TEMPLATE_OBMS },
+      { query: GET_OBM_AND_PERSON_CONNECTIONS },
     ]}
     afterMutationHook={afterMutationHook}
   />

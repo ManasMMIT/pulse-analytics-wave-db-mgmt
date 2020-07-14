@@ -1,15 +1,4 @@
-const { ObjectId } = require('mongodb')
-
-const obmAndPersonConnections = (
-  parent,
-  { obmId },
-  { pulseCoreDb },
-) => {
-  obmId = ObjectId(obmId)
-
-  return pulseCoreDb.collection('obm_people')
-    .find({ obmId })
-    .toArray()
-}
+const obmAndPersonConnections = (parent, args, { pulseCoreDb }) =>
+  pulseCoreDb.collection('obm_people').find().toArray()
 
 module.exports = obmAndPersonConnections

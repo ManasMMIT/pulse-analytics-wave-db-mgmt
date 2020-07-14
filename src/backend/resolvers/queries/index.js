@@ -59,5 +59,5 @@ module.exports = {
   regionalTargetingData,
   cMsOrgPrimarySpecialtyCounts,
   ...aquila,
-  people,
+  ...people,
 }

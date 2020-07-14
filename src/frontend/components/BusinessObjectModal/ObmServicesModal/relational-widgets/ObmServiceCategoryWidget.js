@@ -14,12 +14,12 @@ import { CONNECT_OBM_SERVICE_AND_OBM_SERVICE_CATEGORY } from '../../../../api/mu
 const ObmServiceCategoryWidget = ({ entity }) => {
   const { data: categoriesData, loading: categoriesLoading } = useQuery(GET_OBM_SERVICES_CATEGORIES)
 
-  const {
-    data: connectionsData,
-    loading: connectionsLoading,
-  } = useQuery(GET_OBM_SERVICE_AND_OBM_SERVICE_CATEGORY_CONNECTIONS, {
-    variables: { obmServiceId: entity._id },
-  })
+  const { data: connectionsData, loading: connectionsLoading } = useQuery(
+    GET_OBM_SERVICE_AND_OBM_SERVICE_CATEGORY_CONNECTIONS,
+    {
+      variables: { obmServiceId: entity._id },
+    }
+  )
 
   const [selectedCategoryId, selectCategoryId] = useState(null)
 

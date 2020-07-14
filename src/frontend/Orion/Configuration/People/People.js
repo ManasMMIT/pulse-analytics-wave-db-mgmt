@@ -1,30 +1,19 @@
 import React from 'react'
-import { useQuery } from '@apollo/react-hooks'
 import format from 'date-fns/format'
-
-import { GET_PEOPLE } from 'frontend/api/queries'
 
 import PanelHeader from 'frontend/components/Panel/PanelHeader'
 import PeopleModalButton from 'frontend/components/BusinessObjectModal/PeopleModal/PeopleModalButton'
 import PeopleModal from 'frontend/components/BusinessObjectModal/PeopleModal'
 import Icon from 'frontend/components/Icon'
-
-import TemplateTable from '../Organizations/Obm/TemplateTable'
-import MultiSelectColumnFilter from '../Organizations/Obm/TemplateTable/custom-filters/MultiSelect/MultiSelectColumnFilter'
-import customMultiSelectFilterFn from '../Organizations/Obm/TemplateTable/custom-filters/MultiSelect/customMultiSelectFilterFn'
-
 import Color from 'frontend/utils/color'
-import createButtonStyle from '../Organizations/Obm/create-button-style'
 
-const editButtonStyle = {
-  background: Color.LIGHT_BLUE_GRAY_2,
-  color: Color.PRIMARY,
-  fontWeight: 700,
-  margin: 12,
-  padding: '6px 12px',
-  borderRadius: 4,
-  cursor: 'pointer',
-}
+import TemplateTable from '../../Organizations/Obm/TemplateTable'
+import MultiSelectColumnFilter from '../../Organizations/Obm/TemplateTable/custom-filters/MultiSelect/MultiSelectColumnFilter'
+import customMultiSelectFilterFn from '../../Organizations/Obm/TemplateTable/custom-filters/MultiSelect/customMultiSelectFilterFn'
+
+import createButtonStyle from '../../Organizations/Obm/create-button-style'
+
+import usePeople from './usePeople'
 
 const PAGE_TITLE = 'People'
 const CREATE_BTN_TXT = 'Create Person'
@@ -43,6 +32,7 @@ const COLUMNS = [
     Cell: (props) => format(new Date(props.value), 'M/d/yyyy h:mm:ss a'),
     disableFilters: true,
     width: 180,
+    sticky: 'left',
   },
   {
     Header: 'First Name',
@@ -50,6 +40,7 @@ const COLUMNS = [
     Filter: MultiSelectColumnFilter,
     filter: customMultiSelectFilterFn,
     sortType: 'text',
+    sticky: 'left',
   },
   {
     Header: 'Last Name',
@@ -57,6 +48,7 @@ const COLUMNS = [
     Filter: MultiSelectColumnFilter,
     filter: customMultiSelectFilterFn,
     sortType: 'text',
+    sticky: 'left',
   },
   {
     Header: 'Internal ID',
@@ -73,27 +65,40 @@ const COLUMNS = [
     sortType: 'text',
   },
   {
+    Header: 'Pathways Data',
+    accessor: 'hasPathwaysData',
+    disableFilters: true,
+    sortType: 'bool',
+    Cell: ({ value }) => (value ? 'Yes' : 'No'),
+    width: 100,
+  },
+  {
+    Header: 'Provider Data',
+    accessor: 'hasProviderData',
+    disableFilters: true,
+    sortType: 'bool',
+    Cell: ({ value }) => (value ? 'Yes' : 'No'),
+    width: 100,
+  },
+  {
+    Header: 'Obm Data',
+    accessor: 'hasObmData',
+    disableFilters: true,
+    sortType: 'bool',
+    Cell: ({ value }) => (value ? 'Yes' : 'No'),
+    width: 100,
+  },
+  {
     Header: '',
     disableSortBy: true,
     disableFilters: true,
     accessor: 'editAccessor',
-    Cell: ({ cell: { getCellProps } }) => {
-      const props = getCellProps()
-
-      return (
-        <div style={editButtonStyle} {...props}>
-          Edit
-        </div>
-      )
-    },
+    Cell: 'Edit',
   },
 ]
 
 const People = () => {
-  const { data, loading } = useQuery(GET_PEOPLE)
-
-  let influencerTemplateData = []
-  if (data && !loading) influencerTemplateData = Object.values(data)[0] || []
+  const { data } = usePeople()
 
   return (
     <div
@@ -110,7 +115,7 @@ const People = () => {
         </PeopleModalButton>
       </PanelHeader>
       <TemplateTable
-        data={influencerTemplateData}
+        data={data}
         columns={COLUMNS}
         modalColMap={MODAL_TO_COL_MAP}
         exportProps={{ filename: 'Influencers', sheetName: 'Influencers' }}
