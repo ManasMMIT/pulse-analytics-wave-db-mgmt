@@ -56,16 +56,28 @@ const mutationType = gql`
     pushSitemapToProd: String
 
     createIndication(input: CreateIndicationInput!): CreateIndicationPayload
-    updateSourceIndication(input: UpdateSourceIndicationInput!): UpdateSourceIndicationPayload
-    deleteSourceIndication(input: DeleteSourceIndicationInput!): DeleteSourceIndicationPayload
+    updateSourceIndication(
+      input: UpdateSourceIndicationInput!
+    ): UpdateSourceIndicationPayload
+    deleteSourceIndication(
+      input: DeleteSourceIndicationInput!
+    ): DeleteSourceIndicationPayload
 
     createProduct(input: CreateProductInput!): CreateProductPayload
-    updateSourceProduct(input: UpdateSourceProductInput!): UpdateSourceProductPayload
-    deleteSourceProduct(input: DeleteSourceProductInput!): DeleteSourceProductPayload
+    updateSourceProduct(
+      input: UpdateSourceProductInput!
+    ): UpdateSourceProductPayload
+    deleteSourceProduct(
+      input: DeleteSourceProductInput!
+    ): DeleteSourceProductPayload
 
     createRegimen(input: CreateRegimenInput!): CreateRegimenPayload
-    updateSourceRegimen(input: UpdateSourceRegimenInput!): UpdateSourceRegimenPayload
-    deleteSourceRegimen(input: DeleteSourceRegimenInput!): DeleteSourceRegimenPayload
+    updateSourceRegimen(
+      input: UpdateSourceRegimenInput!
+    ): UpdateSourceRegimenPayload
+    deleteSourceRegimen(
+      input: DeleteSourceRegimenInput!
+    ): DeleteSourceRegimenPayload
 
     createProviderOrganization(
       input: CreateProviderOrganizationInput!
@@ -78,9 +90,15 @@ const mutationType = gql`
     ): UpdateProviderOrganizationPayload
     bulkImportProviderOrganizations(data: JSON): JSON
 
-    createPayerOrganization(input: CreatePayerOrganizationInput!): CreatePayerOrganizationPayload
-    deletePayerOrganization(input: DeletePayerOrganizationInput!): DeletePayerOrganizationPayload
-    updatePayerOrganization(input: UpdatePayerOrganizationInput!): UpdatePayerOrganizationPayload
+    createPayerOrganization(
+      input: CreatePayerOrganizationInput!
+    ): CreatePayerOrganizationPayload
+    deletePayerOrganization(
+      input: DeletePayerOrganizationInput!
+    ): DeletePayerOrganizationPayload
+    updatePayerOrganization(
+      input: UpdatePayerOrganizationInput!
+    ): UpdatePayerOrganizationPayload
 
     createPathwaysOrganization(
       input: CreatePathwaysOrganizationInput!
@@ -92,12 +110,22 @@ const mutationType = gql`
       input: UpdatePathwaysOrganizationInput!
     ): UpdatePathwaysOrganizationPayload
 
-    createApmOrganization(input: CreateApmOrganizationInput!): CreateApmOrganizationPayload
-    deleteApmOrganization(input: DeleteApmOrganizationInput!): DeleteApmOrganizationPayload
-    updateApmOrganization(input: UpdateApmOrganizationInput!): UpdateApmOrganizationPayload
+    createApmOrganization(
+      input: CreateApmOrganizationInput!
+    ): CreateApmOrganizationPayload
+    deleteApmOrganization(
+      input: DeleteApmOrganizationInput!
+    ): DeleteApmOrganizationPayload
+    updateApmOrganization(
+      input: UpdateApmOrganizationInput!
+    ): UpdateApmOrganizationPayload
 
-    createObmOrganization(input: CreateObmOrganizationInput!): CreateObmOrganizationPayload!
-    updateObmOrganization(input: UpdateObmOrganizationInput!): UpdateObmOrganizationPayload!
+    createObmOrganization(
+      input: CreateObmOrganizationInput!
+    ): CreateObmOrganizationPayload!
+    updateObmOrganization(
+      input: UpdateObmOrganizationInput!
+    ): UpdateObmOrganizationPayload!
 
     createObmService(input: CreateObmServiceInput!): CreateObmServicePayload!
     updateObmService(input: UpdateObmServiceInput!): UpdateObmServicePayload!
@@ -119,10 +147,16 @@ const mutationType = gql`
     connectObmAndObmService(
       input: [ConnectObmAndObmServiceInput!]!
     ): [ConnectObmAndObmServicePayload!]!
-    connectObmAndPerson(input: [ConnectObmAndPersonInput!]!): [ConnectObmAndPersonPayload!]!
-    connectObmAndPayer(input: ConnectObmAndPayerInput!): [ConnectObmAndPayerPayload!]!
+    connectObmAndPerson(
+      input: [ConnectObmAndPersonInput!]!
+    ): [ConnectObmAndPersonPayload!]!
+    connectObmAndPayer(
+      input: ConnectObmAndPayerInput!
+    ): [ConnectObmAndPayerPayload!]!
 
-    upsertOrganizationMeta(input: UpsertOrganizationMetaInput!): [UpsertOrganizationMetaPayload]
+    upsertOrganizationMeta(
+      input: UpsertOrganizationMetaInput!
+    ): [UpsertOrganizationMetaPayload]
 
     createQualityOfAccessScore(
       input: CreateQualityOfAccessScoreInput!
@@ -138,7 +172,9 @@ const mutationType = gql`
     importWorkbook(input: [ImportWorkbookInput!]!): JSON
     backupExport(input: BackupExportInput!): String
 
-    sendToSubscribedUsers(input: SendToSubscribedUsersInput!): SendToSubscribedUsersPayload
+    sendToSubscribedUsers(
+      input: SendToSubscribedUsersInput!
+    ): SendToSubscribedUsersPayload
     sendToTestGroup(input: SendToTestGroupInput): SendToTestGroupPayload
 
     deleteSourceTreatmentPlan(input: DeleteSourceTreatmentPlanInput!): JSON
@@ -167,7 +203,12 @@ const mutationType = gql`
 
     pipeDelimitedScript: JSON
 
-    createPayerProject(input: CreatePayerProjectInput!): CreatePayerProjectPayload
+    createPayerProject(
+      input: CreatePayerProjectInput!
+    ): CreatePayerProjectPayload
+    deletePayerProject(
+      input: DeletePayerProjectInput!
+    ): DeletePayerProjectPayload
     updatePayerProjectPtps(input: UpdatePayerProjectPtpsInput!): JSON
     removePayerProjectPtps(input: RemovePayerProjectPtpsInput!): [ID]!
     transferPayerProjectPtps(input: TransferPayerProjectPtpsInput!): JSON
@@ -180,25 +221,55 @@ const mutationType = gql`
     updateBusinessObject(input: UpdateBusinessObjectInput!): BusinessObject
     updateBusinessObjectField(input: UpdateBusinessObjectFieldInput!): BoField
 
-    createBusinessObjectModal(input: CreateBusinessObjectModalInput!): BomConfig!
-    deleteBusinessObjectModal(input: DeleteBusinessObjectModalInput!): BomConfig!
-    updateBusinessObjectModal(input: UpdateBusinessObjectModalInput!): BomConfig!
-    createBusinessObjectModalTag(input: CreateBusinessObjectModalTagInput!): BomTag!
-    deleteBusinessObjectModalTag(input: DeleteBusinessObjectModalTagInput!): BomTag!
-    updateBusinessObjectModalTag(input: UpdateBusinessObjectModalTagInput!): BomTag!
-    createBusinessObjectModalSection(input: CreateBusinessObjectModalSectionInput!): BomSection!
-    deleteBusinessObjectModalSection(input: DeleteBusinessObjectModalSectionInput!): BomSection!
-    updateBusinessObjectModalSection(input: UpdateBusinessObjectModalSectionInput!): BomSection!
-    createBusinessObjectModalField(input: CreateBusinessObjectModalFieldInput!): BomField!
-    deleteBusinessObjectModalField(input: DeleteBusinessObjectModalFieldInput!): BomField!
-    updateBusinessObjectModalField(input: UpdateBusinessObjectModalFieldInput!): BomField!
+    createBusinessObjectModal(
+      input: CreateBusinessObjectModalInput!
+    ): BomConfig!
+    deleteBusinessObjectModal(
+      input: DeleteBusinessObjectModalInput!
+    ): BomConfig!
+    updateBusinessObjectModal(
+      input: UpdateBusinessObjectModalInput!
+    ): BomConfig!
+    createBusinessObjectModalTag(
+      input: CreateBusinessObjectModalTagInput!
+    ): BomTag!
+    deleteBusinessObjectModalTag(
+      input: DeleteBusinessObjectModalTagInput!
+    ): BomTag!
+    updateBusinessObjectModalTag(
+      input: UpdateBusinessObjectModalTagInput!
+    ): BomTag!
+    createBusinessObjectModalSection(
+      input: CreateBusinessObjectModalSectionInput!
+    ): BomSection!
+    deleteBusinessObjectModalSection(
+      input: DeleteBusinessObjectModalSectionInput!
+    ): BomSection!
+    updateBusinessObjectModalSection(
+      input: UpdateBusinessObjectModalSectionInput!
+    ): BomSection!
+    createBusinessObjectModalField(
+      input: CreateBusinessObjectModalFieldInput!
+    ): BomField!
+    deleteBusinessObjectModalField(
+      input: DeleteBusinessObjectModalFieldInput!
+    ): BomField!
+    updateBusinessObjectModalField(
+      input: UpdateBusinessObjectModalFieldInput!
+    ): BomField!
 
     createAquilaConfig(input: CreateAquilaConfigInput!): AquilaConfig!
-    createAquilaConfigField(input: CreateAquilaConfigFieldInput!): AquilaConfigField!
+    createAquilaConfigField(
+      input: CreateAquilaConfigFieldInput!
+    ): AquilaConfigField!
     updateAquilaConfig(input: UpdateAquilaConfigInput!): AquilaConfig!
-    updateAquilaConfigField(input: UpdateAquilaConfigFieldInput!): AquilaConfigField!
+    updateAquilaConfigField(
+      input: UpdateAquilaConfigFieldInput!
+    ): AquilaConfigField!
     deleteAquilaConfig(input: DeleteAquilaConfigInput!): AquilaConfig!
-    deleteAquilaConfigField(input: DeleteAquilaConfigFieldInput!): AquilaConfigField!
+    deleteAquilaConfigField(
+      input: DeleteAquilaConfigFieldInput!
+    ): AquilaConfigField!
 
     deleteBook(input: DeleteBookInput!): DeleteBookPayload
     createBook(input: CreateBookInput!): CreateBookPayload

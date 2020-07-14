@@ -11,6 +11,15 @@ export const CREATE_PAYER_PROJECT = gql`
   }
 `
 
+export const DELETE_PAYER_PROJECT = gql`
+  mutation DeletePayerProject($input: DeletePayerProjectInput!) {
+    deletePayerProject(input: $input) {
+      _id
+      name
+    }
+  }
+`
+
 export const UPDATE_PAYER_PROJECT_PTPS = gql`
   mutation UpdatePayerProjectPtps($input: UpdatePayerProjectPtpsInput!) {
     updatePayerProjectPtps(input: $input)
