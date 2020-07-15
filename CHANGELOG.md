@@ -18,6 +18,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `Orion`: Add data source columns to People view
 - `Frontend`: Build out hook data sourcing structure around people data
 
+### Changed
+- `Polaris API Logging`: 
+  - Add timestamps to GraphQL error logging
+  - Tweak how workbook import is detected for the blanking out of heavy json before writing to `api.log`
+
 ## [2.11.0] - Started: 6-30-20
 
 ### Added

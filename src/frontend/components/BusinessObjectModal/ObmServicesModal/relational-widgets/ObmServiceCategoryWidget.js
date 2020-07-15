@@ -12,7 +12,9 @@ import {
 import { CONNECT_OBM_SERVICE_AND_OBM_SERVICE_CATEGORY } from '../../../../api/mutations'
 
 const ObmServiceCategoryWidget = ({ entity }) => {
-  const { data: categoriesData, loading: categoriesLoading } = useQuery(GET_OBM_SERVICES_CATEGORIES)
+  const { data: categoriesData, loading: categoriesLoading } = useQuery(
+    GET_OBM_SERVICES_CATEGORIES
+  )
 
   const { data: connectionsData, loading: connectionsLoading } = useQuery(
     GET_OBM_SERVICE_AND_OBM_SERVICE_CATEGORY_CONNECTIONS,
@@ -23,7 +25,8 @@ const ObmServiceCategoryWidget = ({ entity }) => {
 
   const [selectedCategoryId, selectCategoryId] = useState(null)
 
-  const { obmServiceAndObmServiceCategoryConnections: connections } = connectionsData || {}
+  const { obmServiceAndObmServiceCategoryConnections: connections } =
+    connectionsData || {}
 
   const connectionId = connections && connections[0] && connections[0]._id
 
@@ -83,7 +86,12 @@ const ObmServiceCategoryWidget = ({ entity }) => {
       />
 
       <button
-        style={{ border: '1px solid black', cursor: 'pointer', padding: 4, marginTop: 12 }}
+        style={{
+          border: '1px solid black',
+          cursor: 'pointer',
+          padding: 4,
+          marginTop: 12,
+        }}
         onClick={save}
       >
         Save

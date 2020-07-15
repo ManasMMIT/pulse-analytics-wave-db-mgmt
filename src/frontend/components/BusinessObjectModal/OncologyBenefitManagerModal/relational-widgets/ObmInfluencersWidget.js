@@ -37,7 +37,10 @@ import {
 const ObmInfluencersWidget = ({ entity }) => {
   const { data: peopleData, loading: peopleLoading } = useQuery(GET_PEOPLE)
 
-  const { data: connectionsData, loading: connectionsLoading } = useObmPersonConnections({
+  const {
+    data: connectionsData,
+    loading: connectionsLoading,
+  } = useObmPersonConnections({
     obmId: entity._id,
   })
 
@@ -63,12 +66,14 @@ const ObmInfluencersWidget = ({ entity }) => {
   useEffect(() => {
     if (!peopleLoading && !connectionsLoading) {
       // clean data of __typename and anything else
-      const initialConnections = connectionsData.map(({ _id, personId, obmId, position }) => ({
-        _id,
-        personId,
-        obmId,
-        position,
-      }))
+      const initialConnections = connectionsData.map(
+        ({ _id, personId, obmId, position }) => ({
+          _id,
+          personId,
+          obmId,
+          position,
+        })
+      )
 
       stageConnections(initialConnections)
     }
@@ -76,10 +81,12 @@ const ObmInfluencersWidget = ({ entity }) => {
 
   if (peopleLoading || connectionsLoading) return 'Loading...'
 
-  const peopleDropdownOptions = peopleData.people.map(({ _id, firstName, lastName }) => ({
-    value: _id,
-    label: `${firstName} ${lastName}`,
-  }))
+  const peopleDropdownOptions = peopleData.people.map(
+    ({ _id, firstName, lastName }) => ({
+      value: _id,
+      label: `${firstName} ${lastName}`,
+    })
+  )
 
   const clonedStagedConnections = _.cloneDeep(stagedConnections)
 
@@ -99,7 +106,9 @@ const ObmInfluencersWidget = ({ entity }) => {
                 <Select
                   styles={customSelectStyles}
                   options={peopleDropdownOptions}
-                  value={peopleDropdownOptions.find(({ value }) => value === personId)}
+                  value={peopleDropdownOptions.find(
+                    ({ value }) => value === personId
+                  )}
                   onChange={({ value }) => {
                     const newDoc = _.merge(clonedStagedConnections[idx], {
                       personId: value,
@@ -111,7 +120,9 @@ const ObmInfluencersWidget = ({ entity }) => {
               </div>
             </InputContainer>
 
-            <div style={{ display: 'flex', alignItems: 'center', marginLeft: 12 }}>
+            <div
+              style={{ display: 'flex', alignItems: 'center', marginLeft: 12 }}
+            >
               <InputLabel>Position:</InputLabel>
 
               <RowInput
@@ -160,7 +171,8 @@ const ObmInfluencersWidget = ({ entity }) => {
 
         <SaveContainer>
           <SaveWarningBox>
-            IMPORTANT: You must click this save button to persist influencer changes.
+            IMPORTANT: You must click this save button to persist influencer
+            changes.
           </SaveWarningBox>
           <Button onClick={save} color={Color.GREEN}>
             Save Influencer Changes

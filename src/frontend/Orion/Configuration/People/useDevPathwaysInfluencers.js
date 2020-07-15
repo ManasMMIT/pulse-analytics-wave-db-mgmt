@@ -14,7 +14,9 @@ const useDevPathwaysInfluencers = (args = {}) => {
   if (!personId) return { data: payload, loading }
 
   return {
-    data: payload.filter(({ personId: localPersonId }) => localPersonId === personId),
+    data: payload.filter(
+      ({ personId: localPersonId }) => localPersonId === personId
+    ),
     loading,
   }
 }
