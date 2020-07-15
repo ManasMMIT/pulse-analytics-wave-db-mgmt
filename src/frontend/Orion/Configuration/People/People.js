@@ -1,5 +1,6 @@
 import React from 'react'
 import format from 'date-fns/format'
+import _ from 'lodash'
 
 import PanelHeader from 'frontend/components/Panel/PanelHeader'
 import PeopleModalButton from 'frontend/components/BusinessObjectModal/PeopleModal/PeopleModalButton'
@@ -100,6 +101,12 @@ const COLUMNS = [
 const People = () => {
   const { data } = usePeople()
 
+  const orderedData = _.orderBy(
+    data,
+    ({ updatedOn }) => new Date(updatedOn),
+    'desc'
+  )
+
   return (
     <div
       style={{
@@ -110,12 +117,17 @@ const People = () => {
     >
       <PanelHeader title={PAGE_TITLE}>
         <PeopleModalButton buttonStyle={createButtonStyle}>
-          <Icon iconName="add" color1={Color.WHITE} width={16} style={{ marginRight: 8 }} />
+          <Icon
+            iconName="add"
+            color1={Color.WHITE}
+            width={16}
+            style={{ marginRight: 8 }}
+          />
           {CREATE_BTN_TXT}
         </PeopleModalButton>
       </PanelHeader>
       <TemplateTable
-        data={data}
+        data={orderedData}
         columns={COLUMNS}
         modalColMap={MODAL_TO_COL_MAP}
         exportProps={{ filename: 'Influencers', sheetName: 'Influencers' }}
