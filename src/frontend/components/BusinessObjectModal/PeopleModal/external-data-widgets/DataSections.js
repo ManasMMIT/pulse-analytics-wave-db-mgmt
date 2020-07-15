@@ -42,8 +42,7 @@ const DataSections = ({ title, data }) => {
               titleStyle={{
                 borderBottom: `1px solid ${Color.LIGHT_BLUE_GRAY_1}`,
               }}
-              title={title}
-              titleModifiers={[datum.organization]}
+              title={datum.organization}
               size={'FS3'}
             />
             <div style={gridWrapperStyle}>
