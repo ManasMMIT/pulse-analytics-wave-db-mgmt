@@ -1,6 +1,10 @@
 import React from 'react'
 
-import { CREATE_PERSON, UPDATE_PERSON, DELETE_PERSON } from 'frontend/api/mutations'
+import {
+  CREATE_PERSON,
+  UPDATE_PERSON,
+  DELETE_PERSON,
+} from 'frontend/api/mutations'
 
 import {
   GET_PEOPLE,
@@ -9,11 +13,52 @@ import {
 } from '../../../api/queries'
 
 import BusinessObjectModal from '../BusinessObjectModal/BusinessObjectModal'
+import PathwaysInfluencerWidget from './external-data-widgets/PathwaysInfluencerWidget'
+import ProviderInfluencerWidget from './external-data-widgets/ProviderInfluencerWidget'
+import Color from 'frontend/utils/color'
+
+const placeHolderStyle = {
+  color: Color.ORANGE,
+  padding: 24,
+  fontWeight: 700,
+  fontSize: 24,
+  width: '100%',
+  textAlign: 'center',
+  alignSelf: 'center',
+}
+
+const WIDGETS = [
+  {
+    _id: 'RELATIONAL_pathwaysInfluencerWidget',
+    label: 'Pathways Influencers',
+    Component: PathwaysInfluencerWidget,
+  },
+  {
+    _id: 'RELATIONAL_providerInfluencerWidget',
+    label: 'Provider Key Decision Makers',
+    Component: ProviderInfluencerWidget,
+  },
+  {
+    _id: 'RELATIONAL_physiciansCompareWidget',
+    label: 'Physicians Compare',
+    Component: () => <div style={placeHolderStyle}>Under Construction</div>,
+  },
+  {
+    _id: 'RELATIONAL_externalSource2Widget',
+    label: 'Open Payments',
+    Component: () => <div style={placeHolderStyle}>Under Construction</div>,
+  },
+]
 
 const PEOPLE_BOID = '5eea22d5adbf920fa4320487'
 const HEADER_TEXT = 'People'
 
-const PeopleModal = ({ closeModal, entityId, refetchQueries, afterMutationHook }) => (
+const PeopleModal = ({
+  closeModal,
+  entityId,
+  refetchQueries,
+  afterMutationHook,
+}) => (
   <BusinessObjectModal
     closeModal={closeModal}
     entityId={entityId}
@@ -32,6 +77,7 @@ const PeopleModal = ({ closeModal, entityId, refetchQueries, afterMutationHook }
       { query: GET_OBM_AND_PERSON_CONNECTIONS },
     ]}
     afterMutationHook={afterMutationHook}
+    widgets={WIDGETS}
   />
 )
 
