@@ -9,6 +9,7 @@ export const GET_PEOPLE = gql`
       firstName
       lastName
       nationalProviderIdentifier
+      physicianProfileId
     }
   }
 `

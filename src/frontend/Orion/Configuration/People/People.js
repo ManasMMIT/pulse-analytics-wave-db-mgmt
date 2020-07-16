@@ -56,14 +56,18 @@ const COLUMNS = [
     accessor: '_id',
     Filter: MultiSelectColumnFilter,
     filter: customMultiSelectFilterFn,
-    sortType: 'text',
   },
   {
     Header: 'NPI #',
     accessor: 'nationalProviderIdentifier',
     Filter: MultiSelectColumnFilter,
     filter: customMultiSelectFilterFn,
-    sortType: 'text',
+  },
+  {
+    Header: 'Physician Profile ID',
+    accessor: 'physicianProfileId',
+    Filter: MultiSelectColumnFilter,
+    filter: customMultiSelectFilterFn,
   },
   {
     Header: 'Pathways Data',

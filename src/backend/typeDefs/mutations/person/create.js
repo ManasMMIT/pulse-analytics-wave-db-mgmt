@@ -5,7 +5,8 @@ const createPersonTypeDefs = gql`
     _id: ID # included but should always be null
     firstName: String!
     lastName: String!
-    nationalProviderIdentifier: Int
+    nationalProviderIdentifier: Float
+    physicianProfileId: Float
   }
 
   type CreatePersonPayload {
@@ -14,7 +15,8 @@ const createPersonTypeDefs = gql`
     updatedOn: DateTime
     firstName: String
     lastName: String
-    nationalProviderIdentifier: Int
+    nationalProviderIdentifier: Float
+    physicianProfileId: Float
   }
 `
 

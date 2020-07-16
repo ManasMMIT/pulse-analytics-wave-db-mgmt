@@ -10,6 +10,7 @@ const deletePersonTypeDefs = gql`
     firstName: String
     lastName: String
     nationalProviderIdentifier: Float
+    physicianProfileId: Float
   }
 `
 

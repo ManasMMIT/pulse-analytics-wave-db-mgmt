@@ -89,6 +89,7 @@ const queries = gql`
     firstName: String
     lastName: String
     nationalProviderIdentifier: Float
+    physicianProfileId: Float
   }
 
   type Node {

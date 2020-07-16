@@ -7,6 +7,7 @@ export const CREATE_PERSON = gql`
       firstName
       lastName
       nationalProviderIdentifier
+      physicianProfileId
     }
   }
 `
@@ -18,6 +19,7 @@ export const UPDATE_PERSON = gql`
       firstName
       lastName
       nationalProviderIdentifier
+      physicianProfileId
     }
   }
 `
@@ -29,6 +31,7 @@ export const DELETE_PERSON = gql`
       firstName
       lastName
       nationalProviderIdentifier
+      physicianProfileId
     }
   }
 `
