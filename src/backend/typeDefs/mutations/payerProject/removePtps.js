@@ -2,6 +2,7 @@ const { gql } = require('apollo-server-express')
 
 const removePayerProjectPtpsTypeDefs = gql`
   input RemovePayerProjectPtpsInput {
+    projectId: ID!
     orgTpIds: [ID!]!
   }
 `

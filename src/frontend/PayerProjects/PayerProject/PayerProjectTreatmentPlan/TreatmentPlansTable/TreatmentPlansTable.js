@@ -3,19 +3,15 @@ import { useParams } from 'react-router-dom'
 import { useMutation } from '@apollo/react-hooks'
 import styled from '@emotion/styled'
 import _ from 'lodash'
-import {lighten, darken, transparentize } from 'polished'
+import { lighten, darken, transparentize } from 'polished'
 
 import Table from '@material-ui/core/Table'
 import TableContainer from '@material-ui/core/TableContainer'
 import TablePagination from '@material-ui/core/TablePagination'
 
-import {
-  REMOVE_PAYER_PROJECT_PTPS,
-} from 'frontend/api/mutations'
+import { REMOVE_PAYER_PROJECT_PTPS } from 'frontend/api/mutations'
 
-import {
-  GET_PAYER_PROJECT_PTPS,
-} from 'frontend/api/queries'
+import { GET_PAYER_PROJECT_PTPS } from 'frontend/api/queries'
 
 import { Colors } from 'frontend/utils/pulseStyles'
 
@@ -45,11 +41,11 @@ const PlaceholderButton = styled.button({
   },
   ':active': {
     backgroundColor: darken(0.1, Colors.RED),
-  }
+  },
 })
 
 const sortData = ({ data, order, key }) => {
-  return _.orderBy(data, [datum => datum[key].toLowerCase()], [order])
+  return _.orderBy(data, [(datum) => datum[key].toLowerCase()], [order])
 }
 
 const TreatmentPlansTable = ({ data, checkbox }) => {
@@ -65,26 +61,27 @@ const TreatmentPlansTable = ({ data, checkbox }) => {
     setTableData(data)
   }, [data])
 
-  const [removePtps] = useMutation(
-    REMOVE_PAYER_PROJECT_PTPS,
-    {
-      variables: {
-        input: {
-          orgTpIds: Array.from(selected),
-        }
+  const [removePtps] = useMutation(REMOVE_PAYER_PROJECT_PTPS, {
+    variables: {
+      input: {
+        projectId,
+        orgTpIds: Array.from(selected),
       },
-      // ! Note: this isn't good enough for updating OTHER projects' tables; we're using
-      // ! `fetchPolicy: network-only` on the original GET_PAYER_PROJECT_PTPS query also;
-      // ! we still need this tho to refresh the table on the current view
-      refetchQueries: [{ query: GET_PAYER_PROJECT_PTPS, variables: { input: { projectId } } }]
-    }
-  )
+    },
+    // ! Note: this isn't good enough for updating OTHER projects' tables; we're using
+    // ! `fetchPolicy: network-only` on the original GET_PAYER_PROJECT_PTPS query also;
+    // ! we still need this tho to refresh the table on the current view
+    refetchQueries: [
+      { query: GET_PAYER_PROJECT_PTPS, variables: { input: { projectId } } },
+    ],
+    onError: alert,
+  })
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage)
   }
 
-  const handleChangeRowsPerPage = event => {
+  const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value))
     setPage(0)
   }
@@ -97,7 +94,7 @@ const TreatmentPlansTable = ({ data, checkbox }) => {
     setTableData(sortedTableData)
   }
 
-  const isSelected = id => selected.has(id)
+  const isSelected = (id) => selected.has(id)
   const isAllSelected = selected.size === data.length
 
   const handleCheckboxClick = (event, id) => {
@@ -129,8 +126,22 @@ const TreatmentPlansTable = ({ data, checkbox }) => {
   return (
     <TableWrapper>
       {checkbox && (
-        <section style={{ display: 'flex', justifyContent: 'space-between', padding: '0 12px' }}>
-          <h2 style={{ padding: 12, fontSize: 14, fontWeight: 800, color: Colors.BLACK, lineHeight: '32px' }}>
+        <section
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            padding: '0 12px',
+          }}
+        >
+          <h2
+            style={{
+              padding: 12,
+              fontSize: 14,
+              fontWeight: 800,
+              color: Colors.BLACK,
+              lineHeight: '32px',
+            }}
+          >
             {selected.size} Payer Treatments Selected
           </h2>
           {selected.size > 0 && (
@@ -172,7 +183,7 @@ const TreatmentPlansTable = ({ data, checkbox }) => {
         page={page}
         onChangePage={handleChangePage}
         onChangeRowsPerPage={handleChangeRowsPerPage}
-        style={{ borderTop: `2px solid ${transparentize(0.5, Colors.BLACK)}`}}
+        style={{ borderTop: `2px solid ${transparentize(0.5, Colors.BLACK)}` }}
       />
     </TableWrapper>
   )
