@@ -16,6 +16,7 @@ import BusinessObjectModal from '../BusinessObjectModal/BusinessObjectModal'
 import PathwaysInfluencerWidget from './external-data-widgets/PathwaysInfluencerWidget'
 import ProviderInfluencerWidget from './external-data-widgets/ProviderInfluencerWidget'
 import Color from 'frontend/utils/color'
+import UnderConstruction from '../../UnderConstruction'
 
 const placeHolderStyle = {
   color: Color.ORANGE,
@@ -30,23 +31,23 @@ const placeHolderStyle = {
 const WIDGETS = [
   {
     _id: 'RELATIONAL_pathwaysInfluencerWidget',
-    label: 'Pathways Influencers',
+    label: 'Pathways Influencers Sheet Data',
     Component: PathwaysInfluencerWidget,
   },
   {
     _id: 'RELATIONAL_providerInfluencerWidget',
-    label: 'Provider Key Decision Makers',
+    label: 'Provider KDM Sheet Data',
     Component: ProviderInfluencerWidget,
   },
   {
     _id: 'RELATIONAL_physiciansCompareWidget',
     label: 'Physicians Compare',
-    Component: () => <div style={placeHolderStyle}>Under Construction</div>,
+    Component: () => <UnderConstruction />,
   },
   {
     _id: 'RELATIONAL_externalSource2Widget',
     label: 'Open Payments',
-    Component: () => <div style={placeHolderStyle}>Under Construction</div>,
+    Component: () => <UnderConstruction />,
   },
 ]
 

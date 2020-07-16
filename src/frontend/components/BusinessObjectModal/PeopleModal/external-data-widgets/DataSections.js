@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from '@emotion/styled'
+import { transparentize } from 'polished'
 
 import Color from 'frontend/utils/color'
 import Spacing from 'frontend/utils/spacing'
@@ -8,15 +9,14 @@ import FontSpace from 'frontend/utils/fontspace'
 import Title from '../../../Title/Title'
 
 const wrapperStyle = {
-  padding: Spacing.S4,
   background: Color.LIGHT_BLUE_GRAY_1,
   borderRadius: 4,
 }
 
 const gridWrapperStyle = {
-  padding: Spacing.S4,
   display: 'grid',
   gridTemplateColumns: '25% 25% 25% 25%',
+  padding: Spacing.S3,
 }
 
 const InputComponent = styled.input({
@@ -25,6 +25,18 @@ const InputComponent = styled.input({
   padding: `${Spacing.S3}`,
   borderRadius: 4,
   ...FontSpace.FS2,
+  ':disabled': {
+    cursor: 'not-allowed',
+  },
+})
+
+const InputLabel = styled.div({
+  color: Color.BLACK,
+  fontSize: 12,
+  lineHeight: 1.5,
+  marginBottom: Spacing.S3,
+  fontWeight: 700,
+  opacity: 0.7,
 })
 
 const DataSections = ({ title, data }) => {
@@ -40,7 +52,9 @@ const DataSections = ({ title, data }) => {
           <div style={wrapperStyle}>
             <Title
               titleStyle={{
-                borderBottom: `1px solid ${Color.LIGHT_BLUE_GRAY_1}`,
+                borderBottom: `1px solid ${transparentize(0.92, Color.BLACK)}`,
+                textTransform: 'none',
+                paddingLeft: Spacing.S5,
               }}
               title={datum.organization}
               size={'FS3'}
@@ -49,11 +63,7 @@ const DataSections = ({ title, data }) => {
               {Object.keys(datum).map((key) => {
                 return (
                   <div style={{ padding: 12 }}>
-                    <div
-                      style={{ fontSize: 12, lineHeight: 3, fontWeight: 600 }}
-                    >
-                      {key}
-                    </div>
+                    <InputLabel>{key}</InputLabel>
                     <InputComponent type="text" disabled value={datum[key]} />
                   </div>
                 )
