@@ -2,34 +2,29 @@ const { ObjectId } = require('mongodb')
 
 const removePtps = async (
   parent,
-  {
-    input: {
-      orgTpIds,
-    }
-  },
+  { input: { projectId, orgTpIds: orgTpIdsToRemove } },
   { pulseCoreDb },
   info
 ) => {
-  orgTpIds = orgTpIds.map(ObjectId)
+  orgTpIdsToRemove = orgTpIdsToRemove.map(ObjectId)
 
-  await pulseCoreDb
-    .collection('tdgProjects')
-    .updateMany(
-      {
-        'orgTpIds': {
-          $in: orgTpIds,
-        }
+  await pulseCoreDb.collection('tdgProjects').updateOne(
+    {
+      _id: ObjectId(projectId),
+    },
+    {
+      $pull: {
+        orgTpIds: {
+          $in: orgTpIdsToRemove,
+        },
+        extraOrgTpIds: {
+          $in: orgTpIdsToRemove,
+        },
       },
-      {
-        $pull: {
-          orgTpIds: {
-            $in: orgTpIds,
-          }
-        }
-      }
-    )
+    }
+  )
 
-  return orgTpIds
+  return orgTpIdsToRemove
 }
 
 module.exports = removePtps

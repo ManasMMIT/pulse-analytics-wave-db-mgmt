@@ -1,6 +1,6 @@
 const _ = require('lodash')
 
-const obmPayerPartnerships = async (
+const VIEW_obmPayerPartnerships = async (
   parent,
   args,
   { pulseCoreDb, pulseDevDb }
@@ -74,7 +74,7 @@ const JOIN_OBMS_TO_PAYERS_AGG = [
   },
   {
     $lookup: {
-      from: 'obm_payers',
+      from: 'JOIN_obms_payers',
       localField: '_id',
       foreignField: 'obmId',
       as: 'obmPayerJoinEntries',
@@ -114,4 +114,4 @@ const JOIN_OBMS_TO_PAYERS_AGG = [
   },
 ]
 
-module.exports = obmPayerPartnerships
+module.exports = VIEW_obmPayerPartnerships

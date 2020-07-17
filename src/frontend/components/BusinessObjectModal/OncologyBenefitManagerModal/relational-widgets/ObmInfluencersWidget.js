@@ -9,15 +9,17 @@ import { faTrashAlt } from '@fortawesome/free-solid-svg-icons'
 
 import {
   GET_PEOPLE,
-  GET_OBM_AND_PERSON_CONNECTIONS,
-  GET_INFLUENCER_TEMPLATE_OBMS,
-} from '../../../../api/queries'
+  GET_JOIN_OBMS_AND_PEOPLE,
+  GET_VIEW_OBM_INFLUENCERS,
+} from 'frontend/api/queries'
 
-import { CONNECT_OBM_AND_PERSON } from '../../../../api/mutations'
+import { CONNECT_OBM_AND_PERSON } from 'frontend/api/mutations'
 
-import { customSelectStyles } from '../../../../components/customSelectStyles'
-import Button from '../../../../components/Button'
-import Color from '../../../../utils/color'
+import useObmPersonConnections from 'frontend/Orion/Organizations/Obm/useObmPersonConnections'
+
+import { customSelectStyles } from 'frontend/components/customSelectStyles'
+import Button from 'frontend/components/Button'
+import Color from 'frontend/utils/color'
 
 import {
   RelationalRow,
@@ -35,12 +37,12 @@ import {
 const ObmInfluencersWidget = ({ entity }) => {
   const { data: peopleData, loading: peopleLoading } = useQuery(GET_PEOPLE)
 
-  const { data: connectionsData, loading: connectionsLoading } = useQuery(
-    GET_OBM_AND_PERSON_CONNECTIONS,
-    {
-      variables: { obmId: entity._id },
-    }
-  )
+  const {
+    data: connectionsData,
+    loading: connectionsLoading,
+  } = useObmPersonConnections({
+    obmId: entity._id,
+  })
 
   const [stagedConnections, stageConnections] = useState([])
 
@@ -52,11 +54,10 @@ const ObmInfluencersWidget = ({ entity }) => {
     },
     refetchQueries: [
       {
-        query: GET_OBM_AND_PERSON_CONNECTIONS,
-        variables: { obmId: entity._id },
+        query: GET_JOIN_OBMS_AND_PEOPLE,
       },
       {
-        query: GET_INFLUENCER_TEMPLATE_OBMS,
+        query: GET_VIEW_OBM_INFLUENCERS,
       },
     ],
     onError: alert,
@@ -65,7 +66,7 @@ const ObmInfluencersWidget = ({ entity }) => {
   useEffect(() => {
     if (!peopleLoading && !connectionsLoading) {
       // clean data of __typename and anything else
-      const initialConnections = connectionsData.obmAndPersonConnections.map(
+      const initialConnections = connectionsData.map(
         ({ _id, personId, obmId, position }) => ({
           _id,
           personId,
@@ -80,10 +81,12 @@ const ObmInfluencersWidget = ({ entity }) => {
 
   if (peopleLoading || connectionsLoading) return 'Loading...'
 
-  const peopleDropdownOptions = peopleData.people.map(({ _id, firstName, lastName }) => ({
-    value: _id,
-    label: `${firstName} ${lastName}`,
-  }))
+  const peopleDropdownOptions = peopleData.people.map(
+    ({ _id, firstName, lastName }) => ({
+      value: _id,
+      label: `${firstName} ${lastName}`,
+    })
+  )
 
   const clonedStagedConnections = _.cloneDeep(stagedConnections)
 
@@ -103,7 +106,9 @@ const ObmInfluencersWidget = ({ entity }) => {
                 <Select
                   styles={customSelectStyles}
                   options={peopleDropdownOptions}
-                  value={peopleDropdownOptions.find(({ value }) => value === personId)}
+                  value={peopleDropdownOptions.find(
+                    ({ value }) => value === personId
+                  )}
                   onChange={({ value }) => {
                     const newDoc = _.merge(clonedStagedConnections[idx], {
                       personId: value,
@@ -115,7 +120,9 @@ const ObmInfluencersWidget = ({ entity }) => {
               </div>
             </InputContainer>
 
-            <div style={{ display: 'flex', alignItems: 'center', marginLeft: 12 }}>
+            <div
+              style={{ display: 'flex', alignItems: 'center', marginLeft: 12 }}
+            >
               <InputLabel>Position:</InputLabel>
 
               <RowInput
@@ -164,7 +171,8 @@ const ObmInfluencersWidget = ({ entity }) => {
 
         <SaveContainer>
           <SaveWarningBox>
-            IMPORTANT: You must click this save button to persist influencer changes.
+            IMPORTANT: You must click this save button to persist influencer
+            changes.
           </SaveWarningBox>
           <Button onClick={save} color={Color.GREEN}>
             Save Influencer Changes

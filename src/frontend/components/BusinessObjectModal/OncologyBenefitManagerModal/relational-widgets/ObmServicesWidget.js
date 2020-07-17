@@ -9,8 +9,8 @@ import { faTrashAlt } from '@fortawesome/free-solid-svg-icons'
 
 import {
   GET_OBM_SERVICES,
-  GET_OBM_AND_OBM_SERVICE_CONNECTIONS,
-  GET_SERVICE_TEMPLATE_OBMS,
+  GET_JOIN_OBMS_AND_OBMS_SERVICES,
+  GET_VIEW_OBM_SERVICES,
 } from '../../../../api/queries'
 
 import { CONNECT_OBM_AND_OBM_SERVICE } from '../../../../api/mutations'
@@ -33,12 +33,16 @@ import {
 } from './styledComponents'
 
 const ObmServicesWidget = ({ entity }) => {
-  const { data: servicesData, loading: servicesLoading } = useQuery(GET_OBM_SERVICES)
+  const { data: servicesData, loading: servicesLoading } = useQuery(
+    GET_OBM_SERVICES
+  )
 
-  const {
-    data: connectionsData,
-    loading: connectionsLoading,
-  } = useQuery(GET_OBM_AND_OBM_SERVICE_CONNECTIONS, { variables: { obmId: entity._id } })
+  const { data: connectionsData, loading: connectionsLoading } = useQuery(
+    GET_JOIN_OBMS_AND_OBMS_SERVICES,
+    {
+      variables: { obmId: entity._id },
+    }
+  )
 
   const [stagedConnections, stageConnections] = useState([])
 
@@ -50,11 +54,11 @@ const ObmServicesWidget = ({ entity }) => {
     },
     refetchQueries: [
       {
-        query: GET_OBM_AND_OBM_SERVICE_CONNECTIONS,
+        query: GET_JOIN_OBMS_AND_OBMS_SERVICES,
         variables: { obmId: entity._id },
       },
       {
-        query: GET_SERVICE_TEMPLATE_OBMS,
+        query: GET_VIEW_OBM_SERVICES,
       },
     ],
     onError: alert,
@@ -62,9 +66,20 @@ const ObmServicesWidget = ({ entity }) => {
 
   useEffect(() => {
     if (!servicesLoading && !connectionsLoading) {
+      // ! HOTFIX: make sure there are no connections in the cache for removed services
+      const servicesById = _.keyBy(Object.values(servicesData)[0], '_id')
+      const validConnections = Object.values(connectionsData)[0].filter(
+        (connection) => servicesById[connection.obmServiceId]
+      )
+
       // clean data of __typename and anything else
-      const initialConnections = connectionsData.obmAndObmServiceConnections.map(
-        ({ _id, obmServiceId, obmId, rating }) => ({ _id, obmServiceId, obmId, rating })
+      const initialConnections = validConnections.map(
+        ({ _id, obmServiceId, obmId, rating }) => ({
+          _id,
+          obmServiceId,
+          obmId,
+          rating,
+        })
       )
 
       stageConnections(initialConnections)
@@ -73,10 +88,12 @@ const ObmServicesWidget = ({ entity }) => {
 
   if (servicesLoading || connectionsLoading) return 'Loading...'
 
-  const serviceDropdownOptions = servicesData.obmServices.map(({ _id, name }) => ({
-    value: _id,
-    label: name,
-  }))
+  const serviceDropdownOptions = servicesData.obmServices.map(
+    ({ _id, name }) => ({
+      value: _id,
+      label: name,
+    })
+  )
 
   const clonedStagedConnections = _.cloneDeep(stagedConnections)
 
@@ -90,15 +107,21 @@ const ObmServicesWidget = ({ entity }) => {
 
         return (
           <RelationalRow key={_id}>
-            <InputContainer style={{ display: 'flex', width: 400, alignItems: 'center' }}>
+            <InputContainer
+              style={{ display: 'flex', width: 400, alignItems: 'center' }}
+            >
               <InputLabel>OBM Service:</InputLabel>
               <div style={{ width: 300 }}>
                 <Select
                   styles={customSelectStyles}
                   options={serviceDropdownOptions}
-                  value={serviceDropdownOptions.find(({ value }) => value === obmServiceId)}
+                  value={serviceDropdownOptions.find(
+                    ({ value }) => value === obmServiceId
+                  )}
                   onChange={({ value }) => {
-                    const newDoc = _.merge(clonedStagedConnections[idx], { obmServiceId: value })
+                    const newDoc = _.merge(clonedStagedConnections[idx], {
+                      obmServiceId: value,
+                    })
                     clonedStagedConnections.splice(idx, 1, newDoc)
                     stageConnections(clonedStagedConnections)
                   }}
@@ -106,7 +129,9 @@ const ObmServicesWidget = ({ entity }) => {
               </div>
             </InputContainer>
 
-            <div style={{ display: 'flex', alignItems: 'center', marginLeft: 12 }}>
+            <div
+              style={{ display: 'flex', alignItems: 'center', marginLeft: 12 }}
+            >
               <InputLabel>Rating:</InputLabel>
 
               <RowInput
@@ -157,7 +182,8 @@ const ObmServicesWidget = ({ entity }) => {
 
         <SaveContainer>
           <SaveWarningBox>
-            IMPORTANT: You must click this save button to persist service changes.
+            IMPORTANT: You must click this save button to persist service
+            changes.
           </SaveWarningBox>
           <Button onClick={save} color={Color.GREEN}>
             Save Service Changes

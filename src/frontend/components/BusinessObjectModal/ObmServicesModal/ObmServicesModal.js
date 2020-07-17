@@ -6,10 +6,7 @@ import {
   DELETE_OBM_SERVICE,
 } from 'frontend/api/mutations'
 
-import {
-  GET_OBM_SERVICES,
-  GET_SERVICE_TEMPLATE_OBMS,
-} from '../../../api/queries'
+import { GET_OBM_SERVICES, GET_VIEW_OBM_SERVICES } from '../../../api/queries'
 
 import ObmServiceCategoryWidget from './relational-widgets/ObmServiceCategoryWidget'
 import BusinessObjectModal from '../BusinessObjectModal/BusinessObjectModal'
@@ -44,7 +41,7 @@ const ObmServicesModal = ({
     refetchQueries={[
       ...refetchQueries,
       { query: GET_OBM_SERVICES },
-      { query: GET_SERVICE_TEMPLATE_OBMS },
+      { query: GET_VIEW_OBM_SERVICES },
     ]}
     afterMutationHook={afterMutationHook}
     widgets={WIDGETS}

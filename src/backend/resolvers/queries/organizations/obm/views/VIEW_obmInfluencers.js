@@ -1,9 +1,9 @@
-const influencerTemplateObms = async (parent, args, { pulseCoreDb }) =>
-  pulseCoreDb.collection('organizations').aggregate(INFLUENCER_TEMPLATE_AGG).toArray()
+const VIEW_obmInfluencers = async (parent, args, { pulseCoreDb }) =>
+  pulseCoreDb.collection('organizations').aggregate(VIEW_AGG).toArray()
 
-module.exports = influencerTemplateObms
+module.exports = VIEW_obmInfluencers
 
-const INFLUENCER_TEMPLATE_AGG = [
+const VIEW_AGG = [
   {
     $match: {
       type: 'Oncology Benefit Manager',
@@ -11,7 +11,7 @@ const INFLUENCER_TEMPLATE_AGG = [
   },
   {
     $lookup: {
-      from: 'obm_people',
+      from: 'JOIN_obms_people',
       localField: '_id',
       foreignField: 'obmId',
       as: 'obmInfluencers',

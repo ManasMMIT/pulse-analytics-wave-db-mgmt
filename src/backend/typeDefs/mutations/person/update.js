@@ -5,7 +5,8 @@ const updatePersonTypeDefs = gql`
     _id: ID!
     firstName: String!
     lastName: String!
-    nationalProviderIdentifier: Int
+    nationalProviderIdentifier: Float
+    physicianProfileId: Float
   }
 
   type UpdatePersonPayload {
@@ -14,7 +15,8 @@ const updatePersonTypeDefs = gql`
     updatedOn: DateTime
     firstName: String
     lastName: String
-    nationalProviderIdentifier: Int
+    nationalProviderIdentifier: Float
+    physicianProfileId: Float
   }
 `
 

@@ -32,10 +32,15 @@ const FilterContainer = styled.div({
 
 const Header = ({ headerGroup }) => {
   return headerGroup.headers.map((column) => (
-    <HeaderCell {...column.getHeaderProps(column.getSortByToggleProps())} className="th">
-      <div>
+    <HeaderCell
+      {...column.getHeaderProps(column.getSortByToggleProps())}
+      className="th"
+    >
+      <div style={{ overflowX: 'scroll' }}>
         {column.render('Header')}
-        <SortIcon>{column.isSorted ? (column.isSortedDesc ? ' ⬇︎' : ' ⬆︎') : ''}</SortIcon>
+        <SortIcon>
+          {column.isSorted ? (column.isSortedDesc ? ' ⬇︎' : ' ⬆︎') : ''}
+        </SortIcon>
       </div>
       <FilterContainer onClick={(e) => e.stopPropagation()}>
         {column.canFilter ? column.render('Filter') : null}

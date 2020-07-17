@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import _ from 'lodash'
 
 import { useTable, useBlockLayout, useFilters, useSortBy } from 'react-table'
 import { useSticky } from 'react-table-sticky'
@@ -15,7 +14,9 @@ import Icon from 'frontend/components/Icon'
 import Color from 'frontend/utils/color'
 import formatDataForExport from './formatDataForExport'
 
-const DefaultColumnFilter = ({ column: { filterValue, preFilteredRows, setFilter } }) => {
+const DefaultColumnFilter = ({
+  column: { filterValue, preFilteredRows, setFilter },
+}) => {
   const count = preFilteredRows.length
 
   return (
@@ -33,10 +34,23 @@ const DEFAULT_COLUMN = {
   Filter: DefaultColumnFilter,
 }
 
-const TemplateTable = ({ columns, data, modalColMap, exportProps }) => {
+const TemplateTable = ({
+  columns,
+  data,
+  modalColMap,
+  exportProps,
+  exportStyle,
+}) => {
   const [modalCell, setModalCell] = useState(null)
 
-  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow, sortedRows } = useTable(
+  const {
+    getTableProps,
+    getTableBodyProps,
+    headerGroups,
+    rows,
+    prepareRow,
+    sortedRows,
+  } = useTable(
     {
       columns,
       data,
@@ -55,10 +69,14 @@ const TemplateTable = ({ columns, data, modalColMap, exportProps }) => {
 
   return (
     <>
-      <div style={{ margin: '0 24px 0 auto' }}>
+      <div style={{ margin: '0 24px 0 auto', ...exportStyle }}>
         <ExportExcelButton
           data={dataFormattedForExport}
-          buttonStyle={{ margin: '0 0 12px', display: 'flex', alignItems: 'center' }}
+          buttonStyle={{
+            margin: '0 0 12px',
+            display: 'flex',
+            alignItems: 'center',
+          }}
           {...exportProps}
         >
           <Icon
@@ -71,9 +89,12 @@ const TemplateTable = ({ columns, data, modalColMap, exportProps }) => {
           Export to Excel
         </ExportExcelButton>
       </div>
-
       <TableWrapper>
-        <div className="table sticky" style={{ height: '100%' }} {...getTableProps()}>
+        <div
+          className="table sticky"
+          style={{ height: '100%' }}
+          {...getTableProps()}
+        >
           <Headers headerGroups={headerGroups} />
 
           <div {...getTableBodyProps()} className="body">
@@ -90,6 +111,10 @@ const TemplateTable = ({ columns, data, modalColMap, exportProps }) => {
       <ModalManager modalColMap={modalColMap} modalCell={modalCell} />
     </>
   )
+}
+
+TemplateTable.defaultProps = {
+  modalColMap: {},
 }
 
 export default TemplateTable

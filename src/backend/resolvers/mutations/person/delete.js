@@ -22,7 +22,7 @@ const deletePerson = async (
 
     // Step 2: Cascade delete person if an obm influencer
     await pulseCoreDb
-      .collection('obm_people')
+      .collection('JOIN_obms_people')
       .deleteMany({ personId: _id }, { session })
   })
 

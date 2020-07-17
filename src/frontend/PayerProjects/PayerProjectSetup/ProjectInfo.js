@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
 import { useMutation } from '@apollo/react-hooks'
 
-import SectionCard from '../SectionCard'
 import FieldLabel from 'frontend/components/FieldLabel'
 import Title from 'frontend/components/Title'
 import Button from 'frontend/components/Button'
@@ -12,6 +11,8 @@ import Color from 'frontend/utils/color'
 import Spacing from 'frontend/utils/spacing'
 import FontSpace from 'frontend/utils/fontspace'
 
+import SectionCard from '../SectionCard'
+import ProjectDeleteButton from './ProjectDeleteButton'
 import { UPDATE_PAYER_PROJECT_NAME } from 'frontend/api/mutations'
 import { GET_SINGLE_PAYER_PROJECT, GET_PAYER_PROJECTS_LIST } from 'frontend/api/queries'
 
@@ -35,9 +36,17 @@ const generateDefaultContent = ({ projectName, toggleEditPanel }) => {
   )
 
   const leftHeaderContent = (
-    <Button onClick={() => toggleEditPanel(true)} type="secondary" color={Color.MEDIUM_GRAY_2}>
-      Edit Project Name
-    </Button>
+    <>
+      <Button
+        onClick={() => toggleEditPanel(true)}
+        type="secondary"
+        color={Color.MEDIUM_GRAY_2}
+        buttonStyle={{ marginRight: Spacing.S4 }}
+      >
+        Edit Project Name
+      </Button>
+      <ProjectDeleteButton />
+    </>
   )
 
   return {

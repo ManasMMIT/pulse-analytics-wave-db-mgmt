@@ -2,22 +2,16 @@ const { ObjectId } = require('mongodb')
 
 const connectObmServiceAndObmServiceCategory = async (
   parent,
-  { 
-    input: {
-      _id,
-      obmServiceId,
-      obmServiceCategoryId,
-    }
-  },
+  { input: { _id, obmServiceId, obmServiceCategoryId } },
   { pulseCoreDb },
-  info,
+  info
 ) => {
   _id = _id ? ObjectId(_id) : ObjectId()
   obmServiceId = ObjectId(obmServiceId)
   obmServiceCategoryId = ObjectId(obmServiceCategoryId)
 
   const { value: newOrUpdatedDoc } = await pulseCoreDb
-    .collection('obm.services_obm.services.categories')
+    .collection('JOIN_obms.services_obms.services.categories')
     .findOneAndUpdate(
       { _id },
       {
@@ -25,12 +19,12 @@ const connectObmServiceAndObmServiceCategory = async (
           _id,
           obmServiceId,
           obmServiceCategoryId,
-        }
+        },
       },
-      { 
+      {
         upsert: true,
         returnOriginal: false,
-      },
+      }
     )
 
   return newOrUpdatedDoc

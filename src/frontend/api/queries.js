@@ -1,5 +1,61 @@
 import gql from 'graphql-tag'
 
+export const GET_OPEN_PAYMENTS = gql`
+  query getOpenPayments($physicianProfileId: Float) {
+    openPayments(physicianProfileId: $physicianProfileId) {
+      dateOfPayment
+      totalAmountOfPaymentUsdollars
+      applicableManufacturerOrApplicableGpoMakingPaymentName
+      productCategoryOrTherapeuticArea1
+      nameOfDrugOrBiologicalOrDeviceOrMedicalSupply1
+      productCategoryOrTherapeuticArea2
+      nameOfDrugOrBiologicalOrDeviceOrMedicalSupply2
+      productCategoryOrTherapeuticArea3
+      nameOfDrugOrBiologicalOrDeviceOrMedicalSupply3
+      productCategoryOrTherapeuticArea4
+      nameOfDrugOrBiologicalOrDeviceOrMedicalSupply4
+      natureOfPaymentOrTransferOfValue
+      recipientPrimaryBusinessStreetAddressLine1
+      recipientPrimaryBusinessStreetAddressLine2
+      recipientCity
+      recipientState
+      recipientZipCode
+      physicianPrimaryType
+      physicianSpecialty
+    }
+  }
+`
+
+export const GET_PHYSICIANS_COMPARE = gql`
+  query getPhysiciansCompare($npi: Float) {
+    physiciansCompare(npi: $npi) {
+      firstName
+      middleName
+      lastName
+      pacId
+      professionalEnrollmentId
+      primarySpecialty
+      secondarySpecialty1
+      secondarySpecialty2
+      secondarySpecialty3
+      secondarySpecialty4
+      secondarySpecialtyAll
+      orgLegalName
+      groupPracticePacId
+      address1
+      address2
+      city
+      state
+      zip
+      hospitalAffilLbn1
+      hospitalAffilLbn2
+      hospitalAffilLbn3
+      hospitalAffilLbn4
+      hospitalAffilLbn5
+    }
+  }
+`
+
 export const GET_PEOPLE = gql`
   query getPeople {
     people {
@@ -9,7 +65,20 @@ export const GET_PEOPLE = gql`
       firstName
       lastName
       nationalProviderIdentifier
+      physicianProfileId
     }
+  }
+`
+
+export const GET_DEV_PATHWAYS_INFLUENCERS = gql`
+  query getDevPathwaysInfluencers {
+    DEV_pathwaysInfluencers
+  }
+`
+
+export const GET_DEV_PROVIDER_INFLUENCERS = gql`
+  query getDevProviderInfluencers {
+    DEV_providerInfluencers
   }
 `
 
@@ -806,9 +875,9 @@ export const GET_REGIONAL_TARGETING_DATA = gql`
   }
 `
 
-export const GET_OBM_SERVICE_AND_OBM_SERVICE_CATEGORY_CONNECTIONS = gql`
-  query getObmServiceAndObmServiceCategoryConnections($obmServiceId: String) {
-    obmServiceAndObmServiceCategoryConnections(obmServiceId: $obmServiceId) {
+export const GET_JOIN_OBMS_SERVICES_AND_OBMS_SERVICES_CATEGORIES = gql`
+  query getJoinObmsServicesAndObmsServicesCategories($obmServiceId: String) {
+    JOIN_obmsServices_obmsServicesCategories(obmServiceId: $obmServiceId) {
       _id
       obmServiceId
       obmServiceCategoryId
@@ -816,9 +885,9 @@ export const GET_OBM_SERVICE_AND_OBM_SERVICE_CATEGORY_CONNECTIONS = gql`
   }
 `
 
-export const GET_OBM_AND_OBM_SERVICE_CONNECTIONS = gql`
-  query getObmAndObmServiceConnections($obmId: String) {
-    obmAndObmServiceConnections(obmId: $obmId) {
+export const GET_JOIN_OBMS_AND_OBMS_SERVICES = gql`
+  query getJoinObmsAndObmsServices($obmId: String) {
+    JOIN_obms_obmsServices(obmId: $obmId) {
       _id
       obmId
       obmServiceId
@@ -827,9 +896,9 @@ export const GET_OBM_AND_OBM_SERVICE_CONNECTIONS = gql`
   }
 `
 
-export const GET_OBM_AND_PERSON_CONNECTIONS = gql`
-  query getObmAndPersonConnections($obmId: ID) {
-    obmAndPersonConnections(obmId: $obmId) {
+export const GET_JOIN_OBMS_AND_PEOPLE = gql`
+  query getJoinObmsAndPeople {
+    JOIN_obms_people {
       _id
       obmId
       personId
@@ -838,9 +907,9 @@ export const GET_OBM_AND_PERSON_CONNECTIONS = gql`
   }
 `
 
-export const GET_OBM_AND_PAYER_CONNECTIONS = gql`
-  query getObmAndPayerConnections($obmId: ID) {
-    obmAndPayerConnections(obmId: $obmId) {
+export const GET_JOIN_OBMS_AND_PAYERS = gql`
+  query getJoinObmsAndPayers($obmId: ID) {
+    JOIN_obms_payers(obmId: $obmId) {
       _id
       obmId
       payerId
@@ -848,9 +917,9 @@ export const GET_OBM_AND_PAYER_CONNECTIONS = gql`
   }
 `
 
-export const GET_SERVICE_TEMPLATE_OBMS = gql`
-  query getServiceTemplateObms {
-    serviceTemplateObms {
+export const GET_VIEW_OBM_SERVICES = gql`
+  query getViewObmServices {
+    VIEW_obmServices {
       _id
       obmId
       serviceId
@@ -863,9 +932,9 @@ export const GET_SERVICE_TEMPLATE_OBMS = gql`
   }
 `
 
-export const GET_OBM_PAYER_PARTNERSHIPS = gql`
-  query getObmPayerPartnerships {
-    obmPayerPartnerships {
+export const GET_VIEW_OBM_PAYER_PARTNERSHIPS = gql`
+  query getViewObmPayerPartnerships {
+    VIEW_obmPayerPartnerships {
       _id
       obmId
       obmOrganization
@@ -882,9 +951,9 @@ export const GET_OBM_PAYER_PARTNERSHIPS = gql`
   }
 `
 
-export const GET_INFLUENCER_TEMPLATE_OBMS = gql`
-  query getInfluencerTemplateObms {
-    influencerTemplateObms {
+export const GET_VIEW_OBM_INFLUENCERS = gql`
+  query getViewObmInfluencers {
+    VIEW_obmInfluencers {
       _id
       obmId
       obmOrganization

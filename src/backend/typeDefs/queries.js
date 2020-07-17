@@ -22,16 +22,16 @@ const queries = gql`
     obmOrganizations: [ObmOrganization]
     obmServices: [ObmService]
     obmServicesCategories: [ObmServiceCategory]
-    obmServiceAndObmServiceCategoryConnections(
+    JOIN_obmsServices_obmsServicesCategories(
       obmServiceId: String
     ): [ObmServiceAndObmServiceCategoryConnection]
-    obmAndObmServiceConnections(obmId: String): [ObmAndObmServiceConnection]
-    obmAndPersonConnections(obmId: ID): [ObmAndPersonConnection]
-    obmAndPayerConnections(obmId: ID): [ObmAndPayerConnection]
+    JOIN_obms_obmsServices(obmId: String): [ObmAndObmServiceConnection]
+    JOIN_obms_people: [ObmAndPersonConnection]
+    JOIN_obms_payers(obmId: ID): [ObmAndPayerConnection]
 
-    serviceTemplateObms: [ServiceTemplateObms]
-    obmPayerPartnerships: [ObmPayerPartnership]
-    influencerTemplateObms: [InfluencerTemplateObms]
+    VIEW_obmServices: [VIEW_ObmService]
+    VIEW_obmPayerPartnerships: [VIEW_ObmPayerPartnership]
+    VIEW_obmInfluencers: [VIEW_ObmInfluencer]
 
     qualityOfAccessScores: [QualityOfAccessScore]
     collections(type: String): [String]
@@ -78,6 +78,58 @@ const queries = gql`
     cMsOrgPrimarySpecialtyCounts(orgPacId: String): JSON
 
     people: [Person]
+    DEV_pathwaysInfluencers: JSON # grabbing sheet data directly from dev. type def is in wave-api
+    DEV_providerInfluencers: JSON # grabbing sheet data directly from dev. type def is in wave-api
+    physiciansCompare(npi: Float): [PhysiciansCompareDatum]
+    openPayments(physicianProfileId: Float): [OpenPaymentDatum]
+  }
+
+  type OpenPaymentDatum {
+    dateOfPayment: String
+    totalAmountOfPaymentUsdollars: String
+    applicableManufacturerOrApplicableGpoMakingPaymentName: String
+    productCategoryOrTherapeuticArea1: String
+    nameOfDrugOrBiologicalOrDeviceOrMedicalSupply1: String
+    productCategoryOrTherapeuticArea2: String
+    nameOfDrugOrBiologicalOrDeviceOrMedicalSupply2: String
+    productCategoryOrTherapeuticArea3: String
+    nameOfDrugOrBiologicalOrDeviceOrMedicalSupply3: String
+    productCategoryOrTherapeuticArea4: String
+    nameOfDrugOrBiologicalOrDeviceOrMedicalSupply4: String
+    natureOfPaymentOrTransferOfValue: String
+    recipientPrimaryBusinessStreetAddressLine1: String
+    recipientPrimaryBusinessStreetAddressLine2: String
+    recipientCity: String
+    recipientState: String
+    recipientZipCode: String
+    physicianPrimaryType: String
+    physicianSpecialty: String
+  }
+
+  type PhysiciansCompareDatum {
+    firstName: String
+    middleName: String
+    lastName: String
+    pacId: String
+    professionalEnrollmentId: String
+    primarySpecialty: String
+    secondarySpecialty1: String
+    secondarySpecialty2: String
+    secondarySpecialty3: String
+    secondarySpecialty4: String
+    secondarySpecialtyAll: String
+    orgLegalName: String
+    groupPracticePacId: String
+    address1: String
+    address2: String
+    city: String
+    state: String
+    zip: String
+    hospitalAffilLbn1: String
+    hospitalAffilLbn2: String
+    hospitalAffilLbn3: String
+    hospitalAffilLbn4: String
+    hospitalAffilLbn5: String
   }
 
   type Person {
@@ -87,6 +139,7 @@ const queries = gql`
     firstName: String
     lastName: String
     nationalProviderIdentifier: Float
+    physicianProfileId: Float
   }
 
   type Node {
@@ -257,7 +310,7 @@ const queries = gql`
     payerId: String!
   }
 
-  type InfluencerTemplateObms {
+  type VIEW_ObmInfluencer {
     _id: ID!
     obmId: String!
     obmOrganization: String!
@@ -268,7 +321,7 @@ const queries = gql`
     influencerNpiNumber: Float
   }
 
-  type ServiceTemplateObms {
+  type VIEW_ObmService {
     _id: ID!
     obmId: String!
     serviceId: String!
@@ -279,7 +332,7 @@ const queries = gql`
     serviceRating: Int!
   }
 
-  type ObmPayerPartnership {
+  type VIEW_ObmPayerPartnership {
     _id: ID!
     obmId: String!
     obmOrganization: String!

@@ -1,12 +1,9 @@
-const serviceTemplateObms = async (parent, args, { pulseCoreDb }) =>
-  pulseCoreDb
-    .collection('organizations')
-    .aggregate(SERVICE_TEMPLATE_AGG)
-    .toArray()
+const VIEW_obmServices = async (parent, args, { pulseCoreDb }) =>
+  pulseCoreDb.collection('organizations').aggregate(VIEW_AGG).toArray()
 
-module.exports = serviceTemplateObms
+module.exports = VIEW_obmServices
 
-const SERVICE_TEMPLATE_AGG = [
+const VIEW_AGG = [
   {
     $match: {
       type: 'Oncology Benefit Manager',
@@ -14,7 +11,7 @@ const SERVICE_TEMPLATE_AGG = [
   },
   {
     $lookup: {
-      from: 'obm_obm.services',
+      from: 'JOIN_obms_obms.services',
       localField: '_id',
       foreignField: 'obmId',
       as: 'obmServices',
@@ -36,7 +33,7 @@ const SERVICE_TEMPLATE_AGG = [
   },
   {
     $lookup: {
-      from: 'obm.services',
+      from: 'obms.services',
       localField: 'obmServiceId',
       foreignField: '_id',
       as: 'service',
@@ -51,7 +48,7 @@ const SERVICE_TEMPLATE_AGG = [
   },
   {
     $lookup: {
-      from: 'obm.services_obm.services.categories',
+      from: 'JOIN_obms.services_obms.services.categories',
       localField: 'service._id',
       foreignField: 'obmServiceId',
       as: 'serviceCategoryJoin',
@@ -71,7 +68,7 @@ const SERVICE_TEMPLATE_AGG = [
   },
   {
     $lookup: {
-      from: 'obm.services.categories',
+      from: 'obms.services.categories',
       localField: 'serviceCategoryJoin.obmServiceCategoryId',
       foreignField: '_id',
       as: 'serviceCategory',

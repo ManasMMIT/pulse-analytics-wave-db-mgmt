@@ -1,7 +1,7 @@
 import React from 'react'
 import { useQuery } from '@apollo/react-hooks'
 
-import { GET_SERVICE_TEMPLATE_OBMS } from 'frontend/api/queries'
+import { GET_VIEW_OBM_SERVICES } from 'frontend/api/queries'
 
 import PanelHeader from 'frontend/components/Panel/PanelHeader'
 import ObmModal from 'frontend/components/BusinessObjectModal/OncologyBenefitManagerModal'
@@ -79,7 +79,7 @@ const COLUMNS = [
 ]
 
 const Services = () => {
-  const { data, loading } = useQuery(GET_SERVICE_TEMPLATE_OBMS)
+  const { data, loading } = useQuery(GET_VIEW_OBM_SERVICES)
 
   let serviceTemplateData = []
   if (data && !loading) serviceTemplateData = Object.values(data)[0] || []
@@ -98,12 +98,24 @@ const Services = () => {
           <ObmServicePowerSelect />
           <ObmServiceCategoryPowerSelect />
           <ObmServicesModalButton buttonStyle={createButtonStyle}>
-            <Icon iconName="add" color1={Color.WHITE} width={16} style={{ marginRight: 8 }} />
+            <Icon
+              iconName="add"
+              color1={Color.WHITE}
+              width={16}
+              style={{ marginRight: 8 }}
+            />
             Create Service
           </ObmServicesModalButton>
 
-          <ObmServicesCategoriesModalButton buttonStyle={{ ...createButtonStyle, marginLeft: 12 }}>
-            <Icon iconName="add" color1={Color.WHITE} width={16} style={{ marginRight: 8 }} />
+          <ObmServicesCategoriesModalButton
+            buttonStyle={{ ...createButtonStyle, marginLeft: 12 }}
+          >
+            <Icon
+              iconName="add"
+              color1={Color.WHITE}
+              width={16}
+              style={{ marginRight: 8 }}
+            />
             Create Service Category
           </ObmServicesCategoriesModalButton>
         </div>

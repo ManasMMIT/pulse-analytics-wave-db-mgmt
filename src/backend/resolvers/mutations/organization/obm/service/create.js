@@ -1,11 +1,6 @@
-const createObmService = async (
-  parent,
-  { input },
-  { pulseCoreDb },
-  info,
-) => {
+const createObmService = async (parent, { input }, { pulseCoreDb }, info) => {
   const { ops } = await pulseCoreDb
-    .collection('obm.services')
+    .collection('obms.services')
     .insertOne({ ...input })
 
   return ops[0]

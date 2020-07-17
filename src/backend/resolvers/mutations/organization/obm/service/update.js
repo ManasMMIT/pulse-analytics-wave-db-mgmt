@@ -4,17 +4,13 @@ const updateObmService = async (
   parent,
   { input: { _id, ...body } },
   { pulseCoreDb },
-  info,
+  info
 ) => {
   _id = ObjectId(_id)
 
   const { value } = await pulseCoreDb
-    .collection('obm.services')
-    .findOneAndUpdate(
-      { _id },
-      { $set: body },
-      { returnOriginal: false },
-    )
+    .collection('obms.services')
+    .findOneAndUpdate({ _id }, { $set: body }, { returnOriginal: false })
 
   return value
 }

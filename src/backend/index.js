@@ -32,7 +32,9 @@ var checkJwt = jwt({
   algorithms: ['RS256'],
 })
 
-const accessLogStream = fs.createWriteStream(path.join(__dirname, 'api.log'), { flags: 'a' })
+const accessLogStream = fs.createWriteStream(path.join(__dirname, 'api.log'), {
+  flags: 'a',
+})
 
 // Custom morgan token inspired by https://github.com/expressjs/morgan/issues/116
 morgan.token('graphql-query', (req) => {
@@ -48,11 +50,7 @@ morgan.token('graphql-query', (req) => {
 
     // ! Don't persist huge amounts of workbook data in the oplog,
     // ! also results in VERY heavy reads
-    if (
-      Array.isArray(copyOfVariables.input) &&
-      !_.isEmpty(copyOfVariables.input[0]) &&
-      copyOfVariables.input[0].wb
-    ) {
+    if (operationName === 'ImportWorkbook') {
       copyOfVariables.input.forEach((workbookObj) => {
         workbookObj.data = []
       })
