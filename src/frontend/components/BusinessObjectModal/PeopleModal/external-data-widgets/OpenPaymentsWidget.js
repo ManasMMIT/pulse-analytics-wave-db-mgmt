@@ -1,5 +1,6 @@
 import React from 'react'
 import { useQuery } from '@apollo/react-hooks'
+import format from 'date-fns/format'
 
 import { GET_OPEN_PAYMENTS } from 'frontend/api/queries'
 
@@ -15,6 +16,7 @@ const COLUMNS = [
     filter: customMultiSelectFilterFn,
     sortType: 'text',
     sticky: 'left',
+    Cell: ({ value }) => format(new Date(value), 'M/d/yyyy'),
   },
   {
     Header: 'Total_Amount_of_Payment_USDollars',
@@ -23,6 +25,7 @@ const COLUMNS = [
     filter: customMultiSelectFilterFn,
     sortType: 'text',
     sticky: 'left',
+    Cell: ({ value }) => `$${value}`,
   },
   {
     Header: 'Applicable_Manufacturer_or_Applicable_GPO_Making_Payment_Name',
@@ -154,11 +157,28 @@ const OpenPaymentsWidget = ({ entity }) => {
     variables: { physicianProfileId: entity.physicianProfileId },
   })
 
+  const filename = `CMS_Open_Payments-${entity.firstName}_${entity.lastName}`
+
   if (loading) return null
 
   data = Object.values(data)[0] || []
 
-  return <TemplateTable data={data} columns={COLUMNS} isExportable={false} />
+  return (
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        width: 'calc(100% - 300px)',
+      }}
+    >
+      <TemplateTable
+        data={data}
+        columns={COLUMNS}
+        exportStyle={{ margin: 24 }}
+        exportProps={{ filename }}
+      />
+    </div>
+  )
 }
 
 export default OpenPaymentsWidget

@@ -35,11 +35,11 @@ const DEFAULT_COLUMN = {
 }
 
 const TemplateTable = ({
-  isExportable,
   columns,
   data,
   modalColMap,
   exportProps,
+  exportStyle,
 }) => {
   const [modalCell, setModalCell] = useState(null)
 
@@ -67,32 +67,28 @@ const TemplateTable = ({
 
   const dataFormattedForExport = formatDataForExport(sortedRows, columns)
 
-  const exportButton = isExportable ? (
-    <div style={{ margin: '0 24px 0 auto' }}>
-      <ExportExcelButton
-        data={dataFormattedForExport}
-        buttonStyle={{
-          margin: '0 0 12px',
-          display: 'flex',
-          alignItems: 'center',
-        }}
-        {...exportProps}
-      >
-        <Icon
-          iconName="export"
-          color1={Color.PRIMARY}
-          width={16}
-          height={16}
-          style={{ marginRight: 8 }}
-        />
-        Export to Excel
-      </ExportExcelButton>
-    </div>
-  ) : null
-
   return (
     <>
-      {exportButton}
+      <div style={{ margin: '0 24px 0 auto', ...exportStyle }}>
+        <ExportExcelButton
+          data={dataFormattedForExport}
+          buttonStyle={{
+            margin: '0 0 12px',
+            display: 'flex',
+            alignItems: 'center',
+          }}
+          {...exportProps}
+        >
+          <Icon
+            iconName="export"
+            color1={Color.PRIMARY}
+            width={16}
+            height={16}
+            style={{ marginRight: 8 }}
+          />
+          Export to Excel
+        </ExportExcelButton>
+      </div>
       <TableWrapper>
         <div
           className="table sticky"
@@ -118,7 +114,6 @@ const TemplateTable = ({
 }
 
 TemplateTable.defaultProps = {
-  isExportable: true,
   modalColMap: {},
 }
 

@@ -186,7 +186,24 @@ const PhysiciansCompareWidget = ({ entity }) => {
 
   data = Object.values(data)[0] || []
 
-  return <TemplateTable data={data} columns={COLUMNS} isExportable={false} />
+  const filename = `CMS_Physicians_Compare-${entity.firstName}_${entity.lastName}`
+
+  return (
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        width: 'calc(100% - 300px)',
+      }}
+    >
+      <TemplateTable
+        data={data}
+        columns={COLUMNS}
+        exportStyle={{ margin: 24 }}
+        exportProps={{ filename }}
+      />
+    </div>
+  )
 }
 
 export default PhysiciansCompareWidget
