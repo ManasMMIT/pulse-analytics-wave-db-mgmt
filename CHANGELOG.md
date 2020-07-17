@@ -15,11 +15,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased] - Started: 7-9-20
 
 ### Added
-- `Orion`: Add data source columns to People view
+- `Orion`: People View
+  - Add data source columns to People view
+  - Add external data widgets: pathways/provider sheets, CMS physicians compare, CMS open payments
 - `Frontend`: Build out hook data sourcing structure around people data
 
 ### Changed
-- `Polaris API Logging`: 
+- `Polaris API Logging`:
   - Add timestamps to GraphQL error logging
   - Tweak how workbook import is detected for the blanking out of heavy json before writing to `api.log`
 

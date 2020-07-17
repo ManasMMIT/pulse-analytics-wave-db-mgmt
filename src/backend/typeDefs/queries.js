@@ -80,6 +80,56 @@ const queries = gql`
     people: [Person]
     DEV_pathwaysInfluencers: JSON # grabbing sheet data directly from dev. type def is in wave-api
     DEV_providerInfluencers: JSON # grabbing sheet data directly from dev. type def is in wave-api
+    physiciansCompare(npi: Float): [PhysiciansCompareDatum]
+    openPayments(physicianProfileId: Float): [OpenPaymentDatum]
+  }
+
+  type OpenPaymentDatum {
+    dateOfPayment: String
+    totalAmountOfPaymentUsdollars: String
+    applicableManufacturerOrApplicableGpoMakingPaymentName: String
+    productCategoryOrTherapeuticArea1: String
+    nameOfDrugOrBiologicalOrDeviceOrMedicalSupply1: String
+    productCategoryOrTherapeuticArea2: String
+    nameOfDrugOrBiologicalOrDeviceOrMedicalSupply2: String
+    productCategoryOrTherapeuticArea3: String
+    nameOfDrugOrBiologicalOrDeviceOrMedicalSupply3: String
+    productCategoryOrTherapeuticArea4: String
+    nameOfDrugOrBiologicalOrDeviceOrMedicalSupply4: String
+    natureOfPaymentOrTransferOfValue: String
+    recipientPrimaryBusinessStreetAddressLine1: String
+    recipientPrimaryBusinessStreetAddressLine2: String
+    recipientCity: String
+    recipientState: String
+    recipientZipCode: String
+    physicianPrimaryType: String
+    physicianSpecialty: String
+  }
+
+  type PhysiciansCompareDatum {
+    firstName: String
+    middleName: String
+    lastName: String
+    pacId: String
+    professionalEnrollmentId: String
+    primarySpecialty: String
+    secondarySpecialty1: String
+    secondarySpecialty2: String
+    secondarySpecialty3: String
+    secondarySpecialty4: String
+    secondarySpecialtyAll: String
+    orgLegalName: String
+    groupPracticePacId: String
+    address1: String
+    address2: String
+    city: String
+    state: String
+    zip: String
+    hospitalAffilLbn1: String
+    hospitalAffilLbn2: String
+    hospitalAffilLbn3: String
+    hospitalAffilLbn4: String
+    hospitalAffilLbn5: String
   }
 
   type Person {

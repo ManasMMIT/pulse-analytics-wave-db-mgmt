@@ -15,18 +15,8 @@ import {
 import BusinessObjectModal from '../BusinessObjectModal/BusinessObjectModal'
 import PathwaysInfluencerWidget from './external-data-widgets/PathwaysInfluencerWidget'
 import ProviderInfluencerWidget from './external-data-widgets/ProviderInfluencerWidget'
-import Color from 'frontend/utils/color'
-import UnderConstruction from '../../UnderConstruction'
-
-const placeHolderStyle = {
-  color: Color.ORANGE,
-  padding: 24,
-  fontWeight: 700,
-  fontSize: 24,
-  width: '100%',
-  textAlign: 'center',
-  alignSelf: 'center',
-}
+import PhysiciansCompareWidget from './external-data-widgets/PhysiciansCompareWidget'
+import OpenPaymentsWidget from './external-data-widgets/OpenPaymentsWidget'
 
 const WIDGETS = [
   {
@@ -42,12 +32,12 @@ const WIDGETS = [
   {
     _id: 'RELATIONAL_physiciansCompareWidget',
     label: 'Physicians Compare',
-    Component: () => <UnderConstruction />,
+    Component: PhysiciansCompareWidget,
   },
   {
     _id: 'RELATIONAL_externalSource2Widget',
     label: 'Open Payments',
-    Component: () => <UnderConstruction />,
+    Component: OpenPaymentsWidget,
   },
 ]
 

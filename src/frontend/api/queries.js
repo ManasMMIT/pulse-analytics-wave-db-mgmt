@@ -1,5 +1,61 @@
 import gql from 'graphql-tag'
 
+export const GET_OPEN_PAYMENTS = gql`
+  query getOpenPayments($physicianProfileId: Float) {
+    openPayments(physicianProfileId: $physicianProfileId) {
+      dateOfPayment
+      totalAmountOfPaymentUsdollars
+      applicableManufacturerOrApplicableGpoMakingPaymentName
+      productCategoryOrTherapeuticArea1
+      nameOfDrugOrBiologicalOrDeviceOrMedicalSupply1
+      productCategoryOrTherapeuticArea2
+      nameOfDrugOrBiologicalOrDeviceOrMedicalSupply2
+      productCategoryOrTherapeuticArea3
+      nameOfDrugOrBiologicalOrDeviceOrMedicalSupply3
+      productCategoryOrTherapeuticArea4
+      nameOfDrugOrBiologicalOrDeviceOrMedicalSupply4
+      natureOfPaymentOrTransferOfValue
+      recipientPrimaryBusinessStreetAddressLine1
+      recipientPrimaryBusinessStreetAddressLine2
+      recipientCity
+      recipientState
+      recipientZipCode
+      physicianPrimaryType
+      physicianSpecialty
+    }
+  }
+`
+
+export const GET_PHYSICIANS_COMPARE = gql`
+  query getPhysiciansCompare($npi: Float) {
+    physiciansCompare(npi: $npi) {
+      firstName
+      middleName
+      lastName
+      pacId
+      professionalEnrollmentId
+      primarySpecialty
+      secondarySpecialty1
+      secondarySpecialty2
+      secondarySpecialty3
+      secondarySpecialty4
+      secondarySpecialtyAll
+      orgLegalName
+      groupPracticePacId
+      address1
+      address2
+      city
+      state
+      zip
+      hospitalAffilLbn1
+      hospitalAffilLbn2
+      hospitalAffilLbn3
+      hospitalAffilLbn4
+      hospitalAffilLbn5
+    }
+  }
+`
+
 export const GET_PEOPLE = gql`
   query getPeople {
     people {
