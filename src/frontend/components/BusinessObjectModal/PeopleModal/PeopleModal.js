@@ -8,8 +8,8 @@ import {
 
 import {
   GET_PEOPLE,
-  GET_INFLUENCER_TEMPLATE_OBMS,
-  GET_OBM_AND_PERSON_CONNECTIONS,
+  GET_JOIN_OBMS_AND_PEOPLE,
+  GET_VIEW_OBM_INFLUENCERS,
 } from '../../../api/queries'
 
 import BusinessObjectModal from '../BusinessObjectModal/BusinessObjectModal'
@@ -64,8 +64,8 @@ const PeopleModal = ({
     refetchQueries={[
       ...refetchQueries,
       { query: GET_PEOPLE },
-      { query: GET_INFLUENCER_TEMPLATE_OBMS },
-      { query: GET_OBM_AND_PERSON_CONNECTIONS },
+      { query: GET_JOIN_OBMS_AND_PEOPLE },
+      { query: GET_VIEW_OBM_INFLUENCERS },
     ]}
     afterMutationHook={afterMutationHook}
     widgets={WIDGETS}

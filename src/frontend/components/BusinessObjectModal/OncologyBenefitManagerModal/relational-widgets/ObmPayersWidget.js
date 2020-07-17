@@ -9,8 +9,8 @@ import { faTrashAlt } from '@fortawesome/free-solid-svg-icons'
 
 import {
   GET_PAYER_ORGANIZATIONS,
-  GET_OBM_AND_PAYER_CONNECTIONS,
-  GET_OBM_PAYER_PARTNERSHIPS,
+  GET_JOIN_OBMS_AND_PAYERS,
+  GET_VIEW_OBM_PAYER_PARTNERSHIPS,
 } from '../../../../api/queries'
 
 import { CONNECT_OBM_AND_PAYER } from '../../../../api/mutations'
@@ -23,7 +23,7 @@ import {
   RelationalRow,
   InputContainer,
   InputLabel,
-  RowInput,
+  // RowInput,
   FixedControlRow,
   SaveWarningBox,
   SaveContainer,
@@ -33,10 +33,12 @@ import {
 } from './styledComponents'
 
 const ObmPayersWidget = ({ entity }) => {
-  const { data: payersData, loading: payersLoading } = useQuery(GET_PAYER_ORGANIZATIONS)
+  const { data: payersData, loading: payersLoading } = useQuery(
+    GET_PAYER_ORGANIZATIONS
+  )
 
   const { data: connectionsData, loading: connectionsLoading } = useQuery(
-    GET_OBM_AND_PAYER_CONNECTIONS,
+    GET_JOIN_OBMS_AND_PAYERS,
     {
       variables: { obmId: entity._id },
     }
@@ -55,11 +57,11 @@ const ObmPayersWidget = ({ entity }) => {
     },
     refetchQueries: [
       {
-        query: GET_OBM_AND_PAYER_CONNECTIONS,
+        query: GET_JOIN_OBMS_AND_PAYERS,
         variables: { obmId: entity._id },
       },
       {
-        query: GET_OBM_PAYER_PARTNERSHIPS,
+        query: GET_VIEW_OBM_PAYER_PARTNERSHIPS,
       },
     ],
     onError: alert,
@@ -69,7 +71,7 @@ const ObmPayersWidget = ({ entity }) => {
     if (!payersLoading && !connectionsLoading) {
       // ! HOTFIX: make sure there are no connections in the cache for removed payers
       const payersById = _.keyBy(Object.values(payersData)[0], '_id')
-      const validConnections = connectionsData.obmAndPayerConnections.filter(
+      const validConnections = Object.values(connectionsData)[0].filter(
         (connection) => payersById[connection.payerId]
       )
 
@@ -85,10 +87,12 @@ const ObmPayersWidget = ({ entity }) => {
 
   if (payersLoading || connectionsLoading) return 'Loading...'
 
-  const payerDropdownOptions = payersData.payerOrganizations.map(({ _id, organization }) => ({
-    value: _id,
-    label: organization,
-  }))
+  const payerDropdownOptions = payersData.payerOrganizations.map(
+    ({ _id, organization }) => ({
+      value: _id,
+      label: organization,
+    })
+  )
 
   const clonedStagedConnections = _.cloneDeep(stagedConnections)
 
@@ -108,7 +112,9 @@ const ObmPayersWidget = ({ entity }) => {
                 <Select
                   styles={customSelectStyles}
                   options={payerDropdownOptions}
-                  value={payerDropdownOptions.find(({ value }) => value === payerId)}
+                  value={payerDropdownOptions.find(
+                    ({ value }) => value === payerId
+                  )}
                   onChange={({ value }) => {
                     const newDoc = _.merge(clonedStagedConnections[idx], {
                       payerId: value,

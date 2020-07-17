@@ -1,7 +1,7 @@
 import React from 'react'
 import { useQuery } from '@apollo/react-hooks'
 
-import { GET_INFLUENCER_TEMPLATE_OBMS } from 'frontend/api/queries'
+import { GET_VIEW_OBM_INFLUENCERS } from 'frontend/api/queries'
 
 import PanelHeader from 'frontend/components/Panel/PanelHeader'
 import ObmModal from 'frontend/components/BusinessObjectModal/OncologyBenefitManagerModal'
@@ -89,7 +89,7 @@ const COLUMNS = [
 ]
 
 const Influencers = () => {
-  const { data, loading } = useQuery(GET_INFLUENCER_TEMPLATE_OBMS)
+  const { data, loading } = useQuery(GET_VIEW_OBM_INFLUENCERS)
 
   let influencerTemplateData = []
   if (data && !loading) influencerTemplateData = Object.values(data)[0] || []
@@ -107,7 +107,12 @@ const Influencers = () => {
           <ObmPowerSelect />
           <PeoplePowerSelect />
           <PeopleModalButton buttonStyle={createButtonStyle}>
-            <Icon iconName="add" color1={Color.WHITE} width={16} style={{ marginRight: 8 }} />
+            <Icon
+              iconName="add"
+              color1={Color.WHITE}
+              width={16}
+              style={{ marginRight: 8 }}
+            />
             Create Person
           </PeopleModalButton>
         </div>

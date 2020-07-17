@@ -8,7 +8,7 @@ import {
 
 import {
   GET_OBM_SERVICES_CATEGORIES,
-  GET_SERVICE_TEMPLATE_OBMS,
+  GET_VIEW_OBM_SERVICES,
 } from '../../../api/queries'
 
 import BusinessObjectModal from '../BusinessObjectModal/BusinessObjectModal'
@@ -35,7 +35,7 @@ const ObmServicesCategoriesModal = ({
     refetchQueries={[
       ...refetchQueries,
       { query: GET_OBM_SERVICES_CATEGORIES },
-      { query: GET_SERVICE_TEMPLATE_OBMS },
+      { query: GET_VIEW_OBM_SERVICES },
     ]}
     afterMutationHook={afterMutationHook}
   />

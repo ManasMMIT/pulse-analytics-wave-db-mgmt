@@ -15,19 +15,19 @@ const deleteService = async (
   await session.withTransaction(async () => {
     // Step 1: Delete service from own collection
     const { value } = await pulseCoreDb
-      .collection('obm.services')
+      .collection('obms.services')
       .findOneAndDelete({ _id }, { session })
 
     result = value
 
     // Step 2: Cascade delete services and obm connections
     await pulseCoreDb
-      .collection('obm_obm.services')
+      .collection('JOIN_obms_obms.services')
       .deleteMany({ obmServiceId: _id }, { session })
 
     // Step 3: Cascade delete services to service category connections
     await pulseCoreDb
-      .collection('obm.services_obm.services.categories')
+      .collection('JOIN_obms.services_obms.services.categories')
       .deleteMany({ obmServiceId: _id }, { session })
   })
 

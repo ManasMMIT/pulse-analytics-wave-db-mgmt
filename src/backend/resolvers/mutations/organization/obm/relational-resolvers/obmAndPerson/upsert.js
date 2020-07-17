@@ -6,7 +6,7 @@ const connectObmAndPerson = async (
   parent,
   { input },
   { pulseCoreDb, mongoClient },
-  info,
+  info
 ) => {
   // Note: Error out if input is blank arr; otherwise we could get
   // unexpected result where someone clears all people and op seems successful
@@ -15,12 +15,7 @@ const connectObmAndPerson = async (
 
   const session = mongoClient.startSession()
 
-  const docsToInsert = input.map(({
-    _id,
-    personId,
-    obmId,
-    position,
-  }) => ({
+  const docsToInsert = input.map(({ _id, personId, obmId, position }) => ({
     _id: _id ? ObjectId(_id) : ObjectId(),
     personId: ObjectId(personId),
     obmId: ObjectId(obmId),
@@ -30,10 +25,12 @@ const connectObmAndPerson = async (
   const obmId = docsToInsert[0].obmId
 
   await session.withTransaction(async () => {
-    await pulseCoreDb.collection('obm_people')
+    await pulseCoreDb
+      .collection('JOIN_obms_people')
       .deleteMany({ obmId }, { session })
 
-    await pulseCoreDb.collection('obm_people')
+    await pulseCoreDb
+      .collection('JOIN_obms_people')
       .insertMany(docsToInsert, { session })
   })
 

@@ -1,12 +1,15 @@
 import React from 'react'
 
-import { CREATE_OBM_ORGANIZATION, UPDATE_OBM_ORGANIZATION } from 'frontend/api/mutations'
+import {
+  CREATE_OBM_ORGANIZATION,
+  UPDATE_OBM_ORGANIZATION,
+} from 'frontend/api/mutations'
 
 import {
   GET_OBM_ORGANIZATIONS,
-  GET_SERVICE_TEMPLATE_OBMS,
-  GET_OBM_PAYER_PARTNERSHIPS,
-  GET_INFLUENCER_TEMPLATE_OBMS,
+  GET_VIEW_OBM_SERVICES,
+  GET_VIEW_OBM_PAYER_PARTNERSHIPS,
+  GET_VIEW_OBM_INFLUENCERS,
 } from 'frontend/api/queries'
 
 import ObmServicesWidget from './relational-widgets/ObmServicesWidget'
@@ -54,9 +57,9 @@ const OncologyBenefitManagerModal = ({
     refetchQueries={[
       ...refetchQueries,
       { query: GET_OBM_ORGANIZATIONS },
-      { query: GET_SERVICE_TEMPLATE_OBMS },
-      { query: GET_OBM_PAYER_PARTNERSHIPS },
-      { query: GET_INFLUENCER_TEMPLATE_OBMS },
+      { query: GET_VIEW_OBM_SERVICES },
+      { query: GET_VIEW_OBM_PAYER_PARTNERSHIPS },
+      { query: GET_VIEW_OBM_INFLUENCERS },
     ]}
     afterMutationHook={afterMutationHook}
     widgets={WIDGETS}

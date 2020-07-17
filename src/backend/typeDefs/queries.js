@@ -22,16 +22,16 @@ const queries = gql`
     obmOrganizations: [ObmOrganization]
     obmServices: [ObmService]
     obmServicesCategories: [ObmServiceCategory]
-    obmServiceAndObmServiceCategoryConnections(
+    JOIN_obmsServices_obmsServicesCategories(
       obmServiceId: String
     ): [ObmServiceAndObmServiceCategoryConnection]
-    obmAndObmServiceConnections(obmId: String): [ObmAndObmServiceConnection]
-    obmAndPersonConnections: [ObmAndPersonConnection]
-    obmAndPayerConnections(obmId: ID): [ObmAndPayerConnection]
+    JOIN_obms_obmsServices(obmId: String): [ObmAndObmServiceConnection]
+    JOIN_obms_people: [ObmAndPersonConnection]
+    JOIN_obms_payers(obmId: ID): [ObmAndPayerConnection]
 
-    serviceTemplateObms: [ServiceTemplateObms]
-    obmPayerPartnerships: [ObmPayerPartnership]
-    influencerTemplateObms: [InfluencerTemplateObms]
+    VIEW_obmServices: [VIEW_ObmService]
+    VIEW_obmPayerPartnerships: [VIEW_ObmPayerPartnership]
+    VIEW_obmInfluencers: [VIEW_ObmInfluencer]
 
     qualityOfAccessScores: [QualityOfAccessScore]
     collections(type: String): [String]
@@ -310,7 +310,7 @@ const queries = gql`
     payerId: String!
   }
 
-  type InfluencerTemplateObms {
+  type VIEW_ObmInfluencer {
     _id: ID!
     obmId: String!
     obmOrganization: String!
@@ -321,7 +321,7 @@ const queries = gql`
     influencerNpiNumber: Float
   }
 
-  type ServiceTemplateObms {
+  type VIEW_ObmService {
     _id: ID!
     obmId: String!
     serviceId: String!
@@ -332,7 +332,7 @@ const queries = gql`
     serviceRating: Int!
   }
 
-  type ObmPayerPartnership {
+  type VIEW_ObmPayerPartnership {
     _id: ID!
     obmId: String!
     obmOrganization: String!

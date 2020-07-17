@@ -1,10 +1,10 @@
-import { GET_OBM_AND_PERSON_CONNECTIONS } from 'frontend/api/queries'
+import { GET_JOIN_OBMS_AND_PEOPLE } from 'frontend/api/queries'
 
 import { useQuery } from '@apollo/react-hooks'
 
 const useObmPersonConnections = (args = {}) => {
   const { obmId, personId } = args
-  const { data, loading } = useQuery(GET_OBM_AND_PERSON_CONNECTIONS)
+  const { data, loading } = useQuery(GET_JOIN_OBMS_AND_PEOPLE)
 
   if (loading) return { data: [], loading }
 

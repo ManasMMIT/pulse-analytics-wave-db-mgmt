@@ -76,7 +76,7 @@ const deletePayerOrganization = async (
 
     // STEP 5: Delete all obm-payer connections
     await pulseCoreDb
-      .collection('obm_payers')
+      .collection('JOIN_obms_payers')
       .deleteMany({ payerId: _id }, { session })
   })
 

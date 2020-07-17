@@ -5,8 +5,8 @@ import _ from 'lodash'
 
 import {
   GET_OBM_SERVICES_CATEGORIES,
-  GET_OBM_SERVICE_AND_OBM_SERVICE_CATEGORY_CONNECTIONS,
-  GET_SERVICE_TEMPLATE_OBMS,
+  GET_JOIN_OBMS_SERVICES_AND_OBMS_SERVICES_CATEGORIES,
+  GET_VIEW_OBM_SERVICES,
 } from '../../../../api/queries'
 
 import { CONNECT_OBM_SERVICE_AND_OBM_SERVICE_CATEGORY } from '../../../../api/mutations'
@@ -17,7 +17,7 @@ const ObmServiceCategoryWidget = ({ entity }) => {
   )
 
   const { data: connectionsData, loading: connectionsLoading } = useQuery(
-    GET_OBM_SERVICE_AND_OBM_SERVICE_CATEGORY_CONNECTIONS,
+    GET_JOIN_OBMS_SERVICES_AND_OBMS_SERVICES_CATEGORIES,
     {
       variables: { obmServiceId: entity._id },
     }
@@ -25,8 +25,7 @@ const ObmServiceCategoryWidget = ({ entity }) => {
 
   const [selectedCategoryId, selectCategoryId] = useState(null)
 
-  const { obmServiceAndObmServiceCategoryConnections: connections } =
-    connectionsData || {}
+  const connections = Object.values(connectionsData || {})[0]
 
   const connectionId = connections && connections[0] && connections[0]._id
 
@@ -42,11 +41,11 @@ const ObmServiceCategoryWidget = ({ entity }) => {
     },
     refetchQueries: [
       {
-        query: GET_OBM_SERVICE_AND_OBM_SERVICE_CATEGORY_CONNECTIONS,
+        query: GET_JOIN_OBMS_SERVICES_AND_OBMS_SERVICES_CATEGORIES,
         variables: { obmServiceId: entity._id },
       },
       {
-        query: GET_SERVICE_TEMPLATE_OBMS,
+        query: GET_VIEW_OBM_SERVICES,
       },
     ],
     onError: alert,

@@ -19,12 +19,12 @@ const connectObmAndPayer = async (
 
   await session.withTransaction(async () => {
     await pulseCoreDb
-      .collection('obm_payers')
+      .collection('JOIN_obms_payers')
       .deleteMany({ obmId }, { session })
 
     if (docsToInsert.length) {
       await pulseCoreDb
-        .collection('obm_payers')
+        .collection('JOIN_obms_payers')
         .insertMany(docsToInsert, { session })
     }
   })

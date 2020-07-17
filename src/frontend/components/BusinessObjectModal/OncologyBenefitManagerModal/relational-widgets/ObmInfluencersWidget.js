@@ -9,8 +9,8 @@ import { faTrashAlt } from '@fortawesome/free-solid-svg-icons'
 
 import {
   GET_PEOPLE,
-  GET_OBM_AND_PERSON_CONNECTIONS,
-  GET_INFLUENCER_TEMPLATE_OBMS,
+  GET_JOIN_OBMS_AND_PEOPLE,
+  GET_VIEW_OBM_INFLUENCERS,
 } from 'frontend/api/queries'
 
 import { CONNECT_OBM_AND_PERSON } from 'frontend/api/mutations'
@@ -54,10 +54,10 @@ const ObmInfluencersWidget = ({ entity }) => {
     },
     refetchQueries: [
       {
-        query: GET_OBM_AND_PERSON_CONNECTIONS,
+        query: GET_JOIN_OBMS_AND_PEOPLE,
       },
       {
-        query: GET_INFLUENCER_TEMPLATE_OBMS,
+        query: GET_VIEW_OBM_INFLUENCERS,
       },
     ],
     onError: alert,

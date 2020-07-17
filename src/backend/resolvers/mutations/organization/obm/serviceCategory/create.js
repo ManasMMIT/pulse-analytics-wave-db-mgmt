@@ -2,10 +2,10 @@ const createObmServiceCategory = async (
   parent,
   { input },
   { pulseCoreDb },
-  info,
+  info
 ) => {
   const { ops } = await pulseCoreDb
-    .collection('obm.services.categories')
+    .collection('obms.services.categories')
     .insertOne({ ...input })
 
   return ops[0]
