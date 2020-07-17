@@ -12,18 +12,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Fixed** for any bug fixes.
 - **Security** in case of vulnerabilities.
 
-## [Unreleased] - Started: 7-9-20
+## [Unreleased] - Started: 7-17-20
+
+## [3.0.0] - Started: 7-9-20
 
 ### Added
 - `Orion`: People View
   - Add data source columns to People view
   - Add external data widgets: pathways/provider sheets, CMS physicians compare, CMS open payments
 - `Frontend`: Build out hook data sourcing structure around people data
+- `Payer Projects Mgmt Tool`: Delete project functionality
 
 ### Changed
+- `Orion/OBM Tool`: Rename OBM collections and application code to follow new `JOIN`/`VIEW` conventions
 - `Polaris API Logging`:
   - Add timestamps to GraphQL error logging
   - Tweak how workbook import is detected for the blanking out of heavy json before writing to `api.log`
+- `Payer Projects Mgmt Tool`: Change PTP removal functionality to be specific from a project
 
 ## [2.11.0] - Started: 6-30-20
 
