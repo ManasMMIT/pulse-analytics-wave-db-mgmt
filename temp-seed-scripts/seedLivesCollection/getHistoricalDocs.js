@@ -50,8 +50,8 @@ module.exports = ({
     const comboDoc = {
       organizationId,
       timestamp,
-      book: mappedData.book,
-      coverage: mappedData.coverage,
+      bookId: mappedData.bookId,
+      coverageId: mappedData.coverageId,
       lives,
       source,
       territoryType,
