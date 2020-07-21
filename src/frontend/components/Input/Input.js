@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from '@emotion/styled'
 import PropTypes from 'prop-types'
+import { transparentize } from 'polished'
 
 import Color from '../../utils/color'
 import Spacing from '../../utils/spacing'
@@ -12,12 +13,20 @@ const InputComponent = styled.input({
   padding: `${Spacing.S3}`,
   borderRadius: 4,
   ...FontSpace.FS2,
+  border: `1px solid ${transparentize(0.96, Color.BLACK)}`,
+  ':hover': {
+    border: `1px solid ${transparentize(0.9, Color.BLACK)}`,
+  },
+  ':focus': {
+    border: `1px solid ${transparentize(0.1, Color.PRIMARY)}`,
+    outline: 'none',
+  },
 })
 
-const Input = ({ name, type, value, onChange }) => {
+const Input = ({ name, type, value, onChange, disabled }) => {
   const defaultValue = value || ''
 
-  const onEventChange = event => {
+  const onEventChange = (event) => {
     event.persist()
     const { type, name, value, checked } = event.target
 
@@ -25,13 +34,13 @@ const Input = ({ name, type, value, onChange }) => {
     switch (type) {
       case 'checkbox':
         stateVal = checked
-        break;
+        break
       case 'number':
         stateVal = parseInt(value)
-        break;
+        break
       default:
         stateVal = value
-        break;
+        break
     }
 
     onChange({ name, value: stateVal })
@@ -44,6 +53,7 @@ const Input = ({ name, type, value, onChange }) => {
       name={name}
       onChange={onEventChange}
       value={defaultValue}
+      disabled={disabled}
     />
   )
 }
@@ -53,12 +63,14 @@ Input.propTypes = {
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
   type: PropTypes.string,
   onChange: PropTypes.func,
+  disabled: PropTypes.bool,
 }
 
 Input.defaultProps = {
   type: 'text',
   onChange: () => null,
   value: '',
+  disabled: false,
 }
 
 export default Input
