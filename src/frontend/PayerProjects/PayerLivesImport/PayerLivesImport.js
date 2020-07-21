@@ -85,14 +85,16 @@ const PayerLivesImport = () => {
       defval: null,
     })
 
-    const workbookData = {
-      wb: 'Payer Lives Master',
-      sheet,
-      timestamp,
-      territoryType: sheet === 'State Lives' ? 'U.S. State' : 'National',
-      source,
-      data: json,
-    }
+    const workbookData = [
+      {
+        wb: 'Payer Lives Master',
+        sheet,
+        timestamp,
+        territoryType: sheet === 'State Lives' ? 'U.S. State' : 'National',
+        source,
+        data: json,
+      },
+    ]
 
     console.log(workbookData)
 

@@ -1,4 +1,4 @@
-const { latestMonthYearPipeline } = require('../latest-month-year-agg-pipeline')
+const latestMonthYearPipeline = require('../latest-month-year-agg-pipeline')
 const _ = require('lodash')
 
 const appendStructuredLivesField = async ({

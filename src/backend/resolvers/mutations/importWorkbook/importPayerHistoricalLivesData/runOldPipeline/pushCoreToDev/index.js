@@ -1,4 +1,4 @@
-const { latestMonthYearPipeline } = require('../latest-month-year-agg-pipeline')
+const latestMonthYearPipeline = require('../latest-month-year-agg-pipeline')
 const persistStateLivesTotals = require('./persist-state-lives-totals')
 const persistNationalLivesTotal = require('./persist-national-lives-totals')
 const appendLivesPercentData = require('./append-percent-lives')
