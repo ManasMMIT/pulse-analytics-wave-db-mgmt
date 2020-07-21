@@ -18,98 +18,121 @@ class CoreToDev {
   }
 
   async getNationalLivesTotals(source) {
-    return await this.pulseCore.collection('lives.history')
+    return await this.pulseCore
+      .collection('lives.history')
       .aggregate(getNationalLivesTotalsAggPip(source), { allowDiskUse: true })
       .toArray()
   }
 
   combineBookCoverageLives(bookCoverageLivesDocs, shouldTotal = true) {
-    return bookCoverageLivesDocs
-      .reduce((acc, { book, coverage, lives }) => {
-        const bookCoverageKey = _.camelCase(`${book}${coverage}`)
+    return bookCoverageLivesDocs.reduce((acc, { book, coverage, lives }) => {
+      const bookCoverageKey = _.camelCase(`${book}${coverage}`)
 
-        acc[bookCoverageKey] = lives
+      acc[bookCoverageKey] = lives
 
-        if (shouldTotal) {
-          let totalKey = `total${coverage}`
+      if (shouldTotal) {
+        let totalKey = `total${coverage}`
 
-          acc[totalKey]
-            ? acc[totalKey] += lives
-            : acc[totalKey] = lives
-        }
+        acc[totalKey] ? (acc[totalKey] += lives) : (acc[totalKey] = lives)
+      }
 
-        return acc
-      }, {})
+      return acc
+    }, {})
   }
 
   async materializePayerDrgNationalLivesTotals() {
-    const payerDrgNationalLivesTotalCollection = this.pulseCore
-      .collection('payerDrgNationalLivesTotals-MATT')
+    const payerDrgNationalLivesTotalCollection = this.pulseCore.collection(
+      'payerDrgNationalLivesTotals-MATT'
+    )
 
     await payerDrgNationalLivesTotalCollection.deleteOne()
 
     const payerDrgNationalLivesTotals = await this.getNationalLivesTotals('DRG')
 
-    const payerDrgNationalLivesTotalsDoc = this.combineBookCoverageLives(payerDrgNationalLivesTotals)
+    const payerDrgNationalLivesTotalsDoc = this.combineBookCoverageLives(
+      payerDrgNationalLivesTotals
+    )
 
-    await payerDrgNationalLivesTotalCollection.insertOne(payerDrgNationalLivesTotalsDoc)
+    await payerDrgNationalLivesTotalCollection.insertOne(
+      payerDrgNationalLivesTotalsDoc
+    )
   }
 
   async materializePayerMmitNationalLivesTotals() {
-    const payerMmitNationalLivesTotalCollection = this.pulseCore
-      .collection('payerMmitNationalLivesTotals-MATT')
+    const payerMmitNationalLivesTotalCollection = this.pulseCore.collection(
+      'payerMmitNationalLivesTotals-MATT'
+    )
 
     await payerMmitNationalLivesTotalCollection.deleteOne()
 
-    const payerMmitNationalLivesTotals = await this.getNationalLivesTotals('MMIT')
+    const payerMmitNationalLivesTotals = await this.getNationalLivesTotals(
+      'MMIT'
+    )
 
-    const payerMmitNationalLivesTotalsDoc = this.combineBookCoverageLives(payerMmitNationalLivesTotals)
+    const payerMmitNationalLivesTotalsDoc = this.combineBookCoverageLives(
+      payerMmitNationalLivesTotals
+    )
 
-    await payerMmitNationalLivesTotalCollection.insertOne(payerMmitNationalLivesTotalsDoc)
+    await payerMmitNationalLivesTotalCollection.insertOne(
+      payerMmitNationalLivesTotalsDoc
+    )
   }
 
   async getStateLivesTotals(source) {
-    return await this.pulseCore.collection('lives.history')
+    return await this.pulseCore
+      .collection('lives.history')
       .aggregate(getStateLivesTotalsAggPip(source), { allowDiskUse: true })
       .toArray()
   }
 
   formatStateLivesTotalsDoc(stateDocs) {
     return stateDocs.map(({ _id: state, bookCoverageSums }) => {
-      const bookCoverageLivesFields = this.combineBookCoverageLives(bookCoverageSums)
+      const bookCoverageLivesFields = this.combineBookCoverageLives(
+        bookCoverageSums
+      )
 
-      return ({
+      return {
         state,
         stateLong: STATE_LONG_BY_ABBREV[state],
         ...bookCoverageLivesFields,
-      })
+      }
     })
   }
 
   async materializePayerDrgStateLivesTotals() {
-    const payerDrgStateLivesTotalCollection = this.pulseCore
-      .collection('payerDrgStateLivesTotals-MATT')
+    const payerDrgStateLivesTotalCollection = this.pulseCore.collection(
+      'payerDrgStateLivesTotals-MATT'
+    )
 
     await payerDrgStateLivesTotalCollection.deleteMany()
 
     const payerDrgStateLivesTotals = await this.getStateLivesTotals('DRG')
 
-    const payerDrgStateLivesTotalsDoc = this.formatStateLivesTotalsDoc(payerDrgStateLivesTotals)
+    const payerDrgStateLivesTotalsDoc = this.formatStateLivesTotalsDoc(
+      payerDrgStateLivesTotals
+    )
 
-    await payerDrgStateLivesTotalCollection.insertMany(payerDrgStateLivesTotalsDoc)
+    await payerDrgStateLivesTotalCollection.insertMany(
+      payerDrgStateLivesTotalsDoc
+    )
   }
 
   async materializePayerMmitStateLivesTotals() {
-    const payerMmitStateLivesTotalCollection = this.pulseCore
-      .collection('payerMmitStateLivesTotals-MATT')
+    const payerMmitStateLivesTotalCollection = this.pulseCore.collection(
+      'payerMmitStateLivesTotals-MATT'
+    )
 
     await payerMmitStateLivesTotalCollection.deleteMany()
 
     const payerMmitStateLivesTotals = await this.getStateLivesTotals('MMIT')
 
-    const payerMmitStateLivesTotalsDoc = this.formatStateLivesTotalsDoc(payerMmitStateLivesTotals)
+    const payerMmitStateLivesTotalsDoc = this.formatStateLivesTotalsDoc(
+      payerMmitStateLivesTotals
+    )
 
-    await payerMmitStateLivesTotalCollection.insertMany(payerMmitStateLivesTotalsDoc)
+    await payerMmitStateLivesTotalCollection.insertMany(
+      payerMmitStateLivesTotalsDoc
+    )
   }
 
   async materializeLivesTotals() {
@@ -122,79 +145,91 @@ class CoreToDev {
   }
 
   async getPayerStateLives(source) {
-    return await this.pulseCore.collection('lives.history')
+    return await this.pulseCore
+      .collection('lives.history')
       .aggregate(getPayerStateLivesAggPip(source), { allowDiskUse: true })
       .toArray()
   }
 
   async materializeStateDrgLives() {
-    const collection = this.pulseDev.collection('payerHistoricalDrgStateLives-MATT')
+    const collection = this.pulseDev.collection(
+      'payerHistoricalDrgStateLives-MATT'
+    )
 
     await collection.deleteMany()
 
     const drgPayerStateLives = await this.getPayerStateLives('DRG')
 
-    const docs = drgPayerStateLives.map(({
-      bookCoverageLivesDocs,
-      ...rest
-    }) => {
-      const bookCoverageLivesFields = this.combineBookCoverageLives(bookCoverageLivesDocs)
+    const docs = drgPayerStateLives.map(
+      ({ bookCoverageLivesDocs, ...rest }) => {
+        const bookCoverageLivesFields = this.combineBookCoverageLives(
+          bookCoverageLivesDocs
+        )
 
-      return ({
-        ...rest,
-        stateLong: STATE_LONG_BY_ABBREV[rest.state],
-        ...bookCoverageLivesFields,
-        createdOn: new Date(),
-      })
-    })
+        return {
+          ...rest,
+          stateLong: STATE_LONG_BY_ABBREV[rest.state],
+          ...bookCoverageLivesFields,
+          createdOn: new Date(),
+        }
+      }
+    )
 
     await collection.insertMany(docs)
   }
 
   async materializeStateMmitLives() {
-    const collection = this.pulseDev.collection('payerHistoricalMmitStateLives-MATT')
+    const collection = this.pulseDev.collection(
+      'payerHistoricalMmitStateLives-MATT'
+    )
 
     await collection.deleteMany()
 
     const mMitPayerStateLives = await this.getPayerStateLives('MMIT')
 
-    const docs = mMitPayerStateLives.map(({
-      bookCoverageLivesDocs,
-      ...rest
-    }) => {
-      const bookCoverageLivesFields = this.combineBookCoverageLives(bookCoverageLivesDocs)
+    const docs = mMitPayerStateLives.map(
+      ({ bookCoverageLivesDocs, ...rest }) => {
+        const bookCoverageLivesFields = this.combineBookCoverageLives(
+          bookCoverageLivesDocs
+        )
 
-      return ({
-        ...rest,
-        stateLong: STATE_LONG_BY_ABBREV[rest.state],
-        ...bookCoverageLivesFields,
-        createdOn: new Date(),
-      })
-    })
+        return {
+          ...rest,
+          stateLong: STATE_LONG_BY_ABBREV[rest.state],
+          ...bookCoverageLivesFields,
+          createdOn: new Date(),
+        }
+      }
+    )
 
     await collection.insertMany(docs)
   }
 
   async getPayerNationalLives(source) {
-    return await this.pulseCore.collection('lives.history')
+    return await this.pulseCore
+      .collection('lives.history')
       .aggregate(getPayerNationalLivesAggPip(source), { allowDiskUse: true })
       .toArray()
   }
 
   async materializeNationalDrgLives() {
-    const collection = this.pulseDev.collection('payerHistoricalDrgNationalLives-MATT')
+    const collection = this.pulseDev.collection(
+      'payerHistoricalDrgNationalLives-MATT'
+    )
 
     await collection.deleteMany()
 
     const dRgPayerNationalLives = await this.getPayerNationalLives('DRG')
 
-    const totalsDoc = await this.pulseCore.collection('payerDrgNationalLivesTotals').findOne()
+    const totalsDoc = await this.pulseCore
+      .collection('payerDrgNationalLivesTotals')
+      .findOne()
 
-    const docs = dRgPayerNationalLives.map(({
-      structuredLives,
-      ...rest
-    }) => {
-      const bookCoverageFields = this.combineBookCoverageLives(structuredLives, false)
+    const docs = dRgPayerNationalLives.map(({ structuredLives, ...rest }) => {
+      const bookCoverageFields = this.combineBookCoverageLives(
+        structuredLives,
+        false
+      )
 
       structuredLives = structuredLives.map(({ book, coverage, lives }) => {
         const bookCoverage = _.camelCase(`${book}${coverage}`)
@@ -206,42 +241,46 @@ class CoreToDev {
           livesPercentage = lives / livesDenominator
         }
 
-        return ({
+        return {
           book,
           coverage,
           lives,
           livesPercentage,
-        })
+        }
       })
 
-      return ({
+      return {
         structuredLives,
         ...rest,
         ...bookCoverageFields,
         createdOn: new Date(),
-      })
+      }
     })
 
     collection.insertMany(docs)
   }
 
   async materializeNationalMmitLives() {
-    const collection = this.pulseDev.collection('payerHistoricalMmitNationalLives-MATT')
+    const collection = this.pulseDev.collection(
+      'payerHistoricalMmitNationalLives-MATT'
+    )
 
     await collection.deleteMany()
 
     const mMitPayerNationalLives = await this.getPayerNationalLives('MMIT')
 
-    const totalsDoc = await this.pulseCore.collection('payerMmitNationalLivesTotals').findOne()
+    const totalsDoc = await this.pulseCore
+      .collection('payerMmitNationalLivesTotals')
+      .findOne()
 
-    const docs = mMitPayerNationalLives.map(({
-      structuredLives,
-      ...rest
-    }) => {
-      const bookCoverageFields = this.combineBookCoverageLives(structuredLives, false)
+    const docs = mMitPayerNationalLives.map(({ structuredLives, ...rest }) => {
+      const bookCoverageFields = this.combineBookCoverageLives(
+        structuredLives,
+        false
+      )
 
       structuredLives = structuredLives.map(({ book, coverage, lives }) => {
-        const bookCoverage = _.camelCase(`${ book }${ coverage }`)
+        const bookCoverage = _.camelCase(`${book}${coverage}`)
 
         const livesDenominator = totalsDoc[bookCoverage]
 
@@ -250,25 +289,24 @@ class CoreToDev {
           livesPercentage = lives / livesDenominator
         }
 
-        return ({
+        return {
           book,
           coverage,
           lives,
           livesPercentage,
-        })
+        }
       })
 
-      return ({
+      return {
         structuredLives,
         ...rest,
         ...bookCoverageFields,
         createdOn: new Date(),
-      })
+      }
     })
 
     collection.insertMany(docs)
   }
-
 
   /*
     ! actually belongs in sheet to core import logic
