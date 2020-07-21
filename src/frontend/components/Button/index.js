@@ -51,24 +51,34 @@ const getSecondaryButtonStyle = (color) => ({
   },
 })
 
-const StyledButton = styled.button(({ type, color, buttonStyle, hoverStyle }) => {
-  const typeStyle =
-    type === 'primary' ? getPrimaryButtonStyle(color) : getSecondaryButtonStyle(color)
-  const combinedHoverStyle = {
-    ...typeStyle[':hover'],
-    ...hoverStyle,
-  }
+const StyledButton = styled.button(
+  ({ type, color, buttonStyle, hoverStyle }) => {
+    const typeStyle =
+      type === 'primary'
+        ? getPrimaryButtonStyle(color)
+        : getSecondaryButtonStyle(color)
+    const combinedHoverStyle = {
+      ...typeStyle[':hover'],
+      ...hoverStyle,
+    }
 
-  return {
-    ...typeStyle,
-    ...buttonStyle,
-    ':hover': {
-      ...combinedHoverStyle,
-    },
+    return {
+      ...typeStyle,
+      ...buttonStyle,
+      ':hover': {
+        ...combinedHoverStyle,
+      },
+    }
   }
-})
+)
 
-const generateButtonContent = ({ iconName, iconPosition, iconColor1, iconColor2, children }) => {
+const generateButtonContent = ({
+  iconName,
+  iconPosition,
+  iconColor1,
+  iconColor2,
+  children,
+}) => {
   if (!iconName) return children
 
   const iconProps = {
@@ -79,10 +89,16 @@ const generateButtonContent = ({ iconName, iconPosition, iconColor1, iconColor2,
   }
 
   if (children) {
-    const iconStyle = iconPosition === 'left' ? { marginRight: 8 } : { marginLeft: 8 }
+    const iconStyle =
+      iconPosition === 'left' ? { marginRight: 8 } : { marginLeft: 8 }
 
     const content = [
-      <Icon key={`icon-${iconName}`} iconName={iconName} style={iconStyle} {...iconProps} />,
+      <Icon
+        key={`icon-${iconName}`}
+        iconName={iconName}
+        style={iconStyle}
+        {...iconProps}
+      />,
       children,
     ]
 
@@ -103,6 +119,7 @@ const Button = ({
   iconColor2,
   iconPosition,
   children,
+  isDisabled,
 }) => {
   const buttonContent = generateButtonContent({
     iconName,
@@ -118,6 +135,7 @@ const Button = ({
 
   return (
     <StyledButton
+      disabled={isDisabled}
       onClick={onClick}
       type={type}
       color={color}
@@ -139,6 +157,7 @@ Button.propTypes = {
   iconPosition: PropTypes.oneOf(['left', 'right']),
   iconColor1: PropTypes.string,
   iconColor2: PropTypes.string,
+  isDisabled: PropTypes.bool,
 }
 
 Button.defaultProps = {
@@ -150,6 +169,7 @@ Button.defaultProps = {
   iconPosition: 'left',
   iconColor1: null,
   iconColor2: null,
+  isDisabled: false,
 }
 
 export default Button

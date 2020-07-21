@@ -14,7 +14,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased] - Started: 7-17-20
 
+### Added
+- `Payer Projects`: Adds a secret admin button to the Payer Projects List page to import payer lives
+
 ### Changed
+- `Orion`: Adds typedefs to `importWorkbook` resolver to cover payer lives schema fields
 - `Polaris Scripts`: Seeding of `lives.history` now persists bookId and coverageId, instead of just string references.
 
 ## [3.0.0] - Started: 7-9-20

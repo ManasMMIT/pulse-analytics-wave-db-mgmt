@@ -22,12 +22,15 @@ import {
 import resolvers from './api/resolvers'
 import typeDefs from './api/typeDefs'
 
+import superUsersById from './utils/super-users'
+
 import Phoenix from './Phoenix'
 import Orion from './Orion'
 import Delphi from './Delphi'
 
 import PayerProjectsList from './PayerProjects/PayerProjectsList'
 import PayerProject from './PayerProjects/PayerProject'
+import PayerLivesImport from './PayerProjects/PayerLivesImport'
 
 import { Colors, Spacing } from './utils/pulseStyles'
 
@@ -110,6 +113,7 @@ const App = () => {
     loginWithRedirect,
     logout,
     accessToken,
+    user,
   } = useAuth0()
 
   const logoutWithRedirect = () =>
@@ -154,6 +158,8 @@ const App = () => {
       }
     },
   })
+
+  const isSuperUser = user.sub in superUsersById
 
   return (
     <ApolloProvider client={client}>
@@ -216,6 +222,12 @@ const App = () => {
             <Route path="/orion" component={Orion} />
             <Route path="/delphi" component={Delphi} />
             <Route exact path="/payer-projects" component={PayerProjectsList} />
+            {isSuperUser ? (
+              <Route
+                path="/payer-projects/import-lives"
+                component={PayerLivesImport}
+              />
+            ) : null}
             <Route path="/payer-projects/:projectId" component={PayerProject} />
             <Redirect to="/phoenix" />
           </Switch>

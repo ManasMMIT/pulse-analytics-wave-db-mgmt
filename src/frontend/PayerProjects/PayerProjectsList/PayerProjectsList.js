@@ -7,6 +7,7 @@ import Spinner from 'frontend/components/Spinner'
 import { Colors, Spacing } from 'frontend/utils/pulseStyles'
 import ProjectPlacard from './ProjectPlacard'
 import CreateProjectButton from './CreateProjectButton'
+import AdminLivesImportButton from './AdminLivesImportButton'
 
 const PlacardContainer = styled.div({
   display: 'flex',
@@ -27,30 +28,25 @@ const Header = styled.div({
   fontWeight: 700,
 })
 
-const generatePlacards = ({ _id, name, }) => {
-  return (
-    <ProjectPlacard
-      key={_id}
-      projectId={_id}
-      projectName={name}
-    />
-  )
+const generatePlacards = ({ _id, name }) => {
+  return <ProjectPlacard key={_id} projectId={_id} projectName={name} />
 }
 
-const PayerProjectsList = props => {
+const PayerProjectsList = (props) => {
   const { data, loading } = useQuery(GET_PAYER_PROJECTS_LIST)
   if (loading) return <Spinner />
 
   return (
     <Wrapper>
       <Header>
+        <div>Payer Projects</div>
         <div>
-          Payer Projects
+          <AdminLivesImportButton />
+          <CreateProjectButton />
         </div>
-        <CreateProjectButton/>
       </Header>
       <PlacardContainer>
-        { data.payerProjectsList.map(generatePlacards)}
+        {data.payerProjectsList.map(generatePlacards)}
       </PlacardContainer>
     </Wrapper>
   )
