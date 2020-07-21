@@ -11,6 +11,7 @@ import Button from 'frontend/components/Button'
 import Spacing from 'frontend/utils/spacing'
 import { formatDateMonthYearLong } from 'frontend/utils/formatDate'
 import Color from 'frontend/utils/color'
+import FontSpace from 'frontend/utils/fontspace'
 
 const IFrame = styled.iframe({
   height: 800,
@@ -21,14 +22,17 @@ const Wrapper = styled.div({
   padding: Spacing.S7,
 })
 
-const UpdateWrapper = styled.div({
-  paddingTop: Spacing.S4,
-})
-
 const InputWrapper = styled.div({
   display: 'flex',
   justifyContent: 'space-between',
+  alignItems: 'center',
   padding: `${Spacing.S4} 0`,
+})
+
+const Label = styled.span({
+  ...FontSpace.FS4,
+  fontWeight: 500,
+  marginRight: Spacing.S4,
 })
 
 const EndUserTerms = () => {
@@ -51,28 +55,25 @@ const EndUserTerms = () => {
         title="End User Terms Management"
         titleStyle={{ paddingLeft: 0 }}
       />
-      <p>
-        <b>Created on:</b> {formatDateMonthYearLong(createdOn)}
-      </p>
-      <UpdateWrapper>
-        <b>Update Link:</b>
-        <InputWrapper>
-          <Input
-            name="end-user-terms-link"
-            value={link}
-            disabled={!isEditing}
-          />
-          <Button
-            buttonStyle={{ marginLeft: Spacing.S4 }}
-            onClick={editHandler}
-            color={isEditing ? Color.GREEN : Color.PRIMARY}
-          >
-            {isEditing ? 'Save Changes' : 'Edit'}
-          </Button>
-        </InputWrapper>
-      </UpdateWrapper>
-      <h4>Preview: </h4>
-      <IFrame src={link} title="end-user-terms-preview" />
+      <div>
+        <Label>Created on:</Label> {formatDateMonthYearLong(createdOn)}
+      </div>
+      <InputWrapper>
+        <Label>Link:</Label>
+        <Input name="end-user-terms-link" value={link} disabled={!isEditing} />
+        <Button
+          buttonStyle={{ marginLeft: Spacing.S4 }}
+          onClick={editHandler}
+          color={isEditing ? Color.GREEN : Color.PRIMARY}
+        >
+          {isEditing ? 'Save Changes' : 'Edit'}
+        </Button>
+      </InputWrapper>
+      <IFrame
+        style={{ marginTop: Spacing.S4 }}
+        src={link}
+        title="end-user-terms-preview"
+      />
     </Wrapper>
   )
 }
