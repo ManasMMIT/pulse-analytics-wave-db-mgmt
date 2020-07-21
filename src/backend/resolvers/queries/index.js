@@ -22,6 +22,7 @@ const books = require('./books')
 const coverages = require('./coverages')
 const populations = require('./populations')
 const lines = require('./lines')
+const endUserTerms = require('./endUserTerms')
 
 const payerProjects = require('./payerProjects')
 
@@ -60,4 +61,5 @@ module.exports = {
   cMsOrgPrimarySpecialtyCounts,
   ...aquila,
   ...people,
+  endUserTerms,
 }
