@@ -1,5 +1,5 @@
 const { zonedTimeToUtc } = require('date-fns-tz')
-const DEFAULT_TIMEZONE = require('../../../utils/defaultTimeZone')
+const DEFAULT_TIMEZONE = require('../../../../utils/defaultTimeZone')
 const { STATE_LONG_BY_ABBREV } = require('../../../../utils/states-data-util')
 
 const runOldPipeline = require('./runOldPipeline')
