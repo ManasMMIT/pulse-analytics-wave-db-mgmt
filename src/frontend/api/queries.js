@@ -965,3 +965,13 @@ export const GET_VIEW_OBM_INFLUENCERS = gql`
     }
   }
 `
+
+export const GET_END_USER_TERMS = gql`
+  query getEndUserTerms {
+    endUserTerms {
+      _id
+      link
+      createdOn
+    }
+  }
+`
