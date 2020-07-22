@@ -87,7 +87,10 @@ const PayerLivesImport = () => {
 
     const workbookData = [
       {
-        wb: 'Payer Lives Master',
+        wb:
+          source === 'DRG'
+            ? 'Payer DRG Lives Master'
+            : 'Payer MMIT Lives Master',
         sheet,
         timestamp,
         territoryType: sheet === 'State Lives' ? 'U.S. State' : 'National',

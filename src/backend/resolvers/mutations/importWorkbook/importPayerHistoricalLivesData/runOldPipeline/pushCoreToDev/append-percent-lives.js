@@ -51,7 +51,7 @@ const appendStructuredLivesField = async ({
 
     livesFields.forEach(({ key, book, coverage }) => {
       if (livesObj[key] !== undefined) {
-        const lives = Number(livesObj[key])
+        const lives = Number(livesObj[key]) || 0
 
         const livesResult = {
           book,
