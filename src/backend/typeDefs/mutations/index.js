@@ -31,6 +31,8 @@ const importWorkbook = require('./importWorkbook')
 
 const person = require('./person')
 
+const endUserTerms = require('./endUserTerms')
+
 const mutationType = gql`
   type Mutation {
     createUser(input: CreateUserInput!): CreateUserPayload
@@ -290,6 +292,10 @@ const mutationType = gql`
     createPerson(input: CreatePersonInput!): CreatePersonPayload
     updatePerson(input: UpdatePersonInput!): UpdatePersonPayload
     deletePerson(input: DeletePersonInput!): DeletePersonPayload
+
+    updateEndUserTerms(
+      input: UpdateEndUserTermsInput!
+    ): UpdateEndUserTermsPayload
   }
 `
 
@@ -325,4 +331,5 @@ module.exports = [
 
   importWorkbook,
   ...person,
+  ...endUserTerms,
 ]
