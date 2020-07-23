@@ -4,7 +4,8 @@ import styled from '@emotion/styled'
 
 import { GET_PAYER_PROJECTS_LIST } from 'frontend/api/queries'
 import Spinner from 'frontend/components/Spinner'
-import { Colors, Spacing } from 'frontend/utils/pulseStyles'
+import Color from 'frontend/utils/color'
+import Spacing from 'frontend/utils/spacing'
 import ProjectPlacard from './ProjectPlacard'
 import CreateProjectButton from './CreateProjectButton'
 import AdminLivesImportButton from './AdminLivesImportButton'
@@ -12,16 +13,16 @@ import AdminLivesImportButton from './AdminLivesImportButton'
 const PlacardContainer = styled.div({
   display: 'flex',
   flexWrap: 'wrap',
-  backgroundColor: Colors.WHITE,
+  backgroundColor: Color.WHITE,
   borderRadius: 4,
 })
 
 const Wrapper = styled.div({
-  margin: Spacing.NORMAL,
+  margin: Spacing.S4,
 })
 
 const Header = styled.div({
-  margin: Spacing.NORMAL,
+  margin: Spacing.S4,
   display: 'flex',
   justifyContent: 'space-between',
   alignItems: 'center',
@@ -34,6 +35,7 @@ const generatePlacards = ({ _id, name }) => {
 
 const PayerProjectsList = (props) => {
   const { data, loading } = useQuery(GET_PAYER_PROJECTS_LIST)
+
   if (loading) return <Spinner />
 
   return (

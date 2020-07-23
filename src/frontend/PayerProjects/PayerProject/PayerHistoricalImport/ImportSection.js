@@ -5,12 +5,17 @@ import { useMutation } from '@apollo/react-hooks'
 import styled from '@emotion/styled'
 import { Alert, AlertTitle } from '@material-ui/lab'
 import socket from 'frontend/api/socket'
-import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers'
+import {
+  MuiPickersUtilsProvider,
+  KeyboardDatePicker,
+} from '@material-ui/pickers'
 import DateFnsUtils from '@date-io/date-fns'
 import { createMuiTheme } from '@material-ui/core'
 import { ThemeProvider } from '@material-ui/styles'
-import { IMPORT_WORKBOOK } from 'frontend/api/mutations'
 import { darken } from 'polished'
+
+import { GET_PAYER_PROJECT_IMPORT_TIMESTAMPS } from 'frontend/api/queries'
+import { IMPORT_WORKBOOK } from 'frontend/api/mutations'
 
 import Button from 'frontend/components/Button'
 import FieldLabel from 'frontend/components/FieldLabel'
@@ -76,7 +81,8 @@ const importBtnStyle = {
 
 const alertMessageMap = {
   success: 'Import Successful',
-  error: 'Import Failed. See errors in the table below. Once fixed, reload the page and try again.',
+  error:
+    'Import Failed. See errors in the table below. Once fixed, reload the page and try again.',
   info: (
     <LoadingWrapper>
       <span style={{ marginRight: Spacing.S3 }}>Importing</span>
@@ -114,7 +120,11 @@ const DEFAULT_ALERT_STATUS = {
 
 const DEFAULT_NOTIFICATION = '✅ Good to import'
 
-const ImportSection = ({ projectId, projectName, setValidationErrorsAndWarnings }) => {
+const ImportSection = ({
+  projectId,
+  projectName,
+  setValidationErrorsAndWarnings,
+}) => {
   const fileInputRef = useRef(null)
 
   const [notification, setNotification] = useState(DEFAULT_NOTIFICATION)
@@ -171,6 +181,12 @@ const ImportSection = ({ projectId, projectName, setValidationErrorsAndWarnings 
   }, [notification])
 
   const [importWorkbook] = useMutation(IMPORT_WORKBOOK, {
+    refetchQueries: [
+      {
+        query: GET_PAYER_PROJECT_IMPORT_TIMESTAMPS,
+        variables: { projectId },
+      },
+    ],
     onError: (errorMessage, ...rest) => {
       setValidationErrorsAndWarnings(errorMessage.message)
       setAlertStatus({
@@ -191,12 +207,16 @@ const ImportSection = ({ projectId, projectName, setValidationErrorsAndWarnings 
       const nextWorkbook = XLSX.read(data, { type: 'array' })
 
       let nextSheetNames = nextWorkbook.SheetNames
-      nextSheetNames = nextSheetNames.filter((sheetName) => VALID_SHEETS[sheetName])
+      nextSheetNames = nextSheetNames.filter(
+        (sheetName) => VALID_SHEETS[sheetName]
+      )
 
       if (nextSheetNames.length !== 3) {
         if (
           window.confirm(
-            `Workbook doesn't have required sheets: ${Object.keys(VALID_SHEETS).join(
+            `Workbook doesn't have required sheets: ${Object.keys(
+              VALID_SHEETS
+            ).join(
               ', '
             )}. Make sure workbook includes those sheets (exact naming), refresh, try again.`
           )
@@ -260,7 +280,13 @@ const ImportSection = ({ projectId, projectName, setValidationErrorsAndWarnings 
         <label htmlFor="file-upload" className="custom-file-upload">
           {isWorkbookUploaded ? workbookName : 'Choose a File'}
         </label>
-        <input id="file-upload" ref={fileInputRef} type="file" multiple onChange={onFileAdded} />
+        <input
+          id="file-upload"
+          ref={fileInputRef}
+          type="file"
+          multiple
+          onChange={onFileAdded}
+        />
       </InputWrapper>
       <InputWrapper>
         <FieldLabel>Select Timestamp</FieldLabel>
@@ -285,14 +311,20 @@ const ImportSection = ({ projectId, projectName, setValidationErrorsAndWarnings 
       </InputWrapper>
 
       {[ERROR, INFO].includes(alertStatus.status) || (
-        <Button buttonStyle={importBtnStyle} hoverStyle={buttonHoverStyle} onClick={handleSubmit}>
+        <Button
+          buttonStyle={importBtnStyle}
+          hoverStyle={buttonHoverStyle}
+          onClick={handleSubmit}
+        >
           Import File
         </Button>
       )}
 
       {alertStatus.status && (
         <Alert severity={alertStatus.status}>
-          <AlertTitle style={{ fontSize: 12, fontWeight: 700 }}>{alertStatus.message}</AlertTitle>
+          <AlertTitle style={{ fontSize: 12, fontWeight: 700 }}>
+            {alertStatus.message}
+          </AlertTitle>
           <div style={{ fontSize: 12, lineHeight: 1.5, fontWeight: 400 }}>
             {alertStatus.description}
           </div>
