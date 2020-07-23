@@ -3,7 +3,7 @@ const DEFAULT_TIMEZONE = require('../../../../utils/defaultTimeZone')
 const { STATE_LONG_BY_ABBREV } = require('../../../../utils/states-data-util')
 
 const runOldPipeline = require('./runOldPipeline')
-const runNewPipeline = () => {}
+const runNewPipeline = require('./runNewPipeline')
 
 const importPayerHistoricalLivesData = async ({
   sheetObj,
