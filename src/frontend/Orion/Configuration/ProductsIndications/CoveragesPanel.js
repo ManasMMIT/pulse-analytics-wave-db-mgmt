@@ -1,15 +1,12 @@
 import React from 'react'
 import { useQuery } from '@apollo/react-hooks'
 import _ from 'lodash'
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faEdit } from "@fortawesome/free-solid-svg-icons"
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faEdit } from '@fortawesome/free-solid-svg-icons'
 import { transparentize } from 'polished'
 
 import Panel from 'frontend/components/Panel'
-import {
-  GET_SOURCE_TREATMENT_PLANS,
-  GET_COVERAGES,
-} from 'frontend/api/queries'
+import { GET_SOURCE_TREATMENT_PLANS, GET_COVERAGES } from 'frontend/api/queries'
 
 import {
   DELETE_COVERAGE,
@@ -22,14 +19,14 @@ import Spacing from 'frontend/utils/spacing'
 
 import ModalButtonWithForm from '../../shared/ModalButtonWithForm'
 import DeleteButton from '../../shared/DeleteButton'
+import DeleteModalWarning from '../../shared/DeleteModalWarning'
 
 import {
   StyledInput,
   FormLabel,
   createObjectModalStyle,
-  defaultPanelItemStyle
+  defaultPanelItemStyle,
 } from '../../Organizations/styledComponents'
-
 
 const editIcon = <FontAwesomeIcon size="lg" icon={faEdit} />
 
@@ -71,7 +68,7 @@ const headerChildren = (
   </div>
 )
 
-const getButtonGroupCallback = treatmentPlansByCoverage => coverage => (
+const getButtonGroupCallback = (treatmentPlansByCoverage) => (coverage) => (
   <>
     <span
       style={{
@@ -82,7 +79,9 @@ const getButtonGroupCallback = treatmentPlansByCoverage => coverage => (
         color: Color.ORION,
       }}
     >
-      {`(${(treatmentPlansByCoverage[coverage.name] || []).length} Treatment Plans)`}
+      {`(${
+        (treatmentPlansByCoverage[coverage.name] || []).length
+      } Treatment Plans)`}
     </span>
     <ModalButtonWithForm
       modalTitle="Edit Coverage Type"
@@ -95,13 +94,13 @@ const getButtonGroupCallback = treatmentPlansByCoverage => coverage => (
       getInputFields={getInputFields}
     />
     <DeleteButton
+      modalText={<DeleteModalWarning />}
       itemId={coverage._id}
       mutationDoc={DELETE_COVERAGE}
       refetchQueries={[{ query: GET_COVERAGES }]}
     />
   </>
 )
-
 
 const CoveragesPanel = () => {
   const { data, loading } = useQuery(GET_SOURCE_TREATMENT_PLANS)
@@ -126,7 +125,7 @@ const CoveragesPanel = () => {
       headerChildren={headerChildren}
       headerContainerStyle={{
         background: Color.WHITE,
-        borderBottom: `1px solid ${transparentize(0.9, Color.BLACK)}`
+        borderBottom: `1px solid ${transparentize(0.9, Color.BLACK)}`,
       }}
       queryDocs={{
         fetchAllQueryProps: { query: GET_COVERAGES },

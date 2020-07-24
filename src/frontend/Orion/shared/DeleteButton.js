@@ -2,8 +2,8 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
 import { useMutation } from '@apollo/react-hooks'
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faTrashAlt } from "@fortawesome/free-solid-svg-icons"
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faTrashAlt } from '@fortawesome/free-solid-svg-icons'
 import { transparentize } from 'polished'
 
 import Modal from './../../components/Modal'
@@ -33,10 +33,10 @@ const StyledButton = styled.button({
   ':hover': {
     color: Colors.RED,
     background: transparentize(0.9, Colors.RED),
-  }
+  },
 })
 
-const DeleteButton = props => {
+const DeleteButton = (props) => {
   const {
     style,
     modalTitle,
@@ -51,18 +51,15 @@ const DeleteButton = props => {
   const openModal = () => toggleModal(true)
   const closeModal = () => toggleModal(false)
 
-  const [handleSubmit, { loading, error }] = useMutation(
-    mutationDoc,
-    {
-      awaitRefetchQueries: true,
-      refetchQueries,
-      // the account modals don't need to pass closing the modal into afterMutationHook 
-      // because when refetchQueries are done, the account itself is no longer a list item
-      // in the master list, meaning the list item completely unmounts and all of its children,
-      // including its DeleteButton instantiation and the modal it wraps, also unmount
-      update: afterMutationHook, 
-    }
-  )
+  const [handleSubmit, { loading, error }] = useMutation(mutationDoc, {
+    awaitRefetchQueries: true,
+    refetchQueries,
+    // the account modals don't need to pass closing the modal into afterMutationHook
+    // because when refetchQueries are done, the account itself is no longer a list item
+    // in the master list, meaning the list item completely unmounts and all of its children,
+    // including its DeleteButton instantiation and the modal it wraps, also unmount
+    update: afterMutationHook,
+  })
 
   let buttonContent
   if (error) {
@@ -82,17 +79,10 @@ const DeleteButton = props => {
 
   return (
     <>
-      <StyledButton
-        style={{ ...style }}
-        onClick={openModal}
-      >
+      <StyledButton style={{ ...style }} onClick={openModal}>
         {trashCan}
       </StyledButton>
-      <Modal
-        handleClose={closeModal}
-        show={isModalOpen}
-        title={modalTitle}
-      >
+      <Modal handleClose={closeModal} show={isModalOpen} title={modalTitle}>
         {modalText}
         {buttonContent}
       </Modal>
@@ -105,9 +95,9 @@ DeleteButton.propTypes = {
   mutationDoc: PropTypes.object,
   refetchQueries: PropTypes.arrayOf(PropTypes.object),
   modalTitle: PropTypes.string,
-  modalText: PropTypes.string,
+  modalText: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
   itemId: PropTypes.string,
   afterMutationHook: PropTypes.func,
-};
+}
 
 export default DeleteButton

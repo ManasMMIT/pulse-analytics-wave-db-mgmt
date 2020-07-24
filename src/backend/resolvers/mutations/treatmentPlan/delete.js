@@ -5,8 +5,8 @@ const deleteTreatmentPlansCascade = require('../utils/deleteTreatmentPlansCascad
 const deleteSourceTreatmentPlan = async (
   parent,
   { input: { _id } },
-  { mongoClient, pulseCoreDb },
-  info,
+  { mongoClient, pulseCoreDb, pulseDevDb },
+  info
 ) => {
   _id = ObjectId(_id)
 
@@ -22,7 +22,8 @@ const deleteSourceTreatmentPlan = async (
     result = value
 
     await deleteTreatmentPlansCascade({
-      db: pulseCoreDb,
+      pulseCoreDb,
+      pulseDevDb,
       treatmentPlanIds: [_id],
       session,
     })

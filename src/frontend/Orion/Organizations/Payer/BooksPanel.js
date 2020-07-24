@@ -1,35 +1,28 @@
 import React from 'react'
 import { useQuery } from '@apollo/react-hooks'
 import _ from 'lodash'
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faEdit } from "@fortawesome/free-solid-svg-icons"
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faEdit } from '@fortawesome/free-solid-svg-icons'
 import { transparentize } from 'polished'
 
 import Panel from 'frontend/components/Panel'
-import {
-  GET_SOURCE_TREATMENT_PLANS,
-  GET_BOOKS,
-} from 'frontend/api/queries'
+import { GET_SOURCE_TREATMENT_PLANS, GET_BOOKS } from 'frontend/api/queries'
 
-import {
-  DELETE_BOOK,
-  CREATE_BOOK,
-  UPDATE_BOOK,
-} from 'frontend/api/mutations'
+import { DELETE_BOOK, CREATE_BOOK, UPDATE_BOOK } from 'frontend/api/mutations'
 
 import Color from 'frontend/utils/color'
 import Spacing from 'frontend/utils/spacing'
 
 import ModalButtonWithForm from '../../shared/ModalButtonWithForm'
 import DeleteButton from '../../shared/DeleteButton'
+import DeleteModalWarning from '../../shared/DeleteModalWarning'
 
 import {
   StyledInput,
   FormLabel,
   createObjectModalStyle,
-  defaultPanelItemStyle
+  defaultPanelItemStyle,
 } from '../../Organizations/styledComponents'
-
 
 const editIcon = <FontAwesomeIcon size="lg" icon={faEdit} />
 
@@ -71,7 +64,7 @@ const headerChildren = (
   </div>
 )
 
-const getButtonGroupCallback = treatmentPlansByBook => book => (
+const getButtonGroupCallback = (treatmentPlansByBook) => (book) => (
   <>
     <span
       style={{
@@ -97,11 +90,11 @@ const getButtonGroupCallback = treatmentPlansByBook => book => (
     <DeleteButton
       itemId={book._id}
       mutationDoc={DELETE_BOOK}
+      modalText={<DeleteModalWarning />}
       refetchQueries={[{ query: GET_BOOKS }]}
     />
   </>
 )
-
 
 const BooksPanel = () => {
   const { data, loading } = useQuery(GET_SOURCE_TREATMENT_PLANS)
@@ -126,7 +119,7 @@ const BooksPanel = () => {
       headerChildren={headerChildren}
       headerContainerStyle={{
         background: Color.WHITE,
-        borderBottom: `1px solid ${transparentize(0.9, Color.BLACK)}`
+        borderBottom: `1px solid ${transparentize(0.9, Color.BLACK)}`,
       }}
       queryDocs={{
         fetchAllQueryProps: { query: GET_BOOKS },

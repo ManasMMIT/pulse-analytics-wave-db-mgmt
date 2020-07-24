@@ -8,7 +8,7 @@ const deleteSourceIndication = async (
   parent,
   { input: { _id: indicationId } },
   { pulseDevDb, pulseCoreDb, coreRoles, mongoClient },
-  info,
+  info
 ) => {
   const _id = ObjectId(indicationId)
 
@@ -24,16 +24,21 @@ const deleteSourceIndication = async (
       },
       {
         $pull: {
-          'resources.$[].treatmentPlans': { _id }
-        }
+          'resources.$[].treatmentPlans': { _id },
+        },
       },
-      { session },
+      { session }
     )
 
     // STEP 2: Regenerate user nodes resources to dev with updated team resources
     // ! find all relevant teams OUTSIDE of transaction (pre-op)
-    const teamsWithIndicationResource = await coreRoles.find({ 'resources.treatmentPlans._id': _id }).toArray()
-    let allTeamUsers = teamsWithIndicationResource.reduce((acc, { users }) => [...acc, ...users], [])
+    const teamsWithIndicationResource = await coreRoles
+      .find({ 'resources.treatmentPlans._id': _id })
+      .toArray()
+    let allTeamUsers = teamsWithIndicationResource.reduce(
+      (acc, { users }) => [...acc, ...users],
+      []
+    )
     allTeamUsers = _.uniqBy(allTeamUsers, '_id')
 
     // ! might take longer than a minute and error on frontend
@@ -45,26 +50,24 @@ const deleteSourceIndication = async (
     })
 
     // STEP 3: find all treatmentPlans with deleted indication and handle treatmentPlan deletion cascade
-    const treatmentPlans = await pulseCoreDb.collection('treatmentPlans')
-      .find(
-        { indication: _id },
-        { session },
-      )
+    const treatmentPlans = await pulseCoreDb
+      .collection('treatmentPlans')
+      .find({ indication: _id }, { session })
       .toArray()
 
     const tpIds = treatmentPlans.map(({ _id }) => _id)
 
     await deleteTreatmentPlansCascade({
-      db: pulseCoreDb,
+      pulseCoreDb,
+      pulseDevDb,
       treatmentPlanIds: tpIds,
       session,
     })
 
     // STEP 4: delete indication itself
-    const { value } = await pulseCoreDb.collection('indications').deleteOne(
-      { _id },
-      { session },
-    )
+    const { value } = await pulseCoreDb
+      .collection('indications')
+      .deleteOne({ _id }, { session })
 
     result = value
   })

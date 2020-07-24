@@ -39,19 +39,13 @@ module.exports = ({
 
     const parsedLivesValue = parseInt(doc[key])
 
-    // ! let 0 through
-    const lives = (
-        [null, '', undefined].includes(parsedLivesValue)
-        || isNaN(parsedLivesValue)
-      )
-      ? null
-      : parsedLivesValue
+    const lives = parsedLivesValue || 0
 
     const comboDoc = {
       organizationId,
       timestamp,
-      book: mappedData.book,
-      coverage: mappedData.coverage,
+      bookId: mappedData.bookId,
+      coverageId: mappedData.coverageId,
       lives,
       source,
       territoryType,

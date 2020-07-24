@@ -4,6 +4,7 @@ const enrich = require('./utils/enrich')
 const getSheetConfig = require('./utils/getSheetConfig')
 const formatAjvErrors = require('./utils/formatAjvErrors')
 const importPayerHistoricalAccessData = require('./importPayerHistoricalAccessData')
+const importPayerHistoricalLivesData = require('./importPayerHistoricalLivesData')
 const PayerImportEmitter = require('./PayerImportEmitter')
 
 const {
@@ -18,9 +19,15 @@ const importWorkbook = async (
   { pulseCoreDb, pulseDevDb, mongoClient, io, user },
   info
 ) => {
-  const isIncomingDataPayerWorkbook = isQualityAccessSheet(input[0].sheet)
-    || isAdditionalCriteriaSheet(input[0].sheet)
-    || isPolicyLinksSheet(input[0].sheet)
+  const isIncomingDataPayerWorkbook =
+    isQualityAccessSheet(input[0].sheet) ||
+    isAdditionalCriteriaSheet(input[0].sheet) ||
+    isPolicyLinksSheet(input[0].sheet)
+
+  const isIncomingDataPayerLivesWorkbook =
+    input.length === 1 &&
+    (/State Lives/.test(input[0].sheet) ||
+      /National Lives/.test(input[0].sheet))
 
   let payerImportEmitter
   if (isIncomingDataPayerWorkbook) {
@@ -31,7 +38,7 @@ const importWorkbook = async (
       projectTimestamp: input[0].timestamp,
       projectId: input[0].projectId,
     })
-    
+
     await payerImportEmitter.start()
   }
 
@@ -48,7 +55,7 @@ const importWorkbook = async (
     data = result
 
     const sheetConfig = await getSheetConfig({ wb, sheet, pulseCoreDb }) // handles getting the right sheet config, including for payer historical data exceptions
-    
+
     const targetCollection = sheetConfig.collection
 
     const {
@@ -92,6 +99,12 @@ const importWorkbook = async (
       importFeedback,
       payerImportEmitter,
     })
+  } else if (isIncomingDataPayerLivesWorkbook) {
+    await importPayerHistoricalLivesData({
+      sheetObj: cleanedSheetsWithMetadata[0],
+      dbsConfig: { pulseCoreDb, pulseDevDb, mongoClient },
+      importFeedback,
+    })
   } else {
     for (const sheetObjWithMetadata of cleanedSheetsWithMetadata) {
       let {
@@ -107,16 +120,14 @@ const importWorkbook = async (
       // miscellaneous enrichment of data before it's persisted
       data = enrich(data, sideEffectData)
 
-      await pulseDevDb.collection(targetCollection)
-        .deleteMany()
+      await pulseDevDb.collection(targetCollection).deleteMany()
 
-      await pulseDevDb.collection(targetCollection)
-        .insertMany(data)
+      await pulseDevDb.collection(targetCollection).insertMany(data)
 
       importFeedback.push(
-        `Import successful for ${wb}/${sheet}`
-        + `\n${data.length}/${originalDataLength} rows imported (excluding header)`
-        + `\nSkipped rows were: ${skippedRows.join(', ')}`
+        `Import successful for ${wb}/${sheet}` +
+          `\n${data.length}/${originalDataLength} rows imported (excluding header)` +
+          `\nSkipped rows were: ${skippedRows.join(', ')}`
       )
     }
   }
