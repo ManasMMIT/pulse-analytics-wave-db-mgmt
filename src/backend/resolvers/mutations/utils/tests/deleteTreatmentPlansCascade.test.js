@@ -11,7 +11,8 @@ describe('Cascade Delete', () => {
   })
 
   test('Cascade deleting Treatment Plans removes required docs', async () => {
-    const pulseCore = mongoConnection.db('pulse-core')
+    const pulseCoreDb = mongoConnection.db('pulse-core')
+    const pulseDevDb = mongoConnection.db('pulse-dev')
 
     try {
       const session = mongoConnection.startSession()
@@ -19,7 +20,7 @@ describe('Cascade Delete', () => {
       await session.withTransaction(async () => {
         // ! we want to test the entire cascade, so start from PTPs in the tdgProjects,
         // ! grab some treatment plans, and start the cascade from there
-        const testStartingProject = await pulseCore
+        const testStartingProject = await pulseCoreDb
           .collection('tdgProjects')
           .findOne({ 'orgTpIds.0': { $exists: true } }, { session })
 
@@ -29,15 +30,14 @@ describe('Cascade Delete', () => {
 
         const testOrgTpIds = testStartingProject.orgTpIds.slice(0, 5)
 
-        const testOrgTpHistoryDocs = await pulseCore
+        const testOrgTpHistoryDocs = await pulseCoreDb
           .collection('organizations.treatmentPlans')
-          .find(
-            { _id: { $in: testOrgTpIds } },
-            { session },
-          )
+          .find({ _id: { $in: testOrgTpIds } }, { session })
           .toArray()
 
-        const testTpIds = testOrgTpHistoryDocs.map(({ treatmentPlanId }) => treatmentPlanId)
+        const testTpIds = testOrgTpHistoryDocs.map(
+          ({ treatmentPlanId }) => treatmentPlanId
+        )
 
         if (!testTpIds.length) {
           throw new Error('No testTpIds found for test to run')
@@ -46,18 +46,19 @@ describe('Cascade Delete', () => {
         console.log('Test tps to check: ', testTpIds.join(', '))
 
         await deleteTreatmentPlansCascade({
-          db: pulseCore,
+          pulseCoreDb,
+          pulseDevDb,
           treatmentPlanIds: testTpIds,
           session,
         })
 
         // ! Test org tp deletion success.
 
-        const orgTpDocs = await pulseCore
+        const orgTpDocs = await pulseCoreDb
           .collection('organizations.treatmentPlans')
           .find(
             {
-              treatmentPlanId: { $in: testTpIds }
+              treatmentPlanId: { $in: testTpIds },
             },
             { session }
           )
@@ -66,16 +67,16 @@ describe('Cascade Delete', () => {
         expect(orgTpDocs.length).toBe(0)
         console.log(
           'Organization TreatmentPlan docs successfully deleted: ',
-          orgTpDocs.length === 0,
+          orgTpDocs.length === 0
         )
 
         // ! Test org tp history delete success.
 
-        const orgTpHistDocs = await pulseCore
+        const orgTpHistDocs = await pulseCoreDb
           .collection('organizations.treatmentPlans.history')
           .find(
             {
-              treatmentPlanId: { $in: testTpIds }
+              treatmentPlanId: { $in: testTpIds },
             },
             { session }
           )
@@ -84,16 +85,16 @@ describe('Cascade Delete', () => {
         expect(orgTpHistDocs.length).toBe(0)
         console.log(
           'Organization TreatmentPlan History docs successfully deleted: ',
-          orgTpHistDocs.length === 0,
+          orgTpHistDocs.length === 0
         )
 
         // ! Test tp delete success.
 
-        const tPDocs = await pulseCore
+        const tPDocs = await pulseCoreDb
           .collection('treatmentPlans')
           .find(
             {
-              _id: { $in: testTpIds }
+              _id: { $in: testTpIds },
             },
             { session }
           )
@@ -102,19 +103,19 @@ describe('Cascade Delete', () => {
         expect(tPDocs.length).toBe(0)
         console.log(
           'TreatmentPlan docs successfully deleted: ',
-          tPDocs.length === 0,
+          tPDocs.length === 0
         )
 
         // ! Test tdgProjects deletion success
 
-        const tdgProjectsDocs = await pulseCore
+        const tdgProjectsDocs = await pulseCoreDb
           .collection('tdgProjects')
           .find(
             {
               $or: [
                 { orgTpId: { $in: testOrgTpIds } },
                 { extraOrgTpId: { $in: testOrgTpIds } },
-              ]
+              ],
             },
             { session }
           )
@@ -123,10 +124,48 @@ describe('Cascade Delete', () => {
         expect(tdgProjectsDocs.length).toBe(0)
         console.log(
           'Payer treatment plans in tdgProjects successfully removed: ',
-          tdgProjectsDocs.length === 0,
+          tdgProjectsDocs.length === 0
         )
 
-        throw new Error('Success. Cascade Treatment Plan deletion test ran to end.')
+        // ! Test pulse-dev.payerLatestAccess deletion success
+
+        const payerLatestAccessDocs = await pulseDevDb
+          .collection('payerLatestAccess')
+          .find(
+            {
+              treatmentPlanId: { $in: testTpIds },
+            },
+            { session }
+          )
+          .toArray()
+
+        expect(payerLatestAccessDocs.length).toBe(0)
+        console.log(
+          'Payer treatment plans in pulse-dev.payerLatestAccess successfully removed: ',
+          payerLatestAccessDocs.length === 0
+        )
+
+        // ! Test pulse-dev.payerHistoricalAccess deletion success
+
+        const payerHistoricalAccessDocs = await pulseDevDb
+          .collection('payerHistoricalAccess')
+          .find(
+            {
+              treatmentPlanId: { $in: testTpIds },
+            },
+            { session }
+          )
+          .toArray()
+
+        expect(payerHistoricalAccessDocs.length).toBe(0)
+        console.log(
+          'Payer treatment plans in pulse-dev.payerHistoricalAccessDocs successfully removed: ',
+          payerHistoricalAccessDocs.length === 0
+        )
+
+        throw new Error(
+          'Success. Cascade Treatment Plan deletion test ran to end.'
+        )
       })
     } catch (e) {
       await mongoConnection.close()

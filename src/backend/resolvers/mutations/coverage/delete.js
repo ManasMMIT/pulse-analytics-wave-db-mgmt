@@ -5,8 +5,8 @@ const deleteTreatmentPlansCascade = require('../utils/deleteTreatmentPlansCascad
 const deleteCoverage = async (
   parent,
   { input: { _id } },
-  { mongoClient, pulseCoreDb },
-  info,
+  { mongoClient, pulseCoreDb, pulseDevDb },
+  info
 ) => {
   _id = ObjectId(_id)
 
@@ -23,7 +23,8 @@ const deleteCoverage = async (
     result = value
 
     // Step 2: Cascade deletion for treatment plans -> ptps -> ptp history -> trash history
-    const treatmentPlans = await pulseCoreDb.collection('treatmentPlans')
+    const treatmentPlans = await pulseCoreDb
+      .collection('treatmentPlans')
       .find({ coverage: _id })
       .toArray()
 
@@ -31,7 +32,8 @@ const deleteCoverage = async (
 
     if (treatmentPlanIds.length) {
       await deleteTreatmentPlansCascade({
-        db: pulseCoreDb,
+        pulseCoreDb,
+        pulseDevDb,
         treatmentPlanIds,
         session,
       })
