@@ -12,14 +12,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Fixed** for any bug fixes.
 - **Security** in case of vulnerabilities.
 
-## [Unreleased] - Started: 7-17-20
+## [Unreleased] - Started: 7-24-20
+
+## [3.1.0] - Started: 7-17-20
 
 ### Added
-- `Payer Projects`: Adds a secret admin button to the Payer Projects List page to import payer lives
+- `Payer Projects Mgmt Tool`: Build out new payer lives import process while maintaining old pipeline
+  - Adds a secret admin button to the Payer Projects List page to import payer lives
+- `Orion`: Extend cascade deletion of treatment plan to pulse-dev new payer access collections
 
 ### Changed
-- `Orion`: Adds typedefs to `importWorkbook` resolver to cover payer lives schema fields
-- `Polaris Scripts`: Seeding of `lives.history` now persists bookId and coverageId, instead of just string references.
+- `Polaris Scripts`: `lives.history` schema has changed to use foreign keys and lives are always zero
+- `End User Terms`: Adds seed script for users collection in pulse-dev
 
 ## [3.0.0] - Started: 7-9-20
 
