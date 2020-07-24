@@ -45,6 +45,10 @@ const PayerLivesImport = () => {
 
   const [importWorkbook] = useMutation(IMPORT_WORKBOOK, {
     onError: alert,
+    onCompleted: () => {
+      alert('Import Successful')
+      window.location.reload()
+    },
   })
 
   const onFileAdded = () => {

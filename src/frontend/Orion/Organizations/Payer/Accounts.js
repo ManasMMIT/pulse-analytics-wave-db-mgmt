@@ -7,6 +7,7 @@ import { transparentize } from 'polished'
 import Panel from '../../../components/Panel'
 import { PayerAccountModalButton } from './../../shared/AccountModals'
 import DeleteButton from './../../shared/DeleteButton'
+import DeleteModalWarning from '../../shared/DeleteModalWarning'
 import CopyOneOfStringButton from './../../shared/CopyOneOfStringButton'
 
 import { DELETE_PAYER_ORGANIZATION } from './../../../api/mutations'
@@ -68,6 +69,7 @@ const buttonGroupCallback = (entity) => (
     />
 
     <DeleteButton
+      modalText={<DeleteModalWarning />}
       itemId={entity._id}
       mutationDoc={DELETE_PAYER_ORGANIZATION}
       refetchQueries={[
