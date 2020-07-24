@@ -5,6 +5,14 @@ const { STATE_LONG_BY_ABBREV } = require('../../../../utils/states-data-util')
 const runOldPipeline = require('./runOldPipeline')
 const runNewPipeline = require('./runNewPipeline')
 
+const KEYS_TO_SKIP_ZEROING = {
+  state: true,
+  stateLong: true,
+  organization: true,
+  organizationTiny: true,
+  slug: true,
+}
+
 const importPayerHistoricalLivesData = async ({
   sheetObj,
   dbsConfig,
@@ -25,6 +33,15 @@ const importPayerHistoricalLivesData = async ({
       }
     })
   }
+
+  // ! HOTFIX expensive and inexact overwriting of lives fields from null to 0
+  data.forEach((row) => {
+    Object.keys(row).forEach((key) => {
+      if (key in KEYS_TO_SKIP_ZEROING) return
+
+      if (row[key] === null) row[key] = 0
+    })
+  })
 
   const pipelineInput = {
     timestamp,
