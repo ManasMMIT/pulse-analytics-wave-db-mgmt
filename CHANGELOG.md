@@ -14,6 +14,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased] - Started: 7-24-20
 
+### Fixed
+- `Payer Projects Mgmt Tool`: Stops `parentSlug` from being coerced to `0` in lives pipeline.
+
 ## [3.1.0] - Started: 7-17-20
 
 ### Added
