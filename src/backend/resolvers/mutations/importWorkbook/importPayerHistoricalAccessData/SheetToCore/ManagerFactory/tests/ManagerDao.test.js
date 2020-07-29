@@ -1,5 +1,8 @@
 const ManagerDao = require('../ManagerDao')
-const { mockOrgTpsHistory, mockTestCollectionName } = require('./mocks/input/managerDaoMocks')
+const {
+  mockOrgTpsHistory,
+  mockTestCollectionName,
+} = require('./mocks/input/managerDaoMocks')
 const {
   mockUpsertQualityOfAccessData,
   mockUpsertAdditionalCriteriaData,
@@ -9,7 +12,7 @@ const {
 const qualityAccessMocks = require('./mocks/output/qualityOfAccessManagerMocks')
 const additionalCriteriaMocks = require('./mocks/output/additionalCriteriaManagerMocks')
 const policyLinksMocks = require('./mocks/output/policyLinkManagerMocks')
-const connectToMongoDb = require('../../../../../../../../../connect-to-mongodb')
+const connectToTestCluster = require('../../../../../../../utils/connectToTestCluster')
 
 describe('ManagerDao', () => {
   jest.setTimeout(60000) // ! needed to adjust jest timeout for slower connections
@@ -19,7 +22,7 @@ describe('ManagerDao', () => {
   let session
 
   beforeAll(async () => {
-    mongoConnection = await connectToMongoDb()
+    mongoConnection = await connectToTestCluster()
     db = await mongoConnection.db('pulse-core')
   })
 
