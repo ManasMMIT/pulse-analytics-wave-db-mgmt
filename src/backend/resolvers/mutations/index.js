@@ -31,6 +31,8 @@ const importWorkbook = require('./importWorkbook')
 
 const personResolvers = require('./person')
 
+const endUserTermsResolvers = require('./endUserTerms')
+
 module.exports = {
   ...clientResolvers,
   ...teamResolvers,
@@ -65,4 +67,6 @@ module.exports = {
   importWorkbook,
 
   ...personResolvers,
+
+  ...endUserTermsResolvers,
 }

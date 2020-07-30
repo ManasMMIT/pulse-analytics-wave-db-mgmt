@@ -166,10 +166,19 @@ const ADMIN_SETTINGS_LINKS_CONFIG = [
     label: 'Edit Role Node',
     link: '/orion/configuration/admin-settings/edit-role-node',
   },
+  {
+    label: 'End User Terms Management',
+    link: '/orion/configuration/admin-settings/end-user-terms',
+  },
 ]
 
 const renderStyledNavLink = ({ label, link }) => (
-  <StyledNavLink key={link} style={inactiveLinkStyle} activeStyle={activeLinkStyle} to={link}>
+  <StyledNavLink
+    key={link}
+    style={inactiveLinkStyle}
+    activeStyle={activeLinkStyle}
+    to={link}
+  >
     {label}
   </StyledNavLink>
 )
@@ -197,7 +206,10 @@ const Sidebar = () => {
         >
           People
         </StyledNavLink>
-        <StyledDropdown style={inactiveLinkStyle} label={'Products + Indications'}>
+        <StyledDropdown
+          style={inactiveLinkStyle}
+          label={'Products + Indications'}
+        >
           <div style={{ display: 'flex', flexDirection: 'column' }}>
             {PRODUCT_INDICATION_LINKS_CONFIG.map(renderStyledNavLink)}
           </div>
@@ -213,7 +225,10 @@ const Sidebar = () => {
 
       <div>
         <Header>Organizations</Header>
-        <StyledDropdown style={inactiveLinkStyle} label={'Alternative Payment Models'}>
+        <StyledDropdown
+          style={inactiveLinkStyle}
+          label={'Alternative Payment Models'}
+        >
           <StyledNavLink
             style={dropdownInactiveLinkStyle}
             activeStyle={dropdownActiveLinkStyle}
@@ -222,7 +237,10 @@ const Sidebar = () => {
             Accounts
           </StyledNavLink>
         </StyledDropdown>
-        <StyledDropdown style={inactiveLinkStyle} label={'Oncology Benefit Managers'}>
+        <StyledDropdown
+          style={inactiveLinkStyle}
+          label={'Oncology Benefit Managers'}
+        >
           <StyledNavLink
             style={dropdownInactiveLinkStyle}
             activeStyle={dropdownActiveLinkStyle}
@@ -268,7 +286,10 @@ const Sidebar = () => {
             New Pathways Accounts
           </StyledNavLink>
         </StyledDropdown>
-        <StyledDropdown style={inactiveLinkStyle} label={'Payer Quality of Access'}>
+        <StyledDropdown
+          style={inactiveLinkStyle}
+          label={'Payer Quality of Access'}
+        >
           <StyledNavLink
             style={dropdownInactiveLinkStyle}
             activeStyle={dropdownActiveLinkStyle}
@@ -291,7 +312,10 @@ const Sidebar = () => {
             Quality of Access Scores
           </StyledNavLink>
         </StyledDropdown>
-        <StyledDropdown style={inactiveLinkStyle} label={'Provider Key Accounts'}>
+        <StyledDropdown
+          style={inactiveLinkStyle}
+          label={'Provider Key Accounts'}
+        >
           <StyledNavLink
             style={dropdownInactiveLinkStyle}
             activeStyle={dropdownActiveLinkStyle}
