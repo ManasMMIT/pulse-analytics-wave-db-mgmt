@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { useMutation } from '@apollo/client/react/hooks'
 
 import createPersonDoc from '../gql-tags/createPersonGraphQLTag'
