@@ -11,6 +11,7 @@ const KEYS_TO_SKIP_ZEROING = {
   organization: true,
   organizationTiny: true,
   slug: true,
+  parentSlug: true,
 }
 
 const importPayerHistoricalLivesData = async ({

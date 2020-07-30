@@ -12,7 +12,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Fixed** for any bug fixes.
 - **Security** in case of vulnerabilities.
 
-## [Unreleased] - Started: 7-24-20
+## [Unreleased] - Started: 7-30-20
+
+## [3.2.0] - Started: 7-24-20
+
+### Added
+- `Orion`: End User Terms Management interface for adjusting PDF link for agreement and viewing users who've agreed
+
+### Changed
+- `README`: Updated the README to remove deprecated sections and refresh the app description
+
+### Fixed
+- `Payer Projects Mgmt Tool`: Stops `parentSlug` from being coerced to `0` in lives pipeline.
+
+### Removed
+- `Node Scripts`: Deleted deprecated top-level node script for pushing permissions from core to dev (`users.dashboards` collection)
 
 ## [3.1.0] - Started: 7-17-20
 

@@ -82,6 +82,9 @@ const queries = gql`
     DEV_providerInfluencers: JSON # grabbing sheet data directly from dev. type def is in wave-api
     physiciansCompare(npi: Float): [PhysiciansCompareDatum]
     openPayments(physicianProfileId: Float): [OpenPaymentDatum]
+
+    endUserTermsLink: EndUserTermsLink
+    endUserTermsUsers: [EndUserTermsUser]
   }
 
   type OpenPaymentDatum {
@@ -560,6 +563,22 @@ const queries = gql`
     book: String
     coverage: String
     project: String
+  }
+
+  type EndUserTermsLink {
+    _id: ID!
+    link: String
+    agreementDate: DateTime
+  }
+
+  type EndUserTermsUser {
+    _id: ID!
+    endUserTerms: EndUserTermsAgreement
+  }
+
+  type EndUserTermsAgreement {
+    agreed: Boolean
+    timestamp: DateTime
   }
 
   input PayerProjectPtpsInput {

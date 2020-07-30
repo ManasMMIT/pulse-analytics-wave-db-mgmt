@@ -7,6 +7,7 @@ import AquilaManagement from './AquilaManagement'
 import SheetManagement from './SheetManagement'
 import AddSourceNode from './AddSourceNode'
 import EditRoleNodeView from './EditRoleNodeView'
+import EndUserTerms from './EndUserTerms'
 
 const AdminSettings = () => (
   <Switch>
@@ -33,6 +34,10 @@ const AdminSettings = () => (
     <Route
       path={'/orion/configuration/admin-settings/edit-role-node'}
       component={EditRoleNodeView}
+    />
+    <Route
+      path={'/orion/configuration/admin-settings/end-user-terms'}
+      component={EndUserTerms}
     />
     <Redirect to={'/orion/configuration/admin-settings/bo-management'} />
   </Switch>
