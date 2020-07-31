@@ -13,15 +13,27 @@ import { GET_PEOPLE } from 'frontend/api/queries'
 
 import { CREATE_PERSON } from 'frontend/api/mutations'
 
-describe('Create Person', () => {
-  jest.setTimeout(500000)
-  it('should update the cache correctly when triggered with refetch', async () => {
+describe('Person Endpoints', () => {
+  it.todo('should update the cache correctly from empty when query')
+
+  // ? difference in result data and initial data
+  it.todo('should update the cache correctly when query is already full')
+
+  it.todo(
+    'will a query that returns a subset replace cache with subset (e.g., getPeople with 1 person, when 100 are in caches)'
+  )
+
+  it.todo(
+    'will a query that returns a superset update cache with additional data'
+  )
+
+  it('Create should update the cache correctly when triggered with refetch', async () => {
     const cache = new InMemoryCache().restore(initialCache)
 
     const newObjId = '123'
 
     const newPerson = {
-      _id: newObjId, // NOT ACTUALLY DONE IN THE APP
+      _id: newObjId,
       firstName: 'Cache Integration',
       lastName: 'Test',
     }
