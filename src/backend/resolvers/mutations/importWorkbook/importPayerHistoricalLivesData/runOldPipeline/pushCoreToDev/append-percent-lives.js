@@ -39,11 +39,11 @@ const appendStructuredLivesField = async ({
 
   const nationalLivesTotal = await pulseCoreDb
     .collection(nationalLivesTotalCollectionName)
-    .findOne()
+    .findOne({}, { session })
 
   const nationalLives = await pulseCoreDb
     .collection(nationalLivesCollectionName)
-    .aggregate(latestMonthYearPipeline, { allowDiskUse: true })
+    .aggregate(latestMonthYearPipeline, { session, allowDiskUse: true })
     .toArray()
 
   const livesDataWithPercent = nationalLives.map((livesObj) => {
