@@ -10,7 +10,6 @@ import GetPeopleComponent from './components/GetPeopleComponent'
 import CreatePersonComponent from './components/CreatePersonComponent'
 
 import { GET_PEOPLE } from 'frontend/api/queries'
-
 import { CREATE_PERSON } from 'frontend/api/mutations'
 
 describe('Person Endpoints', () => {
@@ -30,17 +29,12 @@ describe('Person Endpoints', () => {
   it('Create should update the cache correctly when triggered with refetch', async () => {
     const cache = new InMemoryCache().restore(initialCache)
 
-    const newObjId = '4'
-
-    const newPerson = {
-      _id: newObjId,
-      firstName: 'Cache Integration',
-      lastName: 'Test',
-    }
+    const _id = '4'
+    const newPerson = { _id, firstName: 'Cache Integration', lastName: 'Test' }
 
     const postMutationPeople = [
       ...initialPeople,
-      { _id: newObjId, firstName: newPerson.firstName, __typename: 'Person' },
+      { ...newPerson, __typename: 'Person' },
     ]
 
     const mutationMocks = [
@@ -51,12 +45,7 @@ describe('Person Endpoints', () => {
         },
         result: {
           data: {
-            createPerson: {
-              _id: newObjId,
-              firstName: newPerson.firstName,
-              lastName: 'Test',
-              __typename: 'CreatePersonPayload',
-            },
+            createPerson: { ...newPerson, __typename: 'CreatePersonPayload' },
           },
         },
       },
@@ -72,6 +61,7 @@ describe('Person Endpoints', () => {
       },
     ]
 
+    // ! manual hack to get mutation, so we can await it. Never do this in an actual component.
     let myMutation = {}
 
     render(
@@ -82,9 +72,7 @@ describe('Person Endpoints', () => {
 
     await myMutation.createPerson()
     const updatedCache = cache.extract()
-    const doesNewPersonExistInCache = Boolean(
-      updatedCache[`Person:${newObjId}`]._id
-    )
+    const doesNewPersonExistInCache = Boolean(updatedCache[`Person:${_id}`]._id)
     expect(doesNewPersonExistInCache).toBe(true)
   })
 })
