@@ -3,7 +3,7 @@ import { InMemoryCache } from '@apollo/client'
 import { MockedProvider } from '@apollo/client/testing'
 import { render } from '@testing-library/react'
 
-import initialCache from './initialCache.json'
+import initialCache from './initialCache'
 import initialPeople from './initialPeople'
 
 import GetPeopleComponent from './components/GetPeopleComponent'
@@ -30,7 +30,7 @@ describe('Person Endpoints', () => {
   it('Create should update the cache correctly when triggered with refetch', async () => {
     const cache = new InMemoryCache().restore(initialCache)
 
-    const newObjId = '123'
+    const newObjId = '4'
 
     const newPerson = {
       _id: newObjId,
