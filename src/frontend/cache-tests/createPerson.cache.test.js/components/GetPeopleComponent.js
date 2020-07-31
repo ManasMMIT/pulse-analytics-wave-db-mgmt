@@ -1,10 +1,10 @@
 import React from 'react'
 import { useQuery } from '@apollo/client/react/hooks'
 
-import getPeopleDoc from '../gql-tags/getPeopleGraphQLTag'
+import { GET_PEOPLE } from 'frontend/api/queries'
 
 export default () => {
-  const { data, loading } = useQuery(getPeopleDoc)
+  const { data, loading } = useQuery(GET_PEOPLE)
 
   return loading ? (
     <div>loading</div>

@@ -1,17 +1,17 @@
 import React from 'react'
 import { useMutation } from '@apollo/client/react/hooks'
 
-import createPersonDoc from '../gql-tags/createPersonGraphQLTag'
-import getPeopleDoc from '../gql-tags/getPeopleGraphQLTag'
+import { GET_PEOPLE } from 'frontend/api/queries'
+import { CREATE_PERSON } from 'frontend/api/mutations'
 
 // TODO: Add list of people to this component to directly test component render after mutation
 export default ({ person, myMutation }) => {
-  const [createPerson] = useMutation(createPersonDoc, {
+  const [createPerson] = useMutation(CREATE_PERSON, {
     variables: {
       input: person,
     },
     awaitRefetchQueries: true, // ! TESTING POST-REFETCH WORLD
-    refetchQueries: [{ query: getPeopleDoc }],
+    refetchQueries: [{ query: GET_PEOPLE }],
   })
 
   myMutation.createPerson = createPerson
