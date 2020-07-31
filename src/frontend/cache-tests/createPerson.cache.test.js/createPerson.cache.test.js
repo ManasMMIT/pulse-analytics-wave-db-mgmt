@@ -37,17 +37,11 @@ describe('Person Endpoints', () => {
       firstName: 'Cache Integration',
       lastName: 'Test',
     }
-    const newCachedPerson = {
-      _id: newObjId,
-      firstName: newPerson.firstName,
-      __typename: 'Person',
-    }
 
-    const createPersonPayload = {
-      _id: newObjId,
-      firstName: newPerson.firstName,
-      __typename: 'CreatePersonPayload',
-    }
+    const postMutationPeople = [
+      ...initialPeople,
+      { _id: newObjId, firstName: newPerson.firstName, __typename: 'Person' },
+    ]
 
     const mutationMocks = [
       {
@@ -57,7 +51,12 @@ describe('Person Endpoints', () => {
         },
         result: {
           data: {
-            createPerson: createPersonPayload,
+            createPerson: {
+              _id: newObjId,
+              firstName: newPerson.firstName,
+              lastName: 'Test',
+              __typename: 'CreatePersonPayload',
+            },
           },
         },
       },
@@ -67,7 +66,7 @@ describe('Person Endpoints', () => {
         },
         result: {
           data: {
-            people: [...initialPeople, newCachedPerson],
+            people: postMutationPeople,
           },
         },
       },
@@ -83,7 +82,9 @@ describe('Person Endpoints', () => {
 
     await myMutation.createPerson()
     const updatedCache = cache.extract()
-
-    expect(!!updatedCache[`Person:${newObjId}`]._id).toBe(true)
+    const doesNewPersonExistInCache = Boolean(
+      updatedCache[`Person:${newObjId}`]._id
+    )
+    expect(doesNewPersonExistInCache).toBe(true)
   })
 })
