@@ -9,7 +9,7 @@ export default () => {
   return loading ? (
     <div>loading</div>
   ) : (
-    <div>
+    <div data-testid="list">
       {data.people.map(({ _id, firstName, lastName }) => (
         <div key={_id}>{firstName + ' ' + lastName}</div>
       ))}

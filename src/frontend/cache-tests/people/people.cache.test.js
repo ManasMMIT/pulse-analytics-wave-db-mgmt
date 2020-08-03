@@ -1,10 +1,10 @@
 import React from 'react'
 import { InMemoryCache } from '@apollo/client'
 import { MockedProvider } from '@apollo/client/testing'
-import { render } from '@testing-library/react'
+import { render, act, waitFor } from '@testing-library/react'
 
-import initialCache from './initialCache'
-import initialPeople from './initialPeople'
+import initialCache from './stubs/initialCache'
+import initialPeople from './stubs/initialPeople'
 
 import GetPeopleComponent from './components/GetPeopleComponent'
 import CreatePersonComponent from './components/CreatePersonComponent'
@@ -13,7 +13,38 @@ import { GET_PEOPLE } from 'frontend/api/queries'
 import { CREATE_PERSON } from 'frontend/api/mutations'
 
 describe('Person Endpoints', () => {
-  it.todo('should update the cache correctly from empty when query')
+  jest.setTimeout(6000)
+
+  it('Initially READ data should populate the cache', async () => {
+    const cache = new InMemoryCache()
+    const queryMock = [
+      {
+        request: {
+          query: GET_PEOPLE,
+        },
+        result: {
+          data: {
+            people: initialPeople,
+          },
+        },
+      },
+    ]
+
+    const { getByTestId } = render(
+      <MockedProvider cache={cache} mocks={queryMock}>
+        <GetPeopleComponent />
+      </MockedProvider>
+    )
+
+    await waitFor(() => getByTestId('list'))
+
+    const updatedCache = cache.extract()
+
+    const wasCachePopulatedCompletely = initialPeople.every(
+      ({ _id }) => updatedCache[`Person:${_id}`]
+    )
+    expect(wasCachePopulatedCompletely).toBe(true)
+  })
 
   // ? difference in result data and initial data
   it.todo('should update the cache correctly when query is already full')
@@ -61,16 +92,14 @@ describe('Person Endpoints', () => {
       },
     ]
 
-    // ! manual hack to get mutation, so we can await it. Never do this in an actual component.
-    let myMutation = {}
+    await act(async () => {
+      await render(
+        <MockedProvider cache={cache} mocks={mutationMocks}>
+          <CreatePersonComponent person={newPerson} />
+        </MockedProvider>
+      )
+    })
 
-    render(
-      <MockedProvider cache={cache} mocks={mutationMocks}>
-        <CreatePersonComponent person={newPerson} myMutation={myMutation} />
-      </MockedProvider>
-    )
-
-    await myMutation.createPerson()
     const updatedCache = cache.extract()
     const doesNewPersonExistInCache = Boolean(updatedCache[`Person:${_id}`]._id)
     expect(doesNewPersonExistInCache).toBe(true)
