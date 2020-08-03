@@ -1,6 +1,6 @@
 const _ = require('lodash')
 
-const upsertUsersSitemaps = require('../sitemap/sitemaps-upsertion/upsertUsersSitemaps')
+const upsertUsersSitemaps = require('../sitemap/upsertUsersSitemaps')
 const upsertUsersPermissions = require('../sitemap/permissions-upsertion/upsertUsersPermissions')
 
 const createUser = async (

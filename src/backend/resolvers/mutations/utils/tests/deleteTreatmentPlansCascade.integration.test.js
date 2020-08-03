@@ -1,9 +1,9 @@
 const connectToTestCluster = require('../../../../utils/connectToTestCluster')
 const deleteTreatmentPlansCascade = require('../deleteTreatmentPlansCascade')
 
-let mongoConnection
-
 describe('Cascade Delete', () => {
+  let mongoConnection
+
   jest.setTimeout(60000) // ! needed to adjust jest timeout for slower connections
 
   beforeAll(async () => {

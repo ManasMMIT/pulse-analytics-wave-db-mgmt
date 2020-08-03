@@ -6,16 +6,16 @@ const upsertUsersSitemaps = async ({
   pulseCoreDb,
   pulseDevDb,
 }) => {
-  console.log(`Starting to rebuild sitemaps for ${ users.length } user(s)`)
+  console.log(`Starting to rebuild sitemaps for ${users.length} user(s)`)
 
-  const userOps = users.map(user => (
+  const userOps = users.map((user) =>
     upsertUserSitemap({
       user,
       session,
       pulseCoreDb,
       pulseDevDb,
     })
-  ))
+  )
 
   await Promise.all(userOps)
 

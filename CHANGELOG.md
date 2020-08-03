@@ -17,6 +17,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - `Payer Project Management`: Add sessions to lives import to prevent structuredLives lookup of lives totals from being behind
 
+### Added
+- `Phoenix/Backend`: Write integration and unit tests for `upsertUsersSitemaps.js` util
+
 ## [3.2.0] - Started: 7-24-20
 
 ### Added

@@ -10,19 +10,14 @@ const upsertUserSitemap = async ({
   const coreRoles = pulseCoreDb.collection('roles')
 
   const userTeams = await coreRoles
-    .find(
-      { 'users._id': user._id },
-      { session }
-    )
+    .find({ 'users._id': user._id }, { session })
     .toArray()
 
   const userTeamsSitemaps = userTeams.map(({ sitemap }) => sitemap)
 
   const combinedSitemap = getCombinedSitemaps(userTeamsSitemaps)
 
-  const client = userTeams.length
-    ? userTeams[0].client
-    : null
+  const client = userTeams.length ? userTeams[0].client : null
 
   const teams = userTeams.length
     ? userTeams.map(({ _id, name }) => ({ _id, name }))
@@ -39,11 +34,11 @@ const upsertUserSitemap = async ({
         client,
         defaultLandingPath: user.defaultLanding && user.defaultLanding.path,
         schemaVersion: 'v1.2.0',
-        updatedAt: new Date()
+        updatedAt: new Date(),
       },
-      $setOnInsert: { createdAt: new Date() }
+      $setOnInsert: { createdAt: new Date() },
     },
-    { session, upsert: true },
+    { session, upsert: true }
   )
 
   return true

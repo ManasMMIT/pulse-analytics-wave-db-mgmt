@@ -1,7 +1,7 @@
 const _ = require('lodash')
 
 const upsertUsersPermissions = require('../sitemap/permissions-upsertion/upsertUsersPermissions')
-const upsertUsersSitemaps = require('../sitemap/sitemaps-upsertion/upsertUsersSitemaps')
+const upsertUsersSitemaps = require('../sitemap/upsertUsersSitemaps')
 
 const updateUser = async (
   parent,
@@ -14,29 +14,22 @@ const updateUser = async (
       roles,
       emailSubscriptions,
       defaultLanding,
-    }
+    },
   },
-  {
-    mongoClient,
-    coreRoles,
-    coreUsers,
-    auth0,
-    pulseDevDb,
-    pulseCoreDb,
-  },
-  info,
+  { mongoClient, coreRoles, coreUsers, auth0, pulseDevDb, pulseCoreDb },
+  info
 ) => {
   username = username.trim()
   email = email.trim()
 
   if (!Boolean(username) || !Boolean(email)) {
-    throw Error('username and/or email fields can\'t be blank')
+    throw Error("username and/or email fields can't be blank")
   } else if (username.includes(' ') || email.includes(' ')) {
     throw Error('username and/or email cannot have spaces')
   } else if (username.includes('@')) {
     // TODO: make validation against email address more stringent
     // ! Note: without this check, auth0 will silently fail to update the username
-    throw Error('Error: auth0 can\'t accept email address as username')
+    throw Error("Error: auth0 can't accept email address as username")
   } else if (_.isEmpty(roles) || !Array.isArray(roles)) {
     throw Error('must specify at least one role in an array')
   }
@@ -59,13 +52,13 @@ const updateUser = async (
     // ! rather than { returnNewDocument: true }
     const { value: updatedResult } = await coreUsers.findOneAndUpdate(
       { _id },
-      { 
-        $set: { 
-          username, 
-          email, 
-          emailSubscriptions, 
-          defaultLanding, 
-        } 
+      {
+        $set: {
+          username,
+          email,
+          emailSubscriptions,
+          defaultLanding,
+        },
       },
       { returnOriginal: false, session }
     )
@@ -85,15 +78,15 @@ const updateUser = async (
     await coreRoles.updateMany(
       { _id: { $in: incomingRoles } }, // query all incoming roles from edit
       {
-        $push: { 
-          users: { 
-            _id, 
-            username, 
-            email, 
+        $push: {
+          users: {
+            _id,
+            username,
+            email,
             emailSubscriptions,
             defaultLanding,
-          } 
-        }
+          },
+        },
       },
       { session }
     )
@@ -113,10 +106,7 @@ const updateUser = async (
       session,
     })
 
-    await Promise.all([
-      sitemapOp,
-      nodesResourcesOp,
-    ])
+    await Promise.all([sitemapOp, nodesResourcesOp])
   })
 
   return updatedMongoUser
