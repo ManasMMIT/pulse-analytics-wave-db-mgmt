@@ -28,6 +28,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - `README`: Updated the README to remove deprecated sections and refresh the app description
 
+### Added
+- `Phoenix`: Client create integration tests
+
 ### Fixed
 - `Payer Projects Mgmt Tool`: Stops `parentSlug` from being coerced to `0` in lives pipeline.
 
