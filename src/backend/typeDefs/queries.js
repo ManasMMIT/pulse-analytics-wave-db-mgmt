@@ -89,7 +89,7 @@ const queries = gql`
 
   type OpenPaymentDatum {
     dateOfPayment: String
-    totalAmountOfPaymentUsdollars: String
+    totalAmountOfPaymentUsdollars: Float
     applicableManufacturerOrApplicableGpoMakingPaymentName: String
     productCategoryOrTherapeuticArea1: String
     nameOfDrugOrBiologicalOrDeviceOrMedicalSupply1: String

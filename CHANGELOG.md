@@ -33,6 +33,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - `Payer Projects Mgmt Tool`: Stops `parentSlug` from being coerced to `0` in lives pipeline.
+- `Orion`: Open Payments payment values are coerced to strings and formatted to two decimal places.
 
 ### Removed
 - `Node Scripts`: Deleted deprecated top-level node script for pushing permissions from core to dev (`users.dashboards` collection)

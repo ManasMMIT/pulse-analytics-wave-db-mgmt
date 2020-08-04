@@ -23,9 +23,9 @@ const COLUMNS = [
     accessor: 'totalAmountOfPaymentUsdollars',
     Filter: MultiSelectColumnFilter,
     filter: customMultiSelectFilterFn,
-    sortType: 'text',
+    sortType: 'float',
     sticky: 'left',
-    Cell: ({ value }) => `$${value}`,
+    Cell: ({ value }) => `$${value.toFixed(2)}`,
   },
   {
     Header: 'Applicable_Manufacturer_or_Applicable_GPO_Making_Payment_Name',
