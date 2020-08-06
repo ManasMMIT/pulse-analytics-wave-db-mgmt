@@ -5,6 +5,7 @@ const teams = require('./teams')
 const user = require('./user')
 const sitemap = require('./sitemap')
 const indication = require('./indication')
+const therapeuticArea = require('./therapeuticArea')
 const product = require('./product')
 const regimen = require('./regimen')
 const organization = require('./organization')
@@ -64,6 +65,16 @@ const mutationType = gql`
     deleteSourceIndication(
       input: DeleteSourceIndicationInput!
     ): DeleteSourceIndicationPayload
+
+    createTherapeuticArea(
+      input: CreateTherapeuticAreaInput!
+    ): CreateTherapeuticAreaPayload!
+    updateTherapeuticArea(
+      input: UpdateTherapeuticAreaInput!
+    ): UpdateTherapeuticAreaPayload!
+    deleteTherapeuticArea(
+      input: DeleteTherapeuticAreaInput!
+    ): DeleteTherapeuticAreaPayload!
 
     createProduct(input: CreateProductInput!): CreateProductPayload
     updateSourceProduct(
@@ -306,6 +317,7 @@ module.exports = [
   ...user,
   ...sitemap,
   ...indication,
+  ...therapeuticArea,
   ...product,
   ...regimen,
   ...organization,

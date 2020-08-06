@@ -22,6 +22,7 @@ const books = require('./books')
 const coverages = require('./coverages')
 const populations = require('./populations')
 const lines = require('./lines')
+const therapeuticAreas = require('./therapeuticAreas')
 
 const payerProjects = require('./payerProjects')
 
@@ -63,4 +64,5 @@ module.exports = {
   ...aquila,
   ...people,
   ...endUserTerms,
+  therapeuticAreas,
 }

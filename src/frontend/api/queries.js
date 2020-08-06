@@ -539,6 +539,7 @@ export const GET_SOURCE_INDICATIONS = gql`
     indications {
       _id
       name
+      therapeuticAreaId
       regimens {
         _id
         name
@@ -549,6 +550,15 @@ export const GET_SOURCE_INDICATIONS = gql`
           tags
         }
       }
+    }
+  }
+`
+
+export const GET_THERAPEUTIC_AREAS = gql`
+  query getTherapeuticAreas {
+    therapeuticAreas {
+      _id
+      name
     }
   }
 `

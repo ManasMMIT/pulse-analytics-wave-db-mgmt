@@ -11,6 +11,7 @@ const queries = gql`
     users(teamId: String, clientId: String, subscriptionId: String): [User]
 
     indications: [Indication]
+    therapeuticAreas: [TherapeuticArea]
     products: [Product]
     regimens: [Regimen]
 
@@ -200,6 +201,12 @@ const queries = gql`
     _id: ID!
     name: String
     regimens: [Regimen]
+    therapeuticAreaId: String
+  }
+
+  type TherapeuticArea {
+    _id: ID!
+    name: String
   }
 
   type Product {

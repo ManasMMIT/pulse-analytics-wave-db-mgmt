@@ -2,6 +2,7 @@ const clientResolvers = require('./client')
 const teamResolvers = require('./team')
 const userResolvers = require('./user')
 const indicationResolvers = require('./indication')
+const therapeuticAreaResolvers = require('./therapeuticArea')
 const productResolvers = require('./product')
 const regimenResolvers = require('./regimen')
 const organizationResolvers = require('./organization')
@@ -38,6 +39,7 @@ module.exports = {
   ...teamResolvers,
   ...userResolvers,
   ...indicationResolvers,
+  ...therapeuticAreaResolvers,
   ...productResolvers,
   ...sitemapResolvers,
   ...regimenResolvers,

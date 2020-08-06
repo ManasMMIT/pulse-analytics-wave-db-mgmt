@@ -5,12 +5,14 @@ const createIndicationTypeDefs = gql`
     _id: ID # included but should always be null
     name: String!
     regimens: [CreateRegimenInput]
+    therapeuticAreaId: String!
   }
 
   type CreateIndicationPayload {
     _id: ID
     name: String
     regimens: [CreateRegimenPayload]
+    therapeuticAreaId: String
   }
 `
 

@@ -2,31 +2,32 @@ import React from 'react'
 import { useQuery } from '@apollo/react-hooks'
 import _ from 'lodash'
 import styled from '@emotion/styled'
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faEdit } from "@fortawesome/free-solid-svg-icons"
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faEdit } from '@fortawesome/free-solid-svg-icons'
 import { transparentize } from 'polished'
 
-import Panel from '../../../components/Panel'
-import ModalButtonWithForm from '../../shared/ModalButtonWithForm'
-import DeleteButton from '../../shared/DeleteButton'
-import CopyOneOfStringButton from '../../shared/CopyOneOfStringButton'
+import TherapeuticAreaSelect from './TherapeuticAreaSelect'
+import Panel from '../../../../components/Panel'
+import ModalButtonWithForm from '../../../shared/ModalButtonWithForm'
+import DeleteButton from '../../../shared/DeleteButton'
+import CopyOneOfStringButton from '../../../shared/CopyOneOfStringButton'
 
 import {
   GET_SOURCE_TREATMENT_PLANS,
   GET_SOURCE_INDICATIONS,
-} from '../../../api/queries'
+} from '../../../../api/queries'
 
 import {
   CREATE_INDICATION,
   UPDATE_SOURCE_INDICATION,
   DELETE_SOURCE_INDICATION,
-} from '../../../api/mutations'
+} from '../../../../api/mutations'
 
-import Color from '../../../utils/color'
-import Spacing from '../../../utils/spacing'
-import FontSpace from '../../../utils/fontspace'
+import Color from '../../../../utils/color'
+import Spacing from '../../../../utils/spacing'
+import FontSpace from '../../../../utils/fontspace'
 
-import { defaultPanelItemStyle } from '../../Organizations/styledComponents'
+import { defaultPanelItemStyle } from '../../../Organizations/styledComponents'
 
 const editIcon = <FontAwesomeIcon size="lg" icon={faEdit} />
 
@@ -48,24 +49,30 @@ const StyledInput = styled.input({
   ...FontSpace.FS2,
 })
 
+const StyledInputLabel = styled.div({
+  color: Color.BLACK,
+  fontSize: 12,
+  fontWeight: 500,
+  marginBottom: Spacing.S2,
+})
+
 const getInputFields = (state, handleChange) => {
   return (
     <div style={{ display: 'block' }}>
-      <div
-        style={{
-          color: Color.BLACK,
-          fontSize: 12,
-          fontWeight: 500,
-          marginBottom: Spacing.S2,
-        }}
-      >
-        Name:
-      </div>
+      <StyledInputLabel>Name (REQUIRED):</StyledInputLabel>
       <StyledInput
         type="text"
         name="name"
         onChange={handleChange}
         value={state.input.name}
+      />
+
+      <StyledInputLabel style={{ marginTop: 24 }}>
+        Therapeutic Area (REQUIRED):
+      </StyledInputLabel>
+      <TherapeuticAreaSelect
+        handleChange={handleChange}
+        therapeuticAreaId={state.input.therapeuticAreaId}
       />
     </div>
   )
@@ -90,7 +97,11 @@ const headerChildren = (
   </div>
 )
 
-const getButtonGroupCallback = treatmentPlansByInd => ({ name, _id }) => (
+const getButtonGroupCallback = (treatmentPlansByInd) => ({
+  name,
+  _id,
+  therapeuticAreaId,
+}) => (
   <>
     <span
       style={{
@@ -108,7 +119,7 @@ const getButtonGroupCallback = treatmentPlansByInd => ({ name, _id }) => (
       modalTitle="Edit Indication"
       buttonLabel={editIcon}
       buttonStyle={{ border: 'none', background: 'none', color: '#b6b9bc' }}
-      data={{ input: { name, _id } }}
+      data={{ input: { name, _id, therapeuticAreaId } }}
       mutationDoc={UPDATE_SOURCE_INDICATION}
       refetchQueries={[{ query: GET_SOURCE_INDICATIONS }]}
       getInputFields={getInputFields}
@@ -145,7 +156,7 @@ const IndicationsPanel = () => {
       headerChildren={headerChildren}
       headerContainerStyle={{
         background: Color.WHITE,
-        borderBottom: `1px solid ${transparentize(0.9, Color.BLACK)}`
+        borderBottom: `1px solid ${transparentize(0.9, Color.BLACK)}`,
       }}
       queryDocs={{
         fetchAllQueryProps: { query: GET_SOURCE_INDICATIONS },
