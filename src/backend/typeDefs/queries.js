@@ -86,6 +86,20 @@ const queries = gql`
 
     endUserTermsLink: EndUserTermsLink
     endUserTermsUsers: [EndUserTermsUser]
+
+    usStates: [UsState]
+  }
+
+  type UsState {
+    _id: ID!
+    state: String
+    stateLong: String
+    status: String
+    booksImpacted: [String]
+    law: String
+    lawLink: String
+    bill: String
+    surveyCommercialLivesPercentInsured: Float
   }
 
   type OpenPaymentDatum {

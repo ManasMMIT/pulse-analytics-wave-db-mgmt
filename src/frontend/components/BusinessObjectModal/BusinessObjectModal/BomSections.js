@@ -30,7 +30,12 @@ const fieldStyle = {
   padding: '12px 0',
 }
 
-const BomSections = ({ isEditModal, selectedTab, inputFields, setInputField }) => {
+const BomSections = ({
+  isEditModal,
+  selectedTab,
+  inputFields,
+  setInputField,
+}) => {
   if (!selectedTab.sections) return null
   const { sections } = selectedTab
 
@@ -48,16 +53,39 @@ const BomSections = ({ isEditModal, selectedTab, inputFields, setInputField }) =
     }))
   }
 
+  const onMultiSelectChange = (selected, { name }) => {
+    // ! clearing last element makes selected `null`
+    if (!selected) selected = []
+
+    setInputField((inputs) => ({
+      ...inputs,
+      [name]: selected.map(({ value }) => value),
+    }))
+  }
+
   const hydrateSections = sections.map((section) => {
     const fieldsWithProps = section.fields.map((field) => {
       const { inputComponent, key, inputProps } = field
-      const onChange = inputComponent !== 'Select' ? onEventChange : onSelectChange
 
+      let onChange = onEventChange
       let value = inputFields[key]
       let clonedInputProps = _.cloneDeep(inputProps)
 
       if (inputComponent === 'Select') {
+        onChange = onSelectChange
         value = { value: inputFields[key], label: inputFields[key] }
+        clonedInputProps.options = clonedInputProps.options.map((value) => ({
+          value,
+          label: value,
+        }))
+      } else if (inputComponent === 'MultiSelect') {
+        onChange = onMultiSelectChange
+        const selectedValues = (inputFields[key] || []).map((value) => ({
+          value,
+          label: value,
+        }))
+
+        value = selectedValues
         clonedInputProps.options = clonedInputProps.options.map((value) => ({
           value,
           label: value,

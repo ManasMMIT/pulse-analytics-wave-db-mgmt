@@ -195,6 +195,8 @@ import { IMPORT_WORKBOOK } from './importWorkbook'
 
 import { CREATE_PERSON, UPDATE_PERSON, DELETE_PERSON } from './people'
 
+import { CREATE_US_STATE, UPDATE_US_STATE, DELETE_US_STATE } from './usStates'
+
 export {
   SELECT_CLIENT,
   CREATE_CLIENT,
@@ -338,4 +340,7 @@ export {
   CREATE_PERSON,
   UPDATE_PERSON,
   DELETE_PERSON,
+  CREATE_US_STATE,
+  UPDATE_US_STATE,
+  DELETE_US_STATE,
 }

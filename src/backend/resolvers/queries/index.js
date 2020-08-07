@@ -34,6 +34,8 @@ const people = require('./people')
 
 const endUserTerms = require('./endUserTerms')
 
+const usStates = require('./usStates')
+
 module.exports = {
   collections,
   clients,
@@ -64,5 +66,6 @@ module.exports = {
   ...aquila,
   ...people,
   ...endUserTerms,
+  usStates,
   therapeuticAreas,
 }

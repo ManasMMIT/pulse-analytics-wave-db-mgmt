@@ -210,6 +210,13 @@ const Sidebar = () => {
         >
           People
         </StyledNavLink>
+        <StyledNavLink
+          style={dropdownInactiveLinkStyle}
+          activeStyle={dropdownActiveLinkStyle}
+          to={'/orion/configuration/us-states'}
+        >
+          US States
+        </StyledNavLink>
         <StyledDropdown
           style={inactiveLinkStyle}
           label={'Products + Indications'}

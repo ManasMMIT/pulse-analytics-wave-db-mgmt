@@ -34,6 +34,8 @@ const personResolvers = require('./person')
 
 const endUserTermsResolvers = require('./endUserTerms')
 
+const usState = require('./usState')
+
 module.exports = {
   ...clientResolvers,
   ...teamResolvers,
@@ -71,4 +73,6 @@ module.exports = {
   ...personResolvers,
 
   ...endUserTermsResolvers,
+
+  ...usState,
 }

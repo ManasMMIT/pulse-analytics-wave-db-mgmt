@@ -5,6 +5,7 @@ import { useAuth0 } from '../../../react-auth0-spa'
 import superUsersById from '../../utils/super-users'
 
 import People from './People'
+import UsStates from './UsStates'
 import ProductsIndications from './ProductsIndications'
 import AdminSettings from './AdminSettings'
 
@@ -15,6 +16,7 @@ const Configuration = () => {
   return (
     <Switch>
       <Route path={'/orion/configuration/people'} component={People} />
+      <Route path={'/orion/configuration/us-states'} component={UsStates} />
       <Route
         path={'/orion/configuration/products-indications'}
         component={ProductsIndications}
