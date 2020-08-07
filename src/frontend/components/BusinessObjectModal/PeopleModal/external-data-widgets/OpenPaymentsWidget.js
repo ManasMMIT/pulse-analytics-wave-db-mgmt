@@ -1,12 +1,23 @@
 import React from 'react'
+import styled from '@emotion/styled'
 import { useQuery } from '@apollo/react-hooks'
 import format from 'date-fns/format'
+import _ from 'lodash'
 
 import { GET_OPEN_PAYMENTS } from 'frontend/api/queries'
 
 import TemplateTable from 'frontend/Orion/Organizations/Obm/TemplateTable'
 import MultiSelectColumnFilter from 'frontend/Orion/Organizations/Obm/TemplateTable/custom-filters/MultiSelect/MultiSelectColumnFilter'
 import customMultiSelectFilterFn from 'frontend/Orion/Organizations/Obm/TemplateTable/custom-filters/MultiSelect/customMultiSelectFilterFn'
+import NoDataPlaceholder from 'frontend/components/NoDataPlaceholder'
+import Spinner from 'frontend/components/Spinner'
+
+const SpinnerWrapper = styled.div({
+  width: '100%',
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+})
 
 const COLUMNS = [
   {
@@ -155,13 +166,22 @@ const COLUMNS = [
 const OpenPaymentsWidget = ({ entity }) => {
   let { data, loading } = useQuery(GET_OPEN_PAYMENTS, {
     variables: { physicianProfileId: entity.physicianProfileId },
+    fetchPolicy: 'network-only',
   })
 
   const filename = `CMS_Open_Payments-${entity.firstName}_${entity.lastName}`
 
-  if (loading) return null
+  if (loading) {
+    return (
+      <SpinnerWrapper>
+        <Spinner size={28} />
+      </SpinnerWrapper>
+    )
+  }
 
   data = Object.values(data)[0] || []
+
+  if (_.isEmpty(data)) return <NoDataPlaceholder />
 
   return (
     <div
