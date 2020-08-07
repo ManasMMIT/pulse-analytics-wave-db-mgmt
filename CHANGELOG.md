@@ -19,18 +19,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - `Phoenix/Backend`: Write integration and unit tests for `upsertUsersSitemaps.js` util
-- `Orion`: Build out therapeuticArea CRUD and integrate with indications master list CRUD; build out all cascade logic including syncing with materialized `pulse-dev.indicationsTherapeuticAreas`
+- `Orion`: Pagination to react-table throughout app [#718](https://github.com/pulse-data/wave-db-mgmt/pull/718)
+- `Orion`: Build out therapeuticArea CRUD and integrate with indications master list CRUD; build out all cascade logic including syncing with materialized `pulse-dev.indicationsTherapeuticAreas` [#717](https://github.com/pulse-data/wave-db-mgmt/pull/717)
 
 ## [3.2.0] - Started: 7-24-20
 
 ### Added
 - `Orion`: End User Terms Management interface for adjusting PDF link for agreement and viewing users who've agreed
+- `Phoenix`: Client create integration tests
 
 ### Changed
 - `README`: Updated the README to remove deprecated sections and refresh the app description
-
-### Added
-- `Phoenix`: Client create integration tests
 
 ### Fixed
 - `Payer Projects Mgmt Tool`: Stops `parentSlug` from being coerced to `0` in lives pipeline.

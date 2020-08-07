@@ -1,17 +1,24 @@
 import React, { useState } from 'react'
 
-import { useTable, useBlockLayout, useFilters, useSortBy } from 'react-table'
+import {
+  useTable,
+  useBlockLayout,
+  useFilters,
+  useSortBy,
+  usePagination,
+} from 'react-table'
 import { useSticky } from 'react-table-sticky'
-
-import TableWrapper from './TableWrapper'
-import Headers from './Headers'
-import Rows from './Rows'
-import ModalManager from './ModalManager'
-import sortTypes from './custom-sort-types'
 
 import ExportExcelButton from 'frontend/components/ExportExcelButton'
 import Icon from 'frontend/components/Icon'
 import Color from 'frontend/utils/color'
+
+import TableWrapper from './TableWrapper'
+import Headers from './Headers'
+import Rows from './Rows'
+import Pagination from './Pagination'
+import ModalManager from './ModalManager'
+import sortTypes from './custom-sort-types'
 import formatDataForExport from './formatDataForExport'
 
 const DefaultColumnFilter = ({
@@ -44,12 +51,15 @@ const TemplateTable = ({
   const [modalCell, setModalCell] = useState(null)
 
   const {
+    state: { pageIndex, pageSize },
     getTableProps,
     getTableBodyProps,
     headerGroups,
     rows,
+    page,
     prepareRow,
     sortedRows,
+    ...tablePropOverflow
   } = useTable(
     {
       columns,
@@ -58,11 +68,13 @@ const TemplateTable = ({
       maxMultiSortColCount: 5,
       disableMultiRemove: true,
       sortTypes,
+      initialState: { pageSize: 50, pageIndex: 0 },
     },
     useFilters,
     useSortBy,
     useBlockLayout,
-    useSticky
+    useSticky,
+    usePagination
   )
 
   const dataFormattedForExport = formatDataForExport(sortedRows, columns)
@@ -89,6 +101,9 @@ const TemplateTable = ({
           Export to Excel
         </ExportExcelButton>
       </div>
+      {data.length ? (
+        <Pagination {...{ pageIndex, pageSize, ...tablePropOverflow }} />
+      ) : null}
       <TableWrapper>
         <div
           className="table sticky"
@@ -99,7 +114,7 @@ const TemplateTable = ({
 
           <div {...getTableBodyProps()} className="body">
             <Rows
-              rows={rows}
+              rows={page}
               prepareRow={prepareRow}
               setModalCell={setModalCell}
               modalColMap={modalColMap}
