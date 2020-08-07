@@ -1,24 +1,26 @@
 const createUsState = async (
   parent,
   { input },
-  { pulseCoreDb, pulseDevDb },
+  { pulseCoreDb, pulseDevDb, mongoClient },
   info
 ) => {
-  const createStateInCoreOp = pulseCoreDb
-    .collection('usStates')
-    .insertOne(input)
-    .then((res) => res.ops[0])
+  const session = mongoClient.startSession()
 
-  const createStateInDevOp = pulseDevDb
-    .collection('statesStepEditLegislation')
-    .insertOne(input)
+  let result
+  await session.withTransaction(async () => {
+    const createdStateInCore = await pulseCoreDb
+      .collection('usStates')
+      .insertOne(input, { session })
+      .then((res) => res.ops[0])
 
-  const [newState] = await Promise.all([
-    createStateInCoreOp,
-    createStateInDevOp,
-  ])
+    await pulseDevDb
+      .collection('statesStepEditLegislation')
+      .insertOne(createdStateInCore, { session })
 
-  return newState
+    result = createdStateInCore
+  })
+
+  return result
 }
 
 module.exports = createUsState

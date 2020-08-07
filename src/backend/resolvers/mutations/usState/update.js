@@ -3,7 +3,7 @@ const { ObjectId } = require('mongodb')
 const updateUsState = async (
   parent,
   { input },
-  { pulseCoreDb, pulseDevDb },
+  { pulseCoreDb, pulseDevDb, mongoClient },
   info
 ) => {
   let { _id, ...rest } = input
@@ -11,20 +11,27 @@ const updateUsState = async (
   _id = ObjectId(_id)
   const setObj = { $set: rest }
 
-  const updateStateInCoreOp = pulseCoreDb
-    .collection('usStates')
-    .findOneAndUpdate({ _id }, setObj, { returnOriginal: false })
+  const session = mongoClient.startSession()
 
-  const updateStateInDevOp = pulseDevDb
-    .collection('statesStepEditLegislation')
-    .updateOne({ _id }, setObj, { upsert: true })
+  let result
+  await session.withTransaction(async () => {
+    const updateStateInCoreOp = pulseCoreDb
+      .collection('usStates')
+      .findOneAndUpdate({ _id }, setObj, { returnOriginal: false, session })
 
-  const [{ value: updatedState }] = await Promise.all([
-    updateStateInCoreOp,
-    updateStateInDevOp,
-  ])
+    const updateStateInDevOp = pulseDevDb
+      .collection('statesStepEditLegislation')
+      .updateOne({ _id }, setObj, { upsert: true, session })
 
-  return updatedState
+    const [{ value: updatedState }] = await Promise.all([
+      updateStateInCoreOp,
+      updateStateInDevOp,
+    ])
+
+    result = updatedState
+  })
+
+  return result
 }
 
 module.exports = updateUsState
