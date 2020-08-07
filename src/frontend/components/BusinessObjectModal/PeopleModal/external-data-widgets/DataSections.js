@@ -1,12 +1,14 @@
 import React from 'react'
 import styled from '@emotion/styled'
 import { transparentize } from 'polished'
+import _ from 'lodash'
 
 import Color from 'frontend/utils/color'
 import Spacing from 'frontend/utils/spacing'
 import FontSpace from 'frontend/utils/fontspace'
 
 import Title from '../../../Title/Title'
+import NoDataPlaceholder from 'frontend/components/NoDataPlaceholder'
 
 const wrapperStyle = {
   background: Color.LIGHT_BLUE_GRAY_1,
@@ -39,7 +41,9 @@ const InputLabel = styled.div({
   opacity: 0.7,
 })
 
-const DataSections = ({ title, data }) => {
+const DataSections = ({ data }) => {
+  if (_.isEmpty(data)) return <NoDataPlaceholder />
+
   return (
     <div
       style={{

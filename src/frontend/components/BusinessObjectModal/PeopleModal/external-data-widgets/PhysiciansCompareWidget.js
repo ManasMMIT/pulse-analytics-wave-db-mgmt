@@ -1,11 +1,22 @@
 import React from 'react'
 import { useQuery } from '@apollo/react-hooks'
+import styled from '@emotion/styled'
+import _ from 'lodash'
 
 import { GET_PHYSICIANS_COMPARE } from 'frontend/api/queries'
 
 import TemplateTable from 'frontend/Orion/Organizations/Obm/TemplateTable'
 import MultiSelectColumnFilter from 'frontend/Orion/Organizations/Obm/TemplateTable/custom-filters/MultiSelect/MultiSelectColumnFilter'
 import customMultiSelectFilterFn from 'frontend/Orion/Organizations/Obm/TemplateTable/custom-filters/MultiSelect/customMultiSelectFilterFn'
+import NoDataPlaceholder from 'frontend/components/NoDataPlaceholder'
+import Spinner from 'frontend/components/Spinner'
+
+const SpinnerWrapper = styled.div({
+  width: '100%',
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+})
 
 const COLUMNS = [
   {
@@ -180,11 +191,20 @@ const COLUMNS = [
 const PhysiciansCompareWidget = ({ entity }) => {
   let { data, loading } = useQuery(GET_PHYSICIANS_COMPARE, {
     variables: { npi: entity.nationalProviderIdentifier },
+    fetchPolicy: 'network-only',
   })
 
-  if (loading) return null
+  if (loading) {
+    return (
+      <SpinnerWrapper>
+        <Spinner size={28} />
+      </SpinnerWrapper>
+    )
+  }
 
   data = Object.values(data)[0] || []
+
+  if (_.isEmpty(data)) return <NoDataPlaceholder />
 
   const filename = `CMS_Physicians_Compare-${entity.firstName}_${entity.lastName}`
 

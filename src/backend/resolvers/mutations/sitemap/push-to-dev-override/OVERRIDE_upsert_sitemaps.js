@@ -1,10 +1,7 @@
 /* eslint-disable no-loop-func */
-const upsertUsersSitemaps = require('../sitemaps-upsertion/upsertUsersSitemaps')
+const upsertUsersSitemaps = require('../upsertUsersSitemaps')
 
-const overrideUpsertSitemaps = async ({
-  pulseCoreDb,
-  pulseDevDb,
-}) => {
+const overrideUpsertSitemaps = async ({ pulseCoreDb, pulseDevDb }) => {
   const CoreUsers = pulseCoreDb.collection('users')
   const users = await CoreUsers.find().toArray()
 

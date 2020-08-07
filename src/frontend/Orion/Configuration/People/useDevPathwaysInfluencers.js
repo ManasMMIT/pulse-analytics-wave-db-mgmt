@@ -5,7 +5,9 @@ import { GET_DEV_PATHWAYS_INFLUENCERS } from 'frontend/api/queries'
 const useDevPathwaysInfluencers = (args = {}) => {
   const { personId } = args
 
-  const { data, loading } = useQuery(GET_DEV_PATHWAYS_INFLUENCERS)
+  const { data, loading } = useQuery(GET_DEV_PATHWAYS_INFLUENCERS, {
+    fetchPolicy: 'network-only',
+  })
 
   if (loading) return { data: [], loading }
 

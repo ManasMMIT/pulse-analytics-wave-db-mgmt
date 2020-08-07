@@ -6,6 +6,7 @@ import Input from '../Input'
 
 const INPUT_MAP = {
   Select,
+  MultiSelect: Select,
   TextInput: Input,
   DateInput: Input,
   EmailInput: Input,
@@ -14,11 +15,13 @@ const INPUT_MAP = {
   TimeInput: Input,
   CheckboxInput: Input,
 }
+
 const generateCardInput = ({ field, fieldLabelStyle, fieldStyle }) => {
   const { key, label, inputComponent, inputProps } = field
 
   const InputComponent = INPUT_MAP[inputComponent]
   if (!InputComponent) return null
+  if (inputComponent == 'MultiSelect') inputProps.isMulti = true
 
   return (
     <div key={`field-section-card-${key}-${label}-input`} style={fieldStyle}>

@@ -11,6 +11,7 @@ const queries = gql`
     users(teamId: String, clientId: String, subscriptionId: String): [User]
 
     indications: [Indication]
+    therapeuticAreas: [TherapeuticArea]
     products: [Product]
     regimens: [Regimen]
 
@@ -85,11 +86,25 @@ const queries = gql`
 
     endUserTermsLink: EndUserTermsLink
     endUserTermsUsers: [EndUserTermsUser]
+
+    usStates: [UsState]
+  }
+
+  type UsState {
+    _id: ID!
+    state: String
+    stateLong: String
+    status: String
+    booksImpacted: [String]
+    law: String
+    lawLink: String
+    bill: String
+    surveyCommercialLivesPercentInsured: Float
   }
 
   type OpenPaymentDatum {
     dateOfPayment: String
-    totalAmountOfPaymentUsdollars: String
+    totalAmountOfPaymentUsdollars: Float
     applicableManufacturerOrApplicableGpoMakingPaymentName: String
     productCategoryOrTherapeuticArea1: String
     nameOfDrugOrBiologicalOrDeviceOrMedicalSupply1: String
@@ -200,6 +215,12 @@ const queries = gql`
     _id: ID!
     name: String
     regimens: [Regimen]
+    therapeuticAreaId: String
+  }
+
+  type TherapeuticArea {
+    _id: ID!
+    name: String
   }
 
   type Product {

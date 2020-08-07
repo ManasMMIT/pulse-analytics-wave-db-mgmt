@@ -20,6 +20,7 @@ import {
 
 const HARD_CODED_INPUT_OPTIONS = [
   'Select',
+  'MultiSelect',
   'TextInput',
   'DateInput',
   'EmailInput',
@@ -38,8 +39,12 @@ const Form = ({
   selectedBom,
 }) => {
   const [stagedFieldLabel, setFieldLabel] = useState(data.label)
-  const [stagedInputComponent, setInputComponent] = useState(data.inputComponent)
-  const [stagedInputProps, setInputProps] = useState(JSON.stringify(data.inputProps || {}))
+  const [stagedInputComponent, setInputComponent] = useState(
+    data.inputComponent
+  )
+  const [stagedInputProps, setInputProps] = useState(
+    JSON.stringify(data.inputProps || {})
+  )
   const [stagedFieldOption, setFieldOption] = useState(null)
 
   const [saveField] = useMutation(mutationDoc, {
@@ -50,10 +55,13 @@ const Form = ({
         inputComponent: stagedInputComponent,
         inputProps: stagedInputProps,
         boFieldId: (stagedFieldOption || {}).value, // need to wait for query to assign correct initial field
-      }
+      },
     },
-    refetchQueries: [{ query: GET_BOM_CONFIGS }, { query: GET_BOM_SCHEMA, variables: { boId: selectedBom.boId } }],
-    onCompleted: result => {
+    refetchQueries: [
+      { query: GET_BOM_CONFIGS },
+      { query: GET_BOM_SCHEMA, variables: { boId: selectedBom.boId } },
+    ],
+    onCompleted: (result) => {
       const targetDataKey = Object.keys(result)[0]
       const newOrUpdatedBomField = result[targetDataKey]
 
@@ -61,22 +69,22 @@ const Form = ({
       afterMutationHook(newOrUpdatedBomField)
     },
     awaitRefetchQueries: true,
-    onError: e => {
+    onError: (e) => {
       alert(e)
-    }
+    },
   })
 
-  const handleInputComponentSelection = obj => setInputComponent(obj.value)
-  const handleFieldOptionSelection = obj => setFieldOption(obj)
+  const handleInputComponentSelection = (obj) => setInputComponent(obj.value)
+  const handleFieldOptionSelection = (obj) => setFieldOption(obj)
 
-  const handleInputPropsChange = e => {
+  const handleInputPropsChange = (e) => {
     e.persist()
     const value = e.currentTarget && e.currentTarget.value
 
     setInputProps(value)
   }
 
-  const handleFieldChange = e => {
+  const handleFieldChange = (e) => {
     e.persist()
     const value = e.currentTarget && e.currentTarget.value
     setFieldLabel(value)
@@ -88,11 +96,13 @@ const Form = ({
   useEffect(() => {
     if (!loading) {
       if (data._id) {
-        const underlyingBusinessObject = businessObjData.businessObjects
-          .find(({ _id }) => _id === selectedBom.boId)
+        const underlyingBusinessObject = businessObjData.businessObjects.find(
+          ({ _id }) => _id === selectedBom.boId
+        )
 
-        const originalDataField = underlyingBusinessObject.fields
-          .find(({ _id }) => _id === data.boFieldId)
+        const originalDataField = underlyingBusinessObject.fields.find(
+          ({ _id }) => _id === data.boFieldId
+        )
 
         const { _id, key, type } = originalDataField
 
@@ -108,18 +118,24 @@ const Form = ({
 
   if (loading) return null
 
-  const underlyingBusinessObject = businessObjData.businessObjects
-    .find(({ _id }) => _id === selectedBom.boId)
+  const underlyingBusinessObject = businessObjData.businessObjects.find(
+    ({ _id }) => _id === selectedBom.boId
+  )
 
   let fieldOptions = []
   if (underlyingBusinessObject) {
-    fieldOptions = underlyingBusinessObject.fields.map(({ _id, key, type }) => ({
-      value: _id,
-      label: `${key} (${type})`, // hint at what the input component should be using boField's type
-    }))
+    fieldOptions = underlyingBusinessObject.fields.map(
+      ({ _id, key, type }) => ({
+        value: _id,
+        label: `${key} (${type})`, // hint at what the input component should be using boField's type
+      })
+    )
   }
 
-  const inputOptions = HARD_CODED_INPUT_OPTIONS.map(inputType => ({ value: inputType, label: inputType }))
+  const inputOptions = HARD_CODED_INPUT_OPTIONS.map((inputType) => ({
+    value: inputType,
+    label: inputType,
+  }))
 
   return (
     <FieldsFormContainer>
@@ -128,7 +144,7 @@ const Form = ({
 
         <Select
           isDisabled={data._id} // not allowed to update boFieldId after creation
-          styles={{ container: base => ({ ...base, flex: 1 }) }}
+          styles={{ container: (base) => ({ ...base, flex: 1 }) }}
           value={stagedFieldOption}
           defaultValue={fieldOptions[0]}
           onChange={handleFieldOptionSelection}
@@ -149,7 +165,7 @@ const Form = ({
         <FormLabel>Input Component</FormLabel>
 
         <Select
-          styles={{ container: base => ({ ...base, flex: 1 }) }}
+          styles={{ container: (base) => ({ ...base, flex: 1 }) }}
           value={{ label: stagedInputComponent, value: stagedInputComponent }}
           defaultValue={inputOptions[0]}
           onChange={handleInputComponentSelection}

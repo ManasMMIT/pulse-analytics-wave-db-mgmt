@@ -1,5 +1,21 @@
 import gql from 'graphql-tag'
 
+export const GET_US_STATES = gql`
+  query getUsStates {
+    usStates {
+      _id
+      state
+      stateLong
+      status
+      booksImpacted
+      law
+      lawLink
+      bill
+      surveyCommercialLivesPercentInsured
+    }
+  }
+`
+
 export const GET_OPEN_PAYMENTS = gql`
   query getOpenPayments($physicianProfileId: Float) {
     openPayments(physicianProfileId: $physicianProfileId) {
@@ -539,6 +555,7 @@ export const GET_SOURCE_INDICATIONS = gql`
     indications {
       _id
       name
+      therapeuticAreaId
       regimens {
         _id
         name
@@ -549,6 +566,15 @@ export const GET_SOURCE_INDICATIONS = gql`
           tags
         }
       }
+    }
+  }
+`
+
+export const GET_THERAPEUTIC_AREAS = gql`
+  query getTherapeuticAreas {
+    therapeuticAreas {
+      _id
+      name
     }
   }
 `

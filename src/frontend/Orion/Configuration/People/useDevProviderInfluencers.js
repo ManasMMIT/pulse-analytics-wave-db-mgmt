@@ -5,7 +5,9 @@ import { GET_DEV_PROVIDER_INFLUENCERS } from 'frontend/api/queries'
 const useDevProviderInfluencers = (args = {}) => {
   const { personId } = args
 
-  const { data, loading } = useQuery(GET_DEV_PROVIDER_INFLUENCERS)
+  const { data, loading } = useQuery(GET_DEV_PROVIDER_INFLUENCERS, {
+    fetchPolicy: 'network-only',
+  })
 
   if (loading) return { data: [], loading }
 

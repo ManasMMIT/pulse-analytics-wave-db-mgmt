@@ -3,25 +3,19 @@ import { useMutation } from '@apollo/react-hooks'
 import styled from '@emotion/styled'
 import PropTypes from 'prop-types'
 import _ from 'lodash'
-import gql from 'graphql-tag'
 
 import useBom from '../../../hooks/useBom'
 
 import Color from 'frontend/utils/color'
 import Spacing from 'frontend/utils/spacing'
+import STUB_DOC from 'frontend/api/utils/stub-doc'
 
 import BomSidebar from './BomSidebar'
 import BomSections from './BomSections'
+import ButtonGroup from './ButtonGroup'
+import DeleteConfirmation from './DeleteConfirmation'
 import Title from '../../Title'
 import Dialog from '../../Dialog'
-import Button from '../../Button'
-import Icon from '../../Icon'
-
-const STUB_DOC = gql`
-  mutation STUBBED_NO_OP {
-    stub
-  }
-`
 
 const Header = styled.div({
   display: 'flex',
@@ -35,36 +29,6 @@ const BoContent = styled.div({
   display: 'flex',
   overflowY: 'auto',
   height: '100%',
-})
-
-const DeleteConfirmationContainer = styled.div({
-  alignItems: 'center',
-  display: 'flex',
-  flexDirection: 'column',
-  margin: '0 auto',
-  padding: 24,
-  textAlign: 'center',
-})
-
-const DeleteMessageText = styled.p({
-  color: Color.BLACK,
-  fontSize: 13,
-  fontWeight: 500,
-  lineHeight: 1.5,
-  marginBottom: 12,
-})
-
-const DeleteMessageBO = styled.span({
-  color: Color.PRIMARY,
-  fontWeight: 800,
-})
-
-const DeleteMessageCaption = styled.p({
-  color: Color.RED,
-  fontSize: 12,
-  fontWeight: 800,
-  lineHeight: 1.5,
-  marginTop: 12,
 })
 
 const BusinessObjectModal = ({
@@ -85,22 +49,6 @@ const BusinessObjectModal = ({
   const [selectedTab, setSelectedTab] = useState({})
   const [inputFields, setInputField] = useState({})
   const [showDeleteConfirmation, toggleDeleteConfirmation] = useState(false)
-
-  const saveMutationToUse = isEditModal ? mutationDocs.update : mutationDocs.create
-
-  const inputToUse = isEditModal ? { _id: entityId, ...inputFields } : inputFields
-
-  console.log('Mutation Input: ', inputToUse)
-  const [save] = useMutation(saveMutationToUse, {
-    variables: { input: inputToUse },
-    refetchQueries,
-    onCompleted: (data) => {
-      afterMutationHook(data)
-      closeModal()
-    },
-    awaitRefetchQueries: true,
-    onError: alert,
-  })
 
   const [deleteHandler] = useMutation(mutationDocs.delete || STUB_DOC, {
     variables: { input: { _id: entityId } },
@@ -147,57 +95,23 @@ const BusinessObjectModal = ({
     <Dialog>
       <Header>
         <Title title={modalTitle} titleModifiers={titleModifiers} />
-        <div style={{ margin: `0 ${Spacing.S4}`, display: 'flex', alignItems: 'center' }}>
-          {isEditModal && mutationDocs.delete && (
-            <Button
-              buttonStyle={{ margin: Spacing.S3 }}
-              color={Color.RED}
-              type="secondary"
-              iconName="delete"
-              iconColor1={Color.RED}
-              onClick={() => toggleDeleteConfirmation(!showDeleteConfirmation)}
-            >
-              {showDeleteConfirmation ? 'Cancel Delete' : 'Delete'}
-            </Button>
-          )}
-          <Button
-            buttonStyle={{ margin: Spacing.S3 }}
-            color={Color.GRAY_DARK}
-            type="secondary"
-            onClick={closeModal}
-          >
-            Cancel + Close
-          </Button>
-          <Button buttonStyle={{ margin: Spacing.S3 }} color={Color.GREEN} onClick={save}>
-            Save + Close
-          </Button>
-        </div>
+        <ButtonGroup
+          mutationDocs={mutationDocs}
+          toggleDeleteConfirmation={toggleDeleteConfirmation}
+          showDeleteConfirmation={showDeleteConfirmation}
+          closeModal={closeModal}
+          inputFields={inputFields}
+          entityId={entityId}
+          refetchQueries={refetchQueries}
+          afterMutationHook={afterMutationHook}
+        />
       </Header>
-
-      {showDeleteConfirmation ? (
-        <DeleteConfirmationContainer>
-          <div>
-            <DeleteMessageText>
-              Are you sure you want to delete <DeleteMessageBO>{titleModifiers}</DeleteMessageBO>?
-            </DeleteMessageText>
-            <DeleteMessageText>
-              Any connections to <DeleteMessageBO>{titleModifiers}</DeleteMessageBO> will also be
-              deleted.
-            </DeleteMessageText>
-          </div>
-          <div style={{ marginTop: 24 }}>
-            <Button
-              color={Color.RED}
-              iconName="delete"
-              iconColor1={Color.WHITE}
-              onClick={deleteHandler}
-            >
-              Delete Forever
-            </Button>
-            <DeleteMessageCaption>This cannot be undone.</DeleteMessageCaption>
-          </div>
-        </DeleteConfirmationContainer>
-      ) : (
+      <DeleteConfirmation
+        showDeleteConfirmation={showDeleteConfirmation}
+        titleModifiers={titleModifiers}
+        deleteHandler={deleteHandler}
+      />
+      {!showDeleteConfirmation && (
         <BoContent>
           <BomSidebar
             options={sidebarOptions}
@@ -247,38 +161,3 @@ BusinessObjectModal.defaultProps = {
 }
 
 export default BusinessObjectModal
-
-// ! thoughts on more dynamic model:
-// 1. Upsertion dynamic mutation
-// 2. Deletion dynamic mutation
-// const [save] = useMutation(SUPER_DYNAMIC_ENDPOINT_EITHER_DELETE_OR_UPSERT, // make a dynamic modal mutation
-//   {
-//     variables: {
-//       input: {
-//         boId,// get to correct collection
-//         entityId, // search to upsert
-//         inputFields // set obj
-//       },
-//     },
-//     update: (cache, { data }) => {
-//       const { __typename, ...newOrUpdatedEntity } = data[Object.keys(data)[0]]
-
-//       const cacheId = `${__typename}:${newOrUpdatedEntity._id}`
-
-//       cache.writeFragment({
-//         // id: 'PathwaysOrganization:5d825338cc80b15a9476ba84', // ! example format
-//         id: cacheId,
-//         fragment: gql`
-//           fragment ${ __typename + _.uniqueId() } on ${ __typename } {
-//             ${ Object.keys(newOrUpdatedEntity).join('\n') }
-//             __typename
-//           }
-//         `,
-//         data: {
-//           ...newOrUpdatedEntity,
-//           __typename,
-//         },
-//       });
-//     }
-//     // refetchQueries: [{ query: MAP_QUERY_THINGY[boId] }]
-//   })

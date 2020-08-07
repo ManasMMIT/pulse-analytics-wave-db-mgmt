@@ -9,6 +9,7 @@ const deleteSourceIndicationTypeDefs = gql`
     _id: ID
     name: String
     regimens: [DeleteSourceRegimenPayload]
+    therapeuticAreaId: String
   }
 `
 

@@ -9,5 +9,5 @@ export default (rowA, rowB, columnId, desc) => {
 
   if (valueA === valueB) return 0
 
-  return valueB > valueA ? -1 : 1
+  return Number(valueB) > Number(valueA) ? -1 : 1
 }

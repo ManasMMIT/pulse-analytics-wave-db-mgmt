@@ -120,6 +120,10 @@ const PRODUCT_INDICATION_LINKS_CONFIG = [
     link: '/orion/configuration/products-indications/indications',
   },
   {
+    label: 'Therapeutic Areas',
+    link: '/orion/configuration/products-indications/therapeutic-areas',
+  },
+  {
     label: 'Regimens',
     link: '/orion/configuration/products-indications/regimens',
   },
@@ -205,6 +209,13 @@ const Sidebar = () => {
           to={'/orion/configuration/people'}
         >
           People
+        </StyledNavLink>
+        <StyledNavLink
+          style={dropdownInactiveLinkStyle}
+          activeStyle={dropdownActiveLinkStyle}
+          to={'/orion/configuration/us-states'}
+        >
+          US States
         </StyledNavLink>
         <StyledDropdown
           style={inactiveLinkStyle}

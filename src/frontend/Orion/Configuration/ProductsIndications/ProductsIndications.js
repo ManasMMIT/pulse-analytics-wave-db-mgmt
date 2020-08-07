@@ -4,6 +4,7 @@ import { Switch, Route, Redirect } from 'react-router-dom'
 import PhoenixTreatmentPlans from './PhoenixTreatmentPlans'
 import TreatmentPlansPanel from './TreatmentPlansPanel'
 import IndicationsPanel from './IndicationsPanel'
+import TherapeuticAreas from './TherapeuticAreas'
 import RegimensPanel from './RegimensPanel'
 import ProductsPanel from './ProductsPanel'
 import CoveragesPanel from './CoveragesPanel'
@@ -25,6 +26,10 @@ const ProductsIndications = () => (
       component={IndicationsPanel}
     />
     <Route
+      path={'/orion/configuration/products-indications/therapeutic-areas'}
+      component={TherapeuticAreas}
+    />
+    <Route
       path={'/orion/configuration/products-indications/regimens'}
       component={RegimensPanel}
     />
@@ -44,7 +49,9 @@ const ProductsIndications = () => (
       path={'/orion/configuration/products-indications/lines'}
       component={LinesPanel}
     />
-    <Redirect to={'/orion/configuration/products-indications/phoenix-treatment-plans'} />
+    <Redirect
+      to={'/orion/configuration/products-indications/phoenix-treatment-plans'}
+    />
   </Switch>
 )
 

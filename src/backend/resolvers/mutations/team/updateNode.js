@@ -1,4 +1,4 @@
-const upsertUsersSitemaps = require('./../sitemap/sitemaps-upsertion/upsertUsersSitemaps')
+const upsertUsersSitemaps = require('../sitemap/upsertUsersSitemaps')
 
 const ALLOWED_NODE_TYPES = ['tools', 'dashboards', 'pages', 'cards']
 
@@ -9,7 +9,11 @@ const updateNode = async (
   info
 ) => {
   if (!ALLOWED_NODE_TYPES.includes(nodeData.type + 's')) {
-    throw new Error(`type field must be singularized version of one of the following: ${ALLOWED_NODE_TYPES.join(', ')}.`)
+    throw new Error(
+      `type field must be singularized version of one of the following: ${ALLOWED_NODE_TYPES.join(
+        ', '
+      )}.`
+    )
   }
 
   const session = mongoClient.startSession()
@@ -20,7 +24,7 @@ const updateNode = async (
       { _id: teamId },
       {
         $set: {
-          [`sitemap.${ nodeData.type }s.$[node]`]: nodeData
+          [`sitemap.${nodeData.type}s.$[node]`]: nodeData,
         },
       },
       {
@@ -28,13 +32,13 @@ const updateNode = async (
         arrayFilters: [
           {
             'node._id': nodeData._id,
-          }
+          },
         ],
         session,
-      },
+      }
     )
 
-    updatedNode = updatedTeam.sitemap[`${nodeData.type }s`].find(
+    updatedNode = updatedTeam.sitemap[`${nodeData.type}s`].find(
       ({ _id }) => nodeData._id === _id
     )
 
@@ -45,7 +49,6 @@ const updateNode = async (
       pulseDevDb,
     })
   })
-
 
   return updatedNode
 }

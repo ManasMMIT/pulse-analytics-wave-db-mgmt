@@ -1,0 +1,55 @@
+export default {
+  ROOT_QUERY: {
+    people: [
+      {
+        type: 'id',
+        generated: false,
+        id: 'Person:1',
+        typename: 'Person',
+      },
+      {
+        type: 'id',
+        generated: false,
+        id: 'Person:2',
+        typename: 'Person',
+      },
+      {
+        type: 'id',
+        generated: false,
+        id: 'Person:3',
+        typename: 'Person',
+      },
+    ],
+  },
+  ROOT_MUTATION: {},
+  'Person:1': {
+    _id: '1',
+    createdOn: '2020-07-01T15:55:42.000Z',
+    updatedOn: '2020-07-01T15:55:42.000Z',
+    firstName: 'Danielle',
+    lastName: 'Fishman',
+    nationalProviderIdentifier: null,
+    physicianProfileId: null,
+    __typename: 'Person',
+  },
+  'Person:2': {
+    _id: '2',
+    createdOn: '2020-07-01T15:54:03.000Z',
+    updatedOn: '2020-07-01T15:54:03.000Z',
+    firstName: 'Barry',
+    lastName: 'Peterson',
+    nationalProviderIdentifier: null,
+    physicianProfileId: null,
+    __typename: 'Person',
+  },
+  'Person:3': {
+    _id: '3',
+    createdOn: '2020-07-01T15:58:13.000Z',
+    updatedOn: '2020-07-01T15:58:13.000Z',
+    firstName: 'Debbie',
+    lastName: 'Rosamelia',
+    nationalProviderIdentifier: null,
+    physicianProfileId: null,
+    __typename: 'Person',
+  },
+}

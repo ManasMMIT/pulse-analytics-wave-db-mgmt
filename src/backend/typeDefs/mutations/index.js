@@ -5,6 +5,7 @@ const teams = require('./teams')
 const user = require('./user')
 const sitemap = require('./sitemap')
 const indication = require('./indication')
+const therapeuticArea = require('./therapeuticArea')
 const product = require('./product')
 const regimen = require('./regimen')
 const organization = require('./organization')
@@ -32,6 +33,8 @@ const importWorkbook = require('./importWorkbook')
 const person = require('./person')
 
 const endUserTerms = require('./endUserTerms')
+
+const usState = require('./usState')
 
 const mutationType = gql`
   type Mutation {
@@ -64,6 +67,16 @@ const mutationType = gql`
     deleteSourceIndication(
       input: DeleteSourceIndicationInput!
     ): DeleteSourceIndicationPayload
+
+    createTherapeuticArea(
+      input: CreateTherapeuticAreaInput!
+    ): CreateTherapeuticAreaPayload!
+    updateTherapeuticArea(
+      input: UpdateTherapeuticAreaInput!
+    ): UpdateTherapeuticAreaPayload!
+    deleteTherapeuticArea(
+      input: DeleteTherapeuticAreaInput!
+    ): DeleteTherapeuticAreaPayload!
 
     createProduct(input: CreateProductInput!): CreateProductPayload
     updateSourceProduct(
@@ -296,6 +309,10 @@ const mutationType = gql`
     updateEndUserTerms(
       input: UpdateEndUserTermsInput!
     ): UpdateEndUserTermsPayload
+
+    createUsState(input: CreateUsStateInput!): CreateUsStatePayload!
+    updateUsState(input: UpdateUsStateInput!): UpdateUsStatePayload!
+    deleteUsState(input: DeleteUsStateInput!): DeleteUsStatePayload!
   }
 `
 
@@ -306,6 +323,7 @@ module.exports = [
   ...user,
   ...sitemap,
   ...indication,
+  ...therapeuticArea,
   ...product,
   ...regimen,
   ...organization,
@@ -332,4 +350,5 @@ module.exports = [
   importWorkbook,
   ...person,
   ...endUserTerms,
+  ...usState,
 ]
