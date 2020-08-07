@@ -12,16 +12,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Fixed** for any bug fixes.
 - **Security** in case of vulnerabilities.
 
-## [Unreleased] - Started: 7-30-20
+## [Unreleased] - Started: 8-7-20
 
-### Fixed
-- `Payer Project Management`: Add sessions to lives import to prevent structuredLives lookup of lives totals from being behind
+## [3.3.0] - Started: 7-30-20
 
 ### Added
-- `Phoenix/Backend`: Write integration and unit tests for `upsertUsersSitemaps.js` util
+- `Phoenix/Backend`: Write integration and unit tests for `upsertUsersSitemaps.js` util [#711](https://github.com/pulse-data/wave-db-mgmt/pull/711)
+- `Phoenix/Frontend`: Write basic READ/CREATE Apollo cache tests [#704](https://github.com/pulse-data/wave-db-mgmt/pull/704)
+
 - `Orion`: Pagination to react-table throughout app [#718](https://github.com/pulse-data/wave-db-mgmt/pull/718)
 - `Orion`: Build out therapeuticArea CRUD and integrate with indications master list CRUD; build out all cascade logic including syncing with materialized `pulse-dev.indicationsTherapeuticAreas` [#717](https://github.com/pulse-data/wave-db-mgmt/pull/717)
 - `Orion`: Build out State CRUD w/ cascading logic to `pulse-dev.statesStepEditLegislation` [#713](https://github.com/pulse-data/wave-db-mgmt/pull/713) (child PR [#715](https://github.com/pulse-data/wave-db-mgmt/pull/715))
+
+### Changed
+- `Orion/People View`: Changed open payments external API widget and endpoint to pull in all data from 2016-2019 [#718](https://github.com/pulse-data/wave-db-mgmt/pull/718)
+
+### Fixed
+- `Payer Project Management`: Add sessions to lives import to prevent structuredLives lookup of lives totals from being behind [#708](https://github.com/pulse-data/wave-db-mgmt/pull/708)
 
 ## [3.2.0] - Started: 7-24-20
 
