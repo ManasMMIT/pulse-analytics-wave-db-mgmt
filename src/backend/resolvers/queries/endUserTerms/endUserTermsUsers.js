@@ -1,5 +1,5 @@
-const endUserTermsUsers = async (parent, args, { pulseDevDb }, info) => {
-  return await pulseDevDb.collection('users').find().toArray()
+const endUserTermsUsers = async (parent, args, { pulseProdDb }, info) => {
+  return await pulseProdDb.collection('users').find().toArray()
 }
 
 module.exports = endUserTermsUsers
