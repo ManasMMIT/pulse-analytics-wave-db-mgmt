@@ -5,7 +5,7 @@ import { Route, Switch, Redirect } from 'react-router-dom'
 import { SELECT_INDICATION } from './../api/mutations'
 
 import Query from './Query'
-import Excel from './Excel'
+import ImportExportData from './ImportExportData'
 import Organizations from './Organizations'
 import Configuration from './Configuration'
 
@@ -19,7 +19,8 @@ class Orion extends React.Component {
   componentDidMount() {
     const { client } = this.props
 
-    client.mutate({ mutation: SELECT_INDICATION })
+    client
+      .mutate({ mutation: SELECT_INDICATION })
       .then(() => this.setState({ isLoading: false }))
   }
 
@@ -31,10 +32,10 @@ class Orion extends React.Component {
         <Sidebar />
         <Switch>
           <Route path="/orion/query" component={Query} />
-          <Route path="/orion/excel" component={Excel} />
+          <Route path="/orion/import-export" component={ImportExportData} />
           <Route path="/orion/organizations" component={Organizations} />
           <Route path="/orion/configuration" component={Configuration} />
-          <Redirect to={'/orion/excel'} />
+          <Redirect to={'/orion/import-export'} />
         </Switch>
       </div>
     )

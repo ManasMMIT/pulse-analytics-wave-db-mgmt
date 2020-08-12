@@ -12,36 +12,39 @@ import {
   SectionContainer,
   SectionHeader,
   SelectLabel,
-} from '../styledComponents'
+} from '../../styledComponents'
 
-const getTpLabel = obj => (
-  [obj.indication, obj.regimen, obj.population, obj.line, obj.book, obj.coverage].join(' | ')
-)
+const getTpLabel = (obj) =>
+  [
+    obj.indication,
+    obj.regimen,
+    obj.population,
+    obj.line,
+    obj.book,
+    obj.coverage,
+  ].join(' | ')
 
 const ExportRegionalBreakdown = () => {
   const [selectedTreatmentPlan, selectTreatmentPlan] = useState({})
   const [selectedTeam, selectTeam] = useState({})
 
-  const { 
-    loading: treatmentPlansLoading, 
-    data: treatmentPlansData 
-  } = useQuery(GET_SOURCE_TREATMENT_PLANS)
-  
-  const { 
-    loading: teamsLoading, 
-    data: teamsData 
-  } = useQuery(GET_TEAMS)
+  const { loading: treatmentPlansLoading, data: treatmentPlansData } = useQuery(
+    GET_SOURCE_TREATMENT_PLANS
+  )
+
+  const { loading: teamsLoading, data: teamsData } = useQuery(GET_TEAMS)
 
   useEffect(() => {
     if (!teamsLoading) selectTeam(teamsData.teams[0])
-    if (!treatmentPlansLoading) selectTreatmentPlan(treatmentPlansData.treatmentPlans[0])
+    if (!treatmentPlansLoading)
+      selectTreatmentPlan(treatmentPlansData.treatmentPlans[0])
   }, [treatmentPlansLoading, teamsLoading])
 
   let teamsDropdownOptions
   if (!teamsLoading) {
     const { teams } = teamsData
-  
-    teamsDropdownOptions = teams.map(team => ({
+
+    teamsDropdownOptions = teams.map((team) => ({
       value: team,
       label: `Client: ${team.client.name} | Team: ${team.name}`,
     }))
@@ -50,52 +53,53 @@ const ExportRegionalBreakdown = () => {
   let treatmentPlansOptions
   if (!treatmentPlansLoading) {
     const { treatmentPlans } = treatmentPlansData
-  
-    treatmentPlansOptions = treatmentPlans.map(treatmentPlan => ({
+
+    treatmentPlansOptions = treatmentPlans.map((treatmentPlan) => ({
       label: getTpLabel(treatmentPlan),
       value: treatmentPlan,
     }))
   }
-  
+
   return (
     <SectionContainer>
       <SectionHeader>Regional Targeting Export</SectionHeader>
 
       <div style={{ marginTop: 24 }}>
         <SelectLabel>Select a team:</SelectLabel>
-        {
-          teamsLoading
-            ? <Spinner />
-            : (
-              <Select
-                value={{
-                  value: selectedTeam,
-                  label: `Client: ${selectedTeam.client && selectedTeam.client.name} | Team: ${selectedTeam.name}`,
-                }}
-                onChange={({ value }) => selectTeam(value)}
-                options={teamsDropdownOptions}
-                styles={customSelectStyles}
-              />
-            )
-        }
+        {teamsLoading ? (
+          <Spinner />
+        ) : (
+          <Select
+            value={{
+              value: selectedTeam,
+              label: `Client: ${
+                selectedTeam.client && selectedTeam.client.name
+              } | Team: ${selectedTeam.name}`,
+            }}
+            onChange={({ value }) => selectTeam(value)}
+            options={teamsDropdownOptions}
+            styles={customSelectStyles}
+          />
+        )}
 
         <SelectLabel style={{ marginTop: 16 }}>
           Select a treatment plan:
         </SelectLabel>
-        {
-          treatmentPlansLoading
-            ? <Spinner />
-            : (
-              <Select
-                value={{ value: selectedTreatmentPlan, label: getTpLabel(selectedTreatmentPlan) }}
-                onChange={({ value }) => selectTreatmentPlan(value)}
-                options={treatmentPlansOptions}
-                styles={customSelectStyles}
-              />
-            )
-        }
+        {treatmentPlansLoading ? (
+          <Spinner />
+        ) : (
+          <Select
+            value={{
+              value: selectedTreatmentPlan,
+              label: getTpLabel(selectedTreatmentPlan),
+            }}
+            onChange={({ value }) => selectTreatmentPlan(value)}
+            options={treatmentPlansOptions}
+            styles={customSelectStyles}
+          />
+        )}
 
-        <ExportButtons 
+        <ExportButtons
           treatmentPlan={selectedTreatmentPlan}
           selectedTeamId={selectedTeam._id}
         />

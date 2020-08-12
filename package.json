@@ -50,6 +50,7 @@
     "nunjucks": "^3.2.1",
     "papaparse": "4.6.3",
     "polished": "^3.4.4",
+    "pptxgenjs": "^3.2.1",
     "qs": "^6.9.1",
     "query-string": "^6.11.1",
     "react": "^16.13.0",

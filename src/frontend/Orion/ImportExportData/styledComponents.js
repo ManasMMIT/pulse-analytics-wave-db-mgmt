@@ -1,16 +1,16 @@
 import styled from '@emotion/styled'
 import Button from '@material-ui/core/Button'
 import { transparentize } from 'polished'
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles'
 
-import FontSpace from '../../../utils/fontspace'
-import Spacing from '../../../utils/spacing'
-import Color from '../../../utils/color'
+import FontSpace from '../../utils/fontspace'
+import Spacing from '../../utils/spacing'
+import Color from '../../utils/color'
 
 export const PageHeaderContainer = styled.div({
   borderBottom: `1px solid ${transparentize(0.9, Color.BLACK)}`,
   padding: Spacing.S7,
-  width: '100%'
+  width: '100%',
 })
 
 export const PageHeader = styled.h1({
@@ -63,6 +63,6 @@ export const StyledButton = withStyles({
     textTransform: 'capitalize',
     '&:hover': {
       background: transparentize(0.7, Color.PRIMARY),
-    }
-  }
+    },
+  },
 })(Button)
