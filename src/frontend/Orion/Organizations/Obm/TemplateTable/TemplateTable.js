@@ -81,29 +81,38 @@ const TemplateTable = ({
 
   return (
     <>
-      <div style={{ margin: '0 24px 0 auto', ...exportStyle }}>
-        <ExportExcelButton
-          data={dataFormattedForExport}
-          buttonStyle={{
-            margin: '0 0 12px',
-            display: 'flex',
-            alignItems: 'center',
-          }}
-          {...exportProps}
-        >
-          <Icon
-            iconName="export"
-            color1={Color.PRIMARY}
-            width={16}
-            height={16}
-            style={{ marginRight: 8 }}
-          />
-          Export to Excel
-        </ExportExcelButton>
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          width: '100%',
+          alignItems: 'center',
+        }}
+      >
+        {data.length ? (
+          <Pagination {...{ pageIndex, pageSize, ...tablePropOverflow }} />
+        ) : null}
+        <div style={{ margin: '0 24px 0 auto', ...exportStyle }}>
+          <ExportExcelButton
+            data={dataFormattedForExport}
+            buttonStyle={{
+              margin: '0 0 12px',
+              display: 'flex',
+              alignItems: 'center',
+            }}
+            {...exportProps}
+          >
+            <Icon
+              iconName="export"
+              color1={Color.PRIMARY}
+              width={16}
+              height={16}
+              style={{ marginRight: 8 }}
+            />
+            Export to Excel
+          </ExportExcelButton>
+        </div>
       </div>
-      {data.length ? (
-        <Pagination {...{ pageIndex, pageSize, ...tablePropOverflow }} />
-      ) : null}
       <TableWrapper>
         <div
           className="table sticky"
