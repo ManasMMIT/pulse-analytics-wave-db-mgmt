@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { useMutation } from '@apollo/react-hooks'
 import styled from '@emotion/styled'
@@ -18,7 +18,7 @@ const StyledTd = styled.td({
   fontSize: 12,
   fontWeight: 500,
   verticalAlign: 'middle',
-  borderTop: `1px solid ${transparentize(0.92, Color.BLUE)}`
+  borderTop: `1px solid ${transparentize(0.92, Color.BLUE)}`,
 })
 
 const ToolTimestamp = ({ toolId, toolName, prevTimestamp }) => {
@@ -26,18 +26,15 @@ const ToolTimestamp = ({ toolId, toolName, prevTimestamp }) => {
 
   const [timestamp, setTimestamp] = useState(isoShortString)
 
-  const [save, { loading }] = useMutation(
-    UPDATE_TDG_TIMESTAMPS,
-    {
-      variables: {
-        input: {
-          _id: toolId,
-          tdgTimestamp: timestamp,
-        }
+  const [save, { loading }] = useMutation(UPDATE_TDG_TIMESTAMPS, {
+    variables: {
+      input: {
+        _id: toolId,
+        tdgTimestamp: timestamp,
       },
-      refetchQueries: [{ query: GET_SOURCE_TOOLS }],
-    }
-  )
+    },
+    refetchQueries: [{ query: GET_SOURCE_TOOLS }],
+  })
 
   return (
     <tr>
@@ -46,20 +43,24 @@ const ToolTimestamp = ({ toolId, toolName, prevTimestamp }) => {
         <input
           value={timestamp}
           type="date"
-          onChange={e => setTimestamp(e.target.value)}
-          style={{ padding: 4, border: 'none', background: transparentize(0.85, Color.BLUE), color: Color.BLUE, fontWeight: 700, }}
+          onChange={(e) => setTimestamp(e.target.value)}
+          style={{
+            padding: 4,
+            border: 'none',
+            background: transparentize(0.85, Color.BLUE),
+            color: Color.BLUE,
+            fontWeight: 700,
+          }}
         />
       </StyledTd>
       <StyledTd>
-        {
-          loading
-            ? <Spinner />
-            : (
-              <Button type="secondary" onClick={save}>
-                Update
-              </Button>
-            )
-        }
+        {loading ? (
+          <Spinner />
+        ) : (
+          <Button type="secondary" onClick={save}>
+            Update
+          </Button>
+        )}
       </StyledTd>
     </tr>
   )

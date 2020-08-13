@@ -98,11 +98,15 @@ const QUERY_LINKS_CONFIG = [
   { label: 'Suggested Questions', link: '/orion/query/questions' },
 ]
 
-const EXCEL_LINKS_CONFIG = [
-  { label: 'Import Sheets', link: '/orion/excel/import-sheets' },
+const IMPORT_EXPORT_LINKS_CONFIG = [
+  { label: 'Import Sheets', link: '/orion/import-export/import-sheets' },
   {
     label: 'Export Custom Data',
-    link: '/orion/excel/export-custom-data',
+    link: '/orion/import-export/export-custom-data',
+  },
+  {
+    label: 'Export Custom PowerPoint',
+    link: '/orion/import-export/export-custom-powerpoint',
   },
 ]
 
@@ -198,9 +202,8 @@ const Sidebar = () => {
         Orion DB
       </OrionHeader>
 
-      <Header>Excel</Header>
-      {EXCEL_LINKS_CONFIG.map(renderStyledNavLink)}
-
+      <Header>Import/Export Data</Header>
+      {IMPORT_EXPORT_LINKS_CONFIG.map(renderStyledNavLink)}
       <div>
         <Header>Configuration</Header>
         <StyledNavLink

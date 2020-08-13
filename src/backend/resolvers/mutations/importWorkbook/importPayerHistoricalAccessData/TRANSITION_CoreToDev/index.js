@@ -1,6 +1,6 @@
 const getLatestPipeline = require('./latest-agg-pipeline')
 const getSixMonthsPipeline = require('./six-months-agg-pipeline')
-// const omniscientPayerSummaryPipeline = require('./omniscient-payer-summary-agg-pipeline')
+const materializeOmniscientPayerMgmtSummary = require('./materializeOmniscientPayerMgmtSummary.js')
 
 module.exports = async ({ pulseCoreDb, pulseDevDb, projectPtpIds }) => {
   // ! Why deleteMany? MUST clear older PTP data; ex: 3/1/2020 data for PTPs are in payerLatestAccess and
@@ -32,20 +32,11 @@ module.exports = async ({ pulseCoreDb, pulseDevDb, projectPtpIds }) => {
     resetPayerHistoricalAccessPromise.then(materializePayerHistoricalAccess),
   ])
 
-  /* 
-  ! EXCLUDE THIS SECTION UNTIL payerLatestLives collection exists in pulse-dev
-
-  // would be best to let this op go async without blocking
+  // we intentionally let this op go async without blocking
   console.time('omniscient payer summary page materialization')
 
-  pulseDevDb
-    .collection('payerLatestAccess')
-    .aggregate(omniscientPayerSummaryPipeline, { allowDiskUse: true })
-    .toArray()
-    .then(() => {
-      console.log('omniscient payer summary page data updated')
-      console.timeEnd('omniscient payer summary page materialization')
-    })
-
-  */
+  materializeOmniscientPayerMgmtSummary({ pulseDevDb }).then(() => {
+    console.log('omniscient payer summary page data updated')
+    console.timeEnd('omniscient payer summary page materialization')
+  })
 }

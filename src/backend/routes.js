@@ -21,6 +21,7 @@ const {
   getNodeController,
   MerckPipeDelimitedCtrl,
   NovartisCsvCtrl,
+  CustomPowerPointExportCtrl,
 } = require('./controllers')
 
 const MongoClient = require('mongodb').MongoClient
@@ -92,12 +93,18 @@ MongoClient.connect(LOADER_URI, { useUnifiedTopology: true }, (err, client) => {
 
   const merckPipeDelimitedCtrl = new MerckPipeDelimitedCtrl(pulseDevDb)
   const novartisCsvCtrl = new NovartisCsvCtrl(pulseDevDb)
+  const customPowerPointExportCtrl = new CustomPowerPointExportCtrl(pulseDevDb)
 
   subApp.get(
     '/merck-pipe-delimited-file',
     merckPipeDelimitedCtrl.apiDownloadFiles
   )
   subApp.get('/novartis-csv-file', novartisCsvCtrl.apiDownloadFiles)
+
+  subApp.get(
+    '/custom-powerpoint-export',
+    customPowerPointExportCtrl.apiDownloadPptReport
+  )
 
   subApp.use('/collections', async (req, res) => {
     const collections = await pulseRawDb.listCollections().toArray()

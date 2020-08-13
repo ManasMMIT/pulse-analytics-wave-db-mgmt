@@ -37,8 +37,8 @@ export const FileInput = styled.input({
   padding: 8,
   cursor: 'pointer',
   ':hover': {
-    background: transparentize(0.90, Color.BLUE),
-  }
+    background: transparentize(0.9, Color.BLUE),
+  },
 })
 
 export const ErrorContainer = styled.div({

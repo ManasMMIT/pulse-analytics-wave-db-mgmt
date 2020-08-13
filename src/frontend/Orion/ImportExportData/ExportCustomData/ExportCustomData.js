@@ -13,7 +13,7 @@ import {
   SectionContainer,
   SectionHeader,
   StyledButton,
-} from './styledComponents'
+} from '../styledComponents'
 
 const MERCK_URL = '/api/merck-pipe-delimited-file'
 const NOVARTIS_URL = '/api/novartis-csv-file'
@@ -28,22 +28,24 @@ const ExportCustomData = () => {
     setLoadingStatusFn(true)
 
     await fetch(url, {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${ accessToken }`,
-          'Content-Type': 'application/json'
-        },
-      })
-      .then(async response => ({
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(async (response) => ({
         blob: await response.blob(),
-        filename: response.headers.get('Content-Disposition').split("filename=")[1]
+        filename: response.headers
+          .get('Content-Disposition')
+          .split('filename=')[1],
       }))
       .then(({ blob, filename }) => {
         FileSaver.saveAs(blob, filename)
       })
       .catch(console.error)
 
-      setLoadingStatusFn(false)
+    setLoadingStatusFn(false)
   }
 
   return (
@@ -51,7 +53,7 @@ const ExportCustomData = () => {
       <PageHeaderContainer>
         <PageHeader>Export Custom Data</PageHeader>
       </PageHeaderContainer>
-      
+
       <ContentContainer>
         <SectionContainer>
           <SectionHeader>Merck Pipe Delimited CSV and TXT Files</SectionHeader>
@@ -60,7 +62,7 @@ const ExportCustomData = () => {
             onClick={clickHandler(MERCK_URL, setMerckLoadingStatus)}
           >
             <span style={{ margin: '0 4px 0 6px' }}>Download</span>
-            { isMerckScriptLoading && <Spinner fill={Color.PRIMARY} />}
+            {isMerckScriptLoading && <Spinner fill={Color.PRIMARY} />}
           </StyledButton>
         </SectionContainer>
 
@@ -71,7 +73,7 @@ const ExportCustomData = () => {
             onClick={clickHandler(NOVARTIS_URL, setNovartisLoadingStatus)}
           >
             <span style={{ margin: '0 4px 0 6px' }}>Download</span>
-            { isNvsScriptLoading && <Spinner fill={Color.PRIMARY} />}
+            {isNvsScriptLoading && <Spinner fill={Color.PRIMARY} />}
           </StyledButton>
         </SectionContainer>
 
