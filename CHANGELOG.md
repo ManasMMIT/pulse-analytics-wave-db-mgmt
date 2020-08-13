@@ -12,10 +12,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Fixed** for any bug fixes.
 - **Security** in case of vulnerabilities.
 
-## [Unreleased] - Started: 8-7-20
+## [Unreleased] - Started: 8-13-20
+
+## [3.4.0] - Started: 8-7-20
 
 ### Added
+- `Orion`: First export to PowerPoint feature: custom Dupuxient summary export [#722](https://github.com/pulse-data/wave-db-mgmt/pull/722)
 - `Payer Projects Mgmt Tool/Backend`: Materialize omniscient user's payer mgmt summary data whenever payer data is imported [#726](https://github.com/pulse-data/wave-db-mgmt/pull/726)
+
+### Changed
+- `Polaris/Frontend`: Finish full set of CRUD Apollo cache tests [#725](https://github.com/pulse-data/wave-db-mgmt/pull/725)
 
 ## [3.3.0] - Started: 7-30-20
 
