@@ -3,7 +3,7 @@ module.exports = [
     $lookup: {
       from: 'payerLatestLives',
       let: {
-        orgBookCoverageIds: '$orgBookCoverageIds', // this might not be a key, and that might be okay; maybe just use discrete three-way string match, use slug/book/coverage
+        slug: '$slug',
         book: '$book',
         coverage: '$coverage',
       },
@@ -12,9 +12,14 @@ module.exports = [
           $match: {
             $expr: {
               $and: [
-                // under discussion: see above note on orgBookCoverageIds; maybe use book/coverage/slug discrete matching
                 {
-                  $eq: ['$$orgBookCoverageIds', '$orgBookCoverageIds'],
+                  $eq: ['$$slug', '$slug'],
+                },
+                {
+                  $eq: ['$$book', '$book'],
+                },
+                {
+                  $eq: ['$$coverage', '$coverage'],
                 },
                 {
                   $eq: ['$source', 'DRG'],
@@ -156,6 +161,12 @@ module.exports = [
       },
     },
   },
+  // ! SORT DOES NOT HOLD AFTER DATA GOES ADDITIONAL GROUPING STAGES
+  // {
+  //   $sort: {
+  //     '_id.accessData.sortOrder': -1,
+  //   }
+  // },
   {
     $group: {
       _id: {
@@ -195,10 +206,6 @@ module.exports = [
       restrictiveBuckets: 1,
       auditedLives: 1,
       auditedLivesPercent: 1,
-      materializedOn: '$$NOW',
     },
-  },
-  {
-    $out: 'EXPERIMENT_PayerSummaryData',
   },
 ]

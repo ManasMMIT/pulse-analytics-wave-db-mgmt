@@ -14,6 +14,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased] - Started: 8-7-20
 
+### Added
+- `Payer Projects Mgmt Tool/Backend`: Materialize omniscient user's payer mgmt summary data whenever payer data is imported [#726](https://github.com/pulse-data/wave-db-mgmt/pull/726)
+
 ## [3.3.0] - Started: 7-30-20
 
 ### Added
