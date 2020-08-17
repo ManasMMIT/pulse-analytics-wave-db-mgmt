@@ -16,7 +16,7 @@ const createUser = async (
       defaultLanding,
     },
   },
-  { mongoClient, coreClients, auth0, pulseCoreDb, pulseDevDb },
+  { mongoClient, coreClients, auth0, pulseCoreDb, pulseDevDb, pulseProdDb },
   info
 ) => {
   username = username.trim()
@@ -107,20 +107,31 @@ const createUser = async (
 
     // Step 4: Insert User to pulse dev users collection
 
-    const insertUserIntoDevUsersOp = pulseDevDb.collection('users').insertOne(
-      {
-        _id: userInAuth0.user_id,
-        endUserTerms: {
-          agreed: false,
-          timestamp: null,
-        },
+    const queryPredicate = {
+      _id: userInAuth0.user_id,
+      endUserTerms: {
+        agreed: false,
+        timestamp: null,
       },
-      { session }
-    )
+    }
 
-    await Promise.all([insertUserIntoDevUsersOp, sitemapOp, nodesResourcesOp])
+    const insertUserIntoDevUsersOp = pulseDevDb
+      .collection('users')
+      .insertOne(queryPredicate, { session })
+
+    const insertUserIntoProdUsersOp = pulseProdDb
+      .collection('users')
+      .insertOne(queryPredicate, { session })
+
+    await Promise.all([
+      insertUserIntoDevUsersOp,
+      insertUserIntoProdUsersOp,
+      sitemapOp,
+      nodesResourcesOp,
+    ])
 
     console.log(`${newUser.username} added to pulse-dev users collection\n`)
+    console.log(`${newUser.username} added to pulse-prod users collection\n`)
 
     console.log(`${newUser.username} now has sitemap and resource access\n`)
   })
