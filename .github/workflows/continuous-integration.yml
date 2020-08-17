@@ -16,7 +16,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [10.15.3]
+        node-version: [12.18.3]
 
     steps:
     - name: Setup timezone # Set timezone so tests containing date packages will pass
