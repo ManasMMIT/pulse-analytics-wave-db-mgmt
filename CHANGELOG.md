@@ -14,6 +14,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased] - Started: 8-13-20
 
+### Fixed
+- `Phoenix/Backend`: Ensure that user creation and deletion cascades to the `users` collection of both `pulse-dev` and `pulse-prod` [#731](https://github.com/pulse-data/wave-db-mgmt/pull/731)
+
 ## [3.4.0] - Started: 8-7-20
 
 ### Added
