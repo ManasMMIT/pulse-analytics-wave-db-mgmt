@@ -40,6 +40,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `Orion`: Pagination to react-table throughout app [#718](https://github.com/pulse-data/wave-db-mgmt/pull/718)
 - `Orion`: Build out therapeuticArea CRUD and integrate with indications master list CRUD; build out all cascade logic including syncing with materialized `pulse-dev.indicationsTherapeuticAreas` [#717](https://github.com/pulse-data/wave-db-mgmt/pull/717)
 - `Orion`: Build out State CRUD w/ cascading logic to `pulse-dev.statesStepEditLegislation` [#713](https://github.com/pulse-data/wave-db-mgmt/pull/713) (child PR [#715](https://github.com/pulse-data/wave-db-mgmt/pull/715))
+- `Orion`: Build out `users.nodes.resources`' `upsertUserPerms` util integration test [#728](https://github.com/pulse-data/wave-db-mgmt/pull/728)
 
 ### Changed
 - `Orion/People View`: Changed open payments external API widget and endpoint to pull in all data from 2016-2019 [#718](https://github.com/pulse-data/wave-db-mgmt/pull/718)
