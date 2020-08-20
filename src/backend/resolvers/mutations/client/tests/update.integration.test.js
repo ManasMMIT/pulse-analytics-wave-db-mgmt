@@ -25,7 +25,7 @@ describe('Updating a client works and cascade updates as needed', () => {
     session.endSession()
   })
 
-  test('Can invoke resolver successfully with monkey-patched session', async () => {
+  test('Can successfully invoke update op util', async () => {
     await updateClient({
       session,
       coreClients: pulseCoreDb.collection('clients'),
