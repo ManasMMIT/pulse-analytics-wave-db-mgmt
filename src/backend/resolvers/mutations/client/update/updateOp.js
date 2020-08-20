@@ -6,7 +6,7 @@ const updateOp = async ({
   pulseDevDb,
   input: { _id, description },
 }) => {
-  const clientOp = coreClients.findOneAndUpdate(
+  const { value } = await coreClients.findOneAndUpdate(
     { _id },
     {
       $set: {
@@ -24,28 +24,17 @@ const updateOp = async ({
     },
   }
 
-  const rolesOp = coreRoles.updateMany(
-    { 'client._id': _id },
-    embeddedSetOperation,
-    { session }
-  )
+  await coreRoles.updateMany({ 'client._id': _id }, embeddedSetOperation, {
+    session,
+  })
 
-  const usersOp = coreUsers.updateMany(
-    { 'client._id': _id },
-    embeddedSetOperation,
-    { session }
-  )
+  await coreUsers.updateMany({ 'client._id': _id }, embeddedSetOperation, {
+    session,
+  })
 
-  const usersSitemapsOp = pulseDevDb
+  await pulseDevDb
     .collection('users.sitemaps')
     .updateMany({ 'client._id': _id }, embeddedSetOperation, { session })
-
-  const [{ value }] = await Promise.all([
-    clientOp,
-    rolesOp,
-    usersOp,
-    usersSitemapsOp,
-  ])
 
   return value
 }
