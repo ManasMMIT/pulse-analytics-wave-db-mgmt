@@ -1,9 +1,8 @@
 const connectToTestCluster = require('../../../../utils/connectToTestCluster')
-const updateClient = require('../update')
+const updateClient = require('../update/updateOp')
 
 describe('Updating a client works and cascade updates as needed', () => {
   let mongoConnection
-  let mongoClient
   let pulseCoreDb
   let pulseDevDb
   let session
@@ -18,14 +17,7 @@ describe('Updating a client works and cascade updates as needed', () => {
 
   beforeEach(async () => {
     session = mongoConnection.startSession()
-
-    // ! HACK: Monkey-patch withTransaction to neutralize its functionality in the resolver
-    // ! during testing; otherwise the transaction will actually commit
-    session.withTransaction = async (func) => await func()
-
     session.startTransaction()
-
-    mongoClient = { startSession: () => session }
   })
 
   afterEach(async () => {
@@ -34,23 +26,17 @@ describe('Updating a client works and cascade updates as needed', () => {
   })
 
   test('Can invoke resolver successfully with monkey-patched session', async () => {
-    await updateClient(
-      null,
-      {
-        input: {
-          _id: '5d7a0c81-99b2-4c71-a0bc-cd96eb3974a4',
-          description: 'Jon Test',
-        },
+    await updateClient({
+      session,
+      coreClients: pulseCoreDb.collection('clients'),
+      coreRoles: pulseCoreDb.collection('roles'),
+      coreUsers: pulseCoreDb.collection('users'),
+      pulseDevDb,
+      input: {
+        _id: '5d7a0c81-99b2-4c71-a0bc-cd96eb3974a4',
+        description: 'Jon Test',
       },
-      {
-        mongoClient,
-        coreClients: pulseCoreDb.collection('clients'),
-        coreRoles: pulseCoreDb.collection('roles'),
-        coreUsers: pulseCoreDb.collection('users'),
-        pulseDevDb,
-      },
-      null
-    )
+    })
 
     const updatedClient = await pulseCoreDb
       .collection('clients')
