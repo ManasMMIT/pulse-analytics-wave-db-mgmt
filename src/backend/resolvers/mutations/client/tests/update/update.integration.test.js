@@ -1,39 +1,77 @@
-const connectToTestCluster = require('../../../../../utils/connectToTestCluster')
+const _ = require('lodash')
+const relativeBackend = '../../../../..'
+const connectToTestCluster = require(relativeBackend +
+  '/utils/connectToTestCluster')
+const withMongoCtx = require(relativeBackend + '/utils/withMongoCtx')
 const updateClient = require('../../update')
-const getMockMongoClient = require('../../../../../utils/getMockMongoClient')
+const dupeTestUtils = require(relativeBackend + '/utils/dupe/testUtils')
+const CLIENT_DUPLICATION_POLICY = require('../../duplicationPolicy')
+
+const mockData = require('./mocks/data')
+
+const NEW_DESCRIPTION = 'NEW DESCRIPTION'
 
 describe('Updating a client works and cascade updates as needed', () => {
   let mongoConnection
-  let mongoClient
-  let pulseCoreDb
-  let pulseDevDb
-  let session
-
   jest.setTimeout(60000) // ! needed to adjust jest timeout for slower connections
 
   beforeAll(async () => {
     mongoConnection = await connectToTestCluster()
-    pulseCoreDb = mongoConnection.db('pulse-core')
-    pulseDevDb = mongoConnection.db('pulse-dev')
   })
 
-  beforeEach(async () => {
-    session = mongoConnection.startSession()
-    session.startTransaction()
+  const attemptUpdate = (ctx) =>
+    updateClient(
+      null,
+      {
+        input: {
+          _id: mockData.clientA._id,
+          description: NEW_DESCRIPTION,
+        },
+      },
+      ctx
+    )
 
-    mongoClient = getMockMongoClient(session)
-  })
+  const expectation = {
+    ...mockData.clientA,
+    name: NEW_DESCRIPTION,
+    description: NEW_DESCRIPTION,
+  }
 
-  afterEach(async () => {
-    await session.abortTransaction()
-    session.endSession()
-  })
+  test('Description for given client._id is modified', async () =>
+    withMongoCtx(mongoConnection)(async (ctx) => {
+      await dupeTestUtils.mockDuplication(
+        CLIENT_DUPLICATION_POLICY,
+        mockData.clientA,
+        mockData.MOCK_DB,
+        ctx
+      )
 
-  test.todo('client.name and .description are updated')
-  // 01 create mock client w session
-  // 02 run resolver w mocked client._id
-  // 03 find mocked client within session
-  // 04 expect()
+      await attemptUpdate(ctx)
+
+      const updatedClient = await ctx.coreClients.findOne(
+        { _id: mockData.clientA._id },
+        ctx.mongoOpts
+      )
+      expect(updatedClient).toEqual(expectation)
+    }))
+
+  test('All roles, users, and user.sitemaps get duplicated updated client objects', async () =>
+    withMongoCtx(mongoConnection)(async (ctx) => {
+      await dupeTestUtils.mockDuplication(
+        CLIENT_DUPLICATION_POLICY,
+        mockData.clientA,
+        mockData.MOCK_DB,
+        ctx
+      )
+
+      await attemptUpdate(ctx)
+
+      await dupeTestUtils.isInSync(
+        CLIENT_DUPLICATION_POLICY,
+        mockData.clientA._id,
+        ctx
+      )
+    }))
 
   afterAll(async () => {
     await mongoConnection.close()
