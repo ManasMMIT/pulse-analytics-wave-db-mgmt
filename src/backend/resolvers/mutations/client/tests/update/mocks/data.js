@@ -44,7 +44,7 @@ const userSitemapB = {
   client: clientA,
 }
 
-const MOCK_DB = {
+const MOCK_DB_DATA = {
   'pulse-core': {
     users: [userA, userB],
     roles: [roleA, roleB],
@@ -56,5 +56,5 @@ const MOCK_DB = {
 
 module.exports = {
   clientA,
-  MOCK_DB,
+  MOCK_DB: MOCK_DB_DATA,
 }

@@ -1,6 +1,6 @@
 const getMockMongoClient = require('./getMockMongoClient')
 
-const withMongoCtx = (mongoConnection) => async (fn) => {
+const withMongoCtx = (mongoConnection) => async (callback) => {
   let session = mongoConnection.startSession()
   let pulseCoreDb = mongoConnection.db('pulse-core')
   let pulseDevDb = mongoConnection.db('pulse-dev')
@@ -20,7 +20,7 @@ const withMongoCtx = (mongoConnection) => async (fn) => {
   }
 
   session.startTransaction()
-  await fn(ctx)
+  await callback(ctx)
   await session.abortTransaction()
   session.endSession()
 }

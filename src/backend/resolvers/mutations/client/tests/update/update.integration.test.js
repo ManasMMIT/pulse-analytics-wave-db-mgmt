@@ -1,10 +1,8 @@
 const _ = require('lodash')
-const relativeBackend = '../../../../..'
-const connectToTestCluster = require(relativeBackend +
-  '/utils/connectToTestCluster')
-const withMongoCtx = require(relativeBackend + '/utils/withMongoCtx')
+const connectToTestCluster = require('../../../../../utils/connectToTestCluster')
+const withMongoCtx = require('../../../../../utils/withMongoCtx')
 const updateClient = require('../../update')
-const dupeTestUtils = require(relativeBackend + '/utils/dupe/testUtils')
+const dupeTestUtils = require('../../../../../utils/dupe/testUtils')
 const CLIENT_DUPLICATION_POLICY = require('../../duplicationPolicy')
 
 const mockData = require('./mocks/data')
