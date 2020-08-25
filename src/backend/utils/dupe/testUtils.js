@@ -39,21 +39,25 @@ const mockDuplication = async (
     .value()
 }
 
+const getDestinationDupes = async (destDef, sourceId, mongoCtx) =>
+  mongoCtx.mongoConnection
+    .db(destDef.db)
+    .collection(destDef.collection)
+    .find({ [`${destDef.field}._id`]: sourceId }, mongoCtx.mongoOpts)
+    .toArray()
+    .then((destDocs) => destDocs.map((destDoc) => destDoc[destDef.field]))
+
 const isInSync = async (policy, sourceId, mongoCtx) => {
   let source = await mongoCtx.mongoConnection
     .db(policy.source.db)
     .collection(policy.source.collection)
     .findOne({ _id: sourceId }, mongoCtx.mongoOpts)
 
+  let matchesSource = (destDoc) => _.isEqual(destDoc, source)
+
   return _(policy.destinations)
     .map(async (destDef) =>
-      (
-        await mongoCtx.mongoConnection
-          .db(destDef.db)
-          .collection(destDef.collection)
-          .find({ [`${destDef.field}._id`]: sourceId }, mongoCtx.mongoOpts)
-          .toArray()
-      ).every((destDoc) => _.isEqual(destDoc[destDef.field], source))
+      (await getDestinationDupes(destinationDef)).every(matchesSource)
     )
     .thru((p) => Promise.all(p))
     .value()
@@ -63,4 +67,5 @@ const isInSync = async (policy, sourceId, mongoCtx) => {
 module.exports = {
   isInSync,
   mockDuplication,
+  getDestinationDupes,
 }

@@ -64,11 +64,41 @@ describe('Updating a client works and cascade updates as needed', () => {
 
       await attemptUpdate(ctx)
 
-      await dupeTestUtils.isInSync(
-        CLIENT_DUPLICATION_POLICY,
-        mockData.clientA._id,
+      // FUTURE: rely on util/dupe:isInSync module to enforce consistency in duplication behavior,
+      // so individual destination collections do not need to be checked by users of dupe module
+      // e.g.
+      // await dupeTestUtils.isInSync(
+      //   CLIENT_DUPLICATION_POLICY,
+      //   mockData.clientA._id,
+      //   ctx
+      // )
+
+      let userDupes = await dupeTestUtils.getDestinationDupes(
+        CLIENT_DUPLICATION_POLICY.destinations[0],
+        expectation._id,
         ctx
       )
+      expect(
+        userDupes.every((dupe) => _.isEqual(dupe, expectation))
+      ).toBeTruthy()
+
+      let rolesDupes = await dupeTestUtils.getDestinationDupes(
+        CLIENT_DUPLICATION_POLICY.destinations[1],
+        expectation._id,
+        ctx
+      )
+      expect(
+        rolesDupes.every((dupe) => _.isEqual(dupe, expectation))
+      ).toBeTruthy()
+
+      let sitemapsDupes = await dupeTestUtils.getDestinationDupes(
+        CLIENT_DUPLICATION_POLICY.destinations[2],
+        expectation._id,
+        ctx
+      )
+      expect(
+        sitemapsDupes.every((dupe) => _.isEqual(dupe, expectation))
+      ).toBeTruthy()
     }))
 
   afterAll(async () => {
