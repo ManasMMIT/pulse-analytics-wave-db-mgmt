@@ -56,5 +56,5 @@ const MOCK_DB_DATA = {
 
 module.exports = {
   clientA,
-  MOCK_DB: MOCK_DB_DATA,
+  MOCK_DB_DATA,
 }

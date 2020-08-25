@@ -40,7 +40,7 @@ describe('Updating a client works and cascade updates as needed', () => {
       await dupeTestUtils.mockDuplication(
         CLIENT_DUPLICATION_POLICY,
         mockData.clientA,
-        mockData.MOCK_DB,
+        mockData.MOCK_DB_DATA,
         ctx
       )
 
@@ -58,7 +58,7 @@ describe('Updating a client works and cascade updates as needed', () => {
       await dupeTestUtils.mockDuplication(
         CLIENT_DUPLICATION_POLICY,
         mockData.clientA,
-        mockData.MOCK_DB,
+        mockData.MOCK_DB_DATA,
         ctx
       )
 
