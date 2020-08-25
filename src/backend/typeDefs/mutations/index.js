@@ -36,6 +36,8 @@ const endUserTerms = require('./endUserTerms')
 
 const usState = require('./usState')
 
+const dataPushConfig = require('./dataPushConfig')
+
 const mutationType = gql`
   type Mutation {
     createUser(input: CreateUserInput!): CreateUserPayload
@@ -313,6 +315,8 @@ const mutationType = gql`
     createUsState(input: CreateUsStateInput!): CreateUsStatePayload!
     updateUsState(input: UpdateUsStateInput!): UpdateUsStatePayload!
     deleteUsState(input: DeleteUsStateInput!): DeleteUsStatePayload!
+
+    pushDevToProd(input: PushDevToProdInput!): String!
   }
 `
 
@@ -351,4 +355,6 @@ module.exports = [
   ...person,
   ...endUserTerms,
   ...usState,
+
+  ...dataPushConfig,
 ]
