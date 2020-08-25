@@ -53,7 +53,16 @@ describe('Updating a client works and cascade updates as needed', () => {
       expect(updatedClient).toEqual(expectation)
     }))
 
-  test('All roles, users, and user.sitemaps get duplicated updated client objects', async () =>
+  // FUTURE: rely on util/dupe:isInSync module to enforce consistency in duplication behavior,
+  // so individual destination collections do not need to be checked by users of dupe module
+  // e.g.
+  // await dupeTestUtils.isInSync(
+  //   CLIENT_DUPLICATION_POLICY,
+  //   mockData.clientA._id,
+  //   ctx
+  // )
+
+  test('All roles get duplicated updated client objects', async () =>
     withMongoCtx(mongoConnection)(async (ctx) => {
       await dupeTestUtils.mockDuplication(
         CLIENT_DUPLICATION_POLICY,
@@ -64,15 +73,6 @@ describe('Updating a client works and cascade updates as needed', () => {
 
       await attemptUpdate(ctx)
 
-      // FUTURE: rely on util/dupe:isInSync module to enforce consistency in duplication behavior,
-      // so individual destination collections do not need to be checked by users of dupe module
-      // e.g.
-      // await dupeTestUtils.isInSync(
-      //   CLIENT_DUPLICATION_POLICY,
-      //   mockData.clientA._id,
-      //   ctx
-      // )
-
       let userDupes = await dupeTestUtils.getDestinationDupes(
         CLIENT_DUPLICATION_POLICY.destinations[0],
         expectation._id,
@@ -81,6 +81,18 @@ describe('Updating a client works and cascade updates as needed', () => {
       expect(
         userDupes.every((dupe) => _.isEqual(dupe, expectation))
       ).toBeTruthy()
+    }))
+
+  test('All users get duplicated updated client objects', async () =>
+    withMongoCtx(mongoConnection)(async (ctx) => {
+      await dupeTestUtils.mockDuplication(
+        CLIENT_DUPLICATION_POLICY,
+        mockData.clientA,
+        mockData.MOCK_DB_DATA,
+        ctx
+      )
+
+      await attemptUpdate(ctx)
 
       let rolesDupes = await dupeTestUtils.getDestinationDupes(
         CLIENT_DUPLICATION_POLICY.destinations[1],
@@ -90,6 +102,18 @@ describe('Updating a client works and cascade updates as needed', () => {
       expect(
         rolesDupes.every((dupe) => _.isEqual(dupe, expectation))
       ).toBeTruthy()
+    }))
+
+  test('All user.sitemaps get duplicated updated client objects', async () =>
+    withMongoCtx(mongoConnection)(async (ctx) => {
+      await dupeTestUtils.mockDuplication(
+        CLIENT_DUPLICATION_POLICY,
+        mockData.clientA,
+        mockData.MOCK_DB_DATA,
+        ctx
+      )
+
+      await attemptUpdate(ctx)
 
       let sitemapsDupes = await dupeTestUtils.getDestinationDupes(
         CLIENT_DUPLICATION_POLICY.destinations[2],
