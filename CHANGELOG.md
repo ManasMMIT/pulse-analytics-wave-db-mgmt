@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased] - Started: 8-17-20
 
 ### Added
+- `Phoenix/Backend`: Integration test for client update resolver.
 - `Orion/Backend`: Add push dev to prod endpoint for pushing either group of collections or all data [#736](https://github.com/pulse-data/wave-db-mgmt/pull/736)
 
 ### Changed
