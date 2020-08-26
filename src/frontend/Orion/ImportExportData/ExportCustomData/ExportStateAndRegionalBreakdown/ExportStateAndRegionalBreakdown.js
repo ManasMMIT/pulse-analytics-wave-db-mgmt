@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import { useQuery } from '@apollo/react-hooks'
-import Select from 'react-select'
+// import Select from 'react-select'
 
+import UnderConstruction from './../../../../components/UnderConstruction'
 import { GET_SOURCE_TREATMENT_PLANS, GET_TEAMS } from '../../../../api/queries'
-import { customSelectStyles } from '../../../../components/customSelectStyles'
+// import { customSelectStyles } from '../../../../components/customSelectStyles'
 
-import ExportButtons from './ExportButtons'
-import Spinner from 'frontend/components/Spinner'
+// import ExportButtons from './ExportButtons'
+// import Spinner from 'frontend/components/Spinner'
 
 import {
   SectionContainer,
@@ -64,7 +65,7 @@ const ExportRegionalBreakdown = () => {
     <SectionContainer>
       <SectionHeader>Regional Targeting Export</SectionHeader>
 
-      <div style={{ marginTop: 24 }}>
+      {/* <div style={{ marginTop: 24 }}>
         <SelectLabel>Select a team:</SelectLabel>
         {teamsLoading ? (
           <Spinner />
@@ -103,7 +104,12 @@ const ExportRegionalBreakdown = () => {
           treatmentPlan={selectedTreatmentPlan}
           selectedTeamId={selectedTeam._id}
         />
-      </div>
+      </div> */}
+      <UnderConstruction
+        text={
+          'This feature is in the process of being rebuilt to support multiple state breakdowns.'
+        }
+      />
     </SectionContainer>
   )
 }
