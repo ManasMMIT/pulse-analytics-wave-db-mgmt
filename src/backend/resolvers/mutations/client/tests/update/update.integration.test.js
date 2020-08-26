@@ -1,8 +1,13 @@
 const _ = require('lodash')
 const connectToTestCluster = require('../../../../../utils/connectToTestCluster')
-const withMongoCtx = require('../../../../../utils/withMongoCtx')
 const updateClient = require('../../update')
-const dupeTestUtils = require('../../../../../utils/dupe/testUtils')
+const {
+  mockDuplication,
+} = require('../../../../../test-utils/duplication/mockDuplication')
+const {
+  getDestinationDupes,
+} = require('../../../../../test-utils/duplication/checkDuplication')
+const withMongoContext = require('../../../../../utils/withMongoContext')
 const CLIENT_DUPLICATION_POLICY = require('../../duplicationPolicy')
 
 const mockData = require('./mocks/data')
@@ -17,7 +22,7 @@ describe('Updating a client works and cascade updates as needed', () => {
     mongoConnection = await connectToTestCluster()
   })
 
-  const attemptUpdate = (ctx) =>
+  const attemptUpdate = (context) =>
     updateClient(
       null,
       {
@@ -26,7 +31,7 @@ describe('Updating a client works and cascade updates as needed', () => {
           description: NEW_DESCRIPTION,
         },
       },
-      ctx
+      context
     )
 
   const expectation = {
@@ -36,19 +41,21 @@ describe('Updating a client works and cascade updates as needed', () => {
   }
 
   test('Description for given client._id is modified', async () =>
-    withMongoCtx(mongoConnection)(async (ctx) => {
-      await dupeTestUtils.mockDuplication(
-        CLIENT_DUPLICATION_POLICY,
-        mockData.clientA,
-        mockData.MOCK_DB_DATA,
-        ctx
+    withMongoContext(mongoConnection)(async (context) => {
+      await mockDuplication(
+        {
+          policy: CLIENT_DUPLICATION_POLICY,
+          mockSourceDatum: mockData.clientA,
+          mockDestinationData: mockData.MOCK_DB_DATA,
+        },
+        context
       )
 
-      await attemptUpdate(ctx)
+      await attemptUpdate(context)
 
-      const updatedClient = await ctx.coreClients.findOne(
+      const updatedClient = await context.coreClients.findOne(
         { _id: mockData.clientA._id },
-        ctx.mongoOpts
+        context.mongoOpts
       )
       expect(updatedClient).toEqual(expectation)
     }))
@@ -59,24 +66,26 @@ describe('Updating a client works and cascade updates as needed', () => {
   // await dupeTestUtils.isInSync(
   //   CLIENT_DUPLICATION_POLICY,
   //   mockData.clientA._id,
-  //   ctx
+  //   context
   // )
 
   test('All users get duplicated updated client objects', async () =>
-    withMongoCtx(mongoConnection)(async (ctx) => {
-      await dupeTestUtils.mockDuplication(
-        CLIENT_DUPLICATION_POLICY,
-        mockData.clientA,
-        mockData.MOCK_DB_DATA,
-        ctx
+    withMongoContext(mongoConnection)(async (context) => {
+      await mockDuplication(
+        {
+          policy: CLIENT_DUPLICATION_POLICY,
+          mockSourceDatum: mockData.clientA,
+          mockDestinationData: mockData.MOCK_DB_DATA,
+        },
+        context
       )
 
-      await attemptUpdate(ctx)
+      await attemptUpdate(context)
 
-      let clientDupes = await dupeTestUtils.getDestinationDupes(
+      let clientDupes = await getDestinationDupes(
         CLIENT_DUPLICATION_POLICY.destinations[0],
         expectation._id,
-        ctx
+        context
       )
       expect(
         clientDupes.every((dupe) => _.isEqual(dupe, expectation))
@@ -84,20 +93,22 @@ describe('Updating a client works and cascade updates as needed', () => {
     }))
 
   test('All roles get duplicated updated client objects', async () =>
-    withMongoCtx(mongoConnection)(async (ctx) => {
-      await dupeTestUtils.mockDuplication(
-        CLIENT_DUPLICATION_POLICY,
-        mockData.clientA,
-        mockData.MOCK_DB_DATA,
-        ctx
+    withMongoContext(mongoConnection)(async (context) => {
+      await mockDuplication(
+        {
+          policy: CLIENT_DUPLICATION_POLICY,
+          mockSourceDatum: mockData.clientA,
+          mockDestinationData: mockData.MOCK_DB_DATA,
+        },
+        context
       )
 
-      await attemptUpdate(ctx)
+      await attemptUpdate(context)
 
-      let clientDupes = await dupeTestUtils.getDestinationDupes(
+      let clientDupes = await getDestinationDupes(
         CLIENT_DUPLICATION_POLICY.destinations[1],
         expectation._id,
-        ctx
+        context
       )
       expect(
         clientDupes.every((dupe) => _.isEqual(dupe, expectation))
@@ -105,20 +116,22 @@ describe('Updating a client works and cascade updates as needed', () => {
     }))
 
   test('All user.sitemaps get duplicated updated client objects', async () =>
-    withMongoCtx(mongoConnection)(async (ctx) => {
-      await dupeTestUtils.mockDuplication(
-        CLIENT_DUPLICATION_POLICY,
-        mockData.clientA,
-        mockData.MOCK_DB_DATA,
-        ctx
+    withMongoContext(mongoConnection)(async (context) => {
+      await mockDuplication(
+        {
+          policy: CLIENT_DUPLICATION_POLICY,
+          mockSourceDatum: mockData.clientA,
+          mockDestinationData: mockData.MOCK_DB_DATA,
+        },
+        context
       )
 
-      await attemptUpdate(ctx)
+      await attemptUpdate(context)
 
-      let clientDupes = await dupeTestUtils.getDestinationDupes(
+      let clientDupes = await getDestinationDupes(
         CLIENT_DUPLICATION_POLICY.destinations[2],
         expectation._id,
-        ctx
+        context
       )
       expect(
         clientDupes.every((dupe) => _.isEqual(dupe, expectation))
