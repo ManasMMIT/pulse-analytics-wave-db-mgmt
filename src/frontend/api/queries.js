@@ -727,6 +727,7 @@ export const GET_OBM_SERVICES = gql`
     obmServices {
       _id
       name
+      description
     }
   }
 `

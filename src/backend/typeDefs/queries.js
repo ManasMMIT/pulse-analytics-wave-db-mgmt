@@ -301,6 +301,7 @@ const queries = gql`
   type ObmService {
     _id: ID!
     name: String!
+    description: String
   }
 
   type ObmServiceCategory {
