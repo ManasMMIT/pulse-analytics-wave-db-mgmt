@@ -2,11 +2,12 @@ import React from 'react'
 import styled from '@emotion/styled'
 import PropTypes from 'prop-types'
 import _ from 'lodash'
+import { transparentize } from 'polished'
 
-import Spacing from '../../../utils/spacing'
-import Color from '../../../utils/color'
+import FontSpace from 'frontend/utils/fontspace'
+import Spacing from 'frontend/utils/spacing'
+import Color from 'frontend/utils/color'
 
-import Title from '../../Title'
 import FieldsSectionCard from '../../FieldsSectionCard'
 
 const SectionsWrapper = styled.div({
@@ -21,6 +22,17 @@ const sectionStyle = {
   width: 412,
 }
 
+const SectionHeader = styled.div({
+  borderBottom: `2px solid ${transparentize(0.9, Color.BLACK)}`,
+  padding: Spacing.S4,
+})
+
+const SectionTitle = styled.h2({
+  ...FontSpace.FS4,
+  color: Color.BLACK,
+  padding: `0 ${Spacing.S4}`,
+})
+
 const fieldLabelStyle = {
   color: Color.BLACK,
   fontWeight: 600,
@@ -30,12 +42,7 @@ const fieldStyle = {
   padding: '12px 0',
 }
 
-const BomSections = ({
-  isEditModal,
-  selectedTab,
-  inputFields,
-  setInputField,
-}) => {
+const BomSections = ({ selectedTab, inputFields, setInputField }) => {
   if (!selectedTab.sections) return null
   const { sections } = selectedTab
 
@@ -118,12 +125,9 @@ const BomSections = ({
 
   return (
     <div style={{ width: '100%', height: '100%' }}>
-      <Title
-        titleStyle={{ borderBottom: `1px solid ${Color.LIGHT_BLUE_GRAY_1}` }}
-        title={isEditModal ? 'Edit' : 'Create'}
-        titleModifiers={[selectedTab.label]}
-        size={'FS3'}
-      />
+      <SectionHeader>
+        <SectionTitle>{selectedTab.label}</SectionTitle>
+      </SectionHeader>
       <SectionsWrapper>{fieldSections}</SectionsWrapper>
     </div>
   )

@@ -3,18 +3,19 @@ import { useMutation } from '@apollo/react-hooks'
 import styled from '@emotion/styled'
 import PropTypes from 'prop-types'
 import _ from 'lodash'
+import { transparentize } from 'polished'
 
 import useBom from '../../../hooks/useBom'
 
 import Color from 'frontend/utils/color'
 import Spacing from 'frontend/utils/spacing'
+import FontSpace from 'frontend/utils/fontspace'
 import STUB_DOC from 'frontend/api/utils/stub-doc'
 
 import BomSidebar from './BomSidebar'
 import BomSections from './BomSections'
 import ButtonGroup from './ButtonGroup'
 import DeleteConfirmation from './DeleteConfirmation'
-import Title from '../../Title'
 import Dialog from '../../Dialog'
 
 const Header = styled.div({
@@ -22,7 +23,21 @@ const Header = styled.div({
   justifyContent: 'space-between',
   alignItems: 'center',
   padding: Spacing.S4,
-  borderBottom: `1px solid ${Color.LIGHT_BLUE_GRAY_1}`,
+  borderBottom: `2px solid ${transparentize(0.9, Color.BLACK)}`,
+})
+
+const ModalTitleContainer = styled.div({
+  padding: `0 ${Spacing.S4}`,
+})
+
+const ModalTitle = styled.h1({
+  ...FontSpace.FS5,
+  color: Color.BLACK,
+})
+
+const ModalSubtitle = styled.h4({
+  ...FontSpace.FS2,
+  color: Color.GRAY_DARK,
 })
 
 const BoContent = styled.div({
@@ -81,8 +96,8 @@ const BusinessObjectModal = ({
 
   if (loading || _.isEmpty(schema)) return null
 
-  const modalTitle = `${isEditModal ? 'Edit' : 'Create'} ${headerText}`
-  const titleModifiers = isEditModal ? [getEntityTitle(entity)] : []
+  const modalTitle = isEditModal ? getEntityTitle(entity) : null
+  const modalSubtitle = headerText
 
   // Can't allow relationalizing data on create yet; needs to be planned out more
   const allTags = isEditModal ? schema.tags.concat(widgets) : schema.tags
@@ -94,7 +109,10 @@ const BusinessObjectModal = ({
   return (
     <Dialog>
       <Header>
-        <Title title={modalTitle} titleModifiers={titleModifiers} />
+        <ModalTitleContainer>
+          <ModalTitle>{modalTitle}</ModalTitle>
+          <ModalSubtitle>{modalSubtitle}</ModalSubtitle>
+        </ModalTitleContainer>
         <ButtonGroup
           mutationDocs={mutationDocs}
           toggleDeleteConfirmation={toggleDeleteConfirmation}
@@ -108,7 +126,7 @@ const BusinessObjectModal = ({
       </Header>
       <DeleteConfirmation
         showDeleteConfirmation={showDeleteConfirmation}
-        titleModifiers={titleModifiers}
+        entityText={modalSubtitle}
         deleteHandler={deleteHandler}
       />
       {!showDeleteConfirmation && (
@@ -126,7 +144,6 @@ const BusinessObjectModal = ({
             <selectedTab.Component entity={entity} />
           ) : (
             <BomSections
-              isEditModal={isEditModal}
               inputFields={inputFields}
               selectedTab={selectedTab}
               setInputField={setInputField}

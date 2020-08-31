@@ -36,7 +36,7 @@ const DeleteMessageCaption = styled.p({
 })
 
 const DeleteConfirmation = ({
-  titleModifiers,
+  entityText,
   deleteHandler,
   showDeleteConfirmation,
 }) => {
@@ -47,10 +47,10 @@ const DeleteConfirmation = ({
       <div>
         <DeleteMessageText>
           Are you sure you want to delete{' '}
-          <DeleteMessageBO>{titleModifiers}</DeleteMessageBO>?
+          <DeleteMessageBO>{entityText}</DeleteMessageBO>?
         </DeleteMessageText>
         <DeleteMessageText>
-          Any connections to <DeleteMessageBO>{titleModifiers}</DeleteMessageBO>{' '}
+          Any connections to <DeleteMessageBO>{entityText}</DeleteMessageBO>{' '}
           will also be deleted.
         </DeleteMessageText>
       </div>

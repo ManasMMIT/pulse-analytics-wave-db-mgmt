@@ -14,7 +14,7 @@ const Wrapper = styled.div(
     display: 'flex',
     flexDirection: 'column',
     padding: Spacing.S4,
-    background: Color.LIGHT_BLUE_GRAY_1,
+    background: Color.GRAY_LIGHT,
     borderRadius: 4,
   },
   ({ style }) => style
@@ -34,7 +34,7 @@ const FieldsSectionCard = ({
       {label}
     </FieldLabel>
     <div style={fieldsContainerStyle}>
-      {fields.map(field =>
+      {fields.map((field) =>
         generateCardInput({ field, fieldLabelStyle, fieldStyle })
       )}
     </div>
