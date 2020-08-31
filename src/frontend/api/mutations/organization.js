@@ -293,6 +293,7 @@ export const CONNECT_OBM_AND_PERSON = gql`
       obmId
       personId
       position
+      managementTypes
     }
   }
 `

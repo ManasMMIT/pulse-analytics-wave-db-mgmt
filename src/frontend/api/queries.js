@@ -930,6 +930,7 @@ export const GET_JOIN_OBMS_AND_PEOPLE = gql`
       obmId
       personId
       position
+      managementTypes
     }
   }
 `

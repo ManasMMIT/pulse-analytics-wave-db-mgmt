@@ -15,12 +15,15 @@ const connectObmAndPerson = async (
 
   const session = mongoClient.startSession()
 
-  const docsToInsert = input.map(({ _id, personId, obmId, position }) => ({
-    _id: _id ? ObjectId(_id) : ObjectId(),
-    personId: ObjectId(personId),
-    obmId: ObjectId(obmId),
-    position: position,
-  }))
+  const docsToInsert = input.map(
+    ({ _id, personId, obmId, position, managementTypes }) => ({
+      _id: _id ? ObjectId(_id) : ObjectId(),
+      personId: ObjectId(personId),
+      obmId: ObjectId(obmId),
+      position,
+      managementTypes,
+    })
+  )
 
   const obmId = docsToInsert[0].obmId
 

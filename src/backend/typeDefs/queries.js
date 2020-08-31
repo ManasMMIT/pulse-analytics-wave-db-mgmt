@@ -327,6 +327,7 @@ const queries = gql`
     obmId: ID!
     personId: ID!
     position: String
+    managementTypes: [String!]
   }
 
   type ObmAndPayerConnection {
