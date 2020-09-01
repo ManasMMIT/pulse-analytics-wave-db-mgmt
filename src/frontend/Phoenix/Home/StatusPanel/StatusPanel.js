@@ -12,7 +12,7 @@ import superUsersById from '../../../utils/super-users'
 import { useAuth0 } from '../../../../react-auth0-spa'
 import { Colors, Spacing } from '../../../utils/pulseStyles'
 
-// import PushToDevButton from './PushToDevButton'
+import PushToDevButton from './PushToDevButton'
 import PushToProdButton from './PushToProdButton'
 import OpLog from './OpLog'
 
@@ -97,7 +97,11 @@ const StatusPanel = () => {
           </TextLink>
         </Paragraph>
       </div>
-      {/* <PushToDevButton /> */}
+
+      {process.env.NODE_ENV === 'production' && isSuperUser && (
+        <PushToDevButton />
+      )}
+
       <PushToProdButton />
 
       {process.env.NODE_ENV === 'production' && <OpLog />}

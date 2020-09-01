@@ -27,6 +27,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Show error status in polaris status panel if a mutation op errored
 - `Continuous Integration`: Change node version in continuous integration yml from 10.15.3 to 12.18.3 to reflect node upgrade on production droplet [#733](https://github.com/pulse-data/wave-db-mgmt/pull/733)
 - `Phoenix/Backend`: Build out `getMockMongoClient` util; break up Promise.all in update client resolver after observing transaction breakage during integration test prep work [#734](https://github.com/pulse-data/wave-db-mgmt/pull/734)
+- `Phoenix/Status Panel`: Brought back push sitemaps to dev override button for super users in prod to easily cascade any global pulse-core edits of nodes made through Postman. Otherwise, devs are forced to uncomment the button locally and push it, and if local Internet is slow, process could fail and/or take too long. [$747](https://github.com/pulse-data/wave-db-mgmt/pull/747)
 
 ## [3.4.1] - Started: 8-13-20
 
