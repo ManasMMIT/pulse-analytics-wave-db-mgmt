@@ -1,16 +1,16 @@
 const _ = require('lodash')
-const connectToTestCluster = require('../../../../../utils/connectToTestCluster')
-const updateClient = require('../../update')
+const connectToTestCluster = require('../../../../utils/connectToTestCluster')
+const updateClient = require('../update')
 const {
   mockDuplication,
-} = require('../../../../../test-utils/duplication/mockDuplication')
+} = require('../../../../test-utils/duplication/mockDuplication')
 const {
   getDestinationDupes,
-} = require('../../../../../test-utils/duplication/checkDuplication')
-const withMongoContext = require('../../../../../utils/withMongoContext')
-const CLIENT_DUPLICATION_POLICY = require('../../duplicationPolicy')
+} = require('../../../../test-utils/duplication/checkDuplication')
+const withMongoContext = require('../../../../utils/withMongoContext')
+const CLIENT_DUPLICATION_POLICY = require('../duplicationPolicy')
 
-const mockData = require('./mocks/data')
+const mockData = require('./mocks/update-data')
 
 const NEW_DESCRIPTION = 'NEW DESCRIPTION'
 

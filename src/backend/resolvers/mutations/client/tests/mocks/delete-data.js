@@ -1,23 +1,9 @@
-const testingPostfix = 'UpdateIntegrationTest'
+const testingPostfix = 'DeleteIntegrationTest'
 
 const clientA = {
   _id: 'clientA' + testingPostfix,
   name: 'clientA',
   description: 'clientA',
-}
-
-const roleA = {
-  _id: 'roleA' + testingPostfix,
-  name: 'roleA',
-  description: 'roleA',
-  client: clientA,
-}
-
-const roleB = {
-  _id: 'roleB' + testingPostfix,
-  name: 'roleB',
-  description: 'roleB',
-  client: clientA,
 }
 
 const userA = {
@@ -34,13 +20,29 @@ const userB = {
   client: clientA,
 }
 
+const roleA = {
+  _id: 'roleA' + testingPostfix,
+  name: 'roleA',
+  description: 'roleA',
+  client: clientA,
+  users: [userA],
+}
+
+const roleB = {
+  _id: 'roleB' + testingPostfix,
+  name: 'roleB',
+  description: 'roleB',
+  client: clientA,
+  users: [userB],
+}
+
 const userSitemapA = {
-  _id: 'userSitemapA' + testingPostfix,
+  _id: userA._id,
   client: clientA,
 }
 
 const userSitemapB = {
-  _id: 'userSitemapB' + testingPostfix,
+  _id: userB._id,
   client: clientA,
 }
 
