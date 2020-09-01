@@ -798,6 +798,7 @@ export const GET_OP_LOG = gql`
       userId
       operationName
       operationVariables
+      status
     }
   }
 `
@@ -810,6 +811,7 @@ export const GET_FULL_OP_LOGS = gql`
       userId
       operationName
       operationVariables
+      status
     }
   }
 `

@@ -16,6 +16,7 @@ const { ApolloServer } = require('apollo-server-express')
 
 const typeDefs = require('./typeDefs')
 const resolvers = require('./resolvers')
+const apolloServerPlugins = require('./apollo-server-plugins')
 
 const {
   getNodeController,
@@ -83,6 +84,7 @@ MongoClient.connect(LOADER_URI, { useUnifiedTopology: true }, (err, client) => {
       console.error(`${new Date().toLocaleString()} | Server Error:\n${err}`)
       return err
     },
+    plugins: apolloServerPlugins,
   })
 
   apolloServer.applyMiddleware({ app: subApp })

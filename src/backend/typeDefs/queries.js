@@ -419,6 +419,7 @@ const queries = gql`
     userId: String
     operationName: String
     operationVariables: JSON
+    status: String
   }
 
   type Workbook {

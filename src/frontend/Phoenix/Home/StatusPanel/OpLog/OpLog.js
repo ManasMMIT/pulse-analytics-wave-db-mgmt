@@ -24,6 +24,7 @@ import {
   Action,
   OpLogLoadingContainer,
   OpLogLoadingMessage,
+  Error,
 } from './styledComponents'
 
 const OpLog = () => {
@@ -33,16 +34,18 @@ const OpLog = () => {
     fetchPolicy: 'network-only',
   })
 
-  if (loading) return (
-    <OpLogLoadingContainer >
-      <Spinner fill="white" />
-      <OpLogLoadingMessage>
-        Refreshing Change Log, Stand By
-      </OpLogLoadingMessage>
-    </OpLogLoadingContainer>
-  )
+  if (loading)
+    return (
+      <OpLogLoadingContainer>
+        <Spinner fill="white" />
+        <OpLogLoadingMessage>
+          Refreshing Change Log, Stand By
+        </OpLogLoadingMessage>
+      </OpLogLoadingContainer>
+    )
 
-  if (error) return <span style={{ color: 'red' }}>Error processing request</span>
+  if (error)
+    return <span style={{ color: 'red' }}>Error processing request</span>
 
   let { opLogs } = data
 
@@ -56,47 +59,56 @@ const OpLog = () => {
 
   return (
     <>
-      {
-        pushToProdLog && (
-          <OpLogLastUpdatedContainer>
-            <OpLogLastUpdatedTitle>Permissions Last Deployed:</OpLogLastUpdatedTitle>
-            <div>{formatDateTime(pushToProdLog.timestamp)} by <User>{pushToProdLog.username}</User></div>
-          </OpLogLastUpdatedContainer>
-        )
-      }
+      {pushToProdLog && (
+        <OpLogLastUpdatedContainer>
+          <OpLogLastUpdatedTitle>
+            Permissions Last Deployed:
+          </OpLogLastUpdatedTitle>
+          <div>
+            {formatDateTime(pushToProdLog.timestamp)} by{' '}
+            <User>{pushToProdLog.username}</User>
+          </div>
+        </OpLogLastUpdatedContainer>
+      )}
 
       <OpLogContainer>
         <OpLogTitle>
           Changes Staged + Log:
-          <OpLogRefreshLabel>Refreshed every 1 min: {formatDateTime(new Date())}</OpLogRefreshLabel>
+          <OpLogRefreshLabel>
+            Refreshed every 1 min: {formatDateTime(new Date())}
+          </OpLogRefreshLabel>
         </OpLogTitle>
         <OpLogList>
-          {
-            opLogs.map(({ username, timestamp, operationName, operationVariables }) => (
+          {opLogs.map(
+            ({
+              status,
+              username,
+              timestamp,
+              operationName,
+              operationVariables,
+            }) => (
               <OpLogListItem key={timestamp}>
                 <TimeUserContainer>
                   <TimeStamp>{formatDateTime(timestamp)}</TimeStamp>
                   <User>{username}</User>
                 </TimeUserContainer>
                 <ActionContainer>
-                  {
-                    ['UpdatePermissions', 'UpdateRoleSitemap'].includes(operationName) && (
-                      <Client>
-                        [
-                          <span>{operationVariables.input.team.clientName}</span>
-                          : 
-                          <span>{operationVariables.input.team.teamName}</span>
-                        ]
-                      </Client>
-                    )
-                  }
+                  {status === 'ERROR' && <Error>ERROR:&nbsp;</Error>}
+                  {['UpdatePermissions', 'UpdateRoleSitemap'].includes(
+                    operationName
+                  ) && (
+                    <Client>
+                      [<span>{operationVariables.input.team.clientName}</span>:
+                      <span>{operationVariables.input.team.teamName}</span>]
+                    </Client>
+                  )}
                   <Action title={util.inspect(operationVariables)}>
                     {_.startCase(operationName)}
                   </Action>
                 </ActionContainer>
               </OpLogListItem>
-            ))
-          }
+            )
+          )}
         </OpLogList>
       </OpLogContainer>
     </>

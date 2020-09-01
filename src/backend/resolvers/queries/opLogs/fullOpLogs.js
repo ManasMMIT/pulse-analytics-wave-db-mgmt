@@ -3,7 +3,7 @@ const path = require('path')
 const fs = require('fs')
 const _ = require('lodash')
 
-const fileExists = filePath => {
+const fileExists = (filePath) => {
   try {
     return fs.statSync(filePath).isFile()
   } catch (err) {
@@ -15,31 +15,37 @@ const fileExists = filePath => {
 const readFirstLine = (path, usrOpts) => {
   const opts = {
     encoding: 'utf8',
-    lineEnding: '\n'
-  };
-  Object.assign(opts, usrOpts);
+    lineEnding: '\n',
+  }
+  Object.assign(opts, usrOpts)
   return new Promise((resolve, reject) => {
-    const rs = fs.createReadStream(path, { encoding: opts.encoding });
-    let acc = '';
-    let pos = 0;
-    let index;
-    rs
-      .on('data', chunk => {
-        index = chunk.indexOf(opts.lineEnding);
-        acc += chunk;
-        if (index === -1) {
-          pos += chunk.length;
-        } else {
-          pos += index;
-          rs.close();
-        }
-      })
-      .on('close', () => resolve(acc.slice(acc.charCodeAt(0) === 0xFEFF ? 1 : 0, pos)))
-      .on('error', err => reject(err));
-  });
-};
+    const rs = fs.createReadStream(path, { encoding: opts.encoding })
+    let acc = ''
+    let pos = 0
+    let index
+    rs.on('data', (chunk) => {
+      index = chunk.indexOf(opts.lineEnding)
+      acc += chunk
+      if (index === -1) {
+        pos += chunk.length
+      } else {
+        pos += index
+        rs.close()
+      }
+    })
+      .on('close', () =>
+        resolve(acc.slice(acc.charCodeAt(0) === 0xfeff ? 1 : 0, pos))
+      )
+      .on('error', (err) => reject(err))
+  })
+}
 
-const fullOpLogs = async (parent, { maxLineCount = 20 }, { coreNodes, coreRoles }, info) => {
+const fullOpLogs = async (
+  parent,
+  { maxLineCount = 20 },
+  { coreNodes, coreRoles },
+  info
+) => {
   const pathToLog = path.join(process.cwd(), 'src', 'backend', 'api.log')
 
   if (!fileExists(pathToLog)) return []
@@ -58,68 +64,71 @@ const fullOpLogs = async (parent, { maxLineCount = 20 }, { coreNodes, coreRoles 
     let lineCount = 0
 
     try {
-      lineReader.eachLine(
-        pathToLog,
-        (line, isLastLine) => {
-          if (line !== '') {
-            let [
-              originalStr,
+      lineReader.eachLine(pathToLog, (line, isLastLine) => {
+        if (line !== '') {
+          let timestamp = line.match(/\[(.+?)\]/)[1]
+          let username = line.match(/username: (.+?) \//)[1]
+          let userId = line.match(/userId: (.+?) \//)[1]
+          let operationName = line.match(/operationName: (.+?) \//)[1]
+          let operationVariables = line.match(/operationVariables: (.+)/)[1]
+
+          let statusMatch = line.match(/status: (.+?) \//)
+          let status = statusMatch && statusMatch[1]
+
+          operationVariables = JSON.parse(operationVariables)
+
+          if (operationName === 'UpdatePermissions') {
+            const { nodeId, teamId } = operationVariables.input
+            const { name: nodeName, type: nodeType } = nodes[nodeId]
+            const {
+              name: teamName,
+              client: { name: clientName },
+            } = teams[teamId]
+
+            operationVariables = {
+              input: {
+                node: { nodeName, nodeType },
+                team: { teamName, clientName },
+              },
+            }
+          }
+
+          if (operationName === 'UpdateRoleSitemap') {
+            const { teamId } = operationVariables.input
+            const {
+              name: teamName,
+              client: { name: clientName },
+            } = teams[teamId]
+
+            operationVariables = {
+              input: {
+                team: { teamName, clientName },
+              },
+            }
+          }
+
+          // ! ignore 'FilterQuery' mutations that aren't actually CUD (and also are going to be deprecated)
+          if (operationName !== 'FilterQuery') {
+            ops.push({
               timestamp,
               username,
               userId,
               operationName,
               operationVariables,
-            ] = line.match(/\[(.+)\] username: (.+) \/ userId: (.+) \/ operationName: (.+) \/ operationVariables: (.+)/)
-
-            operationVariables = JSON.parse(operationVariables)
-
-            if (operationName === 'UpdatePermissions') {
-              const { nodeId, teamId } = operationVariables.input
-              const { name: nodeName, type: nodeType } = nodes[nodeId]
-              const { name: teamName, client: { name: clientName } } = teams[teamId]
-
-              // reassigning operationVariables here gets rid of massive 'updatedResources' part
-              operationVariables = {
-                input: {
-                  node: { nodeName, nodeType },
-                  team: { teamName, clientName },
-                }
-              }
-            }
-
-            // reassigning operationVariables here gets rid of unneeded 'updatedResources' part
-            if (operationName === 'UpdateRoleSitemap') {
-              const { teamId } = operationVariables.input
-              const { name: teamName, client: { name: clientName } } = teams[teamId]
-
-              operationVariables = {
-                input: {
-                  team: { teamName, clientName },
-                }
-              }
-            }
-
-            // ! ignore 'FilterQuery' mutations that aren't actually CUD (and also are going to be deprecated)
-            if (operationName !== 'FilterQuery') {
-              ops.push({
-                timestamp,
-                username,
-                userId,
-                operationName,
-                operationVariables,
-              })
-            }
-
-            lineCount += 1
+              status,
+            })
           }
 
-          // Stop reading the file from the end either when you reach last line or when you
-          // hit the maxLineCount passed to the resolver
-          if (lineCount === maxLineCount || isLastLine) {
-            resolve(ops)
-            return false
-          }
-        })
+          lineCount += 1
+        }
+
+        // Stop reading the file from the end either when you reach last line or when you
+        // hit the maxLineCount passed to the resolver
+        if (lineCount === maxLineCount || isLastLine) {
+          resolve(ops)
+          return false
+        }
+      })
     } catch (e) {
       reject(e)
     }

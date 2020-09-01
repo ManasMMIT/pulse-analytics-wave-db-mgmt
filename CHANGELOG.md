@@ -21,6 +21,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `Orion/Obm/Obm-Person Widget`: Add ability to multiselect management type on an obm/person connection [#744](https://github.com/pulse-data/wave-db-mgmt/pull/744)
 
 ### Changed
+- `Polaris API Logging` [#743](https://github.com/pulse-data/wave-db-mgmt/pull/743)
+  - Uninstall morgan in favor of using apollo server plugin and fs logging
+  - Add success/error status to all logged mutations in `api.log`
+  - Show error status in polaris status panel if a mutation op errored
 - `Continuous Integration`: Change node version in continuous integration yml from 10.15.3 to 12.18.3 to reflect node upgrade on production droplet [#733](https://github.com/pulse-data/wave-db-mgmt/pull/733)
 - `Phoenix/Backend`: Build out `getMockMongoClient` util; break up Promise.all in update client resolver after observing transaction breakage during integration test prep work [#734](https://github.com/pulse-data/wave-db-mgmt/pull/734)
 

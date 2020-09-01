@@ -112,3 +112,8 @@ export const OpLogLoadingMessage = styled.div({
   marginTop: Spacing.NORMAL,
   textTransform: 'uppercase',
 })
+
+export const Error = styled.span({
+  color: Colors.RED,
+  fontSize: 12,
+})
