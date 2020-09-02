@@ -18,10 +18,13 @@ const Color = {
   GRAY_DARK: '#849CB2',
   GRAY_MEDIUM: '#BBC8D6',
   GRAY_LIGHT: '#F1F5FA',
+  // Background Colors
+  MAIN_BACKGROUND: '#F1F7FD',
   // Custom Colors
   PHOENIX: '#FA8969',
   ORION: '#38B59A',
-  DELPHI: '#30B2DC',
+  DELPHI: '#7C5EFA',
+  PAYER_PROJECTS: '#30B2DC',
   TOOL_SIDEBAR: '#093357',
 }
 
