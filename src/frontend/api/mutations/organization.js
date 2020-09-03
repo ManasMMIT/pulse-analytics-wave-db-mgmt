@@ -213,6 +213,7 @@ export const UPDATE_OBM_SERVICE = gql`
     updateObmService(input: $input) {
       _id
       name
+      description
     }
   }
 `
@@ -231,6 +232,7 @@ export const CREATE_OBM_SERVICE = gql`
     createObmService(input: $input) {
       _id
       name
+      description
     }
   }
 `
@@ -291,6 +293,7 @@ export const CONNECT_OBM_AND_PERSON = gql`
       obmId
       personId
       position
+      managementTypes
     }
   }
 `

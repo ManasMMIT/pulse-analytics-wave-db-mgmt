@@ -20,7 +20,6 @@ const DialogOverlay = styled.div({
 const ContentWrapper = styled.div({
   position: 'relative',
   height: '100%',
-  maxHeight: 'calc(100% - 24px)',
 })
 
 const Content = styled.div({

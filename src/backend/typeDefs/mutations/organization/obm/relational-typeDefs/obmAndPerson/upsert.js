@@ -6,6 +6,7 @@ const connectObmAndPersonTypeDefs = gql`
     personId: String!
     obmId: String!
     position: String
+    managementTypes: [String!]!
   }
 
   type ConnectObmAndPersonPayload {
@@ -13,6 +14,7 @@ const connectObmAndPersonTypeDefs = gql`
     personId: String!
     obmId: String!
     position: String
+    managementTypes: [String!]!
   }
 `
 

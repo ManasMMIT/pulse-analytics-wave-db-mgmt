@@ -34,6 +34,8 @@ import {
   DeleteButton,
 } from './styledComponents'
 
+const MANAGEMENT_TYPES = ['Business', 'Clinical']
+
 const ObmInfluencersWidget = ({ entity }) => {
   const { data: peopleData, loading: peopleLoading } = useQuery(GET_PEOPLE)
 
@@ -67,11 +69,12 @@ const ObmInfluencersWidget = ({ entity }) => {
     if (!peopleLoading && !connectionsLoading) {
       // clean data of __typename and anything else
       const initialConnections = connectionsData.map(
-        ({ _id, personId, obmId, position }) => ({
+        ({ _id, personId, obmId, position, managementTypes }) => ({
           _id,
           personId,
           obmId,
           position,
+          managementTypes: managementTypes || [],
         })
       )
 
@@ -96,7 +99,7 @@ const ObmInfluencersWidget = ({ entity }) => {
         <WidgetPanelTitle>OBM Influencers</WidgetPanelTitle>
       </WidgetPanelHeader>
       {stagedConnections.map((connection, idx) => {
-        const { _id, personId, position } = connection
+        const { _id, personId, position, managementTypes } = connection
 
         return (
           <RelationalRow key={_id}>
@@ -137,6 +140,46 @@ const ObmInfluencersWidget = ({ entity }) => {
               />
             </div>
 
+            <div
+              style={{ display: 'flex', alignItems: 'center', marginLeft: 12 }}
+            >
+              <InputLabel>Management Types:</InputLabel>
+              <div style={{ width: 300 }}>
+                <Select
+                  isMulti
+                  styles={customSelectStyles}
+                  options={MANAGEMENT_TYPES.map((type) => ({
+                    label: type,
+                    value: type,
+                  }))}
+                  value={managementTypes.map((type) => ({
+                    label: type,
+                    value: type,
+                  }))}
+                  onChange={(optionsArr) => {
+                    let clonedConnection = _.cloneDeep(
+                      clonedStagedConnections[idx]
+                    )
+
+                    if (_.isEmpty(optionsArr)) {
+                      clonedConnection.managementTypes = []
+                    } else {
+                      clonedConnection.managementTypes = optionsArr.map(
+                        ({ value }) => value
+                      )
+                    }
+
+                    clonedConnection.managementTypes.sort((a, b) =>
+                      a.localeCompare(b)
+                    )
+
+                    clonedStagedConnections.splice(idx, 1, clonedConnection)
+                    stageConnections(clonedStagedConnections)
+                  }}
+                />
+              </div>
+            </div>
+
             <div style={{ marginLeft: 'auto' }}>
               <DeleteButton
                 onClick={() => {
@@ -160,6 +203,7 @@ const ObmInfluencersWidget = ({ entity }) => {
                 personId: null,
                 position: null,
                 obmId: entity._id,
+                managementTypes: [],
               }
               clonedStagedConnections.push(newConnection)
               stageConnections(clonedStagedConnections)

@@ -1,29 +1,30 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
+import { transparentize } from 'polished'
 
 import Color from '../../utils/color'
 import Spacing from '../../utils/spacing'
 import FontSpace from '../../utils/fontspace'
-import { AlphaColors } from '../../utils/pulseStyles'
 
 const SidebarLabel = styled.div(
   {
     padding: Spacing.S4,
-    color: AlphaColors.Black70,
-    fontWeight: 500,
+    color: Color.GRAY_DARK,
+    fontWeight: 700,
     borderRadius: 4,
     cursor: 'pointer',
     ...FontSpace.FS2,
+    ':hover': {
+      background: transparentize(0.9, Color.GRAY_DARK),
+    },
   },
   ({ style }) => style
 )
 
 const defaultSelectedStyle = {
-  background: Color.LIGHT_BLUE_GRAY_1,
+  background: transparentize(0.9, Color.BLUE),
   color: Color.BLUE,
-  borderRadius: 4,
-  fontWeight: 700,
 }
 
 const SidebarItem = ({
@@ -66,7 +67,7 @@ SidebarItem.defaultProps = {
   isSelected: false,
   selectedStyle: {},
   inactiveStyle: {},
-  onClick: () => {}
+  onClick: () => {},
 }
 
 export default SidebarItem

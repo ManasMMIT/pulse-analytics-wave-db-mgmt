@@ -12,7 +12,31 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Fixed** for any bug fixes.
 - **Security** in case of vulnerabilities.
 
-## [Unreleased] - Started: 8-17-20
+## [Unreleased] - Started: 9-4-20
+
+## [3.5.0] - Started: 8-17-20
+
+### Added
+- `Phoenix/Sitemap View`: 
+  - Add copy/paste `nodeId` button for sitemap view for super-users [#742](https://github.com/pulse-data/wave-db-mgmt/pull/742)
+  - Add new toolId to node mapping for OBM Tool permissions
+- `Phoenix/Backend`: Integration test for client update resolver. [#734](https://github.com/pulse-data/wave-db-mgmt/pull/734) and Luming merge committed his work in
+- `Orion/Backend`: Add push dev to prod endpoint for pushing either group of collections or all data [#736](https://github.com/pulse-data/wave-db-mgmt/pull/736)
+- `Polaris`: Add initial homepage with tool nav cards. [#746](https://github.com/pulse-data/wave-db-mgmt/pull/746)
+- `Orion/Obm/Obm-Person Widget`: Add ability to multiselect management type on an obm/person connection [#744](https://github.com/pulse-data/wave-db-mgmt/pull/744)
+- `Orion`: OBM-relevant business object CUD synced to materialized collections
+  - work specifically done on UPDATE [#748](https://github.com/pulse-data/wave-db-mgmt/pull/748) and CREATE [#751](https://github.com/pulse-data/wave-db-mgmt/pull/751) OBM
+  - `pulse-dev.obmInfluencers` syncing [#749](https://github.com/pulse-data/wave-db-mgmt/pull/749)
+  - `pulse-dev.obmsServices` syncing [#750](https://github.com/pulse-data/wave-db-mgmt/pull/750)
+
+### Changed
+- `Polaris API Logging` [#743](https://github.com/pulse-data/wave-db-mgmt/pull/743)
+  - Uninstall morgan in favor of using apollo server plugin and fs logging
+  - Add success/error status to all logged mutations in `api.log`
+  - Show error status in polaris status panel if a mutation op errored
+- `Continuous Integration`: Change node version in continuous integration yml from 10.15.3 to 12.18.3 to reflect node upgrade on production droplet [#733](https://github.com/pulse-data/wave-db-mgmt/pull/733)
+- `Phoenix/Backend`: Build out `getMockMongoClient` util; break up Promise.all in update client resolver after observing transaction breakage during integration test prep work [#734](https://github.com/pulse-data/wave-db-mgmt/pull/734)
+- `Phoenix/Status Panel`: Brought back push sitemaps to dev override button for super users in prod to easily cascade any global pulse-core edits of nodes made through Postman. Otherwise, devs are forced to uncomment the button locally and push it, and if local Internet is slow, process could fail and/or take too long. [$747](https://github.com/pulse-data/wave-db-mgmt/pull/747)
 
 ## [3.4.1] - Started: 8-13-20
 
@@ -37,6 +61,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `Orion`: Pagination to react-table throughout app [#718](https://github.com/pulse-data/wave-db-mgmt/pull/718)
 - `Orion`: Build out therapeuticArea CRUD and integrate with indications master list CRUD; build out all cascade logic including syncing with materialized `pulse-dev.indicationsTherapeuticAreas` [#717](https://github.com/pulse-data/wave-db-mgmt/pull/717)
 - `Orion`: Build out State CRUD w/ cascading logic to `pulse-dev.statesStepEditLegislation` [#713](https://github.com/pulse-data/wave-db-mgmt/pull/713) (child PR [#715](https://github.com/pulse-data/wave-db-mgmt/pull/715))
+- `Orion`: Build out `users.nodes.resources`' `upsertUserPerms` util integration test [#728](https://github.com/pulse-data/wave-db-mgmt/pull/728)
 
 ### Changed
 - `Orion/People View`: Changed open payments external API widget and endpoint to pull in all data from 2016-2019 [#718](https://github.com/pulse-data/wave-db-mgmt/pull/718)

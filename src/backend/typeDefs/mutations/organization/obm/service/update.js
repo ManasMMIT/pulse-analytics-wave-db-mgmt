@@ -4,11 +4,13 @@ const updateObmServiceTypeDefs = gql`
   input UpdateObmServiceInput {
     _id: ID!
     name: String!
+    description: String
   }
 
   type UpdateObmServicePayload {
     _id: ID!
     name: String!
+    description: String
   }
 `
 

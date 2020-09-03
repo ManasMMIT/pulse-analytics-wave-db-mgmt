@@ -1,6 +1,6 @@
 {
   "name": "wave-db-mgmt",
-  "version": "3.4.1",
+  "version": "3.5.0",
   "description": "A repository for managing data into Pulse databases.",
   "repository": "https://github.com/pulse-data/wave-db-mgmt.git",
   "proxy": "http://localhost:1337/",
@@ -44,7 +44,6 @@
     "lodash": "^4.17.11",
     "mjml": "^4.6.2",
     "mongodb": "^3.5.5",
-    "morgan": "^1.9.1",
     "node-fetch": "^2.4.1",
     "nodemon": "^2.0.2",
     "nunjucks": "^3.2.1",

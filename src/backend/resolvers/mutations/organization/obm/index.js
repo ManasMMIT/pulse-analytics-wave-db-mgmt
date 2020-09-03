@@ -1,5 +1,5 @@
 const createObmOrganization = require('./create')
-const updateObmOrganization = require('./update')
+const updateObmOrganization = require('./update/resolver')
 
 const obmServiceResolvers = require('./service')
 const obmServiceCategoryResolvers = require('./serviceCategory')

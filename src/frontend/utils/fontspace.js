@@ -20,6 +20,11 @@ const FontSpace = {
     lineHeight: '24px',
   },
   FS5: {
+    fontSize: '20px',
+    letterSpacing: '-0.2px',
+    lineHeight: '30px',
+  },
+  FS6: {
     fontSize: '24px',
     letterSpacing: '-0.4px',
     lineHeight: '32px',

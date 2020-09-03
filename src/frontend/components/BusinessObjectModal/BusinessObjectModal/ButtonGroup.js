@@ -42,7 +42,7 @@ const ButtonGroup = ({
   return (
     <div
       style={{
-        margin: `0 ${Spacing.S4}`,
+        margin: `0 ${Spacing.S3}`,
         display: 'flex',
         alignItems: 'center',
       }}

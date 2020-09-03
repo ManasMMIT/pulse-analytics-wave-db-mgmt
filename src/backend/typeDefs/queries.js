@@ -301,6 +301,7 @@ const queries = gql`
   type ObmService {
     _id: ID!
     name: String!
+    description: String
   }
 
   type ObmServiceCategory {
@@ -326,6 +327,7 @@ const queries = gql`
     obmId: ID!
     personId: ID!
     position: String
+    managementTypes: [String!]
   }
 
   type ObmAndPayerConnection {
@@ -417,6 +419,7 @@ const queries = gql`
     userId: String
     operationName: String
     operationVariables: JSON
+    status: String
   }
 
   type Workbook {

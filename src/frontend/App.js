@@ -24,54 +24,88 @@ import typeDefs from './api/typeDefs'
 
 import superUsersById from './utils/super-users'
 
+import Home from './Home'
 import Phoenix from './Phoenix'
 import Orion from './Orion'
 import Delphi from './Delphi'
+import Icon from 'frontend/components/Icon'
 
 import PayerProjectsList from './PayerProjects/PayerProjectsList'
 import PayerProject from './PayerProjects/PayerProject'
 import PayerLivesImport from './PayerProjects/PayerLivesImport'
 
-import { Colors, Spacing } from './utils/pulseStyles'
+import { Spacing } from './utils/pulseStyles'
+import Color from './utils/color'
 
-const IconSource = {
-  PHOENIX:
-    'https://res.cloudinary.com/pulsedatatools/image/upload/v1573136582/polaris/icons/phoenix-1-white.svg',
-  ORION:
-    'https://res.cloudinary.com/pulsedatatools/image/upload/v1573136582/polaris/icons/orion-1-white.svg',
-  DELPHI:
-    'https://res.cloudinary.com/pulsedatatools/image/upload/v1573136582/polaris/icons/mercury-1-white.svg',
-  PAYER_PROJECTS:
-    'https://res.cloudinary.com/pulsedatatools/image/upload/v1591273667/polaris/icons/payer-1-white.svg',
-}
+const SIDE_BAR_ITEMS = [
+  {
+    to: '/',
+    exact: true,
+    iconId: 'home-1-white',
+    activeColor: Color.PRIMARY,
+  },
+  {
+    to: '/phoenix',
+    exact: false,
+    iconId: 'phoenix-1-white',
+    activeColor: Color.PHOENIX,
+  },
+  {
+    to: '/orion',
+    exact: false,
+    iconId: 'orion-1-white',
+    activeColor: Color.ORION,
+  },
+  {
+    to: '/payer-projects',
+    exact: false,
+    iconId: 'payer-1-white',
+    activeColor: Color.PAYER_PROJECTS,
+  },
+  {
+    to: '/delphi',
+    exact: false,
+    iconId: 'mercury-1-white',
+    activeColor: Color.DELPHI,
+  },
+]
 
-const PolarisSidebar = styled.div({
-  display: 'flex',
-  flexDirection: 'column',
-  backgroundColor: '#0E2539',
-  padding: Spacing.TINY,
-})
+const ICON_SIZE = 20
 
-const iconStyle = {
-  width: 20,
-  height: 20,
-}
-
-const activeLinkStyle = (activeColor) => ({
+const getActiveLinkStyle = (activeColor) => ({
   background: transparentize(0.8, activeColor),
   opacity: 1,
 })
 
 const StyledNavLink = styled(NavLink)({
-  color: Colors.WHITE,
+  color: Color.WHITE,
   borderRadius: 4,
   textDecoration: 'none',
   padding: `${Spacing.NORMAL} ${Spacing.NORMAL} ${Spacing.SMALL}`,
   margin: Spacing.TINY,
   opacity: 0.6,
   ':hover': {
-    background: transparentize(0.92, Colors.WHITE),
+    background: transparentize(0.92, Color.WHITE),
   },
+})
+
+const sidebarNavlinks = SIDE_BAR_ITEMS.map(
+  ({ to, iconId, activeColor, exact }) => (
+    <StyledNavLink
+      exact={exact}
+      to={to}
+      activeStyle={getActiveLinkStyle(activeColor)}
+    >
+      <Icon width={ICON_SIZE} height={ICON_SIZE} iconName={iconId} />
+    </StyledNavLink>
+  )
+)
+
+const PolarisSidebar = styled.div({
+  display: 'flex',
+  flexDirection: 'column',
+  backgroundColor: '#0E2539',
+  padding: Spacing.TINY,
 })
 
 const sidebarBottomSectionStyle = {
@@ -91,7 +125,7 @@ const LogoutContainer = styled.div({
   margin: `${Spacing.NORMAL} ${Spacing.TINY} 0`,
   opacity: 0.6,
   ':hover': {
-    background: transparentize(0.92, Colors.WHITE),
+    background: transparentize(0.92, Color.WHITE),
     opacity: 1,
   },
 })
@@ -101,7 +135,7 @@ const SupportDocumentationContainer = styled.a({
   margin: `0 ${Spacing.TINY} ${Spacing.TINY}`,
   opacity: 0.6,
   ':hover': {
-    background: transparentize(0.92, Colors.WHITE),
+    background: transparentize(0.92, Color.WHITE),
     opacity: 1,
   },
 })
@@ -166,31 +200,7 @@ const App = () => {
       <Router>
         <div style={{ display: 'flex', height: '100vh' }}>
           <PolarisSidebar>
-            <StyledNavLink
-              to="/phoenix"
-              activeStyle={activeLinkStyle(Colors.PHOENIX)}
-            >
-              <img style={iconStyle} src={IconSource.PHOENIX} />
-            </StyledNavLink>
-            <StyledNavLink
-              to="/orion"
-              activeStyle={activeLinkStyle(Colors.ORION)}
-            >
-              <img style={iconStyle} src={IconSource.ORION} />
-            </StyledNavLink>
-            <StyledNavLink
-              to="/delphi"
-              activeStyle={activeLinkStyle(Colors.DELPHI)}
-            >
-              <img style={iconStyle} src={IconSource.DELPHI} />
-            </StyledNavLink>
-            <StyledNavLink
-              to="/payer-projects"
-              activeStyle={activeLinkStyle(Colors.DELPHI)}
-            >
-              <img style={iconStyle} src={IconSource.PAYER_PROJECTS} />
-            </StyledNavLink>
-
+            {sidebarNavlinks}
             <div style={sidebarBottomSectionStyle}>
               <UserProfile />
               <LogoutContainer title="Log Out">
@@ -201,7 +211,7 @@ const App = () => {
                     client.clearStore().then(logoutWithRedirect)
                   }}
                   icon={faSignOutAlt}
-                  color={Colors.WHITE}
+                  color={Color.WHITE}
                 />
               </LogoutContainer>
               <SupportDocumentationContainer
@@ -212,12 +222,13 @@ const App = () => {
                 <FontAwesomeIcon
                   style={logoutButtonStyle}
                   icon={faQuestionCircle}
-                  color={Colors.WHITE}
+                  color={Color.WHITE}
                 />
               </SupportDocumentationContainer>
             </div>
           </PolarisSidebar>
           <Switch>
+            <Route exact path="/" component={Home} />
             <Route path="/phoenix" component={Phoenix} />
             <Route path="/orion" component={Orion} />
             <Route path="/delphi" component={Delphi} />
@@ -229,7 +240,7 @@ const App = () => {
               />
             ) : null}
             <Route path="/payer-projects/:projectId" component={PayerProject} />
-            <Redirect to="/phoenix" />
+            <Redirect to="/" />
           </Switch>
         </div>
       </Router>

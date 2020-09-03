@@ -12,7 +12,7 @@ import superUsersById from '../../../utils/super-users'
 import { useAuth0 } from '../../../../react-auth0-spa'
 import { Colors, Spacing } from '../../../utils/pulseStyles'
 
-// import PushToDevButton from './PushToDevButton'
+import PushToDevButton from './PushToDevButton'
 import PushToProdButton from './PushToProdButton'
 import OpLog from './OpLog'
 
@@ -50,9 +50,9 @@ const Paragraph = styled.p({
 
 const TextLink = styled.a({
   ...paragraphStyle,
-  ":visited": {
+  ':visited': {
     color: Colors.WHITE,
-  }
+  },
 })
 
 const StyledButton = styled.button({
@@ -71,7 +71,7 @@ const StyledButton = styled.button({
   color: Colors.WHITE,
   ':hover': {
     background: transparentize(0.7, Colors.WHITE),
-  }
+  },
 })
 
 const StatusPanel = () => {
@@ -83,30 +83,38 @@ const StatusPanel = () => {
       <div>
         <Header>Deploying Changes to Production</Header>
         <Paragraph>
-          By default, changes automatically appear
-          on <TextLink href="https://dev.pulse-tools.com/" target="_blank">dev.pulse-tools.com</TextLink> after you refresh the Pulse Analytics webapp. For clients to see the changes, click the button below to deploy the changes to production. <TextLink href="https://dedhamgroup.atlassian.net/wiki/spaces/TDG/pages/713129985/Phoenix+User+MGMT#Status-Panel" target="_blank">See guide for help.</TextLink>
+          By default, changes automatically appear on{' '}
+          <TextLink href="https://dev.pulse-tools.com/" target="_blank">
+            dev.pulse-tools.com
+          </TextLink>{' '}
+          after you refresh the Pulse Analytics webapp. For clients to see the
+          changes, click the button below to deploy the changes to production.{' '}
+          <TextLink
+            href="https://dedhamgroup.atlassian.net/wiki/spaces/TDG/pages/713129985/Phoenix+User+MGMT#Status-Panel"
+            target="_blank"
+          >
+            See guide for help.
+          </TextLink>
         </Paragraph>
       </div>
-      {/* <PushToDevButton /> */}
+
+      {process.env.NODE_ENV === 'production' && isSuperUser && (
+        <PushToDevButton />
+      )}
+
       <PushToProdButton />
 
-      { process.env.NODE_ENV === 'production' && <OpLog /> }
+      {process.env.NODE_ENV === 'production' && <OpLog />}
 
-      { 
-        process.env.NODE_ENV === 'production' && isSuperUser && (
-          <div style={{ margin: 'auto auto 0px' }}>
-            <div style={{ marginTop: 16 }}>
-              <Link
-                to={`/phoenix/oplog`}
-              >
-                <StyledButton>
-                  Full OpLog
-                </StyledButton>
-              </Link>
-            </div>
+      {process.env.NODE_ENV === 'production' && isSuperUser && (
+        <div style={{ margin: 'auto auto 0px' }}>
+          <div style={{ marginTop: 16 }}>
+            <Link to={`/phoenix/oplog`}>
+              <StyledButton>Full OpLog</StyledButton>
+            </Link>
           </div>
-        )
-      }
+        </div>
+      )}
     </Wrapper>
   )
 }

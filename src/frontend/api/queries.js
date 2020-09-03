@@ -727,6 +727,7 @@ export const GET_OBM_SERVICES = gql`
     obmServices {
       _id
       name
+      description
     }
   }
 `
@@ -797,6 +798,7 @@ export const GET_OP_LOG = gql`
       userId
       operationName
       operationVariables
+      status
     }
   }
 `
@@ -809,6 +811,7 @@ export const GET_FULL_OP_LOGS = gql`
       userId
       operationName
       operationVariables
+      status
     }
   }
 `
@@ -929,6 +932,7 @@ export const GET_JOIN_OBMS_AND_PEOPLE = gql`
       obmId
       personId
       position
+      managementTypes
     }
   }
 `

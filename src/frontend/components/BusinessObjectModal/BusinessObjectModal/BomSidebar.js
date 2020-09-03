@@ -1,19 +1,20 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { transparentize } from 'polished'
 
-import Color from '../../../utils/color'
+import Color from 'frontend/utils/color'
 
 import Sidebar from '../../Sidebar'
 import SidebarItem from '../../Sidebar/SidebarItem'
 
 const sidebarStyle = {
-  borderRight: `1px solid ${Color.LIGHT_BLUE_GRAY_1}`,
+  borderRight: `2px solid ${transparentize(0.9, Color.BLACK)}`,
 }
 
 const BomSidebar = ({ options, onClick, selectedTab }) => {
   if (!selectedTab.value) return null
 
-  const sidebarItems = options.map(option => {
+  const sidebarItems = options.map((option) => {
     const isSelected = option.value === selectedTab.value
     return (
       <SidebarItem

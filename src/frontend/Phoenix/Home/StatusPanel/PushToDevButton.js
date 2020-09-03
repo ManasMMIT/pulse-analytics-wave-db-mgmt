@@ -2,18 +2,18 @@ import React from 'react'
 import { useMutation } from '@apollo/react-hooks'
 
 import Spinner from 'frontend/components/Spinner'
-import {
-  PUSH_SITEMAP_TO_DEV,
-} from '../../../api/mutations'
+import { PUSH_SITEMAP_TO_DEV } from '../../../api/mutations'
 
 const buttonStyle = {
   border: 'none',
-  height: 30,
+  padding: 12,
   borderRadius: 4,
   fontWeight: 700,
   cursor: 'pointer',
-  background: "#234768",
+  background: '#234768',
   color: 'white',
+  marginBottom: 24,
+  fontSize: 10,
 }
 
 const PushToDevButton = () => {
@@ -23,11 +23,8 @@ const PushToDevButton = () => {
 
   return (
     <div>
-      <button
-        style={buttonStyle}
-        onClick={handleSubmit}
-      >
-        Push Sitemaps to Dev
+      <button style={buttonStyle} onClick={handleSubmit}>
+        OVERRIDE: Push Sitemaps to Dev
       </button>
     </div>
   )
