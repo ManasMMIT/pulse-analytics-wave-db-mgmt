@@ -126,7 +126,7 @@ const BusinessObjectModal = ({
       </Header>
       <DeleteConfirmation
         showDeleteConfirmation={showDeleteConfirmation}
-        entityText={modalSubtitle}
+        entityText={modalTitle}
         deleteHandler={deleteHandler}
       />
       {!showDeleteConfirmation && (
