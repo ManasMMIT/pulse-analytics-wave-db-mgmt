@@ -203,6 +203,7 @@ const ObmInfluencersWidget = ({ entity }) => {
                 personId: null,
                 position: null,
                 obmId: entity._id,
+                managementTypes: [],
               }
               clonedStagedConnections.push(newConnection)
               stageConnections(clonedStagedConnections)

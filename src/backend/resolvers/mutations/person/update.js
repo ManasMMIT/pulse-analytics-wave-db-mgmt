@@ -1,26 +1,49 @@
 const { ObjectId } = require('mongodb')
 
-const updatePerson = (
+const updatePerson = async (
   parent,
   { input: { _id, ...body } },
-  { pulseCoreDb },
+  { pulseCoreDb, pulseDevDb, mongoClient },
   info
 ) => {
-  const updatedOn = new Date()
+  const session = mongoClient.startSession()
 
-  return pulseCoreDb
-    .collection('people')
-    .findOneAndUpdate(
-      { _id: ObjectId(_id) },
+  let updatedPerson
+
+  await session.withTransaction(async () => {
+    const updatedOn = new Date()
+
+    // Step 1: Update core person
+    updatedPerson = await pulseCoreDb
+      .collection('people')
+      .findOneAndUpdate(
+        { _id: ObjectId(_id) },
+        {
+          $set: {
+            ...body,
+            updatedOn,
+          },
+        },
+        { returnOriginal: false, session }
+      )
+      .then(({ value }) => value)
+
+    // Step 2: Cascade update pulse-dev.obmsInfluencers
+    await pulseDevDb.collection('obmsInfluencers').updateMany(
+      { 'person._id': updatedPerson._id },
       {
         $set: {
-          ...body,
-          updatedOn,
+          'person.firstName': updatedPerson.firstName,
+          'person.lastName': updatedPerson.lastName,
+          'person.nationalProviderIdentifier':
+            updatedPerson.nationalProviderIdentifier,
         },
       },
-      { returnOriginal: false }
+      { session }
     )
-    .then(({ value }) => value)
+  })
+
+  return updatedPerson
 }
 
 module.exports = updatePerson
