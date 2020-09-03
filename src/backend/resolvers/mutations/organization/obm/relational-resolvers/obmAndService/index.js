@@ -1,4 +1,4 @@
-const connectObmAndObmService = require('./upsert')
+const connectObmAndObmService = require('./replace')
 
 module.exports = {
   connectObmAndObmService,

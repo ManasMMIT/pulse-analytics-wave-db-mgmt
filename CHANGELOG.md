@@ -22,6 +22,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `Orion/Backend`: Add push dev to prod endpoint for pushing either group of collections or all data [#736](https://github.com/pulse-data/wave-db-mgmt/pull/736)
 - `Polaris`: Add initial homepage with tool nav cards. [#746](https://github.com/pulse-data/wave-db-mgmt/pull/746)
 - `Orion/Obm/Obm-Person Widget`: Add ability to multiselect management type on an obm/person connection [#744](https://github.com/pulse-data/wave-db-mgmt/pull/744)
+- `Orion`: OBM-relevant business object CUD synced to materialized collections
+  - work specifically done on UPDATE [#748](https://github.com/pulse-data/wave-db-mgmt/pull/748) and CREATE [#751](https://github.com/pulse-data/wave-db-mgmt/pull/751) OBM
+  - `pulse-dev.obmInfluencers` syncing [#749](https://github.com/pulse-data/wave-db-mgmt/pull/749)
+  - `pulse-dev.obmsServices` syncing [#750](https://github.com/pulse-data/wave-db-mgmt/pull/750)
 
 ### Changed
 - `Polaris API Logging` [#743](https://github.com/pulse-data/wave-db-mgmt/pull/743)

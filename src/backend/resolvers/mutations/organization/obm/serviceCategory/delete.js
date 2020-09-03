@@ -1,32 +1,36 @@
 const { ObjectId } = require('mongodb')
 
-const deleteServiceCategory = async (
+const deleteObmServiceCategory = async (
   parent,
   { input: { _id } },
-  { mongoClient, pulseCoreDb },
+  { mongoClient, pulseCoreDb, pulseDevDb },
   info
 ) => {
   _id = ObjectId(_id)
 
-  let result
+  let deletedObmServiceCategory
 
   const session = mongoClient.startSession()
 
   await session.withTransaction(async () => {
     // Step 1: Delete service category from own collection
-    const { value } = await pulseCoreDb
+    deletedObmServiceCategory = await pulseCoreDb
       .collection('obms.services.categories')
       .findOneAndDelete({ _id }, { session })
-
-    result = value
+      .then(({ value }) => value)
 
     // Step 2: Cascade delete service category connections to services
     await pulseCoreDb
       .collection('JOIN_obms.services_obms.services.categories')
       .deleteMany({ obmServiceCategoryId: _id }, { session })
+
+    // Step 3: Cascade delete dev obmsServices docs connected to category
+    await pulseDevDb
+      .collection('obmsServices')
+      .deleteMany({ 'service.categoryId': _id }, { session })
   })
 
-  return result
+  return deletedObmServiceCategory
 }
 
-module.exports = deleteServiceCategory
+module.exports = deleteObmServiceCategory
