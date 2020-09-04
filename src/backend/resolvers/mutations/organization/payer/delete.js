@@ -78,6 +78,11 @@ const deletePayerOrganization = async (
     await pulseCoreDb
       .collection('JOIN_obms_payers')
       .deleteMany({ payerId: _id }, { session })
+
+    // STEP 6: Cascade delete entries connected to the payer in pulse-dev.obmsPayers
+    await pulseDevDb
+      .collection('obmsPayers')
+      .deleteMany({ 'payer._id': _id }, { session })
   })
 
   return deletedOrg

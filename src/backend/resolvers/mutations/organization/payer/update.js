@@ -6,14 +6,11 @@ const updatePayerOrganization = async (
   parent,
   { input: { _id: stringId, ...body } },
   { pulseCoreDb, pulseDevDb, mongoClient },
-  info,
+  info
 ) => {
   const _id = ObjectId(stringId)
 
-  const {
-    connections: newConnections,
-    ...setObj
-  } = body
+  const { connections: newConnections, ...setObj } = body
 
   const session = mongoClient.startSession()
 
@@ -26,28 +23,27 @@ const updatePayerOrganization = async (
       .findOneAndUpdate(
         { _id },
         { $set: setObj },
-        { returnOriginal: false, session },
+        { returnOriginal: false, session }
       )
 
     result = value
 
     // Step 2: update org.slug in all users.nodes.resources
-    await pulseDevDb.collection('users.nodes.resources')
-      .updateMany(
-        { 'resources.accounts._id': _id },
-        {
-          $set: {
-            'resources.$[resource].accounts.$[el].slug': result.slug,
-          }
+    await pulseDevDb.collection('users.nodes.resources').updateMany(
+      { 'resources.accounts._id': _id },
+      {
+        $set: {
+          'resources.$[resource].accounts.$[el].slug': result.slug,
         },
-        {
-          arrayFilters: [
-            { 'resource.accounts': { $exists: true } },
-            { 'el._id': _id }
-          ],
-          session,
-        }
-      )
+      },
+      {
+        arrayFilters: [
+          { 'resource.accounts': { $exists: true } },
+          { 'el._id': _id },
+        ],
+        session,
+      }
+    )
 
     // Step 3: Rebuild connections and connection alerts
     const oldConnections = await pulseCoreDb
@@ -55,11 +51,9 @@ const updatePayerOrganization = async (
       .find({ orgs: _id }, { session })
       .toArray()
 
-    const connectionsWithIds = (newConnections || []).map(connection => ({
+    const connectionsWithIds = (newConnections || []).map((connection) => ({
       ...connection,
-      _id: connection._id
-        ? ObjectId(connection._id)
-        : new ObjectId(),
+      _id: connection._id ? ObjectId(connection._id) : new ObjectId(),
     }))
 
     result.connections = connectionsWithIds
@@ -71,6 +65,19 @@ const updatePayerOrganization = async (
       newConnections: connectionsWithIds,
       session,
     })
+
+    // Step 4: cascade update pulse-dev.obmsPayers
+    await pulseDevDb.collection('obmsPayers').updateMany(
+      { 'payer._id': _id },
+      {
+        $set: {
+          'payer.slug': result.slug,
+          'payer.organization': result.organization,
+          'payer.organizationTiny': result.organizationTiny,
+        },
+      },
+      { session }
+    )
   })
 
   return result
