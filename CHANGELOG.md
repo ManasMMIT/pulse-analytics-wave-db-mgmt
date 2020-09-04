@@ -28,6 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - work specifically done on UPDATE [#748](https://github.com/pulse-data/wave-db-mgmt/pull/748) and CREATE [#751](https://github.com/pulse-data/wave-db-mgmt/pull/751) OBM
   - `pulse-dev.obmInfluencers` syncing [#749](https://github.com/pulse-data/wave-db-mgmt/pull/749)
   - `pulse-dev.obmsServices` syncing [#750](https://github.com/pulse-data/wave-db-mgmt/pull/750)
+  - `pulse-dev.obmsPayers` syncing [#755](https://github.com/pulse-data/wave-db-mgmt/pull/755)
 
 ### Changed
 - `Polaris API Logging` [#743](https://github.com/pulse-data/wave-db-mgmt/pull/743)
