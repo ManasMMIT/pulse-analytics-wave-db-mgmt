@@ -14,6 +14,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased] - Started: 9-10-20
 
+## [3.6.1] - Started: 9-10-20
+
+### Fixed
+- `Orion/Push Dev to Prod`: Change `==` to `=` in if/else statements in bash scripts due to differences in how bash scripts are run with `sh` between MacOS and Ubuntu [#762](https://github.com/pulse-data/wave-db-mgmt/pull/762)
+
 ## [3.6.0] - Started: 9-4-20
 
 ### Added
