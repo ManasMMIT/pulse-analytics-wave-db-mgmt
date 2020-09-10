@@ -3,7 +3,9 @@ import Select from 'react-select'
 import _ from 'lodash'
 import { customTableSelectStyles } from './customTableSelectStyles'
 
-const MultiSelectColumnFilter = ({ column: { filterValue, setFilter, preFilteredRows, id } }) => {
+const MultiSelectColumnFilter = ({
+  column: { filterValue, setFilter, preFilteredRows, id },
+}) => {
   // Calculate the options for filtering
   // using the preFilteredRows
   const options = React.useMemo(() => {

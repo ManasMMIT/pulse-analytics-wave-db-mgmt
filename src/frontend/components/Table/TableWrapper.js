@@ -87,7 +87,11 @@ const TableWrapper = styled.div`
 
       .tr:hover {
         [data-sticky-td] {
-          background-color: ${mix(0.5, Color.WHITE, Color.LIGHT_GRAY_1)} !important;
+          background-color: ${mix(
+            0.5,
+            Color.WHITE,
+            Color.LIGHT_GRAY_1
+          )} !important;
         }
         .th {
           background-color: ${Color.WHITE} !important;

@@ -27,7 +27,11 @@ const Rows = ({ rows, prepareRow, setModalCell, modalColMap }) => {
           }
 
           return (
-            <Cell className={className} onClick={() => setModalCell(cell)} {...cell.getCellProps()}>
+            <Cell
+              className={className}
+              onClick={() => setModalCell(cell)}
+              {...cell.getCellProps()}
+            >
               {cell.render('Cell')}
             </Cell>
           )

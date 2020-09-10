@@ -5,9 +5,10 @@ import _ from 'lodash'
 
 import { GET_PHYSICIANS_COMPARE } from 'frontend/api/queries'
 
-import TemplateTable from 'frontend/Orion/Organizations/Obm/TemplateTable'
-import MultiSelectColumnFilter from 'frontend/Orion/Organizations/Obm/TemplateTable/custom-filters/MultiSelect/MultiSelectColumnFilter'
-import customMultiSelectFilterFn from 'frontend/Orion/Organizations/Obm/TemplateTable/custom-filters/MultiSelect/customMultiSelectFilterFn'
+import { MODAL_TABLE_WIDTH } from 'frontend/components/Table/tableWidths'
+import Table from 'frontend/components/Table'
+import MultiSelectColumnFilter from 'frontend/components/Table/custom-filters/MultiSelect/MultiSelectColumnFilter'
+import customMultiSelectFilterFn from 'frontend/components/Table/custom-filters/MultiSelect/customMultiSelectFilterFn'
 import NoDataPlaceholder from 'frontend/components/NoDataPlaceholder'
 import Spinner from 'frontend/components/Spinner'
 
@@ -209,20 +210,13 @@ const PhysiciansCompareWidget = ({ entity }) => {
   const filename = `CMS_Physicians_Compare-${entity.firstName}_${entity.lastName}`
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        width: 'calc(100% - 300px)',
-      }}
-    >
-      <TemplateTable
-        data={data}
-        columns={COLUMNS}
-        exportStyle={{ margin: 24 }}
-        exportProps={{ filename }}
-      />
-    </div>
+    <Table
+      width={MODAL_TABLE_WIDTH}
+      data={data}
+      columns={COLUMNS}
+      exportStyle={{ margin: 24 }}
+      exportProps={{ filename }}
+    />
   )
 }
 

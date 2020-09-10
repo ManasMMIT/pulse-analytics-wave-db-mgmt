@@ -7,9 +7,10 @@ import TherapeuticAreaModal from 'frontend/components/BusinessObjectModal/Therap
 import Icon from 'frontend/components/Icon'
 import Color from 'frontend/utils/color'
 
-import TemplateTable from 'frontend/Orion/Organizations/Obm/TemplateTable'
-import MultiSelectColumnFilter from 'frontend/Orion/Organizations/Obm/TemplateTable/custom-filters/MultiSelect/MultiSelectColumnFilter'
-import customMultiSelectFilterFn from 'frontend/Orion/Organizations/Obm/TemplateTable/custom-filters/MultiSelect/customMultiSelectFilterFn'
+import { CONFIG_TABLE_WIDTH } from 'frontend/components/Table/tableWidths'
+import Table from 'frontend/components/Table'
+import MultiSelectColumnFilter from 'frontend/components/Table/custom-filters/MultiSelect/MultiSelectColumnFilter'
+import customMultiSelectFilterFn from 'frontend/components/Table/custom-filters/MultiSelect/customMultiSelectFilterFn'
 import createButtonStyle from 'frontend/Orion/Organizations/Obm/create-button-style'
 
 import { GET_THERAPEUTIC_AREAS } from '../../../api/queries'
@@ -40,7 +41,6 @@ const TherapeuticAreas = () => {
       style={{
         display: 'flex',
         flexDirection: 'column',
-        width: 'calc(100vw - 318px)',
       }}
     >
       <PanelHeader title={PAGE_TITLE}>
@@ -55,7 +55,8 @@ const TherapeuticAreas = () => {
         </TherapeuticAreaModalButton>
       </PanelHeader>
 
-      <TemplateTable
+      <Table
+        width={CONFIG_TABLE_WIDTH}
         data={Object.values(data)[0]}
         columns={COLUMNS}
         modalColMap={MODAL_TO_COL_MAP}

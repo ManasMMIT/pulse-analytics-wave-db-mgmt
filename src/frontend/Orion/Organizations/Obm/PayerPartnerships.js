@@ -6,13 +6,13 @@ import { GET_VIEW_OBM_PAYER_PARTNERSHIPS } from 'frontend/api/queries'
 import PanelHeader from 'frontend/components/Panel/PanelHeader'
 import ObmModal from 'frontend/components/BusinessObjectModal/OncologyBenefitManagerModal'
 import ObmPowerSelect from 'frontend/components/BoPowerSelect/ObmPowerSelect'
+import Table from 'frontend/components/Table'
 
-import TemplateTable from './TemplateTable'
-
-import MultiSelectColumnFilter from './TemplateTable/custom-filters/MultiSelect/MultiSelectColumnFilter'
-import customMultiSelectFilterFn from './TemplateTable/custom-filters/MultiSelect/customMultiSelectFilterFn'
-import NumberRangeColumnFilter from './TemplateTable/custom-filters/NumberRangeColumnFilter'
-import customBetweenPercentsFilterFn from './TemplateTable/custom-filters/customBetweenPercentsFilterFn'
+import { CONFIG_TABLE_WIDTH } from 'frontend/components/Table/tableWidths'
+import MultiSelectColumnFilter from 'frontend/components/Table/custom-filters/MultiSelect/MultiSelectColumnFilter'
+import customMultiSelectFilterFn from 'frontend/components/Table/custom-filters/MultiSelect/customMultiSelectFilterFn'
+import NumberRangeColumnFilter from 'frontend/components/Table/custom-filters/NumberRangeColumnFilter'
+import customBetweenPercentsFilterFn from 'frontend/components/Table/custom-filters/customBetweenPercentsFilterFn'
 
 const percentageFormatter = (value, decimals = 0) =>
   // #toFixed may result in imperfect rounding,
@@ -135,7 +135,6 @@ const PayerPartnerships = () => {
       style={{
         display: 'flex',
         flexDirection: 'column',
-        width: 'calc(100vw - 318px)',
       }}
     >
       <PanelHeader
@@ -145,7 +144,8 @@ const PayerPartnerships = () => {
         <ObmPowerSelect />
       </PanelHeader>
 
-      <TemplateTable
+      <Table
+        width={CONFIG_TABLE_WIDTH}
         data={payerPartnershipsData}
         columns={COLUMNS}
         modalColMap={MODAL_TO_COL_MAP}
