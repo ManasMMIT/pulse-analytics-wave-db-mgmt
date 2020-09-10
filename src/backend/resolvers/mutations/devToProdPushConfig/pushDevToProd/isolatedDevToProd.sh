@@ -20,13 +20,15 @@ echo "isolatedDevToProd script beginning against $DB_CLUSTER_ENV cluster"
 
 echo "Dumping pulse-dev collections into current-dump folder..."
 
-if [ $DB_CLUSTER_ENV == 'production' ]
+# WARNING: use single =, not double == because on Ubuntu server, 'sh' not okay with single = used in this way
+# Ref: https://stackoverflow.com/a/3411105
+if [ $DB_CLUSTER_ENV = 'production' ]
 then
   HOST='wave-shard-0/wave-shard-00-00-ik4h2.mongodb.net:27017,wave-shard-00-01-ik4h2.mongodb.net:27017,wave-shard-00-02-ik4h2.mongodb.net:27017'
-elif [ $DB_CLUSTER_ENV == 'staging' ]
+elif [ $DB_CLUSTER_ENV = 'staging' ]
 then
   HOST='wave-staging-shard-0/wave-staging-shard-00-00-ik4h2.mongodb.net:27017,wave-staging-shard-00-01-ik4h2.mongodb.net:27017,wave-staging-shard-00-02-ik4h2.mongodb.net:27017'
-elif [ $DB_CLUSTER_ENV == 'local' ]
+elif [ $DB_CLUSTER_ENV = 'local' ]
 then
   HOST='localhost:27017'
 else
