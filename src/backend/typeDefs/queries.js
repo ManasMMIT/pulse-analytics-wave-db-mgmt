@@ -35,7 +35,11 @@ const queries = gql`
     VIEW_obmInfluencers: [VIEW_ObmInfluencer]
 
     qualityOfAccessScores: [QualityOfAccessScore]
+
     collections(type: String): [String]
+
+    devToProdPushConfigs: [DevToProdPushConfig!]!
+
     newTreatmentPlans(data: JSON): JSON
 
     testEmailGroups: [TestEmailGroup]
@@ -612,6 +616,12 @@ const queries = gql`
   input OrderConfig {
     key: String!
     direction: Int!
+  }
+
+  type DevToProdPushConfig {
+    _id: ID!
+    name: String
+    collections: [String!]!
   }
 `
 

@@ -155,6 +155,10 @@ const ADMIN_SETTINGS_LINKS_CONFIG = [
     link: '/orion/configuration/admin-settings/sheet-management',
   },
   {
+    label: 'Push Dev to Prod Management',
+    link: '/orion/configuration/admin-settings/dev-to-prod-push-management',
+  },
+  {
     label: 'Business Object Management',
     link: '/orion/configuration/admin-settings/bo-management',
   },
@@ -206,6 +210,13 @@ const Sidebar = () => {
       {IMPORT_EXPORT_LINKS_CONFIG.map(renderStyledNavLink)}
       <div>
         <Header>Configuration</Header>
+        <StyledNavLink
+          style={dropdownInactiveLinkStyle}
+          activeStyle={dropdownActiveLinkStyle}
+          to={'/orion/configuration/dev-to-prod-push-console'}
+        >
+          Push Dev to Prod
+        </StyledNavLink>
         <StyledNavLink
           style={dropdownInactiveLinkStyle}
           activeStyle={dropdownActiveLinkStyle}

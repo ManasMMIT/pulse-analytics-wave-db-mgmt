@@ -1,21 +1,19 @@
 const { ObjectId } = require('mongodb')
 
-const updateTestEmailGroup = (
+const updateDevToProdPushConfig = (
   parent,
-  { input: { _id, name, recipients, usersToMock, emailSubscriptions } },
+  { input: { _id, name, collections } },
   { pulseCoreDb },
   info
 ) => {
   return pulseCoreDb
-    .collection('testEmailGroups')
+    .collection('devToProdPushConfigs')
     .findOneAndUpdate(
       { _id: ObjectId(_id) },
       {
         $set: {
           name,
-          recipients,
-          usersToMock,
-          emailSubscriptions,
+          collections,
         },
       },
       { returnOriginal: false }
@@ -23,4 +21,4 @@ const updateTestEmailGroup = (
     .then(({ value }) => value)
 }
 
-module.exports = updateTestEmailGroup
+module.exports = updateDevToProdPushConfig

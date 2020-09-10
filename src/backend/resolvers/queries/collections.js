@@ -1,4 +1,8 @@
-const collections = async (parent, { type }, { pulseRawDb, pulseCoreDb, pulseProdDb }) => {
+const collections = async (
+  parent,
+  { type },
+  { pulseRawDb, pulseDevDb, pulseCoreDb, pulseProdDb }
+) => {
   let collections
 
   switch (type) {
@@ -6,6 +10,9 @@ const collections = async (parent, { type }, { pulseRawDb, pulseCoreDb, pulsePro
       collections = await pulseRawDb.listCollections().toArray()
       break
     case 'dev':
+      collections = await pulseDevDb.listCollections().toArray()
+      break
+    case 'core':
       collections = await pulseCoreDb.listCollections().toArray()
       break
     case 'prod':

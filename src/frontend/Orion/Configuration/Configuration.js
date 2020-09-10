@@ -8,6 +8,7 @@ import People from './People'
 import UsStates from './UsStates'
 import ProductsIndications from './ProductsIndications'
 import AdminSettings from './AdminSettings'
+import DevToProdPushConsole from './DevToProdPushConsole'
 
 const Configuration = () => {
   const { user } = useAuth0()
@@ -27,6 +28,10 @@ const Configuration = () => {
           component={AdminSettings}
         />
       )}
+      <Route
+        path="/orion/configuration/dev-to-prod-push-console"
+        component={DevToProdPushConsole}
+      />
       <Redirect to="/orion/configuration/people" />
     </Switch>
   )

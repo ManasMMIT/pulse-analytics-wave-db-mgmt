@@ -36,7 +36,7 @@ const endUserTermsResolvers = require('./endUserTerms')
 
 const usState = require('./usState')
 
-const dataPushConfigResolvers = require('./dataPushConfig')
+const devToProdPushConfigResolvers = require('./devToProdPushConfig')
 
 module.exports = {
   ...clientResolvers,
@@ -78,5 +78,5 @@ module.exports = {
 
   ...usState,
 
-  ...dataPushConfigResolvers,
+  ...devToProdPushConfigResolvers,
 }
