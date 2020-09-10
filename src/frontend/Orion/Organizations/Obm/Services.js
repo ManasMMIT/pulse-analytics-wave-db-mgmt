@@ -13,13 +13,14 @@ import ObmPowerSelect from 'frontend/components/BoPowerSelect/ObmPowerSelect'
 import ObmServicePowerSelect from 'frontend/components/BoPowerSelect/ObmServicePowerSelect'
 import ObmServiceCategoryPowerSelect from 'frontend/components/BoPowerSelect/ObmServiceCategoryPowerSelect'
 import Icon from 'frontend/components/Icon'
+import Table from 'frontend/components/Table'
 
 import Color from 'frontend/utils/color'
 
-import TemplateTable from './TemplateTable'
-import MultiSelectColumnFilter from './TemplateTable/custom-filters/MultiSelect/MultiSelectColumnFilter'
-import customMultiSelectFilterFn from './TemplateTable/custom-filters/MultiSelect/customMultiSelectFilterFn'
-import NumberRangeColumnFilter from './TemplateTable/custom-filters/NumberRangeColumnFilter'
+import { CONFIG_TABLE_WIDTH } from 'frontend/components/Table/tableWidths'
+import MultiSelectColumnFilter from 'frontend/components/Table/custom-filters/MultiSelect/MultiSelectColumnFilter'
+import customMultiSelectFilterFn from 'frontend/components/Table/custom-filters/MultiSelect/customMultiSelectFilterFn'
+import NumberRangeColumnFilter from 'frontend/components/Table/custom-filters/NumberRangeColumnFilter'
 
 import createButtonStyle from './create-button-style'
 
@@ -89,7 +90,6 @@ const Services = () => {
       style={{
         display: 'flex',
         flexDirection: 'column',
-        width: 'calc(100vw - 318px)',
       }}
     >
       <PanelHeader title={PAGE_TITLE}>
@@ -121,7 +121,8 @@ const Services = () => {
         </div>
       </PanelHeader>
 
-      <TemplateTable
+      <Table
+        width={CONFIG_TABLE_WIDTH}
         data={serviceTemplateData}
         columns={COLUMNS}
         modalColMap={MODAL_TO_COL_MAP}

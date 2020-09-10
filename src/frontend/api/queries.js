@@ -755,9 +755,9 @@ export const GET_OBM_ORGANIZATIONS = gql`
   }
 `
 
-export const GET_RAW_COLLECTION_NAMES = gql`
-  query getRawCollectionNames {
-    collections(type: "raw")
+export const GET_DEV_COLLECTION_NAMES = gql`
+  query getDevCollectionNames {
+    collections(type: "dev")
   }
 `
 
@@ -1014,6 +1014,16 @@ export const GET_END_USER_TERMS_USERS = gql`
         agreed
         timestamp
       }
+    }
+  }
+`
+
+export const GET_DEV_TO_PROD_PUSH_CONFIGS = gql`
+  query getDevToProdPushConfigs {
+    devToProdPushConfigs {
+      _id
+      name
+      collections
     }
   }
 `

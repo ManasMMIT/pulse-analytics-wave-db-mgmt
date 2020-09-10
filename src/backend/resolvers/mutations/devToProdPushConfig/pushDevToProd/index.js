@@ -59,7 +59,7 @@ const pushDevToProd = async (
 
     let [allDevCollections, pushConfig] = await Promise.all([
       pulseDevDb.listCollections().toArray(),
-      pulseCoreDb.collection('dataPushConfigs').findOne({ _id }),
+      pulseCoreDb.collection('devToProdPushConfigs').findOne({ _id }),
     ])
 
     allDevCollections = _.keyBy(allDevCollections, 'name')

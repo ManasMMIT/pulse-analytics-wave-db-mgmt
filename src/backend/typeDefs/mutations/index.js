@@ -36,7 +36,7 @@ const endUserTerms = require('./endUserTerms')
 
 const usState = require('./usState')
 
-const dataPushConfig = require('./dataPushConfig')
+const devToProdPushConfig = require('./devToProdPushConfig')
 
 const mutationType = gql`
   type Mutation {
@@ -316,6 +316,13 @@ const mutationType = gql`
     updateUsState(input: UpdateUsStateInput!): UpdateUsStatePayload!
     deleteUsState(input: DeleteUsStateInput!): DeleteUsStatePayload!
 
+    createDevToProdPushConfig: DevToProdPushConfig!
+    updateDevToProdPushConfig(
+      input: UpdateDevToProdPushConfigInput!
+    ): DevToProdPushConfig!
+    deleteDevToProdPushConfig(
+      input: DeleteDevToProdPushConfigInput!
+    ): DevToProdPushConfig!
     pushDevToProd(input: PushDevToProdInput!): String!
   }
 `
@@ -356,5 +363,5 @@ module.exports = [
   ...endUserTerms,
   ...usState,
 
-  ...dataPushConfig,
+  ...devToProdPushConfig,
 ]

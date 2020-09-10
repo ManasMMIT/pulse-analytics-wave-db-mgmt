@@ -12,7 +12,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Fixed** for any bug fixes.
 - **Security** in case of vulnerabilities.
 
-## [Unreleased] - Started: 9-4-20
+## [Unreleased] - Started: 9-10-20
+
+## [3.6.0] - Started: 9-4-20
+
+### Added
+- `Orion/Push Dev to Prod`: Built super-user-facing CRUD interface for making/editing/labeling groups of pulse-dev collections to be pushed to prod; built out consultant-facing version as well that isn't CRUD-able [#758](https://github.com/pulse-data/wave-db-mgmt/pull/758), [#759](https://github.com/pulse-data/wave-db-mgmt/pull/759)
+
+### Changed
+- `Orion/Table`: Generalize TemplateTable component to make it reusable out of the context of the OBM tool; renamed component as Table [#760](https://github.com/pulse-data/wave-db-mgmt/pull/760)
 
 ## [3.5.0] - Started: 8-17-20
 

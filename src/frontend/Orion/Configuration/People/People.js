@@ -8,9 +8,10 @@ import PeopleModal from 'frontend/components/BusinessObjectModal/PeopleModal'
 import Icon from 'frontend/components/Icon'
 import Color from 'frontend/utils/color'
 
-import TemplateTable from '../../Organizations/Obm/TemplateTable'
-import MultiSelectColumnFilter from '../../Organizations/Obm/TemplateTable/custom-filters/MultiSelect/MultiSelectColumnFilter'
-import customMultiSelectFilterFn from '../../Organizations/Obm/TemplateTable/custom-filters/MultiSelect/customMultiSelectFilterFn'
+import { CONFIG_TABLE_WIDTH } from 'frontend/components/Table/tableWidths'
+import Table from 'frontend/components/Table'
+import MultiSelectColumnFilter from 'frontend/components/Table/custom-filters/MultiSelect/MultiSelectColumnFilter'
+import customMultiSelectFilterFn from 'frontend/components/Table/custom-filters/MultiSelect/customMultiSelectFilterFn'
 
 import createButtonStyle from '../../Organizations/Obm/create-button-style'
 
@@ -116,7 +117,6 @@ const People = () => {
       style={{
         display: 'flex',
         flexDirection: 'column',
-        width: 'calc(100vw - 318px)',
       }}
     >
       <PanelHeader title={PAGE_TITLE}>
@@ -130,7 +130,8 @@ const People = () => {
           {CREATE_BTN_TXT}
         </PeopleModalButton>
       </PanelHeader>
-      <TemplateTable
+      <Table
+        width={CONFIG_TABLE_WIDTH}
         data={orderedData}
         columns={COLUMNS}
         modalColMap={MODAL_TO_COL_MAP}

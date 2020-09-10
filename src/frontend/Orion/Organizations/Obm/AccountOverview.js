@@ -7,13 +7,14 @@ import PanelHeader from 'frontend/components/Panel/PanelHeader'
 import ObmModalButton from 'frontend/components/BusinessObjectModal/OncologyBenefitManagerModal/OncologyBenefitManagerModalButton'
 import ObmModal from 'frontend/components/BusinessObjectModal/OncologyBenefitManagerModal'
 import Icon from 'frontend/components/Icon'
+import Table from 'frontend/components/Table'
 
 import Color from 'frontend/utils/color'
 
-import TemplateTable from './TemplateTable'
-import NumberRangeColumnFilter from './TemplateTable/custom-filters/NumberRangeColumnFilter'
-import MultiSelectColumnFilter from './TemplateTable/custom-filters/MultiSelect/MultiSelectColumnFilter'
-import customMultiSelectFilterFn from './TemplateTable/custom-filters/MultiSelect/customMultiSelectFilterFn'
+import { CONFIG_TABLE_WIDTH } from 'frontend/components/Table/tableWidths'
+import NumberRangeColumnFilter from 'frontend/components/Table/custom-filters/NumberRangeColumnFilter'
+import MultiSelectColumnFilter from 'frontend/components/Table/custom-filters/MultiSelect/MultiSelectColumnFilter'
+import customMultiSelectFilterFn from 'frontend/components/Table/custom-filters/MultiSelect/customMultiSelectFilterFn'
 
 import createButtonStyle from './create-button-style'
 
@@ -62,21 +63,29 @@ const AccountOverview = () => {
       style={{
         display: 'flex',
         flexDirection: 'column',
-        width: 'calc(100vw - 318px)',
       }}
     >
       <PanelHeader title={PAGE_TITLE}>
         <ObmModalButton buttonStyle={createButtonStyle}>
-          <Icon iconName="add" color1={Color.WHITE} width={16} style={{ marginRight: 8 }} />
+          <Icon
+            iconName="add"
+            color1={Color.WHITE}
+            width={16}
+            style={{ marginRight: 8 }}
+          />
           Create OBM
         </ObmModalButton>
       </PanelHeader>
 
-      <TemplateTable
+      <Table
+        width={CONFIG_TABLE_WIDTH}
         data={obms}
         columns={COLUMNS}
         modalColMap={MODAL_TO_COL_MAP}
-        exportProps={{ filename: 'ObmAccountOverview', sheetName: 'Account Overview' }}
+        exportProps={{
+          filename: 'ObmAccountOverview',
+          sheetName: 'Account Overview',
+        }}
       />
     </div>
   )

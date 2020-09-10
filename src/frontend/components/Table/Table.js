@@ -1,4 +1,6 @@
+import PropTypes from 'prop-types'
 import React, { useState } from 'react'
+import styled from '@emotion/styled'
 
 import {
   useTable,
@@ -21,6 +23,15 @@ import ModalManager from './ModalManager'
 import sortTypes from './custom-sort-types'
 import formatDataForExport from './formatDataForExport'
 
+const TemplateWrapper = styled.div(
+  {
+    display: 'flex',
+    flexDirection: 'column',
+    overflowY: 'scroll',
+  },
+  ({ width }) => ({ width })
+)
+
 const DefaultColumnFilter = ({
   column: { filterValue, preFilteredRows, setFilter },
 }) => {
@@ -41,12 +52,13 @@ const DEFAULT_COLUMN = {
   Filter: DefaultColumnFilter,
 }
 
-const TemplateTable = ({
+const Table = ({
   columns,
   data,
   modalColMap,
   exportProps,
   exportStyle,
+  width,
 }) => {
   const [modalCell, setModalCell] = useState(null)
 
@@ -80,7 +92,7 @@ const TemplateTable = ({
   const dataFormattedForExport = formatDataForExport(sortedRows, columns)
 
   return (
-    <>
+    <TemplateWrapper width={width}>
       <div
         style={{
           display: 'flex',
@@ -132,13 +144,26 @@ const TemplateTable = ({
         </div>
       </TableWrapper>
 
+      {/* TODO: Decouple Modal Manager from Template Table */}
       <ModalManager modalColMap={modalColMap} modalCell={modalCell} />
-    </>
+    </TemplateWrapper>
   )
 }
 
-TemplateTable.defaultProps = {
-  modalColMap: {},
+Table.propTypes = {
+  columns: PropTypes.array.isRequired,
+  data: PropTypes.array.isRequired,
+  exportProps: PropTypes.object,
+  exportStyle: PropTypes.object,
+  modalColMap: PropTypes.object,
+  width: PropTypes.string, // Dynamic width constants can be found in tableWidths.js
 }
 
-export default TemplateTable
+Table.defaultProps = {
+  modalColMap: {},
+  exportProps: {},
+  exportStyle: {},
+  width: '100vw',
+}
+
+export default Table

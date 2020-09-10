@@ -10,11 +10,12 @@ import Icon from 'frontend/components/Icon'
 
 import Color from 'frontend/utils/color'
 
-import TemplateTable from '../Organizations/Obm/TemplateTable/'
-import MultiSelectColumnFilter from '../Organizations/Obm/TemplateTable/custom-filters/MultiSelect/MultiSelectColumnFilter'
-import NumberRangeColumnFilter from '../Organizations/Obm/TemplateTable/custom-filters/NumberRangeColumnFilter'
-import customMultiSelectFilterFn from '../Organizations/Obm/TemplateTable/custom-filters/MultiSelect/customMultiSelectFilterFn'
-import customBetweenPercentsFilterFn from '../Organizations/Obm/TemplateTable/custom-filters/customBetweenPercentsFilterFn'
+import { CONFIG_TABLE_WIDTH } from 'frontend/components/Table/tableWidths'
+import Table from 'frontend/components/Table/'
+import MultiSelectColumnFilter from 'frontend/components/Table/custom-filters/MultiSelect/MultiSelectColumnFilter'
+import NumberRangeColumnFilter from 'frontend/components/Table/custom-filters/NumberRangeColumnFilter'
+import customMultiSelectFilterFn from 'frontend/components/Table/custom-filters/MultiSelect/customMultiSelectFilterFn'
+import customBetweenPercentsFilterFn from 'frontend/components/Table/custom-filters/customBetweenPercentsFilterFn'
 
 import createButtonStyle from '../Organizations/Obm/create-button-style'
 import FontSpace from 'frontend/utils/fontspace'
@@ -125,7 +126,6 @@ const UsStates = () => {
       style={{
         display: 'flex',
         flexDirection: 'column',
-        width: 'calc(100vw - 318px)',
       }}
     >
       <PanelHeader title={PAGE_TITLE}>
@@ -139,8 +139,8 @@ const UsStates = () => {
           Create US State
         </UsStatesModalButton>
       </PanelHeader>
-
-      <TemplateTable
+      <Table
+        width={CONFIG_TABLE_WIDTH}
         data={usStates}
         columns={COLUMNS}
         modalColMap={MODAL_TO_COL_MAP}

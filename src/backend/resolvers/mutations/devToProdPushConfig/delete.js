@@ -1,15 +1,15 @@
 const { ObjectId } = require('mongodb')
 
-const deleteTestEmailGroup = (
+const deleteDevToProdPushConfig = (
   parent,
   { input: { _id } },
   { pulseCoreDb },
   info
 ) => {
   return pulseCoreDb
-    .collection('testEmailGroups')
+    .collection('devToProdPushConfigs')
     .findOneAndDelete({ _id: ObjectId(_id) })
     .then(({ value }) => value)
 }
 
-module.exports = deleteTestEmailGroup
+module.exports = deleteDevToProdPushConfig

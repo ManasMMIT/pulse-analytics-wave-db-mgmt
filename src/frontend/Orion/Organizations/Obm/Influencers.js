@@ -10,12 +10,13 @@ import PeopleModalButton from 'frontend/components/BusinessObjectModal/PeopleMod
 import ObmPowerSelect from 'frontend/components/BoPowerSelect/ObmPowerSelect'
 import PeoplePowerSelect from 'frontend/components/BoPowerSelect/PeoplePowerSelect'
 import Icon from 'frontend/components/Icon'
+import Table from 'frontend/components/Table'
 
 import Color from 'frontend/utils/color'
 
-import TemplateTable from './TemplateTable'
-import MultiSelectColumnFilter from './TemplateTable/custom-filters/MultiSelect/MultiSelectColumnFilter'
-import customMultiSelectFilterFn from './TemplateTable/custom-filters/MultiSelect/customMultiSelectFilterFn'
+import { CONFIG_TABLE_WIDTH } from 'frontend/components/Table/tableWidths'
+import MultiSelectColumnFilter from 'frontend/components/Table/custom-filters/MultiSelect/MultiSelectColumnFilter'
+import customMultiSelectFilterFn from 'frontend/components/Table/custom-filters/MultiSelect/customMultiSelectFilterFn'
 
 import createButtonStyle from './create-button-style'
 
@@ -99,7 +100,6 @@ const Influencers = () => {
       style={{
         display: 'flex',
         flexDirection: 'column',
-        width: 'calc(100vw - 318px)',
       }}
     >
       <PanelHeader title={PAGE_TITLE}>
@@ -117,7 +117,8 @@ const Influencers = () => {
           </PeopleModalButton>
         </div>
       </PanelHeader>
-      <TemplateTable
+      <Table
+        width={CONFIG_TABLE_WIDTH}
         data={influencerTemplateData}
         columns={COLUMNS}
         modalColMap={MODAL_TO_COL_MAP}

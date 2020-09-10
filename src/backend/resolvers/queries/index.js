@@ -8,6 +8,7 @@ const regimens = require('./regimens')
 const organizations = require('./organizations')
 const qualityOfAccessScores = require('./qualityOfAccessScores')
 const collections = require('./collections')
+const devToProdPushConfigs = require('./devToProdPushConfigs')
 const newTreatmentPlans = require('./newTreatmentPlans')
 const testEmailGroups = require('./testEmailGroups')
 const alert = require('./alert')
@@ -39,6 +40,7 @@ const usStates = require('./usStates')
 module.exports = {
   collections,
   clients,
+  devToProdPushConfigs,
   teams,
   users,
   nodes,
