@@ -12,7 +12,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Fixed** for any bug fixes.
 - **Security** in case of vulnerabilities.
 
-## [Unreleased] - Started: 9-10-20
+## [Unreleased] - Started: 9-11-20
+
+## [3.6.2] - Started: 9-10-20
 
 ### Fixed
 - `Payer Projects Mgmt Tool`: Fix payer projects error parsing to account for errors without suggestions [#764](https://github.com/pulse-data/wave-db-mgmt/pull/764)
