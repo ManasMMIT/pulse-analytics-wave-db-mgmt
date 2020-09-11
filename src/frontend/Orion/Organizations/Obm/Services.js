@@ -22,7 +22,7 @@ import MultiSelectColumnFilter from 'frontend/components/Table/custom-filters/Mu
 import customMultiSelectFilterFn from 'frontend/components/Table/custom-filters/MultiSelect/customMultiSelectFilterFn'
 import NumberRangeColumnFilter from 'frontend/components/Table/custom-filters/NumberRangeColumnFilter'
 
-import createButtonStyle from './create-button-style'
+import peopleModalButtonStyle from 'frontend/components/BusinessObjectModal/PeopleModal/peopleModalButtonStyle'
 
 const PAGE_TITLE = 'Oncology Benefit Manager Services'
 
@@ -97,7 +97,7 @@ const Services = () => {
           <ObmPowerSelect />
           <ObmServicePowerSelect />
           <ObmServiceCategoryPowerSelect />
-          <ObmServicesModalButton buttonStyle={createButtonStyle}>
+          <ObmServicesModalButton buttonStyle={peopleModalButtonStyle}>
             <Icon
               iconName="add"
               color1={Color.WHITE}
@@ -108,7 +108,7 @@ const Services = () => {
           </ObmServicesModalButton>
 
           <ObmServicesCategoriesModalButton
-            buttonStyle={{ ...createButtonStyle, marginLeft: 12 }}
+            buttonStyle={{ ...peopleModalButtonStyle, marginLeft: 12 }}
           >
             <Icon
               iconName="add"

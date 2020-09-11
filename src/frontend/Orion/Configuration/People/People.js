@@ -13,7 +13,7 @@ import Table from 'frontend/components/Table'
 import MultiSelectColumnFilter from 'frontend/components/Table/custom-filters/MultiSelect/MultiSelectColumnFilter'
 import customMultiSelectFilterFn from 'frontend/components/Table/custom-filters/MultiSelect/customMultiSelectFilterFn'
 
-import createButtonStyle from '../../Organizations/Obm/create-button-style'
+import peopleModalButtonStyle from 'frontend/components/BusinessObjectModal/PeopleModal/peopleModalButtonStyle'
 
 import usePeople from './usePeople'
 
@@ -120,7 +120,7 @@ const People = () => {
       }}
     >
       <PanelHeader title={PAGE_TITLE}>
-        <PeopleModalButton buttonStyle={createButtonStyle}>
+        <PeopleModalButton buttonStyle={peopleModalButtonStyle}>
           <Icon
             iconName="add"
             color1={Color.WHITE}
