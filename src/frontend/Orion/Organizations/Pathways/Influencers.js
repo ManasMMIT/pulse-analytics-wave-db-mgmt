@@ -1,8 +1,6 @@
 import React from 'react'
 import { useQuery } from '@apollo/react-hooks'
 
-import { GET_VIEW_OBM_PAYER_PARTNERSHIPS } from 'frontend/api/queries'
-
 import PanelHeader from 'frontend/components/Panel/PanelHeader'
 import Table from 'frontend/components/Table'
 import PeoplePowerSelect from 'frontend/components/BoPowerSelect/PeoplePowerSelect'
@@ -81,10 +79,10 @@ const COLUMNS = [
 ]
 
 const PathwaysInfluencers = () => {
-  const { data, loading } = useQuery(GET_VIEW_OBM_PAYER_PARTNERSHIPS)
+  // const { data, loading } = useQuery(GET_VIEW_PATHWAY_INFLUENCERS)
 
-  let payerPartnershipsData = []
-  if (data && !loading) payerPartnershipsData = Object.values(data)[0] || []
+  // let pathwayInfluencerData = []
+  // if (data && !loading) pathwayInfluencerData = Object.values(data)[0] || []
 
   return (
     <div
@@ -109,7 +107,7 @@ const PathwaysInfluencers = () => {
       </PanelHeader>
       <Table
         width={CONFIG_TABLE_WIDTH}
-        data={payerPartnershipsData}
+        data={[]}
         columns={COLUMNS}
         exportProps={{
           filename: 'PathwaysInfluencers',
