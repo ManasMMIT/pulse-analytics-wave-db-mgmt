@@ -20,7 +20,7 @@ echo "isolatedDevToProd script beginning against $DB_CLUSTER_ENV cluster"
 
 echo "Dumping pulse-dev collections into current-dump folder..."
 
-# WARNING: use single =, not double == because on Ubuntu server, 'sh' not okay with single = used in this way
+# WARNING: use single =, not double == because on Ubuntu server, 'sh' not okay with double ==
 # Ref: https://stackoverflow.com/a/3411105
 if [ $DB_CLUSTER_ENV = 'production' ]
 then

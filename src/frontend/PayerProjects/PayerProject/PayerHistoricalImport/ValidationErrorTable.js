@@ -24,27 +24,37 @@ const tableHeaderStyle = {
   fontSize: 12,
   fontWeight: 800,
   color: Colors.BLACK,
-  borderBottom: `2px solid ${transparentize(0.9, Colors.BLACK)}`
+  borderBottom: `2px solid ${transparentize(0.9, Colors.BLACK)}`,
 }
 
-const ValidationErrorTable = ({
-  validationErrors
-}) => {
+const ValidationErrorTable = ({ validationErrors }) => {
+  // TODO: Deprecate error string parsing in favor of structured error objects
   const formattedErrors = validationErrors.split('#')
   const [, scenario, ...errorGroups] = formattedErrors
 
   const tableData = errorGroups.reduce((acc, errorGroup) => {
-    const [message, ...suggestions] = errorGroup.split('\n').filter(line => !!line)
-    const errorData = suggestions.map(suggestion => ({
-      scenario,
-      message,
-      suggestion: suggestion.replace(/\|/g, ' | ')
-    }))
+    const [message, ...suggestions] = errorGroup
+      .split('\n')
+      .filter((line) => !!line)
+    let errorData
 
-    return [
-      ...acc,
-      ...errorData
-    ]
+    if (suggestions.length) {
+      errorData = suggestions.map((suggestion) => ({
+        scenario,
+        message,
+        suggestion: suggestion.replace(/\|/g, ' | '),
+      }))
+    } else {
+      errorData = [
+        {
+          scenario,
+          message,
+          suggestion: null,
+        },
+      ]
+    }
+
+    return [...acc, ...errorData]
   }, [])
 
   const shouldShowTable = validationErrors.length !== 0
@@ -56,40 +66,46 @@ const ValidationErrorTable = ({
     setPage(newPage)
   }
 
-  const handleChangeRowsPerPage = event => {
+  const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value))
     setPage(0)
   }
 
-  return shouldShowTable && (
-    <TableWrapper>
-      <TableContainer style={{ maxHeight: 400 }}>
-        <Table stickyHeader aria-label="sticky table" size="small">
-          <TableHead>
-            <TableRow>
-              <TableCell style={tableHeaderStyle}> Scenario/Error </TableCell>
-              <TableCell style={tableHeaderStyle}> Message </TableCell>
-              <TableCell style={tableHeaderStyle}> Suggestion/Consideration </TableCell>
-            </TableRow>
-          </TableHead>
-          <ValidationErrorTableBody
-            tableData={tableData}
-            page={page}
-            rowsPerPage={rowsPerPage}
-          />
-        </Table>
-      </TableContainer>
-      <TablePagination
-        rowsPerPageOptions={[10, 25, 100]}
-        component="div"
-        count={tableData.length}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onChangePage={handleChangePage}
-        onChangeRowsPerPage={handleChangeRowsPerPage}
-        style={{ borderTop: `1px solid ${transparentize(0.9, Colors.BLACK)}` }}
-      />
-    </TableWrapper>
+  return (
+    shouldShowTable && (
+      <TableWrapper>
+        <TableContainer style={{ maxHeight: 400 }}>
+          <Table stickyHeader aria-label="sticky table" size="small">
+            <TableHead>
+              <TableRow style={{ backgroundColor: Colors.WHITE }}>
+                <TableCell style={tableHeaderStyle}>Scenario/Error</TableCell>
+                <TableCell style={tableHeaderStyle}>Message</TableCell>
+                <TableCell style={tableHeaderStyle}>
+                  Suggestion/Consideration
+                </TableCell>
+              </TableRow>
+            </TableHead>
+            <ValidationErrorTableBody
+              tableData={tableData}
+              page={page}
+              rowsPerPage={rowsPerPage}
+            />
+          </Table>
+        </TableContainer>
+        <TablePagination
+          rowsPerPageOptions={[10, 25, 100]}
+          component="div"
+          count={tableData.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onChangePage={handleChangePage}
+          onChangeRowsPerPage={handleChangeRowsPerPage}
+          style={{
+            borderTop: `1px solid ${transparentize(0.9, Colors.BLACK)}`,
+          }}
+        />
+      </TableWrapper>
+    )
   )
 }
 
