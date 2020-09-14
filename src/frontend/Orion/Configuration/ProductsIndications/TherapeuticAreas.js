@@ -11,7 +11,7 @@ import { CONFIG_TABLE_WIDTH } from 'frontend/components/Table/tableWidths'
 import Table from 'frontend/components/Table'
 import MultiSelectColumnFilter from 'frontend/components/Table/custom-filters/MultiSelect/MultiSelectColumnFilter'
 import customMultiSelectFilterFn from 'frontend/components/Table/custom-filters/MultiSelect/customMultiSelectFilterFn'
-import peopleModalButtonStyle from 'frontend/components/BusinessObjectModal/PeopleModal/peopleModalButtonStyle'
+import createButtonStyle from 'frontend/components/BusinessObjectModal/PeopleModal/createButtonStyle'
 
 import { GET_THERAPEUTIC_AREAS } from '../../../api/queries'
 
@@ -44,7 +44,7 @@ const TherapeuticAreas = () => {
       }}
     >
       <PanelHeader title={PAGE_TITLE}>
-        <TherapeuticAreaModalButton buttonStyle={peopleModalButtonStyle}>
+        <TherapeuticAreaModalButton buttonStyle={createButtonStyle}>
           <Icon
             iconName="add"
             color1={Color.WHITE}

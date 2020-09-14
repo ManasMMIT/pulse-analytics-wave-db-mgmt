@@ -5,7 +5,7 @@ import PanelHeader from 'frontend/components/Panel/PanelHeader'
 import Table from 'frontend/components/Table'
 import PeoplePowerSelect from 'frontend/components/BoPowerSelect/PeoplePowerSelect'
 import PeopleModalButton from 'frontend/components/BusinessObjectModal/PeopleModal/PeopleModalButton'
-import peopleModalButtonStyle from 'frontend/components/BusinessObjectModal/PeopleModal/peopleModalButtonStyle'
+import createButtonStyle from 'frontend/components/BusinessObjectModal/PeopleModal/createButtonStyle'
 import Icon from 'frontend/components/Icon'
 import Color from 'frontend/utils/color'
 
@@ -94,7 +94,7 @@ const PathwaysInfluencers = () => {
       <PanelHeader title={PAGE_TITLE}>
         <div style={{ display: 'flex', alignItems: 'center' }}>
           <PeoplePowerSelect />
-          <PeopleModalButton buttonStyle={peopleModalButtonStyle}>
+          <PeopleModalButton buttonStyle={createButtonStyle}>
             <Icon
               iconName="add"
               color1={Color.WHITE}

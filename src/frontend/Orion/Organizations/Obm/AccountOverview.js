@@ -16,7 +16,7 @@ import NumberRangeColumnFilter from 'frontend/components/Table/custom-filters/Nu
 import MultiSelectColumnFilter from 'frontend/components/Table/custom-filters/MultiSelect/MultiSelectColumnFilter'
 import customMultiSelectFilterFn from 'frontend/components/Table/custom-filters/MultiSelect/customMultiSelectFilterFn'
 
-import peopleModalButtonStyle from 'frontend/components/BusinessObjectModal/PeopleModal/peopleModalButtonStyle'
+import createButtonStyle from 'frontend/components/BusinessObjectModal/PeopleModal/createButtonStyle'
 
 const PAGE_TITLE = 'Oncology Benefit Manager Account Overview'
 
@@ -66,7 +66,7 @@ const AccountOverview = () => {
       }}
     >
       <PanelHeader title={PAGE_TITLE}>
-        <ObmModalButton buttonStyle={peopleModalButtonStyle}>
+        <ObmModalButton buttonStyle={createButtonStyle}>
           <Icon
             iconName="add"
             color1={Color.WHITE}

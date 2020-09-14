@@ -18,7 +18,7 @@ import { CONFIG_TABLE_WIDTH } from 'frontend/components/Table/tableWidths'
 import MultiSelectColumnFilter from 'frontend/components/Table/custom-filters/MultiSelect/MultiSelectColumnFilter'
 import customMultiSelectFilterFn from 'frontend/components/Table/custom-filters/MultiSelect/customMultiSelectFilterFn'
 
-import peopleModalButtonStyle from 'frontend/components/BusinessObjectModal/PeopleModal/peopleModalButtonStyle'
+import createButtonStyle from 'frontend/components/BusinessObjectModal/PeopleModal/createButtonStyle'
 
 const PAGE_TITLE = 'Oncology Benefit Manager Influencers'
 
@@ -106,7 +106,7 @@ const Influencers = () => {
         <div style={{ display: 'flex', alignItems: 'center' }}>
           <ObmPowerSelect />
           <PeoplePowerSelect />
-          <PeopleModalButton buttonStyle={peopleModalButtonStyle}>
+          <PeopleModalButton buttonStyle={createButtonStyle}>
             <Icon
               iconName="add"
               color1={Color.WHITE}

@@ -17,7 +17,7 @@ import NumberRangeColumnFilter from 'frontend/components/Table/custom-filters/Nu
 import customMultiSelectFilterFn from 'frontend/components/Table/custom-filters/MultiSelect/customMultiSelectFilterFn'
 import customBetweenPercentsFilterFn from 'frontend/components/Table/custom-filters/customBetweenPercentsFilterFn'
 
-import peopleModalButtonStyle from 'frontend/components/BusinessObjectModal/PeopleModal/peopleModalButtonStyle'
+import createButtonStyle from 'frontend/components/BusinessObjectModal/PeopleModal/createButtonStyle'
 import FontSpace from 'frontend/utils/fontspace'
 
 const percentageFormatter = (value, decimals = 0) => {
@@ -129,7 +129,7 @@ const UsStates = () => {
       }}
     >
       <PanelHeader title={PAGE_TITLE}>
-        <UsStatesModalButton buttonStyle={peopleModalButtonStyle}>
+        <UsStatesModalButton buttonStyle={createButtonStyle}>
           <Icon
             iconName="add"
             color1={Color.WHITE}
