@@ -1,54 +1,23 @@
 import React from 'react'
 import { useQuery } from '@apollo/react-hooks'
 
-import { GET_VIEW_OBM_INFLUENCERS } from 'frontend/api/queries'
-
 import PanelHeader from 'frontend/components/Panel/PanelHeader'
-import ObmModal from 'frontend/components/BusinessObjectModal/OncologyBenefitManagerModal'
-import PeopleModal from 'frontend/components/BusinessObjectModal/PeopleModal'
-import PeopleModalButton from 'frontend/components/BusinessObjectModal/PeopleModal/PeopleModalButton'
-import ObmPowerSelect from 'frontend/components/BoPowerSelect/ObmPowerSelect'
-import PeoplePowerSelect from 'frontend/components/BoPowerSelect/PeoplePowerSelect'
-import Icon from 'frontend/components/Icon'
 import Table from 'frontend/components/Table'
-
+import PeoplePowerSelect from 'frontend/components/BoPowerSelect/PeoplePowerSelect'
+import PeopleModalButton from 'frontend/components/BusinessObjectModal/PeopleModal/PeopleModalButton'
+import createButtonStyle from 'frontend/components/BusinessObjectModal/PeopleModal/createButtonStyle'
+import Icon from 'frontend/components/Icon'
 import Color from 'frontend/utils/color'
 
 import { CONFIG_TABLE_WIDTH } from 'frontend/components/Table/tableWidths'
 import MultiSelectColumnFilter from 'frontend/components/Table/custom-filters/MultiSelect/MultiSelectColumnFilter'
 import customMultiSelectFilterFn from 'frontend/components/Table/custom-filters/MultiSelect/customMultiSelectFilterFn'
 
-import createButtonStyle from 'frontend/components/BusinessObjectModal/PeopleModal/createButtonStyle'
-
-const PAGE_TITLE = 'Oncology Benefit Manager Influencers'
-
-const MODAL_TO_COL_MAP = {
-  obmOrganization: {
-    Modal: ObmModal,
-    idKey: 'obmId',
-  },
-  influencerFirstName: {
-    Modal: PeopleModal,
-    idKey: 'influencerId',
-  },
-  influencerLastName: {
-    Modal: PeopleModal,
-    idKey: 'influencerId',
-  },
-  influencerNpiNumber: {
-    Modal: PeopleModal,
-    idKey: 'influencerId',
-  },
-  influencerPosition: {
-    Modal: ObmModal,
-    idKey: 'obmId',
-  },
-}
+const PAGE_TITLE = 'Pathways Influencers'
 
 const COLUMNS = [
   {
-    Header: 'Account',
-    accessor: 'obmOrganization',
+    Header: 'Date Updated',
     Filter: MultiSelectColumnFilter,
     filter: customMultiSelectFilterFn,
     sortType: 'text',
@@ -56,44 +25,64 @@ const COLUMNS = [
     width: 200,
   },
   {
-    Header: 'First Name',
-    accessor: 'influencerFirstName',
+    Header: 'Name',
     Filter: MultiSelectColumnFilter,
     filter: customMultiSelectFilterFn,
     sortType: 'text',
     sticky: 'left',
+    width: 300,
   },
   {
-    Header: 'Last Name',
-    accessor: 'influencerLastName',
+    Header: 'Status',
     Filter: MultiSelectColumnFilter,
     filter: customMultiSelectFilterFn,
     sortType: 'text',
     sticky: 'left',
+    width: 300,
   },
   {
-    Header: 'NPI #',
-    accessor: 'influencerNpiNumber',
+    Header: 'Pathways Organization',
     Filter: MultiSelectColumnFilter,
     filter: customMultiSelectFilterFn,
     sortType: 'text',
     Cell: (props) => <div style={{ textAlign: 'right' }}>{props.value}</div>,
+    width: 300,
   },
   {
-    Header: 'Position within OBM',
-    accessor: 'influencerPosition',
+    Header: 'NPI #',
     Filter: MultiSelectColumnFilter,
     filter: customMultiSelectFilterFn,
     sortType: 'text',
-    width: 700,
+    width: 400,
+  },
+  {
+    Header: 'Management Type',
+    Filter: MultiSelectColumnFilter,
+    filter: customMultiSelectFilterFn,
+    sortType: 'text',
+    width: 400,
+  },
+  {
+    Header: 'Influencer Type',
+    Filter: MultiSelectColumnFilter,
+    filter: customMultiSelectFilterFn,
+    sortType: 'text',
+    width: 400,
+  },
+  {
+    Header: 'Pathways Position',
+    Filter: MultiSelectColumnFilter,
+    filter: customMultiSelectFilterFn,
+    sortType: 'text',
+    width: 400,
   },
 ]
 
-const Influencers = () => {
-  const { data, loading } = useQuery(GET_VIEW_OBM_INFLUENCERS)
+const PathwaysInfluencers = () => {
+  // const { data, loading } = useQuery(GET_VIEW_PATHWAY_INFLUENCERS)
 
-  let influencerTemplateData = []
-  if (data && !loading) influencerTemplateData = Object.values(data)[0] || []
+  // let pathwayInfluencerData = []
+  // if (data && !loading) pathwayInfluencerData = Object.values(data)[0] || []
 
   return (
     <div
@@ -104,7 +93,6 @@ const Influencers = () => {
     >
       <PanelHeader title={PAGE_TITLE}>
         <div style={{ display: 'flex', alignItems: 'center' }}>
-          <ObmPowerSelect />
           <PeoplePowerSelect />
           <PeopleModalButton buttonStyle={createButtonStyle}>
             <Icon
@@ -119,13 +107,15 @@ const Influencers = () => {
       </PanelHeader>
       <Table
         width={CONFIG_TABLE_WIDTH}
-        data={influencerTemplateData}
+        data={[]}
         columns={COLUMNS}
-        modalColMap={MODAL_TO_COL_MAP}
-        exportProps={{ filename: 'ObmInfluencers', sheetName: 'Influencers' }}
+        exportProps={{
+          filename: 'PathwaysInfluencers',
+          sheetName: 'Pathways Influencers',
+        }}
       />
     </div>
   )
 }
 
-export default Influencers
+export default PathwaysInfluencers

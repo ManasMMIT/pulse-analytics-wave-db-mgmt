@@ -17,7 +17,7 @@ import NumberRangeColumnFilter from 'frontend/components/Table/custom-filters/Nu
 import customMultiSelectFilterFn from 'frontend/components/Table/custom-filters/MultiSelect/customMultiSelectFilterFn'
 import customBetweenPercentsFilterFn from 'frontend/components/Table/custom-filters/customBetweenPercentsFilterFn'
 
-import createButtonStyle from '../Organizations/Obm/create-button-style'
+import createButtonStyle from 'frontend/components/BusinessObjectModal/PeopleModal/createButtonStyle'
 import FontSpace from 'frontend/utils/fontspace'
 
 const percentageFormatter = (value, decimals = 0) => {

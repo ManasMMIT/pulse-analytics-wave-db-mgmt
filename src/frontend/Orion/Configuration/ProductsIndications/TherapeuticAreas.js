@@ -11,7 +11,7 @@ import { CONFIG_TABLE_WIDTH } from 'frontend/components/Table/tableWidths'
 import Table from 'frontend/components/Table'
 import MultiSelectColumnFilter from 'frontend/components/Table/custom-filters/MultiSelect/MultiSelectColumnFilter'
 import customMultiSelectFilterFn from 'frontend/components/Table/custom-filters/MultiSelect/customMultiSelectFilterFn'
-import createButtonStyle from 'frontend/Orion/Organizations/Obm/create-button-style'
+import createButtonStyle from 'frontend/components/BusinessObjectModal/PeopleModal/createButtonStyle'
 
 import { GET_THERAPEUTIC_AREAS } from '../../../api/queries'
 
