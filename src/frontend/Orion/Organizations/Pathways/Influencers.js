@@ -41,7 +41,7 @@ const COLUMNS = [
     width: 300,
   },
   {
-    Header: 'Pathway Organization',
+    Header: 'Pathways Organization',
     Filter: MultiSelectColumnFilter,
     filter: customMultiSelectFilterFn,
     sortType: 'text',
