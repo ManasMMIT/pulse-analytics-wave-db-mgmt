@@ -1,6 +1,6 @@
 import styled from '@emotion/styled'
 import { transparentize } from 'polished'
-import { Colors, Spacing, Transitions } from 'frontend/utils/pulseStyles'
+import { Spacing, Transitions } from 'frontend/utils/pulseStyles'
 import Color from 'frontend/utils/color'
 
 export const StyledTopButton = styled.button({
@@ -19,8 +19,8 @@ export const StyledTopButton = styled.button({
 })
 
 export const StyledCardButton = styled.button({
-  background: Colors.PRIMARY,
-  color: Colors.WHITE,
+  background: Color.PRIMARY,
+  color: Color.WHITE,
   fontSize: 12,
   fontWeight: 700,
   padding: `${Spacing.SMALL} ${Spacing.NORMAL}`,
@@ -30,8 +30,8 @@ export const StyledCardButton = styled.button({
   lineHeight: 1.5,
   textAlign: 'left',
   ':hover': {
-    background: transparentize(0.9, Colors.PRIMARY),
-    color: Colors.PRIMARY,
+    background: transparentize(0.9, Color.PRIMARY),
+    color: Color.PRIMARY,
   },
   ':focus': {
     outline: 'none',
@@ -42,6 +42,7 @@ export const InputSection = styled.div({
   marginBottom: 16,
   display: 'flex',
   flexDirection: 'column',
+  maxWidth: '1300px',
 })
 
 export const TitleInput = styled.input({
@@ -50,19 +51,19 @@ export const TitleInput = styled.input({
   padding: `${Spacing.SMALL}`,
   borderRadius: 4,
   border: '1px solid',
-  borderColor: transparentize(0.9, Colors.BLACK),
-  caretColor: Colors.PRIMARY,
+  borderColor: transparentize(0.9, Color.BLACK),
+  caretColor: Color.PRIMARY,
   transition: Transitions.NORMAL,
   ':focus': {
-    borderColor: Colors.PRIMARY,
+    borderColor: Color.PRIMARY,
     outline: 'none',
-    boxShadow: `0 0 0 1px ${Colors.PRIMARY}`,
+    boxShadow: `0 0 0 1px ${Color.PRIMARY}`,
   },
   ':hover': {
-    borderColor: Colors.PRIMARY,
+    borderColor: Color.PRIMARY,
   },
   '::placeholder': {
-    color: transparentize(0.7, Colors.BLACK),
+    color: transparentize(0.7, Color.BLACK),
   },
 })
 
@@ -70,6 +71,6 @@ export const StyledLabel = styled.label({
   fontSize: 12,
   lineHeight: '22px',
   fontWeight: 600,
-  color: Colors.BLACK,
+  color: Color.BLACK,
   marginBottom: Spacing.TINY,
 })

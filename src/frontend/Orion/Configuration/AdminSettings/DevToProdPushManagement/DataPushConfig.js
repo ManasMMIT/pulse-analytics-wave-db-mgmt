@@ -10,6 +10,7 @@ import styled from '@emotion/styled'
 import Spinner from 'frontend/components/Spinner'
 import { Colors, Spacing } from 'frontend/utils/pulseStyles'
 import DeleteButton from 'frontend/Orion/shared/DeleteButton'
+import { customSelectStyles } from 'frontend/components/customSelectStyles'
 
 import {
   StyledCardButton,
@@ -78,6 +79,7 @@ const DataPushConfig = ({ _id, name, collections }) => {
   return (
     <Wrapper>
       <InputSection>
+        <StyledLabel>Collection Group Name</StyledLabel>
         <TitleInput
           type="text"
           name="name"
@@ -91,8 +93,9 @@ const DataPushConfig = ({ _id, name, collections }) => {
       </InputSection>
 
       <InputSection>
-        <StyledLabel>Collections:</StyledLabel>
+        <StyledLabel>Collections</StyledLabel>
         <Select
+          styles={customSelectStyles}
           isMulti
           options={devCollectionNames.map((name) => ({
             label: name,
