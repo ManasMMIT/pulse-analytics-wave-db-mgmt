@@ -80,6 +80,13 @@ export const GET_PEOPLE = gql`
       updatedOn
       firstName
       lastName
+      middleName
+      affiliation
+      affiliationPosition
+      primaryState
+      email
+      linkedIn
+      externalLink
       nationalProviderIdentifier
       physicianProfileId
     }

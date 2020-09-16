@@ -45,6 +45,14 @@ const COLUMNS = [
     sticky: 'left',
   },
   {
+    Header: 'Middle Name',
+    accessor: 'middleName',
+    Filter: MultiSelectColumnFilter,
+    filter: customMultiSelectFilterFn,
+    sortType: 'text',
+    sticky: 'left',
+  },
+  {
     Header: 'Last Name',
     accessor: 'lastName',
     Filter: MultiSelectColumnFilter,
