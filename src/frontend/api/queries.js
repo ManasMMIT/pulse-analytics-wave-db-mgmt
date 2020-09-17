@@ -1,5 +1,29 @@
 import gql from 'graphql-tag'
 
+export const GET_EVENTS = gql`
+  query getEvents {
+    events {
+      _id
+      userId
+      username
+      action
+      entity
+      timestamp
+      boName
+      connectedEntities {
+        entity
+        boName
+      }
+      deltas {
+        field
+        before
+        after
+      }
+      metaType
+    }
+  }
+`
+
 export const GET_US_STATES = gql`
   query getUsStates {
     usStates {

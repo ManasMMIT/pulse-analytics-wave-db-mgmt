@@ -14,6 +14,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased] - Started: 9-11-20
 
+### Added
+- `Orion`: Added initial Total History view to Admin Settings [#769](https://github.com/pulse-data/wave-db-mgmt/pull/769)
+
 ## [3.6.2] - Started: 9-10-20
 
 ### Fixed
@@ -35,7 +38,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [3.5.0] - Started: 8-17-20
 
 ### Added
-- `Phoenix/Sitemap View`: 
+- `Phoenix/Sitemap View`:
   - Add copy/paste `nodeId` button for sitemap view for super-users [#742](https://github.com/pulse-data/wave-db-mgmt/pull/742)
   - Add new toolId to node mapping for OBM Tool permissions
 - `Phoenix/Backend`: Integration test for client update resolver. [#734](https://github.com/pulse-data/wave-db-mgmt/pull/734) and Luming merge committed his work in
