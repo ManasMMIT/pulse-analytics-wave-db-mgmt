@@ -32,6 +32,7 @@
     "express": "^4.17.1",
     "express-jwt": "^5.3.1",
     "file-saver": "^2.0.2",
+    "flat": "^5.0.2",
     "glamor": "^2.20.40",
     "glamorous": "^5.0.0",
     "graphql": "^14.6.0",
