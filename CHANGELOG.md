@@ -12,10 +12,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Fixed** for any bug fixes.
 - **Security** in case of vulnerabilities.
 
-## [Unreleased] - Started: 9-11-20
+## [Unreleased] - Started: 9-17-20
+
+## [3.7.0] - Started: 9-11-20
 
 ### Added
-- `Orion`: Added initial Total History view to Admin Settings [#769](https://github.com/pulse-data/wave-db-mgmt/pull/769)
+- `Orion`: Initial Event tracking work
+  - Scaffold of event sourcing OOP [#770](https://github.com/pulse-data/wave-db-mgmt/pull/770)
+  - Added Total History view to Admin Settings [#769](https://github.com/pulse-data/wave-db-mgmt/pull/769)
 
 ## [3.6.2] - Started: 9-10-20
 
