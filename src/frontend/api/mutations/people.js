@@ -6,6 +6,13 @@ export const CREATE_PERSON = gql`
       _id
       firstName
       lastName
+      middleName
+      affiliation
+      affiliationPosition
+      primaryState
+      email
+      linkedIn
+      externalLink
       nationalProviderIdentifier
       physicianProfileId
     }
@@ -18,6 +25,13 @@ export const UPDATE_PERSON = gql`
       _id
       firstName
       lastName
+      middleName
+      affiliation
+      affiliationPosition
+      primaryState
+      email
+      linkedIn
+      externalLink
       nationalProviderIdentifier
       physicianProfileId
     }
@@ -30,6 +44,13 @@ export const DELETE_PERSON = gql`
       _id
       firstName
       lastName
+      middleName
+      affiliation
+      affiliationPosition
+      primaryState
+      email
+      linkedIn
+      externalLink
       nationalProviderIdentifier
       physicianProfileId
     }

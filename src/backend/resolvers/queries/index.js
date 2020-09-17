@@ -24,18 +24,13 @@ const coverages = require('./coverages')
 const populations = require('./populations')
 const lines = require('./lines')
 const therapeuticAreas = require('./therapeuticAreas')
-
 const payerProjects = require('./payerProjects')
-
 const cMsOrgPrimarySpecialtyCounts = require('./cMsOrgPrimarySpecialtyCounts')
-
 const aquila = require('./aquila')
-
 const people = require('./people')
-
 const endUserTerms = require('./endUserTerms')
-
 const usStates = require('./usStates')
+const events = require('./events')
 
 module.exports = {
   collections,
@@ -70,4 +65,5 @@ module.exports = {
   ...endUserTerms,
   usStates,
   therapeuticAreas,
+  events,
 }

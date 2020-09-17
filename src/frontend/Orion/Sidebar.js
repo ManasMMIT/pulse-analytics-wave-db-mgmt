@@ -182,6 +182,10 @@ const ADMIN_SETTINGS_LINKS_CONFIG = [
     label: 'End User Terms Management',
     link: '/orion/configuration/admin-settings/end-user-terms',
   },
+  {
+    label: 'Total History',
+    link: '/orion/configuration/admin-settings/total-history',
+  },
 ]
 
 const renderStyledNavLink = ({ label, link }) => (
@@ -309,6 +313,13 @@ const Sidebar = () => {
             to={getToolItemPath('pathways', 'newaccounts')}
           >
             New Pathways Accounts
+          </StyledNavLink>
+          <StyledNavLink
+            style={dropdownInactiveLinkStyle}
+            activeStyle={dropdownActiveLinkStyle}
+            to={getToolItemPath('pathways', 'influencers')}
+          >
+            Influencers
           </StyledNavLink>
         </StyledDropdown>
         <StyledDropdown

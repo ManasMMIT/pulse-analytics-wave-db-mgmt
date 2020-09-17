@@ -92,6 +92,32 @@ const queries = gql`
     endUserTermsUsers: [EndUserTermsUser]
 
     usStates: [UsState]
+
+    events: [Event]
+  }
+
+  type Event {
+    _id: ID!
+    userId: String
+    username: String
+    action: String
+    timestamp: DateTime
+    entity: JSON
+    boName: String
+    connectedEntities: [ConnectedEntity]
+    deltas: [FieldDelta]
+    metaType: String
+  }
+
+  type ConnectedEntity {
+    entity: JSON
+    boName: String
+  }
+
+  type FieldDelta {
+    field: String
+    before: JSON
+    after: JSON
   }
 
   type UsState {
@@ -160,6 +186,13 @@ const queries = gql`
     updatedOn: DateTime
     firstName: String
     lastName: String
+    middleName: String
+    affiliation: String
+    affiliationPosition: String
+    primaryState: String
+    email: String
+    linkedIn: String
+    externalLink: String
     nationalProviderIdentifier: Float
     physicianProfileId: Float
   }

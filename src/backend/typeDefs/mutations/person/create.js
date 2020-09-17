@@ -5,6 +5,13 @@ const createPersonTypeDefs = gql`
     _id: ID # included but should always be null
     firstName: String!
     lastName: String!
+    middleName: String
+    affiliation: String
+    affiliationPosition: String
+    primaryState: String
+    email: String
+    linkedIn: String
+    externalLink: String
     nationalProviderIdentifier: Float
     physicianProfileId: Float
   }
@@ -15,6 +22,13 @@ const createPersonTypeDefs = gql`
     updatedOn: DateTime
     firstName: String
     lastName: String
+    middleName: String
+    affiliation: String
+    affiliationPosition: String
+    primaryState: String
+    email: String
+    linkedIn: String
+    externalLink: String
     nationalProviderIdentifier: Float
     physicianProfileId: Float
   }

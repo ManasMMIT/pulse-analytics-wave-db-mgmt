@@ -9,6 +9,7 @@ import DevToProdPushManagement from './DevToProdPushManagement'
 import AddSourceNode from './AddSourceNode'
 import EditRoleNodeView from './EditRoleNodeView'
 import EndUserTerms from './EndUserTerms'
+import TotalHistory from './TotalHistory'
 
 const AdminSettings = () => (
   <Switch>
@@ -43,6 +44,10 @@ const AdminSettings = () => (
     <Route
       path={'/orion/configuration/admin-settings/dev-to-prod-push-management'}
       component={DevToProdPushManagement}
+    />
+    <Route
+      path={'/orion/configuration/admin-settings/total-history'}
+      component={TotalHistory}
     />
     <Redirect to={'/orion/configuration/admin-settings/bo-management'} />
   </Switch>

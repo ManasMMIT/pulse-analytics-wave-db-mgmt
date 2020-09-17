@@ -13,7 +13,7 @@ import Table from 'frontend/components/Table'
 import MultiSelectColumnFilter from 'frontend/components/Table/custom-filters/MultiSelect/MultiSelectColumnFilter'
 import customMultiSelectFilterFn from 'frontend/components/Table/custom-filters/MultiSelect/customMultiSelectFilterFn'
 
-import createButtonStyle from '../../Organizations/Obm/create-button-style'
+import createButtonStyle from 'frontend/components/BusinessObjectModal/PeopleModal/createButtonStyle'
 
 import usePeople from './usePeople'
 
@@ -39,6 +39,14 @@ const COLUMNS = [
   {
     Header: 'First Name',
     accessor: 'firstName',
+    Filter: MultiSelectColumnFilter,
+    filter: customMultiSelectFilterFn,
+    sortType: 'text',
+    sticky: 'left',
+  },
+  {
+    Header: 'Middle Name',
+    accessor: 'middleName',
     Filter: MultiSelectColumnFilter,
     filter: customMultiSelectFilterFn,
     sortType: 'text',
