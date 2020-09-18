@@ -1,10 +1,14 @@
 import React from 'react'
 import { useQuery } from '@apollo/react-hooks'
 
+import { GET_VIEW_PATHWAYS_INFLUENCERS } from 'frontend/api/queries'
+
 import PanelHeader from 'frontend/components/Panel/PanelHeader'
 import Table from 'frontend/components/Table'
 import PeoplePowerSelect from 'frontend/components/BoPowerSelect/PeoplePowerSelect'
 import PeopleModalButton from 'frontend/components/BusinessObjectModal/PeopleModal/PeopleModalButton'
+import PeopleModal from 'frontend/components/BusinessObjectModal/PeopleModal'
+import PathwaysModal from 'frontend/components/BusinessObjectModal/PathwaysModal'
 import createButtonStyle from 'frontend/components/BusinessObjectModal/PeopleModal/createButtonStyle'
 import Icon from 'frontend/components/Icon'
 import Color from 'frontend/utils/color'
@@ -15,9 +19,37 @@ import customMultiSelectFilterFn from 'frontend/components/Table/custom-filters/
 
 const PAGE_TITLE = 'Pathways Influencers'
 
+const MODAL_TO_COL_MAP = {
+  pathwaysOrganization: {
+    Modal: PathwaysModal,
+    idKey: 'pathwaysId',
+  },
+  influencerFirstName: {
+    Modal: PeopleModal,
+    idKey: 'influencerId',
+  },
+  influencerMiddleName: {
+    Modal: PeopleModal,
+    idKey: 'influencerId',
+  },
+  influencerLastName: {
+    Modal: PeopleModal,
+    idKey: 'influencerId',
+  },
+  influencerNpiNumber: {
+    Modal: PeopleModal,
+    idKey: 'influencerId',
+  },
+  influencerPosition: {
+    Modal: PathwaysModal,
+    idKey: 'pathwaysId',
+  },
+}
+
 const COLUMNS = [
   {
     Header: 'Date Updated',
+    accessor: 'updatedOn',
     Filter: MultiSelectColumnFilter,
     filter: customMultiSelectFilterFn,
     sortType: 'text',
@@ -25,12 +57,31 @@ const COLUMNS = [
     width: 200,
   },
   {
-    Header: 'Name',
+    Header: 'First Name',
+    accessor: 'influencerFirstName',
     Filter: MultiSelectColumnFilter,
     filter: customMultiSelectFilterFn,
     sortType: 'text',
     sticky: 'left',
-    width: 300,
+    width: 100,
+  },
+  {
+    Header: 'Middle Name',
+    accessor: 'influencerMiddleName',
+    Filter: MultiSelectColumnFilter,
+    filter: customMultiSelectFilterFn,
+    sortType: 'text',
+    sticky: 'left',
+    width: 100,
+  },
+  {
+    Header: 'Last Name',
+    accessor: 'influencerLastName',
+    Filter: MultiSelectColumnFilter,
+    filter: customMultiSelectFilterFn,
+    sortType: 'text',
+    sticky: 'left',
+    width: 100,
   },
   {
     Header: 'Status',
@@ -38,51 +89,54 @@ const COLUMNS = [
     filter: customMultiSelectFilterFn,
     sortType: 'text',
     sticky: 'left',
-    width: 300,
+    width: 100,
   },
   {
     Header: 'Pathways Organization',
+    accessor: 'pathwaysOrganization',
     Filter: MultiSelectColumnFilter,
     filter: customMultiSelectFilterFn,
     sortType: 'text',
-    Cell: (props) => <div style={{ textAlign: 'right' }}>{props.value}</div>,
-    width: 300,
+    width: 200,
   },
   {
     Header: 'NPI #',
+    accessor: 'influencerNpiNumber',
     Filter: MultiSelectColumnFilter,
     filter: customMultiSelectFilterFn,
     sortType: 'text',
-    width: 400,
+    width: 200,
   },
   {
     Header: 'Management Type',
     Filter: MultiSelectColumnFilter,
     filter: customMultiSelectFilterFn,
     sortType: 'text',
-    width: 400,
+    width: 200,
   },
   {
     Header: 'Influencer Type',
+    accessor: 'influencerType',
     Filter: MultiSelectColumnFilter,
     filter: customMultiSelectFilterFn,
     sortType: 'text',
-    width: 400,
+    width: 200,
   },
   {
     Header: 'Pathways Position',
+    accessor: 'influencerPosition',
     Filter: MultiSelectColumnFilter,
     filter: customMultiSelectFilterFn,
     sortType: 'text',
-    width: 400,
+    width: 200,
   },
 ]
 
 const PathwaysInfluencers = () => {
-  // const { data, loading } = useQuery(GET_VIEW_PATHWAY_INFLUENCERS)
+  const { data, loading } = useQuery(GET_VIEW_PATHWAYS_INFLUENCERS)
 
-  // let pathwayInfluencerData = []
-  // if (data && !loading) pathwayInfluencerData = Object.values(data)[0] || []
+  let pathwaysInfluencerData = []
+  if (data && !loading) pathwaysInfluencerData = Object.values(data)[0] || []
 
   return (
     <div
@@ -107,8 +161,9 @@ const PathwaysInfluencers = () => {
       </PanelHeader>
       <Table
         width={CONFIG_TABLE_WIDTH}
-        data={[]}
+        data={pathwaysInfluencerData}
         columns={COLUMNS}
+        modalColMap={MODAL_TO_COL_MAP}
         exportProps={{
           filename: 'PathwaysInfluencers',
           sheetName: 'Pathways Influencers',

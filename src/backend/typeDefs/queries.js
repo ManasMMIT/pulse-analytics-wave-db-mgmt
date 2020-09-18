@@ -34,6 +34,8 @@ const queries = gql`
     VIEW_obmPayerPartnerships: [VIEW_ObmPayerPartnership]
     VIEW_obmInfluencers: [VIEW_ObmInfluencer]
 
+    VIEW_pathwaysInfluencers: [VIEW_PathwaysInfluencer]
+
     qualityOfAccessScores: [QualityOfAccessScore]
 
     collections(type: String): [String]
@@ -408,6 +410,20 @@ const queries = gql`
     medicareMedicalLivesPercent: Float
     managedMedicaidMedicalLives: Float
     managedMedicaidMedicalLivesPercent: Float
+  }
+
+  type VIEW_PathwaysInfluencer {
+    _id: ID!
+    pathwaysId: String!
+    pathwaysOrganization: String!
+    influencerId: String!
+    influencerType: String
+    influencerPosition: String
+    influencerFirstName: String!
+    influencerLastName: String!
+    influencerMiddleName: String
+    influencerNpiNumber: Float
+    updatedOn: DateTime
   }
 
   type Connection {
