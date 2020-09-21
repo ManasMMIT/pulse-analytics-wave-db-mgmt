@@ -15,6 +15,8 @@ const queries = gql`
     products: [Product]
     regimens: [Regimen]
 
+    organizationTypes: [String]
+
     providerOrganizations: [ProviderOrganization]
     payerOrganizations: [PayerOrganization]
     pathwaysOrganizations: [PathwaysOrganization]

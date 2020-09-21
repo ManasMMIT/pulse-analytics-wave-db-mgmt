@@ -1076,3 +1076,9 @@ export const GET_VIEW_PATHWAYS_INFLUENCERS = gql`
     }
   }
 `
+
+export const GET_ORGANIZATION_TYPES = gql`
+  query getOrganizationTypes {
+    organizationTypes
+  }
+`

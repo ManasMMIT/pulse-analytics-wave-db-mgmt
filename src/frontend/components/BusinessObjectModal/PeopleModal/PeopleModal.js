@@ -14,11 +14,17 @@ import {
 
 import BusinessObjectModal from '../BusinessObjectModal/BusinessObjectModal'
 import PathwaysInfluencerWidget from './external-data-widgets/PathwaysInfluencerWidget'
+import OrganizationConnectionsWidget from './external-data-widgets/OrganizationConnectionsWidget'
 import ProviderInfluencerWidget from './external-data-widgets/ProviderInfluencerWidget'
 import PhysiciansCompareWidget from './external-data-widgets/PhysiciansCompareWidget'
 import OpenPaymentsWidget from './external-data-widgets/OpenPaymentsWidget'
 
 const WIDGETS = [
+  {
+    _id: 'RELATIONAL_organizationConnectionsWidget',
+    label: 'Organization Connections',
+    Component: OrganizationConnectionsWidget,
+  },
   {
     _id: 'RELATIONAL_pathwaysInfluencerWidget',
     label: 'Pathways Influencers Sheet Data',
