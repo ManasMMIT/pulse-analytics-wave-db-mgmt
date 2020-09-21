@@ -1,6 +1,7 @@
 const INIT_PERSON_SYMBOL = Symbol('INIT_PERSON_SYMBOL')
 const { ObjectId } = require('mongodb')
 const PERSON_BUSINESS_OBJECT_ID = ObjectId('5eea22d5adbf920fa4320487')
+const SOURCE_COLLECTION = 'people'
 
 // factory pattern: https://qwtel.com/posts/software/async-constructor-pattern/#factory-functions
 class Person {
@@ -41,13 +42,13 @@ class Person {
 
   getPrevData() {
     return this.dbs.pulseCoreDb
-      .collection('people')
+      .collection(SOURCE_COLLECTION)
       .findOne({ _id: this.data._id })
   }
 
   create(session, timestamp) {
     return this.dbs.pulseCoreDb
-      .collection('people')
+      .collection(SOURCE_COLLECTION)
       .insertOne(
         {
           ...this.data,
@@ -60,24 +61,39 @@ class Person {
   }
 
   async update(session, timestamp) {
-    // // Step 1: Update core person
-    // const updatedPerson = await this.dbs.pulseCoreDb
-    //   .collection('people')
-    //   .findOneAndUpdate(
-    //     { _id: this.data._id },
-    //     {
-    //       ...this.data,
-    //       updatedOn: timestamp,
-    //     },
-    //     {
-    //       returnOriginal: false,
-    //       session,
-    //     }
-    //   )
-    //   .then(({ value }) => value)
-    // // Step 2: Cascade update pulse-dev.obmsInfluencers
-    // // fill in code from resolver
-    // return updatedPerson
+    const { pulseCoreDb, pulseDevDb } = this.dbs
+    const { _id, ...setData } = this.data
+
+    // Step 1: Update core person
+    const updatedPerson = await pulseCoreDb
+      .collection(SOURCE_COLLECTION)
+      .findOneAndUpdate(
+        { _id },
+        {
+          $set: {
+            ...setData,
+            updatedOn: timestamp,
+          },
+        },
+        { returnOriginal: false, session }
+      )
+      .then(({ value }) => value)
+
+    // Step 2: Cascade update pulse-dev.obmsInfluencers
+    await pulseDevDb.collection('obmsInfluencers').updateMany(
+      { 'person._id': updatedPerson._id },
+      {
+        $set: {
+          'person.firstName': updatedPerson.firstName,
+          'person.lastName': updatedPerson.lastName,
+          'person.nationalProviderIdentifier':
+            updatedPerson.nationalProviderIdentifier,
+        },
+      },
+      { session }
+    )
+
+    return updatedPerson
   }
 }
 
