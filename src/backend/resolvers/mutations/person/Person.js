@@ -95,6 +95,27 @@ class Person {
 
     return updatedPerson
   }
+
+  async delete(session, timestamp) {
+    const { pulseCoreDb, pulseDevDb } = this.dbs
+    const { _id } = this.data
+    // Step 1: Delete person from own collection
+    const { value: deletedPerson } = await pulseCoreDb
+      .collection(SOURCE_COLLECTION)
+      .findOneAndDelete({ _id }, { session })
+
+    // Step 2: Cascade delete person if an obm influencer
+    await pulseCoreDb
+      .collection('JOIN_obms_people')
+      .deleteMany({ personId: _id }, { session })
+
+    // Step 3: Cascade delete JOIN entries connected to person in pulse-dev.obmsInfluencers
+    await pulseDevDb
+      .collection('obmsInfluencers')
+      .deleteMany({ 'person._id': _id }, { session })
+
+    return deletedPerson
+  }
 }
 
 module.exports = Person
