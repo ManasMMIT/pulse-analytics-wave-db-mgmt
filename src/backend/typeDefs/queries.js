@@ -16,6 +16,9 @@ const queries = gql`
     regimens: [Regimen]
 
     organizationTypes: [String]
+    personOrganizationConnections(
+      personId: String
+    ): [OrganizationInfluencerInfo]
 
     providerOrganizations: [ProviderOrganization]
     payerOrganizations: [PayerOrganization]
@@ -642,6 +645,15 @@ const queries = gql`
     book: String
     coverage: String
     project: String
+  }
+
+  type OrganizationInfluencerInfo {
+    _id: ID!
+    organization: String!
+    organizationType: String!
+    position: String!
+    description: String
+    status: String!
   }
 
   type EndUserTermsLink {

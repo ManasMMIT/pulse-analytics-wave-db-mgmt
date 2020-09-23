@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import PropTypes from 'prop-types'
 
 import styled from '@emotion/styled'
 
@@ -9,11 +10,12 @@ const WidgetContainer = styled.div({
   width: '100%',
 })
 
-const OrganizationConnectionsWidget = (props) => {
+const OrganizationConnectionsWidget = ({ entity }) => {
   const [selectedOrgType, changeOrgType] = useState(null)
   return (
     <WidgetContainer>
       <ConnectionsList
+        personId={entity._id}
         selectedOrgType={selectedOrgType}
         changeOrgType={changeOrgType}
       />
@@ -24,6 +26,8 @@ const OrganizationConnectionsWidget = (props) => {
   )
 }
 
-OrganizationConnectionsWidget.propTypes = {}
+OrganizationConnectionsWidget.propTypes = {
+  entityId: PropTypes.string.isRequired,
+}
 
 export default OrganizationConnectionsWidget

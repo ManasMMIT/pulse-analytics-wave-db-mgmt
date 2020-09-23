@@ -1082,3 +1082,16 @@ export const GET_ORGANIZATION_TYPES = gql`
     organizationTypes
   }
 `
+
+export const GET_PERSON_ORGANIZATION_CONNECTIONS = gql`
+  query getPersonOrganizationConnections($personId: String!) {
+    personOrganizationConnections(personId: $personId) {
+      _id
+      organization
+      organizationType
+      description
+      position
+      status
+    }
+  }
+`
