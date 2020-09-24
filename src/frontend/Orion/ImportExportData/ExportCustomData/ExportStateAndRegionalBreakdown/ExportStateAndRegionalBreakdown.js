@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import { useQuery } from '@apollo/react-hooks'
-// import Select from 'react-select'
+import Select from 'react-select'
 
-import UnderConstruction from './../../../../components/UnderConstruction'
 import { GET_SOURCE_TREATMENT_PLANS, GET_TEAMS } from '../../../../api/queries'
-// import { customSelectStyles } from '../../../../components/customSelectStyles'
+import { customSelectStyles } from '../../../../components/customSelectStyles'
 
-// import ExportButtons from './ExportButtons'
-// import Spinner from 'frontend/components/Spinner'
+import ExportButtons from './ExportButtons'
+import Spinner from 'frontend/components/Spinner'
 
 import {
   SectionContainer,
@@ -28,6 +27,7 @@ const getTpLabel = (obj) =>
 const ExportRegionalBreakdown = () => {
   const [selectedTreatmentPlan, selectTreatmentPlan] = useState({})
   const [selectedTeam, selectTeam] = useState({})
+  const [selectedLivesSource, selectLivesSource] = useState('DRG')
 
   const { loading: treatmentPlansLoading, data: treatmentPlansData } = useQuery(
     GET_SOURCE_TREATMENT_PLANS
@@ -64,8 +64,7 @@ const ExportRegionalBreakdown = () => {
   return (
     <SectionContainer>
       <SectionHeader>Regional Targeting Export</SectionHeader>
-
-      {/* <div style={{ marginTop: 24 }}>
+      <div style={{ marginTop: 24 }}>
         <SelectLabel>Select a team:</SelectLabel>
         {teamsLoading ? (
           <Spinner />
@@ -100,16 +99,29 @@ const ExportRegionalBreakdown = () => {
           />
         )}
 
+        <SelectLabel style={{ marginTop: 16 }}>
+          Select a lives source:
+        </SelectLabel>
+        <Select
+          isDisabled
+          value={{
+            value: selectedLivesSource,
+            label: selectedLivesSource,
+          }}
+          onChange={({ value }) => selectLivesSource(value)}
+          options={[
+            { value: 'DRG', label: 'DRG' },
+            { value: 'MMIT', label: 'MMIT' },
+          ]}
+          styles={customSelectStyles}
+        />
+
         <ExportButtons
           treatmentPlan={selectedTreatmentPlan}
           selectedTeamId={selectedTeam._id}
+          selectedLivesSource={selectedLivesSource}
         />
-      </div> */}
-      <UnderConstruction
-        text={
-          'This feature is in the process of being rebuilt to support multiple state breakdowns.'
-        }
-      />
+      </div>
     </SectionContainer>
   )
 }

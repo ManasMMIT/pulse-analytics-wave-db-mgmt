@@ -53,7 +53,7 @@ export const AlphaColors = {
   White60: transparentize(0.4, Colors.WHITE),
   White70: transparentize(0.3, Colors.WHITE),
   White80: transparentize(0.2, Colors.WHITE),
-  White90: transparentize(0.1, Colors.WHITE)
+  White90: transparentize(0.1, Colors.WHITE),
 }
 
 export const mediaQueries = {
@@ -68,6 +68,7 @@ export const Transitions = {
 export const ZIndexes = {
   MODAL: 1000,
   PANEL_HEADER: 100,
+  MENU: 10,
   QUERY_CONTROLS: 1000,
 }
 
@@ -85,5 +86,5 @@ export const Spacing = {
 }
 
 export const FontFamily = {
-  NORMAL: 'IBM Plex Sans'
+  NORMAL: 'IBM Plex Sans',
 }

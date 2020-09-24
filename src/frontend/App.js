@@ -92,6 +92,7 @@ const StyledNavLink = styled(NavLink)({
 const sidebarNavlinks = SIDE_BAR_ITEMS.map(
   ({ to, iconId, activeColor, exact }) => (
     <StyledNavLink
+      key={to}
       exact={exact}
       to={to}
       activeStyle={getActiveLinkStyle(activeColor)}

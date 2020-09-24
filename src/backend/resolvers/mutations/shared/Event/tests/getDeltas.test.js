@@ -198,15 +198,6 @@ describe(`getDeltas util on base Event class works as expected`, () => {
     ])
   })
 
-  test('Always excludes top-level _id while diffing objects', () => {
-    const deltas = event.getDeltas({
-      prev: { _id: ObjectId('5eac293b79e11113da3b67f6') },
-      next: { _id: ObjectId('5eac293b79e11113da3b683e') },
-    })
-
-    expect(deltas).toStrictEqual([])
-  })
-
   test('Correctly ignores excludedPaths while diffing 1D objects', () => {
     const deltas = event.getDeltas({
       prev: { a: 123, e: 'hi', b: 'hello', c: 5.5 },

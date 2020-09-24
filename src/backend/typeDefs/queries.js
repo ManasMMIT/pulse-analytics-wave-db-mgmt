@@ -15,6 +15,11 @@ const queries = gql`
     products: [Product]
     regimens: [Regimen]
 
+    organizationTypes: [String]
+    personOrganizationConnections(
+      personId: String
+    ): [OrganizationInfluencerInfo]
+
     providerOrganizations: [ProviderOrganization]
     payerOrganizations: [PayerOrganization]
     pathwaysOrganizations: [PathwaysOrganization]
@@ -33,6 +38,8 @@ const queries = gql`
     VIEW_obmServices: [VIEW_ObmService]
     VIEW_obmPayerPartnerships: [VIEW_ObmPayerPartnership]
     VIEW_obmInfluencers: [VIEW_ObmInfluencer]
+
+    VIEW_pathwaysInfluencers: [VIEW_PathwaysInfluencer]
 
     qualityOfAccessScores: [QualityOfAccessScore]
 
@@ -410,6 +417,20 @@ const queries = gql`
     managedMedicaidMedicalLivesPercent: Float
   }
 
+  type VIEW_PathwaysInfluencer {
+    _id: ID!
+    pathwaysId: String!
+    pathwaysOrganization: String!
+    influencerId: String!
+    influencerType: String
+    influencerPosition: String
+    influencerFirstName: String!
+    influencerLastName: String!
+    influencerMiddleName: String
+    influencerNpiNumber: Float
+    updatedOn: DateTime
+  }
+
   type Connection {
     _id: ID!
     org: JSON # could be various shapes, depending on how much dupe org data we want here
@@ -626,6 +647,15 @@ const queries = gql`
     project: String
   }
 
+  type OrganizationInfluencerInfo {
+    _id: ID!
+    organization: String!
+    organizationType: String!
+    position: String!
+    description: String
+    status: String!
+  }
+
   type EndUserTermsLink {
     _id: ID!
     link: String
@@ -655,6 +685,45 @@ const queries = gql`
     _id: ID!
     name: String
     collections: [String!]!
+  }
+
+  type PathwaysAndPersonConnection {
+    _id: ID
+    personId: String!
+    pathwaysId: String!
+    indicationIds: [String!]!
+    pathwaysInfluencerTypes: [String] # ?
+    tumorTypeSpecialty: String # ? is this the same as therapeutic area or no?
+    internalFields: PathwaysAndPersonConnectionInternalFields!
+    # title: String # ? why 'title' instead of position like in JOIN_obms_people?
+    position: String # ?
+    priority: String
+    alert: PathwaysAndPersonConnectionAlert!
+    exclusionSettings: PathwaysAndPersonExclusionSettings!
+    startDate: DateTime
+    endDate: DateTime
+  }
+
+  type PathwaysAndPersonConnectionInternalFields {
+    internalNotes: String
+    pathwaysManagementTypes: [String!]!
+    valueChairsIndicationIds: [String!]! # ? will this be IDs corresponding to real indications?
+    totalDisclosures: String # ?
+    dateDisclosure1: String # ?
+    dateDisclosure2: String # ?
+    dateDisclosure3: String # ?
+    dateDisclosure4: String # ?
+  }
+
+  type PathwaysAndPersonConnectionAlert {
+    date: DateTime
+    type: String
+    description: String
+  }
+
+  type PathwaysAndPersonExclusionSettings {
+    isExcluded: Boolean
+    reason: String
   }
 `
 

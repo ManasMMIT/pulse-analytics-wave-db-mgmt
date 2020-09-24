@@ -1058,3 +1058,40 @@ export const GET_DEV_TO_PROD_PUSH_CONFIGS = gql`
     }
   }
 `
+
+export const GET_VIEW_PATHWAYS_INFLUENCERS = gql`
+  query getViewPathwaysInfluencers {
+    VIEW_pathwaysInfluencers {
+      _id
+      pathwaysId
+      pathwaysOrganization
+      influencerId
+      influencerType
+      influencerPosition
+      influencerFirstName
+      influencerLastName
+      influencerMiddleName
+      influencerNpiNumber
+      updatedOn
+    }
+  }
+`
+
+export const GET_ORGANIZATION_TYPES = gql`
+  query getOrganizationTypes {
+    organizationTypes
+  }
+`
+
+export const GET_PERSON_ORGANIZATION_CONNECTIONS = gql`
+  query getPersonOrganizationConnections($personId: String!) {
+    personOrganizationConnections(personId: $personId) {
+      _id
+      organization
+      organizationType
+      description
+      position
+      status
+    }
+  }
+`
