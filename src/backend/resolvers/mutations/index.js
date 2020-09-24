@@ -38,6 +38,8 @@ const usState = require('./usState')
 
 const devToProdPushConfigResolvers = require('./devToProdPushConfig')
 
+const relationalResolvers = require('./relationalResolvers')
+
 module.exports = {
   ...clientResolvers,
   ...teamResolvers,
@@ -79,4 +81,6 @@ module.exports = {
   ...usState,
 
   ...devToProdPushConfigResolvers,
+
+  ...relationalResolvers,
 }

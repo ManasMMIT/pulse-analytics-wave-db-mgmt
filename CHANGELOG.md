@@ -14,6 +14,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased] - Started: 9-17-20
 
+### Added
+- `Orion`: Extended event sourcing pattern to connection types
+  - Made Event.js diffing engine able to process ObjectId diffing
+  - Built out class-based event sourcing for `PathwaysPersonConnection` CUD ops against pulse-core [#779](https://github.com/pulse-data/wave-db-mgmt/pull/779)
+  
 ## [3.7.0] - Started: 9-11-20
 
 ### Added

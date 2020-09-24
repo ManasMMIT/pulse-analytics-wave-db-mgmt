@@ -1,14 +1,14 @@
 const Event = require('../../shared/Event/Event')
 const { DELETE_ACTION } = require('../../shared/Event/actions')
 
-class PersonDeletionEvent extends Event {
-  constructor(metaData, person) {
+class PathwaysAndPersonConnectionDeletionEvent extends Event {
+  constructor(metaData, connection) {
     super(metaData)
     this.action = DELETE_ACTION
-    this.entityId = person.data._id
-    this.businessObject = person.businessObject
+    this.entityId = connection.data._id
+    this.connectedEntities = connection.connectedEntities
 
-    this.entity = person
+    this.entity = connection
     this.deltas = this.getDeltas()
   }
 
@@ -24,4 +24,4 @@ class PersonDeletionEvent extends Event {
   }
 }
 
-module.exports = PersonDeletionEvent
+module.exports = PathwaysAndPersonConnectionDeletionEvent

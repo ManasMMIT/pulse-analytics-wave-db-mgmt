@@ -1,3 +1,4 @@
+const { ObjectId } = require('mongodb')
 const flatten = require('flat')
 const _ = require('lodash')
 
@@ -13,10 +14,7 @@ class Event {
   }
 
   getFlattenedAndFilteredKeys(obj, excludedPaths) {
-    // ! Never diff the immutable top-level _id
-    const objWithoutTopLevelId = _.omitBy(obj, (__, key) => key === '_id')
-
-    const flattenedObj = flatten(objWithoutTopLevelId)
+    const flattenedObj = flatten(obj)
 
     const keys = Object.keys(flattenedObj)
 
@@ -25,7 +23,29 @@ class Event {
     return filteredKeys
   }
 
+  stringifyObjectIds(obj) {
+    if (Array.isArray(obj)) {
+      for (let i = 0; i < obj.length; i++) {
+        obj[i] = this.stringifyObjectIds(obj[i])
+      }
+    } else if (_.isPlainObject(obj)) {
+      _.forEach(obj, (value, key) => {
+        obj[key] = this.stringifyObjectIds(value)
+      })
+    } else if (
+      ObjectId.isValid(obj) &&
+      ObjectId(obj).equals(obj) // floats like 5.5 are valid but aren't ObjectIds
+    ) {
+      return obj.toString()
+    }
+
+    return obj
+  }
+
   getDeltas({ prev = {}, next = {}, excludedPaths = [] }) {
+    prev = this.stringifyObjectIds(_.cloneDeep(prev))
+    next = this.stringifyObjectIds(_.cloneDeep(next))
+
     const prevKeys = this.getFlattenedAndFilteredKeys(prev, excludedPaths)
     const nextKeys = this.getFlattenedAndFilteredKeys(next, excludedPaths)
 
@@ -62,11 +82,25 @@ class Event {
       after: _.get(next, path),
     }))
 
-    return [
+    const result = [
       ...commonFieldsWithChangedValues,
       ...noLongerExistingPaths,
       ...newPaths,
     ]
+
+    // Convert anything that's supposed to be ObjectId from
+    // stringified form back to ObjectId; if it's a proper ObjectId
+    // in string form, the following line returns true:
+    // ! ObjectId.isValid('5f64cd51afb0b526154a3c1f') && ObjectId('5f64cd51afb0b526154a3c1f').equals('5f64cd51afb0b526154a3c1f')
+    result.forEach((deltaObj) => {
+      _.forEach(deltaObj, (value, key) => {
+        if (ObjectId.isValid(value) && ObjectId(value).equals(value)) {
+          deltaObj[key] = ObjectId(value)
+        }
+      })
+    })
+
+    return result
   }
 }
 

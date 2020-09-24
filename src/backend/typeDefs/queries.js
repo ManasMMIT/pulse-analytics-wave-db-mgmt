@@ -686,6 +686,45 @@ const queries = gql`
     name: String
     collections: [String!]!
   }
+
+  type PathwaysAndPersonConnection {
+    _id: ID
+    personId: String!
+    pathwaysId: String!
+    indicationIds: [String!]!
+    pathwaysInfluencerTypes: [String] # ?
+    tumorTypeSpecialty: String # ? is this the same as therapeutic area or no?
+    internalFields: PathwaysAndPersonConnectionInternalFields!
+    # title: String # ? why 'title' instead of position like in JOIN_obms_people?
+    position: String # ?
+    priority: String
+    alert: PathwaysAndPersonConnectionAlert!
+    exclusionSettings: PathwaysAndPersonExclusionSettings!
+    startDate: DateTime
+    endDate: DateTime
+  }
+
+  type PathwaysAndPersonConnectionInternalFields {
+    internalNotes: String
+    pathwaysManagementTypes: [String!]!
+    valueChairsIndicationIds: [String!]! # ? will this be IDs corresponding to real indications?
+    totalDisclosures: String # ?
+    dateDisclosure1: String # ?
+    dateDisclosure2: String # ?
+    dateDisclosure3: String # ?
+    dateDisclosure4: String # ?
+  }
+
+  type PathwaysAndPersonConnectionAlert {
+    date: DateTime
+    type: String
+    description: String
+  }
+
+  type PathwaysAndPersonExclusionSettings {
+    isExcluded: Boolean
+    reason: String
+  }
 `
 
 module.exports = [queries]

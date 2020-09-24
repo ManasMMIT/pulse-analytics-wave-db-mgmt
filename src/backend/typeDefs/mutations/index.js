@@ -38,6 +38,8 @@ const usState = require('./usState')
 
 const devToProdPushConfig = require('./devToProdPushConfig')
 
+const relationalTypeDefs = require('./relationalTypeDefs')
+
 const mutationType = gql`
   type Mutation {
     createUser(input: CreateUserInput!): CreateUserPayload
@@ -324,6 +326,14 @@ const mutationType = gql`
       input: DeleteDevToProdPushConfigInput!
     ): DevToProdPushConfig!
     pushDevToProd(input: PushDevToProdInput!): String!
+
+    upsertPathwaysAndPersonConnection(
+      input: UpsertPathwaysAndPersonConnectionInput!
+    ): PathwaysAndPersonConnection!
+
+    deletePathwaysAndPersonConnection(
+      input: DeletePathwaysAndPersonConnectionInput!
+    ): PathwaysAndPersonConnection!
   }
 `
 
@@ -364,4 +374,6 @@ module.exports = [
   ...usState,
 
   ...devToProdPushConfig,
+
+  ...relationalTypeDefs,
 ]
