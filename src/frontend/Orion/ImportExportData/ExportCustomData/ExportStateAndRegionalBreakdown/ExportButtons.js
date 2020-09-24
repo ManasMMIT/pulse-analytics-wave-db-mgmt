@@ -10,14 +10,16 @@ import FontSpace from '../../../../utils/fontspace'
 import Color from '../../../../utils/color'
 import { GET_REGIONAL_TARGETING_DATA } from '../../../../api/queries'
 
-const LIVES_SOURCE = 'DRG'
-
-const ExportButtons = ({ treatmentPlan, selectedTeamId }) => {
+const ExportButtons = ({
+  treatmentPlan,
+  selectedTeamId,
+  selectedLivesSource,
+}) => {
   const { _id, __typename, ...tpFields } = treatmentPlan
   const treatmentPlanLabel = Object.values(tpFields).join('-')
 
   const [statesBreakdownData, setStatesBreakdownData] = useState([])
-  const [regionalBreakdownData, setRegionalBreakdownData] = useState([])
+  const [breakdownsData, setBreakdownsData] = useState([])
 
   // ! it's possible data for export will fall behind dropdown selections, so keep track of exportDataTpAndTeamId
   // ! and don't let user download data if selections don't match it
@@ -30,7 +32,7 @@ const ExportButtons = ({ treatmentPlan, selectedTeamId }) => {
         alert(error)
         setExportDataTpAndTeamId({})
         setStatesBreakdownData([])
-        setRegionalBreakdownData([])
+        setBreakdownsData([])
       },
     }
   )
@@ -39,13 +41,13 @@ const ExportButtons = ({ treatmentPlan, selectedTeamId }) => {
     if (!loading && data) {
       const {
         statesExportData,
-        regionalExportData,
+        breakdownsExportData,
         treatmentPlan: exportDataTp,
         teamId: exportDataTeamId,
       } = data.regionalTargetingData
 
       if (statesExportData) setStatesBreakdownData(statesExportData)
-      if (regionalExportData) setRegionalBreakdownData(regionalExportData)
+      if (breakdownsExportData) setBreakdownsData(breakdownsExportData)
 
       if (exportDataTp && exportDataTeamId) {
         setExportDataTpAndTeamId({ ...exportDataTp, teamId: exportDataTeamId })
@@ -69,7 +71,7 @@ const ExportButtons = ({ treatmentPlan, selectedTeamId }) => {
               input: {
                 treatmentPlan: tpFields,
                 teamId: selectedTeamId,
-                livesSource: LIVES_SOURCE,
+                livesSource: selectedLivesSource,
               },
             },
           })
@@ -79,8 +81,8 @@ const ExportButtons = ({ treatmentPlan, selectedTeamId }) => {
       </StyledButton>
 
       <div style={{ marginTop: 16, color: Color.RED, ...FontSpace.FS2 }}>
-        Note: All lives are DRG lives, and regional sheet only becomes
-        downloadable if the selected team has regional data.
+        Note: All lives are DRG lives, and regional breakdown sheets only become
+        downloadable if the selected team has regional breakdown data.
       </div>
 
       <div style={{ display: 'flex' }}>
@@ -89,24 +91,28 @@ const ExportButtons = ({ treatmentPlan, selectedTeamId }) => {
           isDisabled={
             _.isEmpty(statesBreakdownData) || isExportDataBehindDropdowns
           }
-          filename={`${LIVES_SOURCE}_State_Lives-${treatmentPlanLabel}_${selectedTeamId}`}
+          filename={`${selectedLivesSource}_State_Lives-${treatmentPlanLabel}_${selectedTeamId}`}
           sheetName={'State Sheet'}
         >
           Download State Sheet
         </ExportExcelButton>
 
-        <div style={{ marginLeft: 16 }} />
+        {breakdownsData.map(({ type, data }) => {
+          const typeLabel = _.startCase(type)
 
-        <ExportExcelButton
-          data={regionalBreakdownData}
-          isDisabled={
-            _.isEmpty(regionalBreakdownData) || isExportDataBehindDropdowns
-          }
-          filename={`${LIVES_SOURCE}_Regional_Lives-${treatmentPlanLabel}_${selectedTeamId}`}
-          sheetName={'Regional Sheet'}
-        >
-          Download Regional Sheet
-        </ExportExcelButton>
+          return (
+            <div style={{ marginLeft: 16 }}>
+              <ExportExcelButton
+                data={data}
+                isDisabled={_.isEmpty(data) || isExportDataBehindDropdowns}
+                filename={`${selectedLivesSource}_${typeLabel}_Lives-${treatmentPlanLabel}_${selectedTeamId}`}
+                sheetName={`${typeLabel} Sheet`}
+              >
+                Download {typeLabel} Sheet
+              </ExportExcelButton>
+            </div>
+          )
+        })}
       </div>
     </div>
   )
