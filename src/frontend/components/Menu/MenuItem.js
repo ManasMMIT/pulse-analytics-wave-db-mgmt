@@ -22,6 +22,13 @@ const activeStyle = {
   backgroundColor: Color.BLUE,
 }
 
+const disabledStyle = {
+  opacity: 0.5,
+  ':hover': {
+    cursor: 'not-allowed',
+  },
+}
+
 const MenuItemWrapper = styled.li(
   {
     borderRadius: 4,
@@ -31,13 +38,18 @@ const MenuItemWrapper = styled.li(
     fontWeight: 500,
     ...FontSpace.FS2,
   },
-  ({ isActive }) => ({
+  ({ isActive, isDisabled }) => ({
     ...(isActive ? activeStyle : defaultStyle),
+    ...(isDisabled ? disabledStyle : {}),
   })
 )
 
-const MenuItem = ({ label, isActive, value, clickHandler }) => (
-  <MenuItemWrapper isActive={isActive} onClick={() => clickHandler(value)}>
+const MenuItem = ({ label, isActive, isDisabled, value, clickHandler }) => (
+  <MenuItemWrapper
+    isActive={isActive}
+    isDisabled={isDisabled}
+    onClick={isDisabled ? null : () => clickHandler(value)}
+  >
     {label}
   </MenuItemWrapper>
 )

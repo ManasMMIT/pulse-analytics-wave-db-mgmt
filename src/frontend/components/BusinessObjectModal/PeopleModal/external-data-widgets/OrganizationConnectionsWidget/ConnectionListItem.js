@@ -27,6 +27,9 @@ const ContentWrapper = styled.div(
 )
 
 const TextWrapper = styled.div({}, ({ isActive, isDisabled }) => ({
+  display: 'flex',
+  justifyContent: 'center',
+  flexDirection: 'column',
   color: isActive ? Color.PRIMARY : Color.BLACK,
   opacity: isDisabled ? 0.5 : 1,
   fontStyle: isDisabled ? 'italic' : 'normal',
@@ -111,7 +114,7 @@ const ConnectionListItem = ({
 
 ConnectionListItem.propTypes = {
   title: PropTypes.string.isRequired,
-  subtitle: PropTypes.string.isRequired,
+  subtitle: PropTypes.string,
   description: PropTypes.string,
   isActive: PropTypes.bool,
   value: PropTypes.any,
@@ -119,6 +122,7 @@ ConnectionListItem.propTypes = {
 }
 
 ConnectionListItem.defaultProps = {
+  subtitle: '',
   description: '',
   isActive: false,
   value: null,

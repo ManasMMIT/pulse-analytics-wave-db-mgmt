@@ -60,6 +60,11 @@ const getAggPipeline = (personId) => [
       },
     },
   },
+  {
+    $sort: {
+      status: 1,
+    },
+  },
 ]
 
 const personOrganizationConnections = (
