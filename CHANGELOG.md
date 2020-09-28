@@ -14,6 +14,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased] - Started: 9-24-20
 
+### Added
+- `Orion`: Event sourcing frontend/backend work
+  - First business object modal History widget [#781](https://github.com/pulse-data/wave-db-mgmt/pull/781)
+  - Delta ref values are now hydrated [#784](https://github.com/pulse-data/wave-db-mgmt/pull/784)
+
 ## [3.8.0] - Started: 9-17-20
 
 ### Added

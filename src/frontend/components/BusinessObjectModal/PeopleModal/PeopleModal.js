@@ -18,6 +18,7 @@ import OrganizationConnectionsWidget from './external-data-widgets/OrganizationC
 import ProviderInfluencerWidget from './external-data-widgets/ProviderInfluencerWidget'
 import PhysiciansCompareWidget from './external-data-widgets/PhysiciansCompareWidget'
 import OpenPaymentsWidget from './external-data-widgets/OpenPaymentsWidget'
+import HistoryWidget from './external-data-widgets/HistoryWidget'
 
 const WIDGETS = [
   {
@@ -44,6 +45,11 @@ const WIDGETS = [
     _id: 'RELATIONAL_externalSource2Widget',
     label: 'Open Payments',
     Component: OpenPaymentsWidget,
+  },
+  {
+    _id: 'RELATIONAL_historyWidget',
+    label: 'History',
+    Component: HistoryWidget,
   },
 ]
 
