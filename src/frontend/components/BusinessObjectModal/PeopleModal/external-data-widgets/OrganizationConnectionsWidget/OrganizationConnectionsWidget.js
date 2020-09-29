@@ -9,6 +9,7 @@ import ConnectionsList from './ConnectionsList'
 import ConnectionsPanel from './ConnectionsPanel'
 
 import Spinner from 'frontend/components/Spinner'
+import NoDataPlaceholder from 'frontend/components/NoDataPlaceholder'
 
 import {
   GET_ORGANIZATION_TYPES,
@@ -47,6 +48,7 @@ const OrganizationConnectionsWidget = ({ entity }) => {
 
   const { personOrganizationConnections } = connectionsData
   const { organizationTypes } = organizationTypeData
+  if (personOrganizationConnections.length === 0) return <NoDataPlaceholder />
 
   return (
     <WidgetContainer>
