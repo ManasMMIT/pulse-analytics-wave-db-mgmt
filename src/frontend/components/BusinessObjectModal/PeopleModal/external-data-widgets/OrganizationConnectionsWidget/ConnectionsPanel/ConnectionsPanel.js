@@ -13,6 +13,7 @@ import { AlphaColors } from 'frontend/utils/pulseStyles'
 
 import ButtonCluster from './ButtonCluster'
 import PathwaysForm from './PathwaysForm'
+import EventLog from 'frontend/components/EventLog'
 
 const ConnectionsPanelWrapper = styled.div({
   display: 'flex',
@@ -27,11 +28,12 @@ const FORM_MAP = {
 
 const TABS_DATA = [
   'Details',
-  // TODO: 'History',
+  'History',
   // TODO: 'Comments'
 ]
 
 const ConnectionsPanel = ({
+  entityId,
   selectedOrganization,
   hasNewOrgConnection,
   changeOrganization,
@@ -42,7 +44,11 @@ const ConnectionsPanel = ({
     changeOrganization(personOrganizationConnections[0])
     setNewOrgConnectionStatus(false)
   }
-  const { organization, organizationType } = selectedOrganization
+  const {
+    _id: orgEntityId,
+    organization,
+    organizationType,
+  } = selectedOrganization
   const OrganizationForm = FORM_MAP[organizationType]
 
   return (
@@ -65,12 +71,18 @@ const ConnectionsPanel = ({
         }}
       >
         {organizationType && <OrganizationForm />}
+        <EventLog
+          filters={{
+            entityIds: [entityId, orgEntityId],
+          }}
+        />
       </UnderlinedTabs>
     </ConnectionsPanelWrapper>
   )
 }
 
 ConnectionsPanel.propTypes = {
+  entityId: PropTypes.string.isRequired,
   changeOrganization: PropTypes.func.isRequired,
   hasNewOrgConnection: PropTypes.bool.isRequired,
   personOrganizationConnections: PropTypes.array.isRequired,

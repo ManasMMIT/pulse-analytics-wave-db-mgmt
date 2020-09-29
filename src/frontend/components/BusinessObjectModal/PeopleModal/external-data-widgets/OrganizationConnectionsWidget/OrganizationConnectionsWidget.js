@@ -61,6 +61,7 @@ const OrganizationConnectionsWidget = ({ entity }) => {
         changeOrganization={changeOrganization}
       />
       <ConnectionsPanel
+        entityId={entity._id}
         selectedOrganization={selectedOrganization}
         changeOrganization={changeOrganization}
         setNewOrgConnectionStatus={setNewOrgConnectionStatus}

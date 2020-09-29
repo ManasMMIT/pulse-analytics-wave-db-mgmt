@@ -1,22 +1,16 @@
 import _ from 'lodash'
 
 export default (events, entityIds) => {
-  if (entityIds.length === 1) {
-    const [entityId] = entityIds
-    return events.filter((event) => {
-      return (
-        isEntityTopLevel(event, entityId) ||
-        isEntityInConnection(event, entityId) ||
-        isEntityInDeltas(event, entityId)
-      )
-    })
-  } else if (entityIds.length === 2) {
-    // TODO: Support relational events filtering
-    return events
-  }
-
-  return events
+  return entityIds.reduce(filterEventsByEntityId, events)
 }
+
+const filterEventsByEntityId = (events, entityId) =>
+  events.filter(
+    (event) =>
+      isEntityTopLevel(event, entityId) ||
+      isEntityInConnection(event, entityId) ||
+      isEntityInDeltas(event, entityId)
+  )
 
 const isEntityTopLevel = (event, entityId) => {
   return !_.isEmpty(event.entity) && event.entity._id === entityId
