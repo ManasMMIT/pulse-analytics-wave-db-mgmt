@@ -1,7 +1,7 @@
 const pathwaysOrganizations = require('./pathways')
-const views = require('./views')
+const joins = require('./joins')
 
 module.exports = {
   pathwaysOrganizations,
-  ...views,
+  ...joins,
 }

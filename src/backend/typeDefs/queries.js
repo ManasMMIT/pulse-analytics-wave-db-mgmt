@@ -16,9 +16,6 @@ const queries = gql`
     regimens: [Regimen]
 
     organizationTypes: [String]
-    personOrganizationConnections(
-      personId: String
-    ): [OrganizationInfluencerInfo]
 
     providerOrganizations: [ProviderOrganization]
     payerOrganizations: [PayerOrganization]
@@ -39,7 +36,7 @@ const queries = gql`
     VIEW_obmPayerPartnerships: [VIEW_ObmPayerPartnership]
     VIEW_obmInfluencers: [VIEW_ObmInfluencer]
 
-    VIEW_pathwaysInfluencers: [VIEW_PathwaysInfluencer]
+    JOIN_pathways_people: [PathwaysAndPersonConnection]
 
     qualityOfAccessScores: [QualityOfAccessScore]
 
@@ -647,15 +644,6 @@ const queries = gql`
     project: String
   }
 
-  type OrganizationInfluencerInfo {
-    _id: ID!
-    organization: String!
-    organizationType: String!
-    position: String!
-    description: String
-    status: String!
-  }
-
   type EndUserTermsLink {
     _id: ID!
     link: String
@@ -691,7 +679,7 @@ const queries = gql`
     _id: ID
     personId: String!
     pathwaysId: String!
-    indicationIds: [String!]!
+    indicationIds: [String] # TODO: Add non-nullable flag
     pathwaysInfluencerTypes: [String] # ?
     tumorTypeSpecialty: String # ? is this the same as therapeutic area or no?
     internalFields: PathwaysAndPersonConnectionInternalFields!
@@ -706,8 +694,8 @@ const queries = gql`
 
   type PathwaysAndPersonConnectionInternalFields {
     internalNotes: String
-    pathwaysManagementTypes: [String!]!
-    valueChairsIndicationIds: [String!]! # ? will this be IDs corresponding to real indications?
+    pathwaysManagementTypes: [String] # TODO: Add non-nullable flag
+    valueChairsIndicationIds: [String] # TODO: Add non-nullable flag ? will this be IDs corresponding to real indications?
     totalDisclosures: String # ?
     dateDisclosure1: String # ?
     dateDisclosure2: String # ?

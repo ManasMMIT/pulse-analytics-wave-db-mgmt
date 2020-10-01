@@ -38,10 +38,10 @@ const ConnectionsPanel = ({
   hasNewOrgConnection,
   changeOrganization,
   setNewOrgConnectionStatus,
-  personOrganizationConnections,
+  connectionsData,
 }) => {
   const cancelHandler = () => {
-    changeOrganization(personOrganizationConnections[0])
+    changeOrganization(connectionsData[0])
     setNewOrgConnectionStatus(false)
   }
   const {
@@ -70,7 +70,9 @@ const ConnectionsPanel = ({
           paddingLeft: Spacing.S4,
         }}
       >
-        {organizationType && <OrganizationForm />}
+        {organizationType && (
+          <OrganizationForm selectedOrganization={selectedOrganization} />
+        )}
         <EventLog
           filters={{
             entityIds: [entityId, orgEntityId],
@@ -85,7 +87,7 @@ ConnectionsPanel.propTypes = {
   entityId: PropTypes.string.isRequired,
   changeOrganization: PropTypes.func.isRequired,
   hasNewOrgConnection: PropTypes.bool.isRequired,
-  personOrganizationConnections: PropTypes.array.isRequired,
+  connectionsData: PropTypes.array.isRequired,
   selectedOrganization: PropTypes.object.isRequired,
   setNewOrgConnectionStatus: PropTypes.func.isRequired,
 }

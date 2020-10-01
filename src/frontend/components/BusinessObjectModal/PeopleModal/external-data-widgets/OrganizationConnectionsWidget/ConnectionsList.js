@@ -97,7 +97,7 @@ const generateSublist = ({
 const ConnectionsList = ({
   changeOrganization,
   selectedOrganization,
-  personOrganizationConnections,
+  connectionsData,
   organizationTypes,
   hasNewOrgConnection,
   setNewOrgConnectionStatus,
@@ -124,10 +124,7 @@ const ConnectionsList = ({
     changeOrganization(stagedNewOrg)
   }
 
-  const groupedConnectionsByStatus = _.groupBy(
-    personOrganizationConnections,
-    'status'
-  )
+  const groupedConnectionsByStatus = _.groupBy(connectionsData, 'status')
 
   return (
     <ConnectionsListWrapper>
@@ -164,7 +161,7 @@ ConnectionsList.propTypes = {
   changeOrganization: PropTypes.func.isRequired,
   hasNewOrgConnection: PropTypes.bool.isRequired,
   organizationTypes: PropTypes.array.isRequired,
-  personOrganizationConnections: PropTypes.array.isRequired,
+  connectionsData: PropTypes.array.isRequired,
   selectedOrganization: PropTypes.object.isRequired,
   setNewOrgConnectionStatus: PropTypes.func.isRequired,
 }

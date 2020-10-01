@@ -8,13 +8,11 @@ import { useQuery } from '@apollo/react-hooks'
 import ConnectionsList from './ConnectionsList'
 import ConnectionsPanel from './ConnectionsPanel'
 
+import usePathwaysPersonConnections from 'frontend/hooks/usePathwaysPersonConnections'
 import Spinner from 'frontend/components/Spinner'
 import NoDataPlaceholder from 'frontend/components/NoDataPlaceholder'
 
-import {
-  GET_ORGANIZATION_TYPES,
-  GET_PERSON_ORGANIZATION_CONNECTIONS,
-} from 'frontend/api/queries'
+import { GET_ORGANIZATION_TYPES } from 'frontend/api/queries'
 
 const WidgetContainer = styled.div({
   display: 'flex',
@@ -25,37 +23,33 @@ const OrganizationConnectionsWidget = ({ entity }) => {
   const { data: organizationTypeData, loading: orgTypeLoading } = useQuery(
     GET_ORGANIZATION_TYPES
   )
-  const { data: connectionsData, loading: connectionsLoading } = useQuery(
-    GET_PERSON_ORGANIZATION_CONNECTIONS,
-    {
-      variables: {
-        personId: entity._id,
-      },
-    }
-  )
+  const {
+    data: connectionsData,
+    loading: connectionsLoading,
+  } = usePathwaysPersonConnections({
+    personId: entity._id,
+  })
 
   const [selectedOrganization, changeOrganization] = useState({})
   const [hasNewOrgConnection, setNewOrgConnectionStatus] = useState(false)
 
   useEffect(() => {
     if (!orgTypeLoading && !connectionsLoading) {
-      const { personOrganizationConnections } = connectionsData
-      changeOrganization(personOrganizationConnections[0])
+      changeOrganization(connectionsData[0])
     }
   }, [connectionsLoading, orgTypeLoading])
 
   if (orgTypeLoading || connectionsLoading) return <Spinner size={28} />
 
-  const { personOrganizationConnections } = connectionsData
   const { organizationTypes } = organizationTypeData
-  if (personOrganizationConnections.length === 0) return <NoDataPlaceholder />
+  if (connectionsData.length === 0) return <NoDataPlaceholder />
 
   return (
     <WidgetContainer>
       <ConnectionsList
         hasNewOrgConnection={hasNewOrgConnection}
         setNewOrgConnectionStatus={setNewOrgConnectionStatus}
-        personOrganizationConnections={personOrganizationConnections}
+        connectionsData={connectionsData}
         organizationTypes={organizationTypes}
         selectedOrganization={selectedOrganization}
         changeOrganization={changeOrganization}
@@ -66,7 +60,7 @@ const OrganizationConnectionsWidget = ({ entity }) => {
         changeOrganization={changeOrganization}
         setNewOrgConnectionStatus={setNewOrgConnectionStatus}
         hasNewOrgConnection={hasNewOrgConnection}
-        personOrganizationConnections={personOrganizationConnections}
+        connectionsData={connectionsData}
       />
     </WidgetContainer>
   )

@@ -1,7 +1,4 @@
 import React from 'react'
-import { useQuery } from '@apollo/react-hooks'
-
-import { GET_VIEW_PATHWAYS_INFLUENCERS } from 'frontend/api/queries'
 
 import PanelHeader from 'frontend/components/Panel/PanelHeader'
 import Table from 'frontend/components/Table'
@@ -17,30 +14,32 @@ import { CONFIG_TABLE_WIDTH } from 'frontend/components/Table/tableWidths'
 import MultiSelectColumnFilter from 'frontend/components/Table/custom-filters/MultiSelect/MultiSelectColumnFilter'
 import customMultiSelectFilterFn from 'frontend/components/Table/custom-filters/MultiSelect/customMultiSelectFilterFn'
 
+import usePathwaysPersonConnections from 'frontend/hooks/usePathwaysPersonConnections'
+
 const PAGE_TITLE = 'Pathways Influencers'
 
 const MODAL_TO_COL_MAP = {
-  pathwaysOrganization: {
+  organization: {
     Modal: PathwaysModal,
     idKey: 'pathwaysId',
   },
-  influencerFirstName: {
+  firstName: {
     Modal: PeopleModal,
-    idKey: 'influencerId',
+    idKey: 'personId',
   },
-  influencerMiddleName: {
+  middleName: {
     Modal: PeopleModal,
-    idKey: 'influencerId',
+    idKey: 'personId',
   },
-  influencerLastName: {
+  lastName: {
     Modal: PeopleModal,
-    idKey: 'influencerId',
+    idKey: 'personId',
   },
-  influencerNpiNumber: {
+  nationalProviderIdentifier: {
     Modal: PeopleModal,
-    idKey: 'influencerId',
+    idKey: 'personId',
   },
-  influencerPosition: {
+  position: {
     Modal: PathwaysModal,
     idKey: 'pathwaysId',
   },
@@ -58,7 +57,7 @@ const COLUMNS = [
   },
   {
     Header: 'First Name',
-    accessor: 'influencerFirstName',
+    accessor: 'firstName',
     Filter: MultiSelectColumnFilter,
     filter: customMultiSelectFilterFn,
     sortType: 'text',
@@ -67,7 +66,7 @@ const COLUMNS = [
   },
   {
     Header: 'Middle Name',
-    accessor: 'influencerMiddleName',
+    accessor: 'middleName',
     Filter: MultiSelectColumnFilter,
     filter: customMultiSelectFilterFn,
     sortType: 'text',
@@ -76,7 +75,7 @@ const COLUMNS = [
   },
   {
     Header: 'Last Name',
-    accessor: 'influencerLastName',
+    accessor: 'lastName',
     Filter: MultiSelectColumnFilter,
     filter: customMultiSelectFilterFn,
     sortType: 'text',
@@ -85,6 +84,7 @@ const COLUMNS = [
   },
   {
     Header: 'Status',
+    accessor: 'status',
     Filter: MultiSelectColumnFilter,
     filter: customMultiSelectFilterFn,
     sortType: 'text',
@@ -93,7 +93,7 @@ const COLUMNS = [
   },
   {
     Header: 'Pathways Organization',
-    accessor: 'pathwaysOrganization',
+    accessor: 'organization',
     Filter: MultiSelectColumnFilter,
     filter: customMultiSelectFilterFn,
     sortType: 'text',
@@ -101,7 +101,7 @@ const COLUMNS = [
   },
   {
     Header: 'NPI #',
-    accessor: 'influencerNpiNumber',
+    accessor: 'nationalProviderIdentifier',
     Filter: MultiSelectColumnFilter,
     filter: customMultiSelectFilterFn,
     sortType: 'text',
@@ -109,22 +109,25 @@ const COLUMNS = [
   },
   {
     Header: 'Management Type',
+    accessor: 'internalFields.pathwaysManagementTypes',
     Filter: MultiSelectColumnFilter,
     filter: customMultiSelectFilterFn,
     sortType: 'text',
     width: 200,
+    Cell: ({ value }) => (value ? value.join(', ') : []),
   },
   {
     Header: 'Influencer Type',
-    accessor: 'influencerType',
+    accessor: 'pathwaysInfluencerTypes',
     Filter: MultiSelectColumnFilter,
     filter: customMultiSelectFilterFn,
     sortType: 'text',
     width: 200,
+    Cell: ({ value }) => (value ? value.join(', ') : []),
   },
   {
     Header: 'Pathways Position',
-    accessor: 'influencerPosition',
+    accessor: 'position',
     Filter: MultiSelectColumnFilter,
     filter: customMultiSelectFilterFn,
     sortType: 'text',
@@ -133,10 +136,7 @@ const COLUMNS = [
 ]
 
 const PathwaysInfluencers = () => {
-  const { data, loading } = useQuery(GET_VIEW_PATHWAYS_INFLUENCERS)
-
-  let pathwaysInfluencerData = []
-  if (data && !loading) pathwaysInfluencerData = Object.values(data)[0] || []
+  const { data: pathwaysInfluencerData } = usePathwaysPersonConnections()
 
   return (
     <div
