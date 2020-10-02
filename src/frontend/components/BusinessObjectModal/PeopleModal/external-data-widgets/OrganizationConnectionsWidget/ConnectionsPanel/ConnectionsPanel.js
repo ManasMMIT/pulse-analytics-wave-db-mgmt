@@ -51,6 +51,10 @@ const ConnectionsPanel = ({
   } = selectedOrganization
   const OrganizationForm = FORM_MAP[organizationType]
 
+  const eventLogFilters = {
+    entityIds: [entityId, orgEntityId],
+  }
+
   return (
     <ConnectionsPanelWrapper>
       <SectionTitle
@@ -73,11 +77,7 @@ const ConnectionsPanel = ({
         {organizationType && (
           <OrganizationForm selectedOrganization={selectedOrganization} />
         )}
-        <EventLog
-          filters={{
-            entityIds: [entityId, orgEntityId],
-          }}
-        />
+        <EventLog filters={eventLogFilters} />
       </UnderlinedTabs>
     </ConnectionsPanelWrapper>
   )

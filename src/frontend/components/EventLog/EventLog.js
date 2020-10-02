@@ -119,7 +119,6 @@ const ConnectionEvent = ({
 }
 
 const EventLog = ({ filters, style }) => {
-  // TODO: Pass entityId to hook and filter events
   const { events, loading } = useEventLog(filters)
 
   if (loading) return 'loading'

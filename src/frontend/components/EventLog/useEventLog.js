@@ -15,7 +15,7 @@ const useEventLog = (filters) => {
       const events = filterEvents(data.events, filters)
       setEvents(events)
     }
-  }, [loading])
+  }, [filters, loading])
 
   return {
     events,
