@@ -1,5 +1,4 @@
-const { ObjectId } = require('mongodb')
-
+const isValidObjectId = require('../../../../utils/isValidObjectId')
 const { BASIC } = require('../event-meta-types')
 
 // TODO: Raise boIds into global map
@@ -55,11 +54,8 @@ const getBoId = (field) => {
 
 const addValidIdsToMap = ({ before, after, map, boId }) => {
   ;[before, after].forEach((value) => {
-    if (isValidObjId(value)) {
+    if (isValidObjectId(value)) {
       map[boId] ? map[boId].push(value) : (map[boId] = [value])
     }
   })
 }
-
-const isValidObjId = (value) =>
-  ObjectId.isValid(value) && ObjectId(value).equals(value)
