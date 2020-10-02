@@ -1,6 +1,6 @@
 const { ObjectId } = require('mongodb')
 
-const isValidObjectId = (value: any) => {
+const isValidObjectId = (value: any): boolean => {
   if (!value || typeof value === 'number') return false
 
   const stringValue = value.toString()
@@ -13,4 +13,4 @@ const isValidObjectId = (value: any) => {
   )
 }
 
-module.exports = isValidObjectId
+export default isValidObjectId
