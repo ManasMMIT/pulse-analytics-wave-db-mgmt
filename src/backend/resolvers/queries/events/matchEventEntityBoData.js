@@ -55,6 +55,7 @@ const enrichBasicEventEntity = ({ event, entityMap, boMap }) => {
     action,
     entity: { ...entity, label },
     timestamp,
+    boId,
     boName,
     deltas,
     metaType,
@@ -100,8 +101,8 @@ const enrichRelationalEventEntities = ({ event, entityMap, boMap }) => {
   }
 
   const actualConnectedEntities = [
-    { entity: entity1, boName: boName1 },
-    { entity: entity2, boName: boName2 },
+    { entity: entity1, boName: boName1, boId: boId1 },
+    { entity: entity2, boName: boName2, boId: boId2 },
   ]
 
   return {

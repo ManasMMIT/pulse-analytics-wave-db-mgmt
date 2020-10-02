@@ -1,20 +1,39 @@
 const _ = require('lodash')
 
-const aggPipeline = require('./agg-pipeline')
+const findInitialEvents = require('./findInitialEvents')
+const findModalFieldLabelMap = require('./findModalFieldLabelMap')
+const findEntityAndBoMaps = require('./findEntityAndBoMaps')
+
 const matchEventEntityBoData = require('./matchEventEntityBoData')
-const getEntityAndBoMaps = require('./getEntityAndBoMaps')
+const formatEventDeltaFields = require('./formatEventDeltaFields')
 
 module.exports = async (parent, args, { pulseCoreDb }, info) => {
-  const events = await pulseCoreDb
-    .collection('events')
-    .aggregate(aggPipeline, { allowDiskUse: true })
-    .toArray()
+  const eventsOp = findInitialEvents(pulseCoreDb)
+  const fieldLabelMapOp = findModalFieldLabelMap(pulseCoreDb)
 
-  const { entityMap, boMap } = await getEntityAndBoMaps(events, pulseCoreDb)
+  const [events, fieldLabelMap] = await Promise.all([eventsOp, fieldLabelMapOp])
+
+  const { entityMap, boMap } = await findEntityAndBoMaps(events, pulseCoreDb)
 
   const enrichedEvents = matchEventEntityBoData(events, entityMap, boMap)
 
-  return _.orderBy(enrichedEvents, ({ timestamp }) => new Date(timestamp), [
+  const formattedEvents = enrichedEvents.map(({ deltas, ...event }) => {
+    const { boId, connectedEntities } = event
+
+    const formattedDeltas = formatEventDeltaFields({
+      deltas,
+      fieldLabelMap,
+      boId,
+      connectedEntities,
+    })
+
+    return {
+      ...event,
+      deltas: formattedDeltas,
+    }
+  })
+
+  return _.orderBy(formattedEvents, ({ timestamp }) => new Date(timestamp), [
     'desc',
   ])
 }
