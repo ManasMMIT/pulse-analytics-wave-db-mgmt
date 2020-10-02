@@ -84,14 +84,13 @@
     "react:test:debug": "react-scripts --inspect-brk test --runInBand --env=jest-environment-jsdom-sixteen",
     "eject": "react-scripts eject",
     "repl": "node --inspect=127.0.0.1:2000 ./pulse-core-psql/sequelizeConsole.js",
-    "phoenix": "tsc --build tsconfig.json && nodemon --inspect=127.0.0.1:2000 ./src/backend",
-    "phoenix-prod": "node --inspect=127.0.0.1:2000 ./src/backend",
+    "phoenix": "nodemon",
+    "phoenix-prod": "node --inspect=127.0.0.1:2000 -r ts-node/register ./src/backend/index.js",
     "test": "jest --testPathIgnorePatterns src/frontend/.*.test.js .*.integration.test.js .*.cache.test.js",
     "integration-test": "jest .*.integration.test.js",
     "test:debug": "node --inspect node_modules/.bin/jest --runInBand",
     "start:prod": "NODE_ENV=production node ./src/backend",
-    "lint-staged": "lint-staged",
-    "tsc": "tsc"
+    "lint-staged": "lint-staged"
   },
   "eslintConfig": {
     "extends": "react-app"
