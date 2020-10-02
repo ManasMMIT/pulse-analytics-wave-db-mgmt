@@ -20,6 +20,10 @@
     "@material-ui/pickers": "^3.2.10",
     "@sendgrid/mail": "^6.5.4",
     "@testing-library/react": "^10.4.7",
+    "@types/jest": "^26.0.14",
+    "@types/node": "^14.11.2",
+    "@types/react": "^16.9.50",
+    "@types/react-dom": "^16.9.8",
     "ajv": "^6.12.0",
     "ajv-errors": "^1.0.1",
     "apollo-boost": "^0.4.7",
@@ -80,13 +84,14 @@
     "react:test:debug": "react-scripts --inspect-brk test --runInBand --env=jest-environment-jsdom-sixteen",
     "eject": "react-scripts eject",
     "repl": "node --inspect=127.0.0.1:2000 ./pulse-core-psql/sequelizeConsole.js",
-    "phoenix": "nodemon --inspect=127.0.0.1:2000 ./src/backend",
+    "phoenix": "tsc --build tsconfig.json && nodemon --inspect=127.0.0.1:2000 ./src/backend",
     "phoenix-prod": "node --inspect=127.0.0.1:2000 ./src/backend",
     "test": "jest --testPathIgnorePatterns src/frontend/.*.test.js .*.integration.test.js .*.cache.test.js",
     "integration-test": "jest .*.integration.test.js",
     "test:debug": "node --inspect node_modules/.bin/jest --runInBand",
     "start:prod": "NODE_ENV=production node ./src/backend",
-    "lint-staged": "lint-staged"
+    "lint-staged": "lint-staged",
+    "tsc": "tsc"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -121,6 +126,8 @@
     "jest-environment-jsdom-sixteen": "^1.0.3",
     "lint-staged": "^10.2.11",
     "pre-commit": "^1.2.2",
-    "prettier": "2.0.5"
+    "prettier": "2.0.5",
+    "ts-node": "^9.0.0",
+    "typescript": "^4.0.3"
   }
 }
