@@ -25,6 +25,13 @@ const ConnectionsPanelWrapper = styled.div({
   borderLeft: `2px solid ${transparentize(0.9, Color.BLACK)}`,
 })
 
+const ORG_TYPE_MAP = {
+  Pathways: {
+    // form: PathwaysForm,
+    refKey: 'pathwaysId',
+  },
+}
+
 export const FieldContainer = styled.div({
   display: 'flex',
   flexDirection: 'column',
@@ -52,10 +59,6 @@ export const FlexWrapper = styled.div({
   alignItems: 'center',
 })
 
-// const FORM_MAP = {
-//   Pathways: PathwaysForm,
-// }
-
 const TABS_DATA = [
   'Details',
   'History',
@@ -77,21 +80,17 @@ const ConnectionsPanel = ({
     changeOrganization(connectionsData[0])
     setNewOrgConnectionStatus(false)
   }
+  const { organization, organizationType } = selectedOrganization
 
-  const {
-    _id: orgEntityId,
-    organization,
-    // organizationType,
-  } = selectedOrganization
+  const { refKey } = ORG_TYPE_MAP[organizationType] || {}
 
   const eventLogFilters = {
-    entityIds: [entityId, orgEntityId],
+    entityIds: [entityId, selectedOrganization[refKey]],
   }
 
   const [data, setData] = useState({})
 
   const handlePosition = ({ name, value }) => {
-    debugger
     const newData = _.merge({}, data, { [name]: value })
     setData(newData)
   }
