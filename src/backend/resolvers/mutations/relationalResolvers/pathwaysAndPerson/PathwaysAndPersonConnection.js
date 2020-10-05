@@ -2,6 +2,8 @@ const INIT_PATHWAYS_AND_PERSON_CONNECTION_SYMBOL = Symbol(
   'INIT_PATHWAYS_AND_PERSON_CONNECTION_SYMBOL'
 )
 const { ObjectId } = require('mongodb')
+const BusinessObject = require('../../shared/BusinessObject')
+
 const SOURCE_COLLECTION = 'JOIN_pathways_people'
 
 const PATHWAYS_BOID = ObjectId('5eac3251ac8a01743081f28d')
@@ -36,6 +38,11 @@ class PathwaysAndPersonConnection {
 
     const prevData = await connection.getPrevData()
     connection.prevData = prevData || {}
+
+    connection.relationalFieldMap = await BusinessObject.getRelationalFieldMap({
+      db: dbs.pulseCoreDb,
+      boId: PATHWAYS_BOID,
+    })
 
     // take a snapshot of "next" connected entities, which will be stored
     // top-level on the event itself

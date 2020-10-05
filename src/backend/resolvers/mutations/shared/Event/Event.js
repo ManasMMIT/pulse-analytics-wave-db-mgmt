@@ -2,6 +2,19 @@ const { ObjectId } = require('mongodb')
 const flatten = require('flat')
 const _ = require('lodash')
 
+const isValidObjectId = (value) => {
+  if (!value || typeof value === 'number') return false
+
+  const stringValue = value.toString()
+  const checkForHexRegExp = new RegExp('^[0-9a-fA-F]{24}$')
+
+  return (
+    ObjectId.isValid(stringValue) &&
+    ObjectId(stringValue).equals(stringValue) &&
+    checkForHexRegExp.test(stringValue)
+  )
+}
+
 class Event {
   constructor(metaData) {
     this.timestamp = new Date()
@@ -11,6 +24,34 @@ class Event {
     this.entityId = null // remains blank unless child sets
     this.businessObject = null // remains blank unless child sets
     this.connectedEntities = null // remains blank unless child sets
+  }
+
+  static getFieldMetaData({ field, map }) {
+    if (_.isEmpty(map)) return {}
+
+    const isArrayField = field.match(/(.+)\.[0-9]+/)
+    const actualField = isArrayField ? isArrayField[1] : field
+
+    return map[actualField] || {}
+  }
+
+  static getRelationalFieldMetaData({ field, connectedEntities, map }) {
+    if (_.isEmpty(map)) return {}
+
+    const isArrayField = field.match(/(.+)\.[0-9]+/)
+    const actualField = isArrayField ? isArrayField[1] : field
+
+    const [first, second] = connectedEntities.map(({ boId }) => boId)
+
+    let metaData
+    if (map[first] && map[first][second]) {
+      metaData = map[first][second][actualField]
+    }
+    if (map[second] && map[second][first]) {
+      metaData = map[second][first][actualField]
+    }
+
+    return metaData || {}
   }
 
   getFlattenedAndFilteredKeys(obj, excludedPaths) {
@@ -32,10 +73,7 @@ class Event {
       _.forEach(obj, (value, key) => {
         obj[key] = this.stringifyObjectIds(value)
       })
-    } else if (
-      ObjectId.isValid(obj) &&
-      ObjectId(obj).equals(obj) // floats like 5.5 are valid but aren't ObjectIds
-    ) {
+    } else if (isValidObjectId(obj)) {
       return obj.toString()
     }
 
@@ -94,10 +132,27 @@ class Event {
     // ! ObjectId.isValid('5f64cd51afb0b526154a3c1f') && ObjectId('5f64cd51afb0b526154a3c1f').equals('5f64cd51afb0b526154a3c1f')
     result.forEach((deltaObj) => {
       _.forEach(deltaObj, (value, key) => {
-        if (ObjectId.isValid(value) && ObjectId(value).equals(value)) {
+        if (isValidObjectId(value)) {
           deltaObj[key] = ObjectId(value)
         }
       })
+
+      if (this.entity) {
+        const { fieldLabel, fieldId, boId } = this.entity.fieldMap
+          ? Event.getFieldMetaData({
+              field: deltaObj.field,
+              map: this.entity.fieldMap,
+            })
+          : Event.getRelationalFieldMetaData({
+              field: deltaObj.field,
+              connectedEntities: this.connectedEntities,
+              map: this.entity.relationalFieldMap,
+            })
+
+        deltaObj.fieldLabel = fieldLabel
+        deltaObj.fieldId = fieldId
+        deltaObj.boId = boId
+      }
     })
 
     return result
