@@ -46,8 +46,6 @@ const enrichBasicEventEntity = ({ event, entityMap, boMap }) => {
   const entityLabelFunc = BO_LABEL_MAP[boName]
   const label = entity && entityLabelFunc(entity)
 
-  enrichDeltas({ deltas, entityMap, boMap })
-
   return {
     _id,
     userId,
@@ -57,7 +55,7 @@ const enrichBasicEventEntity = ({ event, entityMap, boMap }) => {
     timestamp,
     boId,
     boName,
-    deltas,
+    deltas: deltas.map(enrichDeltas({ entityMap, boMap })),
     metaType,
   }
 }
@@ -88,15 +86,13 @@ const enrichRelationalEventEntities = ({ event, entityMap, boMap }) => {
   const label2 = entity2 && entityLabelFunc2(entity2)
   entity2 = { ...entity2, label: label2 }
 
-  enrichDeltas({ deltas, entityMap, boMap })
-
   const topLevelFields = {
     _id,
     userId,
     username,
     action,
     timestamp,
-    deltas,
+    deltas: deltas.map(enrichDeltas({ entityMap, boMap })),
     metaType,
   }
 
@@ -111,8 +107,8 @@ const enrichRelationalEventEntities = ({ event, entityMap, boMap }) => {
   }
 }
 
-const enrichDeltas = ({ deltas, entityMap, boMap }) => {
-  deltas = deltas.map((delta) => {
+const enrichDeltas = ({ entityMap, boMap }) => {
+  return (delta) => {
     if (delta.boId) {
       const { name } = boMap[delta.boId]
       const entityLabelFunc = BO_LABEL_MAP[name]
@@ -127,5 +123,5 @@ const enrichDeltas = ({ deltas, entityMap, boMap }) => {
     }
 
     return delta
-  })
+  }
 }

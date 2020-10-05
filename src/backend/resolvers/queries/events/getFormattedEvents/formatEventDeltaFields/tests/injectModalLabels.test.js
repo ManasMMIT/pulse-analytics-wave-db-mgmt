@@ -15,7 +15,7 @@ const injectModalLabels = require('../injectModalLabels')
 test('Replaces field names with business object modal labels', () => {
   const newDeltas = injectModalLabels({
     deltas: simpleDeltasInput,
-    fieldLabelMap: simpleFieldLabelMap,
+    fieldLabelMaps: simpleFieldLabelMap,
     boId: MOCK_BOID_ONE,
   })
 
@@ -25,12 +25,12 @@ test('Replaces field names with business object modal labels', () => {
 test('Replaces dupe field names in respect to business objects', () => {
   const newDeltas = injectModalLabels({
     deltas: simpleDeltasInput,
-    fieldLabelMap: simpleFieldLabelMap,
+    fieldLabelMaps: simpleFieldLabelMap,
     boId: MOCK_BOID_ONE,
   })
 
-  const firstBoIdBLabel = simpleFieldLabelMap[MOCK_BOID_ONE].B
-  const secondBoIdBLabel = simpleFieldLabelMap[MOCK_BOID_TWO].B
+  const firstBoIdBLabel = simpleFieldLabelMap.basicModalMap[MOCK_BOID_ONE].B
+  const secondBoIdBLabel = simpleFieldLabelMap.basicModalMap[MOCK_BOID_TWO].B
 
   const rightBoIdLabel = newDeltas.find(
     ({ field }) => field === firstBoIdBLabel
@@ -47,13 +47,14 @@ test('Replaces dupe field names in respect to business objects', () => {
 test('Replaces field names with business object modal WIDGET labels', () => {
   const newDeltas = injectModalLabels({
     deltas: [widgetDelta],
-    fieldLabelMap: fieldLabelMapWithWidget,
+    fieldLabelMaps: fieldLabelMapWithWidget,
     connectedEntities,
   })
 
   const [{ boId: boId1 }, { boId: boId2 }] = connectedEntities
 
-  const correctNewDeltaLabel = fieldLabelMapWithWidget[boId1][boId2].widget
+  const correctNewDeltaLabel =
+    fieldLabelMapWithWidget.widgetModalMap[boId1][boId2].widget
 
   const isCorrectLabelSet = newDeltas.find(
     ({ field }) => field === correctNewDeltaLabel
@@ -65,7 +66,7 @@ test('Replaces field names with business object modal WIDGET labels', () => {
 test('Keeps unmapped fields unchanged', () => {
   const newDeltas = injectModalLabels({
     deltas: simpleDeltasInput,
-    fieldLabelMap: simpleFieldLabelMap,
+    fieldLabelMaps: simpleFieldLabelMap,
     boId: MOCK_BOID_ONE,
   })
 

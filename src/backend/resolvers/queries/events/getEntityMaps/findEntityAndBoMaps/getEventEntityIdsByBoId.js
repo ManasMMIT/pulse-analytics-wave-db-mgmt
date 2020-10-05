@@ -1,6 +1,6 @@
 const { ObjectId } = require('mongodb')
 
-const { BASIC } = require('../event-meta-types')
+const { BASIC } = require('../../event-meta-types')
 
 // TODO: Raise boIds into global map
 const PATHWAYS_BOID = '5eac3251ac8a01743081f28d'

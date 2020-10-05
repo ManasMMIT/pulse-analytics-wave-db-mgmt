@@ -27,20 +27,25 @@ const MOCK_BOID_TWO = '456'
 const connectedEntities = [{ boId: 'abc' }, { boId: 'def' }]
 
 const simpleFieldLabelMap = {
-  [MOCK_BOID_ONE]: {
-    A: 'Label A',
-    B: 'Label B1',
+  basicModalMap: {
+    [MOCK_BOID_ONE]: {
+      A: 'Label A',
+      B: 'Label B1',
+    },
+    [MOCK_BOID_TWO]: {
+      B: 'Label B2',
+    },
   },
-  [MOCK_BOID_TWO]: {
-    B: 'Label B2',
-  },
+  widgetModalMap: {},
 }
 
 const fieldLabelMapWithWidget = {
   ...simpleFieldLabelMap,
-  [connectedEntities[0].boId]: {
-    [connectedEntities[1].boId]: {
-      widget: 'Widget Label',
+  widgetModalMap: {
+    [connectedEntities[0].boId]: {
+      [connectedEntities[1].boId]: {
+        widget: 'Widget Label',
+      },
     },
   },
 }

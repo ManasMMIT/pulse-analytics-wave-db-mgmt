@@ -19,14 +19,14 @@ module.exports = async (pulseCoreDb) => {
     widgetLabelDocsOp,
   ])
 
-  const nonRelationalMap = d3
+  const basicModalMap = d3
     .nest()
     .key((row) => row.boId)
     .key((row) => row.key)
     .rollup((arr) => arr[0].label)
     .object(keyLabelBoIdDocs)
 
-  const relationalMap = d3
+  const widgetModalMap = d3
     .nest()
     .key((row) => row.connectedEntities[0])
     .key((row) => row.connectedEntities[1])
@@ -35,7 +35,7 @@ module.exports = async (pulseCoreDb) => {
     .object(widgetLabelDocs)
 
   return {
-    ...nonRelationalMap,
-    ...relationalMap,
+    basicModalMap,
+    widgetModalMap,
   }
 }
