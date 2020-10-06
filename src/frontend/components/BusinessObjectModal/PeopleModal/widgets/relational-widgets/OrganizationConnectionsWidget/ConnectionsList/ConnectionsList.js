@@ -54,7 +54,12 @@ const ConnectionsList = ({
     changeOrganization(stagedNewOrg)
   }
 
-  const groupedConnectionsByStatus = _.groupBy(connectionsData, 'status')
+  const groupedConnectionsByStatus = _.sortBy(
+    Object.entries(_.groupBy(connectionsData, 'status')),
+    ([status]) => status
+  )
+
+  console.log(groupedConnectionsByStatus)
 
   return (
     <ConnectionsListWrapper>
@@ -78,7 +83,7 @@ const ConnectionsList = ({
           <ConnectionListItem title={organization} isActive />
         )}
 
-        {_.map(groupedConnectionsByStatus, (data, status) => (
+        {groupedConnectionsByStatus.map(([status, data]) => (
           <ConnectionsSublist
             key={status}
             status={status}
