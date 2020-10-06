@@ -1,5 +1,8 @@
 const INIT_PERSON_SYMBOL = Symbol('INIT_PERSON_SYMBOL')
 const { ObjectId } = require('mongodb')
+
+const BusinessObject = require('../shared/BusinessObject')
+
 const PERSON_BUSINESS_OBJECT_ID = ObjectId('5eea22d5adbf920fa4320487')
 const SOURCE_COLLECTION = 'people'
 
@@ -28,6 +31,11 @@ class Person {
 
     const prevData = await person.getPrevData()
     person.prevData = prevData || {}
+
+    person.fieldMap = await BusinessObject.getFieldMap({
+      db: dbs.pulseCoreDb,
+      boId: PERSON_BUSINESS_OBJECT_ID,
+    })
 
     return person
   }

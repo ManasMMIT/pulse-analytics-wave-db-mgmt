@@ -11,6 +11,7 @@ import Color from 'frontend/utils/color'
 const SectionHeader = styled.div({
   display: 'flex',
   justifyContent: 'space-between',
+  alignItems: 'center',
   width: '100%',
   borderBottom: `2px solid ${transparentize(0.9, Color.BLACK)}`,
   padding: Spacing.S4,
@@ -22,10 +23,10 @@ const SectionLabel = styled.h2({
   padding: `0 ${Spacing.S4}`,
 })
 
-const SectionTitle = ({ title, children }) => {
+const SectionTitle = ({ title, titleStyle, children }) => {
   return (
     <SectionHeader>
-      <SectionLabel>{title}</SectionLabel>
+      <SectionLabel style={titleStyle}>{title}</SectionLabel>
       {children}
     </SectionHeader>
   )
@@ -33,11 +34,13 @@ const SectionTitle = ({ title, children }) => {
 
 SectionTitle.propTypes = {
   title: PropTypes.string,
+  titleStyle: PropTypes.object,
   children: PropTypes.node,
 }
 
 SectionTitle.defaultProps = {
   title: '',
+  titleStyle: {},
   children: null,
 }
 

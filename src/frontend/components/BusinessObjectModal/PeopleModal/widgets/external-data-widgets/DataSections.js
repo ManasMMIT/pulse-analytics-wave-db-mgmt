@@ -7,7 +7,7 @@ import Color from 'frontend/utils/color'
 import Spacing from 'frontend/utils/spacing'
 import FontSpace from 'frontend/utils/fontspace'
 
-import Title from '../../../Title/Title'
+import Title from 'frontend/components/Title'
 import NoDataPlaceholder from 'frontend/components/NoDataPlaceholder'
 
 const wrapperStyle = {

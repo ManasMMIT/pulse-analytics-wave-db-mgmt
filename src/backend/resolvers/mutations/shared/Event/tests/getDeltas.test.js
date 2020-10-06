@@ -1,8 +1,11 @@
 const Event = require('../Event')
-const { ObjectId } = require('mongodb')
 
 describe(`getDeltas util on base Event class works as expected`, () => {
   const event = new Event({}, {})
+
+  test.todo(
+    'Test correct fieldMetaData insertion for basic and relational events'
+  )
 
   test('Correctly diffs CREATE for 1D objects', () => {
     const deltas = event.getDeltas({

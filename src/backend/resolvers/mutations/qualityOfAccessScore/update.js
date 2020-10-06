@@ -2,17 +2,7 @@ const ObjectId = require('mongodb').ObjectId
 
 const updateQualityAccessScore = async (
   parent,
-  {
-    input: {
-      _id,
-      access,
-      accessTiny,
-      score,
-      sortOrder,
-      color,
-      caption,
-    }
-  },
+  { input: { _id, access, accessTiny, score, sortOrder, color, caption } },
   { pulseCoreDb, pulseDevDb, mongoClient },
   info
 ) => {
@@ -29,48 +19,68 @@ const updateQualityAccessScore = async (
     caption,
   }
 
+  const nestedAccessSetObj = {
+    'accessData.access': access,
+    'accessData.accessTiny': accessTiny,
+    'accessData.score': score,
+    'accessData.sortOrder': sortOrder,
+    'accessData.color': color,
+    'accessData.caption': caption,
+  }
+
   const session = mongoClient.startSession()
 
   let result
+
   await session.withTransaction(async () => {
-    const newAccessScore = await pulseCoreDb.collection('qualityOfAccessScore')
+    const updateCoreQoaScoreOp = pulseCoreDb
+      .collection('qualityOfAccessScore')
       .findOneAndUpdate(
-      { _id },
-      { $set: { ...updateAccessScoreObj } },
-      { returnOriginal: false, session }
-    )
+        { _id },
+        { $set: updateAccessScoreObj },
+        { returnOriginal: false, session }
+      )
 
-    await pulseDevDb.collection('qualityOfAccessScore').updateOne(
-      { _id },
-      {
-        $set: {
-          ...updateAccessScoreObj
-        }
-      },
-      { session }
-    )
-
-    await pulseCoreDb.collection('organizations.treatmentPlans.history')
+    const updateCoreOrgTpHistoryOp = pulseCoreDb
+      .collection('organizations.treatmentPlans.history')
       .updateMany(
         { 'accessData._id': _id },
-        {
-          $set: {
-            'accessData.access': access,
-            'accessData.accessTiny': accessTiny,
-            'accessData.score': score,
-            'accessData.sortOrder': sortOrder,
-            'accessData.color': color,
-            'accessData.caption': caption,
-          }
-        },
+        { $set: nestedAccessSetObj },
         { session }
       )
-  
+
+    const updateDevQoaScoreOp = pulseDevDb
+      .collection('qualityOfAccessScore')
+      .updateOne({ _id }, { $set: updateAccessScoreObj }, { session })
+
+    const updateDevPayerLatestAccessOp = pulseDevDb
+      .collection('payerLatestAccess')
+      .updateMany(
+        { 'accessData._id': _id },
+        { $set: nestedAccessSetObj },
+        { session }
+      )
+
+    const updateDevPayerHistoricalAccessOp = pulseDevDb
+      .collection('payerHistoricalAccess')
+      .updateMany(
+        { 'accessData._id': _id },
+        { $set: nestedAccessSetObj },
+        { session }
+      )
+
+    const [newAccessScore] = await Promise.all([
+      updateCoreQoaScoreOp,
+      updateCoreOrgTpHistoryOp,
+      updateDevQoaScoreOp,
+      updateDevPayerLatestAccessOp,
+      updateDevPayerHistoricalAccessOp,
+    ])
+
     result = newAccessScore.value
   })
 
   return result
-
 }
 
 module.exports = updateQualityAccessScore
