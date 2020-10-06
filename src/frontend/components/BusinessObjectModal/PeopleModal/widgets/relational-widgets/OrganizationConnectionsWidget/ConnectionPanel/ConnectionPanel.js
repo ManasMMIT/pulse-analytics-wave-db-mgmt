@@ -46,13 +46,13 @@ const ConnectionPanel = ({
 
   const { refKey, Form } = ORG_TYPE_MAP[organizationType] || {}
 
-  const [data, setData] = useState(selectedOrganization)
+  const [orgData, setOrgData] = useState(selectedOrganization)
 
   const [eventLogFilters, setEventLogFilters] = useState({})
 
   useEffect(() => {
     if (!_.isEmpty(selectedOrganization)) {
-      setData(selectedOrganization)
+      setOrgData(selectedOrganization)
 
       if (refKey in selectedOrganization) {
         setEventLogFilters({
@@ -71,7 +71,7 @@ const ConnectionPanel = ({
         titleStyle={{ ...FontSpace.FS3, color: Color.BLUE }}
       >
         <ButtonCluster
-          data={data}
+          data={orgData}
           cancelHandler={cancelHandler}
           isNewOrgBeingCreated={isNewOrgBeingCreated}
         />
@@ -84,8 +84,11 @@ const ConnectionPanel = ({
           paddingLeft: Spacing.S4,
         }}
       >
-        {/* <Form data={data} /> */}
-        <div>hello</div>
+        {Boolean(ORG_TYPE_MAP[organizationType]) ? (
+          <Form data={orgData} />
+        ) : (
+          <div>Loading...</div>
+        )}
 
         {selectedOrganization && refKey in selectedOrganization ? (
           <EventLog filters={eventLogFilters} />
