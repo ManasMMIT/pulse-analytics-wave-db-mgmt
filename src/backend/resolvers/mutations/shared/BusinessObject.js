@@ -102,13 +102,13 @@ class BusinessObject {
       .object(keyLabelBoIdDocs)
   }
 
-  static async getRelationalFieldMap({ boId, db }) {
+  static async getRelationalFieldMap({ widgetId, db }) {
     const widgetLabelDocs = await db
       .collection('businessObjects.modals.widgets')
       .aggregate(
         [
           {
-            $match: { connectedEntities: boId },
+            $match: { _id: widgetId },
           },
           {
             $unwind: {
@@ -117,7 +117,7 @@ class BusinessObject {
           },
           {
             $project: {
-              connectedEntities: 1,
+              connectedBoIds: 1,
               key: '$fields.key',
               label: '$fields.label',
               boId: '$fields.boId',
@@ -130,8 +130,8 @@ class BusinessObject {
 
     return d3
       .nest()
-      .key((row) => row.connectedEntities[0])
-      .key((row) => row.connectedEntities[1])
+      .key((row) => row.connectedBoIds[0])
+      .key((row) => row.connectedBoIds[1])
       .key((row) => row.key)
       .rollup((arr) => ({
         fieldId: arr[0]._id,

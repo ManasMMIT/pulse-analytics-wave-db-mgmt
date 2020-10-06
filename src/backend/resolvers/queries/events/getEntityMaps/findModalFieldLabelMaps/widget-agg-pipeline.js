@@ -7,7 +7,7 @@ module.exports = [
   {
     $project: {
       _id: 0,
-      connectedEntities: 1,
+      connectedBoIds: 1,
       key: '$fields.key',
       label: '$fields.label',
     },

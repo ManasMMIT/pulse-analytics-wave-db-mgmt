@@ -8,6 +8,7 @@ const SOURCE_COLLECTION = 'JOIN_pathways_people'
 
 const PATHWAYS_BOID = ObjectId('5eac3251ac8a01743081f28d')
 const PERSON_BOID = ObjectId('5eea22d5adbf920fa4320487')
+const PATHWAYS_PERSON_WIDGET_ID = ObjectId('5f7b8ed2f0300b312990adf7')
 
 // factory pattern: https://qwtel.com/posts/software/async-constructor-pattern/#factory-functions
 class PathwaysAndPersonConnection {
@@ -41,7 +42,7 @@ class PathwaysAndPersonConnection {
 
     connection.relationalFieldMap = await BusinessObject.getRelationalFieldMap({
       db: dbs.pulseCoreDb,
-      boId: PATHWAYS_BOID,
+      widgetId: PATHWAYS_PERSON_WIDGET_ID,
     })
 
     // take a snapshot of "next" connected entities, which will be stored

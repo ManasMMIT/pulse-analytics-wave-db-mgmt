@@ -28,8 +28,8 @@ module.exports = async (pulseCoreDb) => {
 
   const widgetModalMap = d3
     .nest()
-    .key((row) => row.connectedEntities[0])
-    .key((row) => row.connectedEntities[1])
+    .key((row) => row.connectedBoIds[0])
+    .key((row) => row.connectedBoIds[1])
     .key((row) => row.key)
     .rollup((arr) => arr[0].label)
     .object(widgetLabelDocs)

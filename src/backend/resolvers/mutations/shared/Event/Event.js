@@ -137,6 +137,7 @@ class Event {
         }
       })
 
+      // Inject snapshot of delta metaData: field label, field id, and boId for ref fields
       if (this.entity) {
         const { fieldLabel, fieldId, boId } = this.entity.fieldMap
           ? Event.getFieldMetaData({
