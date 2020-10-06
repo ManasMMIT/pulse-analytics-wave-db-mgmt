@@ -18,7 +18,7 @@ import ButtonCluster from './ButtonCluster'
 // import PathwaysForm from './PathwaysForm'
 import EventLog from 'frontend/components/EventLog'
 
-const ConnectionsPanelWrapper = styled.div({
+const ConnectionPanelWrapper = styled.div({
   display: 'flex',
   flexDirection: 'column',
   width: '50%',
@@ -68,7 +68,7 @@ const TABS_DATA = [
 const getSelectVal = (arr) =>
   arr ? arr.map((value) => ({ label: value, value })) : []
 
-const ConnectionsPanel = ({
+const ConnectionPanel = ({
   entityId,
   selectedOrganization,
   hasNewOrgConnection,
@@ -138,7 +138,7 @@ const ConnectionsPanel = ({
     : []
 
   return (
-    <ConnectionsPanelWrapper>
+    <ConnectionPanelWrapper>
       <SectionTitle
         title={organization}
         titleStyle={{ ...FontSpace.FS3, color: Color.BLUE }}
@@ -292,11 +292,11 @@ const ConnectionsPanel = ({
 
         <EventLog filters={eventLogFilters} />
       </UnderlinedTabs>
-    </ConnectionsPanelWrapper>
+    </ConnectionPanelWrapper>
   )
 }
 
-ConnectionsPanel.propTypes = {
+ConnectionPanel.propTypes = {
   entityId: PropTypes.string.isRequired,
   changeOrganization: PropTypes.func.isRequired,
   hasNewOrgConnection: PropTypes.bool.isRequired,
@@ -305,4 +305,4 @@ ConnectionsPanel.propTypes = {
   setNewOrgConnectionStatus: PropTypes.func.isRequired,
 }
 
-export default ConnectionsPanel
+export default ConnectionPanel
