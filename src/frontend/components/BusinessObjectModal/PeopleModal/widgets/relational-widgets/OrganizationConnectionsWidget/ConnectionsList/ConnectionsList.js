@@ -28,12 +28,13 @@ const ConnectionsList = ({
   selectedOrganization,
   connectionsData,
   organizationTypes,
-  hasNewOrgConnection,
-  setNewOrgConnectionStatus,
+  setWhetherNewOrgBeingCreated,
+  isNewOrgBeingCreated,
 }) => {
   const { organizationType, organization } = selectedOrganization
+
   const orgClickHandler = (value) => {
-    if (hasNewOrgConnection) {
+    if (isNewOrgBeingCreated) {
       // Disable selection when a new organization connection is being created
       alert(
         'Selecting an existing connection is locked. Please save or cancel the new connection.'
@@ -49,7 +50,7 @@ const ConnectionsList = ({
       organizationType: value,
     }
 
-    setNewOrgConnectionStatus(true)
+    setWhetherNewOrgBeingCreated(true)
     changeOrganization(stagedNewOrg)
   }
 
@@ -73,7 +74,7 @@ const ConnectionsList = ({
         </DropdownMenu>
       </SectionTitle>
       <List>
-        {hasNewOrgConnection && (
+        {isNewOrgBeingCreated && (
           <ConnectionListItem title={organization} isActive />
         )}
 

@@ -71,15 +71,16 @@ const getSelectVal = (arr) =>
 const ConnectionPanel = ({
   entityId,
   selectedOrganization,
-  hasNewOrgConnection,
   changeOrganization,
-  setNewOrgConnectionStatus,
   connectionsData,
+  setWhetherNewOrgBeingCreated,
+  isNewOrgBeingCreated,
 }) => {
   const cancelHandler = () => {
     changeOrganization(connectionsData[0])
-    setNewOrgConnectionStatus(false)
+    setWhetherNewOrgBeingCreated(false)
   }
+
   const { organization, organizationType } = selectedOrganization
 
   const { refKey } = ORG_TYPE_MAP[organizationType] || {}
@@ -146,7 +147,7 @@ const ConnectionPanel = ({
         <ButtonCluster
           data={data}
           cancelHandler={cancelHandler}
-          hasNewOrgConnection={hasNewOrgConnection}
+          isNewOrgBeingCreated={isNewOrgBeingCreated}
         />
       </SectionTitle>
       <UnderlinedTabs

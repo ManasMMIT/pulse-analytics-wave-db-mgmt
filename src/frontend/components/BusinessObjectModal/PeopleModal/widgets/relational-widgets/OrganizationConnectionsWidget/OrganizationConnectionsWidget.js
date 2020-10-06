@@ -31,7 +31,7 @@ const OrganizationConnectionsWidget = ({ entity }) => {
   })
 
   const [selectedOrganization, changeOrganization] = useState({})
-  const [hasNewOrgConnection, setNewOrgConnectionStatus] = useState(false)
+  const [isNewOrgBeingCreated, setWhetherNewOrgBeingCreated] = useState(false)
 
   useEffect(() => {
     if (!orgTypeLoading && !connectionsLoading) {
@@ -48,8 +48,8 @@ const OrganizationConnectionsWidget = ({ entity }) => {
   return (
     <WidgetContainer>
       <ConnectionsList
-        hasNewOrgConnection={hasNewOrgConnection}
-        setNewOrgConnectionStatus={setNewOrgConnectionStatus}
+        isNewOrgBeingCreated={isNewOrgBeingCreated}
+        setWhetherNewOrgBeingCreated={setWhetherNewOrgBeingCreated}
         connectionsData={connectionsData}
         organizationTypes={organizationTypes}
         selectedOrganization={selectedOrganization}
@@ -59,8 +59,8 @@ const OrganizationConnectionsWidget = ({ entity }) => {
         entityId={entity._id}
         selectedOrganization={selectedOrganization}
         changeOrganization={changeOrganization}
-        setNewOrgConnectionStatus={setNewOrgConnectionStatus}
-        hasNewOrgConnection={hasNewOrgConnection}
+        setWhetherNewOrgBeingCreated={setWhetherNewOrgBeingCreated}
+        isNewOrgBeingCreated={isNewOrgBeingCreated}
         connectionsData={connectionsData}
       />
     </WidgetContainer>
