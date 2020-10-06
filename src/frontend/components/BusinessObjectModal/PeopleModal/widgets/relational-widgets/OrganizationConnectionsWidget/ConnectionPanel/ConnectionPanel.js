@@ -11,14 +11,14 @@ import FontSpace from 'frontend/utils/fontspace'
 import { AlphaColors } from 'frontend/utils/pulseStyles'
 
 import ButtonCluster from './ButtonCluster'
-// import PathwaysForm from './PathwaysForm'
+import PathwaysForm from './PathwaysForm'
 import EventLog from 'frontend/components/EventLog'
 
 import { ConnectionPanelWrapper } from './styledComponents'
 
 const ORG_TYPE_MAP = {
   Pathways: {
-    // form: PathwaysForm,
+    Form: PathwaysForm,
     refKey: 'pathwaysId',
   },
 }
@@ -44,17 +44,23 @@ const ConnectionPanel = ({
 
   const { organization, organizationType } = selectedOrganization
 
-  const { refKey } = ORG_TYPE_MAP[organizationType] || {}
+  const { refKey, Form } = ORG_TYPE_MAP[organizationType] || {}
 
-  const eventLogFilters = {
-    entityIds: [entityId, selectedOrganization[refKey]],
-  }
+  const [data, setData] = useState(selectedOrganization)
 
-  const [data, setData] = useState({})
+  const [eventLogFilters, setEventLogFilters] = useState({})
 
   useEffect(() => {
     if (!_.isEmpty(selectedOrganization)) {
-      setData(_.cloneDeep(selectedOrganization))
+      setData(selectedOrganization)
+
+      if (refKey in selectedOrganization) {
+        setEventLogFilters({
+          entityIds: [entityId, selectedOrganization[refKey]],
+        })
+      } else {
+        setEventLogFilters({})
+      }
     }
   }, [selectedOrganization])
 
@@ -78,8 +84,14 @@ const ConnectionPanel = ({
           paddingLeft: Spacing.S4,
         }}
       >
+        {/* <Form data={data} /> */}
         <div>hello</div>
-        <EventLog filters={eventLogFilters} />
+
+        {selectedOrganization && refKey in selectedOrganization ? (
+          <EventLog filters={eventLogFilters} />
+        ) : (
+          <div>New unsaved connection doesn't have history</div>
+        )}
       </UnderlinedTabs>
     </ConnectionPanelWrapper>
   )
