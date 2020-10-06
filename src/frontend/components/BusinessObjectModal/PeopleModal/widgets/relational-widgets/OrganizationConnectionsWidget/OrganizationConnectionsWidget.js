@@ -22,6 +22,7 @@ const OrganizationConnectionsWidget = ({ entity }) => {
   const { data: organizationTypeData, loading: orgTypeLoading } = useQuery(
     GET_ORGANIZATION_TYPES
   )
+
   const {
     data: connectionsData,
     loading: connectionsLoading,
@@ -41,6 +42,7 @@ const OrganizationConnectionsWidget = ({ entity }) => {
   if (orgTypeLoading || connectionsLoading) return <Spinner size={28} />
 
   const { organizationTypes } = organizationTypeData
+
   if (connectionsData.length === 0) return <NoDataPlaceholder />
 
   return (
