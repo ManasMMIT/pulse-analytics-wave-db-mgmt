@@ -18,6 +18,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `Orion`: Event sourcing frontend/backend work
   - First business object modal History widget [#781](https://github.com/pulse-data/wave-db-mgmt/pull/781)
   - Delta ref values are now hydrated [#784](https://github.com/pulse-data/wave-db-mgmt/pull/784)
+- `Orion/Quality of Access Score`: Cascade qoa score updates to `payerLatestAccess` and `payerHistoricalAccess` collections in `pulse-dev` [#796](https://github.com/pulse-data/wave-db-mgmt/pull/796)
+  - Out of scope: cascading to `payerHistoricalCombinedData` (no access `_id` to latch onto for updating) and cascading to `omniscientPayerManagementSummary` (is dropped/replaced anyway while we have to reimport payer data to drop/replace `payerHistoricalCombinedData`)
 
 ## [3.8.0] - Started: 9-17-20
 
