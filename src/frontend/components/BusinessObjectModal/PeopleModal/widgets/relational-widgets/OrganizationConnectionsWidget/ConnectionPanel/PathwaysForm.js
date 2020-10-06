@@ -1,47 +1,23 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Select from 'react-select'
-import styled from '@emotion/styled'
-import { transparentize } from 'polished'
 import _ from 'lodash'
 
-import FontSpace from 'frontend/utils/fontspace'
-import Color from 'frontend/utils/color'
 import Spacing from 'frontend/utils/spacing'
-
 import Input from 'frontend/components/Input'
 
-export const FieldContainer = styled.div({
-  display: 'flex',
-  flexDirection: 'column',
-  padding: Spacing.S4,
-  background: Color.GRAY_LIGHT,
-  borderBottom: `1px solid ${transparentize(0.9, Color.BLACK)}`,
-})
-
-export const FormLabel = styled.label({
-  color: Color.BLACK,
-  fontWeight: 700,
-  ...FontSpace.FS2,
-})
-
-export const FieldWrapper = styled.div({
-  margin: Spacing.S4,
-})
-
-export const FormWrapper = styled.label({
-  overflowY: 'scroll',
-})
-
-export const FlexWrapper = styled.div({
-  display: 'flex',
-  alignItems: 'center',
-})
+import {
+  FieldContainer,
+  FormLabel,
+  FieldWrapper,
+  FormWrapper,
+  FlexWrapper,
+} from './styledComponents'
 
 const getSelectVal = (arr) =>
   arr ? arr.map((value) => ({ label: value, value })) : []
 
-const PathwaysForm = ({ selectedOrganization }) => {
+const PathwaysForm = ({ data }) => {
   const {
     internalFields,
     pathwaysInfluencerTypes,
@@ -50,7 +26,7 @@ const PathwaysForm = ({ selectedOrganization }) => {
     priority,
     alert,
     exclusionSettings,
-  } = selectedOrganization
+  } = data
 
   //  Destructured fields are defaulted to empty object to account
   //  for initial creation when all values are empty
@@ -207,7 +183,7 @@ const PathwaysForm = ({ selectedOrganization }) => {
 }
 
 PathwaysForm.propTypes = {
-  selectedOrganization: PropTypes.object.isRequired,
+  data: PropTypes.object.isRequired,
 }
 
 export default PathwaysForm
