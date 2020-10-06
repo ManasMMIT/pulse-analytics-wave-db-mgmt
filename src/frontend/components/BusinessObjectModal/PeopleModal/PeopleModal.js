@@ -13,12 +13,12 @@ import {
 } from '../../../api/queries'
 
 import BusinessObjectModal from '../BusinessObjectModal/BusinessObjectModal'
-import PathwaysInfluencerWidget from './external-data-widgets/PathwaysInfluencerWidget'
-import OrganizationConnectionsWidget from './external-data-widgets/OrganizationConnectionsWidget'
-import ProviderInfluencerWidget from './external-data-widgets/ProviderInfluencerWidget'
-import PhysiciansCompareWidget from './external-data-widgets/PhysiciansCompareWidget'
-import OpenPaymentsWidget from './external-data-widgets/OpenPaymentsWidget'
-import HistoryWidget from './external-data-widgets/HistoryWidget'
+import PathwaysInfluencerWidget from './widgets/external-data-widgets/PathwaysInfluencerWidget'
+import OrganizationConnectionsWidget from './widgets/relational-widgets/OrganizationConnectionsWidget'
+import ProviderInfluencerWidget from './widgets/external-data-widgets/ProviderInfluencerWidget'
+import PhysiciansCompareWidget from './widgets/external-data-widgets/PhysiciansCompareWidget'
+import OpenPaymentsWidget from './widgets/external-data-widgets/OpenPaymentsWidget'
+import HistoryWidget from './widgets/HistoryWidget'
 
 const WIDGETS = [
   {

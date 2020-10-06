@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
-import _ from 'lodash'
 
 import styled from '@emotion/styled'
 import { useQuery } from '@apollo/react-hooks'
 
 import ConnectionsList from './ConnectionsList'
-import ConnectionsPanel from './ConnectionsPanel'
+import ConnectionPanel from './ConnectionPanel'
 
 import usePathwaysPersonConnections from 'frontend/hooks/usePathwaysPersonConnections'
 import Spinner from 'frontend/components/Spinner'
@@ -54,7 +53,7 @@ const OrganizationConnectionsWidget = ({ entity }) => {
         selectedOrganization={selectedOrganization}
         changeOrganization={changeOrganization}
       />
-      <ConnectionsPanel
+      <ConnectionPanel
         entityId={entity._id}
         selectedOrganization={selectedOrganization}
         changeOrganization={changeOrganization}
