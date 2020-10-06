@@ -97,11 +97,11 @@ const ConnectionsList = ({
 
 ConnectionsList.propTypes = {
   changeOrganization: PropTypes.func.isRequired,
-  hasNewOrgConnection: PropTypes.bool.isRequired,
   organizationTypes: PropTypes.array.isRequired,
   connectionsData: PropTypes.array.isRequired,
   selectedOrganization: PropTypes.object.isRequired,
-  setNewOrgConnectionStatus: PropTypes.func.isRequired,
+  isNewOrgBeingCreated: PropTypes.bool.isRequired,
+  setWhetherNewOrgBeingCreated: PropTypes.func.isRequired,
 }
 
 export default ConnectionsList
