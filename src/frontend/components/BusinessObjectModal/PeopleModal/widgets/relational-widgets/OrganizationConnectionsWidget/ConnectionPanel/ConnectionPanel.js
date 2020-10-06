@@ -88,10 +88,10 @@ const ConnectionPanel = ({
 ConnectionPanel.propTypes = {
   entityId: PropTypes.string.isRequired,
   changeOrganization: PropTypes.func.isRequired,
-  hasNewOrgConnection: PropTypes.bool.isRequired,
+  isNewOrgBeingCreated: PropTypes.bool.isRequired,
   connectionsData: PropTypes.array.isRequired,
   selectedOrganization: PropTypes.object.isRequired,
-  setNewOrgConnectionStatus: PropTypes.func.isRequired,
+  setWhetherNewOrgBeingCreated: PropTypes.func.isRequired,
 }
 
 export default ConnectionPanel
