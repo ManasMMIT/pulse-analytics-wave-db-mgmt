@@ -31,7 +31,7 @@ const ConnectionsList = ({
   setWhetherNewOrgBeingCreated,
   isNewOrgBeingCreated,
 }) => {
-  const { organizationType, organization } = selectedOrganization
+  const { organization } = selectedOrganization
 
   const orgClickHandler = (value) => {
     if (isNewOrgBeingCreated) {
@@ -44,10 +44,10 @@ const ConnectionsList = ({
     }
   }
 
-  const createOrgConnectionHandler = (value) => {
+  const createOrgConnectionHandler = (orgType) => {
     const stagedNewOrg = {
-      organization: `New ${organizationType} Organization Connection`,
-      organizationType: value,
+      organization: `New ${orgType} Organization Connection`,
+      organizationType: orgType,
     }
 
     setWhetherNewOrgBeingCreated(true)
@@ -59,20 +59,18 @@ const ConnectionsList = ({
     ([status]) => status
   )
 
-  console.log(groupedConnectionsByStatus)
-
   return (
     <ConnectionsListWrapper>
       <SectionTitle title={'Organization Connections'}>
         <DropdownMenu>
           <MenuGroup menuGroupLabel={'New Organization Connection Type:'}>
-            {organizationTypes.map((value) => (
+            {organizationTypes.map((orgType) => (
               <MenuItem
-                key={value}
-                label={value}
-                value={value}
-                isDisabled={!ACTIVE_MENU_ITEMS.includes(value)}
-                clickHandler={createOrgConnectionHandler}
+                key={orgType}
+                label={orgType}
+                value={orgType}
+                isDisabled={!ACTIVE_MENU_ITEMS.includes(orgType)}
+                clickHandler={() => createOrgConnectionHandler(orgType)}
               />
             ))}
           </MenuGroup>
