@@ -74,7 +74,7 @@ const ConnectionsList = ({
       </SectionTitle>
       <List>
         {hasNewOrgConnection && (
-          <ConnectionListItem title={organization} isActive={true} />
+          <ConnectionListItem title={organization} isActive />
         )}
 
         {_.map(groupedConnectionsByStatus, (data, status) => (
