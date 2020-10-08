@@ -15,7 +15,7 @@ const ButtonsWrapper = styled.div({
   alignItems: 'center',
 })
 
-const ButtonCluster = ({ isNewOrgBeingCreated, cancelHandler, data }) => {
+const ButtonCluster = ({ isNewOrgBeingCreated, cancelHandler, orgData }) => {
   const {
     _id,
     pathwaysId,
@@ -30,7 +30,7 @@ const ButtonCluster = ({ isNewOrgBeingCreated, cancelHandler, data }) => {
     exclusionSettings,
     startDate,
     endDate,
-  } = data
+  } = orgData
 
   const { __typename: t1, ...internalFieldsCleaned } = internalFields || {}
   internalFieldsCleaned.valueChairsIndicationIds =

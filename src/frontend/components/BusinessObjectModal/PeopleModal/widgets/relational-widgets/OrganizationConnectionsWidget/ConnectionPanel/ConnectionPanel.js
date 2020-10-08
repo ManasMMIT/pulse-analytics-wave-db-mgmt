@@ -69,7 +69,7 @@ const ConnectionPanel = ({
         titleStyle={{ ...FontSpace.FS3, color: Color.BLUE }}
       >
         <ButtonCluster
-          data={orgData}
+          orgData={orgData}
           cancelHandler={cancelHandler}
           isNewOrgBeingCreated={isNewOrgBeingCreated}
         />
@@ -82,7 +82,7 @@ const ConnectionPanel = ({
           paddingLeft: Spacing.S4,
         }}
       >
-        <Form data={orgData} isNewOrgBeingCreated={isNewOrgBeingCreated} />
+        <Form orgData={orgData} isNewOrgBeingCreated={isNewOrgBeingCreated} />
 
         {refKey in orgData ? (
           <EventLog filters={eventLogFilters} />

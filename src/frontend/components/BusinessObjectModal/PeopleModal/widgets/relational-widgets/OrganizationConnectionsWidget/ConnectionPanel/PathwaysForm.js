@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useQuery } from '@apollo/react-hooks'
 import PropTypes from 'prop-types'
 import Select from 'react-select'
@@ -7,7 +7,10 @@ import _ from 'lodash'
 import Spacing from 'frontend/utils/spacing'
 import Input from 'frontend/components/Input'
 
-import { GET_SOURCE_INDICATIONS } from 'frontend/api/queries'
+import {
+  GET_SOURCE_INDICATIONS,
+  GET_PATHWAYS_ORGANIZATIONS,
+} from 'frontend/api/queries'
 
 import {
   FieldContainer,
@@ -28,20 +31,9 @@ const INFLUENCER_TYPES = [
   'UHC P&T Members',
 ]
 
-const PathwaysForm = ({ data }) => {
-  const { data: indicationsData, loading: indicationsLoading } = useQuery(
-    GET_SOURCE_INDICATIONS
-  )
-
-  if (indicationsLoading) return 'Loading...'
-
-  const globalIndications = Object.values(indicationsData)[0]
-  const globalIndicationsById = _.keyBy(globalIndications, '_id')
-
+const PathwaysForm = ({ orgData, isNewOrgBeingCreated }) => {
   const {
-    _id,
     pathwaysId,
-    personId,
     tumorTypeSpecialty,
     position,
     priority,
@@ -52,7 +44,7 @@ const PathwaysForm = ({ data }) => {
     internalFields,
     alert,
     exclusionSettings,
-  } = data
+  } = orgData
 
   const {
     internalNotes,
@@ -69,9 +61,45 @@ const PathwaysForm = ({ data }) => {
 
   const { isExcluded, reason } = exclusionSettings
 
+  const [selectedPathwaysId, selectPathwaysId] = useState(pathwaysId)
+
+  const { data: indicationsData, loading: indicationsLoading } = useQuery(
+    GET_SOURCE_INDICATIONS
+  )
+
+  const { data: pathwaysData, loading: pathwaysLoading } = useQuery(
+    GET_PATHWAYS_ORGANIZATIONS
+  )
+
+  if (indicationsLoading || pathwaysLoading) return 'Loading...'
+
+  const globalIndications = Object.values(indicationsData)[0]
+  const globalIndicationsById = _.keyBy(globalIndications, '_id')
+
+  const globalPathways = Object.values(pathwaysData)[0]
+  const globalPathwaysById = _.keyBy(globalPathways, '_id')
+
   return (
     <FormWrapper>
       <FieldContainer>
+        <FieldWrapper>
+          <FormLabel>Connected Pathways Organization</FormLabel>
+          <Select
+            isDisabled={!isNewOrgBeingCreated}
+            value={{
+              label:
+                selectedPathwaysId &&
+                globalPathwaysById[selectedPathwaysId].organization,
+              value: selectedPathwaysId,
+            }}
+            options={globalPathways.map(({ _id, organization }) => ({
+              label: organization,
+              value: _id,
+            }))}
+            onChange={({ value }) => selectPathwaysId(value)}
+          />
+        </FieldWrapper>
+
         <FieldWrapper>
           <FormLabel>
             Internal TDG Notes [Format - YYQQ (MM/DD:____);]
