@@ -1,10 +1,13 @@
 import React from 'react'
+import { useQuery } from '@apollo/react-hooks'
 import PropTypes from 'prop-types'
 import Select from 'react-select'
 import _ from 'lodash'
 
 import Spacing from 'frontend/utils/spacing'
 import Input from 'frontend/components/Input'
+
+import { GET_SOURCE_INDICATIONS } from 'frontend/api/queries'
 
 import {
   FieldContainer,
@@ -14,44 +17,57 @@ import {
   FlexWrapper,
 } from './styledComponents'
 
-const getSelectVal = (arr) =>
-  arr ? arr.map((value) => ({ label: value, value })) : []
+const MGMT_TYPES = ['Business', 'Clinical', 'Leadership']
+
+const INFLUENCER_TYPES = [
+  'Steering Committee',
+  'Leadership',
+  'Content Manager',
+  'Payer Partner Leadership',
+  'USON P&T Members',
+  'UHC P&T Members',
+]
 
 const PathwaysForm = ({ data }) => {
+  const { data: indicationsData, loading: indicationsLoading } = useQuery(
+    GET_SOURCE_INDICATIONS
+  )
+
+  if (indicationsLoading) return 'Loading...'
+
+  const globalIndications = Object.values(indicationsData)[0]
+  const globalIndicationsById = _.keyBy(globalIndications, '_id')
+
   const {
-    internalFields,
-    pathwaysInfluencerTypes,
-    position,
+    _id,
+    pathwaysId,
+    personId,
     tumorTypeSpecialty,
+    position,
     priority,
+    startDate,
+    endDate,
+    indicationIds,
+    pathwaysInfluencerTypes,
+    internalFields,
     alert,
     exclusionSettings,
   } = data
 
-  //  Destructured fields are defaulted to empty object to account
-  //  for initial creation when all values are empty
   const {
     internalNotes,
-    pathwaysManagementTypes,
-    // valueChairsIndicationIds,
     totalDisclosures,
     dateDisclosure1,
     dateDisclosure2,
     dateDisclosure3,
     dateDisclosure4,
-  } = internalFields || {}
-  const { isExcluded, reason } = exclusionSettings || {}
+    pathwaysManagementTypes,
+    valueChairsIndicationIds,
+  } = internalFields
 
-  const {
-    // date,
-    type,
-    description,
-  } = alert || {}
+  const { date, type, description } = alert
 
-  const pathwayInfluencerTypesVal = getSelectVal(pathwaysInfluencerTypes)
-  const pathwaysManagementTypesVal = !_.isEmpty(internalFields)
-    ? getSelectVal(pathwaysManagementTypes)
-    : []
+  const { isExcluded, reason } = exclusionSettings
 
   return (
     <FormWrapper>
@@ -67,11 +83,28 @@ const PathwaysForm = ({ data }) => {
       <FieldContainer>
         <FieldWrapper>
           <FormLabel>Pathways Management Type (Internal TDG Only)</FormLabel>
-          <Select isMulti value={pathwaysManagementTypesVal} />
+          <Select
+            isMulti
+            value={(pathwaysManagementTypes || []).map((type) => ({
+              label: type,
+              value: type,
+            }))}
+            options={MGMT_TYPES.map((type) => ({ label: type, value: type }))}
+          />
         </FieldWrapper>
         <FieldWrapper>
           <FormLabel>Pathways Influencer Type</FormLabel>
-          <Select isMulti value={pathwayInfluencerTypesVal} />
+          <Select
+            isMulti
+            value={pathwaysInfluencerTypes.map((type) => ({
+              label: type,
+              value: type,
+            }))}
+            options={INFLUENCER_TYPES.map((type) => ({
+              label: type,
+              value: type,
+            }))}
+          />
         </FieldWrapper>
         <FieldWrapper>
           <FormLabel>Pathways Position</FormLabel>
@@ -84,13 +117,31 @@ const PathwaysForm = ({ data }) => {
           <FormLabel>
             ClinicalPath / Value Chairs Indication(s) (Internal TDG Only)
           </FormLabel>
-          {/* TODO: Hydrate Clinical Chair Indications */}
-          <Select isMulti />
+          <Select
+            isMulti
+            value={indicationIds.map((_id) => ({
+              label: globalIndicationsById[_id],
+              value: _id,
+            }))}
+            options={globalIndications.map(({ _id, name }) => ({
+              label: name,
+              value: _id,
+            }))}
+          />
         </FieldWrapper>
         <FieldWrapper>
           <FormLabel>Indications (for permissions)</FormLabel>
-          {/* TODO: Hydrate Indications */}
-          <Select isMulti />
+          <Select
+            isMulti
+            value={(valueChairsIndicationIds || []).map((_id) => ({
+              label: globalIndicationsById[_id],
+              value: _id,
+            }))}
+            options={globalIndications.map(({ _id, name }) => ({
+              label: name,
+              value: _id,
+            }))}
+          />
         </FieldWrapper>
         <FieldWrapper>
           <FormLabel>Tumor Type Specialty</FormLabel>
