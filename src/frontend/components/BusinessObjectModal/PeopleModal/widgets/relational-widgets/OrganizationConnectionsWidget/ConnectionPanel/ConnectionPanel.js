@@ -37,18 +37,16 @@ const ConnectionPanel = ({
   setWhetherNewOrgBeingCreated,
   isNewOrgBeingCreated,
 }) => {
+  const [orgData, setOrgData] = useState(selectedOrganization)
+  const [eventLogFilters, setEventLogFilters] = useState({})
+
+  const { organization, organizationType } = orgData
+  const { refKey, Form } = ORG_TYPE_MAP[organizationType] || {}
+
   const cancelHandler = () => {
     changeOrganization(connectionsData[0])
     setWhetherNewOrgBeingCreated(false)
   }
-
-  const { organization, organizationType } = selectedOrganization
-
-  const { refKey, Form } = ORG_TYPE_MAP[organizationType] || {}
-
-  const [orgData, setOrgData] = useState(selectedOrganization)
-
-  const [eventLogFilters, setEventLogFilters] = useState({})
 
   useEffect(() => {
     if (!_.isEmpty(selectedOrganization)) {
@@ -63,6 +61,8 @@ const ConnectionPanel = ({
       }
     }
   }, [selectedOrganization])
+
+  formatOrgData(orgData)
 
   return (
     <ConnectionPanelWrapper>
@@ -84,13 +84,9 @@ const ConnectionPanel = ({
           paddingLeft: Spacing.S4,
         }}
       >
-        {Boolean(ORG_TYPE_MAP[organizationType]) ? (
-          <Form data={orgData} />
-        ) : (
-          <div>Loading...</div>
-        )}
+        {_.isEmpty(orgData) ? <div>Loading...</div> : <Form data={orgData} />}
 
-        {selectedOrganization && refKey in selectedOrganization ? (
+        {!_.isEmpty(orgData) && refKey in orgData ? (
           <EventLog filters={eventLogFilters} />
         ) : (
           <div>New unsaved connection doesn't have history</div>
@@ -98,6 +94,10 @@ const ConnectionPanel = ({
       </UnderlinedTabs>
     </ConnectionPanelWrapper>
   )
+}
+
+const formatOrgData = (orgData) => {
+  return orgData
 }
 
 ConnectionPanel.propTypes = {
