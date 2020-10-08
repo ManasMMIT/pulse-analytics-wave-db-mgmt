@@ -9,7 +9,6 @@ import ConnectionPanel from './ConnectionPanel'
 
 import usePathwaysPersonConnections from 'frontend/hooks/usePathwaysPersonConnections'
 import Spinner from 'frontend/components/Spinner'
-import NoDataPlaceholder from 'frontend/components/NoDataPlaceholder'
 
 import { GET_ORGANIZATION_TYPES } from 'frontend/api/queries'
 
@@ -34,7 +33,7 @@ const OrganizationConnectionsWidget = ({ entity }) => {
   const [isNewOrgBeingCreated, setWhetherNewOrgBeingCreated] = useState(false)
 
   useEffect(() => {
-    if (!orgTypeLoading && !connectionsLoading) {
+    if (!orgTypeLoading && !connectionsLoading && connectionsData.length) {
       changeOrganization(connectionsData[0])
     }
   }, [connectionsLoading, orgTypeLoading])
@@ -42,8 +41,6 @@ const OrganizationConnectionsWidget = ({ entity }) => {
   if (orgTypeLoading || connectionsLoading) return <Spinner size={28} />
 
   const { organizationTypes } = organizationTypeData
-
-  if (connectionsData.length === 0) return <NoDataPlaceholder />
 
   return (
     <WidgetContainer>
