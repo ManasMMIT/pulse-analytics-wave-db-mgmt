@@ -23,6 +23,23 @@ const ConnectionsListWrapper = styled.div({
 
 const ACTIVE_MENU_ITEMS = ['Pathways']
 
+const ORG_TYPE_TO_FORM_SKELETON_MAP = {
+  Pathways: {
+    organization: `New Pathways Organization Connection`,
+    organizationType: 'Pathways',
+    indicationIds: [],
+    pathwaysInfluencerTypes: [],
+    internalFields: {
+      pathwaysManagementTypes: [],
+      valueChairsIndicationIds: [],
+    },
+    alert: {},
+    exclusionSettings: {
+      isExcluded: false,
+    },
+  },
+}
+
 const ConnectionsList = ({
   changeOrganization,
   selectedOrganization,
@@ -45,11 +62,7 @@ const ConnectionsList = ({
   }
 
   const createOrgConnectionHandler = (orgType) => {
-    const stagedNewOrg = {
-      organization: `New ${orgType} Organization Connection`,
-      organizationType: orgType,
-    }
-
+    const stagedNewOrg = ORG_TYPE_TO_FORM_SKELETON_MAP[orgType]
     setWhetherNewOrgBeingCreated(true)
     changeOrganization(stagedNewOrg)
   }
