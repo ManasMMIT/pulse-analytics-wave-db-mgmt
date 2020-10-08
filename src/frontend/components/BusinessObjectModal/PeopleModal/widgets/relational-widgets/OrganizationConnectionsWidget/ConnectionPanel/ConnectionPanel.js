@@ -16,7 +16,7 @@ import EventLog from 'frontend/components/EventLog'
 
 import { ConnectionPanelWrapper } from './styledComponents'
 
-const ORG_TYPE_MAP = {
+const ORG_TYPE_TO_FORM_MAP = {
   Pathways: {
     Form: PathwaysForm,
     refKey: 'pathwaysId',
@@ -37,11 +37,11 @@ const ConnectionPanel = ({
   setWhetherNewOrgBeingCreated,
   isNewOrgBeingCreated,
 }) => {
-  const [orgData, setOrgData] = useState(selectedOrganization)
+  const [orgData, setOrgData] = useState(_.cloneDeep(selectedOrganization))
   const [eventLogFilters, setEventLogFilters] = useState({})
 
   const { organization, organizationType } = orgData
-  const { refKey, Form } = ORG_TYPE_MAP[organizationType] || {}
+  const { refKey, Form } = ORG_TYPE_TO_FORM_MAP[organizationType] || {}
 
   const cancelHandler = () => {
     changeOrganization(connectionsData[0])
@@ -61,8 +61,6 @@ const ConnectionPanel = ({
       }
     }
   }, [selectedOrganization])
-
-  formatOrgData(orgData)
 
   return (
     <ConnectionPanelWrapper>
@@ -84,9 +82,9 @@ const ConnectionPanel = ({
           paddingLeft: Spacing.S4,
         }}
       >
-        {_.isEmpty(orgData) ? <div>Loading...</div> : <Form data={orgData} />}
+        <Form data={orgData} isNewOrgBeingCreated={isNewOrgBeingCreated} />
 
-        {!_.isEmpty(orgData) && refKey in orgData ? (
+        {refKey in orgData ? (
           <EventLog filters={eventLogFilters} />
         ) : (
           <div>New unsaved connection doesn't have history</div>
@@ -94,10 +92,6 @@ const ConnectionPanel = ({
       </UnderlinedTabs>
     </ConnectionPanelWrapper>
   )
-}
-
-const formatOrgData = (orgData) => {
-  return orgData
 }
 
 ConnectionPanel.propTypes = {
