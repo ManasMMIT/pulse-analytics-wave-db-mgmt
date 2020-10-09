@@ -15,7 +15,7 @@ const ButtonsWrapper = styled.div({
   alignItems: 'center',
 })
 
-const ButtonCluster = ({ hasNewOrgConnection, cancelHandler, data }) => {
+const ButtonCluster = ({ isNewOrgBeingCreated, cancelHandler, orgData }) => {
   const {
     _id,
     pathwaysId,
@@ -30,7 +30,7 @@ const ButtonCluster = ({ hasNewOrgConnection, cancelHandler, data }) => {
     exclusionSettings,
     startDate,
     endDate,
-  } = data
+  } = orgData
 
   const { __typename: t1, ...internalFieldsCleaned } = internalFields || {}
   internalFieldsCleaned.valueChairsIndicationIds =
@@ -90,7 +90,8 @@ const ButtonCluster = ({ hasNewOrgConnection, cancelHandler, data }) => {
       >
         Save
       </Button>
-      {!hasNewOrgConnection && (
+
+      {!isNewOrgBeingCreated && (
         <Button
           buttonStyle={{ margin: `0 ${Spacing.S3}` }}
           onClick={() => {}}
@@ -106,7 +107,7 @@ const ButtonCluster = ({ hasNewOrgConnection, cancelHandler, data }) => {
 
 ButtonCluster.propTypes = {
   cancelHandler: PropTypes.func.isRequired,
-  hasNewOrgConnection: PropTypes.bool.isRequired,
+  isNewOrgBeingCreated: PropTypes.bool.isRequired,
 }
 
 ButtonCluster.defaultProps = {}

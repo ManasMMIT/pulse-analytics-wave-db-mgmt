@@ -688,8 +688,8 @@ const queries = gql`
     priority: String
     alert: PathwaysAndPersonConnectionAlert!
     exclusionSettings: PathwaysAndPersonExclusionSettings!
-    startDate: DateTime
-    endDate: DateTime
+    startDate: Date # will return ISO short instead of DateTime returning ISO long -- but will timezone be an issue?
+    endDate: Date # will return ISO short instead of DateTime returning ISO long  -- but will timezone be an issue?
   }
 
   type PathwaysAndPersonConnectionInternalFields {
@@ -704,7 +704,7 @@ const queries = gql`
   }
 
   type PathwaysAndPersonConnectionAlert {
-    date: DateTime
+    date: Date # will return ISO short instead of DateTime returning ISO long -- but will timezone be an issue?
     type: String
     description: String
   }

@@ -1,3 +1,5 @@
+/** @jsx jsx */
+import { jsx } from '@emotion/core'
 import React from 'react'
 import styled from '@emotion/styled'
 import PropTypes from 'prop-types'
@@ -23,7 +25,7 @@ const InputComponent = styled.input({
   },
 })
 
-const Input = ({ name, type, value, onChange, disabled }) => {
+const Input = ({ name, type, value, onChange, disabled, style }) => {
   const defaultValue = value || ''
   let inputPropOverflow = {}
   if (type === 'number') inputPropOverflow.step = '0.1'
@@ -58,6 +60,7 @@ const Input = ({ name, type, value, onChange, disabled }) => {
       onChange={onEventChange}
       value={defaultValue}
       disabled={disabled}
+      css={style}
     />
   )
 }
@@ -68,6 +71,7 @@ Input.propTypes = {
   type: PropTypes.string,
   onChange: PropTypes.func,
   disabled: PropTypes.bool,
+  style: PropTypes.object,
 }
 
 Input.defaultProps = {
@@ -75,6 +79,7 @@ Input.defaultProps = {
   onChange: () => null,
   value: '',
   disabled: false,
+  style: {},
 }
 
 export default Input
