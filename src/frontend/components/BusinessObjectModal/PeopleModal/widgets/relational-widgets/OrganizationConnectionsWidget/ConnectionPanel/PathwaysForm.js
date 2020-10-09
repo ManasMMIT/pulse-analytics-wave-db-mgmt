@@ -288,7 +288,7 @@ const PathwaysForm = ({ orgData, isNewOrgBeingCreated, setOrgData }) => {
             }
           />
         </FieldWrapper>
-        {/* Wire in Dates */}
+
         <FlexWrapper>
           <FieldWrapper style={{ width: '50%' }}>
             <FormLabel>Start Date</FormLabel>
