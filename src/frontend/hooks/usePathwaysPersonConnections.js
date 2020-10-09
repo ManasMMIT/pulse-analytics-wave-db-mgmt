@@ -82,6 +82,8 @@ const joinDataCallBack = ({ groupedPathwaysById, groupedPeopleById }) => (
 }
 
 const getConnectionDescriptionAndStatus = ({ exclusionSettings, endDate }) => {
+  // ! wait why is description a date? and then changed to a string on line 90?
+  // ! and then changed to null on line 94? what's description going to be used for?
   let description = endDate
   let status = 'outdated'
 
