@@ -34,6 +34,8 @@ const INFLUENCER_TYPES = [
 
 const PRIORITY_LEVELS = [null, 'High', 'Medium', 'Low']
 
+const ALERT_TYPES = [null, 'Influencer']
+
 const PathwaysForm = ({ orgData, isNewOrgBeingCreated, setOrgData }) => {
   const { data: indicationsData, loading: indicationsLoading } = useQuery(
     GET_SOURCE_INDICATIONS
@@ -82,11 +84,13 @@ const PathwaysForm = ({ orgData, isNewOrgBeingCreated, setOrgData }) => {
     valueChairsIndicationIds,
   } = internalFields
 
-  const { date, type, description } = alert
+  const {
+    date: alertDate,
+    type: alertType,
+    description: alertDescription,
+  } = alert
 
-  const { isExcluded, reason } = exclusionSettings
-
-  const selectedPathwaysId = pathwaysId
+  const { isExcluded, reason: exclusionReason } = exclusionSettings
 
   const orgDataCopy = _.cloneDeep(orgData)
 
@@ -142,6 +146,16 @@ const PathwaysForm = ({ orgData, isNewOrgBeingCreated, setOrgData }) => {
     setOrgData(orgDataCopy)
   }
 
+  const handleAlertDate = ({ value: newAlertDate }) => {
+    orgDataCopy.alert.date = newAlertDate
+    setOrgData(orgDataCopy)
+  }
+
+  const handleAlertType = ({ value: newAlertType }) => {
+    orgDataCopy.alert.type = newAlertType
+    setOrgData(orgDataCopy)
+  }
+
   return (
     <FormWrapper>
       <FieldContainer>
@@ -150,8 +164,8 @@ const PathwaysForm = ({ orgData, isNewOrgBeingCreated, setOrgData }) => {
           <Select
             isDisabled={!isNewOrgBeingCreated}
             value={{
-              label: globalPathwaysById[selectedPathwaysId],
-              value: selectedPathwaysId,
+              label: globalPathwaysById[pathwaysId],
+              value: pathwaysId,
             }}
             options={globalPathways.map(({ _id, organization }) => ({
               label: organization,
@@ -318,18 +332,25 @@ const PathwaysForm = ({ orgData, isNewOrgBeingCreated, setOrgData }) => {
         <FlexWrapper>
           <FieldWrapper style={{ width: '50%' }}>
             <FormLabel>Alert Date</FormLabel>
-            <Select />
+            <Input type="date" value={alertDate} onChange={handleAlertDate} />
           </FieldWrapper>
           <FieldWrapper style={{ width: '50%' }}>
             <FormLabel>Alert Type</FormLabel>
-            <Select value={type} />
+            <Select
+              value={{ label: alertType, value: alertType }}
+              options={ALERT_TYPES.map((type) => ({
+                label: type,
+                value: type,
+              }))}
+              onChange={handleAlertType}
+            />
           </FieldWrapper>
         </FlexWrapper>
         <FieldWrapper>
           <FormLabel>Alert Description</FormLabel>
           <Input
             type="text"
-            value={description}
+            value={alertDescription}
             name="description"
             onChange={handleAlertDescriptionChange}
           />
@@ -355,7 +376,7 @@ const PathwaysForm = ({ orgData, isNewOrgBeingCreated, setOrgData }) => {
           <FormLabel>Exclude Reason</FormLabel>
           <Input
             type="text"
-            value={reason}
+            value={exclusionReason}
             name="reason"
             onChange={changeExclusionSettings}
           />
