@@ -82,7 +82,11 @@ const ConnectionPanel = ({
           paddingLeft: Spacing.S4,
         }}
       >
-        <Form orgData={orgData} isNewOrgBeingCreated={isNewOrgBeingCreated} />
+        <Form
+          orgData={orgData}
+          isNewOrgBeingCreated={isNewOrgBeingCreated}
+          setOrgData={setOrgData}
+        />
 
         {refKey in orgData ? (
           <EventLog filters={eventLogFilters} />

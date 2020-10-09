@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { useQuery } from '@apollo/react-hooks'
 import PropTypes from 'prop-types'
 import Select from 'react-select'
@@ -31,7 +31,31 @@ const INFLUENCER_TYPES = [
   'UHC P&T Members',
 ]
 
-const PathwaysForm = ({ orgData, isNewOrgBeingCreated }) => {
+const PRIORITY_LEVELS = [null, 'High', 'Medium', 'Low']
+
+const PathwaysForm = ({ orgData, isNewOrgBeingCreated, setOrgData }) => {
+  const { data: indicationsData, loading: indicationsLoading } = useQuery(
+    GET_SOURCE_INDICATIONS
+  )
+
+  const { data: pathwaysData, loading: pathwaysLoading } = useQuery(
+    GET_PATHWAYS_ORGANIZATIONS
+  )
+
+  if (indicationsLoading || pathwaysLoading) return 'Loading...'
+
+  const globalIndications = Object.values(indicationsData)[0]
+  const globalIndicationsById = _.mapValues(
+    _.keyBy(globalIndications, '_id'),
+    'name'
+  )
+
+  const globalPathways = Object.values(pathwaysData)[0]
+  const globalPathwaysById = _.mapValues(
+    _.keyBy(globalPathways, '_id'),
+    'organization'
+  )
+
   const {
     pathwaysId,
     tumorTypeSpecialty,
@@ -61,23 +85,55 @@ const PathwaysForm = ({ orgData, isNewOrgBeingCreated }) => {
 
   const { isExcluded, reason } = exclusionSettings
 
-  const [selectedPathwaysId, selectPathwaysId] = useState(pathwaysId)
+  const selectedPathwaysId = pathwaysId
 
-  const { data: indicationsData, loading: indicationsLoading } = useQuery(
-    GET_SOURCE_INDICATIONS
-  )
+  const selectPathwaysId = (_id) => {
+    setOrgData(_.merge({}, orgData, { pathwaysId: _id }))
+  }
 
-  const { data: pathwaysData, loading: pathwaysLoading } = useQuery(
-    GET_PATHWAYS_ORGANIZATIONS
-  )
+  const handleTopLevelTextChange = ({ name, value }) => {
+    setOrgData(_.merge({}, orgData, { [name]: value }))
+  }
 
-  if (indicationsLoading || pathwaysLoading) return 'Loading...'
+  const handleAlertDescriptionChange = ({ name, value }) => {
+    const orgDataCopy = _.cloneDeep(orgData)
+    orgDataCopy.alert.description = value
+    setOrgData(orgDataCopy)
+  }
 
-  const globalIndications = Object.values(indicationsData)[0]
-  const globalIndicationsById = _.keyBy(globalIndications, '_id')
+  const handleInternalFieldsTextChange = ({ name, value }) => {
+    const orgDataCopy = _.cloneDeep(orgData)
+    orgDataCopy.internalFields[name] = value
+    setOrgData(orgDataCopy)
+  }
 
-  const globalPathways = Object.values(pathwaysData)[0]
-  const globalPathwaysById = _.keyBy(globalPathways, '_id')
+  const changeInternalPathwaysManagementTypes = (arr) => {
+    const orgDataCopy = _.cloneDeep(orgData)
+    orgDataCopy.internalFields.pathwaysManagementTypes = (arr || []).map(
+      ({ value }) => value
+    )
+    setOrgData(orgDataCopy)
+  }
+
+  const changePathwaysInfluencerTypes = (arr) => {
+    const orgDataCopy = _.cloneDeep(orgData)
+    orgDataCopy.pathwaysInfluencerTypes = (arr || []).map(({ value }) => value)
+    setOrgData(orgDataCopy)
+  }
+
+  const changeInternalValueChairsIndicationIds = (arr) => {
+    const orgDataCopy = _.cloneDeep(orgData)
+    orgDataCopy.internalFields.valueChairsIndicationIds = (arr || []).map(
+      ({ value }) => value
+    )
+    setOrgData(orgDataCopy)
+  }
+
+  const changeExclusionSettings = ({ name, value }) => {
+    const orgDataCopy = _.cloneDeep(orgData)
+    _.merge(orgDataCopy.exclusionSettings, { [name]: value })
+    setOrgData(orgDataCopy)
+  }
 
   return (
     <FormWrapper>
@@ -87,9 +143,7 @@ const PathwaysForm = ({ orgData, isNewOrgBeingCreated }) => {
           <Select
             isDisabled={!isNewOrgBeingCreated}
             value={{
-              label:
-                selectedPathwaysId &&
-                globalPathwaysById[selectedPathwaysId].organization,
+              label: globalPathwaysById[selectedPathwaysId],
               value: selectedPathwaysId,
             }}
             options={globalPathways.map(({ _id, organization }) => ({
@@ -104,7 +158,12 @@ const PathwaysForm = ({ orgData, isNewOrgBeingCreated }) => {
           <FormLabel>
             Internal TDG Notes [Format - YYQQ (MM/DD:____);]
           </FormLabel>
-          <Input name="internal notes" type="text" value={internalNotes} />
+          <Input
+            name="internalNotes"
+            type="text"
+            value={internalNotes}
+            onChange={handleInternalFieldsTextChange}
+          />
         </FieldWrapper>
       </FieldContainer>
 
@@ -118,6 +177,7 @@ const PathwaysForm = ({ orgData, isNewOrgBeingCreated }) => {
               value: type,
             }))}
             options={MGMT_TYPES.map((type) => ({ label: type, value: type }))}
+            onChange={changeInternalPathwaysManagementTypes}
           />
         </FieldWrapper>
         <FieldWrapper>
@@ -132,11 +192,17 @@ const PathwaysForm = ({ orgData, isNewOrgBeingCreated }) => {
               label: type,
               value: type,
             }))}
+            onChange={changePathwaysInfluencerTypes}
           />
         </FieldWrapper>
         <FieldWrapper>
           <FormLabel>Pathways Position</FormLabel>
-          <Input type="text" value={position} />
+          <Input
+            type="text"
+            value={position}
+            name="position"
+            onChange={handleTopLevelTextChange}
+          />
         </FieldWrapper>
       </FieldContainer>
 
@@ -145,6 +211,21 @@ const PathwaysForm = ({ orgData, isNewOrgBeingCreated }) => {
           <FormLabel>
             ClinicalPath / Value Chairs Indication(s) (Internal TDG Only)
           </FormLabel>
+          <Select
+            isMulti
+            value={(valueChairsIndicationIds || []).map((_id) => ({
+              label: globalIndicationsById[_id],
+              value: _id,
+            }))}
+            options={globalIndications.map(({ _id, name }) => ({
+              label: name,
+              value: _id,
+            }))}
+            onChange={changeInternalValueChairsIndicationIds}
+          />
+        </FieldWrapper>
+        <FieldWrapper>
+          <FormLabel>Indications (for permissions)</FormLabel>
           <Select
             isMulti
             value={indicationIds.map((_id) => ({
@@ -158,29 +239,29 @@ const PathwaysForm = ({ orgData, isNewOrgBeingCreated }) => {
           />
         </FieldWrapper>
         <FieldWrapper>
-          <FormLabel>Indications (for permissions)</FormLabel>
-          <Select
-            isMulti
-            value={(valueChairsIndicationIds || []).map((_id) => ({
-              label: globalIndicationsById[_id],
-              value: _id,
-            }))}
-            options={globalIndications.map(({ _id, name }) => ({
-              label: name,
-              value: _id,
-            }))}
-          />
-        </FieldWrapper>
-        <FieldWrapper>
           <FormLabel>Tumor Type Specialty</FormLabel>
-          <Input type="text" value={tumorTypeSpecialty} />
+          <Input
+            type="text"
+            value={tumorTypeSpecialty}
+            name="tumorTypeSpecialty"
+            onChange={handleTopLevelTextChange}
+          />
         </FieldWrapper>
       </FieldContainer>
 
       <FieldContainer>
         <FieldWrapper>
           <FormLabel>Priority</FormLabel>
-          <Input type="text" value={priority} />
+          <Select
+            options={PRIORITY_LEVELS.map((level) => ({
+              value: level,
+              label: level,
+            }))}
+            value={priority}
+            onChange={({ value }) =>
+              handleTopLevelTextChange({ name: 'priority', value })
+            }
+          />
         </FieldWrapper>
         {/* Wire in Dates */}
         <FlexWrapper>
@@ -215,46 +296,83 @@ const PathwaysForm = ({ orgData, isNewOrgBeingCreated }) => {
         </FlexWrapper>
         <FieldWrapper>
           <FormLabel>Alert Description</FormLabel>
-          <Input type="text" value={description} />
+          <Input
+            type="text"
+            value={description}
+            name="description"
+            onChange={handleAlertDescriptionChange}
+          />
         </FieldWrapper>
       </FieldContainer>
 
       <FieldContainer>
         <FieldWrapper>
           <FlexWrapper>
-            <input
+            <Input
+              style={{ width: 'auto', marginRight: Spacing.S3 }}
               type="checkbox"
-              style={{ marginRight: Spacing.S3 }}
-              checked={isExcluded}
+              name="isExcluded"
+              checked={Boolean(isExcluded)}
+              onChange={changeExclusionSettings}
             />
             <FormLabel>Exclude From Tool</FormLabel>
           </FlexWrapper>
         </FieldWrapper>
         <FieldWrapper>
           <FormLabel>Exclude Reason</FormLabel>
-          <Input type="text" value={reason} />
+          <Input
+            type="text"
+            value={reason}
+            name="reason"
+            onChange={changeExclusionSettings}
+          />
         </FieldWrapper>
       </FieldContainer>
       <FieldContainer>
         <FieldWrapper>
           <FormLabel>Total Disclosures</FormLabel>
-          <Input type="text" value={totalDisclosures} />
+          <Input
+            name="totalDisclosures"
+            type="text"
+            value={totalDisclosures}
+            onChange={handleInternalFieldsTextChange}
+          />
         </FieldWrapper>
         <FieldWrapper>
           <FormLabel>Date Disclosure 1 (Date 1: Tumor(s))</FormLabel>
-          <Input type="text" value={dateDisclosure1} />
+          <Input
+            name="dateDisclosure1"
+            type="text"
+            value={dateDisclosure1}
+            onChange={handleInternalFieldsTextChange}
+          />
         </FieldWrapper>
         <FieldWrapper>
           <FormLabel>Date Disclosure 2 (Date 2: Tumor(s))</FormLabel>
-          <Input type="text" value={dateDisclosure2} />
+          <Input
+            name="dateDisclosure2"
+            type="text"
+            value={dateDisclosure2}
+            onChange={handleInternalFieldsTextChange}
+          />
         </FieldWrapper>
         <FieldWrapper>
           <FormLabel>Date Disclosure 3 (Date 3: Tumor(s))</FormLabel>
-          <Input type="text" value={dateDisclosure3} />
+          <Input
+            name="dateDisclosure3"
+            type="text"
+            value={dateDisclosure3}
+            onChange={handleInternalFieldsTextChange}
+          />
         </FieldWrapper>
         <FieldWrapper>
           <FormLabel>Date Disclosure 4 (Date 4: Tumor(s))</FormLabel>
-          <Input type="text" value={dateDisclosure4} />
+          <Input
+            name="dateDisclosure4"
+            type="text"
+            value={dateDisclosure4}
+            onChange={handleInternalFieldsTextChange}
+          />
         </FieldWrapper>
       </FieldContainer>
     </FormWrapper>
