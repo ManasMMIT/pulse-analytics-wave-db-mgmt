@@ -387,7 +387,9 @@ const PathwaysForm = ({ orgData, isNewOrgBeingCreated, setOrgData }) => {
 }
 
 PathwaysForm.propTypes = {
-  data: PropTypes.object.isRequired,
+  orgData: PropTypes.object.isRequired,
+  isNewOrgBeingCreated: PropTypes.bool.isRequired,
+  setOrgData: PropTypes.func.isRequired,
 }
 
 export default PathwaysForm
