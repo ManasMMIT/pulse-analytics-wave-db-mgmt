@@ -52,7 +52,9 @@ const ConnectionPanel = ({
     if (!_.isEmpty(selectedOrganization)) {
       setOrgData(selectedOrganization)
 
-      if (refKey in selectedOrganization) {
+      // if the selected connection has been persisted,
+      // THEN you can setEventLogFilters to get history; otherwise, leave it empty
+      if (selectedOrganization._id) {
         setEventLogFilters({
           entityIds: [entityId, selectedOrganization[refKey]],
         })
@@ -88,7 +90,7 @@ const ConnectionPanel = ({
           setOrgData={setOrgData}
         />
 
-        {refKey in orgData ? (
+        {Boolean(orgData._id) ? (
           <EventLog filters={eventLogFilters} />
         ) : (
           <div>New unsaved connection doesn't have history</div>
