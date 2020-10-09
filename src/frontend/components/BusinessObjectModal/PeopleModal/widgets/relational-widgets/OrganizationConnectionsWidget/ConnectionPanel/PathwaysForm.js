@@ -5,6 +5,7 @@ import Select from 'react-select'
 import _ from 'lodash'
 
 import Spacing from 'frontend/utils/spacing'
+import { formatYearQuarter } from 'frontend/utils/formatDate'
 import Input from 'frontend/components/Input'
 
 import {
@@ -133,6 +134,11 @@ const PathwaysForm = ({ orgData, isNewOrgBeingCreated, setOrgData }) => {
 
   const changeExclusionSettings = ({ name, value }) => {
     _.merge(orgDataCopy.exclusionSettings, { [name]: value })
+    setOrgData(orgDataCopy)
+  }
+
+  const handleTimestampChange = ({ name, value }) => {
+    orgDataCopy[name] = value
     setOrgData(orgDataCopy)
   }
 
@@ -272,21 +278,41 @@ const PathwaysForm = ({ orgData, isNewOrgBeingCreated, setOrgData }) => {
         <FlexWrapper>
           <FieldWrapper style={{ width: '50%' }}>
             <FormLabel>Start Date</FormLabel>
-            <Select />
+            <Input
+              type="date"
+              value={startDate}
+              name="startDate"
+              onChange={handleTimestampChange}
+            />
           </FieldWrapper>
           <FieldWrapper style={{ width: '50%' }}>
             <FormLabel>Start Quarter</FormLabel>
-            <Select />
+            <Input
+              disabled
+              type="text"
+              value={startDate && formatYearQuarter(startDate)}
+              style={{ cursor: 'not-allowed' }}
+            />
           </FieldWrapper>
         </FlexWrapper>
         <FlexWrapper>
           <FieldWrapper style={{ width: '50%' }}>
             <FormLabel>End Date (Outdated)</FormLabel>
-            <Select />
+            <Input
+              type="date"
+              value={endDate}
+              name="endDate"
+              onChange={handleTimestampChange}
+            />
           </FieldWrapper>
           <FieldWrapper style={{ width: '50%' }}>
             <FormLabel>End Quarter</FormLabel>
-            <Select />
+            <Input
+              disabled
+              type="text"
+              value={endDate && formatYearQuarter(endDate)}
+              style={{ cursor: 'not-allowed' }}
+            />
           </FieldWrapper>
         </FlexWrapper>
         <FlexWrapper>
