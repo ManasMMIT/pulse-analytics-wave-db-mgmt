@@ -29,7 +29,7 @@ export const FieldWrapper = styled.div({
   margin: Spacing.S4,
 })
 
-export const FormWrapper = styled.label({
+export const FormWrapper = styled.div({
   overflowY: 'scroll',
 })
 
