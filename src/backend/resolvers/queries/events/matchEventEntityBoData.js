@@ -1,11 +1,9 @@
 /*
-  ! NOTE: Delta Entity Matching is BRITTLE
+  ! If business objects in an event header on the frontend aren't displaying 
+  ! properly, check the following:
+  * BO_LABEL_MAP to make sure the business object has a label callback
 
-  ? If deltas aren't being enriched properly, check
-  * 1. BO_LABEL_MAP to make sure the business object has a label callback
-  * 2. The regex matching in `getEventEntityIdsBoId`
-
-  TODO: As events grow, we'll need to manually scale places 1 and 2.
+  TODO: As events grow, we'll need to manually scale BO_LABEL_MAP.
 */
 
 const BO_LABEL_MAP = require('./bo-label-map')

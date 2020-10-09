@@ -14,8 +14,8 @@ const upsertPathwaysAndPersonConnectionTypeDefs = gql`
     priority: String
     alert: PathwaysAndPersonConnectionAlertInput!
     exclusionSettings: PathwaysAndPersonExclusionSettingsInput!
-    startDate: DateTime
-    endDate: DateTime
+    startDate: String # must be string to preserve ISO short, then convert accounting for timezone in resolver
+    endDate: String # must be string to preserve ISO short, then convert accounting for timezone in resolver
   }
 
   input PathwaysAndPersonConnectionInternalFieldsInput {
@@ -30,7 +30,7 @@ const upsertPathwaysAndPersonConnectionTypeDefs = gql`
   }
 
   input PathwaysAndPersonConnectionAlertInput {
-    date: DateTime
+    date: String # must be string to preserve ISO short, then convert accounting for timezone in resolver
     type: String
     description: String
   }

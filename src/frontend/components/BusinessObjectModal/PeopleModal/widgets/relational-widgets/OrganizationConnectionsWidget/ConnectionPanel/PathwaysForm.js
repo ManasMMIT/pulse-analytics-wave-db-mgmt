@@ -36,7 +36,12 @@ const PRIORITY_LEVELS = [null, 'High', 'Medium', 'Low']
 
 const ALERT_TYPES = [null, 'Influencer']
 
-const PathwaysForm = ({ orgData, isNewOrgBeingCreated, setOrgData }) => {
+const PathwaysForm = ({
+  orgData,
+  isNewOrgBeingCreated,
+  setOrgData,
+  setWhetherUnsavedChanges,
+}) => {
   const { data: indicationsData, loading: indicationsLoading } = useQuery(
     GET_SOURCE_INDICATIONS
   )
@@ -94,66 +99,71 @@ const PathwaysForm = ({ orgData, isNewOrgBeingCreated, setOrgData }) => {
 
   const orgDataCopy = _.cloneDeep(orgData)
 
+  const updateOrgData = (newData) => {
+    setOrgData(newData)
+    setWhetherUnsavedChanges(true)
+  }
+
   const selectPathwaysId = (_id) => {
-    setOrgData(_.merge({}, orgData, { pathwaysId: _id }))
+    updateOrgData(_.merge({}, orgData, { pathwaysId: _id }))
   }
 
   const handleTopLevelTextChange = ({ name, value }) => {
-    setOrgData(_.merge({}, orgData, { [name]: value }))
+    updateOrgData(_.merge({}, orgData, { [name]: value }))
   }
 
   const handleAlertDescriptionChange = ({ name, value }) => {
     orgDataCopy.alert.description = value
-    setOrgData(orgDataCopy)
+    updateOrgData(orgDataCopy)
   }
 
   const handleInternalFieldsTextChange = ({ name, value }) => {
     orgDataCopy.internalFields[name] = value
-    setOrgData(orgDataCopy)
+    updateOrgData(orgDataCopy)
   }
 
   const changeInternalPathwaysManagementTypes = (arr) => {
     orgDataCopy.internalFields.pathwaysManagementTypes = (arr || []).map(
       ({ value }) => value
     )
-    setOrgData(orgDataCopy)
+    updateOrgData(orgDataCopy)
   }
 
   const changePathwaysInfluencerTypes = (arr) => {
     orgDataCopy.pathwaysInfluencerTypes = (arr || []).map(({ value }) => value)
-    setOrgData(orgDataCopy)
+    updateOrgData(orgDataCopy)
   }
 
   const changeInternalValueChairsIndicationIds = (arr) => {
     orgDataCopy.internalFields.valueChairsIndicationIds = (arr || []).map(
       ({ value }) => value
     )
-    setOrgData(orgDataCopy)
+    updateOrgData(orgDataCopy)
   }
 
   const handleIndicationsChange = (arr) => {
     orgDataCopy.indicationIds = (arr || []).map(({ value }) => value)
-    setOrgData(orgDataCopy)
+    updateOrgData(orgDataCopy)
   }
 
   const changeExclusionSettings = ({ name, value }) => {
     _.merge(orgDataCopy.exclusionSettings, { [name]: value })
-    setOrgData(orgDataCopy)
+    updateOrgData(orgDataCopy)
   }
 
   const handleTimestampChange = ({ name, value }) => {
     orgDataCopy[name] = value
-    setOrgData(orgDataCopy)
+    updateOrgData(orgDataCopy)
   }
 
   const handleAlertDate = ({ value: newAlertDate }) => {
     orgDataCopy.alert.date = newAlertDate
-    setOrgData(orgDataCopy)
+    updateOrgData(orgDataCopy)
   }
 
   const handleAlertType = ({ value: newAlertType }) => {
     orgDataCopy.alert.type = newAlertType
-    setOrgData(orgDataCopy)
+    updateOrgData(orgDataCopy)
   }
 
   return (
@@ -302,6 +312,7 @@ const PathwaysForm = ({ orgData, isNewOrgBeingCreated, setOrgData }) => {
           <FieldWrapper style={{ width: '50%' }}>
             <FormLabel>Start Quarter</FormLabel>
             <Input
+              name="startQuarter"
               disabled
               type="text"
               value={startDate && formatYearQuarter(startDate)}
@@ -322,6 +333,7 @@ const PathwaysForm = ({ orgData, isNewOrgBeingCreated, setOrgData }) => {
           <FieldWrapper style={{ width: '50%' }}>
             <FormLabel>End Quarter</FormLabel>
             <Input
+              name="endQuarter" // just to avoid prop warning, not used
               disabled
               type="text"
               value={endDate && formatYearQuarter(endDate)}
@@ -332,7 +344,12 @@ const PathwaysForm = ({ orgData, isNewOrgBeingCreated, setOrgData }) => {
         <FlexWrapper>
           <FieldWrapper style={{ width: '50%' }}>
             <FormLabel>Alert Date</FormLabel>
-            <Input type="date" value={alertDate} onChange={handleAlertDate} />
+            <Input
+              name="alert.date" // just to avoid prop warning, not used
+              type="date"
+              value={alertDate}
+              onChange={handleAlertDate}
+            />
           </FieldWrapper>
           <FieldWrapper style={{ width: '50%' }}>
             <FormLabel>Alert Type</FormLabel>

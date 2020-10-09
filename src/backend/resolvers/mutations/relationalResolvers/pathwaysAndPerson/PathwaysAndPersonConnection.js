@@ -1,9 +1,12 @@
+const { ObjectId } = require('mongodb')
+const { zonedTimeToUtc } = require('date-fns-tz')
+
+const DEFAULT_TIMEZONE = require('../../../../utils/defaultTimeZone')
+const BusinessObject = require('../../shared/BusinessObject')
+
 const INIT_PATHWAYS_AND_PERSON_CONNECTION_SYMBOL = Symbol(
   'INIT_PATHWAYS_AND_PERSON_CONNECTION_SYMBOL'
 )
-const { ObjectId } = require('mongodb')
-const BusinessObject = require('../../shared/BusinessObject')
-
 const SOURCE_COLLECTION = 'JOIN_pathways_people'
 
 const PATHWAYS_BOID = ObjectId('5eac3251ac8a01743081f28d')
@@ -29,10 +32,18 @@ class PathwaysAndPersonConnection {
           ObjectId
         ),
       },
+      alert: {
+        ...data.alert,
+        date:
+          data.alert.date && zonedTimeToUtc(data.alert.date, DEFAULT_TIMEZONE),
+      },
       _id: data._id ? ObjectId(data._id) : ObjectId(),
       personId: ObjectId(data.personId),
       pathwaysId: ObjectId(data.pathwaysId),
       indicationIds: data.indicationIds.map(ObjectId),
+      startDate:
+        data.startDate && zonedTimeToUtc(data.startDate, DEFAULT_TIMEZONE),
+      endDate: data.endDate && zonedTimeToUtc(data.endDate, DEFAULT_TIMEZONE),
     }
 
     connection.dbs = dbs

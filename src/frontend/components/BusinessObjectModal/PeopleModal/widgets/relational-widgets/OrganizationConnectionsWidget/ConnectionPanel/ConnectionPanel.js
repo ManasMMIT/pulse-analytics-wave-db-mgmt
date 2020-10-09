@@ -36,6 +36,7 @@ const ConnectionPanel = ({
   connectionsData,
   setWhetherNewOrgBeingCreated,
   isNewOrgBeingCreated,
+  setWhetherUnsavedChanges,
 }) => {
   const [orgData, setOrgData] = useState(_.cloneDeep(selectedOrganization))
   const [eventLogFilters, setEventLogFilters] = useState({})
@@ -46,6 +47,7 @@ const ConnectionPanel = ({
   const cancelHandler = () => {
     changeOrganization(connectionsData[0])
     setWhetherNewOrgBeingCreated(false)
+    setWhetherUnsavedChanges(false)
   }
 
   useEffect(() => {
@@ -64,6 +66,8 @@ const ConnectionPanel = ({
     }
   }, [selectedOrganization])
 
+  console.log(orgData)
+
   return (
     <ConnectionPanelWrapper>
       <SectionTitle
@@ -73,7 +77,11 @@ const ConnectionPanel = ({
         <ButtonCluster
           orgData={orgData}
           cancelHandler={cancelHandler}
+          changeOrganization={changeOrganization}
+          connectionsData={connectionsData}
           isNewOrgBeingCreated={isNewOrgBeingCreated}
+          setWhetherUnsavedChanges={setWhetherUnsavedChanges}
+          setWhetherNewOrgBeingCreated={setWhetherNewOrgBeingCreated}
         />
       </SectionTitle>
       <UnderlinedTabs
@@ -88,6 +96,7 @@ const ConnectionPanel = ({
           orgData={orgData}
           isNewOrgBeingCreated={isNewOrgBeingCreated}
           setOrgData={setOrgData}
+          setWhetherUnsavedChanges={setWhetherUnsavedChanges}
         />
 
         {Boolean(orgData._id) ? (
@@ -107,6 +116,7 @@ ConnectionPanel.propTypes = {
   connectionsData: PropTypes.array.isRequired,
   selectedOrganization: PropTypes.object.isRequired,
   setWhetherNewOrgBeingCreated: PropTypes.func.isRequired,
+  setWhetherUnsavedChanges: PropTypes.func.isRequired,
 }
 
 export default ConnectionPanel

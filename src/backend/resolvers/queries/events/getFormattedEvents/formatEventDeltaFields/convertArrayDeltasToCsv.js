@@ -4,7 +4,7 @@ const { unflatten } = require('flat')
 const nestedKeyDelimiter = '|||||'
 
 module.exports = (deltas) => {
-  const [arrayDelts, nonArrayDelts] = _.partition(deltas, ({ field }) => {
+  const [arrayDeltas, nonArrayDeltas] = _.partition(deltas, ({ field }) => {
     // ! Not covering nested arrays yet -- e.g., { 'a.0.b.1': 2,  'a.1.b.2': 4 }
     const isMultiNestedArray = field.split('.').filter(isIndex).length > 1
     if (isMultiNestedArray) return false
@@ -12,13 +12,13 @@ module.exports = (deltas) => {
     return field.split('.').some(isIndex)
   })
 
-  let { prev, next } = getPrevAndNextObjects(arrayDelts)
+  let { prev, next } = getPrevAndNextObjects(arrayDeltas)
   prev = unflatten(prev)
   next = unflatten(next)
 
   const csvArrayDeltas = reformArrayDeltas({ prev, next })
 
-  return [...nonArrayDelts, ...csvArrayDeltas]
+  return [...nonArrayDeltas, ...csvArrayDeltas]
 }
 
 const reformArrayDeltas = ({ prev, next }) => {

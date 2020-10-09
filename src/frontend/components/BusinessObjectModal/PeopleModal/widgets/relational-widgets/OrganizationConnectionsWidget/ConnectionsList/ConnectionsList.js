@@ -23,38 +23,57 @@ const ConnectionsListWrapper = styled.div({
 
 const ACTIVE_MENU_ITEMS = ['Pathways']
 
-const ORG_TYPE_TO_FORM_SKELETON_MAP = {
-  Pathways: {
+const ORG_TYPE_TO_FORM_GENERATOR_MAP = {
+  Pathways: (personId) => ({
+    personId,
     organization: `New Pathways Organization Connection`,
     organizationType: 'Pathways',
     indicationIds: [],
     pathwaysInfluencerTypes: [],
+    tumorTypeSpecialty: '',
     internalFields: {
+      internalNotes: '',
+      totalDisclosures: '',
+      dateDisclosure1: '',
+      dateDisclosure2: '',
+      dateDisclosure3: '',
+      dateDisclosure4: '',
       pathwaysManagementTypes: [],
       valueChairsIndicationIds: [],
     },
-    alert: {},
-    exclusionSettings: {
-      isExcluded: false,
+    position: '',
+    priority: null,
+    alert: {
+      date: null,
+      type: null,
+      description: '',
     },
-  },
+    exclusionSettings: {
+      isExcluded: false, // default to true or false?
+      reason: '',
+    },
+    startDate: null,
+    endDate: null,
+  }),
 }
 
 const ConnectionsList = ({
+  personId,
   changeOrganization,
   selectedOrganization,
   connectionsData,
   organizationTypes,
   setWhetherNewOrgBeingCreated,
   isNewOrgBeingCreated,
+  anyUnsavedChanges,
 }) => {
   const { organization } = selectedOrganization
 
   const orgClickHandler = (value) => {
-    if (isNewOrgBeingCreated) {
-      // Disable selection when a new organization connection is being created
+    if (anyUnsavedChanges || isNewOrgBeingCreated) {
+      // Disable selection whenever edits are in progress
       alert(
-        'Selecting an existing connection is locked. Please save or cancel the new connection.'
+        "You have unsaved changes! First save or cancel the connection you're on."
       )
     } else {
       changeOrganization(value)
@@ -62,9 +81,15 @@ const ConnectionsList = ({
   }
 
   const createOrgConnectionHandler = (orgType) => {
-    const stagedNewOrg = ORG_TYPE_TO_FORM_SKELETON_MAP[orgType]
-    setWhetherNewOrgBeingCreated(true)
-    changeOrganization(stagedNewOrg)
+    if (anyUnsavedChanges) {
+      alert(
+        "You have unsaved changes! Please save or cancel the connection you're on."
+      )
+    } else {
+      const stagedNewOrg = ORG_TYPE_TO_FORM_GENERATOR_MAP[orgType](personId)
+      setWhetherNewOrgBeingCreated(true)
+      changeOrganization(stagedNewOrg)
+    }
   }
 
   const groupedConnectionsByStatus = _.sortBy(
@@ -109,6 +134,7 @@ const ConnectionsList = ({
 }
 
 ConnectionsList.propTypes = {
+  personId: PropTypes.string.isRequired,
   changeOrganization: PropTypes.func.isRequired,
   organizationTypes: PropTypes.array.isRequired,
   connectionsData: PropTypes.array.isRequired,

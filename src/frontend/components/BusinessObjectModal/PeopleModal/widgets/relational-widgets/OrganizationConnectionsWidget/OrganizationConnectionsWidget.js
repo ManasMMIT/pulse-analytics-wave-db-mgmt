@@ -31,6 +31,7 @@ const OrganizationConnectionsWidget = ({ entity }) => {
 
   const [selectedOrganization, changeOrganization] = useState({})
   const [isNewOrgBeingCreated, setWhetherNewOrgBeingCreated] = useState(false)
+  const [anyUnsavedChanges, setWhetherUnsavedChanges] = useState(false)
 
   useEffect(() => {
     if (!orgTypeLoading && !connectionsLoading && connectionsData.length) {
@@ -45,12 +46,14 @@ const OrganizationConnectionsWidget = ({ entity }) => {
   return (
     <WidgetContainer>
       <ConnectionsList
+        personId={entity._id}
         isNewOrgBeingCreated={isNewOrgBeingCreated}
         setWhetherNewOrgBeingCreated={setWhetherNewOrgBeingCreated}
         connectionsData={connectionsData}
         organizationTypes={organizationTypes}
         selectedOrganization={selectedOrganization}
         changeOrganization={changeOrganization}
+        anyUnsavedChanges={anyUnsavedChanges}
       />
       <ConnectionPanel
         entityId={entity._id}
@@ -59,6 +62,7 @@ const OrganizationConnectionsWidget = ({ entity }) => {
         setWhetherNewOrgBeingCreated={setWhetherNewOrgBeingCreated}
         isNewOrgBeingCreated={isNewOrgBeingCreated}
         connectionsData={connectionsData}
+        setWhetherUnsavedChanges={setWhetherUnsavedChanges}
       />
     </WidgetContainer>
   )

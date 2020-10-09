@@ -10,6 +10,7 @@ const ConnectionPanelContainer = ({
   connectionsData,
   setWhetherNewOrgBeingCreated,
   isNewOrgBeingCreated,
+  setWhetherUnsavedChanges,
 }) => {
   if (_.isEmpty(selectedOrganization)) return 'No connections'
 
@@ -21,6 +22,7 @@ const ConnectionPanelContainer = ({
       connectionsData={connectionsData}
       setWhetherNewOrgBeingCreated={setWhetherNewOrgBeingCreated}
       isNewOrgBeingCreated={isNewOrgBeingCreated}
+      setWhetherUnsavedChanges={setWhetherUnsavedChanges}
     />
   )
 }
