@@ -20,7 +20,7 @@ import {
   FlexWrapper,
 } from './styledComponents'
 
-const MGMT_TYPES = ['Business', 'Clinical', 'Leadership']
+const PATHWAYS_MGMT_TYPES = ['Business', 'Clinical', 'Leadership']
 
 const INFLUENCER_TYPES = [
   'Steering Committee',
@@ -87,6 +87,8 @@ const PathwaysForm = ({ orgData, isNewOrgBeingCreated, setOrgData }) => {
 
   const selectedPathwaysId = pathwaysId
 
+  const orgDataCopy = _.cloneDeep(orgData)
+
   const selectPathwaysId = (_id) => {
     setOrgData(_.merge({}, orgData, { pathwaysId: _id }))
   }
@@ -96,19 +98,16 @@ const PathwaysForm = ({ orgData, isNewOrgBeingCreated, setOrgData }) => {
   }
 
   const handleAlertDescriptionChange = ({ name, value }) => {
-    const orgDataCopy = _.cloneDeep(orgData)
     orgDataCopy.alert.description = value
     setOrgData(orgDataCopy)
   }
 
   const handleInternalFieldsTextChange = ({ name, value }) => {
-    const orgDataCopy = _.cloneDeep(orgData)
     orgDataCopy.internalFields[name] = value
     setOrgData(orgDataCopy)
   }
 
   const changeInternalPathwaysManagementTypes = (arr) => {
-    const orgDataCopy = _.cloneDeep(orgData)
     orgDataCopy.internalFields.pathwaysManagementTypes = (arr || []).map(
       ({ value }) => value
     )
@@ -116,21 +115,23 @@ const PathwaysForm = ({ orgData, isNewOrgBeingCreated, setOrgData }) => {
   }
 
   const changePathwaysInfluencerTypes = (arr) => {
-    const orgDataCopy = _.cloneDeep(orgData)
     orgDataCopy.pathwaysInfluencerTypes = (arr || []).map(({ value }) => value)
     setOrgData(orgDataCopy)
   }
 
   const changeInternalValueChairsIndicationIds = (arr) => {
-    const orgDataCopy = _.cloneDeep(orgData)
     orgDataCopy.internalFields.valueChairsIndicationIds = (arr || []).map(
       ({ value }) => value
     )
     setOrgData(orgDataCopy)
   }
 
+  const handleIndicationsChange = (arr) => {
+    orgDataCopy.indicationIds = (arr || []).map(({ value }) => value)
+    setOrgData(orgDataCopy)
+  }
+
   const changeExclusionSettings = ({ name, value }) => {
-    const orgDataCopy = _.cloneDeep(orgData)
     _.merge(orgDataCopy.exclusionSettings, { [name]: value })
     setOrgData(orgDataCopy)
   }
@@ -176,7 +177,10 @@ const PathwaysForm = ({ orgData, isNewOrgBeingCreated, setOrgData }) => {
               label: type,
               value: type,
             }))}
-            options={MGMT_TYPES.map((type) => ({ label: type, value: type }))}
+            options={PATHWAYS_MGMT_TYPES.map((type) => ({
+              label: type,
+              value: type,
+            }))}
             onChange={changeInternalPathwaysManagementTypes}
           />
         </FieldWrapper>
@@ -236,6 +240,7 @@ const PathwaysForm = ({ orgData, isNewOrgBeingCreated, setOrgData }) => {
               label: name,
               value: _id,
             }))}
+            onChange={handleIndicationsChange}
           />
         </FieldWrapper>
         <FieldWrapper>
@@ -257,7 +262,7 @@ const PathwaysForm = ({ orgData, isNewOrgBeingCreated, setOrgData }) => {
               value: level,
               label: level,
             }))}
-            value={priority}
+            value={{ value: priority, label: priority }}
             onChange={({ value }) =>
               handleTopLevelTextChange({ name: 'priority', value })
             }
@@ -308,14 +313,16 @@ const PathwaysForm = ({ orgData, isNewOrgBeingCreated, setOrgData }) => {
       <FieldContainer>
         <FieldWrapper>
           <FlexWrapper>
-            <Input
-              style={{ width: 'auto', marginRight: Spacing.S3 }}
-              type="checkbox"
-              name="isExcluded"
-              checked={Boolean(isExcluded)}
-              onChange={changeExclusionSettings}
-            />
-            <FormLabel>Exclude From Tool</FormLabel>
+            <FormLabel>
+              <Input
+                style={{ width: 'auto', marginRight: Spacing.S3 }}
+                type="checkbox"
+                name="isExcluded"
+                checked={Boolean(isExcluded)}
+                onChange={changeExclusionSettings}
+              />
+              Exclude From Tool
+            </FormLabel>
           </FlexWrapper>
         </FieldWrapper>
         <FieldWrapper>
