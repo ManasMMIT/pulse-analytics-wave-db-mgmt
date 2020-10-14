@@ -28,10 +28,9 @@ module.exports = (events) => {
 
 const addEntitiesEmbeddedInDeltasToMap = (map, deltas) => {
   deltas.forEach((delta) => {
-    const { field, before, after, boId } = delta
-    const isIdField = /id/i.test(field)
+    const { before, after, boId } = delta
 
-    if (isIdField && field !== '_id') {
+    if (boId) {
       addValidIdsForSingleDeltaToMap({ before, after, map, boId })
     }
   })
@@ -43,7 +42,7 @@ const addValidIdsForSingleDeltaToMap = ({ before, after, map, boId }) => {
       ! Note: There's an edge case we have to guard against here where
       ! out of the events that are being fetched, say `indicationIds`
       ! is going from null to an empty array. And there isn't yet a
-      ! delta in existence that's `indicationIds.0` -- outcome is that 
+      ! delta in existence that's `indicationIds.0` -- outcome is that
       ! the indication boId won't get put into the map, causing a destructuring breakage
       ! in `const { name } = boMap[delta.boId]` in src/backend/resolvers/queries/events/matchEventEntityBoData.js.
       ! The `if (isValidObjId(value))` condition doesn't account for cases where
