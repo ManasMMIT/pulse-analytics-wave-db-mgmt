@@ -14,7 +14,7 @@ export const UPSERT_PATHWAYS_AND_PERSON_CONNECTION = gql`
       internalFields {
         internalNotes
         pathwaysManagementTypes
-        valueChairsIndicationIds
+        valueChairsIndications
         totalDisclosures
         dateDisclosure1
         dateDisclosure2
@@ -34,6 +34,8 @@ export const UPSERT_PATHWAYS_AND_PERSON_CONNECTION = gql`
       }
       startDate
       endDate
+      startQuarter
+      endQuarter
     }
   }
 `
@@ -52,7 +54,7 @@ export const DELETE_PATHWAYS_AND_PERSON_CONNECTION = gql`
       internalFields {
         internalNotes
         pathwaysManagementTypes
-        valueChairsIndicationIds
+        valueChairsIndications
         totalDisclosures
         dateDisclosure1
         dateDisclosure2
@@ -72,6 +74,8 @@ export const DELETE_PATHWAYS_AND_PERSON_CONNECTION = gql`
       }
       startDate
       endDate
+      startQuarter
+      endQuarter
     }
   }
 `

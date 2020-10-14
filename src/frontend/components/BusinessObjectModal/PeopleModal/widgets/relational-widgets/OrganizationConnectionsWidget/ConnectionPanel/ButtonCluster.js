@@ -48,6 +48,8 @@ const ButtonCluster = ({
     exclusionSettings,
     startDate,
     endDate,
+    startQuarter,
+    endQuarter,
   } = orgData
 
   const dataToPersist = {
@@ -64,6 +66,8 @@ const ButtonCluster = ({
     exclusionSettings,
     startDate,
     endDate,
+    startQuarter,
+    endQuarter,
   }
 
   const [upsert] = useMutation(UPSERT_PATHWAYS_AND_PERSON_CONNECTION, {
@@ -101,7 +105,7 @@ const ButtonCluster = ({
       ],
       awaitRefetchQueries: true,
       onCompleted: () => {
-        changeOrganization(connectionsData[0])
+        changeOrganization(connectionsData[0] || {}) // ! if no more connections, pass empty object
         setWhetherUnsavedChanges(false)
       },
       onError: alert,

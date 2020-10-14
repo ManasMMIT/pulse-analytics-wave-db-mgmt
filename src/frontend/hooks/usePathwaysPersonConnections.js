@@ -82,15 +82,16 @@ const joinDataCallBack = ({ groupedPathwaysById, groupedPeopleById }) => (
 }
 
 const getConnectionDescriptionAndStatus = ({ exclusionSettings, endDate }) => {
-  // ! wait why is description a date? and then changed to a string on line 90?
-  // ! and then changed to null on line 94? what's description going to be used for?
+  // 'description' here refers to the text that appears as the third line
+  // of each item in the org connections panel (middle panel in widget); it can be a
+  // date if the connection is outdated, or an exclusion reason
   let description = endDate
   let status = 'outdated'
 
   if (exclusionSettings.isExcluded) {
     description = exclusionSettings.reason
     status = 'excluded'
-  } else if (endDate === null) {
+  } else if (!endDate) {
     description = null
     status = 'active'
   }

@@ -1077,7 +1077,7 @@ export const GET_JOIN_PATHWAYS_AND_PEOPLE = gql`
       internalFields {
         internalNotes
         pathwaysManagementTypes
-        valueChairsIndicationIds
+        valueChairsIndications
         totalDisclosures
         dateDisclosure1
         dateDisclosure2
@@ -1097,6 +1097,8 @@ export const GET_JOIN_PATHWAYS_AND_PEOPLE = gql`
       }
       startDate
       endDate
+      startQuarter
+      endQuarter
     }
   }
 `

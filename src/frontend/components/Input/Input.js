@@ -26,7 +26,6 @@ const InputComponent = styled.input({
 })
 
 const Input = ({ name, type, value, onChange, disabled, style }) => {
-  const defaultValue = value || ''
   let inputPropOverflow = {}
   if (type === 'number') inputPropOverflow.step = '0.1'
 
@@ -51,16 +50,23 @@ const Input = ({ name, type, value, onChange, disabled, style }) => {
     onChange({ name, value: stateVal })
   }
 
+  let stateProp = {}
+  if (type === 'checkbox') {
+    stateProp = { checked: value }
+  } else {
+    stateProp = { value: value || '' }
+  }
+
   return (
     <InputComponent
       aria-labelledby={`field-${name}-label`}
-      {...inputPropOverflow}
       type={type}
       name={name}
       onChange={onEventChange}
-      value={defaultValue}
       disabled={disabled}
       css={style}
+      {...stateProp}
+      {...inputPropOverflow}
     />
   )
 }

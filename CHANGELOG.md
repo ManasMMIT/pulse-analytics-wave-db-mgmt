@@ -14,6 +14,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased] - Started: 10-6-20
 
+### Changed
+- `Orion/Pathways-Person Connection Widget and Form`: Refactored widget/form; wired up to React local state as well as API upsert and delete endpoints; tweaked the `JOIN_pathways_people` schema and form fields/interactions [#798](https://github.com/pulse-data/wave-db-mgmt/pull/798) [#799](https://github.com/pulse-data/wave-db-mgmt/pull/799) [#800](https://github.com/pulse-data/wave-db-mgmt/pull/800)
+
 ## [3.8.1] - Started: 9-24-20
 
 ### Added

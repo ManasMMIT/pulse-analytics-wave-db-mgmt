@@ -5,8 +5,10 @@ import Select from 'react-select'
 import _ from 'lodash'
 
 import Spacing from 'frontend/utils/spacing'
-import { formatYearQuarter } from 'frontend/utils/formatDate'
 import Input from 'frontend/components/Input'
+
+import CreatableMultiSelect from '../../../../../../../Orion/shared/CreatableMultiSelect'
+import QuarterPicker from './QuarterPicker'
 
 import {
   GET_SOURCE_INDICATIONS,
@@ -21,6 +23,8 @@ import {
   FlexWrapper,
 } from './styledComponents'
 
+import { ALERT_TYPES } from '../alert-types'
+
 const PATHWAYS_MGMT_TYPES = ['Business', 'Clinical', 'Leadership']
 
 const INFLUENCER_TYPES = [
@@ -33,8 +37,6 @@ const INFLUENCER_TYPES = [
 ]
 
 const PRIORITY_LEVELS = [null, 'High', 'Medium', 'Low']
-
-const ALERT_TYPES = [null, 'Influencer']
 
 const PathwaysForm = ({
   orgData,
@@ -76,6 +78,8 @@ const PathwaysForm = ({
     internalFields,
     alert,
     exclusionSettings,
+    startQuarter,
+    endQuarter,
   } = orgData
 
   const {
@@ -86,7 +90,7 @@ const PathwaysForm = ({
     dateDisclosure3,
     dateDisclosure4,
     pathwaysManagementTypes,
-    valueChairsIndicationIds,
+    valueChairsIndications,
   } = internalFields
 
   const {
@@ -134,8 +138,8 @@ const PathwaysForm = ({
     updateOrgData(orgDataCopy)
   }
 
-  const changeInternalValueChairsIndicationIds = (arr) => {
-    orgDataCopy.internalFields.valueChairsIndicationIds = (arr || []).map(
+  const changeInternalValueChairsIndications = (arr) => {
+    orgDataCopy.internalFields.valueChairsIndications = (arr || []).map(
       ({ value }) => value
     )
     updateOrgData(orgDataCopy)
@@ -152,8 +156,23 @@ const PathwaysForm = ({
   }
 
   const handleTimestampChange = ({ name, value }) => {
+    if (name === 'startDate') {
+      orgDataCopy.startQuarter = value
+    } else if (name === 'endDate') {
+      orgDataCopy.endQuarter = value
+    } else if (name === 'startQuarter') {
+      orgDataCopy.startDate = null
+    } else if (name === 'endQuarter') {
+      orgDataCopy.endDate = null
+    }
+
     orgDataCopy[name] = value
+
     updateOrgData(orgDataCopy)
+  }
+
+  const clearTimestamp = (name) => {
+    handleTimestampChange({ name, value: null })
   }
 
   const handleAlertDate = ({ value: newAlertDate }) => {
@@ -245,17 +264,12 @@ const PathwaysForm = ({
           <FormLabel>
             ClinicalPath / Value Chairs Indication(s) (Internal TDG Only)
           </FormLabel>
-          <Select
-            isMulti
-            value={(valueChairsIndicationIds || []).map((_id) => ({
-              label: globalIndicationsById[_id],
-              value: _id,
+          <CreatableMultiSelect
+            value={(valueChairsIndications || []).map((str) => ({
+              label: str,
+              value: str,
             }))}
-            options={globalIndications.map(({ _id, name }) => ({
-              label: name,
-              value: _id,
-            }))}
-            onChange={changeInternalValueChairsIndicationIds}
+            handleChange={changeInternalValueChairsIndications}
           />
         </FieldWrapper>
         <FieldWrapper>
@@ -302,6 +316,12 @@ const PathwaysForm = ({
         <FlexWrapper>
           <FieldWrapper style={{ width: '50%' }}>
             <FormLabel>Start Date</FormLabel>
+            <button
+              style={{ color: 'blue', marginLeft: 6, cursor: 'pointer' }}
+              onClick={() => clearTimestamp('startDate')}
+            >
+              clear
+            </button>
             <Input
               type="date"
               value={startDate}
@@ -311,18 +331,28 @@ const PathwaysForm = ({
           </FieldWrapper>
           <FieldWrapper style={{ width: '50%' }}>
             <FormLabel>Start Quarter</FormLabel>
-            <Input
+            <button
+              style={{ color: 'blue', marginLeft: 6, cursor: 'pointer' }}
+              onClick={() => clearTimestamp('startQuarter')}
+            >
+              clear
+            </button>
+            <QuarterPicker
+              value={startQuarter}
               name="startQuarter"
-              disabled
-              type="text"
-              value={startDate && formatYearQuarter(startDate)}
-              style={{ cursor: 'not-allowed' }}
+              onChange={handleTimestampChange}
             />
           </FieldWrapper>
         </FlexWrapper>
         <FlexWrapper>
           <FieldWrapper style={{ width: '50%' }}>
             <FormLabel>End Date (Outdated)</FormLabel>
+            <button
+              style={{ color: 'blue', marginLeft: 6, cursor: 'pointer' }}
+              onClick={() => clearTimestamp('endDate')}
+            >
+              clear
+            </button>
             <Input
               type="date"
               value={endDate}
@@ -332,18 +362,28 @@ const PathwaysForm = ({
           </FieldWrapper>
           <FieldWrapper style={{ width: '50%' }}>
             <FormLabel>End Quarter</FormLabel>
-            <Input
-              name="endQuarter" // just to avoid prop warning, not used
-              disabled
-              type="text"
-              value={endDate && formatYearQuarter(endDate)}
-              style={{ cursor: 'not-allowed' }}
+            <button
+              style={{ color: 'blue', marginLeft: 6, cursor: 'pointer' }}
+              onClick={() => clearTimestamp('endQuarter')}
+            >
+              clear
+            </button>
+            <QuarterPicker
+              value={endQuarter}
+              name="endQuarter"
+              onChange={handleTimestampChange}
             />
           </FieldWrapper>
         </FlexWrapper>
         <FlexWrapper>
           <FieldWrapper style={{ width: '50%' }}>
             <FormLabel>Alert Date</FormLabel>
+            <button
+              style={{ color: 'blue', marginLeft: 6, cursor: 'pointer' }}
+              onClick={() => handleAlertDate({ value: null })}
+            >
+              clear
+            </button>
             <Input
               name="alert.date" // just to avoid prop warning, not used
               type="date"
@@ -354,6 +394,7 @@ const PathwaysForm = ({
           <FieldWrapper style={{ width: '50%' }}>
             <FormLabel>Alert Type</FormLabel>
             <Select
+              isDisabled // ! for now alertType can only be 'Influencer'
               value={{ label: alertType, value: alertType }}
               options={ALERT_TYPES.map((type) => ({
                 label: type,
@@ -382,7 +423,7 @@ const PathwaysForm = ({
                 style={{ width: 'auto', marginRight: Spacing.S3 }}
                 type="checkbox"
                 name="isExcluded"
-                checked={Boolean(isExcluded)}
+                value={Boolean(isExcluded)}
                 onChange={changeExclusionSettings}
               />
               Exclude From Tool

@@ -32,5 +32,8 @@ export const formatDateMonthYearDash = (str) =>
 export const convertIsoShortToDateObj = (isoShortString) =>
   zonedTimeToUtc(isoShortString, 'America/New_York')
 
-export const formatYearQuarter = (isoShortString) =>
+export const isoShortToDateMonthYearLong = (isoShortString) =>
+  format(convertIsoShortToDateObj(isoShortString), 'MMMM do, yyyy')
+
+export const isoShortToYearQuarter = (isoShortString) =>
   format(convertIsoShortToDateObj(isoShortString), "yyyy 'Q'Q")

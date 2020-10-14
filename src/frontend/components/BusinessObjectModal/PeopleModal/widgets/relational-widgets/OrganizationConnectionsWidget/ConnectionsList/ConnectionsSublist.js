@@ -5,7 +5,7 @@ import SublistHeaderRow from 'frontend/components/List/SublistHeaderRow'
 
 import ConnectionListItem from './ConnectionListItem'
 
-import { formatDateMonthYearLong } from 'frontend/utils/formatDate'
+import { isoShortToDateMonthYearLong } from 'frontend/utils/formatDate'
 import Color from 'frontend/utils/color'
 
 const SUBLIST_MAP = {
@@ -22,7 +22,7 @@ const SUBLIST_MAP = {
   outdated: {
     rowColor: Color.GRAY_DARK,
     isDisabled: true,
-    formatter: formatDateMonthYearLong,
+    formatter: isoShortToDateMonthYearLong,
   },
 }
 
@@ -48,10 +48,12 @@ const ConnectionsSublist = ({
           description,
           position,
         } = datum
+
         // For Outdated date formatting
         const formattedDescription = formatter
           ? formatter(description)
           : description
+
         const isActive = selectedOrganization._id === _id
 
         return (

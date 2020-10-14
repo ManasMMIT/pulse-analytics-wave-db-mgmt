@@ -26,12 +26,6 @@ class PathwaysAndPersonConnection {
       // ! incoming data is splatted in like this because I'm worried
       // ! the class won't be able to keep up with changing fields
       ...data,
-      internalFields: {
-        ...data.internalFields,
-        valueChairsIndicationIds: data.internalFields.valueChairsIndicationIds.map(
-          ObjectId
-        ),
-      },
       alert: {
         ...data.alert,
         date:
@@ -44,6 +38,11 @@ class PathwaysAndPersonConnection {
       startDate:
         data.startDate && zonedTimeToUtc(data.startDate, DEFAULT_TIMEZONE),
       endDate: data.endDate && zonedTimeToUtc(data.endDate, DEFAULT_TIMEZONE),
+      startQuarter:
+        data.startQuarter &&
+        zonedTimeToUtc(data.startQuarter, DEFAULT_TIMEZONE),
+      endQuarter:
+        data.endQuarter && zonedTimeToUtc(data.endQuarter, DEFAULT_TIMEZONE),
     }
 
     connection.dbs = dbs

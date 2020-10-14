@@ -15,6 +15,8 @@ import List from 'frontend/components/List'
 import ConnectionListItem from './ConnectionListItem'
 import ConnectionsSublist from './ConnectionsSublist'
 
+import { INFLUENCER_ALERT_TYPE } from '../alert-types'
+
 const ConnectionsListWrapper = styled.div({
   display: 'flex',
   flexDirection: 'column',
@@ -39,21 +41,23 @@ const ORG_TYPE_TO_FORM_GENERATOR_MAP = {
       dateDisclosure3: '',
       dateDisclosure4: '',
       pathwaysManagementTypes: [],
-      valueChairsIndicationIds: [],
+      valueChairsIndications: [],
     },
     position: '',
     priority: null,
     alert: {
       date: null,
-      type: null,
+      type: INFLUENCER_ALERT_TYPE,
       description: '',
     },
     exclusionSettings: {
-      isExcluded: false, // default to true or false?
+      isExcluded: false,
       reason: '',
     },
     startDate: null,
     endDate: null,
+    startQuarter: null,
+    endQuarter: null,
   }),
 }
 
