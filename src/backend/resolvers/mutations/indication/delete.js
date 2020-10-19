@@ -4,10 +4,14 @@ const _ = require('lodash')
 const upsertUsersPermissions = require('./../sitemap/permissions-upsertion/upsertUsersPermissions')
 const deleteTreatmentPlansCascade = require('./../utils/deleteTreatmentPlansCascade')
 
+const EventProcessor = require('../shared/Event/EventProcessor')
+const PathwaysAndPersonConnection = require('../relationalResolvers/pathwaysAndPerson/PathwaysAndPersonConnection')
+const PathwaysAndPersonConnectionUpsertionEvent = require('../relationalResolvers/pathwaysAndPerson/PathwaysAndPersonConnectionUpsertionEvent')
+
 const deleteSourceIndication = async (
   parent,
   { input: { _id: indicationId } },
-  { pulseDevDb, pulseCoreDb, coreRoles, mongoClient },
+  { pulseDevDb, pulseCoreDb, coreRoles, mongoClient, user },
   info
 ) => {
   const _id = ObjectId(indicationId)
@@ -79,6 +83,50 @@ const deleteSourceIndication = async (
       treatmentPlanIds: tpIds,
       session,
     })
+
+    // STEP 6: Delete all instances of the indication in JOIN_pathways_people in core and
+    // the corresponding materialized collection in dev
+    const connectionsToUpdate = await pulseCoreDb
+      .collection('JOIN_pathways_people')
+      .find({ indicationIds: _id })
+      .toArray()
+
+    const editedConnections = connectionsToUpdate.map((connection) => ({
+      ...connection,
+      indicationIds: connection.indicationIds.filter(
+        (indId) => !indId.equals(_id)
+      ),
+    }))
+
+    const updateOps = editedConnections.map(async (editedConnection) => {
+      const connection = await PathwaysAndPersonConnection.init({
+        data: editedConnection,
+        dbs: { pulseCoreDb, pulseDevDb },
+      })
+
+      const event = new PathwaysAndPersonConnectionUpsertionEvent(
+        user,
+        connection
+      )
+
+      const eventProc = new EventProcessor()
+
+      await eventProc.process({
+        event,
+        dbs: { pulseCoreDb },
+        session,
+      })
+    })
+
+    await Promise.all(updateOps)
+
+    await pulseDevDb
+      .collection('TEMP_pathwaysInfluencers')
+      .updateMany(
+        { indication: deletedIndication.name },
+        { $pull: { indication: deletedIndication.name } },
+        { session }
+      )
   })
 
   return deletedIndication

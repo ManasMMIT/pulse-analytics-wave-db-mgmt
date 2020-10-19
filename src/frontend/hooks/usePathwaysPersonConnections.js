@@ -31,8 +31,9 @@ const usePathwaysPersonConnections = (args = {}) => {
   const groupedPathwaysById = _.keyBy(pathways, '_id')
   const groupedPeopleById = _.keyBy(people, '_id')
 
-  const joinedData = connections.map(
-    joinDataCallBack({ groupedPathwaysById, groupedPeopleById })
+  const joinedData = connections.reduce(
+    joinDataCallBack({ groupedPathwaysById, groupedPeopleById }),
+    []
   )
 
   if (!pathwaysId && !personId) return { data: joinedData, loading }
@@ -47,6 +48,7 @@ const usePathwaysPersonConnections = (args = {}) => {
 }
 
 const joinDataCallBack = ({ groupedPathwaysById, groupedPeopleById }) => (
+  acc,
   datum
 ) => {
   const { pathwaysId, personId, endDate, exclusionSettings } = datum
@@ -60,6 +62,8 @@ const joinDataCallBack = ({ groupedPathwaysById, groupedPeopleById }) => (
   const pathwaysDatum = groupedPathwaysById[pathwaysId]
   const personDatum = groupedPeopleById[personId]
 
+  if (!personDatum || !pathwaysDatum) return acc
+
   const {
     organization,
     organizationTiny,
@@ -69,7 +73,7 @@ const joinDataCallBack = ({ groupedPathwaysById, groupedPeopleById }) => (
 
   const { _id, __typename, ...restPersonDatum } = personDatum
 
-  return {
+  acc.push({
     ...datum,
     organization,
     organizationTiny,
@@ -78,7 +82,9 @@ const joinDataCallBack = ({ groupedPathwaysById, groupedPeopleById }) => (
     ...restPersonDatum,
     description,
     status,
-  }
+  })
+
+  return acc
 }
 
 const getConnectionDescriptionAndStatus = ({ exclusionSettings, endDate }) => {
