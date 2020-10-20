@@ -1,6 +1,7 @@
 const connectToMongoDb = require('../connect-to-mongodb')
 const _ = require('lodash')
 const { ObjectId } = require('mongodb')
+const getMaterializationAggPipeline = require('../src/backend/resolvers/mutations/relationalResolvers/pathwaysAndPerson/getMaterializationAggPipeline')
 
   /*
    * Steps to Follow:
@@ -11,6 +12,11 @@ const { ObjectId } = require('mongodb')
    *   and insert the corresponding people into the "people" collection
    * - It will simultaneously get the id of each person and insert the corresponding JOIN documents in the "JOIN_pathways_people" collection
   */
+
+const JOIN_PEOPLE_COLLECTION = 'JOIN_pathways_people'
+const PEOPLE_COLLECTION = 'people'
+const TEMP_PEOPLE_COLLECTION = 'TEMP_pathwaysInfluencers'
+const EXISTING_PEOPLE_COLLECTION = 'EXISTING_pathways_people'
 
 const seedPeopleFromPathwaysInfluencers = async () => {
   const dbs = await connectToMongoDb()
@@ -33,22 +39,27 @@ const seedPeopleFromPathwaysInfluencers = async () => {
     })
     .toArray()
 
-  
   console.log('Remove All JOIN_pathways_people documents...')
-  await pulseCoreDb.collection('JOIN_pathways_people').deleteMany()
+  await pulseCoreDb.collection(JOIN_PEOPLE_COLLECTION)
+    .deleteMany()
 
   console.log('Remove All EXISTING_pathways_people documents...')
-  await pulseCoreDb.collection('EXISTING_pathways_people').deleteMany()
+  await pulseCoreDb.collection(EXISTING_PEOPLE_COLLECTION)
+    .deleteMany()
+
+  console.log('Remove All TEMP_pathwaysInfluencers collection...')
+  await pulseDevDb.collection(TEMP_PEOPLE_COLLECTION)
+    .deleteMany()
 
   console.log('Remove All Pathways People documents from People collection...')
-  await pulseCoreDb.collection('people').deleteMany({
+  await pulseCoreDb.collection(PEOPLE_COLLECTION).deleteMany({
     isPathwaysPeople: true
   })
 
   const indications = await pulseCoreDb.collection('indications')
     .find()
     .toArray()
-
+    
   const keyedIndicationsByName = _.keyBy(indications, 'name')
 
   const ops = pathwaysInfluencers.map(async datum => {
@@ -88,9 +99,9 @@ const seedPeopleFromPathwaysInfluencers = async () => {
     } = datum
 
     // See if person with personId already exists (anyone with a personId will most likely already be in the DB)
-    const personWithId = await pulseCoreDb.collection('people').findOne({ _id: ObjectId(personId) })
-    const personWithNpi = await pulseCoreDb.collection('people').findOne({ nationalProviderIdentifier: Number(npiNumber) })
-    const personWithName = await pulseCoreDb.collection('people').findOne({
+    const personWithId = await pulseCoreDb.collection(PEOPLE_COLLECTION).findOne({ _id: ObjectId(personId) })
+    const personWithNpi = await pulseCoreDb.collection(PEOPLE_COLLECTION).findOne({ nationalProviderIdentifier: Number(npiNumber) })
+    const personWithName = await pulseCoreDb.collection(PEOPLE_COLLECTION).findOne({
       firstName,
       middleName,
       lastName
@@ -100,7 +111,7 @@ const seedPeopleFromPathwaysInfluencers = async () => {
     if (personWithId === null && personWithNpi === null) {
       // Insert the person only if it doesn't have a corresponding name
       if (personWithName === null) {
-        const { insertedId } = await pulseCoreDb.collection('people')
+        const { insertedId } = await pulseCoreDb.collection(PEOPLE_COLLECTION)
           .insertOne({
             _id: ObjectId(),
             firstName,
@@ -114,8 +125,7 @@ const seedPeopleFromPathwaysInfluencers = async () => {
             updatedOn: new Date(),
             isPathwaysPeople: true // flag to differentiate the injected people
           })
-  
-        console.log(`Inserted Person of ${ firstName } ${ middleName } ${ lastName } into people collection`)
+          console.log(`Inserted Person of ${ firstName } ${ middleName } ${ lastName } into people collection`)
         
         const pathwaysOrg = await pulseCoreDb.collection('organizations')
           .findOne({ type: 'Pathways', slug })
@@ -127,8 +137,9 @@ const seedPeopleFromPathwaysInfluencers = async () => {
           if (indicationIdObj) indicationIds.push(indicationIdObj._id)
         })
     
+        const joinDocId = ObjectId()
         const joinPathwaysPeopleDoc = {
-          _id: ObjectId(),
+          _id: joinDocId,
           personId: insertedId,
           pathwaysId: pathwaysOrg._id,
           indicationIds,
@@ -164,14 +175,31 @@ const seedPeopleFromPathwaysInfluencers = async () => {
           },
         }
   
-        await pulseCoreDb.collection('JOIN_pathways_people')
+        await pulseCoreDb.collection(JOIN_PEOPLE_COLLECTION)
           .insertOne(joinPathwaysPeopleDoc)
-      } else {
-        console.log(`Inserting person: ${ firstName} ${ middleName } ${ lastName } into EXISTING_pathways_people`)
+        console.log(`Inserted Join Doc for ${ joinDocId }`)
+        
+        // Materialize Temp Pathways Inflluencers on pulse-dev
+        const materializedDoc = await pulseCoreDb
+          .collection(JOIN_PEOPLE_COLLECTION)
+          .aggregate(
+            getMaterializationAggPipeline({
+              $match: { _id: joinDocId },
+            })
+          )
+          .next()
+    
+        await pulseDevDb
+          .collection(TEMP_PEOPLE_COLLECTION)
+          .insertOne(materializedDoc)
 
+        console.log(`Materialized Doc for ${ joinDocId }`)
+      } else {
         // Generates list of people with conflicting names
-        await pulseCoreDb.collection('EXISTING_pathways_people')
+        await pulseCoreDb.collection(EXISTING_PEOPLE_COLLECTION)
           .insertOne(datum)
+
+        console.log(`Inserting person: ${ firstName} ${ middleName } ${ lastName } into EXISTING_pathways_people`)
       }
     }
   })
