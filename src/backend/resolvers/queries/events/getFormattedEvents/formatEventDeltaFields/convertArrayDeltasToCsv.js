@@ -1,6 +1,8 @@
 const _ = require('lodash')
 const { unflatten } = require('flat')
 
+const PLACEHOLDER_VALUE = require('./placeholder-value')
+
 const nestedKeyDelimiter = '|||||'
 
 module.exports = (deltas) => {
@@ -31,10 +33,11 @@ const reformArrayDeltas = ({ prev, next }) => {
   })
 }
 
+// Array element formatting: maintain complete array with `holes` displayed as none.
 const getCsvValues = (values) => {
-  const filteredValues = values.filter(Boolean).join(', ')
-
-  return filteredValues.length ? filteredValues : 'none'
+  return values
+    .map((val) => (val === null ? PLACEHOLDER_VALUE : val))
+    .join(', ')
 }
 
 const getPrevAndNextObjects = (deltas) => {
