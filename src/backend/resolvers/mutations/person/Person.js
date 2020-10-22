@@ -101,6 +101,26 @@ class Person {
       { session }
     )
 
+    let member = updatedPerson.firstName
+    if (updatedPerson.middleName) member += ` ${updatedPerson.middleName}`
+    if (updatedPerson.lastName) member += ` ${updatedPerson.lastName}`
+
+    // Step 3: Cascade update TEMP_pathwaysInfluencers collection (soon to be pathwaysInfluencers) in pulse-dev
+    await pulseDevDb.collection('TEMP_pathwaysInfluencers').updateMany(
+      { personId: updatedPerson._id },
+      {
+        $set: {
+          member,
+          affiliation: updatedPerson.affiliation,
+          affiliationPosition: updatedPerson.affiliationPosition,
+          primaryState: updatedPerson.primaryState,
+          npiNumber: String(updatedPerson.nationalProviderIdentifier),
+          updatedOn: new Date(),
+        },
+      },
+      { session }
+    )
+
     return updatedPerson
   }
 
