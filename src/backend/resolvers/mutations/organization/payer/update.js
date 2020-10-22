@@ -5,7 +5,7 @@ const updateConnectionsAndAlerts = require('./../utils/updateConnectionsAndAlert
 const updatePayerOrganization = async (
   parent,
   { input: { _id: stringId, ...body } },
-  { pulseCoreDb, pulseDevDb, mongoClient },
+  { pulseCoreDb, pulseDevDb, pulseProdDb, mongoClient },
   info
 ) => {
   const _id = ObjectId(stringId)
@@ -78,6 +78,13 @@ const updatePayerOrganization = async (
       },
       { session }
     )
+
+    const { type, toolIds, ...devPayerSetObj } = setObj
+
+    // Step 5: update dev payers collection
+    await pulseDevDb
+      .collection('payers')
+      .updateOne({ _id }, { $set: devPayerSetObj }, { session })
   })
 
   return result
