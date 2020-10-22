@@ -45,7 +45,7 @@ const ConnectionPanel = ({
   const { refKey, Form } = ORG_TYPE_TO_FORM_MAP[organizationType] || {}
 
   const cancelHandler = () => {
-    changeOrganization(connectionsData[0])
+    changeOrganization(_.isEmpty(connectionsData) ? {} : connectionsData[0])
     setWhetherNewOrgBeingCreated(false)
     setWhetherUnsavedChanges(false)
   }
@@ -102,7 +102,9 @@ const ConnectionPanel = ({
         {Boolean(orgData._id) ? (
           <EventLog filters={eventLogFilters} />
         ) : (
-          <div>New unsaved connection doesn't have history</div>
+          <div style={{ padding: 24 }}>
+            New unsaved connection doesn't have history
+          </div>
         )}
       </UnderlinedTabs>
     </ConnectionPanelWrapper>
