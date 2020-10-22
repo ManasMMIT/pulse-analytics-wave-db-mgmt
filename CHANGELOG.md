@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Refactored widget/form; wired up to React local state as well as API upsert and delete endpoints; tweaked the `JOIN_pathways_people` schema and form fields/interactions [#798](https://github.com/pulse-data/wave-db-mgmt/pull/798) [#799](https://github.com/pulse-data/wave-db-mgmt/pull/799) [#800](https://github.com/pulse-data/wave-db-mgmt/pull/800)
   - Added materialization steps to CUD ops in PathwaysAndPersonConnection to materialize data to `pulse-dev.TEMP_pathwaysInfluencers` for now [#805](https://github.com/pulse-data/wave-db-mgmt/pull/805)
   - Added cascade DELETE logic so when a pathways, person, or indication is deleted, corresponding deletions are made in the pathways/people collections in core and dev; tweaked FE cache management to also be in sync/not break [#808](https://github.com/pulse-data/wave-db-mgmt/pull/808)
+  - Added logic to account for `isExcluded` toggling; when connection `isExcluded` remove/don't add to materialized collection; otherwise upsert into materialized collection [#812](https://github.com/pulse-data/wave-db-mgmt/pull/812)
   - Added cascade UPDATE logic so when a pathways, person, or indication is updated, corresponding updates are made in the `TEMP_pathwaysInfluencers` collection in dev [#811](https://github.com/pulse-data/wave-db-mgmt/pull/811)
 
 ## [3.8.1] - Started: 9-24-20

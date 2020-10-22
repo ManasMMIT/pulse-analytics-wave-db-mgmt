@@ -17,6 +17,7 @@ const JOIN_PEOPLE_COLLECTION = 'JOIN_pathways_people'
 const PEOPLE_COLLECTION = 'people'
 const TEMP_PEOPLE_COLLECTION = 'TEMP_pathwaysInfluencers'
 const EXISTING_PEOPLE_COLLECTION = 'EXISTING_pathways_people'
+const EVENTS_COLLECTIONS = 'events'
 
 const seedPeopleFromPathwaysInfluencers = async () => {
   const dbs = await connectToMongoDb()
@@ -55,6 +56,10 @@ const seedPeopleFromPathwaysInfluencers = async () => {
   await pulseCoreDb.collection(PEOPLE_COLLECTION).deleteMany({
     isPathwaysPeople: true
   })
+
+  console.log('Reset the core events collections (otherwise old, non-applicable events will be there)')
+  await pulseCoreDb.collection(EVENTS_COLLECTIONS)
+    .deleteMany()
 
   const indications = await pulseCoreDb.collection('indications')
     .find()
@@ -178,22 +183,27 @@ const seedPeopleFromPathwaysInfluencers = async () => {
         await pulseCoreDb.collection(JOIN_PEOPLE_COLLECTION)
           .insertOne(joinPathwaysPeopleDoc)
         console.log(`Inserted Join Doc for ${ joinDocId }`)
-        
-        // Materialize Temp Pathways Inflluencers on pulse-dev
-        const materializedDoc = await pulseCoreDb
-          .collection(JOIN_PEOPLE_COLLECTION)
-          .aggregate(
-            getMaterializationAggPipeline({
-              $match: { _id: joinDocId },
-            })
-          )
-          .next()
-    
-        await pulseDevDb
-          .collection(TEMP_PEOPLE_COLLECTION)
-          .insertOne(materializedDoc)
 
-        console.log(`Materialized Doc for ${ joinDocId }`)
+        // Materialize Temp Pathways Inflluencers on pulse-dev unless
+        // isExcluded is truthy
+        if (joinPathwaysPeopleDoc.exclusionSettings.isExcluded) {
+          console.log(`Doc for ${joinDocId} skipped because isExcluded truthy`)
+        } else {
+          const materializedDoc = await pulseCoreDb
+            .collection(JOIN_PEOPLE_COLLECTION)
+            .aggregate(
+              getMaterializationAggPipeline({
+                $match: { _id: joinDocId },
+              })
+            )
+            .next()
+
+          await pulseDevDb
+            .collection(TEMP_PEOPLE_COLLECTION)
+            .insertOne(materializedDoc)
+
+          console.log(`Materialized Doc for ${joinDocId}`)
+        }
       } else {
         // Generates list of people with conflicting names
         await pulseCoreDb.collection(EXISTING_PEOPLE_COLLECTION)

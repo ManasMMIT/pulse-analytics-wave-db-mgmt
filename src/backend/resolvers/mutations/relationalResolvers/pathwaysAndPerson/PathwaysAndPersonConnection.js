@@ -122,20 +122,22 @@ class PathwaysAndPersonConnection {
       )
       .then(({ ops }) => ops[0])
 
-    // Step 2: Materialize the connection in dev
-    const materializedDoc = await pulseCoreDb
-      .collection(SOURCE_COLLECTION)
-      .aggregate(
-        getMaterializationAggPipeline({
-          $match: { _id: createdConnection._id },
-        }),
-        { session }
-      )
-      .next()
+    // Step 2: Materialize the connection in dev if not excluded
+    if (!createdConnection.exclusionSettings.isExcluded) {
+      const materializedDoc = await pulseCoreDb
+        .collection(SOURCE_COLLECTION)
+        .aggregate(
+          getMaterializationAggPipeline({
+            $match: { _id: createdConnection._id },
+          }),
+          { session }
+        )
+        .next()
 
-    await pulseDevDb
-      .collection(MATERIALIZED_DEV_COLLECTION)
-      .insertOne(materializedDoc, { session })
+      await pulseDevDb
+        .collection(MATERIALIZED_DEV_COLLECTION)
+        .insertOne(materializedDoc, { session })
+    }
 
     return createdConnection
   }
@@ -159,24 +161,31 @@ class PathwaysAndPersonConnection {
       )
       .then(({ value }) => value)
 
-    // Step 2: Update the materialized version of the connection
-    const materializedDoc = await pulseCoreDb
-      .collection(SOURCE_COLLECTION)
-      .aggregate(
-        getMaterializationAggPipeline({
-          $match: { _id: updatedConnection._id },
-        }),
-        { session }
-      )
-      .next()
+    // Step 2: Update the materialized version of the connection;
+    // If isExcluded, delete it from materialized collection; otherwise upsert it
+    if (updatedConnection.exclusionSettings.isExcluded) {
+      await pulseDevDb
+        .collection(MATERIALIZED_DEV_COLLECTION)
+        .deleteOne({ _id: updatedConnection._id }, { session })
+    } else {
+      const materializedDoc = await pulseCoreDb
+        .collection(SOURCE_COLLECTION)
+        .aggregate(
+          getMaterializationAggPipeline({
+            $match: { _id: updatedConnection._id },
+          }),
+          { session }
+        )
+        .next()
 
-    await pulseDevDb
-      .collection(MATERIALIZED_DEV_COLLECTION)
-      .updateOne(
-        { _id: updatedConnection._id },
-        { $set: materializedDoc },
-        { session }
-      )
+      await pulseDevDb
+        .collection(MATERIALIZED_DEV_COLLECTION)
+        .updateOne(
+          { _id: updatedConnection._id },
+          { $set: materializedDoc },
+          { session, upsert: true }
+        )
+    }
 
     return updatedConnection
   }
