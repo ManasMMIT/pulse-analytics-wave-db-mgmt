@@ -16,8 +16,9 @@ module.exports = async (parent, args, { pulseCoreDb }, info) => {
 
   const enrichedEvents = matchEventEntityBoData(events, entityMap, boMap)
   const formattedEvents = getFormattedEvents(enrichedEvents, fieldLabelMaps)
+  const orderedEvents = _.orderBy(formattedEvents, coerceToTimestamps, ['desc'])
 
-  return _.orderBy(formattedEvents, coerceToTimestamps, ['desc'])
+  return orderedEvents
 }
 
 const coerceToTimestamps = ({ timestamp }) => new Date(timestamp)

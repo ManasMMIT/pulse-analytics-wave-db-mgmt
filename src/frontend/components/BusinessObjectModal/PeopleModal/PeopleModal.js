@@ -9,7 +9,9 @@ import {
 import {
   GET_PEOPLE,
   GET_JOIN_OBMS_AND_PEOPLE,
+  GET_JOIN_PATHWAYS_AND_PEOPLE,
   GET_VIEW_OBM_INFLUENCERS,
+  GET_EVENTS,
 } from '../../../api/queries'
 
 import BusinessObjectModal from '../BusinessObjectModal/BusinessObjectModal'
@@ -75,9 +77,11 @@ const PeopleModal = ({
     }}
     refetchQueries={[
       ...refetchQueries,
+      { query: GET_JOIN_PATHWAYS_AND_PEOPLE },
       { query: GET_PEOPLE },
       { query: GET_JOIN_OBMS_AND_PEOPLE },
       { query: GET_VIEW_OBM_INFLUENCERS },
+      { query: GET_EVENTS },
     ]}
     afterMutationHook={afterMutationHook}
     widgets={WIDGETS}

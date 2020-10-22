@@ -1,6 +1,6 @@
 import React from 'react'
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faEdit } from "@fortawesome/free-solid-svg-icons"
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faEdit } from '@fortawesome/free-solid-svg-icons'
 import { transparentize } from 'polished'
 
 import Panel from 'frontend/components/Panel'
@@ -8,11 +8,11 @@ import { PathwaysAccountModalButton } from './../../shared/AccountModals'
 import DeleteButton from './../../shared/DeleteButton'
 import CopyOneOfStringButton from './../../shared/CopyOneOfStringButton'
 
-import {
-  DELETE_PATHWAYS_ORGANIZATION,
-} from './../../../api/mutations'
+import { DELETE_PATHWAYS_ORGANIZATION } from './../../../api/mutations'
 
 import {
+  GET_EVENTS,
+  GET_JOIN_PATHWAYS_AND_PEOPLE,
   GET_PATHWAYS_ORGANIZATIONS,
   GET_PAYER_ORGANIZATIONS,
   GET_PROVIDER_ORGANIZATIONS,
@@ -41,7 +41,7 @@ const defaultPanelItemStyle = {
   borderBottom: `1px solid ${transparentize(0.9, Color.BLACK)}`,
   ':hover': {
     background: transparentize(0.95, Color.BLACK),
-  }
+  },
 }
 
 const headerChildren = (
@@ -59,7 +59,7 @@ const headerChildren = (
   </div>
 )
 
-const buttonGroupCallback = entity => (
+const buttonGroupCallback = (entity) => (
   <>
     <PathwaysAccountModalButton
       account={entity}
@@ -71,9 +71,11 @@ const buttonGroupCallback = entity => (
       itemId={entity._id}
       mutationDoc={DELETE_PATHWAYS_ORGANIZATION}
       refetchQueries={[
+        { query: GET_JOIN_PATHWAYS_AND_PEOPLE },
         { query: GET_PATHWAYS_ORGANIZATIONS },
         { query: GET_PAYER_ORGANIZATIONS },
         { query: GET_PROVIDER_ORGANIZATIONS },
+        { query: GET_EVENTS },
       ]}
     />
   </>
@@ -82,11 +84,7 @@ const buttonGroupCallback = entity => (
 const panelItemConfig = {
   style: defaultPanelItemStyle,
   buttonGroupCallback,
-  label1Callback: ({ organization }) => (
-    <div >
-      {organization}
-    </div>
-  )
+  label1Callback: ({ organization }) => <div>{organization}</div>,
 }
 
 const PathwaysAccounts = () => (
@@ -95,7 +93,7 @@ const PathwaysAccounts = () => (
     headerChildren={headerChildren}
     headerContainerStyle={{
       background: '#FFF',
-      borderBottom: `1px solid ${transparentize(0.9, Color.BLACK)}`
+      borderBottom: `1px solid ${transparentize(0.9, Color.BLACK)}`,
     }}
     queryDocs={{
       fetchAllQueryProps: { query: GET_PATHWAYS_ORGANIZATIONS },

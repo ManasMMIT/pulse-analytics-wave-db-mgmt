@@ -679,32 +679,33 @@ const queries = gql`
     _id: ID
     personId: String!
     pathwaysId: String!
-    indicationIds: [String] # TODO: Add non-nullable flag
-    pathwaysInfluencerTypes: [String] # ?
-    tumorTypeSpecialty: String # ? is this the same as therapeutic area or no?
+    indicationIds: [String!]!
+    pathwaysInfluencerTypes: [String!]!
+    tumorTypeSpecialty: String
     internalFields: PathwaysAndPersonConnectionInternalFields!
-    # title: String # ? why 'title' instead of position like in JOIN_obms_people?
-    position: String # ?
+    position: String
     priority: String
     alert: PathwaysAndPersonConnectionAlert!
     exclusionSettings: PathwaysAndPersonExclusionSettings!
-    startDate: DateTime
-    endDate: DateTime
+    startDate: Date # will return ISO short instead of DateTime returning ISO long -- but will timezone be an issue?
+    endDate: Date # will return ISO short instead of DateTime returning ISO long  -- but will timezone be an issue?
+    startQuarter: Date # will return ISO short instead of DateTime returning ISO long -- but will timezone be an issue?
+    endQuarter: Date # will return ISO short instead of DateTime returning ISO long  -- but will timezone be an issue?
   }
 
   type PathwaysAndPersonConnectionInternalFields {
     internalNotes: String
-    pathwaysManagementTypes: [String] # TODO: Add non-nullable flag
-    valueChairsIndicationIds: [String] # TODO: Add non-nullable flag ? will this be IDs corresponding to real indications?
-    totalDisclosures: String # ?
-    dateDisclosure1: String # ?
-    dateDisclosure2: String # ?
-    dateDisclosure3: String # ?
-    dateDisclosure4: String # ?
+    pathwaysManagementTypes: [String!]!
+    valueChairsIndications: [String!]!
+    totalDisclosures: String
+    dateDisclosure1: String
+    dateDisclosure2: String
+    dateDisclosure3: String
+    dateDisclosure4: String
   }
 
   type PathwaysAndPersonConnectionAlert {
-    date: DateTime
+    date: Date # will return ISO short instead of DateTime returning ISO long -- but will timezone be an issue?
     type: String
     description: String
   }

@@ -1,11 +1,5 @@
-const { ObjectId } = require('mongodb')
-
 const { BASIC } = require('../../event-meta-types')
-
-// TODO: Raise boIds into global map
-const PATHWAYS_BOID = '5eac3251ac8a01743081f28d'
-const INDICATION_BOID = '5eac32c7ac8a01743081f299'
-const PERSON_BOID = '5eea22d5adbf920fa4320487'
+const isValidObjectId = require('../../../../../utils/isValidObjectId')
 
 module.exports = (events) => {
   return events.reduce((acc, event) => {
@@ -26,40 +20,37 @@ module.exports = (events) => {
       })
     }
 
-    injectDeltaEntityIds(acc, event.deltas)
+    addEntitiesEmbeddedInDeltasToMap(acc, event.deltas)
 
     return acc
   }, {})
 }
 
-const injectDeltaEntityIds = (map, deltas) => {
+const addEntitiesEmbeddedInDeltasToMap = (map, deltas) => {
   deltas.forEach((delta) => {
-    const { field, before, after } = delta
-    const isIdField = /id/i.test(field)
+    const { before, after, boId } = delta
 
-    if (isIdField && field !== '_id') {
-      const fieldBoId = getBoId(field)
-      if (fieldBoId) delta.boId = fieldBoId
-      addValidIdsToMap({ before, after, map, boId: fieldBoId })
+    if (boId) {
+      addValidIdsForSingleDeltaToMap({ before, after, map, boId })
     }
   })
 }
 
-const getBoId = (field) => {
-  if (/pathway/i.test(field)) return PATHWAYS_BOID
-  if (/(person|person)/i.test(field)) return PERSON_BOID
-  if (/indication/i.test(field)) return INDICATION_BOID
-
-  return null
-}
-
-const addValidIdsToMap = ({ before, after, map, boId }) => {
+const addValidIdsForSingleDeltaToMap = ({ before, after, map, boId }) => {
   ;[before, after].forEach((value) => {
-    if (isValidObjId(value)) {
-      map[boId] ? map[boId].push(value) : (map[boId] = [value])
-    }
+    /*
+      ! Note: There's an edge case we have to guard against here where
+      ! out of the events that are being fetched, say `indicationIds`
+      ! is going from null to an empty array. And there isn't yet a
+      ! delta in existence that's `indicationIds.0` -- outcome is that
+      ! the indication boId won't get put into the map, causing a destructuring breakage
+      ! in `const { name } = boMap[delta.boId]` in src/backend/resolvers/queries/events/matchEventEntityBoData.js.
+      ! The `if (isValidObjId(value))` condition doesn't account for cases where
+      ! after flattening, `indicationIds` remains an empty array. So we need to make
+      ! sure to always instantiate the boId entry in the map once, even if value
+      ! isn't a valid object id.
+    */
+    if (!(boId in map)) map[boId] = []
+    if (isValidObjectId(value)) map[boId].push(value)
   })
 }
-
-const isValidObjId = (value) =>
-  ObjectId.isValid(value) && ObjectId(value).equals(value)

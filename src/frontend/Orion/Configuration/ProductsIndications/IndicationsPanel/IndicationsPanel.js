@@ -15,6 +15,8 @@ import CopyOneOfStringButton from '../../../shared/CopyOneOfStringButton'
 import {
   GET_SOURCE_TREATMENT_PLANS,
   GET_SOURCE_INDICATIONS,
+  GET_JOIN_PATHWAYS_AND_PEOPLE,
+  GET_EVENTS,
 } from '../../../../api/queries'
 
 import {
@@ -128,7 +130,11 @@ const getButtonGroupCallback = (treatmentPlansByInd) => ({
     <DeleteButton
       itemId={_id}
       mutationDoc={DELETE_SOURCE_INDICATION}
-      refetchQueries={[{ query: GET_SOURCE_INDICATIONS }]}
+      refetchQueries={[
+        { query: GET_SOURCE_INDICATIONS },
+        { query: GET_JOIN_PATHWAYS_AND_PEOPLE },
+        { query: GET_EVENTS },
+      ]}
     />
   </>
 )

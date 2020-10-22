@@ -14,7 +14,7 @@ export const UPSERT_PATHWAYS_AND_PERSON_CONNECTION = gql`
       internalFields {
         internalNotes
         pathwaysManagementTypes
-        valueChairsIndicationIds
+        valueChairsIndications
         totalDisclosures
         dateDisclosure1
         dateDisclosure2
@@ -34,6 +34,48 @@ export const UPSERT_PATHWAYS_AND_PERSON_CONNECTION = gql`
       }
       startDate
       endDate
+      startQuarter
+      endQuarter
+    }
+  }
+`
+
+export const DELETE_PATHWAYS_AND_PERSON_CONNECTION = gql`
+  mutation DeletePathwaysAndPersonConnection(
+    $input: DeletePathwaysAndPersonConnectionInput!
+  ) {
+    deletePathwaysAndPersonConnection(input: $input) {
+      _id
+      personId
+      pathwaysId
+      indicationIds
+      pathwaysInfluencerTypes
+      tumorTypeSpecialty
+      internalFields {
+        internalNotes
+        pathwaysManagementTypes
+        valueChairsIndications
+        totalDisclosures
+        dateDisclosure1
+        dateDisclosure2
+        dateDisclosure3
+        dateDisclosure4
+      }
+      position
+      priority
+      alert {
+        date
+        type
+        description
+      }
+      exclusionSettings {
+        isExcluded
+        reason
+      }
+      startDate
+      endDate
+      startQuarter
+      endQuarter
     }
   }
 `

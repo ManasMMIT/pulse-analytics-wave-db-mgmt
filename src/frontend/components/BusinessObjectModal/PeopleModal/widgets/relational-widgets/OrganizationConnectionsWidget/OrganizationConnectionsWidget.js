@@ -9,7 +9,6 @@ import ConnectionPanel from './ConnectionPanel'
 
 import usePathwaysPersonConnections from 'frontend/hooks/usePathwaysPersonConnections'
 import Spinner from 'frontend/components/Spinner'
-import NoDataPlaceholder from 'frontend/components/NoDataPlaceholder'
 
 import { GET_ORGANIZATION_TYPES } from 'frontend/api/queries'
 
@@ -22,6 +21,7 @@ const OrganizationConnectionsWidget = ({ entity }) => {
   const { data: organizationTypeData, loading: orgTypeLoading } = useQuery(
     GET_ORGANIZATION_TYPES
   )
+
   const {
     data: connectionsData,
     loading: connectionsLoading,
@@ -30,10 +30,11 @@ const OrganizationConnectionsWidget = ({ entity }) => {
   })
 
   const [selectedOrganization, changeOrganization] = useState({})
-  const [hasNewOrgConnection, setNewOrgConnectionStatus] = useState(false)
+  const [isNewOrgBeingCreated, setWhetherNewOrgBeingCreated] = useState(false)
+  const [anyUnsavedChanges, setWhetherUnsavedChanges] = useState(false)
 
   useEffect(() => {
-    if (!orgTypeLoading && !connectionsLoading) {
+    if (!orgTypeLoading && !connectionsLoading && connectionsData.length) {
       changeOrganization(connectionsData[0])
     }
   }, [connectionsLoading, orgTypeLoading])
@@ -41,25 +42,27 @@ const OrganizationConnectionsWidget = ({ entity }) => {
   if (orgTypeLoading || connectionsLoading) return <Spinner size={28} />
 
   const { organizationTypes } = organizationTypeData
-  if (connectionsData.length === 0) return <NoDataPlaceholder />
 
   return (
     <WidgetContainer>
       <ConnectionsList
-        hasNewOrgConnection={hasNewOrgConnection}
-        setNewOrgConnectionStatus={setNewOrgConnectionStatus}
+        personId={entity._id}
+        isNewOrgBeingCreated={isNewOrgBeingCreated}
+        setWhetherNewOrgBeingCreated={setWhetherNewOrgBeingCreated}
         connectionsData={connectionsData}
         organizationTypes={organizationTypes}
         selectedOrganization={selectedOrganization}
         changeOrganization={changeOrganization}
+        anyUnsavedChanges={anyUnsavedChanges}
       />
       <ConnectionPanel
         entityId={entity._id}
         selectedOrganization={selectedOrganization}
         changeOrganization={changeOrganization}
-        setNewOrgConnectionStatus={setNewOrgConnectionStatus}
-        hasNewOrgConnection={hasNewOrgConnection}
+        setWhetherNewOrgBeingCreated={setWhetherNewOrgBeingCreated}
+        isNewOrgBeingCreated={isNewOrgBeingCreated}
         connectionsData={connectionsData}
+        setWhetherUnsavedChanges={setWhetherUnsavedChanges}
       />
     </WidgetContainer>
   )

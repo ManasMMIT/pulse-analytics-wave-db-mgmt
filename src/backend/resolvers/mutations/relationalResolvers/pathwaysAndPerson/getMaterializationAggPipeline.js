@@ -1,42 +1,139 @@
-/*
-! THIS FILE IS MEANT TO BE WHERE THE MATERIALIZATION AGG PIPELINE GOES.
-! NOTE BELOW IS LEFT FOR REFERENCE ABOUT WHAT FIELDS CORRESPOND TO WHAT.
-
-REF LINKS:
-- https://dedhamgroup.atlassian.net/wiki/spaces/POL/pages/1479999511/Pathway+Influencers+Bulk+Import
-- https://pulse-digital.invisionapp.com/console/Pathway-Influencers-ckdq0qtix0dml016kbjm955vl/ckdyt29dj00xt01zqvq7o2258/play?frame-cb=1600886656507
-*/
-
-// ! there must be match stage prior to this one
-// ! that excludes anything with exclusionSettings.excluded set to true
-
-const TEMP_projectStage = {
-  /*
-    personId join op will generate the following:
-      - member
-      - npi number
-      - affiliation
-      - affiliationPosition
-      - primaryState
-
-    pathwaysId join op will generate the following:
-      - slug
-      - organizationType
-      - organization
-
-  */
-  _id: 1,
-  influencerType: '$pathwaysInfluencerTypes', // ! convert 'pathwaysInfluencerTypes' array to joined string
-  title: '$position',
-  indication: '$indicationIds', // ! transform into hydrated array of strings
-  indicationCategory: '$tumorTypeSpeciality', // ! still unclear if this key will change to therapeuticAreaId
-  priority: 1,
-  startDate: '$startDate', // ! unf must be formatted to old '1/15/2019' date format
-  outdated: '$endDate', // ! guessing at this mapping; should be a date type
-  alertDate: '$alertDate.date',
-  alertType: '$alertDate.type',
-  alertDescription: '$alertDate.description',
-  materializedOn: '$$DATE', // ! new field for our reference
-}
-
-module.exports = () => []
+module.exports = (matchStage) => [
+  matchStage,
+  {
+    $lookup: {
+      from: 'organizations',
+      localField: 'pathwaysId',
+      foreignField: '_id',
+      as: 'pathways',
+    },
+  },
+  {
+    $lookup: {
+      from: 'people',
+      localField: 'personId',
+      foreignField: '_id',
+      as: 'person',
+    },
+  },
+  {
+    $lookup: {
+      from: 'indications',
+      localField: 'indicationIds',
+      foreignField: '_id',
+      as: 'indication',
+    },
+  },
+  {
+    $addFields: {
+      person: {
+        $arrayElemAt: ['$person', 0],
+      },
+      pathways: {
+        $arrayElemAt: ['$pathways', 0],
+      },
+      startDate: {
+        $dateToParts: {
+          date: '$startDate',
+          timezone: 'America/New_York',
+        },
+      },
+    },
+  },
+  {
+    $project: {
+      slug: '$pathways.slug',
+      createdOn: {
+        $ifNull: [
+          '$updatedOn',
+          {
+            $toDate: '$_id',
+          },
+        ],
+      },
+      organizationType: '$pathways.type',
+      organization: '$pathways.organization',
+      member: {
+        $concat: [
+          '$person.firstName',
+          {
+            $cond: [
+              {
+                $eq: ['$person.middleName', null],
+              },
+              '',
+              {
+                $concat: [' ', '$person.middleName'],
+              },
+            ],
+          },
+          {
+            $cond: [
+              {
+                $eq: ['$person.lastName', null],
+              },
+              '',
+              {
+                $concat: [' ', '$person.lastName'],
+              },
+            ],
+          },
+        ],
+      },
+      influencerType: {
+        $reduce: {
+          input: '$pathwaysInfluencerTypes',
+          initialValue: '',
+          in: {
+            $concat: [
+              '$$value',
+              {
+                $cond: [
+                  {
+                    $eq: ['$$value', ''],
+                  },
+                  '',
+                  ', ',
+                ],
+              },
+              '$$this',
+            ],
+          },
+        },
+      },
+      title: '$position',
+      affiliation: '$person.affiliation',
+      affiliationPosition: '$person.affiliationPosition',
+      primaryState: '$person.primaryState',
+      type: 'Pathways',
+      indication: '$indication.name',
+      indicationCategory: '$tumorTypeSpecialty',
+      startDate: {
+        $concat: [
+          {
+            $toString: '$startDate.month',
+          },
+          '/',
+          {
+            $toString: '$startDate.day',
+          },
+          '/',
+          {
+            $toString: '$startDate.year',
+          },
+        ],
+      },
+      priority: 1,
+      alertDate: '$alert.date',
+      alertType: '$alert.type',
+      alertDescription: '$alert.description',
+      npiNumber: {
+        $toString: '$person.nationalProviderIdentifier',
+      },
+      outdated: '$endDate',
+      materializedOn: '$$NOW',
+      pathwaysId: 1,
+      personId: 1,
+    },
+  },
+]

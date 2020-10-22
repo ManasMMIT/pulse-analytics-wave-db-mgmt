@@ -1,1 +1,1 @@
-export { default } from './ConnectionPanel'
+export { default } from './ConnectionPanelContainer'

@@ -1,10 +1,15 @@
+const { ObjectId } = require('mongodb')
+const { zonedTimeToUtc } = require('date-fns-tz')
+
+const DEFAULT_TIMEZONE = require('../../../../utils/defaultTimeZone')
+const BusinessObject = require('../../shared/BusinessObject')
+const getMaterializationAggPipeline = require('./getMaterializationAggPipeline')
+
 const INIT_PATHWAYS_AND_PERSON_CONNECTION_SYMBOL = Symbol(
   'INIT_PATHWAYS_AND_PERSON_CONNECTION_SYMBOL'
 )
-const { ObjectId } = require('mongodb')
-const BusinessObject = require('../../shared/BusinessObject')
-
 const SOURCE_COLLECTION = 'JOIN_pathways_people'
+const MATERIALIZED_DEV_COLLECTION = 'TEMP_pathwaysInfluencers'
 
 const PATHWAYS_BOID = ObjectId('5eac3251ac8a01743081f28d')
 const PERSON_BOID = ObjectId('5eea22d5adbf920fa4320487')
@@ -23,16 +28,23 @@ class PathwaysAndPersonConnection {
       // ! incoming data is splatted in like this because I'm worried
       // ! the class won't be able to keep up with changing fields
       ...data,
-      internalFields: {
-        ...data.internalFields,
-        valueChairsIndicationIds: data.internalFields.valueChairsIndicationIds.map(
-          ObjectId
-        ),
+      alert: {
+        ...data.alert,
+        date:
+          data.alert.date && zonedTimeToUtc(data.alert.date, DEFAULT_TIMEZONE),
       },
       _id: data._id ? ObjectId(data._id) : ObjectId(),
       personId: ObjectId(data.personId),
       pathwaysId: ObjectId(data.pathwaysId),
       indicationIds: data.indicationIds.map(ObjectId),
+      startDate:
+        data.startDate && zonedTimeToUtc(data.startDate, DEFAULT_TIMEZONE),
+      endDate: data.endDate && zonedTimeToUtc(data.endDate, DEFAULT_TIMEZONE),
+      startQuarter:
+        data.startQuarter &&
+        zonedTimeToUtc(data.startQuarter, DEFAULT_TIMEZONE),
+      endQuarter:
+        data.endQuarter && zonedTimeToUtc(data.endQuarter, DEFAULT_TIMEZONE),
     }
 
     connection.dbs = dbs
@@ -110,8 +122,22 @@ class PathwaysAndPersonConnection {
       )
       .then(({ ops }) => ops[0])
 
-    // TODO: Step 2: Materialize the connection in dev
-    // MATERIALIZATION OP
+    // Step 2: Materialize the connection in dev if not excluded
+    if (!createdConnection.exclusionSettings.isExcluded) {
+      const materializedDoc = await pulseCoreDb
+        .collection(SOURCE_COLLECTION)
+        .aggregate(
+          getMaterializationAggPipeline({
+            $match: { _id: createdConnection._id },
+          }),
+          { session }
+        )
+        .next()
+
+      await pulseDevDb
+        .collection(MATERIALIZED_DEV_COLLECTION)
+        .insertOne(materializedDoc, { session })
+    }
 
     return createdConnection
   }
@@ -135,8 +161,31 @@ class PathwaysAndPersonConnection {
       )
       .then(({ value }) => value)
 
-    // TODO: Step 2: Update the materialized version of the connection
-    // in pulse-dev
+    // Step 2: Update the materialized version of the connection;
+    // If isExcluded, delete it from materialized collection; otherwise upsert it
+    if (updatedConnection.exclusionSettings.isExcluded) {
+      await pulseDevDb
+        .collection(MATERIALIZED_DEV_COLLECTION)
+        .deleteOne({ _id: updatedConnection._id }, { session })
+    } else {
+      const materializedDoc = await pulseCoreDb
+        .collection(SOURCE_COLLECTION)
+        .aggregate(
+          getMaterializationAggPipeline({
+            $match: { _id: updatedConnection._id },
+          }),
+          { session }
+        )
+        .next()
+
+      await pulseDevDb
+        .collection(MATERIALIZED_DEV_COLLECTION)
+        .updateOne(
+          { _id: updatedConnection._id },
+          { $set: materializedDoc },
+          { session, upsert: true }
+        )
+    }
 
     return updatedConnection
   }
@@ -150,8 +199,10 @@ class PathwaysAndPersonConnection {
       .collection(SOURCE_COLLECTION)
       .findOneAndDelete({ _id }, { session })
 
-    // TODO: Step 2: Cascade delete JOIN entries in pulse-dev.pathwaysInfluencers
-    // MATERIALIZATION OP
+    // Step 2: Cascade delete JOIN entries in pulse-dev.pathwaysInfluencers
+    await pulseDevDb
+      .collection(MATERIALIZED_DEV_COLLECTION)
+      .deleteOne({ _id: deletedConnection._id }, { session })
 
     return deletedConnection
   }

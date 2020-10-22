@@ -12,7 +12,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Fixed** for any bug fixes.
 - **Security** in case of vulnerabilities.
 
-## [Unreleased] - Started: 10-6-20
+## [Unreleased] - Started: 10-22-20
+
+## [3.9.0] - Started: 10-6-20
+
+### Changed
+- `Orion/Pathways-Person Connection Widget and Form`:
+  - Refactored widget/form; wired up to React local state as well as API upsert and delete endpoints; tweaked the `JOIN_pathways_people` schema and form fields/interactions [#798](https://github.com/pulse-data/wave-db-mgmt/pull/798) [#799](https://github.com/pulse-data/wave-db-mgmt/pull/799) [#800](https://github.com/pulse-data/wave-db-mgmt/pull/800)
+  - Added materialization steps to CUD ops in PathwaysAndPersonConnection to materialize data to `pulse-dev.TEMP_pathwaysInfluencers` for now [#805](https://github.com/pulse-data/wave-db-mgmt/pull/805)
+  - Added cascade DELETE logic so when a pathways, person, or indication is deleted, corresponding deletions are made in the pathways/people collections in core and dev; tweaked FE cache management to also be in sync/not break [#808](https://github.com/pulse-data/wave-db-mgmt/pull/808)
+  - Added logic to account for `isExcluded` toggling; when connection `isExcluded` remove/don't add to materialized collection; otherwise upsert into materialized collection [#812](https://github.com/pulse-data/wave-db-mgmt/pull/812)
+  - Added cascade UPDATE logic so when a pathways, person, or indication is updated, corresponding updates are made in the `TEMP_pathwaysInfluencers` collection in dev [#811](https://github.com/pulse-data/wave-db-mgmt/pull/811)
 
 ## [3.8.1] - Started: 9-24-20
 
@@ -23,7 +33,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Format delta labels [#787](https://github.com/pulse-data/wave-db-mgmt/pull/787)
   - Proof of concept for updating connection [#791](https://github.com/pulse-data/wave-db-mgmt/pull/791)
   - Persist `fieldId`, `fieldLabel`, and `boId` on every delta to snapshot what it was [#789](https://github.com/pulse-data/wave-db-mgmt/pull/789)
-- `Orion/Pathways-Person Connection Widget and Form`: 
+- `Orion/Pathways-Person Connection Widget and Form`:
   - Scaffold out the pathways/person connection widget [#783](https://github.com/pulse-data/wave-db-mgmt/pull/783)
   - Consolidate all pathways/person connection querying to have a React custom hook hit `JOIN_pathways_people` to address potential caching issues [#788](https://github.com/pulse-data/wave-db-mgmt/pull/788)
 - `Orion/Quality of Access Score`: Cascade qoa score updates to `payerLatestAccess` and `payerHistoricalAccess` collections in `pulse-dev` [#796](https://github.com/pulse-data/wave-db-mgmt/pull/796)

@@ -1,4 +1,5 @@
 import React from 'react'
+import _ from 'lodash'
 import { useMutation } from '@apollo/react-hooks'
 import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
@@ -7,7 +8,14 @@ import Button from 'frontend/components/Button'
 import Color from 'frontend/utils/color'
 import Spacing from 'frontend/utils/spacing'
 
-import { UPSERT_PATHWAYS_AND_PERSON_CONNECTION } from 'frontend/api/mutations'
+import stripTypename from '../../../../../../../Orion/shared/strip-typename'
+
+import { GET_EVENTS, GET_JOIN_PATHWAYS_AND_PEOPLE } from 'frontend/api/queries'
+
+import {
+  UPSERT_PATHWAYS_AND_PERSON_CONNECTION,
+  DELETE_PATHWAYS_AND_PERSON_CONNECTION,
+} from 'frontend/api/mutations'
 
 const ButtonsWrapper = styled.div({
   display: 'flex',
@@ -15,7 +23,17 @@ const ButtonsWrapper = styled.div({
   alignItems: 'center',
 })
 
-const ButtonCluster = ({ hasNewOrgConnection, cancelHandler, data }) => {
+const ButtonCluster = ({
+  isNewOrgBeingCreated,
+  cancelHandler,
+  orgData,
+  setWhetherUnsavedChanges,
+  setWhetherNewOrgBeingCreated,
+  changeOrganization,
+  connectionsData,
+}) => {
+  orgData = stripTypename(_.cloneDeep(orgData))
+
   const {
     _id,
     pathwaysId,
@@ -30,48 +48,79 @@ const ButtonCluster = ({ hasNewOrgConnection, cancelHandler, data }) => {
     exclusionSettings,
     startDate,
     endDate,
-  } = data
+    startQuarter,
+    endQuarter,
+  } = orgData
 
-  const { __typename: t1, ...internalFieldsCleaned } = internalFields || {}
-  internalFieldsCleaned.valueChairsIndicationIds =
-    internalFieldsCleaned.valueChairsIndicationIds || []
-
-  const { __typename: t2, ...alertCleaned } = alert || {}
-
-  const { __typename: t3, ...exclusionSettingsCleaned } =
-    exclusionSettings || {}
-
-  const formattedData = {
+  const dataToPersist = {
     _id,
     pathwaysId,
     personId,
     indicationIds,
     pathwaysInfluencerTypes,
     tumorTypeSpecialty,
-    internalFields: internalFieldsCleaned,
+    internalFields,
     position,
     priority,
-    alert: alertCleaned,
-    exclusionSettings: exclusionSettingsCleaned,
+    alert,
+    exclusionSettings,
     startDate,
     endDate,
+    startQuarter,
+    endQuarter,
   }
 
   const [upsert] = useMutation(UPSERT_PATHWAYS_AND_PERSON_CONNECTION, {
     variables: {
-      input: formattedData,
+      input: dataToPersist,
     },
-    // refetchQueries: [
-    //   {
-    //     query: GET_JOIN_OBMS_SERVICES_AND_OBMS_SERVICES_CATEGORIES,
-    //     variables: { obmServiceId: entity._id },
-    //   },
-    //   {
-    //     query: GET_VIEW_OBM_SERVICES,
-    //   },
-    // ],
+    refetchQueries: [
+      { query: GET_EVENTS },
+      { query: GET_JOIN_PATHWAYS_AND_PEOPLE },
+    ],
+    awaitRefetchQueries: true,
+    onCompleted: (res) => {
+      if (isNewOrgBeingCreated) {
+        setWhetherNewOrgBeingCreated(false)
+        const newConnectionId = Object.values(res)[0]._id
+        changeOrganization(
+          connectionsData.find(({ _id }) => _id === newConnectionId)
+        )
+      }
+
+      setWhetherUnsavedChanges(false)
+    },
     onError: alert,
   })
+
+  const [deleteConnection] = useMutation(
+    DELETE_PATHWAYS_AND_PERSON_CONNECTION,
+    {
+      variables: {
+        input: dataToPersist,
+      },
+      refetchQueries: [
+        { query: GET_EVENTS },
+        { query: GET_JOIN_PATHWAYS_AND_PEOPLE },
+      ],
+      awaitRefetchQueries: true,
+      onCompleted: () => {
+        changeOrganization(connectionsData[0] || {}) // ! if no more connections, pass empty object
+        setWhetherUnsavedChanges(false)
+      },
+      onError: alert,
+    }
+  )
+
+  const deleteHandler = () => {
+    if (
+      window.confirm(
+        'Are you sure you want to permanently delete this connection?'
+      )
+    ) {
+      deleteConnection()
+    }
+  }
 
   return (
     <ButtonsWrapper>
@@ -90,10 +139,11 @@ const ButtonCluster = ({ hasNewOrgConnection, cancelHandler, data }) => {
       >
         Save
       </Button>
-      {!hasNewOrgConnection && (
+
+      {!isNewOrgBeingCreated && (
         <Button
           buttonStyle={{ margin: `0 ${Spacing.S3}` }}
-          onClick={() => {}}
+          onClick={deleteHandler}
           type="secondary"
           color={Color.RED}
           iconName="delete"
@@ -105,8 +155,13 @@ const ButtonCluster = ({ hasNewOrgConnection, cancelHandler, data }) => {
 }
 
 ButtonCluster.propTypes = {
+  isNewOrgBeingCreated: PropTypes.bool.isRequired,
   cancelHandler: PropTypes.func.isRequired,
-  hasNewOrgConnection: PropTypes.bool.isRequired,
+  orgData: PropTypes.object.isRequired,
+  setWhetherUnsavedChanges: PropTypes.func.isRequired,
+  setWhetherNewOrgBeingCreated: PropTypes.func.isRequired,
+  changeOrganization: PropTypes.func.isRequired,
+  connectionsData: PropTypes.array.isRequired,
 }
 
 ButtonCluster.defaultProps = {}
