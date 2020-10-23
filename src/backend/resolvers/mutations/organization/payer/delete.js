@@ -5,7 +5,7 @@ const deleteTreatmentPlanConnectionsAndHistory = require('../utils/deleteTreatme
 const deletePayerOrganization = async (
   parent,
   { input: { _id: stringId } },
-  { pulseDevDb, pulseCoreDb, coreRoles, mongoClient },
+  { pulseDevDb, pulseCoreDb, pulseProdDb, coreRoles, mongoClient },
   info
 ) => {
   const _id = ObjectId(stringId)
@@ -83,6 +83,9 @@ const deletePayerOrganization = async (
     await pulseDevDb
       .collection('obmsPayers')
       .deleteMany({ 'payer._id': _id }, { session })
+
+    // STEP 7: delete payer copies in dev
+    await pulseDevDb.collection('payers').deleteOne({ _id }, { session })
   })
 
   return deletedOrg

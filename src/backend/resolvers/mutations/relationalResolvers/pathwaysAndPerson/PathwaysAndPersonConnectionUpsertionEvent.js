@@ -26,7 +26,13 @@ class PathwaysAndPersonConnectionUpsertionEvent extends Event {
     return super.getDeltas({
       prev: this.entity.prevData, // will be empty obj if create action
       next: this.entity.data,
-      excludedPaths: ['createdOn', 'updatedOn'],
+      excludedPaths: [
+        'createdOn',
+        'updatedOn',
+        'source', // field not part of the connection form
+        'contact', // field not part of the connection form
+        'internalRole', // field not part of the connection form
+      ],
     })
   }
 }
