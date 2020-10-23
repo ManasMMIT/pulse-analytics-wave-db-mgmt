@@ -19,7 +19,13 @@ class PathwaysAndPersonConnectionDeletionEvent extends Event {
   getDeltas() {
     return super.getDeltas({
       prev: this.entity.prevData,
-      excludedPaths: ['createdOn', 'updatedOn'],
+      excludedPaths: [
+        'createdOn',
+        'updatedOn',
+        'source', // field not part of the connection form
+        'contact', // field not part of the connection form
+        'internalRole', // field not part of the connection form
+      ],
     })
   }
 }

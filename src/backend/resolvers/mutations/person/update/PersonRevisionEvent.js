@@ -20,7 +20,11 @@ class PersonRevisionEvent extends Event {
     return super.getDeltas({
       prev: this.entity.prevData,
       next: this.entity.data,
-      excludedPaths: ['createdOn', 'updatedOn'],
+      excludedPaths: [
+        'createdOn',
+        'updatedOn',
+        'isPathwaysPeople', // exclude special and temporary 'isPathwaysPeople' key
+      ],
     })
   }
 }

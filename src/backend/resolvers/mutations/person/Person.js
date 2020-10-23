@@ -3,6 +3,10 @@ const { ObjectId } = require('mongodb')
 
 const BusinessObject = require('../shared/BusinessObject')
 
+const EventProcessor = require('../shared/Event/EventProcessor')
+const PathwaysAndPersonConnection = require('../relationalResolvers/pathwaysAndPerson/PathwaysAndPersonConnection')
+const PathwaysAndPersonConnectionDeletionEvent = require('../relationalResolvers/pathwaysAndPerson/PathwaysAndPersonConnectionDeletionEvent')
+
 const PERSON_BUSINESS_OBJECT_ID = ObjectId('5eea22d5adbf920fa4320487')
 const SOURCE_COLLECTION = 'people'
 
@@ -124,7 +128,7 @@ class Person {
     return updatedPerson
   }
 
-  async delete(session, timestamp) {
+  async delete(session, timestamp, userData) {
     const { pulseCoreDb, pulseDevDb } = this.dbs
     const { _id } = this.data
     // Step 1: Delete person from own collection
@@ -141,6 +145,38 @@ class Person {
     await pulseDevDb
       .collection('obmsInfluencers')
       .deleteMany({ 'person._id': _id }, { session })
+
+    // Step 4: Delete all pathways/people connections touching that person, core and dev
+    const connectionsToDelete = await pulseCoreDb
+      .collection('JOIN_pathways_people')
+      .find({ personId: deletedPerson._id })
+      .toArray()
+
+    const deletionOps = connectionsToDelete.map(async (connectionToDelete) => {
+      const connection = await PathwaysAndPersonConnection.init({
+        data: connectionToDelete,
+        dbs: { pulseCoreDb, pulseDevDb },
+      })
+
+      const event = new PathwaysAndPersonConnectionDeletionEvent(
+        userData,
+        connection
+      )
+
+      const eventProc = new EventProcessor()
+
+      await eventProc.process({
+        event,
+        dbs: { pulseCoreDb },
+        session,
+      })
+    })
+
+    await Promise.all(deletionOps)
+
+    await pulseDevDb
+      .collection('TEMP_pathwaysInfluencers')
+      .deleteMany({ personId: deletedPerson._id }, { session })
 
     return deletedPerson
   }

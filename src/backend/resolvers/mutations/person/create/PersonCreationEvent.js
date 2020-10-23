@@ -19,7 +19,11 @@ class PersonCreationEvent extends Event {
   getDeltas() {
     return super.getDeltas({
       next: this.entity.data,
-      excludedPaths: ['createdOn', 'updatedOn'],
+      excludedPaths: [
+        'createdOn',
+        'updatedOn',
+        'isPathwaysPeople', // exclude special and temporary 'isPathwaysPeople' key
+      ],
     })
   }
 }
