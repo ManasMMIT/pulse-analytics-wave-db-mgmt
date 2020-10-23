@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Security** in case of vulnerabilities.
 
 ## [Unreleased] - Started: 10-22-20
+- `Orion/Event Logging Feature`: Store entire array element deltas whenever arrays are not equal [#806](https://github.com/pulse-data/wave-db-mgmt/pull/806)
 
 ## [3.9.0] - Started: 10-6-20
 

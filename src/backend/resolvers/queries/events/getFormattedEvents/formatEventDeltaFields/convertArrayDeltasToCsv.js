@@ -1,8 +1,6 @@
 const _ = require('lodash')
 const { unflatten } = require('flat')
 
-const PLACEHOLDER_VALUE = require('./placeholder-value')
-
 const nestedKeyDelimiter = '|||||'
 
 module.exports = (deltas) => {
@@ -33,11 +31,10 @@ const reformArrayDeltas = ({ prev, next }) => {
   })
 }
 
-// Array element formatting: maintain complete array with `holes` displayed as none.
+// Remove trailing nulls from sub or superset deltas to not show in view -- eg. ['a', 'b', null, null, null]
+// nulls are generated for the before array in the following delta: { field: 'a.2', before: null, after: 2 }
 const getCsvValues = (values) => {
-  return values
-    .map((val) => (val === null ? PLACEHOLDER_VALUE : val))
-    .join(', ')
+  return values.filter((val) => ![undefined, null].includes(val)).join(', ')
 }
 
 const getPrevAndNextObjects = (deltas) => {

@@ -44,7 +44,19 @@ class Event {
   }
 
   getFlattenedAndFilteredKeys(obj, excludedPaths) {
-    const flattenedObj = flatten(obj)
+    // ! filter excludedPaths keys BOTH before and after flattening
+    // ! filter empty arrays, because flatten func default behavior
+    const includedObjData = Object.entries(obj).reduce((acc, [key, value]) => {
+      const isEmptyArray = Array.isArray(value) && _.isEmpty(value)
+
+      // ! key during this filter is unflattened -- e.g., indications NOT indications.0
+      // ! so we want to screen at this stage, as well.
+      if (excludedPaths.includes(key) || isEmptyArray) return acc
+      acc[key] = value
+      return acc
+    }, {})
+
+    const flattenedObj = flatten(includedObjData)
 
     const keys = Object.keys(flattenedObj)
 
@@ -81,8 +93,23 @@ class Event {
     const commonFieldsWithChangedValues = commonPaths.reduce((acc, path) => {
       const prevValue = _.get(prev, path)
       const nextValue = _.get(next, path)
+      const matchesArraySyntax = path.match(/(.+)\.[0-9]+/)
 
-      if (!_.isEqual(prevValue, nextValue)) {
+      if (matchesArraySyntax) {
+        const [ø, actualArrayPath] = matchesArraySyntax
+
+        const entirePrevArray = _.get(prev, actualArrayPath, {})
+        const entireNextArray = _.get(next, actualArrayPath, {})
+
+        // ! if prev/next arrays are not equal, push every element array delta
+        if (!_.isEqual(entirePrevArray, entireNextArray)) {
+          acc.push({
+            field: path,
+            before: prevValue,
+            after: nextValue,
+          })
+        }
+      } else if (!_.isEqual(prevValue, nextValue)) {
         acc.push({
           field: path,
           before: prevValue,

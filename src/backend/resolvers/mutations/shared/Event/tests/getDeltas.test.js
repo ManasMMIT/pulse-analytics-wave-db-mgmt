@@ -508,4 +508,139 @@ describe(`getDeltas util on base Event class works as expected`, () => {
       },
     ])
   })
+
+  describe('Correctly special cases for array value deltas', () => {
+    test('completely equal array generates no delta', () => {
+      const deltas = event.getDeltas({
+        prev: { a: [1, 2, 3] },
+        next: { a: [1, 2, 3] },
+      })
+
+      expect(deltas).toStrictEqual([])
+    })
+
+    test('re-ordered array generates delta with before/after arrays completely preserved', () => {
+      const deltas = event.getDeltas({
+        prev: { a: [1, 2, 3] },
+        next: { a: [1, 3, 2] },
+      })
+
+      expect(deltas).toStrictEqual([
+        {
+          field: 'a.0',
+          before: 1,
+          after: 1,
+        },
+        {
+          field: 'a.1',
+          before: 2,
+          after: 3,
+        },
+        {
+          field: 'a.2',
+          before: 3,
+          after: 2,
+        },
+      ])
+    })
+
+    test('superset array generates delta with before/after arrays completely preserved', () => {
+      const deltas = event.getDeltas({
+        prev: { a: [1, 2, 3] },
+        next: { a: [1, 2, 3, 4, 5] },
+      })
+
+      expect(deltas).toStrictEqual([
+        {
+          field: 'a.0',
+          before: 1,
+          after: 1,
+        },
+        {
+          field: 'a.1',
+          before: 2,
+          after: 2,
+        },
+        {
+          field: 'a.2',
+          before: 3,
+          after: 3,
+        },
+        {
+          field: 'a.3',
+          before: null,
+          after: 4,
+        },
+        {
+          field: 'a.4',
+          before: null,
+          after: 5,
+        },
+      ])
+    })
+    test('subset array generates delta with before/after arrays completely preserved', () => {
+      const deltas = event.getDeltas({
+        prev: { a: [1, 2, 3, 4] },
+        next: { a: [1, 2] },
+      })
+
+      expect(deltas).toStrictEqual([
+        {
+          field: 'a.0',
+          before: 1,
+          after: 1,
+        },
+        {
+          field: 'a.1',
+          before: 2,
+          after: 2,
+        },
+        {
+          field: 'a.2',
+          before: 3,
+          after: null,
+        },
+        {
+          field: 'a.3',
+          before: 4,
+          after: null,
+        },
+      ])
+    })
+
+    test('generates deltas for unequal nested arrays', () => {
+      const deltas = event.getDeltas({
+        prev: { a: { cat: [1, 2, 3, 4] } },
+        next: { a: { cat: [1, 2, 3, 4, 5] } },
+      })
+
+      expect(deltas).toStrictEqual([
+        {
+          field: 'a.cat.0',
+          before: 1,
+          after: 1,
+        },
+        {
+          field: 'a.cat.1',
+          before: 2,
+          after: 2,
+        },
+        {
+          field: 'a.cat.2',
+          before: 3,
+          after: 3,
+        },
+        {
+          field: 'a.cat.3',
+          before: 4,
+          after: 4,
+        },
+        {
+          field: 'a.cat.4',
+          before: null,
+          after: 5,
+        },
+      ])
+    })
+  })
 })
