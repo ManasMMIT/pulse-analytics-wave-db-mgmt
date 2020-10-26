@@ -3,30 +3,15 @@ const _ = require('lodash')
 const { ObjectId } = require('mongodb')
 const getMaterializationAggPipeline = require('../src/backend/resolvers/mutations/relationalResolvers/pathwaysAndPerson/getMaterializationAggPipeline')
 
-  /*
-   * Steps to Follow:
-   * 1. Make sure the people collection is at a baseline (Sync it with the production cluster)'
-   * - You can export a json version of the people collection in prod and replace what's existing in the people collection on staging
-   * 2. Run the script
-   * - The script will fetch the documents from the "RAW_pathwaysInfluencers" collection 
-   *   and insert the corresponding people into the "people" collection
-   * - It will simultaneously get the id of each person and insert the corresponding JOIN documents in the "JOIN_pathways_people" collection
-  */
-
-const JOIN_PEOPLE_COLLECTION = 'JOIN_pathways_people'
+const JOIN_PEOPLE_COLLECTION = 'TEMP_JOIN_pathways_people'
 const PEOPLE_COLLECTION = 'people'
-const TEMP_PEOPLE_COLLECTION = 'TEMP_pathwaysInfluencers'
-const EXISTING_PEOPLE_COLLECTION = 'EXISTING_pathways_people'
-const EVENTS_COLLECTIONS = 'events'
-const ALL_EXCLUDED_ROWS_COLL = 'EXCLUDED_pathwaysInfluencers'
+const TEMP_PEOPLE_COLLECTION = 'TEMP_pathwaysInfluencers_2'
+const EVENTS_COLLECTIONS = 'TEMP_events'
+const SOURCE_COLLECTION = 'RAW_pathwaysInfluencers'
 
 const cleanCollections = async ({ pulseCoreDb, pulseDevDb }) => {
   console.log('Remove All JOIN_pathways_people documents...')
   await pulseCoreDb.collection(JOIN_PEOPLE_COLLECTION)
-    .deleteMany()
-
-  console.log('Remove All EXISTING_pathways_people documents...')
-  await pulseCoreDb.collection(EXISTING_PEOPLE_COLLECTION)
     .deleteMany()
 
   console.log('Remove All TEMP_pathwaysInfluencers collection...')
@@ -41,13 +26,9 @@ const cleanCollections = async ({ pulseCoreDb, pulseDevDb }) => {
   console.log('Reset the core events collections (otherwise old, non-applicable events will be there)')
   await pulseCoreDb.collection(EVENTS_COLLECTIONS)
     .deleteMany()
-
-  console.log('Reset global excluded rows collection')
-  await pulseDevDb.collection(ALL_EXCLUDED_ROWS_COLL)
-    .deleteMany()
 }
 
-const materializeDevInfluencers = ({ pulseCoreDb, pulseDevDb, joinDocId }) => async () => {
+const materializeDevInfluencers = async ({ pulseCoreDb, pulseDevDb, joinDocId }) => {
   const materializedDoc = await pulseCoreDb
     .collection(JOIN_PEOPLE_COLLECTION)
     .aggregate(
@@ -100,14 +81,11 @@ const getSeedOps = ({ pulseCoreDb, pulseDevDb, keyedIndicationsByName }) => asyn
 }) => {
   let joinPersonId = ObjectId(personId)
 
-  // See if person with personId already exists (anyone with a personId will most likely already be in the DB)
-  const personWithId = await pulseCoreDb.collection(PEOPLE_COLLECTION).findOne({ _id: joinPersonId })
-  const personWithNpi = await pulseCoreDb.collection(PEOPLE_COLLECTION).findOne({ nationalProviderIdentifier: Number(npiNumber) })
-  const personWithName = await pulseCoreDb.collection(PEOPLE_COLLECTION).findOne({
-    firstName,
-    middleName,
-    lastName
-  })
+  // Step 4a: See if person with personId already exists (anyone with a personId will most likely already be in the DB)
+  const personWithId = await pulseCoreDb.collection(PEOPLE_COLLECTION)
+    .findOne({ _id: joinPersonId })
+  const personWithNpi = await pulseCoreDb.collection(PEOPLE_COLLECTION)
+    .findOne({ nationalProviderIdentifier: Number(npiNumber) })
 
   const pathwaysOrg = await pulseCoreDb.collection('organizations')
     .findOne({ type: 'Pathways', slug })
@@ -122,9 +100,9 @@ const getSeedOps = ({ pulseCoreDb, pulseDevDb, keyedIndicationsByName }) => asyn
   if (personWithNpi) joinPersonId = personWithNpi._id
   if (personWithId) joinPersonId = personWithId._id
 
-  // Create the person if it doesn't already exist in the people collection
+  // Step 4b: Insert the person if it doesn't already exist in the people collection
   if (personWithId === null && personWithNpi === null) {
-    joinPersonId = await pulseCoreDb.collection(PEOPLE_COLLECTION)
+    const insertedObj = await pulseCoreDb.collection(PEOPLE_COLLECTION)
       .insertOne({
         _id: ObjectId(),
         firstName,
@@ -138,7 +116,8 @@ const getSeedOps = ({ pulseCoreDb, pulseDevDb, keyedIndicationsByName }) => asyn
         updatedOn: new Date(),
         isPathwaysPeople: true // flag to differentiate the injected people
       })
-
+    
+    joinPersonId = insertedObj.insertedId
     console.log(`Inserted Person of ${ firstName } ${ middleName } ${ lastName } into people collection`)
   }
 
@@ -180,6 +159,7 @@ const getSeedOps = ({ pulseCoreDb, pulseDevDb, keyedIndicationsByName }) => asyn
     },
   }
 
+  // Step 4c: Insert the join document associated with the person
   await pulseCoreDb.collection(JOIN_PEOPLE_COLLECTION)
     .insertOne(joinPathwaysPeopleDoc)
 
@@ -187,8 +167,7 @@ const getSeedOps = ({ pulseCoreDb, pulseDevDb, keyedIndicationsByName }) => asyn
 
   const shouldSkipMaterialization = joinPathwaysPeopleDoc.exclusionSettings.isExcluded
 
-  // Materialize Temp Pathways Inflluencers on pulse-dev unless
-  // isExcluded is truthy
+  // Step 4d: Materialize Temp Pathways Inflluencers on pulse-dev unless isExcluded is truthy
   if (shouldSkipMaterialization) {
     console.log(`Doc for ${joinDocId} skipped because isExcluded truthy`) 
   } else {
@@ -202,23 +181,30 @@ const seedPeopleFromPathwaysInfluencers = async () => {
   const pulseCoreDb = dbs.db('pulse-core')
   const pulseDevDb = dbs.db('pulse-dev')
 
-  // 1. Clean/Reset all collections
-  cleanCollections()
+  const dbConfig = {
+    pulseCoreDb,
+    pulseDevDb,
+  }
 
-  // Find all influencers that needs to be udpated
-  const pathwaysInfluencers = await pulseDevDb.collection('RAW_pathwaysInfluencers')
-    .find({ type: 'Pathways' })
+  // Step 1: Clean/Reset all collections
+  await cleanCollections({ ...dbConfig })
+
+  // Step 2: Find all influencers that needs to be udpated
+  const pathwaysInfluencers = await pulseDevDb.collection(SOURCE_COLLECTION)
+    .find({ type: 'Pathways' }) // Extra check in case there are blank types
     .toArray()
 
+  // Step 3: Create indication key map
   const indications = await pulseCoreDb.collection('indications')
     .find()
     .toArray()
-
   const keyedIndicationsByName = _.keyBy(indications, 'name')
 
-  const seedOpsCallback = getSeedOps({ pulseCoreDb, pulseDevDb, keyedIndicationsByName })
+  // Step 4:. Create DB Seed Ops
+  const seedOpsCallback = getSeedOps({ ...dbConfig, keyedIndicationsByName })
   const ops = pathwaysInfluencers.map(seedOpsCallback)
 
+  // Step 5. Execute DB Seed Ops
   await Promise.all(ops)
   
   await dbs.close()
