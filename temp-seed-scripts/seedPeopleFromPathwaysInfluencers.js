@@ -18,6 +18,7 @@ const PEOPLE_COLLECTION = 'people'
 const TEMP_PEOPLE_COLLECTION = 'TEMP_pathwaysInfluencers'
 const EXISTING_PEOPLE_COLLECTION = 'EXISTING_pathways_people'
 const EVENTS_COLLECTIONS = 'events'
+const ALL_EXCLUDED_ROWS_COLL = 'EXCLUDED_pathwaysInfluencers'
 
 const seedPeopleFromPathwaysInfluencers = async () => {
   const dbs = await connectToMongoDb()
@@ -61,9 +62,25 @@ const seedPeopleFromPathwaysInfluencers = async () => {
   await pulseCoreDb.collection(EVENTS_COLLECTIONS)
     .deleteMany()
 
+  console.log('Reset global excluded rows collection')
+  await pulseDevDb.collection(ALL_EXCLUDED_ROWS_COLL)
+    .deleteMany()
+
   const indications = await pulseCoreDb.collection('indications')
     .find()
     .toArray()
+
+  const initiallyExcludedRows = await pulseDevDb.collection('RAW_pathwaysInfluencers')
+    .find({ 
+      $or: [
+          { type: { $ne: 'Pathways' } }, 
+          { npiNumber: { $in: ['N/A', null] }, personId: null }
+        ] 
+      })
+    .toArray()
+
+  await pulseDevDb.collection(ALL_EXCLUDED_ROWS_COLL)
+    .insertMany(initiallyExcludedRows)
     
   const keyedIndicationsByName = _.keyBy(indications, 'name')
 
@@ -211,13 +228,22 @@ const seedPeopleFromPathwaysInfluencers = async () => {
 
         console.log(`Inserting person: ${ firstName} ${ middleName } ${ lastName } into EXISTING_pathways_people`)
       }
+    } else {
+      await pulseDevDb
+        .collection(ALL_EXCLUDED_ROWS_COLL)
+        .insertOne(datum)
+
+      console.log(`Excluding person and inserting into excluded collection`)
     }
   })
 
   await Promise.all(ops)
-  
-  dbs.close()
+
+  await dbs.close()
 }
 
-seedPeopleFromPathwaysInfluencers()
+seedPeopleFromPathwaysInfluencers().then(() => {
+  console.log('Script finished')
+  process.exit()
+})
 
