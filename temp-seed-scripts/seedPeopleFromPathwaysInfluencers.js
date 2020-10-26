@@ -5,7 +5,7 @@ const getMaterializationAggPipeline = require('../src/backend/resolvers/mutation
 
 const JOIN_PEOPLE_COLLECTION = 'TEMP_JOIN_pathways_people'
 const PEOPLE_COLLECTION = 'TEMP_people'
-const TEMP_PEOPLE_COLLECTION = 'TEMP_pathwaysInfluencers_2'
+const TEMP_MATERIALIZED_COLLECTION = 'TEMP_pathwaysInfluencers_2'
 const EVENTS_COLLECTIONS = 'TEMP_events'
 const SOURCE_COLLECTION = 'RAW_pathwaysInfluencers'
 
@@ -15,7 +15,7 @@ const cleanCollections = async ({ pulseCoreDb, pulseDevDb }) => {
     .deleteMany()
 
   console.log('Remove All TEMP_pathwaysInfluencers collection...')
-  await pulseDevDb.collection(TEMP_PEOPLE_COLLECTION)
+  await pulseDevDb.collection(TEMP_MATERIALIZED_COLLECTION)
     .deleteMany()
 
   console.log('Remove All Pathways People documents from People collection...')
@@ -171,7 +171,7 @@ const getSeedOps = ({
       .next()
 
     await pulseDevDb
-      .collection(TEMP_PEOPLE_COLLECTION)
+      .collection(TEMP_MATERIALIZED_COLLECTION)
       .insertOne(materializedDoc)
   }
 }
@@ -190,7 +190,7 @@ const seedPeopleFromPathwaysInfluencers = async () => {
     // Step 1: Clean/Reset all collections
     await cleanCollections({ ...dbConfig })
 
-    // Step 2: Find all influencers that needs to be udpated
+    // Step 2: Find all influencers that needs to be seeded
     const pathwaysInfluencers = await pulseDevDb.collection(SOURCE_COLLECTION)
       .find({ type: 'Pathways' }) // Extra check in case there are blank types
       .toArray()
@@ -199,7 +199,6 @@ const seedPeopleFromPathwaysInfluencers = async () => {
     const indications = await pulseCoreDb.collection('indications')
       .find()
       .toArray()
-      
     const keyedIndicationsByName = _.keyBy(indications, 'name')
 
     // Step 4:. Create DB Seed Ops
