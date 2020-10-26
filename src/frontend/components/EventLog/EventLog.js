@@ -1,8 +1,11 @@
 import React from 'react'
 import styled from '@emotion/styled'
 import { formatDateTime } from '../../utils/formatDate'
+import { transparentize } from 'polished'
 
-import { Spacing, AlphaColors } from 'frontend/utils/pulseStyles'
+import Color from 'frontend/utils/color'
+import Spacing from 'frontend/utils/spacing'
+import FontSpace from 'frontend/utils/fontspace'
 
 import useEventLog from './useEventLog'
 
@@ -10,48 +13,53 @@ const EventLogWrapper = styled.div(
   {
     height: '100%',
     overflowY: 'scroll',
+    padding: Spacing.S4,
   },
   ({ style }) => style
 )
 
 const EventWrapper = styled.div({
-  padding: Spacing.NORMAL,
-  paddingBottom: 0,
-  margin: Spacing.NORMAL,
+  ...FontSpace.FS2,
+  color: Color.BLACK,
+  paddingBottom: Spacing.S3,
+  paddingTop: Spacing.S3,
+  margin: Spacing.S4,
+  borderBottom: `1px solid ${transparentize(0.9, Color.BLACK)}`,
 })
 
 const EventHeader = styled.span({
-  padding: `${Spacing.NORMAL} 0px ${Spacing.TINY} 0px`,
+  padding: `${Spacing.S2} 0px ${Spacing.S2} 0px`,
+  fontWeight: 500,
 })
 
 const EventDiffWrapper = styled.div({
-  margin: Spacing.NORMAL,
+  margin: Spacing.S4,
 })
 
 const EventDiff = styled.div({
-  margin: Spacing.NORMAL,
-  marginTop: Spacing.TINY,
+  margin: `${Spacing.S2} ${Spacing.S4}`,
 })
 
 const Field = styled.span({
-  margin: `0px ${Spacing.NORMAL}`,
-  color: AlphaColors.Black80,
-  fontWeight: 500,
+  marginRight: Spacing.S3,
+  color: transparentize(0.4, Color.BLACK),
+  fontWeight: 400,
 })
 
 const DiffArrow = styled.span({
-  padding: `0px ${Spacing.NORMAL}`,
-  color: AlphaColors.Black40,
+  padding: `0px ${Spacing.S4}`,
+  color: transparentize(0.7, Color.BLACK),
 })
 
 const Timestamp = styled.div({
-  color: AlphaColors.Black40,
-  fontWeight: 500,
-  margin: `${Spacing.NORMAL} 0px`,
+  color: Color.BLACK,
+  fontWeight: 400,
+  margin: `0 0 ${Spacing.S1} 0`,
 })
 
 const Accent = styled.span({
   fontWeight: 700,
+  color: Color.BLACK,
 })
 
 const FieldChanges = ({ deltas }) => {
@@ -83,10 +91,10 @@ const BasicEvent = ({
   entity: { label },
 }) => (
   <EventWrapper>
-    <Timestamp>{timestamp}</Timestamp>
     <EventHeader>
       <Accent>{username}</Accent> {action} <Accent>{boName}</Accent>: {label}
     </EventHeader>
+    <Timestamp>{timestamp}</Timestamp>
     <FieldChanges deltas={deltas} />
   </EventWrapper>
 )
@@ -108,11 +116,11 @@ const ConnectionEvent = ({
 
   return (
     <EventWrapper>
-      <Timestamp>{timestamp}</Timestamp>
       <EventHeader>
         <Accent>{username}</Accent> {action} <Accent>{category}</Accent>(
         {connectedEntityString})
       </EventHeader>
+      <Timestamp>{timestamp}</Timestamp>
       <FieldChanges deltas={deltas} />
     </EventWrapper>
   )
