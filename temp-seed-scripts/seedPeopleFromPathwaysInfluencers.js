@@ -9,8 +9,6 @@ const TEMP_PEOPLE_COLLECTION = 'TEMP_pathwaysInfluencers_2'
 const EVENTS_COLLECTIONS = 'TEMP_events'
 const SOURCE_COLLECTION = 'RAW_pathwaysInfluencers'
 
-const pathwaysPersonKeyMap = {}
-
 const cleanCollections = async ({ pulseCoreDb, pulseDevDb }) => {
   console.log('Remove All JOIN_pathways_people documents...')
   await pulseCoreDb.collection(JOIN_PEOPLE_COLLECTION)
@@ -30,40 +28,46 @@ const cleanCollections = async ({ pulseCoreDb, pulseDevDb }) => {
     .deleteMany()
 }
 
-const getSeedOps = ({ pulseCoreDb, pulseDevDb, keyedIndicationsByName }) => async ({
-  personId,
-  npiNumber,
-  firstName,
-  middleName,
-  lastName,
-  affiliation,
-  affiliationPosition,
-  primaryState,
-  managementType,
-  influencerType,
-  slug,
-  title,
-  indication,
-  indicationCategory,
-  priority,
-  chairIndications,
-  startDate,
-  startQuarter,
-  endQuarter,
-  outdated,
-  exclusionSettings,
-  alertDate,
-  alertDescription,
-  disclosureTotal,
-  disclosureDate1,
-  disclosureDate2,
-  disclosureDate3,
-  disclosureDate4,
-  internalNote,
-  source,
-  contact,
-  internalRole,
-}) => {
+const getSeedOps = ({
+  pulseCoreDb,
+  pulseDevDb,
+  keyedIndicationsByName,
+}) => async datum => {
+  const {
+    personId,
+    npiNumber,
+    firstName,
+    middleName,
+    lastName,
+    affiliation,
+    affiliationPosition,
+    primaryState,
+    managementType,
+    influencerType,
+    slug,
+    title,
+    indication,
+    indicationCategory,
+    priority,
+    chairIndications,
+    startDate,
+    startQuarter,
+    endQuarter,
+    outdated,
+    exclusionSettings,
+    alertDate,
+    alertDescription,
+    disclosureTotal,
+    disclosureDate1,
+    disclosureDate2,
+    disclosureDate3,
+    disclosureDate4,
+    internalNote,
+    source,
+    contact,
+    internalRole,
+  } = datum
+
   let joinPersonId = ObjectId(personId)
   const fullName = `${ firstName } ${ middleName } ${ lastName }`
 
@@ -87,7 +91,7 @@ const getSeedOps = ({ pulseCoreDb, pulseDevDb, keyedIndicationsByName }) => asyn
   if (personWithId) joinPersonId = personWithId._id
 
   // Step 4b: Insert the person if it doesn't already exist in the people collection
-  if (personWithId === null && personWithNpi === null && pathwaysPersonKeyMap[fullName]) {
+  if (personWithId === null && personWithNpi === null) {
     const insertedObj = await pulseCoreDb.collection(PEOPLE_COLLECTION)
       .insertOne({
         _id: ObjectId(),
@@ -104,8 +108,6 @@ const getSeedOps = ({ pulseCoreDb, pulseDevDb, keyedIndicationsByName }) => asyn
       })
     
     joinPersonId = insertedObj.insertedId
-    pathwaysPersonKeyMap[fullName] = joinPersonId
-
     console.log(`Inserted Person of ${ fullName } into people collection`)
   }
 
@@ -208,7 +210,6 @@ const seedPeopleFromPathwaysInfluencers = async () => {
     await Promise.all(ops)
   } catch (e) {
     console.log(e)
-    throw new Error(e)
   } finally {
     await dbs.close()
   }
