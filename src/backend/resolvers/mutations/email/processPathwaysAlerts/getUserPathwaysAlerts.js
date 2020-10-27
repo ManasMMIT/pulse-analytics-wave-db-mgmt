@@ -4,7 +4,7 @@ const getFilteredData = require('../filter-user-data-utils/getFilteredData')
 
 const ALERT_COLLECTIONS = [
   'pathwaysKeyEvents',
-  'pathwaysInfluencers',
+  'TEMP_pathwaysInfluencers',
   'providers',
   'protocols',
   'payerLives',
@@ -43,43 +43,42 @@ const getUserPathwaysAlerts = async ({
   userNodesResources,
   monthYearFilterParams,
 }) => {
-  const filteredCollectionPromises = ALERT_COLLECTIONS
-    .map(collectionName => {
-      const postMatchAggregationPipeline = [
-        { 
-          $match: { 
-            alertDate: { $type: 'date' },
-          } 
+  const filteredCollectionPromises = ALERT_COLLECTIONS.map((collectionName) => {
+    const postMatchAggregationPipeline = [
+      {
+        $match: {
+          alertDate: { $type: 'date' },
         },
-        { 
-          $addFields: { 
-            month: { $month: '$alertDate' },
-            year: { $year: '$alertDate' },
-          } 
+      },
+      {
+        $addFields: {
+          month: { $month: '$alertDate' },
+          year: { $year: '$alertDate' },
         },
-        {
-          $match: monthYearFilterParams
+      },
+      {
+        $match: monthYearFilterParams,
+      },
+      {
+        $project: {
+          month: 0,
+          year: 0,
         },
-        {
-          $project: {
-            month: 0,
-            year: 0,
-          }
-        },
-      ]
+      },
+    ]
 
-      return getFilteredData({
-        db: pulseDevDb,
-        collectionName,
-        subscriptionId,
-        userNodesResources,
-        query: {
-          dbQuery: {
-            postMatchAggregationPipeline,
-          }
+    return getFilteredData({
+      db: pulseDevDb,
+      collectionName,
+      subscriptionId,
+      userNodesResources,
+      query: {
+        dbQuery: {
+          postMatchAggregationPipeline,
         },
-      })
+      },
     })
+  })
 
   filteredCollectionPromises.push(
     getFilteredData({
@@ -90,7 +89,7 @@ const getUserPathwaysAlerts = async ({
       query: {
         dbQuery: {
           postMatchAggregationPipeline: PROVIDER_AGG_PIPELINE,
-        }
+        },
       },
     })
   )
@@ -112,11 +111,11 @@ const getUserPathwaysAlerts = async ({
   )
 
   const aggregatedCollections = [
-    { data: pathwaysKeyEvents, type: 'Key Event'},
-    { data: pathwaysInfluencers, type: 'Influencer'},
-    { data: providers, type: 'Provider'},
-    { data: protocols, type: 'Positioning'},
-    { data: payerLives, type: 'Payer'},
+    { data: pathwaysKeyEvents, type: 'Key Event' },
+    { data: pathwaysInfluencers, type: 'Influencer' },
+    { data: providers, type: 'Provider' },
+    { data: protocols, type: 'Positioning' },
+    { data: payerLives, type: 'Payer' },
   ]
 
   // collect all of the unique slugs present in the alert collections
@@ -138,7 +137,7 @@ const getUserPathwaysAlerts = async ({
   const userPathwaysAlerts = aggregatedCollections.reduce((acc, collection) => {
     const { data, type } = collection
 
-    data.forEach(item => {
+    data.forEach((item) => {
       const { slug } = item
 
       const providerAdoptionData = historicalProviderAdoptionBySlug[slug]
