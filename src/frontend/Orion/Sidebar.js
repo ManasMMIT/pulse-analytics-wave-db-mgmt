@@ -310,13 +310,6 @@ const Sidebar = () => {
           <StyledNavLink
             style={dropdownInactiveLinkStyle}
             activeStyle={dropdownActiveLinkStyle}
-            to={getToolItemPath('pathways', 'newaccounts')}
-          >
-            New Pathways Accounts
-          </StyledNavLink>
-          <StyledNavLink
-            style={dropdownInactiveLinkStyle}
-            activeStyle={dropdownActiveLinkStyle}
             to={getToolItemPath('pathways', 'influencers')}
           >
             Influencers
