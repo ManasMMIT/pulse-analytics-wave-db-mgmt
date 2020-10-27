@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import styled from "@emotion/styled"
+import styled from '@emotion/styled'
 import { useMutation, useApolloClient } from '@apollo/react-hooks'
 import { transparentize, lighten } from 'polished'
 
@@ -18,7 +18,7 @@ const Label = styled.label({
   fontSize: 12,
   lineHeight: '22px',
   fontWeight: 600,
-  textTransform: 'capitalize'
+  textTransform: 'capitalize',
 })
 
 const Input = styled.input({
@@ -32,7 +32,7 @@ const Input = styled.input({
   ':focus': {
     border: `1px solid ${transparentize(0.1, Colors.PRIMARY)}`,
     outline: 'none',
-  }
+  },
 })
 
 const Button = styled.button({
@@ -49,27 +49,23 @@ const Button = styled.button({
   marginTop: Spacing.LARGE,
   ':hover': {
     background: lighten(0.1, Colors.PRIMARY),
-  }
+  },
 })
 
 class TextForm extends Component {
   constructor(props) {
     super(props)
     const {
-      data: {
-        description
-      },
-      additionalFormData
+      data: { description },
+      additionalFormData,
     } = props
-
+    const { _id, ...additionalInputData } = additionalFormData
+    this.additionalInputData = additionalInputData
     this.state = { description, ...additionalFormData }
   }
 
-  handleChange = e => {
-    const {
-      value,
-      name,
-    } = e.target
+  handleChange = (e) => {
+    const { value, name } = e.target
 
     this.setState({ [name]: value })
   }
@@ -78,10 +74,7 @@ class TextForm extends Component {
     const {
       state,
       handleChange,
-      props: {
-        handleSubmit,
-        afterSubmitHook,
-      },
+      props: { handleSubmit, afterSubmitHook },
     } = this
 
     return (
@@ -89,18 +82,32 @@ class TextForm extends Component {
         <Label>Name</Label>
         <Input
           type="text"
-          name={"description"}
+          name={'description'}
           onChange={handleChange}
           value={state.description}
         />
+        {this.additionalInputData &&
+          Object.keys(this.additionalInputData).map((field) => (
+            <>
+              <Label>{field}</Label>
+              <Input
+                type="text"
+                name={field}
+                onChange={handleChange}
+                value={state[field]}
+              />
+            </>
+          ))}
         <Button
           type="submit"
-          onClick={() => handleSubmit({ variables: { input: state } }).then(afterSubmitHook)}
+          onClick={() =>
+            handleSubmit({ variables: { input: state } }).then(afterSubmitHook)
+          }
         >
           submit
         </Button>
       </TeamFormWrapper>
-    );
+    )
   }
 }
 
@@ -114,30 +121,22 @@ const TextFormContainer = ({
 
   const updateClientMutationCallback = clientMutation
     ? (cache, { data }) => {
-      client.mutate({
-        mutation: clientMutation,
-        variables: { data },
-      })
-    }
+        client.mutate({
+          mutation: clientMutation,
+          variables: { data },
+        })
+      }
     : () => {}
 
-  const [handleSubmit, { loading, error }] = useMutation(
-    mutationDoc,
-    {
-      update: updateClientMutationCallback,
-      refetchQueries,
-    },
-  )
+  const [handleSubmit, { loading, error }] = useMutation(mutationDoc, {
+    update: updateClientMutationCallback,
+    refetchQueries,
+  })
 
   if (loading) return <Spinner />
   if (error) return <div style={{ color: 'red' }}>Error processing request</div>
 
-  return (
-    <TextForm
-      handleSubmit={handleSubmit}
-      {...otherProps}
-    />
-  )
+  return <TextForm handleSubmit={handleSubmit} {...otherProps} />
 }
 
 TextFormContainer.propTypes = {

@@ -5,19 +5,15 @@ import { transparentize } from 'polished'
 import Panel from '../../../components/Panel'
 import CreateButton from './CreateButton'
 // import DeleteButton from './DeleteButton'
-// import UpdateButton from './UpdateButton'
+import UpdateButton from './UpdateButton'
 
-import {
-  SELECT_CLIENT,
-} from '../../../api/mutations'
-import {
-  GET_CLIENTS,
-  GET_SELECTED_CLIENT,
-} from '../../../api/queries'
+import { SELECT_CLIENT } from '../../../api/mutations'
+import { GET_CLIENTS, GET_SELECTED_CLIENT } from '../../../api/queries'
 
 import { Colors, Spacing } from '../../../utils/pulseStyles'
 
-const phoenixLogo = "https://res.cloudinary.com/pulsedatatools/image/upload/v1573837414/polaris/icons/phoenix-1-color.svg"
+const phoenixLogo =
+  'https://res.cloudinary.com/pulsedatatools/image/upload/v1573837414/polaris/icons/phoenix-1-color.svg'
 
 const ClientPanelContainer = styled.div({
   backgroundColor: Colors.TOOL_SIDEBAR,
@@ -60,9 +56,9 @@ const activePanelItemStyle = {
   background: transparentize(0.9, Colors.WHITE),
 }
 
-const buttonGroupCallback = client => (
+const buttonGroupCallback = (client) => (
   <div style={{ display: 'flex' }}>
-    {/* <UpdateButton client={client} /> */}
+    <UpdateButton client={client} />
     {/* <DeleteButton clientId={client._id} /> */}
   </div>
 )
@@ -72,7 +68,18 @@ const panelItemConfig = {
   style: defaultPanelItemStyle,
   activeStyle: activePanelItemStyle,
   buttonGroupCallback,
-  label1Callback: ({ description }) => description,
+  label1Callback: ({ description, icon }) => (
+    <div style={{ display: 'flex', alignItems: 'center' }}>
+      {icon ? (
+        <img
+          style={{ maxWidth: 18, width: '100%', marginRight: 6 }}
+          src={icon}
+          alt={`#{description}-icon`}
+        />
+      ) : null}
+      <span>{description}</span>
+    </div>
+  ),
   // ! Note: inactiveStyle not needed until hover effects differ
   // ! between active and inactive states
   // inactiveStyle: inactivePanelItemStyle,
@@ -91,12 +98,12 @@ const ClientsPanel = () => {
       </PhoenixHeader>
       <Panel
         style={{
-            backgroundColor: Colors.TOOL_SIDEBAR,
-            maxWidth: Spacing.TOOL_SIDEBAR,
-            minWidth: Spacing.TOOL_SIDEBAR,
-            height: panelHeight,
-            maxHeight: panelHeight,
-            minHeight: panelHeight,
+          backgroundColor: Colors.TOOL_SIDEBAR,
+          maxWidth: Spacing.TOOL_SIDEBAR,
+          minWidth: Spacing.TOOL_SIDEBAR,
+          height: panelHeight,
+          maxHeight: panelHeight,
+          minHeight: panelHeight,
         }}
         title="Clients"
         titleStyle={{ color: transparentize(0.5, Colors.WHITE) }}

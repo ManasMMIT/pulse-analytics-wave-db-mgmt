@@ -220,6 +220,7 @@ const queries = gql`
     _id: String
     name: String
     description: String
+    icon: String
   }
 
   type Team {

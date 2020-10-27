@@ -14,6 +14,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased] - Started: 10-23-20
 
+### Added
+- `Phoenix`: Client names and icons can now be updated by users. [#819](https://github.com/pulse-data/wave-db-mgmt/pull/819)
+
 ## [3.9.1] - Started: 10-22-20
 
 ### Changed

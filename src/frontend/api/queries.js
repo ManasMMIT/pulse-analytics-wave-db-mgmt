@@ -287,6 +287,7 @@ export const GET_CLIENTS = gql`
       _id
       name
       description
+      icon
     }
   }
 `
@@ -297,6 +298,7 @@ export const GET_SELECTED_CLIENT = gql`
       _id
       name
       description
+      icon
     }
   }
 `
@@ -313,6 +315,7 @@ export const GET_CLIENT_TEAMS = gql`
         _id
         name
         description
+        icon
       }
       resources
       defaultLandingPath
