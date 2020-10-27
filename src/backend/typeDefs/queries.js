@@ -680,6 +680,8 @@ const queries = gql`
 
   type PathwaysAndPersonConnection {
     _id: ID
+    createdOn: DateTime
+    updatedOn: DateTime
     personId: String!
     pathwaysId: String!
     indicationIds: [String!]!

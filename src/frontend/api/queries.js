@@ -1108,6 +1108,8 @@ export const GET_JOIN_PATHWAYS_AND_PEOPLE = gql`
       endDate
       startQuarter
       endQuarter
+      updatedOn
+      createdOn
     }
   }
 `

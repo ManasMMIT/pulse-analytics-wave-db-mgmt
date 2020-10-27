@@ -49,6 +49,8 @@ const OptionSelect = styled.select({
 
 const iconColor = transparentize(0.7, Color.BLACK)
 
+const PAGE_SIZE_OPTIONS = [10, 20, 30, 40, 50, 75, 100]
+
 const Pagination = ({
   canPreviousPage,
   canNextPage,
@@ -101,7 +103,7 @@ const Pagination = ({
           setPageSize(Number(e.target.value))
         }}
       >
-        {[10, 20, 30, 40, 50].map((pageSize) => (
+        {PAGE_SIZE_OPTIONS.map((pageSize) => (
           <option key={pageSize} value={pageSize}>
             Rows per Page: {pageSize}
           </option>
