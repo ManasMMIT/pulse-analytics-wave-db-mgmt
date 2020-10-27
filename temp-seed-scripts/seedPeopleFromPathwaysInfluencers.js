@@ -88,6 +88,7 @@ const getSeedOps = ({
   })
 
   if (personWithNpi) joinPersonId = personWithNpi._id
+  if (personWithId) joinPersonId = personWithId._id
 
   // Step 4b: Insert the person if it doesn't already exist in the people collection
   if (personWithId === null && personWithNpi === null) {
@@ -146,6 +147,8 @@ const getSeedOps = ({
       isExcluded: Boolean(exclusionSettings),   
       reason: exclusionSettings,
     },
+    createdOn: new Date(),
+    updatedOn: new Date(),
   }
 
   // Step 4c: Insert the join document associated with the person
