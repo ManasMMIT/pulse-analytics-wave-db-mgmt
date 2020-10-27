@@ -22,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [3.9.0] - Started: 10-6-20
 
 ### Changed
+- `Phoenix`: Added `lastName` and `firstName` fields to UserForm. [#810](https://github.com/pulse-data/wave-db-mgmt/pull/810)
 - `Orion/Pathways-Person Connection Widget and Form`:
   - Refactored widget/form; wired up to React local state as well as API upsert and delete endpoints; tweaked the `JOIN_pathways_people` schema and form fields/interactions [#798](https://github.com/pulse-data/wave-db-mgmt/pull/798) [#799](https://github.com/pulse-data/wave-db-mgmt/pull/799) [#800](https://github.com/pulse-data/wave-db-mgmt/pull/800)
   - Added materialization steps to CUD ops in PathwaysAndPersonConnection to materialize data to `pulse-dev.TEMP_pathwaysInfluencers` for now [#805](https://github.com/pulse-data/wave-db-mgmt/pull/805)

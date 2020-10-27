@@ -7,6 +7,8 @@ const deleteUserTypeDefs = gql`
 
   type DeleteUserPayload {
     _id: ID!
+    firstName: String
+    lastName: String
     username: String
     email: String
     emailSubscriptions: [Subscription]

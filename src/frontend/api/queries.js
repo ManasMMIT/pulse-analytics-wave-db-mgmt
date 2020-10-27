@@ -344,6 +344,8 @@ export const GET_USERS = gql`
   query getUsers($subscriptionId: String) {
     users(subscriptionId: $subscriptionId) {
       _id
+      firstName
+      lastName
       username
       email
       client {
@@ -359,6 +361,8 @@ export const GET_TEAM_USERS = gql`
   query getTeamUsers($teamId: String) {
     users(teamId: $teamId) {
       _id
+      firstName
+      lastName
       username
       email
       emailSubscriptions {
@@ -408,6 +412,8 @@ export const GET_SELECTED_USER = gql`
   query getSelectedUser {
     selectedUser @client {
       _id
+      firstName
+      lastName
       username
       email
       # Note: don't think the below is needed for this

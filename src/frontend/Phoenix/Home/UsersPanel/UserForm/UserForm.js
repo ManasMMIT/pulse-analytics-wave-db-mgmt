@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import styled from "@emotion/styled"
+import styled from '@emotion/styled'
 import _ from 'lodash'
 import { transparentize } from 'polished'
 
@@ -26,7 +26,7 @@ const Label = styled.label({
   fontSize: 12,
   lineHeight: '22px',
   fontWeight: 600,
-  textTransform: 'capitalize'
+  textTransform: 'capitalize',
 })
 
 const Input = styled.input({
@@ -40,7 +40,7 @@ const Input = styled.input({
   ':focus': {
     border: `1px solid ${transparentize(0.1, Colors.PRIMARY)}`,
     outline: 'none',
-  }
+  },
 })
 
 class UserForm extends React.Component {
@@ -51,6 +51,8 @@ class UserForm extends React.Component {
       selectedTeamId,
       allTeamsUserIsOn,
       userData: {
+        firstName,
+        lastName,
         username,
         email,
         emailSubscriptions,
@@ -66,6 +68,8 @@ class UserForm extends React.Component {
     if (selectedTeamId) checkboxesMap[selectedTeamId] = true
 
     this.state = {
+      firstName,
+      lastName,
       username,
       email,
       emailSubscriptions: emailSubscriptions || [],
@@ -78,21 +82,23 @@ class UserForm extends React.Component {
     }
   }
 
-  handleTextChange = e => {
+  handleTextChange = (e) => {
     this.setState({ [e.target.name]: e.currentTarget.value })
   }
 
-  handleTeamCheckboxesChange = e => {
+  handleTeamCheckboxesChange = (e) => {
     const { checkboxesMap } = this.state
 
     const newCheckedStatus = !checkboxesMap[e.target.id]
 
     this.setState({
-      checkboxesMap: _.merge({}, checkboxesMap, { [e.target.id]: newCheckedStatus })
+      checkboxesMap: _.merge({}, checkboxesMap, {
+        [e.target.id]: newCheckedStatus,
+      }),
     })
   }
 
-  handleEmailSubscriptionsChange = subscription => {
+  handleEmailSubscriptionsChange = (subscription) => {
     const { emailSubscriptions } = this.state
     const emailSubscriptionsCopy = _.cloneDeep(emailSubscriptions)
 
@@ -109,14 +115,18 @@ class UserForm extends React.Component {
     this.setState({ emailSubscriptions: emailSubscriptionsCopy })
   }
 
-  handleDefaultLandingChange = e => {
+  handleDefaultLandingChange = (e) => {
     const { defaultLanding } = this.state
-    
+
     let newDefaultLanding
     if (e.currentTarget.type === 'checkbox') {
-      newDefaultLanding = _.merge({}, defaultLanding, { locked: e.currentTarget.checked })
+      newDefaultLanding = _.merge({}, defaultLanding, {
+        locked: e.currentTarget.checked,
+      })
     } else {
-      newDefaultLanding = _.merge({}, defaultLanding, { path: e.currentTarget.value })
+      newDefaultLanding = _.merge({}, defaultLanding, {
+        path: e.currentTarget.value,
+      })
     }
 
     this.setState({ defaultLanding: newDefaultLanding })
@@ -124,6 +134,8 @@ class UserForm extends React.Component {
 
   render() {
     const {
+      firstName,
+      lastName,
       username,
       email,
       emailSubscriptions,
@@ -142,10 +154,14 @@ class UserForm extends React.Component {
     } = this.props
 
     // pick out only the checked boxes and get array of ids
-    const teamsToPersistOnSubmit = Object.keys(_.pickBy(checkboxesMap, value => value))
+    const teamsToPersistOnSubmit = Object.keys(
+      _.pickBy(checkboxesMap, (value) => value)
+    )
 
     const submitData = {
       _id: userId, // only needed for update, not create
+      firstName,
+      lastName,
       username,
       email,
       password,
@@ -155,8 +171,34 @@ class UserForm extends React.Component {
       defaultLanding,
     }
 
+    const isDisabled = [lastName, firstName, username, email].some(
+      (field) => !Boolean(field)
+    )
+
     return (
       <UserFormWrapper>
+        <InputSection>
+          <Label>First Name</Label>
+          <Input
+            type="text"
+            name="firstName"
+            value={firstName}
+            onChange={this.handleTextChange}
+            autoComplete="off"
+          />
+        </InputSection>
+
+        <InputSection>
+          <Label>Last Name</Label>
+          <Input
+            type="text"
+            name="lastName"
+            value={lastName}
+            onChange={this.handleTextChange}
+            autoComplete="off"
+          />
+        </InputSection>
+
         <InputSection>
           <Label>username</Label>
           <Input
@@ -213,11 +255,13 @@ class UserForm extends React.Component {
           <Label>Default Landing Page</Label>
           <div style={{ paddingBottom: 8 }}>
             <input
-              type='checkbox'
+              type="checkbox"
               checked={defaultLanding.locked}
               onChange={this.handleDefaultLandingChange}
             />
-            <label style={{ paddingLeft: 8 }}>Lock Landing Page (skip teams' changes)</label>
+            <label style={{ paddingLeft: 8 }}>
+              Lock Landing Page (skip teams' changes)
+            </label>
           </div>
           <Input
             type="text"
@@ -229,12 +273,18 @@ class UserForm extends React.Component {
         </InputSection>
 
         <SubmitButton
+          isDisabled={isDisabled}
           mutationDoc={mutationDoc}
           afterSubmitHook={afterSubmitHook}
           clientMutation={clientMutation}
           input={submitData}
           selectedTeamId={selectedTeamId}
         />
+        {isDisabled ? (
+          <div style={{ color: Colors.RED }}>
+            Please fill out required fields
+          </div>
+        ) : null}
       </UserFormWrapper>
     )
   }
@@ -249,7 +299,7 @@ UserForm.propTypes = {
     defaultLanding: PropTypes.shape({
       path: PropTypes.string,
       locked: PropTypes.bool,
-    })
+    }),
   }),
   selectedTeamId: PropTypes.string,
   allTeamsUserIsOn: PropTypes.array,

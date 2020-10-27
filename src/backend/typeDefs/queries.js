@@ -235,6 +235,8 @@ const queries = gql`
 
   type User {
     _id: String
+    firstName: String
+    lastName: String
     username: String
     email: String
     client: Client
