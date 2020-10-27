@@ -287,6 +287,7 @@ export const GET_CLIENTS = gql`
       _id
       name
       description
+      icon
     }
   }
 `
@@ -297,6 +298,7 @@ export const GET_SELECTED_CLIENT = gql`
       _id
       name
       description
+      icon
     }
   }
 `
@@ -313,6 +315,7 @@ export const GET_CLIENT_TEAMS = gql`
         _id
         name
         description
+        icon
       }
       resources
       defaultLandingPath
@@ -344,6 +347,8 @@ export const GET_USERS = gql`
   query getUsers($subscriptionId: String) {
     users(subscriptionId: $subscriptionId) {
       _id
+      firstName
+      lastName
       username
       email
       client {
@@ -359,6 +364,8 @@ export const GET_TEAM_USERS = gql`
   query getTeamUsers($teamId: String) {
     users(teamId: $teamId) {
       _id
+      firstName
+      lastName
       username
       email
       emailSubscriptions {
@@ -408,6 +415,8 @@ export const GET_SELECTED_USER = gql`
   query getSelectedUser {
     selectedUser @client {
       _id
+      firstName
+      lastName
       username
       email
       # Note: don't think the below is needed for this
@@ -1099,6 +1108,8 @@ export const GET_JOIN_PATHWAYS_AND_PEOPLE = gql`
       endDate
       startQuarter
       endQuarter
+      updatedOn
+      createdOn
     }
   }
 `

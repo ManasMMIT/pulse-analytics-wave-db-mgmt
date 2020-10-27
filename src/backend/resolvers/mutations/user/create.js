@@ -7,6 +7,8 @@ const createUser = async (
   parent,
   {
     input: {
+      firstName,
+      lastName,
       username,
       email,
       password,
@@ -49,6 +51,8 @@ const createUser = async (
     const user = await pulseCoreDb.collection('users').insertOne(
       {
         _id: userInAuth0.user_id,
+        firstName,
+        lastName,
         username,
         email,
         emailSubscriptions,
@@ -75,6 +79,8 @@ const createUser = async (
             $push: {
               users: {
                 _id: userInAuth0.user_id,
+                firstName,
+                lastName,
                 username,
                 email,
                 emailSubscriptions,
@@ -109,6 +115,12 @@ const createUser = async (
 
     const queryPredicate = {
       _id: userInAuth0.user_id,
+      firstName,
+      lastName,
+      username,
+      email,
+      emailSubscriptions,
+      defaultLanding,
       endUserTerms: {
         agreed: false,
         timestamp: null,

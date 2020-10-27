@@ -3,6 +3,14 @@ import Select from 'react-select'
 import _ from 'lodash'
 import { customTableSelectStyles } from './customTableSelectStyles'
 
+const getCoercedLabel = (label) => {
+  if (Array.isArray(label)) return label.join(', ')
+
+  if ([true, false].includes(label)) return String(label)
+
+  return label
+}
+
 const MultiSelectColumnFilter = ({
   column: { filterValue, setFilter, preFilteredRows, id },
 }) => {
@@ -17,14 +25,14 @@ const MultiSelectColumnFilter = ({
   }, [id, preFilteredRows])
 
   const reactSelectOptions = options.map((option, i) => ({
-    label: option,
+    label: getCoercedLabel(option),
     value: option,
   }))
 
   const selectedOptions = !_.isEmpty(filterValue)
     ? filterValue.map((value) => ({
         value,
-        label: value,
+        label: getCoercedLabel(value),
       }))
     : null
 

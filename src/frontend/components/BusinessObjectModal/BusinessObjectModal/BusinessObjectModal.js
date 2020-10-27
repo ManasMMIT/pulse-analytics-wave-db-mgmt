@@ -24,6 +24,7 @@ const Header = styled.div({
   alignItems: 'center',
   padding: Spacing.S4,
   borderBottom: `2px solid ${transparentize(0.9, Color.BLACK)}`,
+  position: 'relative',
 })
 
 const ModalTitleContainer = styled.div({
@@ -108,7 +109,7 @@ const BusinessObjectModal = ({
 
   return (
     <Dialog>
-      <Header>
+      <Header id="BoModalHeader">
         <ModalTitleContainer>
           <ModalTitle>{modalTitle}</ModalTitle>
           <ModalSubtitle>{modalSubtitle}</ModalSubtitle>

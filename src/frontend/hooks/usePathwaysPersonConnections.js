@@ -5,6 +5,7 @@ import {
   GET_JOIN_PATHWAYS_AND_PEOPLE,
   GET_PATHWAYS_ORGANIZATIONS,
   GET_PEOPLE,
+  GET_SOURCE_INDICATIONS,
 } from 'frontend/api/queries'
 
 const usePathwaysPersonConnections = (args = {}) => {
@@ -17,22 +18,34 @@ const usePathwaysPersonConnections = (args = {}) => {
   )
 
   const { data: peopleData, loading: peopleLoading } = useQuery(GET_PEOPLE)
-
-  const loading = [connectionsLoading, pathwaysLoading, peopleLoading].some(
-    (loading) => loading
+  const { data: indicationData, loading: indicationLoading } = useQuery(
+    GET_SOURCE_INDICATIONS
   )
+
+  const loading = [
+    connectionsLoading,
+    pathwaysLoading,
+    peopleLoading,
+    indicationLoading,
+  ].some((loading) => loading)
 
   if (loading) return { data: [], loading }
 
   const connections = Object.values(connectionsData)[0]
   const pathways = Object.values(pathwaysData)[0]
   const people = Object.values(peopleData)[0]
+  const indications = Object.values(indicationData)[0]
 
   const groupedPathwaysById = _.keyBy(pathways, '_id')
   const groupedPeopleById = _.keyBy(people, '_id')
+  const groupedIndicationsById = _.keyBy(indications, '_id')
 
   const joinedData = connections.reduce(
-    joinDataCallBack({ groupedPathwaysById, groupedPeopleById }),
+    joinDataCallBack({
+      groupedPathwaysById,
+      groupedPeopleById,
+      groupedIndicationsById,
+    }),
     []
   )
 
@@ -47,17 +60,29 @@ const usePathwaysPersonConnections = (args = {}) => {
   }
 }
 
-const joinDataCallBack = ({ groupedPathwaysById, groupedPeopleById }) => (
-  acc,
-  datum
-) => {
-  const { pathwaysId, personId, endDate, exclusionSettings } = datum
+const joinDataCallBack = ({
+  groupedPathwaysById,
+  groupedPeopleById,
+  groupedIndicationsById,
+}) => (acc, datum) => {
+  const {
+    pathwaysId,
+    personId,
+    endDate,
+    exclusionSettings,
+    indicationIds,
+    updatedOn: connectionUpdatedOn,
+  } = datum
 
   // Append Derived Fields
   const { description, status } = getConnectionDescriptionAndStatus({
     exclusionSettings,
     endDate,
   })
+
+  const indicationPermissions = (indicationIds || []).map(
+    (indicationId) => (groupedIndicationsById[indicationId] || {}).name
+  )
 
   const pathwaysDatum = groupedPathwaysById[pathwaysId]
   const personDatum = groupedPeopleById[personId]
@@ -71,7 +96,13 @@ const joinDataCallBack = ({ groupedPathwaysById, groupedPeopleById }) => (
     slug: pathwaysSlug,
   } = pathwaysDatum
 
-  const { _id, __typename, ...restPersonDatum } = personDatum
+  const {
+    _id,
+    __typename,
+    updatedOn: personUpdatedOn,
+    createdOn: personCreatedOn,
+    ...restPersonDatum
+  } = personDatum
 
   acc.push({
     ...datum,
@@ -80,8 +111,10 @@ const joinDataCallBack = ({ groupedPathwaysById, groupedPeopleById }) => (
     organizationType,
     pathwaysSlug,
     ...restPersonDatum,
+    updatedOn: connectionUpdatedOn,
     description,
     status,
+    indicationPermissions,
   })
 
   return acc

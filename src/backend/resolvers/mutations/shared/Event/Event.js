@@ -153,7 +153,9 @@ class Event {
         }
       })
 
-      // Inject snapshot of delta metaData: field label, field id, and boId for ref fields
+      // Meta data getters, below, are used to index basic, array (field names like a.0),
+      // and relational delta fields to underlying business object fields and widget fields.
+      // If a match is found, field meta data, as well as boId, is injected into the delta.
       if (this.entity) {
         const { fieldLabel, fieldId, boId } = this.entity.fieldMap
           ? Event.getFieldMetaData({

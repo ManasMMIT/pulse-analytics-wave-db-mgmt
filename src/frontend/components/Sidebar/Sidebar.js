@@ -9,6 +9,7 @@ const SidebarWrapper = styled.div(
     width: 256,
     padding: Spacing.S4,
     height: '100%',
+    position: 'relative',
   },
   ({ width, sidebarStyle }) => ({
     width,
@@ -16,9 +17,9 @@ const SidebarWrapper = styled.div(
   })
 )
 
-const Sidebar = ({ children, width, sidebarStyle }) => {
+const Sidebar = ({ children, width, sidebarStyle, id }) => {
   return (
-    <SidebarWrapper width={width} sidebarStyle={sidebarStyle}>
+    <SidebarWrapper id={id} width={width} sidebarStyle={sidebarStyle}>
       {children}
     </SidebarWrapper>
   )

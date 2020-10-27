@@ -8,6 +8,8 @@ const updateUser = async (
   {
     input: {
       _id,
+      firstName,
+      lastName,
       username,
       email,
       password,
@@ -16,7 +18,15 @@ const updateUser = async (
       defaultLanding,
     },
   },
-  { mongoClient, coreRoles, coreUsers, auth0, pulseDevDb, pulseCoreDb },
+  {
+    mongoClient,
+    coreRoles,
+    coreUsers,
+    auth0,
+    pulseDevDb,
+    pulseCoreDb,
+    pulseProdDb,
+  },
   info
 ) => {
   username = username.trim()
@@ -46,22 +56,34 @@ const updateUser = async (
   let updatedMongoUser
 
   await session.withTransaction(async () => {
+    const userCollectionsSetObj = {
+      firstName,
+      lastName,
+      username,
+      email,
+      emailSubscriptions,
+      defaultLanding,
+    }
+
     // 1. update user
 
     // ! Note: Must use { returnOriginal:   false }, which is specific to MongoDB node driver,
     // ! rather than { returnNewDocument: true }
     const { value: updatedResult } = await coreUsers.findOneAndUpdate(
       { _id },
-      {
-        $set: {
-          username,
-          email,
-          emailSubscriptions,
-          defaultLanding,
-        },
-      },
+      { $set: userCollectionsSetObj },
       { returnOriginal: false, session }
     )
+
+    const updateUserInDevOp = pulseDevDb
+      .collection('users')
+      .updateOne({ _id }, { $set: userCollectionsSetObj }, { session })
+
+    const updateUserInProdOp = pulseProdDb
+      .collection('users')
+      .updateOne({ _id }, { $set: userCollectionsSetObj }, { session })
+
+    await Promise.all([updateUserInDevOp, updateUserInProdOp])
 
     updatedMongoUser = updatedResult
 
@@ -81,6 +103,8 @@ const updateUser = async (
         $push: {
           users: {
             _id,
+            firstName,
+            lastName,
             username,
             email,
             emailSubscriptions,

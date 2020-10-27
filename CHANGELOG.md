@@ -12,7 +12,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Fixed** for any bug fixes.
 - **Security** in case of vulnerabilities.
 
-## [Unreleased] - Started: 10-23-20
+## [Unreleased] - Started: 10-27-20
+
+## [3.10.1] - Started: 10-23-20
+
+### Added
+- `Phoenix`: Client names and icons can now be updated by users. [#819](https://github.com/pulse-data/wave-db-mgmt/pull/819)
+
+### Changed
+- `Orion/Pathways-Person Connection Widget and Form`:
+ - Added overlay interfaction to Pathways Connection CRUD form; added save button feedback interfaction [#823](https://github.com/pulse-data/wave-db-mgmt/pull/823)
+ - Tweaked Bulk import script logic to include all data rows from `RAW_pathwaysInfluencers` [#822](https://github.com/pulse-data/wave-db-mgmt/pull/822)
+- `Orion`: Replaced old Pathways Accounts view with new view [#826](https://github.com/pulse-data/wave-db-mgmt/pull/826)
 
 ## [3.9.1] - Started: 10-22-20
 
@@ -22,6 +33,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [3.9.0] - Started: 10-6-20
 
 ### Changed
+- `Phoenix`: Added `lastName` and `firstName` fields to UserForm. [#810](https://github.com/pulse-data/wave-db-mgmt/pull/810)
 - `Orion/Pathways-Person Connection Widget and Form`:
   - Refactored widget/form; wired up to React local state as well as API upsert and delete endpoints; tweaked the `JOIN_pathways_people` schema and form fields/interactions [#798](https://github.com/pulse-data/wave-db-mgmt/pull/798) [#799](https://github.com/pulse-data/wave-db-mgmt/pull/799) [#800](https://github.com/pulse-data/wave-db-mgmt/pull/800)
   - Added materialization steps to CUD ops in PathwaysAndPersonConnection to materialize data to `pulse-dev.TEMP_pathwaysInfluencers` for now [#805](https://github.com/pulse-data/wave-db-mgmt/pull/805)

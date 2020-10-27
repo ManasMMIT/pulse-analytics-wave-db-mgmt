@@ -1,5 +1,5 @@
+import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
-import React, { useState } from 'react'
 import styled from '@emotion/styled'
 
 import {
@@ -52,6 +52,13 @@ const DEFAULT_COLUMN = {
   Filter: DefaultColumnFilter,
 }
 
+const INITIAL_PAGE_SIZE = 50
+
+const resetTableScroll = () => {
+  const tableBodyNode = document.querySelector('.table.sticky')
+  tableBodyNode.scrollTo(0, 0)
+}
+
 const Table = ({
   columns,
   data,
@@ -80,7 +87,7 @@ const Table = ({
       maxMultiSortColCount: 5,
       disableMultiRemove: true,
       sortTypes,
-      initialState: { pageSize: 50, pageIndex: 0 },
+      initialState: { pageSize: INITIAL_PAGE_SIZE, pageIndex: 0 },
     },
     useFilters,
     useSortBy,
@@ -88,6 +95,9 @@ const Table = ({
     useSticky,
     usePagination
   )
+
+  // whenever page changes on table, scroll to top
+  useEffect(resetTableScroll, [pageIndex])
 
   const dataFormattedForExport = formatDataForExport(sortedRows, columns)
 
