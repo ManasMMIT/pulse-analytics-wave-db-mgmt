@@ -3,10 +3,10 @@ const _ = require('lodash')
 const { ObjectId } = require('mongodb')
 const getMaterializationAggPipeline = require('../src/backend/resolvers/mutations/relationalResolvers/pathwaysAndPerson/getMaterializationAggPipeline')
 
-const JOIN_PEOPLE_COLLECTION = 'TEMP_JOIN_pathways_people'
-const PEOPLE_COLLECTION = 'TEMP_people'
-const TEMP_MATERIALIZED_COLLECTION = 'TEMP_pathwaysInfluencers_2'
-const EVENTS_COLLECTIONS = 'TEMP_events'
+const JOIN_PEOPLE_COLLECTION = 'JOIN_pathways_people'
+const PEOPLE_COLLECTION = 'people'
+const TEMP_MATERIALIZED_COLLECTION = 'TEMP_pathwaysInfluencers'
+const EVENTS_COLLECTIONS = 'events'
 const SOURCE_COLLECTION = 'RAW_pathwaysInfluencers'
 
 const cleanCollections = async ({ pulseCoreDb, pulseDevDb }) => {
