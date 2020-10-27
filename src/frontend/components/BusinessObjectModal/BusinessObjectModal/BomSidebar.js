@@ -27,7 +27,7 @@ const BomSidebar = ({ options, onClick, selectedTab }) => {
   })
 
   return (
-    <Sidebar width={300} sidebarStyle={sidebarStyle}>
+    <Sidebar id="BomSidebar" width={300} sidebarStyle={sidebarStyle}>
       {sidebarItems}
     </Sidebar>
   )
