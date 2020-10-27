@@ -2,6 +2,7 @@ const connectToMongoDb = require('../connect-to-mongodb')
 const _ = require('lodash')
 const { ObjectId } = require('mongodb')
 const getMaterializationAggPipeline = require('../src/backend/resolvers/mutations/relationalResolvers/pathwaysAndPerson/getMaterializationAggPipeline')
+const d3 = require('d3-collection')
 
 const JOIN_PEOPLE_COLLECTION = 'JOIN_pathways_people'
 const PEOPLE_COLLECTION = 'people'
@@ -26,6 +27,29 @@ const cleanCollections = async ({ pulseCoreDb, pulseDevDb }) => {
   console.log('Reset the core events collections (otherwise old, non-applicable events will be there)')
   await pulseCoreDb.collection(EVENTS_COLLECTIONS)
     .deleteMany()
+}
+
+const validateCollections = async ({ pulseDevDb }) => {
+  const INVALID_NPI = ['N/A', null, 'TBD']
+  const rawInfluencers = await pulseDevDb.collection(SOURCE_COLLECTION)
+    .find({ type: 'Pathways' })
+    .toArray()
+
+  // Detect conflicting NPI numbers
+  const filteredInfluencers = rawInfluencers.filter(({ npiNumber }) => !INVALID_NPI.includes(npiNumber))
+  const groupInfluencersByNpiAndPersonId = d3.nest()
+    .key(row => row.npiNumber)
+    .key(row => row.personId)
+    .object(filteredInfluencers)
+
+  Object.keys(groupInfluencersByNpiAndPersonId).forEach(key => {
+    const numOfPersonIds = Object.keys(groupInfluencersByNpiAndPersonId[key]).length
+    if (numOfPersonIds > 1) {
+      throw new Error(`
+        Influencer of personId: ${ key } has conflicting npiNumbers
+      `)
+    }
+  })
 }
 
 const getSeedOps = ({
@@ -188,6 +212,9 @@ const seedPeopleFromPathwaysInfluencers = async () => {
   }
 
   try {
+    // Step 0: Validate RAW Influencer collection
+    await validateCollections({ ...dbConfig })
+
     // Step 1: Clean/Reset all collections
     await cleanCollections({ ...dbConfig })
 
