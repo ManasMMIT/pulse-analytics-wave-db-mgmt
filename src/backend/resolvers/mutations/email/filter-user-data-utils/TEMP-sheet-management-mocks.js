@@ -10,7 +10,7 @@ module.exports = [
   },
   {
     sheetName: 'PathwaysInfluencers',
-    collection: 'pathwaysInfluencers',
+    collection: 'TEMP_pathwaysInfluencers',
     fields: [
       {
         key: 'indication',
