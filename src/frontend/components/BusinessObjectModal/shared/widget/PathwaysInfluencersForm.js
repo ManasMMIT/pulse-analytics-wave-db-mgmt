@@ -7,12 +7,13 @@ import _ from 'lodash'
 import Spacing from 'frontend/utils/spacing'
 import Input from 'frontend/components/Input'
 
-import CreatableMultiSelect from '../../../../../../../Orion/shared/CreatableMultiSelect'
-import QuarterPicker from './QuarterPicker'
+import CreatableMultiSelect from '../../../../Orion/shared/CreatableMultiSelect'
+import QuarterPicker from '../../../QuarterPicker'
 
 import {
   GET_SOURCE_INDICATIONS,
   GET_PATHWAYS_ORGANIZATIONS,
+  GET_PEOPLE,
 } from 'frontend/api/queries'
 
 import {
@@ -21,9 +22,9 @@ import {
   FieldWrapper,
   FormWrapper,
   FlexWrapper,
-} from './styledComponents'
+} from './ConnectionPanel/styledComponents'
 
-import { ALERT_TYPES } from '../alert-types'
+import { ALERT_TYPES } from './alert-types'
 
 const PATHWAYS_MGMT_TYPES = ['Business', 'Clinical', 'Leadership']
 
@@ -38,10 +39,11 @@ const INFLUENCER_TYPES = [
 
 const PRIORITY_LEVELS = [null, 'High', 'Medium', 'Low']
 
-const PathwaysForm = ({
-  orgData,
-  isNewOrgBeingCreated,
-  setOrgData,
+const PathwaysInfluencersForm = ({
+  refKey,
+  connectionData,
+  isNewConnectionBeingCreated,
+  setConnectionData,
   setWhetherUnsavedChanges,
 }) => {
   const { data: indicationsData, loading: indicationsLoading } = useQuery(
@@ -52,7 +54,16 @@ const PathwaysForm = ({
     GET_PATHWAYS_ORGANIZATIONS
   )
 
-  if (indicationsLoading || pathwaysLoading) return 'Loading...'
+  const { data: peopleData, loading: peopleLoading } = useQuery(GET_PEOPLE)
+
+  if (indicationsLoading || pathwaysLoading || peopleLoading)
+    return 'Loading...'
+
+  const globalPeople = Object.values(peopleData)[0]
+  const globalPeopleById = _.mapValues(
+    _.keyBy(globalPeople, '_id'),
+    ({ firstName, lastName }) => `${firstName} ${lastName}`
+  )
 
   const globalIndications = Object.values(indicationsData)[0]
   const globalIndicationsById = _.mapValues(
@@ -68,6 +79,7 @@ const PathwaysForm = ({
 
   const {
     pathwaysId,
+    personId,
     tumorTypeSpecialty,
     position,
     priority,
@@ -80,7 +92,7 @@ const PathwaysForm = ({
     exclusionSettings,
     startQuarter,
     endQuarter,
-  } = orgData
+  } = connectionData
 
   const {
     internalNotes,
@@ -101,74 +113,84 @@ const PathwaysForm = ({
 
   const { isExcluded, reason: exclusionReason } = exclusionSettings
 
-  const orgDataCopy = _.cloneDeep(orgData)
+  const pathwaysInfluencerConnectionCopy = _.cloneDeep(connectionData)
 
   const updateOrgData = (newData) => {
-    setOrgData(newData)
+    setConnectionData(newData)
     setWhetherUnsavedChanges(true)
   }
 
   const selectPathwaysId = (_id) => {
-    updateOrgData(_.merge({}, orgData, { pathwaysId: _id }))
+    updateOrgData(_.merge({}, connectionData, { pathwaysId: _id }))
+  }
+
+  const selectPersonId = (_id) => {
+    updateOrgData(_.merge({}, connectionData, { personId: _id }))
   }
 
   const handleTopLevelTextChange = ({ name, value }) => {
-    updateOrgData(_.merge({}, orgData, { [name]: value }))
+    updateOrgData(_.merge({}, connectionData, { [name]: value }))
   }
 
   const handleAlertDescriptionChange = ({ name, value }) => {
-    orgDataCopy.alert.description = value
-    updateOrgData(orgDataCopy)
+    pathwaysInfluencerConnectionCopy.alert.description = value
+    updateOrgData(pathwaysInfluencerConnectionCopy)
   }
 
   const handleInternalFieldsTextChange = ({ name, value }) => {
-    orgDataCopy.internalFields[name] = value
-    updateOrgData(orgDataCopy)
+    pathwaysInfluencerConnectionCopy.internalFields[name] = value
+    updateOrgData(pathwaysInfluencerConnectionCopy)
   }
 
   const changeInternalPathwaysManagementTypes = (arr) => {
-    orgDataCopy.internalFields.pathwaysManagementTypes = (arr || []).map(
-      ({ value }) => value
-    )
-    updateOrgData(orgDataCopy)
+    pathwaysInfluencerConnectionCopy.internalFields.pathwaysManagementTypes = (
+      arr || []
+    ).map(({ value }) => value)
+    updateOrgData(pathwaysInfluencerConnectionCopy)
   }
 
   const changePathwaysInfluencerTypes = (arr) => {
-    orgDataCopy.pathwaysInfluencerTypes = (arr || []).map(({ value }) => value)
-    updateOrgData(orgDataCopy)
+    pathwaysInfluencerConnectionCopy.pathwaysInfluencerTypes = (arr || []).map(
+      ({ value }) => value
+    )
+    updateOrgData(pathwaysInfluencerConnectionCopy)
   }
 
   const changeInternalValueChairsIndications = (arr) => {
-    orgDataCopy.internalFields.valueChairsIndications = (arr || []).map(
-      ({ value }) => value
-    )
-    updateOrgData(orgDataCopy)
+    pathwaysInfluencerConnectionCopy.internalFields.valueChairsIndications = (
+      arr || []
+    ).map(({ value }) => value)
+    updateOrgData(pathwaysInfluencerConnectionCopy)
   }
 
   const handleIndicationsChange = (arr) => {
-    orgDataCopy.indicationIds = (arr || []).map(({ value }) => value)
-    updateOrgData(orgDataCopy)
+    pathwaysInfluencerConnectionCopy.indicationIds = (arr || []).map(
+      ({ value }) => value
+    )
+    updateOrgData(pathwaysInfluencerConnectionCopy)
   }
 
   const changeExclusionSettings = ({ name, value }) => {
-    _.merge(orgDataCopy.exclusionSettings, { [name]: value })
-    updateOrgData(orgDataCopy)
+    _.merge(pathwaysInfluencerConnectionCopy.exclusionSettings, {
+      [name]: value,
+    })
+    updateOrgData(pathwaysInfluencerConnectionCopy)
   }
 
   const handleTimestampChange = ({ name, value }) => {
     if (name === 'startDate') {
-      orgDataCopy.startQuarter = value
+      pathwaysInfluencerConnectionCopy.startQuarter = value
     } else if (name === 'endDate') {
-      orgDataCopy.endQuarter = value
+      pathwaysInfluencerConnectionCopy.endQuarter = value
     } else if (name === 'startQuarter') {
-      orgDataCopy.startDate = null
+      pathwaysInfluencerConnectionCopy.startDate = null
     } else if (name === 'endQuarter') {
-      orgDataCopy.endDate = null
+      pathwaysInfluencerConnectionCopy.endDate = null
     }
 
-    orgDataCopy[name] = value
+    pathwaysInfluencerConnectionCopy[name] = value
 
-    updateOrgData(orgDataCopy)
+    updateOrgData(pathwaysInfluencerConnectionCopy)
   }
 
   const clearTimestamp = (name) => {
@@ -176,13 +198,13 @@ const PathwaysForm = ({
   }
 
   const handleAlertDate = ({ value: newAlertDate }) => {
-    orgDataCopy.alert.date = newAlertDate
-    updateOrgData(orgDataCopy)
+    pathwaysInfluencerConnectionCopy.alert.date = newAlertDate
+    updateOrgData(pathwaysInfluencerConnectionCopy)
   }
 
   const handleAlertType = ({ value: newAlertType }) => {
-    orgDataCopy.alert.type = newAlertType
-    updateOrgData(orgDataCopy)
+    pathwaysInfluencerConnectionCopy.alert.type = newAlertType
+    updateOrgData(pathwaysInfluencerConnectionCopy)
   }
 
   return (
@@ -191,7 +213,7 @@ const PathwaysForm = ({
         <FieldWrapper>
           <FormLabel>Connected Pathways Organization</FormLabel>
           <Select
-            isDisabled={!isNewOrgBeingCreated}
+            isDisabled={!isNewConnectionBeingCreated || refKey !== 'pathwaysId'}
             value={{
               label: globalPathwaysById[pathwaysId],
               value: pathwaysId,
@@ -201,6 +223,21 @@ const PathwaysForm = ({
               value: _id,
             }))}
             onChange={({ value }) => selectPathwaysId(value)}
+          />
+        </FieldWrapper>
+        <FieldWrapper>
+          <FormLabel>Connected Influencer</FormLabel>
+          <Select
+            isDisabled={!isNewConnectionBeingCreated || refKey === 'pathwaysId'}
+            value={{
+              label: globalPeopleById[personId],
+              value: personId,
+            }}
+            options={globalPeople.map(({ _id, firstName, lastName }) => ({
+              label: `${firstName} ${lastName}`,
+              value: _id,
+            }))}
+            onChange={({ value }) => selectPersonId(value)}
           />
         </FieldWrapper>
 
@@ -491,10 +528,11 @@ const PathwaysForm = ({
   )
 }
 
-PathwaysForm.propTypes = {
+PathwaysInfluencersForm.propTypes = {
+  refKey: PropTypes.string.isRequired,
   orgData: PropTypes.object.isRequired,
-  isNewOrgBeingCreated: PropTypes.bool.isRequired,
-  setOrgData: PropTypes.func.isRequired,
+  isNewConnectionBeingCreated: PropTypes.bool.isRequired,
+  setConnectionData: PropTypes.func.isRequired,
 }
 
-export default PathwaysForm
+export default PathwaysInfluencersForm

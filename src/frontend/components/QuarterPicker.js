@@ -1,3 +1,6 @@
+// ! This component isn't finished and is only a placeholder.
+// TODO: Actually make a quarter picker component
+
 import React from 'react'
 import styled from '@emotion/styled'
 import Input from 'frontend/components/Input'

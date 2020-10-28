@@ -20,7 +20,7 @@ import OrganizationConnectionsWidget from './widgets/relational-widgets/Organiza
 import ProviderInfluencerWidget from './widgets/external-data-widgets/ProviderInfluencerWidget'
 import PhysiciansCompareWidget from './widgets/external-data-widgets/PhysiciansCompareWidget'
 import OpenPaymentsWidget from './widgets/external-data-widgets/OpenPaymentsWidget'
-import HistoryWidget from './widgets/HistoryWidget'
+import HistoryWidget from '../shared/widget/HistoryWidget'
 
 const WIDGETS = [
   {

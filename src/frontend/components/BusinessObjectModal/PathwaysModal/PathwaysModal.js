@@ -13,6 +13,21 @@ import {
 } from '../../../api/queries'
 
 import BusinessObjectModal from '../BusinessObjectModal/BusinessObjectModal'
+import InfluencerConnectionsWidget from './relational-widgets/InfluencerConnectionsWidget'
+import HistoryWidget from '../shared/widget/HistoryWidget'
+
+const WIDGETS = [
+  {
+    _id: 'RELATIONAL_pathwaysInfluencerConnectionsWidget',
+    label: 'Influencer Connections',
+    Component: InfluencerConnectionsWidget,
+  },
+  {
+    _id: 'RELATIONAL_historyWidget',
+    label: 'History',
+    Component: HistoryWidget,
+  },
+]
 
 const PATHWAYS_BOID = '5eac3251ac8a01743081f28d'
 const HEADER_TEXT = 'Pathways Accounts'
@@ -41,6 +56,7 @@ const PathwaysModal = ({
       { query: GET_EVENTS },
     ]}
     afterMutationHook={afterMutationHook}
+    widgets={WIDGETS}
   />
 )
 
