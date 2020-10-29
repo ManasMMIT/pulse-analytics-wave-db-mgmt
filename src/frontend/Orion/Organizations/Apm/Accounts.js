@@ -1,109 +1,103 @@
 import React from 'react'
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faEdit } from "@fortawesome/free-solid-svg-icons"
-import { transparentize } from 'polished'
+import { useQuery } from '@apollo/react-hooks'
 
-import Panel from 'frontend/components/Panel'
+import { GET_APM_ORGANIZATIONS } from 'frontend/api/queries'
 
-import { ApmAccountModalButton } from '../../shared/AccountModals'
-import DeleteButton from './../../shared/DeleteButton'
-import CopyOneOfStringButton from './../../shared/CopyOneOfStringButton'
+import PanelHeader from 'frontend/components/Panel/PanelHeader'
+import Table from 'frontend/components/Table'
+import ApmsModal from 'frontend/components/BusinessObjectModal/ApmsModal'
+import { CONFIG_TABLE_WIDTH } from 'frontend/components/Table/tableWidths'
+import MultiSelectColumnFilter from 'frontend/components/Table/custom-filters/MultiSelect/MultiSelectColumnFilter'
+import customMultiSelectFilterFn from 'frontend/components/Table/custom-filters/MultiSelect/customMultiSelectFilterFn'
+import Icon from 'frontend/components/Icon'
+import Color from 'frontend/utils/color'
+import createButtonStyle from 'frontend/components/BusinessObjectModal/PeopleModal/createButtonStyle'
+import ApmsModalButton from 'frontend/components/BusinessObjectModal/ApmsModal/ApmsModalButton'
 
-import {
-  DELETE_APM_ORGANIZATION,
-} from './../../../api/mutations'
+const PAGE_TITLE = 'Alternative Payment Model Accounts'
 
-import {
-  GET_APM_ORGANIZATIONS,
-  GET_PAYER_ORGANIZATIONS,
-  GET_PROVIDER_ORGANIZATIONS,
-} from './../../../api/queries'
-
-import Color from './../../../utils/color'
-
-const editIcon = <FontAwesomeIcon size="lg" icon={faEdit} />
-
-const CREATE_BUTTON_TXT = 'Create APM Account'
-
-const buttonStyle = {
-  background: Color.PRIMARY,
-  color: Color.WHITE,
-  fontWeight: 700,
+const MODAL_TO_COL_MAP = {
+  slug: {
+    Modal: ApmsModal,
+    idKey: '_id',
+  },
+  organization: {
+    Modal: ApmsModal,
+    idKey: '_id',
+  },
+  organizationTiny: {
+    Modal: ApmsModal,
+    idKey: '_id',
+  },
 }
 
-const defaultPanelItemStyle = {
-  display: 'flex',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-  padding: '8px 24px',
-  color: Color.BLACK,
-  fontWeight: 600,
-  fontSize: 12,
-  borderBottom: `1px solid ${transparentize(0.9, Color.BLACK)}`,
-  ':hover': {
-    background: transparentize(0.95, Color.BLACK),
-  }
-}
+const COLUMNS = [
+  {
+    Header: 'Slug',
+    accessor: 'slug',
+    Filter: MultiSelectColumnFilter,
+    filter: customMultiSelectFilterFn,
+    sortType: 'text',
+    width: 300,
+  },
+  {
+    Header: 'Organization',
+    accessor: 'organization',
+    Filter: MultiSelectColumnFilter,
+    filter: customMultiSelectFilterFn,
+    sortType: 'text',
+    width: 300,
+  },
+  {
+    Header: 'Short Name',
+    accessor: 'organizationTiny',
+    Filter: MultiSelectColumnFilter,
+    filter: customMultiSelectFilterFn,
+    sortType: 'text',
+    width: 300,
+  },
+]
 
-const headerChildren = (
-  <div>
-    <ApmAccountModalButton
-      buttonLabel={CREATE_BUTTON_TXT}
-      buttonStyle={buttonStyle}
-    />
+const Accounts = () => {
+  const { data, loading } = useQuery(GET_APM_ORGANIZATIONS)
 
-    <CopyOneOfStringButton
-      queryDoc={GET_APM_ORGANIZATIONS}
-      dataKey="apmOrganizations"
-      datumKey="slug"
-    />
-  </div>
-)
+  if (loading) return null
 
-const buttonGroupCallback = entity => (
-  <>
-    <ApmAccountModalButton
-      account={entity}
-      buttonLabel={editIcon}
-      isEditModal
-    />
+  const { apmOrganizations } = data
 
-    <DeleteButton
-      itemId={entity._id}
-      mutationDoc={DELETE_APM_ORGANIZATION}
-      refetchQueries={[
-        { query: GET_APM_ORGANIZATIONS },
-        { query: GET_PAYER_ORGANIZATIONS },
-        { query: GET_PROVIDER_ORGANIZATIONS },
-      ]}
-    />
-  </>
-)
-
-const panelItemConfig = {
-  style: defaultPanelItemStyle,
-  buttonGroupCallback,
-  label1Callback: ({ organization }) => (
-    <div >
-      {organization}
+  return (
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+      }}
+    >
+      <PanelHeader title={PAGE_TITLE}>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <ApmsModalButton buttonStyle={createButtonStyle}>
+            <Icon
+              iconName="add"
+              color1={Color.WHITE}
+              width={16}
+              style={{ marginRight: 8 }}
+            />
+            Create APM
+          </ApmsModalButton>
+        </div>
+      </PanelHeader>
+      <Table
+        width={CONFIG_TABLE_WIDTH}
+        data={apmOrganizations}
+        columns={COLUMNS}
+        modalColMap={MODAL_TO_COL_MAP}
+        exportProps={{
+          filename: 'ApmAccounts',
+          sheetName: 'Apm Accounts',
+        }}
+      />
     </div>
   )
 }
 
-const PathwaysAccounts = () => (
-  <Panel
-    title="Alternative Payment Models Accounts"
-    headerChildren={headerChildren}
-    headerContainerStyle={{
-      background: '#FFF',
-      borderBottom: `1px solid ${transparentize(0.9, Color.BLACK)}`
-    }}
-    queryDocs={{
-      fetchAllQueryProps: { query: GET_APM_ORGANIZATIONS },
-    }}
-    panelItemConfig={panelItemConfig}
-  />
-)
-
-export default PathwaysAccounts
+export default Accounts
