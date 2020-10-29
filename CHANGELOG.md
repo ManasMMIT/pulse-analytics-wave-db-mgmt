@@ -14,6 +14,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased] - Started: 10-27-20
 
+### Changed
+- `Orion/Pathways-Person Connection Widget and Form`: Don't let user save connection with missing required fields unless they also mark the connection as excluded [#831](https://github.com/pulse-data/wave-db-mgmt/pull/831)
+
 ## [3.10.1] - Started: 10-23-20
 
 ### Added
@@ -21,7 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - `Orion/Pathways-Person Connection Widget and Form`:
- - Added overlay interfaction to Pathways Connection CRUD form; added save button feedback interfaction [#823](https://github.com/pulse-data/wave-db-mgmt/pull/823)
+ - Added overlay interaction to Pathways Connection CRUD form; added save button feedback interaction [#823](https://github.com/pulse-data/wave-db-mgmt/pull/823)
  - Tweaked Bulk import script logic to include all data rows from `RAW_pathwaysInfluencers` [#822](https://github.com/pulse-data/wave-db-mgmt/pull/822)
 - `Orion`: Replaced old Pathways Accounts view with new view [#826](https://github.com/pulse-data/wave-db-mgmt/pull/826)
 

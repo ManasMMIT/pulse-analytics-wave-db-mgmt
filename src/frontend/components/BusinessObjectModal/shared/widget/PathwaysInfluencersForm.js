@@ -22,6 +22,7 @@ import {
   FieldWrapper,
   FormWrapper,
   FlexWrapper,
+  RequiredLabel,
 } from './ConnectionPanel/styledComponents'
 
 import { ALERT_TYPES } from './alert-types'
@@ -271,7 +272,10 @@ const PathwaysInfluencersForm = ({
           />
         </FieldWrapper>
         <FieldWrapper>
-          <FormLabel>Pathways Influencer Type</FormLabel>
+          <FormLabel>
+            Pathways Influencer Type
+            <RequiredLabel> (required)</RequiredLabel>
+          </FormLabel>
           <Select
             isMulti
             value={pathwaysInfluencerTypes.map((type) => ({
@@ -310,7 +314,10 @@ const PathwaysInfluencersForm = ({
           />
         </FieldWrapper>
         <FieldWrapper>
-          <FormLabel>Indications (for permissions)</FormLabel>
+          <FormLabel>
+            Indications (for permissions)
+            <RequiredLabel> (required)</RequiredLabel>
+          </FormLabel>
           <Select
             isMulti
             value={indicationIds.map((_id) => ({

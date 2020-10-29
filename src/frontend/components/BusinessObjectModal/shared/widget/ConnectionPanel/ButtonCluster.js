@@ -111,7 +111,7 @@ const ButtonCluster = ({
         toggleSnackbar(true)
         setWhetherUnsavedChanges(false)
       },
-      onError: alert,
+      onError: window.alert,
     }
   )
 
@@ -130,7 +130,7 @@ const ButtonCluster = ({
         changeConnection(connectionsData[0] || {}) // ! if no more connections, pass empty object
         setWhetherUnsavedChanges(false)
       },
-      onError: alert,
+      onError: window.alert,
     }
   )
 
@@ -142,6 +142,20 @@ const ButtonCluster = ({
     ) {
       deleteConnection()
     }
+  }
+
+  const handleUpsertion = () => {
+    const areRequiredFieldsBlank =
+      _.isEmpty(indicationIds) || _.isEmpty(pathwaysInfluencerTypes)
+
+    if (areRequiredFieldsBlank && !exclusionSettings.isExcluded) {
+      window.alert(
+        `Please fill out the fields marked required OR check off "Exclude From Tool"`
+      )
+      return
+    }
+
+    upsert()
   }
 
   return (
@@ -162,7 +176,7 @@ const ButtonCluster = ({
         ) : (
           <Button
             type="secondary"
-            onClick={upsert}
+            onClick={handleUpsertion}
             color={Color.GREEN}
             buttonStyle={{ margin: `0 ${Spacing.S3}` }}
           >
