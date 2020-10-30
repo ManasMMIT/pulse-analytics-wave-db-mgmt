@@ -46,7 +46,7 @@ const getStubbedNewInfluencer = (pathwaysId) => ({
   pathwaysId,
   personId: null,
   firstName: 'New',
-  lastName: 'Person',
+  lastName: 'Person Connection',
   indicationIds: [],
   pathwaysInfluencerTypes: [],
   tumorTypeSpecialty: '',

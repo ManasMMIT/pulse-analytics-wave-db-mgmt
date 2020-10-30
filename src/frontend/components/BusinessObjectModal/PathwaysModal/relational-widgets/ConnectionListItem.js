@@ -10,7 +10,6 @@ import Color from 'frontend/utils/color'
 import {
   ContentWrapper,
   TextWrapper,
-  OrganizationType,
   Title,
   Subtitle,
   IconWrapper,
@@ -18,13 +17,12 @@ import {
 } from './../../shared/widget/ConnectionsList/styledComponents'
 
 const ConnectionListItem = ({ isActive, isDisabled, value, clickHandler }) => {
-  const { firstName, lastName, position, organizationType } = value
+  const { firstName, lastName, position } = value
 
   return (
     <ListItem style={listItemStyle} clickHandler={clickHandler} value={value}>
       <ContentWrapper isActive={isActive}>
         <TextWrapper isActive={isActive} isDisabled={isDisabled}>
-          <OrganizationType>{organizationType}</OrganizationType>
           <Title>{firstName + ' ' + lastName}</Title>
           <Subtitle>{position}</Subtitle>
         </TextWrapper>
