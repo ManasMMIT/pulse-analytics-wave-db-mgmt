@@ -29,14 +29,27 @@ const ButtonGroup = ({
     : inputFields
 
   const [save] = useMutation(saveMutationToUse, {
-    variables: { input: inputToUse },
     refetchQueries,
     onCompleted: (data) => {
       afterMutationHook(data)
       closeModal()
     },
     awaitRefetchQueries: true,
-    onError: alert,
+    onError: (error) => {
+      if (error.message.match(/similar names/i)) {
+        if (
+          window.confirm(
+            `${error.message} -- you're sure this wouldn't duplicate someone? Click 'OK' to save anyway.`
+          )
+        ) {
+          save({ variables: { input: { ...inputToUse, skipDupeCheck: true } } })
+        }
+
+        return
+      }
+
+      alert(error)
+    },
   })
 
   return (
@@ -70,7 +83,7 @@ const ButtonGroup = ({
       <Button
         buttonStyle={{ margin: Spacing.S3 }}
         color={Color.GREEN}
-        onClick={save}
+        onClick={() => save({ variables: { input: inputToUse } })}
       >
         Save + Close
       </Button>
