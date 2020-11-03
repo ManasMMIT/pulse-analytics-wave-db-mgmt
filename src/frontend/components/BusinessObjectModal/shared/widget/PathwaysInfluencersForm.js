@@ -7,12 +7,13 @@ import _ from 'lodash'
 import Spacing from 'frontend/utils/spacing'
 import Input from 'frontend/components/Input'
 
-import CreatableMultiSelect from '../../../../../../../Orion/shared/CreatableMultiSelect'
-import QuarterPicker from './QuarterPicker'
+import CreatableMultiSelect from '../../../../Orion/shared/CreatableMultiSelect'
+import QuarterPicker from '../../../QuarterPicker'
 
 import {
   GET_SOURCE_INDICATIONS,
   GET_PATHWAYS_ORGANIZATIONS,
+  GET_PEOPLE,
 } from 'frontend/api/queries'
 
 import {
@@ -21,9 +22,10 @@ import {
   FieldWrapper,
   FormWrapper,
   FlexWrapper,
-} from './styledComponents'
+  RequiredLabel,
+} from './ConnectionPanel/styledComponents'
 
-import { ALERT_TYPES } from '../alert-types'
+import { ALERT_TYPES } from './alert-types'
 
 const PATHWAYS_MGMT_TYPES = ['Business', 'Clinical', 'Leadership']
 
@@ -38,10 +40,11 @@ const INFLUENCER_TYPES = [
 
 const PRIORITY_LEVELS = [null, 'High', 'Medium', 'Low']
 
-const PathwaysForm = ({
-  orgData,
-  isNewOrgBeingCreated,
-  setOrgData,
+const PathwaysInfluencersForm = ({
+  refKey,
+  connectionData,
+  isNewConnectionBeingCreated,
+  setConnectionData,
   setWhetherUnsavedChanges,
 }) => {
   const { data: indicationsData, loading: indicationsLoading } = useQuery(
@@ -52,7 +55,16 @@ const PathwaysForm = ({
     GET_PATHWAYS_ORGANIZATIONS
   )
 
-  if (indicationsLoading || pathwaysLoading) return 'Loading...'
+  const { data: peopleData, loading: peopleLoading } = useQuery(GET_PEOPLE)
+
+  if (indicationsLoading || pathwaysLoading || peopleLoading)
+    return 'Loading...'
+
+  const globalPeople = Object.values(peopleData)[0]
+  const globalPeopleById = _.mapValues(
+    _.keyBy(globalPeople, '_id'),
+    ({ firstName, lastName }) => `${firstName} ${lastName}`
+  )
 
   const globalIndications = Object.values(indicationsData)[0]
   const globalIndicationsById = _.mapValues(
@@ -68,6 +80,7 @@ const PathwaysForm = ({
 
   const {
     pathwaysId,
+    personId,
     tumorTypeSpecialty,
     position,
     priority,
@@ -80,15 +93,10 @@ const PathwaysForm = ({
     exclusionSettings,
     startQuarter,
     endQuarter,
-  } = orgData
+  } = connectionData
 
   const {
     internalNotes,
-    totalDisclosures,
-    dateDisclosure1,
-    dateDisclosure2,
-    dateDisclosure3,
-    dateDisclosure4,
     pathwaysManagementTypes,
     valueChairsIndications,
   } = internalFields
@@ -101,74 +109,84 @@ const PathwaysForm = ({
 
   const { isExcluded, reason: exclusionReason } = exclusionSettings
 
-  const orgDataCopy = _.cloneDeep(orgData)
+  const pathwaysInfluencerConnectionCopy = _.cloneDeep(connectionData)
 
   const updateOrgData = (newData) => {
-    setOrgData(newData)
+    setConnectionData(newData)
     setWhetherUnsavedChanges(true)
   }
 
   const selectPathwaysId = (_id) => {
-    updateOrgData(_.merge({}, orgData, { pathwaysId: _id }))
+    updateOrgData(_.merge({}, connectionData, { pathwaysId: _id }))
+  }
+
+  const selectPersonId = (_id) => {
+    updateOrgData(_.merge({}, connectionData, { personId: _id }))
   }
 
   const handleTopLevelTextChange = ({ name, value }) => {
-    updateOrgData(_.merge({}, orgData, { [name]: value }))
+    updateOrgData(_.merge({}, connectionData, { [name]: value }))
   }
 
   const handleAlertDescriptionChange = ({ name, value }) => {
-    orgDataCopy.alert.description = value
-    updateOrgData(orgDataCopy)
+    pathwaysInfluencerConnectionCopy.alert.description = value
+    updateOrgData(pathwaysInfluencerConnectionCopy)
   }
 
   const handleInternalFieldsTextChange = ({ name, value }) => {
-    orgDataCopy.internalFields[name] = value
-    updateOrgData(orgDataCopy)
+    pathwaysInfluencerConnectionCopy.internalFields[name] = value
+    updateOrgData(pathwaysInfluencerConnectionCopy)
   }
 
   const changeInternalPathwaysManagementTypes = (arr) => {
-    orgDataCopy.internalFields.pathwaysManagementTypes = (arr || []).map(
-      ({ value }) => value
-    )
-    updateOrgData(orgDataCopy)
+    pathwaysInfluencerConnectionCopy.internalFields.pathwaysManagementTypes = (
+      arr || []
+    ).map(({ value }) => value)
+    updateOrgData(pathwaysInfluencerConnectionCopy)
   }
 
   const changePathwaysInfluencerTypes = (arr) => {
-    orgDataCopy.pathwaysInfluencerTypes = (arr || []).map(({ value }) => value)
-    updateOrgData(orgDataCopy)
+    pathwaysInfluencerConnectionCopy.pathwaysInfluencerTypes = (arr || []).map(
+      ({ value }) => value
+    )
+    updateOrgData(pathwaysInfluencerConnectionCopy)
   }
 
   const changeInternalValueChairsIndications = (arr) => {
-    orgDataCopy.internalFields.valueChairsIndications = (arr || []).map(
-      ({ value }) => value
-    )
-    updateOrgData(orgDataCopy)
+    pathwaysInfluencerConnectionCopy.internalFields.valueChairsIndications = (
+      arr || []
+    ).map(({ value }) => value)
+    updateOrgData(pathwaysInfluencerConnectionCopy)
   }
 
   const handleIndicationsChange = (arr) => {
-    orgDataCopy.indicationIds = (arr || []).map(({ value }) => value)
-    updateOrgData(orgDataCopy)
+    pathwaysInfluencerConnectionCopy.indicationIds = (arr || []).map(
+      ({ value }) => value
+    )
+    updateOrgData(pathwaysInfluencerConnectionCopy)
   }
 
   const changeExclusionSettings = ({ name, value }) => {
-    _.merge(orgDataCopy.exclusionSettings, { [name]: value })
-    updateOrgData(orgDataCopy)
+    _.merge(pathwaysInfluencerConnectionCopy.exclusionSettings, {
+      [name]: value,
+    })
+    updateOrgData(pathwaysInfluencerConnectionCopy)
   }
 
   const handleTimestampChange = ({ name, value }) => {
     if (name === 'startDate') {
-      orgDataCopy.startQuarter = value
+      pathwaysInfluencerConnectionCopy.startQuarter = value
     } else if (name === 'endDate') {
-      orgDataCopy.endQuarter = value
+      pathwaysInfluencerConnectionCopy.endQuarter = value
     } else if (name === 'startQuarter') {
-      orgDataCopy.startDate = null
+      pathwaysInfluencerConnectionCopy.startDate = null
     } else if (name === 'endQuarter') {
-      orgDataCopy.endDate = null
+      pathwaysInfluencerConnectionCopy.endDate = null
     }
 
-    orgDataCopy[name] = value
+    pathwaysInfluencerConnectionCopy[name] = value
 
-    updateOrgData(orgDataCopy)
+    updateOrgData(pathwaysInfluencerConnectionCopy)
   }
 
   const clearTimestamp = (name) => {
@@ -176,22 +194,32 @@ const PathwaysForm = ({
   }
 
   const handleAlertDate = ({ value: newAlertDate }) => {
-    orgDataCopy.alert.date = newAlertDate
-    updateOrgData(orgDataCopy)
+    pathwaysInfluencerConnectionCopy.alert.date = newAlertDate
+    updateOrgData(pathwaysInfluencerConnectionCopy)
   }
 
   const handleAlertType = ({ value: newAlertType }) => {
-    orgDataCopy.alert.type = newAlertType
-    updateOrgData(orgDataCopy)
+    pathwaysInfluencerConnectionCopy.alert.type = newAlertType
+    updateOrgData(pathwaysInfluencerConnectionCopy)
   }
+
+  const shouldDisablePathwaysSelect =
+    !isNewConnectionBeingCreated || refKey !== 'pathwaysId'
+  const shouldDisableInfluencerSelect =
+    !isNewConnectionBeingCreated || refKey === 'pathwaysId'
 
   return (
     <FormWrapper>
       <FieldContainer>
         <FieldWrapper>
-          <FormLabel>Connected Pathways Organization</FormLabel>
+          <FormLabel>
+            Connected Pathways Organization
+            {!shouldDisablePathwaysSelect ? (
+              <RequiredLabel> (required)</RequiredLabel>
+            ) : null}
+          </FormLabel>
           <Select
-            isDisabled={!isNewOrgBeingCreated}
+            isDisabled={shouldDisablePathwaysSelect}
             value={{
               label: globalPathwaysById[pathwaysId],
               value: pathwaysId,
@@ -203,23 +231,34 @@ const PathwaysForm = ({
             onChange={({ value }) => selectPathwaysId(value)}
           />
         </FieldWrapper>
-
         <FieldWrapper>
           <FormLabel>
-            Internal TDG Notes [Format - YYQQ (MM/DD:____);]
+            Connected Influencer
+            {!shouldDisableInfluencerSelect ? (
+              <RequiredLabel> (required)</RequiredLabel>
+            ) : null}
           </FormLabel>
-          <Input
-            name="internalNotes"
-            type="text"
-            value={internalNotes}
-            onChange={handleInternalFieldsTextChange}
+          <Select
+            isDisabled={shouldDisableInfluencerSelect}
+            value={{
+              label: globalPeopleById[personId],
+              value: personId,
+            }}
+            options={globalPeople.map(({ _id, firstName, lastName }) => ({
+              label: `${firstName} ${lastName}`,
+              value: _id,
+            }))}
+            onChange={({ value }) => selectPersonId(value)}
           />
         </FieldWrapper>
       </FieldContainer>
 
       <FieldContainer>
         <FieldWrapper>
-          <FormLabel>Pathways Management Type (Internal TDG Only)</FormLabel>
+          <FormLabel>
+            Pathways Management Type (Internal TDG Only)
+            <RequiredLabel> (required)</RequiredLabel>
+          </FormLabel>
           <Select
             isMulti
             value={(pathwaysManagementTypes || []).map((type) => ({
@@ -234,7 +273,10 @@ const PathwaysForm = ({
           />
         </FieldWrapper>
         <FieldWrapper>
-          <FormLabel>Pathways Influencer Type</FormLabel>
+          <FormLabel>
+            Pathways Influencer Type
+            <RequiredLabel> (required)</RequiredLabel>
+          </FormLabel>
           <Select
             isMulti
             value={pathwaysInfluencerTypes.map((type) => ({
@@ -249,7 +291,10 @@ const PathwaysForm = ({
           />
         </FieldWrapper>
         <FieldWrapper>
-          <FormLabel>Pathways Position</FormLabel>
+          <FormLabel>
+            Pathways Position
+            <RequiredLabel> (required)</RequiredLabel>
+          </FormLabel>
           <Input
             type="text"
             value={position}
@@ -262,18 +307,9 @@ const PathwaysForm = ({
       <FieldContainer>
         <FieldWrapper>
           <FormLabel>
-            ClinicalPath / Value Chairs Indication(s) (Internal TDG Only)
+            Indications (for permissions)
+            <RequiredLabel> (required)</RequiredLabel>
           </FormLabel>
-          <CreatableMultiSelect
-            value={(valueChairsIndications || []).map((str) => ({
-              label: str,
-              value: str,
-            }))}
-            handleChange={changeInternalValueChairsIndications}
-          />
-        </FieldWrapper>
-        <FieldWrapper>
-          <FormLabel>Indications (for permissions)</FormLabel>
           <Select
             isMulti
             value={indicationIds.map((_id) => ({
@@ -288,31 +324,20 @@ const PathwaysForm = ({
           />
         </FieldWrapper>
         <FieldWrapper>
-          <FormLabel>Tumor Type Specialty</FormLabel>
-          <Input
-            type="text"
-            value={tumorTypeSpecialty}
-            name="tumorTypeSpecialty"
-            onChange={handleTopLevelTextChange}
+          <FormLabel>
+            ClinicalPath / Value Chairs Indication(s) (Internal TDG Only)
+          </FormLabel>
+          <CreatableMultiSelect
+            value={(valueChairsIndications || []).map((str) => ({
+              label: str,
+              value: str,
+            }))}
+            handleChange={changeInternalValueChairsIndications}
           />
         </FieldWrapper>
       </FieldContainer>
 
       <FieldContainer>
-        <FieldWrapper>
-          <FormLabel>Priority</FormLabel>
-          <Select
-            options={PRIORITY_LEVELS.map((level) => ({
-              value: level,
-              label: level,
-            }))}
-            value={{ value: priority, label: priority }}
-            onChange={({ value }) =>
-              handleTopLevelTextChange({ name: 'priority', value })
-            }
-          />
-        </FieldWrapper>
-
         <FlexWrapper>
           <FieldWrapper style={{ width: '50%' }}>
             <FormLabel>Start Date</FormLabel>
@@ -417,6 +442,19 @@ const PathwaysForm = ({
 
       <FieldContainer>
         <FieldWrapper>
+          <FormLabel>Priority</FormLabel>
+          <Select
+            options={PRIORITY_LEVELS.map((level) => ({
+              value: level,
+              label: level,
+            }))}
+            value={{ value: priority, label: priority }}
+            onChange={({ value }) =>
+              handleTopLevelTextChange({ name: 'priority', value })
+            }
+          />
+        </FieldWrapper>
+        <FieldWrapper>
           <FlexWrapper>
             <FormLabel>
               <Input
@@ -439,51 +477,24 @@ const PathwaysForm = ({
             onChange={changeExclusionSettings}
           />
         </FieldWrapper>
-      </FieldContainer>
-      <FieldContainer>
         <FieldWrapper>
-          <FormLabel>Total Disclosures</FormLabel>
+          <FormLabel>
+            Internal TDG Notes [Format - YYQQ (MM/DD:____);]
+          </FormLabel>
           <Input
-            name="totalDisclosures"
+            name="internalNotes"
             type="text"
-            value={totalDisclosures}
+            value={internalNotes}
             onChange={handleInternalFieldsTextChange}
           />
         </FieldWrapper>
         <FieldWrapper>
-          <FormLabel>Date Disclosure 1 (Date 1: Tumor(s))</FormLabel>
+          <FormLabel>Tumor Type Specialty</FormLabel>
           <Input
-            name="dateDisclosure1"
             type="text"
-            value={dateDisclosure1}
-            onChange={handleInternalFieldsTextChange}
-          />
-        </FieldWrapper>
-        <FieldWrapper>
-          <FormLabel>Date Disclosure 2 (Date 2: Tumor(s))</FormLabel>
-          <Input
-            name="dateDisclosure2"
-            type="text"
-            value={dateDisclosure2}
-            onChange={handleInternalFieldsTextChange}
-          />
-        </FieldWrapper>
-        <FieldWrapper>
-          <FormLabel>Date Disclosure 3 (Date 3: Tumor(s))</FormLabel>
-          <Input
-            name="dateDisclosure3"
-            type="text"
-            value={dateDisclosure3}
-            onChange={handleInternalFieldsTextChange}
-          />
-        </FieldWrapper>
-        <FieldWrapper>
-          <FormLabel>Date Disclosure 4 (Date 4: Tumor(s))</FormLabel>
-          <Input
-            name="dateDisclosure4"
-            type="text"
-            value={dateDisclosure4}
-            onChange={handleInternalFieldsTextChange}
+            value={tumorTypeSpecialty}
+            name="tumorTypeSpecialty"
+            onChange={handleTopLevelTextChange}
           />
         </FieldWrapper>
       </FieldContainer>
@@ -491,10 +502,11 @@ const PathwaysForm = ({
   )
 }
 
-PathwaysForm.propTypes = {
+PathwaysInfluencersForm.propTypes = {
+  refKey: PropTypes.string.isRequired,
   orgData: PropTypes.object.isRequired,
-  isNewOrgBeingCreated: PropTypes.bool.isRequired,
-  setOrgData: PropTypes.func.isRequired,
+  isNewConnectionBeingCreated: PropTypes.bool.isRequired,
+  setConnectionData: PropTypes.func.isRequired,
 }
 
-export default PathwaysForm
+export default PathwaysInfluencersForm

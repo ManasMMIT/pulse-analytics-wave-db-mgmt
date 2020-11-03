@@ -10,38 +10,39 @@ import UpdateButton from './UpdateButton'
 import { SELECT_CLIENT } from '../../../api/mutations'
 import { GET_CLIENTS, GET_SELECTED_CLIENT } from '../../../api/queries'
 
-import { Colors, Spacing } from '../../../utils/pulseStyles'
+import Color from 'frontend/utils/color'
+import Spacing from 'frontend/utils/spacing'
 
 const phoenixLogo =
   'https://res.cloudinary.com/pulsedatatools/image/upload/v1573837414/polaris/icons/phoenix-1-color.svg'
 
 const ClientPanelContainer = styled.div({
-  backgroundColor: Colors.TOOL_SIDEBAR,
+  backgroundColor: Color.TOOL_SIDEBAR,
 })
 
 const PhoenixHeader = styled.div({
   alignItems: 'center',
-  background: transparentize(0.3, Colors.BLACK),
-  color: Colors.PHOENIX,
+  background: transparentize(0.3, Color.BLACK),
+  color: Color.PHOENIX,
   display: 'flex',
   fontSize: 12,
   fontWeight: 700,
-  padding: `${Spacing.MEDIUM} ${Spacing.EXTRA_LARGE}`,
+  padding: `${Spacing.S5} ${Spacing.S7}`,
   textTransform: 'uppercase',
   width: '100%',
 })
 
 const PhoenixLogo = styled.img({
   display: 'inline',
-  marginRight: Spacing.SMALL,
+  marginRight: Spacing.S3,
 })
 
 const defaultPanelItemStyle = {
   cursor: 'pointer',
-  color: transparentize(0.4, Colors.WHITE),
-  margin: `0 ${Spacing.NORMAL}`,
+  color: transparentize(0.4, Color.WHITE),
+  margin: `0 ${Spacing.S4}`,
   borderRadius: 4,
-  padding: `${Spacing.SMALL} ${Spacing.NORMAL}`,
+  padding: `${Spacing.S4} ${Spacing.S4}`,
   textDecoration: 'none',
   fontSize: 11,
   fontWeight: 600,
@@ -52,8 +53,8 @@ const defaultPanelItemStyle = {
 }
 
 const activePanelItemStyle = {
-  color: Colors.WHITE,
-  background: transparentize(0.9, Colors.WHITE),
+  color: Color.WHITE,
+  background: transparentize(0.9, Color.WHITE),
 }
 
 const buttonGroupCallback = (client) => (
@@ -71,13 +72,26 @@ const panelItemConfig = {
   label1Callback: ({ description, icon }) => (
     <div style={{ display: 'flex', alignItems: 'center' }}>
       {icon ? (
-        <img
-          style={{ maxWidth: 18, width: '100%', marginRight: 6 }}
-          src={icon}
-          alt={`#{description}-icon`}
-        />
+        <div
+          style={{
+            background: Color.WHITE,
+            borderRadius: 4,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            width: 24,
+            height: 24,
+            marginRight: Spacing.S5,
+          }}
+        >
+          <img
+            style={{ width: 20, height: 'auto' }}
+            src={icon}
+            alt={`#{description}-icon`}
+          />
+        </div>
       ) : null}
-      <span>{description}</span>
+      <span style={{ fontSize: 13 }}>{description}</span>
     </div>
   ),
   // ! Note: inactiveStyle not needed until hover effects differ
@@ -98,17 +112,17 @@ const ClientsPanel = () => {
       </PhoenixHeader>
       <Panel
         style={{
-          backgroundColor: Colors.TOOL_SIDEBAR,
-          maxWidth: Spacing.TOOL_SIDEBAR,
-          minWidth: Spacing.TOOL_SIDEBAR,
+          backgroundColor: Color.TOOL_SIDEBAR,
+          maxWidth: 320,
+          minWidth: 320,
           height: panelHeight,
           maxHeight: panelHeight,
           minHeight: panelHeight,
         }}
         title="Clients"
-        titleStyle={{ color: transparentize(0.5, Colors.WHITE) }}
+        titleStyle={{ color: transparentize(0.5, Color.WHITE) }}
         headerChildren={headerChildren}
-        headerContainerStyle={{ backgroundColor: Colors.TOOL_SIDEBAR }}
+        headerContainerStyle={{ backgroundColor: Color.TOOL_SIDEBAR }}
         queryDocs={{
           fetchAllQueryProps: { query: GET_CLIENTS },
           fetchSelectedQueryProps: { query: GET_SELECTED_CLIENT },

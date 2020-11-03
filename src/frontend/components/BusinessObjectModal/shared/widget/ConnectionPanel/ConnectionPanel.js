@@ -11,17 +11,10 @@ import FontSpace from 'frontend/utils/fontspace'
 import { AlphaColors } from 'frontend/utils/pulseStyles'
 
 import ButtonCluster from './ButtonCluster'
-import PathwaysForm from './PathwaysForm'
+
 import EventLog from 'frontend/components/EventLog'
 
 import { ConnectionPanelWrapper } from './styledComponents'
-
-const ORG_TYPE_TO_FORM_MAP = {
-  Pathways: {
-    Form: PathwaysForm,
-    refKey: 'pathwaysId',
-  },
-}
 
 const TABS_DATA = [
   'Details',
@@ -31,57 +24,62 @@ const TABS_DATA = [
 
 const ConnectionPanel = ({
   entityId,
-  selectedOrganization,
-  changeOrganization,
+  title,
+  formConfig,
+  selectedConnection,
+  changeConnection,
   connectionsData,
-  setWhetherNewOrgBeingCreated,
-  isNewOrgBeingCreated,
+  setWhetherNewConnectionBeingCreated,
+  isNewConnectionBeingCreated,
   setWhetherUnsavedChanges,
 }) => {
-  const [orgData, setOrgData] = useState(_.cloneDeep(selectedOrganization))
+  const [connectionData, setConnectionData] = useState(
+    _.cloneDeep(selectedConnection)
+  )
   const [eventLogFilters, setEventLogFilters] = useState({})
 
-  const { organization, organizationType } = orgData
-  const { refKey, Form } = ORG_TYPE_TO_FORM_MAP[organizationType] || {}
+  const { refKey, Form } = formConfig
 
   const cancelHandler = () => {
-    changeOrganization(_.isEmpty(connectionsData) ? {} : connectionsData[0])
-    setWhetherNewOrgBeingCreated(false)
+    changeConnection(_.isEmpty(connectionsData) ? {} : connectionsData[0])
+    setWhetherNewConnectionBeingCreated(false)
     setWhetherUnsavedChanges(false)
   }
 
   useEffect(() => {
-    if (!_.isEmpty(selectedOrganization)) {
-      setOrgData(selectedOrganization)
+    if (!_.isEmpty(selectedConnection)) {
+      setConnectionData(selectedConnection)
 
       // if the selected connection has been persisted,
       // THEN you can setEventLogFilters to get history; otherwise, leave it empty
-      if (selectedOrganization._id) {
+      if (selectedConnection._id) {
         setEventLogFilters({
-          entityIds: [entityId, selectedOrganization[refKey]],
+          entityIds: [entityId, selectedConnection[refKey]],
         })
       } else {
         setEventLogFilters({})
       }
     }
-  }, [selectedOrganization])
+  }, [selectedConnection])
 
-  console.log(orgData)
+  console.log(connectionData)
 
   return (
     <ConnectionPanelWrapper>
       <SectionTitle
-        title={organization}
+        title={title}
         titleStyle={{ ...FontSpace.FS3, color: Color.BLUE }}
       >
         <ButtonCluster
-          orgData={orgData}
+          connectionData={connectionData}
           cancelHandler={cancelHandler}
-          changeOrganization={changeOrganization}
+          changeConnection={changeConnection}
           connectionsData={connectionsData}
-          isNewOrgBeingCreated={isNewOrgBeingCreated}
+          isNewConnectionBeingCreated={isNewConnectionBeingCreated}
           setWhetherUnsavedChanges={setWhetherUnsavedChanges}
-          setWhetherNewOrgBeingCreated={setWhetherNewOrgBeingCreated}
+          setWhetherNewConnectionBeingCreated={
+            setWhetherNewConnectionBeingCreated
+          }
         />
       </SectionTitle>
       <UnderlinedTabs
@@ -93,13 +91,14 @@ const ConnectionPanel = ({
         }}
       >
         <Form
-          orgData={orgData}
-          isNewOrgBeingCreated={isNewOrgBeingCreated}
-          setOrgData={setOrgData}
+          connectionData={connectionData}
+          isNewConnectionBeingCreated={isNewConnectionBeingCreated}
+          setConnectionData={setConnectionData}
           setWhetherUnsavedChanges={setWhetherUnsavedChanges}
+          refKey={refKey}
         />
 
-        {Boolean(orgData._id) ? (
+        {Boolean(connectionData._id) ? (
           <EventLog filters={eventLogFilters} />
         ) : (
           <div style={{ padding: 24 }}>
@@ -113,11 +112,11 @@ const ConnectionPanel = ({
 
 ConnectionPanel.propTypes = {
   entityId: PropTypes.string.isRequired,
-  changeOrganization: PropTypes.func.isRequired,
-  isNewOrgBeingCreated: PropTypes.bool.isRequired,
+  changeConnection: PropTypes.func.isRequired,
+  isNewConnectionBeingCreated: PropTypes.bool.isRequired,
   connectionsData: PropTypes.array.isRequired,
-  selectedOrganization: PropTypes.object.isRequired,
-  setWhetherNewOrgBeingCreated: PropTypes.func.isRequired,
+  selectedConnection: PropTypes.object.isRequired,
+  setWhetherNewConnectionBeingCreated: PropTypes.func.isRequired,
   setWhetherUnsavedChanges: PropTypes.func.isRequired,
 }
 

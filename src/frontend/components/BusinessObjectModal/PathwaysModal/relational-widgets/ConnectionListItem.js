@@ -10,35 +10,21 @@ import Color from 'frontend/utils/color'
 import {
   ContentWrapper,
   TextWrapper,
-  OrganizationType,
   Title,
   Subtitle,
-  Description,
   IconWrapper,
   listItemStyle,
-} from './styledComponents'
+} from './../../shared/widget/ConnectionsList/styledComponents'
 
-const ConnectionListItem = ({
-  organizationType,
-  title,
-  subtitle,
-  description,
-  isActive,
-  isDisabled,
-  // hasPrimaryAffiliation,
-  value,
-  clickHandler,
-}) => {
-  // TODO: Wire in primary affiliation tag
-  // const shouldShowAffiliationTag = !isActive && hasPrimaryAffiliation
+const ConnectionListItem = ({ isActive, isDisabled, value, clickHandler }) => {
+  const { firstName, lastName, position } = value
+
   return (
     <ListItem style={listItemStyle} clickHandler={clickHandler} value={value}>
       <ContentWrapper isActive={isActive}>
         <TextWrapper isActive={isActive} isDisabled={isDisabled}>
-          <OrganizationType>{organizationType}</OrganizationType>
-          <Title>{title}</Title>
-          <Subtitle>{subtitle}</Subtitle>
-          <Description>{description}</Description>
+          <Title>{firstName + ' ' + lastName}</Title>
+          <Subtitle>{position}</Subtitle>
         </TextWrapper>
         {isActive && (
           <IconWrapper>
@@ -49,28 +35,18 @@ const ConnectionListItem = ({
             />
           </IconWrapper>
         )}
-        {/* {shouldShowAffiliationTag && (
-          <div>
-            <Tag text="Primary Affiliation" color={Color.PURPLE} />
-          </div>
-        )} */}
       </ContentWrapper>
     </ListItem>
   )
 }
 
 ConnectionListItem.propTypes = {
-  title: PropTypes.string.isRequired,
-  subtitle: PropTypes.string,
-  description: PropTypes.string,
   isActive: PropTypes.bool,
   value: PropTypes.any,
   clickHandler: PropTypes.func,
 }
 
 ConnectionListItem.defaultProps = {
-  subtitle: '',
-  description: '',
   isActive: false,
   value: null,
   clickHandler: () => {},

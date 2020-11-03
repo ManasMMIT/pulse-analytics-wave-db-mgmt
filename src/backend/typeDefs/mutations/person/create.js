@@ -14,6 +14,7 @@ const createPersonTypeDefs = gql`
     externalLink: String
     nationalProviderIdentifier: Float
     physicianProfileId: Float
+    skipDupeCheck: Boolean
   }
 
   type CreatePersonPayload {

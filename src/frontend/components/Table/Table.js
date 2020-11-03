@@ -22,6 +22,7 @@ import Pagination from './Pagination'
 import ModalManager from './ModalManager'
 import sortTypes from './custom-sort-types'
 import formatDataForExport from './formatDataForExport'
+import { Spacing, Colors } from 'frontend/utils/pulseStyles'
 
 const TemplateWrapper = styled.div(
   {
@@ -48,11 +49,21 @@ const DefaultColumnFilter = ({
   )
 }
 
-const DEFAULT_COLUMN = {
-  Filter: DefaultColumnFilter,
-}
-
+const DEFAULT_COLUMN = { Filter: DefaultColumnFilter }
 const INITIAL_PAGE_SIZE = 50
+
+const TableHint = () => (
+  <span
+    style={{
+      margin: Spacing.NORMAL,
+      fontSize: Spacing.NORMAL,
+      color: Colors.MEDIUM_GRAY_2,
+      fontStyle: 'italic',
+    }}
+  >
+    Hold shift while clicking column headers for multi-column sort
+  </span>
+)
 
 const resetTableScroll = () => {
   const tableBodyNode = document.querySelector('.table.sticky')
@@ -114,6 +125,7 @@ const Table = ({
         {data.length ? (
           <Pagination {...{ pageIndex, pageSize, ...tablePropOverflow }} />
         ) : null}
+        <TableHint />
         <div style={{ margin: '0 24px 0 auto', ...exportStyle }}>
           <ExportExcelButton
             data={dataFormattedForExport}

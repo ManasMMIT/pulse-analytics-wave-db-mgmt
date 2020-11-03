@@ -37,15 +37,15 @@ const activePanelItemStyle = {
   borderLeft: `4px solid ${Colors.PRIMARY}`,
 }
 
-const buttonGroupCallback = team => {
+const buttonGroupCallback = (team) => {
   if (team.isDefault) return <SitemapButton teamId={team._id} />
 
   return (
-    <>
+    <div style={{ display: 'flex', alignItems: 'center' }}>
       <UpdateButton team={team} />
       <SitemapButton teamId={team._id} />
       <DeleteButton teamId={team._id} />
-    </>
+    </div>
   )
 }
 
@@ -69,7 +69,9 @@ const TeamsPanel = () => {
   if (loading) return null
   if (error) return <div>Error fetching data</div>
 
-  const { selectedClient: { description: clientName } } = data
+  const {
+    selectedClient: { description: clientName },
+  } = data
 
   return (
     <Panel

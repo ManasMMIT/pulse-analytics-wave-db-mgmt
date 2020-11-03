@@ -3,8 +3,6 @@ import React from 'react'
 import Sublist from 'frontend/components/List/Sublist'
 import SublistHeaderRow from 'frontend/components/List/SublistHeaderRow'
 
-import ConnectionListItem from './ConnectionListItem'
-
 import { isoShortToDateMonthYearLong } from 'frontend/utils/formatDate'
 import Color from 'frontend/utils/color'
 
@@ -29,8 +27,9 @@ const SUBLIST_MAP = {
 const ConnectionsSublist = ({
   status,
   data,
-  selectedOrganization,
-  orgClickHandler,
+  selectedConnection,
+  ConnectionListItem,
+  clickHandler,
 }) => {
   const { rowColor, formatter, isDisabled } = SUBLIST_MAP[status]
 
@@ -41,31 +40,15 @@ const ConnectionsSublist = ({
         rowColor={rowColor}
       />
       {data.map((datum) => {
-        const {
-          _id,
-          organization,
-          organizationType,
-          description,
-          position,
-        } = datum
-
-        // For Outdated date formatting
-        const formattedDescription = formatter
-          ? formatter(description)
-          : description
-
-        const isActive = selectedOrganization._id === _id
+        const isActive = selectedConnection._id === datum._id
 
         return (
           <ConnectionListItem
-            key={_id}
-            organizationType={organizationType}
-            title={organization}
-            subtitle={position}
-            description={formattedDescription}
+            key={datum._id}
             value={datum}
+            formatter={formatter}
             isActive={isActive}
-            clickHandler={orgClickHandler}
+            clickHandler={clickHandler}
             isDisabled={isDisabled}
           />
         )

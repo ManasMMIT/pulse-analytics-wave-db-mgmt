@@ -37,3 +37,7 @@ export const FlexWrapper = styled.div({
   display: 'flex',
   alignItems: 'center',
 })
+
+export const RequiredLabel = styled.span({
+  color: Color.RED,
+})

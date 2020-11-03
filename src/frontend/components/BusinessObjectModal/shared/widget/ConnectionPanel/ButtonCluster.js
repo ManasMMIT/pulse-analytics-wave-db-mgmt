@@ -5,20 +5,32 @@ import _ from 'lodash'
 import { useMutation } from '@apollo/react-hooks'
 import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
+
 import Button from 'frontend/components/Button'
 import Spinner from 'frontend/components/Spinner'
+import { GET_EVENTS, GET_JOIN_PATHWAYS_AND_PEOPLE } from 'frontend/api/queries'
 
 import Color from 'frontend/utils/color'
 import Spacing from 'frontend/utils/spacing'
+import stripTypename from '../../../../../Orion/shared/strip-typename'
 
-import stripTypename from '../../../../../../../Orion/shared/strip-typename'
-
-import { GET_EVENTS, GET_JOIN_PATHWAYS_AND_PEOPLE } from 'frontend/api/queries'
-
+// TODO: Pass in mutations and refetch gql tags to button cluster
 import {
   UPSERT_PATHWAYS_AND_PERSON_CONNECTION,
   DELETE_PATHWAYS_AND_PERSON_CONNECTION,
 } from 'frontend/api/mutations'
+
+const REQUIRED_FIELD_KEYS = [
+  'pathwaysId',
+  'personId',
+  'indicationIds',
+  'pathwaysInfluencerTypes',
+  'pathwaysInfluencerTypes',
+  'position',
+]
+
+const areRequiredFieldsBlank = (data) =>
+  REQUIRED_FIELD_KEYS.some((key) => _.isEmpty(data[key]))
 
 const Alert = (props) => {
   return <MuiAlert elevation={6} variant="filled" {...props} />
@@ -40,17 +52,17 @@ const ButtonsWrapper = styled.div({
 })
 
 const ButtonCluster = ({
-  isNewOrgBeingCreated,
+  isNewConnectionBeingCreated,
   cancelHandler,
-  orgData,
+  connectionData,
   setWhetherUnsavedChanges,
-  setWhetherNewOrgBeingCreated,
-  changeOrganization,
+  setWhetherNewConnectionBeingCreated,
+  changeConnection,
   connectionsData,
 }) => {
   const [snackbarOpen, toggleSnackbar] = useState(false)
 
-  orgData = stripTypename(_.cloneDeep(orgData))
+  connectionData = stripTypename(_.cloneDeep(connectionData))
 
   const {
     _id,
@@ -68,7 +80,7 @@ const ButtonCluster = ({
     endDate,
     startQuarter,
     endQuarter,
-  } = orgData
+  } = connectionData
 
   const dataToPersist = {
     _id,
@@ -100,10 +112,10 @@ const ButtonCluster = ({
       ],
       awaitRefetchQueries: true,
       onCompleted: (res) => {
-        if (isNewOrgBeingCreated) {
-          setWhetherNewOrgBeingCreated(false)
+        if (isNewConnectionBeingCreated) {
+          setWhetherNewConnectionBeingCreated(false)
           const newConnectionId = Object.values(res)[0]._id
-          changeOrganization(
+          changeConnection(
             connectionsData.find(({ _id }) => _id === newConnectionId)
           )
         }
@@ -111,7 +123,7 @@ const ButtonCluster = ({
         toggleSnackbar(true)
         setWhetherUnsavedChanges(false)
       },
-      onError: alert,
+      onError: window.alert,
     }
   )
 
@@ -127,10 +139,10 @@ const ButtonCluster = ({
       ],
       awaitRefetchQueries: true,
       onCompleted: () => {
-        changeOrganization(connectionsData[0] || {}) // ! if no more connections, pass empty object
+        changeConnection(connectionsData[0] || {}) // ! if no more connections, pass empty object
         setWhetherUnsavedChanges(false)
       },
-      onError: alert,
+      onError: window.alert,
     }
   )
 
@@ -142,6 +154,20 @@ const ButtonCluster = ({
     ) {
       deleteConnection()
     }
+  }
+
+  const handleUpsertion = () => {
+    if (
+      areRequiredFieldsBlank(connectionData) &&
+      !exclusionSettings.isExcluded
+    ) {
+      window.alert(
+        `Please fill out the fields marked required OR check off "Exclude From Tool"`
+      )
+      return
+    }
+
+    upsert()
   }
 
   return (
@@ -162,7 +188,7 @@ const ButtonCluster = ({
         ) : (
           <Button
             type="secondary"
-            onClick={upsert}
+            onClick={handleUpsertion}
             color={Color.GREEN}
             buttonStyle={{ margin: `0 ${Spacing.S3}` }}
           >
@@ -170,7 +196,7 @@ const ButtonCluster = ({
           </Button>
         )}
 
-        {!isNewOrgBeingCreated && (
+        {!isNewConnectionBeingCreated && (
           <Button
             buttonStyle={{ margin: `0 ${Spacing.S3}` }}
             onClick={deleteHandler}
@@ -200,12 +226,12 @@ const ButtonCluster = ({
 }
 
 ButtonCluster.propTypes = {
-  isNewOrgBeingCreated: PropTypes.bool.isRequired,
+  isNewConnectionBeingCreated: PropTypes.bool.isRequired,
   cancelHandler: PropTypes.func.isRequired,
-  orgData: PropTypes.object.isRequired,
+  connectionData: PropTypes.object.isRequired,
   setWhetherUnsavedChanges: PropTypes.func.isRequired,
-  setWhetherNewOrgBeingCreated: PropTypes.func.isRequired,
-  changeOrganization: PropTypes.func.isRequired,
+  setWhetherNewConnectionBeingCreated: PropTypes.func.isRequired,
+  changeConnection: PropTypes.func.isRequired,
   connectionsData: PropTypes.array.isRequired,
 }
 
