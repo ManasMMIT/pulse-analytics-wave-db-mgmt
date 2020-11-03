@@ -303,15 +303,6 @@ const PathwaysInfluencers = () => {
       <PanelHeader title={PAGE_TITLE}>
         <div style={{ display: 'flex', alignItems: 'center' }}>
           <PeoplePowerSelect />
-          <PeopleModalButton buttonStyle={createButtonStyle}>
-            <Icon
-              iconName="add"
-              color1={Color.WHITE}
-              width={16}
-              style={{ marginRight: 8 }}
-            />
-            Create Person
-          </PeopleModalButton>
         </div>
       </PanelHeader>
       <Table

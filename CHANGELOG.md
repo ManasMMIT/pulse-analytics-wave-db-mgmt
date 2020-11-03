@@ -15,7 +15,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased] - Started: 10-27-20
 
 ### Changed
-- `Orion/Pathways-Person Connection Widget and Form`: Don't let user save connection with missing required fields unless they also mark the connection as excluded [#831](https://github.com/pulse-data/wave-db-mgmt/pull/831)
+- `Orion/Pathways-Person Connection Widget and Form`:
+  - Don't let user save connection with missing required fields unless they also mark the connection as excluded [#831](https://github.com/pulse-data/wave-db-mgmt/pull/831)
+  - Create Person button is removed from Pathways Influencers page in favor of a power select search creation functionality [#837](https://github.com/pulse-data/wave-db-mgmt/pull/837)
 - `Orion/Business Object Modal`: Button group now adjusts to state of changes within modal; cancel + close buttons are now two, discrete buttons [#832](https://github.com/pulse-data/wave-db-mgmt/pull/832)
 - `Orion/Person Create`: Warn users when they're creating a person whose name is very similar to already existing names in the core `people` collection [#833](https://github.com/pulse-data/wave-db-mgmt/pull/833)
 
