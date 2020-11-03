@@ -37,8 +37,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - `Orion/Pathways-Person Connection Widget and Form`:
- - Added overlay interaction to Pathways Connection CRUD form; added save button feedback interaction [#823](https://github.com/pulse-data/wave-db-mgmt/pull/823)
- - Tweaked Bulk import script logic to include all data rows from `RAW_pathwaysInfluencers` [#822](https://github.com/pulse-data/wave-db-mgmt/pull/822)
+  - Added overlay interaction to Pathways Connection CRUD form; added save button feedback interaction [#823](https://github.com/pulse-data/wave-db-mgmt/pull/823)
+  - Tweaked Bulk import script logic to include all data rows from `RAW_pathwaysInfluencers` [#822](https://github.com/pulse-data/wave-db-mgmt/pull/822)
 - `Orion`: Replaced old Pathways Accounts view with new view [#826](https://github.com/pulse-data/wave-db-mgmt/pull/826)
 
 ## [3.9.1] - Started: 10-22-20
