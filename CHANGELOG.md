@@ -12,7 +12,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Fixed** for any bug fixes.
 - **Security** in case of vulnerabilities.
 
-## [Unreleased] - Started: 10-27-20
+## [Unreleased] - Started: 11-3-20
+
+## [3.11.1] - Started: 10-27-20
+
+### Added
+- `Orion/APM BO`: Builds out APM BO Modal [#827](https://github.com/pulse-data/wave-db-mgmt/pull/827)
 
 ### Changed
 - `Orion/Pathways-Person Connection Widget and Form`:
@@ -20,6 +25,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Create Person button is removed from Pathways Influencers page in favor of a power select search creation functionality [#837](https://github.com/pulse-data/wave-db-mgmt/pull/837)
 - `Orion/Business Object Modal`: Button group now adjusts to state of changes within modal; cancel + close buttons are now two, discrete buttons [#832](https://github.com/pulse-data/wave-db-mgmt/pull/832)
 - `Orion/Person Create`: Warn users when they're creating a person whose name is very similar to already existing names in the core `people` collection [#833](https://github.com/pulse-data/wave-db-mgmt/pull/833)
+
+### Fixed
+- `Orion/Pathways-Person Connection Widget and Form`:
+  - Fixed null and NaN npi bug in seed script [#839](https://github.com/pulse-data/wave-db-mgmt/pull/839)
 
 ## [3.10.1] - Started: 10-23-20
 
