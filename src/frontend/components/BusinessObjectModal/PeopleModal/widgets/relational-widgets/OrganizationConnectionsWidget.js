@@ -52,11 +52,6 @@ const ORG_TYPE_TO_FORM_GENERATOR_MAP = {
     tumorTypeSpecialty: '',
     internalFields: {
       internalNotes: '',
-      totalDisclosures: '',
-      dateDisclosure1: '',
-      dateDisclosure2: '',
-      dateDisclosure3: '',
-      dateDisclosure4: '',
       pathwaysManagementTypes: [],
       valueChairsIndications: [],
     },

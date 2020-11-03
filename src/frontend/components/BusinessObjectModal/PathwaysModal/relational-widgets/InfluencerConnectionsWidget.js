@@ -52,11 +52,6 @@ const getStubbedNewInfluencer = (pathwaysId) => ({
   tumorTypeSpecialty: '',
   internalFields: {
     internalNotes: '',
-    totalDisclosures: '',
-    dateDisclosure1: '',
-    dateDisclosure2: '',
-    dateDisclosure3: '',
-    dateDisclosure4: '',
     pathwaysManagementTypes: [],
     valueChairsIndications: [],
   },

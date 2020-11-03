@@ -1087,11 +1087,6 @@ export const GET_JOIN_PATHWAYS_AND_PEOPLE = gql`
         internalNotes
         pathwaysManagementTypes
         valueChairsIndications
-        totalDisclosures
-        dateDisclosure1
-        dateDisclosure2
-        dateDisclosure3
-        dateDisclosure4
       }
       position
       priority

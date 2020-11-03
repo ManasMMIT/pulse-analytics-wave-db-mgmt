@@ -20,6 +20,18 @@ import {
   DELETE_PATHWAYS_AND_PERSON_CONNECTION,
 } from 'frontend/api/mutations'
 
+const REQUIRED_FIELD_KEYS = [
+  'pathwaysId',
+  'personId',
+  'indicationIds',
+  'pathwaysInfluencerTypes',
+  'pathwaysInfluencerTypes',
+  'position',
+]
+
+const areRequiredFieldsBlank = (data) =>
+  REQUIRED_FIELD_KEYS.some((key) => _.isEmpty(data[key]))
+
 const Alert = (props) => {
   return <MuiAlert elevation={6} variant="filled" {...props} />
 }
@@ -145,10 +157,10 @@ const ButtonCluster = ({
   }
 
   const handleUpsertion = () => {
-    const areRequiredFieldsBlank =
-      _.isEmpty(indicationIds) || _.isEmpty(pathwaysInfluencerTypes)
-
-    if (areRequiredFieldsBlank && !exclusionSettings.isExcluded) {
+    if (
+      areRequiredFieldsBlank(connectionData) &&
+      !exclusionSettings.isExcluded
+    ) {
       window.alert(
         `Please fill out the fields marked required OR check off "Exclude From Tool"`
       )

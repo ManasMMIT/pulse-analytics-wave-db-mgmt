@@ -702,11 +702,6 @@ const queries = gql`
     internalNotes: String
     pathwaysManagementTypes: [String!]!
     valueChairsIndications: [String!]!
-    totalDisclosures: String
-    dateDisclosure1: String
-    dateDisclosure2: String
-    dateDisclosure3: String
-    dateDisclosure4: String
   }
 
   type PathwaysAndPersonConnectionAlert {
