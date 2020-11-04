@@ -39,10 +39,11 @@ const rewriteHistory = async () => {
   const dbs = await connectToMongoDb()
   const pulseCoreDb = dbs.db('pulse-core')
   const pulseDevDb = dbs.db('pulse-dev')
-debugger
+
   try {
-    await stepOne(pulseCoreDb, pulseDevDb)
-    await stepTwo(pulseCoreDb, pulseDevDb)
+    // await stepOne(pulseCoreDb, pulseDevDb)
+    // await stepTwo(pulseCoreDb, pulseDevDb)
+    await stepThree(pulseCoreDb, pulseDevDb)
   } catch (e) {
     console.log(e)
   } finally {
@@ -189,7 +190,7 @@ async function stepOne(pulseCoreDb, pulseDevDb) {
   // Get map docs with old ptp ids and new ptp docs
   const oldPtpsWithNewPtps = await pulseCoreDb.collection('treatmentPlans')
     .aggregate(oldNewTpsWithPtpsPip, { allowDiskUse: true }).toArray()
-debugger
+
   const updateOps = oldPtpsWithNewPtps.map(async ({
     oldPtpId,
     newPtp: {
@@ -326,4 +327,19 @@ async function stepTwo(pulseCoreDb, pulseDevDb) {
   })
 
   await Promise.all(oldAccessHistoryDeleteOps)
+}
+
+const stepThree = async (pulseCoreDb, pulseDevDb) => {
+  const oldAccessHistoryDeleteOps = OLD_ACCESS_HISTORY_COLLECTIONS.map(async (collection) => {
+    return pulseDevDb.collection(collection).deleteMany(
+      {
+        indication: 'Atopic Dermatitis',
+        population: 'Adolescent',
+        regimen: 'Dupixent',
+        coverage: 'Pharmacy',
+      }
+    )
+  })
+
+    await Promise.all(oldAccessHistoryDeleteOps)
 }
