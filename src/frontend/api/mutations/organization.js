@@ -304,6 +304,8 @@ export const CONNECT_OBM_AND_PAYER = gql`
       _id
       obmId
       payerId
+      bookIds
+      note
     }
   }
 `

@@ -983,6 +983,8 @@ export const GET_JOIN_OBMS_AND_PAYERS = gql`
       _id
       obmId
       payerId
+      bookIds
+      note
     }
   }
 `

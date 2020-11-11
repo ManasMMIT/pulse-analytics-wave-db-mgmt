@@ -9,12 +9,16 @@ const connectObmAndPayerTypeDefs = gql`
   input ObmConnectionToPayer {
     _id: ID!
     payerId: String!
+    bookIds: [String]
+    note: String
   }
 
   type ConnectObmAndPayerPayload {
     _id: ID!
     payerId: String!
     obmId: String!
+    bookIds: [String]
+    note: String
   }
 `
 

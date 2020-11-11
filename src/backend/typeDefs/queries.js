@@ -378,6 +378,8 @@ const queries = gql`
     _id: ID!
     obmId: String!
     payerId: String!
+    bookIds: [String]
+    note: String
   }
 
   type VIEW_ObmInfluencer {
