@@ -14,6 +14,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased] - Started: 11-3-20
 
+### Added
+- `Orion OBM Tool Updates`: Adds new one-to-one fields to OBM business object [#843](https://github.com/pulse-data/wave-db-mgmt/pull/843)
+
 ### Changed
 - `Orion/OBM Payer Connections`: BookIds and note fields can now be added to connections [#842](https://github.com/pulse-data/wave-db-mgmt/pull/842)
 

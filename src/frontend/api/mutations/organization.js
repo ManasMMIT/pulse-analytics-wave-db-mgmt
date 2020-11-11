@@ -246,6 +246,17 @@ export const CREATE_OBM_ORGANIZATION = gql`
       organizationTiny
       start
       businessModel
+      approvalTime
+      hasDecisionSupport
+      hasPbMbAuthorization
+      isEmrIntegrable
+      medicalReview
+      treatmentSelection
+      payer
+      pharmacyBenefitManager
+      specialtyPharmacy
+      labBenefitManager
+      parentCompany
     }
   }
 `
@@ -259,6 +270,17 @@ export const UPDATE_OBM_ORGANIZATION = gql`
       organizationTiny
       start
       businessModel
+      approvalTime
+      hasDecisionSupport
+      hasPbMbAuthorization
+      isEmrIntegrable
+      medicalReview
+      treatmentSelection
+      payer
+      pharmacyBenefitManager
+      specialtyPharmacy
+      labBenefitManager
+      parentCompany
     }
   }
 `

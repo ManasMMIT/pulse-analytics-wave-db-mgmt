@@ -108,6 +108,8 @@ const ButtonGroup = ({
     )
   }
 
+  console.log(inputToUse)
+
   return (
     <div
       style={{

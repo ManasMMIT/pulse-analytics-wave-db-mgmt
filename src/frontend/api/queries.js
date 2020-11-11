@@ -791,6 +791,17 @@ export const GET_OBM_ORGANIZATIONS = gql`
       type
       start
       businessModel
+      approvalTime
+      hasDecisionSupport
+      hasPbMbAuthorization
+      isEmrIntegrable
+      medicalReview
+      treatmentSelection
+      payer
+      pharmacyBenefitManager
+      specialtyPharmacy
+      labBenefitManager
+      parentCompany
     }
   }
 `
