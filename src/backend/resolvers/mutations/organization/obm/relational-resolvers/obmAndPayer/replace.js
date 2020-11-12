@@ -72,15 +72,13 @@ const connectObmAndPayer = async (
 
   const session = mongoClient.startSession()
 
-  const docsToInsert = connections.map(
-    ({ _id, payerId, bookIds = [], note }) => ({
-      _id: _id ? ObjectId(_id) : ObjectId(),
-      payerId: ObjectId(payerId),
-      obmId,
-      bookIds: bookIds.map((bookId) => ObjectId(bookId)),
-      note,
-    })
-  )
+  const docsToInsert = connections.map(({ _id, payerId, bookIds, note }) => ({
+    _id: _id ? ObjectId(_id) : ObjectId(),
+    payerId: ObjectId(payerId),
+    obmId,
+    bookIds: (bookIds || []).map((bookId) => ObjectId(bookId)),
+    note,
+  }))
 
   await session.withTransaction(async () => {
     // Step 1: replace all existing entries affiliated with given obm

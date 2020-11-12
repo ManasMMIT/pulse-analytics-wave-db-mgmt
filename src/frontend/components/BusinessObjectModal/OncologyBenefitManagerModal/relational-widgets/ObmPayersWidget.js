@@ -107,7 +107,7 @@ const ObmPayersWidget = ({ entity }) => {
         <WidgetPanelTitle>OBM Payer Partnerships</WidgetPanelTitle>
       </WidgetPanelHeader>
       {stagedConnections.map((connection, idx) => {
-        const { _id, payerId, bookIds = [], note = '' } = connection
+        const { _id, payerId, bookIds, note = '' } = connection
 
         return (
           <RelationalRow key={_id}>
@@ -139,7 +139,7 @@ const ObmPayersWidget = ({ entity }) => {
                     styles={customSelectStyles}
                     options={bookDropdownOptions}
                     value={bookDropdownOptions.filter(({ value }) =>
-                      bookIds.includes(value)
+                      (bookIds || []).includes(value)
                     )}
                     onChange={(options) => {
                       const newConnectionDoc = _.cloneDeep(
