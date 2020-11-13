@@ -9,32 +9,6 @@ const OLD_ACCESS_HISTORY_COLLECTIONS = [
   'payerHistoricalCombinedData',
 ]
 
-/*
-  ! PLAN OF ATTACK !
-
-  Step 1:
-  A. Update history with new ptp, tpIds, stripping a section of time of treatment plans with "Adult" population
-  B. Update materialized collection for same time period and ptpIds, replacing hydrated population string
-
-  Step 2:
-  Time Range: after October 1 2020
-  - Delete from history and materialized collections all permutations of "Adolescence" for treatment plans for every book
-  - Actual stuff to delete: All ptps associated with { indication: 'Atopic Dermatitis', population: 'Adolescent', regimen: 'Dupixent', coverage: 'Pharmacy', books: ALL_BOOKS }
-*/
-
-/*
-
-{
-  indication: 'Atopic Dermatitis',
-  population: 'Adult',
-  regimen: 'Dupixent',
-  coverage: 'Pharmacy',
-  book: ANY_BOOK,
-  slug: ANY
-}
-
-*/
-
 const rewriteHistory = async () => {
   const dbs = await connectToMongoDb()
   const pulseCoreDb = dbs.db('pulse-core')
@@ -43,7 +17,8 @@ const rewriteHistory = async () => {
   try {
     // await stepOne(pulseCoreDb, pulseDevDb)
     // await stepTwo(pulseCoreDb, pulseDevDb)
-    await stepThree(pulseCoreDb, pulseDevDb)
+    // await stepThree(pulseCoreDb, pulseDevDb)
+    await customRequest(pulseCoreDb, pulseDevDb)
   } catch (e) {
     console.log(e)
   } finally {
@@ -342,4 +317,189 @@ const stepThree = async (pulseCoreDb, pulseDevDb) => {
   })
 
     await Promise.all(oldAccessHistoryDeleteOps)
+}
+
+const customRequest = async (pulseCoreDb, pulseDevDb) => {
+  const AAA_PROJECT_ID = ObjectId('5f5fcb64b0d029634bc87d41')
+  const TIMESTAMP = new Date('2020-11-05T05:00:00.000+00:00')
+  const findObj = { projectId: AAA_PROJECT_ID, timestamp: TIMESTAMP }
+  // 1. test new date gets all 784 ptps in production cluster
+  const ptpsToDelete = await pulseCoreDb.collection('organizations.treatmentPlans.history')
+    .aggregate([
+      {
+        '$match': findObj
+      }, {
+        '$lookup': {
+          'from': 'organizations',
+          'localField': 'organizationId',
+          'foreignField': '_id',
+          'as': 'organization'
+        }
+      }, {
+        '$lookup': {
+          'from': 'treatmentPlans',
+          'localField': 'treatmentPlanId',
+          'foreignField': '_id',
+          'as': 'treatmentPlan'
+        }
+      }, {
+        '$project': {
+          'orgTpId': 1,
+          'timestamp': 1,
+          'organization': {
+            '$arrayElemAt': [
+              '$organization', 0
+            ]
+          },
+          'treatmentPlan': {
+            '$arrayElemAt': [
+              '$treatmentPlan', 0
+            ]
+          }
+        }
+      }, {
+        '$project': {
+          'orgTpId': 1,
+          'timestamp': 1,
+          'slug': '$organization.slug',
+          'book': '$treatmentPlan.book',
+          'coverage': '$treatmentPlan.coverage',
+          'indication': '$treatmentPlan.indication',
+          'regimen': '$treatmentPlan.regimen',
+          'line': '$treatmentPlan.line',
+          'population': '$treatmentPlan.population'
+        }
+      }, {
+        '$lookup': {
+          'from': 'books',
+          'localField': 'book',
+          'foreignField': '_id',
+          'as': 'book'
+        }
+      }, {
+        '$lookup': {
+          'from': 'coverages',
+          'localField': 'coverage',
+          'foreignField': '_id',
+          'as': 'coverage'
+        }
+      }, {
+        '$lookup': {
+          'from': 'indications',
+          'localField': 'indication',
+          'foreignField': '_id',
+          'as': 'indication'
+        }
+      }, {
+        '$lookup': {
+          'from': 'regimens',
+          'localField': 'regimen',
+          'foreignField': '_id',
+          'as': 'regimen'
+        }
+      }, {
+        '$lookup': {
+          'from': 'lines',
+          'localField': 'line',
+          'foreignField': '_id',
+          'as': 'line'
+        }
+      }, {
+        '$lookup': {
+          'from': 'populations',
+          'localField': 'population',
+          'foreignField': '_id',
+          'as': 'population'
+        }
+      }, {
+        '$addFields': {
+          'book': {
+            '$arrayElemAt': [
+              '$book', 0
+            ]
+          },
+          'coverage': {
+            '$arrayElemAt': [
+              '$coverage', 0
+            ]
+          },
+          'indication': {
+            '$arrayElemAt': [
+              '$indication', 0
+            ]
+          },
+          'regimen': {
+            '$arrayElemAt': [
+              '$regimen', 0
+            ]
+          },
+          'line': {
+            '$arrayElemAt': [
+              '$line', 0
+            ]
+          },
+          'population': {
+            '$arrayElemAt': [
+              '$population', 0
+            ]
+          }
+        }
+      }, {
+        '$addFields': {
+          'book': '$book.name',
+          'coverage': '$coverage.name',
+          'indication': '$indication.name',
+          'regimen': '$regimen.name',
+          'population': '$population.name',
+          'line': '$line.name'
+        }
+      }
+    ])
+    .toArray()
+
+  // 2. make sure you have all info from ptps needed to delete from all access history collections.
+  debugger
+
+  const orgTpIdsToDelete = ptpsToDelete.map(({ orgTpId }) => orgTpId)
+
+  await pulseDevDb.collection('payerHistoricalAccess').deleteMany({
+    orgTpId: { $in: orgTpIdsToDelete },
+    timestamp: TIMESTAMP,
+  })
+
+  await pulseDevDb.collection('payerLatestAccess').deleteMany({
+    orgTpId: { $in: orgTpIdsToDelete },
+    timestamp: TIMESTAMP,
+  })
+
+  const ptpCombos = ptpsToDelete.map(({ slug, book, coverage, population, line, indication, regimen }) => ({
+    slug, book, coverage, population, line, indication, regimen
+  }))
+
+  const oldAccessHistoryDeleteOps = OLD_ACCESS_HISTORY_COLLECTIONS.map(async (collection) => {
+    return pulseDevDb.collection(collection).deleteMany({
+        $or: ptpCombos,
+        timestamp: TIMESTAMP,
+      })
+  })
+
+  await Promise.all(oldAccessHistoryDeleteOps)
+
+  const POLICY_LINK_COLLECTIONS = [
+    'payerHistoricalPolicyLinks',
+    'payerHistoricalPolicyLinksHt',
+  ]
+
+  const ptpPolicyCombos = ptpCombos.map(({ line, population, indication, ...rest }) => rest)
+  const POLICY_oldAccessHistoryDeleteOps = POLICY_LINK_COLLECTIONS.map(async (collection) => {
+    return pulseDevDb.collection(collection).deleteMany(
+      {
+        $or: ptpPolicyCombos,
+        timestamp: TIMESTAMP,
+      })
+  })
+
+  await Promise.all(POLICY_oldAccessHistoryDeleteOps)
+
+  await pulseCoreDb.collection('organizations.treatmentPlans.history').deleteMany(findObj)
 }
