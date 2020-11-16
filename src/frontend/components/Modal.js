@@ -1,9 +1,22 @@
-import React from "react"
-import PropTypes from "prop-types"
-import styled from "@emotion/styled"
+import React from 'react'
+import PropTypes from 'prop-types'
+import styled from '@emotion/styled'
 import { transparentize } from 'polished'
 
 import { Colors, Spacing, Transitions, ZIndexes } from '../utils/pulseStyles'
+import Color from 'frontend/utils/color'
+import Button from 'frontend/components/Button'
+
+const CancelCloseButton = ({ closeModal }) => (
+  <Button
+    buttonStyle={{ margin: Spacing.S3 }}
+    color={Color.GRAY_DARK}
+    type="secondary"
+    onClick={closeModal}
+  >
+    Cancel + Close
+  </Button>
+)
 
 const Wrapper = styled.div({
   position: 'fixed',
@@ -25,21 +38,25 @@ const Wrapper = styled.div({
   justifyContent: 'center',
 })
 
-const Main = styled.section({
-  background: '#F0F6F9',
-  borderRadius: 4,
-  boxShadow: `0 6px 24px 0 ${transparentize(0.7, Colors.BLACK)}`,
-  overflowY: 'auto',
-  maxHeight: '90vh',
-  margin: 32,
-}, props => ({
-  width: props.width,
-  padding: props.padding,
-}))
+const Main = styled.section(
+  {
+    background: '#F0F6F9',
+    borderRadius: 4,
+    boxShadow: `0 6px 24px 0 ${transparentize(0.7, Colors.BLACK)}`,
+    overflowY: 'auto',
+    maxHeight: '90vh',
+    margin: 32,
+  },
+  (props) => ({
+    width: props.width,
+    padding: props.padding,
+  })
+)
 
 const Header = styled.div({
   display: 'flex',
   justifyContent: 'space-between',
+  alignItems: 'center',
   marginBottom: 24,
   textTransform: 'uppercase',
 })
@@ -51,36 +68,9 @@ const Title = styled.div({
   marginRight: Spacing.NORMAL,
 })
 
-const CloseButton = styled.button({
-  background: transparentize(0.9, Colors.BLACK),
-  color: transparentize(0.2, Colors.BLACK),
-  cursor: 'pointer',
-  border: 'none',
-  borderRadius: 4,
-  fontSize: 12,
-  fontWeight: 700,
-  padding: `${Spacing.SMALL} ${Spacing.NORMAL}`,
-  transition: Transitions.NORMAL,
-  textTransform: 'uppercase',
-  ':hover': {
-    background: transparentize(0.75, Colors.BLACK)
-  },
-  ':focus': {
-    outline: 'none',
-    boxShadow: '0 0 0 2px',
-  },
-  ':active': {
-    outline: 'none',
-  }
-})
-
-const ButtonWrapper = styled.div({
-  display: 'flex',
-})
-
 class Modal extends React.Component {
   // TODO: but the Create user button still gets clicked!
-  handleClickAway = e => {
+  handleClickAway = (e) => {
     e.stopPropagation()
 
     if (!this.node.contains(e.target) && !this.props.noClickAway) {
@@ -99,33 +89,36 @@ class Modal extends React.Component {
       submitButton,
       padding,
       width,
-      modalStyle
+      modalStyle,
     } = this.props
 
     if (!show) return null
 
     // TODO: but the Create user button still gets clicked!
-    const onClickCloseButton = e => {
+    const onClickCloseButton = (e) => {
       e.stopPropagation()
       handleClose()
     }
 
     return (
       <Wrapper onClick={this.handleClickAway} style={style}>
-        <Main ref={node => { this.node = node }} width={width} padding={padding} style={modalStyle}>
-          {
-            disableHeader || (
-              <Header>
-                <Title>{title}</Title>
-                <ButtonWrapper>
-                  <CloseButton onClick={onClickCloseButton}>
-                    Cancel + Close
-                  </CloseButton>
-                  {submitButton}
-                </ButtonWrapper>
-              </Header>
-            )
-          }
+        <Main
+          ref={(node) => {
+            this.node = node
+          }}
+          width={width}
+          padding={padding}
+          style={modalStyle}
+        >
+          {disableHeader || (
+            <Header>
+              <Title>{title}</Title>
+              <div>
+                <CancelCloseButton closeModal={onClickCloseButton} />
+                {submitButton}
+              </div>
+            </Header>
+          )}
           {children}
         </Main>
       </Wrapper>

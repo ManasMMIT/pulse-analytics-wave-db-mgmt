@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased] - Started: 11-3-20
 
 ### Added
+- `Orion/Node Mgmt`: Scaffold of new admin view for managing source nodes. (READ ONLY) [#841](https://github.com/pulse-data/wave-db-mgmt/pull/841)
 - `Orion OBM Tool Updates`: Adds new one-to-one fields to OBM business object [#843](https://github.com/pulse-data/wave-db-mgmt/pull/843)
 
 ### Changed

@@ -155,6 +155,10 @@ const ADMIN_SETTINGS_LINKS_CONFIG = [
     link: '/orion/configuration/admin-settings/sheet-management',
   },
   {
+    label: 'Node Management',
+    link: '/orion/configuration/admin-settings/node-management',
+  },
+  {
     label: 'Push Dev to Prod Management',
     link: '/orion/configuration/admin-settings/dev-to-prod-push-management',
   },
