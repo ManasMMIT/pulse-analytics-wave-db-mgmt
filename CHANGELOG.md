@@ -12,7 +12,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Fixed** for any bug fixes.
 - **Security** in case of vulnerabilities.
 
-## [Unreleased] - Started: 11-3-20
+## [Unreleased] - Started: 11-18-20
+
+## [3.12.0] - Started: 11-3-20
 
 ### Added
 - `Orion/Node Mgmt`: Scaffold of new admin view for managing source nodes. (READ ONLY) [#841](https://github.com/pulse-data/wave-db-mgmt/pull/841)
