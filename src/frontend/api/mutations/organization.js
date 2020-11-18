@@ -331,3 +331,17 @@ export const CONNECT_OBM_AND_PAYER = gql`
     }
   }
 `
+
+export const CONNECT_OBM_AND_KEY_EVENT = gql`
+  mutation ConnectObmAndKeyEvent($input: ConnectObmAndKeyEventInput!) {
+    connectObmAndKeyEvent(input: $input) {
+      _id
+      obmId
+      date
+      title
+      description
+      link
+      internalTdgNote
+    }
+  }
+`

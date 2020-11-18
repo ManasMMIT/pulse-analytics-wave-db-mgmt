@@ -781,6 +781,20 @@ export const GET_OBM_SERVICES_CATEGORIES = gql`
   }
 `
 
+export const GET_OBM_KEY_EVENTS = gql`
+  query getObmKeyEvents($obmId: String) {
+    obmKeyEvents(obmId: $obmId) {
+      _id
+      obmId
+      date
+      title
+      description
+      link
+      internalTdgNote
+    }
+  }
+`
+
 export const GET_OBM_ORGANIZATIONS = gql`
   query getObmOrganizations {
     obmOrganizations {

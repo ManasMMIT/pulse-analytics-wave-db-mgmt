@@ -15,6 +15,7 @@ import {
 import ObmServicesWidget from './relational-widgets/ObmServicesWidget'
 import ObmInfluencersWidget from './relational-widgets/ObmInfluencersWidget'
 import ObmPayersWidget from './relational-widgets/ObmPayersWidget'
+import ObmKeyEventsWidget from './relational-widgets/ObmKeyEventsWidget'
 import BusinessObjectModal from '../BusinessObjectModal/BusinessObjectModal'
 
 const OBM_BOID = '5ec81a40b2cfb87bb15373ec'
@@ -35,6 +36,11 @@ const WIDGETS = [
     _id: 'RELATIONAL_obmPayersWidget',
     label: 'Connect to Payers',
     Component: ObmPayersWidget,
+  },
+  {
+    _id: 'RELATIONAL_obmKeyEvents',
+    label: 'Manage Key Events',
+    Component: ObmKeyEventsWidget,
   },
 ]
 

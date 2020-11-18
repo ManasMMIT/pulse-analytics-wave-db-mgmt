@@ -25,6 +25,7 @@ const queries = gql`
     obmOrganizations: [ObmOrganization]
     obmServices: [ObmService]
     obmServicesCategories: [ObmServiceCategory]
+    obmKeyEvents(obmId: String): [ObmKeyEvent!]!
     JOIN_obmsServices_obmsServicesCategories(
       obmServiceId: String
     ): [ObmServiceAndObmServiceCategoryConnection]
@@ -397,6 +398,16 @@ const queries = gql`
     payerId: String!
     bookIds: [String]
     note: String
+  }
+
+  type ObmKeyEvent {
+    _id: ID!
+    obmId: String!
+    date: Date
+    title: String
+    description: String
+    link: String
+    internalTdgNote: String
   }
 
   type VIEW_ObmInfluencer {

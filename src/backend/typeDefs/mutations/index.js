@@ -172,6 +172,7 @@ const mutationType = gql`
     connectObmAndPayer(
       input: ConnectObmAndPayerInput!
     ): [ConnectObmAndPayerPayload!]!
+    connectObmAndKeyEvent(input: ConnectObmAndKeyEventInput!): [ObmKeyEvent!]!
 
     upsertOrganizationMeta(
       input: UpsertOrganizationMetaInput!
