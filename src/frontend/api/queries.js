@@ -781,6 +781,16 @@ export const GET_OBM_SERVICES_CATEGORIES = gql`
   }
 `
 
+export const GET_OBM_TYPES = gql`
+  query getObmTypes {
+    obmTypes {
+      _id
+      name
+      description
+    }
+  }
+`
+
 export const GET_OBM_KEY_EVENTS = gql`
   query getObmKeyEvents($obmId: String) {
     obmKeyEvents(obmId: $obmId) {
@@ -986,6 +996,16 @@ export const GET_JOIN_OBMS_AND_OBMS_SERVICES = gql`
       obmId
       obmServiceId
       rating
+    }
+  }
+`
+
+export const GET_JOIN_OBMS_AND_OBMS_TYPES = gql`
+  query getJoinObmsAndObmsTypes($obmId: String) {
+    JOIN_obms_obmsTypes(obmId: $obmId) {
+      _id
+      obmId
+      obmTypeId
     }
   }
 `

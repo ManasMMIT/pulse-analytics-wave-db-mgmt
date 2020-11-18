@@ -25,11 +25,13 @@ const queries = gql`
     obmOrganizations: [ObmOrganization]
     obmServices: [ObmService]
     obmServicesCategories: [ObmServiceCategory]
+    obmTypes: [ObmType]
     obmKeyEvents(obmId: String): [ObmKeyEvent!]!
     JOIN_obmsServices_obmsServicesCategories(
       obmServiceId: String
     ): [ObmServiceAndObmServiceCategoryConnection]
     JOIN_obms_obmsServices(obmId: String): [ObmAndObmServiceConnection]
+    JOIN_obms_obmsTypes(obmId: String): [ObmAndObmTypeConnection]
     JOIN_obms_people: [ObmAndPersonConnection]
     JOIN_obms_payers(obmId: ID): [ObmAndPayerConnection]
 
@@ -371,6 +373,12 @@ const queries = gql`
     name: String!
   }
 
+  type ObmType {
+    _id: ID!
+    name: String!
+    description: String
+  }
+
   type ObmServiceAndObmServiceCategoryConnection {
     _id: ID!
     obmServiceId: String!
@@ -382,6 +390,12 @@ const queries = gql`
     obmId: String!
     obmServiceId: String!
     rating: Int!
+  }
+
+  type ObmAndObmTypeConnection {
+    _id: ID!
+    obmId: String!
+    obmTypeId: String!
   }
 
   type ObmAndPersonConnection {

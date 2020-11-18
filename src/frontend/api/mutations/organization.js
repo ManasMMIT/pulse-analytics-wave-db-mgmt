@@ -227,6 +227,36 @@ export const CREATE_OBM_SERVICE_CATEGORY = gql`
   }
 `
 
+export const UPDATE_OBM_TYPE = gql`
+  mutation UpdateObmType($input: UpdateObmTypeInput!) {
+    updateObmType(input: $input) {
+      _id
+      name
+      description
+    }
+  }
+`
+
+export const CREATE_OBM_TYPE = gql`
+  mutation CreateObmType($input: CreateObmTypeInput!) {
+    createObmType(input: $input) {
+      _id
+      name
+      description
+    }
+  }
+`
+
+export const DELETE_OBM_TYPE = gql`
+  mutation DeleteObmType($input: DeleteObmTypeInput!) {
+    deleteObmType(input: $input) {
+      _id
+      name
+      description
+    }
+  }
+`
+
 export const CREATE_OBM_SERVICE = gql`
   mutation CreateObmService($input: CreateObmServiceInput!) {
     createObmService(input: $input) {
@@ -304,6 +334,16 @@ export const CONNECT_OBM_AND_OBM_SERVICE = gql`
       obmId
       obmServiceId
       rating
+    }
+  }
+`
+
+export const CONNECT_OBM_AND_OBM_TYPE = gql`
+  mutation ConnectObmAndObmType($input: ConnectObmAndObmTypeInput!) {
+    connectObmAndObmType(input: $input) {
+      _id
+      obmId
+      obmTypeId
     }
   }
 `

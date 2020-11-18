@@ -15,6 +15,7 @@ import {
 import ObmServicesWidget from './relational-widgets/ObmServicesWidget'
 import ObmInfluencersWidget from './relational-widgets/ObmInfluencersWidget'
 import ObmPayersWidget from './relational-widgets/ObmPayersWidget'
+import ObmTypesWidget from './relational-widgets/ObmTypesWidget'
 import ObmKeyEventsWidget from './relational-widgets/ObmKeyEventsWidget'
 import BusinessObjectModal from '../BusinessObjectModal/BusinessObjectModal'
 
@@ -22,6 +23,11 @@ const OBM_BOID = '5ec81a40b2cfb87bb15373ec'
 const HEADER_TEXT = 'Oncology Benefit Manager Accounts'
 
 const WIDGETS = [
+  {
+    _id: 'RELATIONAL_obmTypesWidget',
+    label: 'Connect to OBM Type',
+    Component: ObmTypesWidget,
+  },
   {
     _id: 'RELATIONAL_obmServicesWidget',
     label: 'Connect to OBM Services',

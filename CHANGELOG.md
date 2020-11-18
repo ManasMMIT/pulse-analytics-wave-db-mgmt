@@ -16,9 +16,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - `Orion/Node Mgmt`: Scaffold of new admin view for managing source nodes. (READ ONLY) [#841](https://github.com/pulse-data/wave-db-mgmt/pull/841)
-- `Orion OBM Tool Updates`: 
+- `Orion OBM Tool Updates`:
   - Added new one-to-one fields to OBM business object [#843](https://github.com/pulse-data/wave-db-mgmt/pull/843)
   - Built out OBM key events widget [#850](https://github.com/pulse-data/wave-db-mgmt/pull/850)
+  - Built out OBM types widget, bo, and bom [#847](https://github.com/pulse-data/wave-db-mgmt/pull/847) + [#848](https://github.com/pulse-data/wave-db-mgmt/pull/848)
 
 ### Changed
 - `Orion/OBM Payer Connections`: BookIds and note fields can now be added to connections [#842](https://github.com/pulse-data/wave-db-mgmt/pull/842)

@@ -59,6 +59,36 @@ const getObmPayerMaterializationPipeline = (obmId) => [
       books: 1,
     },
   },
+  {
+    $lookup: {
+      from: 'JOIN_obms_obms.types',
+      localField: 'obm._id',
+      foreignField: 'obmId',
+      as: 'obm.type',
+    },
+  },
+  {
+    $addFields: {
+      'obm.type': {
+        $arrayElemAt: ['$obm.type', 0],
+      },
+    },
+  },
+  {
+    $lookup: {
+      from: 'obms.types',
+      localField: 'obm.type.obmTypeId',
+      foreignField: '_id',
+      as: 'obm.type',
+    },
+  },
+  {
+    $addFields: {
+      'obm.type': {
+        $arrayElemAt: ['$obm.type', 0],
+      },
+    },
+  },
 ]
 
 // ! ASSUMPTION: this resolver is for connecting a SINGLE OBM to many payers

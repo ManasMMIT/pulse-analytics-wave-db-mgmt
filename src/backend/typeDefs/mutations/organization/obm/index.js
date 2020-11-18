@@ -3,6 +3,7 @@ const updateObmOrganizationTypeDefs = require('./update')
 
 const obmServiceTypeDefs = require('./service')
 const obmServiceCategoryTypeDefs = require('./serviceCategory')
+const obmTypeTypeDefs = require('./type')
 const obmRelationalTypeDefs = require('./relational-typeDefs')
 
 module.exports = [
@@ -10,5 +11,6 @@ module.exports = [
   updateObmOrganizationTypeDefs,
   ...obmServiceTypeDefs,
   ...obmServiceCategoryTypeDefs,
+  ...obmTypeTypeDefs,
   ...obmRelationalTypeDefs,
 ]
