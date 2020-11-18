@@ -72,8 +72,8 @@ const CHART_LABELS = [
   'Nasal Polyps, Adult',
   'Asthma, Eosinophilic',
   'Asthma, Corticosteroid-Dependent',
-  'Atopic Dermatitis, Adult',
-  'Atopic Dermatitis, Pediatric',
+  'Atopic Dermatitis, Ages 12+',
+  'Atopic Dermatitis, Ages 6-11',
 ]
 
 const CHART_LABELS_SHORT = [
@@ -81,7 +81,7 @@ const CHART_LABELS_SHORT = [
   'Asthma (Eos)',
   'Asthma (OCS)',
   'Atopic Derm',
-  'Pediatric, AD',
+  'Pediatric AD',
 ]
 
 const defaultChartData = [

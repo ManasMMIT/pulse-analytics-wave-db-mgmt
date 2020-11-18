@@ -80,7 +80,13 @@ class AccessAcrossIndicationSlide {
       },
       regimen: 'Dupixent',
       population: {
-        $in: ['Adult', 'Corticosteroid-Dependent', 'Eosinophilic', 'Pediatric'],
+        $in: [
+          'Adult',
+          'Ages 6-11',
+          'Ages 12+',
+          'Corticosteroid-Dependent',
+          'Eosinophilic',
+        ],
       },
       book: this.book,
       coverage: 'Pharmacy',
