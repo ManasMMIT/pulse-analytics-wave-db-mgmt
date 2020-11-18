@@ -2,6 +2,7 @@ import styled from '@emotion/styled'
 import { transparentize } from 'polished'
 
 import Color from '../../../../utils/color'
+import { Spacing } from '../../../../utils/pulseStyles'
 
 const borderStyle = `1px solid ${transparentize(0.9, Color.BLACK)}`
 
@@ -108,4 +109,22 @@ export const SaveWarningBox = styled.div({
   fontSize: 12,
   fontWeight: 700,
   marginRight: 12,
+})
+
+export const EventSection = styled.div({
+  background: Color.WHITE,
+  borderBottom: borderStyle,
+  padding: '8px 12px',
+  ':hover': {
+    background: transparentize(0.85, Color.MEDIUM_GRAY_2),
+  },
+  '& > :not(:last-child)': {
+    marginBottom: Spacing.SMALL,
+  },
+})
+
+export const LabelAndInputWrapper = styled.div({
+  display: 'flex',
+  alignItems: 'center',
+  marginLeft: 12,
 })

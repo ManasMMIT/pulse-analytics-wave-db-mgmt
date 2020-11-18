@@ -43,16 +43,24 @@ const sharedInputFocusStyles = {
   outline: `1px solid ${Colors.PRIMARY}`,
 }
 
-export const StyledInput = styled.input({
-  ...sharedInputStyles,
-  ':hover': {
-    ...sharedInputHoverStyles,
+export const StyledInput = styled.input(
+  {
+    ...sharedInputStyles,
+    ':hover': {
+      ...sharedInputHoverStyles,
+    },
+    ':focus': {
+      ...sharedInputFocusStyles,
+    },
   },
-  ':focus': {
-    ...sharedInputFocusStyles,
-  },
-})
-
+  ({ disabled }) =>
+    disabled
+      ? {
+          cursor: 'not-allowed',
+          background: Colors.LIGHT_GRAY_1,
+        }
+      : {}
+)
 
 export const StyledButton = styled.button({
   background: transparentize(0.85, Colors.PRIMARY),
@@ -73,5 +81,5 @@ export const StyledButton = styled.button({
   },
   ':active': {
     background: transparentize(0.5, Colors.PRIMARY),
-  }
+  },
 })

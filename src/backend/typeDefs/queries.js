@@ -25,10 +25,13 @@ const queries = gql`
     obmOrganizations: [ObmOrganization]
     obmServices: [ObmService]
     obmServicesCategories: [ObmServiceCategory]
+    obmTypes: [ObmType]
+    obmKeyEvents(obmId: String): [ObmKeyEvent!]!
     JOIN_obmsServices_obmsServicesCategories(
       obmServiceId: String
     ): [ObmServiceAndObmServiceCategoryConnection]
     JOIN_obms_obmsServices(obmId: String): [ObmAndObmServiceConnection]
+    JOIN_obms_obmsTypes(obmId: String): [ObmAndObmTypeConnection]
     JOIN_obms_people: [ObmAndPersonConnection]
     JOIN_obms_payers(obmId: ID): [ObmAndPayerConnection]
 
@@ -333,6 +336,7 @@ const queries = gql`
   }
 
   type ObmOrganization {
+    # base fields
     _id: ID!
     slug: String!
     type: String
@@ -340,6 +344,22 @@ const queries = gql`
     organizationTiny: String
     start: Int
     businessModel: String
+
+    # "technology" fields
+    approvalTime: String
+    hasDecisionSupport: Boolean
+    hasPbMbAuthorization: Boolean
+    isEmrIntegrable: Boolean
+    medicalReview: String
+    treatmentSelection: String
+
+    # "vertical integration" fields that in the future should likely
+    # be handled by org-to-org connections
+    payer: String
+    pharmacyBenefitManager: String
+    specialtyPharmacy: String
+    labBenefitManager: String
+    parentCompany: String
   }
 
   type ObmService {
@@ -351,6 +371,12 @@ const queries = gql`
   type ObmServiceCategory {
     _id: ID!
     name: String!
+  }
+
+  type ObmType {
+    _id: ID!
+    name: String!
+    description: String
   }
 
   type ObmServiceAndObmServiceCategoryConnection {
@@ -366,6 +392,12 @@ const queries = gql`
     rating: Int!
   }
 
+  type ObmAndObmTypeConnection {
+    _id: ID!
+    obmId: String!
+    obmTypeId: String!
+  }
+
   type ObmAndPersonConnection {
     _id: ID!
     obmId: ID!
@@ -378,6 +410,18 @@ const queries = gql`
     _id: ID!
     obmId: String!
     payerId: String!
+    bookIds: [String]
+    note: String
+  }
+
+  type ObmKeyEvent {
+    _id: ID!
+    obmId: String!
+    date: Date
+    title: String
+    description: String
+    link: String
+    internalTdgNote: String
   }
 
   type VIEW_ObmInfluencer {

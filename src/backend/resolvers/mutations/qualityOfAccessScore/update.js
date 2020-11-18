@@ -7,8 +7,6 @@ const updateQualityAccessScore = async (
   info
 ) => {
   _id = ObjectId(_id)
-  score = parseInt(score)
-  sortOrder = parseInt(sortOrder)
 
   const updateAccessScoreObj = {
     access,

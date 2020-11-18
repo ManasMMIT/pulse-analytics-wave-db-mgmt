@@ -11,6 +11,7 @@ import {
   GET_PAYER_ORGANIZATIONS,
   GET_JOIN_OBMS_AND_PAYERS,
   GET_VIEW_OBM_PAYER_PARTNERSHIPS,
+  GET_BOOKS,
 } from '../../../../api/queries'
 
 import { CONNECT_OBM_AND_PAYER } from '../../../../api/mutations'
@@ -23,7 +24,7 @@ import {
   RelationalRow,
   InputContainer,
   InputLabel,
-  // RowInput,
+  RowInput,
   FixedControlRow,
   SaveWarningBox,
   SaveContainer,
@@ -36,6 +37,7 @@ const ObmPayersWidget = ({ entity }) => {
   const { data: payersData, loading: payersLoading } = useQuery(
     GET_PAYER_ORGANIZATIONS
   )
+  const { data: booksData, loading: booksLoading } = useQuery(GET_BOOKS)
 
   const { data: connectionsData, loading: connectionsLoading } = useQuery(
     GET_JOIN_OBMS_AND_PAYERS,
@@ -45,7 +47,6 @@ const ObmPayersWidget = ({ entity }) => {
   )
 
   const [stagedConnections, stageConnections] = useState([])
-
   console.log(stagedConnections)
 
   const [save] = useMutation(CONNECT_OBM_AND_PAYER, {
@@ -75,17 +76,16 @@ const ObmPayersWidget = ({ entity }) => {
         (connection) => payersById[connection.payerId]
       )
 
-      // clean data of __typename and anything else
-      const initialConnections = validConnections.map(({ _id, payerId }) => ({
-        _id,
-        payerId,
-      }))
+      // remove `__typename` and `obmId` from staged connections data
+      const initialConnections = validConnections.map(
+        ({ __typename, obmId, ...rest }) => rest
+      )
 
       stageConnections(initialConnections)
     }
   }, [payersLoading, connectionsLoading])
 
-  if (payersLoading || connectionsLoading) return 'Loading...'
+  if (payersLoading || connectionsLoading || booksLoading) return 'Loading...'
 
   const payerDropdownOptions = payersData.payerOrganizations.map(
     ({ _id, organization }) => ({
@@ -93,6 +93,11 @@ const ObmPayersWidget = ({ entity }) => {
       label: organization,
     })
   )
+
+  const bookDropdownOptions = booksData.books.map(({ _id, name }) => ({
+    value: _id,
+    label: name,
+  }))
 
   const clonedStagedConnections = _.cloneDeep(stagedConnections)
 
@@ -102,30 +107,69 @@ const ObmPayersWidget = ({ entity }) => {
         <WidgetPanelTitle>OBM Payer Partnerships</WidgetPanelTitle>
       </WidgetPanelHeader>
       {stagedConnections.map((connection, idx) => {
-        const { _id, payerId } = connection
+        const { _id, payerId, bookIds, note = '' } = connection
 
         return (
           <RelationalRow key={_id}>
-            <InputContainer>
-              <InputLabel>Payer:</InputLabel>
-              <div style={{ width: 300 }}>
-                <Select
-                  styles={customSelectStyles}
-                  options={payerDropdownOptions}
-                  value={payerDropdownOptions.find(
-                    ({ value }) => value === payerId
-                  )}
-                  onChange={({ value }) => {
+            <>
+              <InputContainer>
+                <InputLabel>Payer:</InputLabel>
+                <div style={{ width: 250 }}>
+                  <Select
+                    styles={customSelectStyles}
+                    options={payerDropdownOptions}
+                    value={payerDropdownOptions.find(
+                      ({ value }) => value === payerId
+                    )}
+                    onChange={({ value }) => {
+                      const newDoc = _.merge(clonedStagedConnections[idx], {
+                        payerId: value,
+                      })
+                      clonedStagedConnections.splice(idx, 1, newDoc)
+                      stageConnections(clonedStagedConnections)
+                    }}
+                  />
+                </div>
+              </InputContainer>
+              <InputContainer>
+                <InputLabel>Books:</InputLabel>
+                <div style={{ width: 200 }}>
+                  <Select
+                    isMulti
+                    styles={customSelectStyles}
+                    options={bookDropdownOptions}
+                    value={bookDropdownOptions.filter(({ value }) =>
+                      (bookIds || []).includes(value)
+                    )}
+                    onChange={(options) => {
+                      const newConnectionDoc = _.cloneDeep(
+                        clonedStagedConnections[idx]
+                      )
+                      newConnectionDoc.bookIds = !_.isEmpty(options)
+                        ? options.map(({ value }) => value)
+                        : []
+
+                      clonedStagedConnections.splice(idx, 1, newConnectionDoc)
+                      stageConnections(clonedStagedConnections)
+                    }}
+                  />
+                </div>
+              </InputContainer>
+              <InputContainer>
+                <InputLabel>Note:</InputLabel>
+                <RowInput
+                  style={{ width: 200 }}
+                  value={note}
+                  onChange={(e) => {
                     const newDoc = _.merge(clonedStagedConnections[idx], {
-                      payerId: value,
+                      note: e.target.value,
                     })
                     clonedStagedConnections.splice(idx, 1, newDoc)
                     stageConnections(clonedStagedConnections)
                   }}
                 />
-              </div>
-            </InputContainer>
-
+              </InputContainer>
+            </>
             <div style={{ marginLeft: 'auto' }}>
               <DeleteButton
                 onClick={() => {

@@ -42,8 +42,6 @@ const validateProperNpiPersonIdMappings = async ({ pulseDevDb }) => {
     .key(row => row.personId)
     .object(filteredInfluencers)
 
-  // Detect Out of Bounds NPI values
-
   Object.keys(groupInfluencersByNpiAndPersonId).forEach(key => {
     const numOfPersonIds = Object.keys(groupInfluencersByNpiAndPersonId[key]).length
     if (numOfPersonIds > 1) {

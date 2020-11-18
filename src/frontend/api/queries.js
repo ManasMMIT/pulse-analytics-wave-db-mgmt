@@ -781,6 +781,30 @@ export const GET_OBM_SERVICES_CATEGORIES = gql`
   }
 `
 
+export const GET_OBM_TYPES = gql`
+  query getObmTypes {
+    obmTypes {
+      _id
+      name
+      description
+    }
+  }
+`
+
+export const GET_OBM_KEY_EVENTS = gql`
+  query getObmKeyEvents($obmId: String) {
+    obmKeyEvents(obmId: $obmId) {
+      _id
+      obmId
+      date
+      title
+      description
+      link
+      internalTdgNote
+    }
+  }
+`
+
 export const GET_OBM_ORGANIZATIONS = gql`
   query getObmOrganizations {
     obmOrganizations {
@@ -791,6 +815,17 @@ export const GET_OBM_ORGANIZATIONS = gql`
       type
       start
       businessModel
+      approvalTime
+      hasDecisionSupport
+      hasPbMbAuthorization
+      isEmrIntegrable
+      medicalReview
+      treatmentSelection
+      payer
+      pharmacyBenefitManager
+      specialtyPharmacy
+      labBenefitManager
+      parentCompany
     }
   }
 `
@@ -965,6 +1000,16 @@ export const GET_JOIN_OBMS_AND_OBMS_SERVICES = gql`
   }
 `
 
+export const GET_JOIN_OBMS_AND_OBMS_TYPES = gql`
+  query getJoinObmsAndObmsTypes($obmId: String) {
+    JOIN_obms_obmsTypes(obmId: $obmId) {
+      _id
+      obmId
+      obmTypeId
+    }
+  }
+`
+
 export const GET_JOIN_OBMS_AND_PEOPLE = gql`
   query getJoinObmsAndPeople {
     JOIN_obms_people {
@@ -983,6 +1028,8 @@ export const GET_JOIN_OBMS_AND_PAYERS = gql`
       _id
       obmId
       payerId
+      bookIds
+      note
     }
   }
 `

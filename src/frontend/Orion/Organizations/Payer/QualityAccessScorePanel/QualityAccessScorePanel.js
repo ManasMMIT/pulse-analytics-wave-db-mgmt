@@ -1,158 +1,144 @@
-import React from 'react'
-import styled from '@emotion/styled'
+import React, { useState } from 'react'
+import { useQuery } from '@apollo/react-hooks'
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faEdit } from "@fortawesome/free-solid-svg-icons"
-import { transparentize } from 'polished'
-
-import Panel from './../../../../components/Panel'
-import ModalButtonWithForm from './../../../shared/ModalButtonWithForm'
-// import DeleteButton from '../../../../shared/DeleteButton'
-import CopyOneOfStringButton from './../../../shared/CopyOneOfStringButton'
-import { GET_SOURCE_QUALITY_OF_ACCESS_SCORES } from './../../../../api/queries'
-import ColorBox from './../../../shared/ColorBox'
+import Modal from 'frontend/components/Modal'
 import QoaForm from './QoaForm'
-import { defaultPanelItemStyle } from './../../styledComponents'
 
-import {
-  CREATE_QUALITY_OF_ACCESS_SCORE,
-  UPDATE_QUALITY_OF_ACCESS_SCORE,
-  // DELETE_QUALITY_OF_ACCESS_SCORE,
-} from './../../../../api/mutations'
+import { GET_SOURCE_QUALITY_OF_ACCESS_SCORES } from 'frontend/api/queries'
 
-import Color from './../../../../utils/color'
+import PanelHeader from 'frontend/components/Panel/PanelHeader'
+import Table from 'frontend/components/Table'
+import { CONFIG_TABLE_WIDTH } from 'frontend/components/Table/tableWidths'
+import MultiSelectColumnFilter from 'frontend/components/Table/custom-filters/MultiSelect/MultiSelectColumnFilter'
+import customMultiSelectFilterFn from 'frontend/components/Table/custom-filters/MultiSelect/customMultiSelectFilterFn'
+import Button from 'frontend/components/Button'
 
-const editIcon = <FontAwesomeIcon size="lg" icon={faEdit} />
+import Color from 'frontend/utils/color'
 
 const CREATE_BUTTON_TXT = 'Create Quality of Access'
 
 const CREATE_MODAL_TITLE = 'Create New Quality of Access'
-
-const BoxContainer = styled.div({
-  display: 'flex',
-  alignItems: 'center',
-})
-
-const BoxLabel = styled.span({
-  fontSize: 10,
-  color: Color.MEDIUM_GRAY_2,
-  margin: '0 8px 0 16px',
-})
-
-const buttonStyle = {
-  background: Color.PRIMARY,
-  color: Color.WHITE,
-  fontWeight: 700,
-}
-
-const modalStyle = {
-  height: '90%',
-  maxHeight: '90%',
-  minWidth: 600,
-  justifyContent: 'flex-start',
-}
-
-const getInputFields = (state, handleChange) => (
-  <QoaForm
-    state={state}
-    handleChange={handleChange}
-  />
-)
-
-const headerChildren = (
-  <div>
-    <ModalButtonWithForm
-      modalTitle={CREATE_MODAL_TITLE}
-      buttonLabel={CREATE_BUTTON_TXT}
-      buttonStyle={buttonStyle}
-      modalStyle={modalStyle}
-      mutationDoc={CREATE_QUALITY_OF_ACCESS_SCORE}
-      refetchQueries={[{ query: GET_SOURCE_QUALITY_OF_ACCESS_SCORES }]}
-      getInputFields={getInputFields}
-    />
-
-    <CopyOneOfStringButton
-      queryDoc={GET_SOURCE_QUALITY_OF_ACCESS_SCORES}
-      dataKey="qualityOfAccessScores"
-      datumKey="access"
-    />
-  </div>
-)
-
-const buttonGroupCallback = entity => {
-  const input = {
-    ...entity,
-    score: String(entity.score),
-    sortOrder: String(entity.sortOrder),
-  }
+const EDIT_MODAL_TITLE = 'Edit Quality of Access Scores'
+const QoaModal = ({ entityId, closeModal }) => {
+  const title = entityId ? EDIT_MODAL_TITLE : CREATE_MODAL_TITLE
 
   return (
-    <>
-      <ModalButtonWithForm
-        modalTitle="Edit Quality of Access Score"
-        buttonLabel={editIcon}
-        buttonStyle={{ border: 'none', background: 'none', color: '#b6b9bc' }}
-        modalStyle={modalStyle}
-        data={{ input }}
-        mutationDoc={UPDATE_QUALITY_OF_ACCESS_SCORE}
-        refetchQueries={[{ query: GET_SOURCE_QUALITY_OF_ACCESS_SCORES }]}
-        getInputFields={getInputFields}
-      />
-      {/* <DeleteButton
-        itemId={entity._id}
-        mutationDoc={DELETE_QUALITY_OF_ACCESS_SCORE}
-        refetchQueries={[{ query: GET_SOURCE_QUALITY_OF_ACCESS_SCORES }]}
-      /> */}
-    </>
+    <Modal title={title} show={true} handleClose={closeModal}>
+      <QoaForm entityId={entityId} closeModal={closeModal} />
+    </Modal>
   )
 }
 
-const label1StyleWrapper = {
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'space-between',
-  width: '100%',
+const MODAL_TO_COL_MAP = {
+  editAccessor: {
+    Modal: QoaModal,
+    idKey: '_id',
+  },
 }
 
-const panelItemConfig = {
-  style: defaultPanelItemStyle,
-  buttonGroupCallback,
-  label1Callback: ({ access, score, color, sortOrder }) => (
-    <div style={label1StyleWrapper}>
-      <div style={{ fontSize: 12, fontWeight: 700, width: 500, }}>
-        {access}
+const COLUMNS = [
+  {
+    Header: 'Access',
+    accessor: 'access',
+    Filter: MultiSelectColumnFilter,
+    filter: customMultiSelectFilterFn,
+    sortType: 'text',
+    sticky: 'left',
+    width: 400,
+  },
+  {
+    Header: 'Access Tiny',
+    accessor: 'accessTiny',
+    Filter: MultiSelectColumnFilter,
+    filter: customMultiSelectFilterFn,
+    sortType: 'text',
+    width: 200,
+  },
+  {
+    Header: 'Sort Order',
+    accessor: 'sortOrder',
+    Filter: MultiSelectColumnFilter,
+    filter: customMultiSelectFilterFn,
+    sortType: 'text',
+  },
+  {
+    Header: 'Score',
+    accessor: 'score',
+    Filter: MultiSelectColumnFilter,
+    filter: customMultiSelectFilterFn,
+    sortType: 'text',
+  },
+  {
+    Header: 'Color',
+    accessor: 'color',
+    Filter: MultiSelectColumnFilter,
+    filter: customMultiSelectFilterFn,
+    sortType: 'text',
+    Cell: ({
+      row: {
+        original: { color },
+      },
+    }) => (
+      <div style={{ display: 'flex', alignItems: 'center' }}>
+        {color}
+        <div
+          style={{ marginLeft: 12, background: color, width: 48, height: 12 }}
+        />
       </div>
-      <BoxContainer>
-        <BoxLabel>Access Score</BoxLabel>
-        <ColorBox
-          label={score}
-          boxColor={color}
-        />
-      </BoxContainer>
-      <BoxContainer>
-        <BoxLabel>Sort Order</BoxLabel>
-        <ColorBox
-          label={sortOrder}
-          boxColor={Color.MEDIUM_GRAY_2}
-        />
-      </BoxContainer>
+    ),
+  },
+  {
+    Header: '',
+    disableSortBy: true,
+    disableFilters: true,
+    accessor: 'editAccessor',
+    Cell: 'Edit',
+  },
+]
+
+const PAGE_TITLE = 'Payer Quality of Access Scores'
+
+const QualityAccessScorePanel = () => {
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
+  const { data, loading } = useQuery(GET_SOURCE_QUALITY_OF_ACCESS_SCORES)
+
+  if (loading) return null
+
+  const { qualityOfAccessScores } = data
+
+  return (
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+      }}
+    >
+      <PanelHeader title={PAGE_TITLE}>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <Button
+            color={Color.PRIMARY}
+            type="primary"
+            onClick={() => setIsCreateModalOpen(true)}
+          >
+            {CREATE_BUTTON_TXT}
+          </Button>
+          {isCreateModalOpen && (
+            <QoaModal closeModal={() => setIsCreateModalOpen(false)} />
+          )}
+        </div>
+      </PanelHeader>
+      <Table
+        width={CONFIG_TABLE_WIDTH}
+        data={qualityOfAccessScores}
+        columns={COLUMNS}
+        modalColMap={MODAL_TO_COL_MAP}
+        exportProps={{
+          filename: 'Payer-Quality-of-Access-Scores',
+          sheetName: 'qoa scores',
+        }}
+      />
     </div>
   )
 }
-
-const QualityAccessScorePanel = () => (
-  <Panel
-    title="Quality of Access Scores"
-    headerChildren={headerChildren}
-    headerContainerStyle={{
-      background: Color.WHITE,
-      borderBottom: `1px solid ${transparentize(0.9, Color.BLACK)}`
-    }}
-    queryDocs={{
-      fetchAllQueryProps: { query: GET_SOURCE_QUALITY_OF_ACCESS_SCORES },
-    }}
-    panelItemConfig={panelItemConfig}
-  />
-)
 
 export default QualityAccessScorePanel

@@ -22,6 +22,14 @@ const getObmPayerMaterializationPipeline = (obmId) => [
     },
   },
   {
+    $lookup: {
+      from: 'books',
+      localField: 'bookIds',
+      foreignField: '_id',
+      as: 'books',
+    },
+  },
+  {
     $project: {
       payer: {
         $arrayElemAt: ['$payer', 0],
@@ -29,6 +37,8 @@ const getObmPayerMaterializationPipeline = (obmId) => [
       obm: {
         $arrayElemAt: ['$obm', 0],
       },
+      note: 1,
+      books: '$books.name',
     },
   },
   {
@@ -45,6 +55,38 @@ const getObmPayerMaterializationPipeline = (obmId) => [
         organization: 1,
         organizationTiny: 1,
       },
+      note: 1,
+      books: 1,
+    },
+  },
+  {
+    $lookup: {
+      from: 'JOIN_obms_obms.types',
+      localField: 'obm._id',
+      foreignField: 'obmId',
+      as: 'obm.type',
+    },
+  },
+  {
+    $addFields: {
+      'obm.type': {
+        $arrayElemAt: ['$obm.type', 0],
+      },
+    },
+  },
+  {
+    $lookup: {
+      from: 'obms.types',
+      localField: 'obm.type.obmTypeId',
+      foreignField: '_id',
+      as: 'obm.type',
+    },
+  },
+  {
+    $addFields: {
+      'obm.type': {
+        $arrayElemAt: ['$obm.type', 0],
+      },
     },
   },
 ]
@@ -60,10 +102,12 @@ const connectObmAndPayer = async (
 
   const session = mongoClient.startSession()
 
-  const docsToInsert = connections.map(({ _id, payerId }) => ({
+  const docsToInsert = connections.map(({ _id, payerId, bookIds, note }) => ({
     _id: _id ? ObjectId(_id) : ObjectId(),
     payerId: ObjectId(payerId),
     obmId,
+    bookIds: (bookIds || []).map((bookId) => ObjectId(bookId)),
+    note,
   }))
 
   await session.withTransaction(async () => {

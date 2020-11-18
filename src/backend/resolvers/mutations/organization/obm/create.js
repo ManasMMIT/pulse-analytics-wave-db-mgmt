@@ -23,7 +23,9 @@ const createObmAccount = async (
       )
       .then(({ ops }) => ops[0])
 
-    await pulseDevDb.collection('obms').insertOne(input, { session })
+    const { type, toolIds, ...devObm } = createdObm
+
+    await pulseDevDb.collection('obms').insertOne(devObm, { session })
   })
 
   return createdObm

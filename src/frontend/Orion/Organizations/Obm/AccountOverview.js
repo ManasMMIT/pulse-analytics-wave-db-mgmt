@@ -6,6 +6,8 @@ import { GET_OBM_ORGANIZATIONS } from 'frontend/api/queries'
 import PanelHeader from 'frontend/components/Panel/PanelHeader'
 import ObmModalButton from 'frontend/components/BusinessObjectModal/OncologyBenefitManagerModal/OncologyBenefitManagerModalButton'
 import ObmModal from 'frontend/components/BusinessObjectModal/OncologyBenefitManagerModal'
+// import ObmTypesModal from 'frontend/components/BusinessObjectModal/ObmTypesModal'
+import ObmTypePowerSelect from 'frontend/components/BoPowerSelect/ObmTypePowerSelect'
 import Icon from 'frontend/components/Icon'
 import Table from 'frontend/components/Table'
 
@@ -66,15 +68,18 @@ const AccountOverview = () => {
       }}
     >
       <PanelHeader title={PAGE_TITLE}>
-        <ObmModalButton buttonStyle={createButtonStyle}>
-          <Icon
-            iconName="add"
-            color1={Color.WHITE}
-            width={16}
-            style={{ marginRight: 8 }}
-          />
-          Create OBM
-        </ObmModalButton>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <ObmTypePowerSelect />
+          <ObmModalButton buttonStyle={createButtonStyle}>
+            <Icon
+              iconName="add"
+              color1={Color.WHITE}
+              width={16}
+              style={{ marginRight: 8 }}
+            />
+            Create OBM
+          </ObmModalButton>
+        </div>
       </PanelHeader>
 
       <Table
