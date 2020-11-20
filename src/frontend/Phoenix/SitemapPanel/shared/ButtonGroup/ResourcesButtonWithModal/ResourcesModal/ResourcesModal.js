@@ -32,7 +32,6 @@ const ResourcesModal = ({
       selectedTeamNode={selectedTeamNode}
       nodeType={nodeType}
       closeModal={handleClose}
-
     />
   </Modal>
 )

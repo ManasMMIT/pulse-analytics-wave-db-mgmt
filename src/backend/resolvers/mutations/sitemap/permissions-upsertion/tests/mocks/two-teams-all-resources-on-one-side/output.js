@@ -9,7 +9,6 @@ module.exports = [
         slug: 'aetna',
       },
     ],
-    regionalBreakdown: [],
     treatmentPlans: [
       {
         _id: indicationId1,

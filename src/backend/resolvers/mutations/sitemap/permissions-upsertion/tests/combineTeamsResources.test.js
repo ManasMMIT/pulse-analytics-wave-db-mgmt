@@ -71,39 +71,4 @@ describe("outputs a single-node's resources correctly", () => {
 
     expect(result).toEqual(twoTeamsAllSimpleResourcesOutput)
   })
-
-  // ! Current weird behavior is if a user belongs to multiple teams and some have regional breakdown
-  // ! and others don't, it's a roulette (based on array ordering) as to whether the user will get a breakdown.
-  // ! This hasn't been a problem for us in the actual app because no user is currently in this situation --
-  // ! for any user that has a breakdown, all of its teams happen to have breakdowns
-  test('Expected but unwanted and soon-to-be-deprecated behavior: Regional breakdown for a user can be overwritten to blank', () => {
-    const TEST_REGIONAL_BREAKDOWN = 'asdf'
-
-    const result = combineTeamsResources({
-      teams: [
-        {
-          resources: [
-            {
-              nodeId: '25fde1b5-4c24-4d8a-ad89-aa4afaca4c52',
-              accounts: [],
-              treatmentPlans: [],
-              regionalBreakdown: TEST_REGIONAL_BREAKDOWN,
-            },
-          ],
-        },
-        {
-          resources: [
-            {
-              nodeId: '25fde1b5-4c24-4d8a-ad89-aa4afaca4c52',
-              accounts: [],
-              treatmentPlans: [],
-            },
-          ],
-        },
-      ],
-      masterListItemsById,
-    })
-
-    expect(result[0].regionalBreakdown).toEqual([])
-  })
 })

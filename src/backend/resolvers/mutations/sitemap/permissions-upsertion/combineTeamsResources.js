@@ -14,16 +14,11 @@ const combineTeamsResources = ({ teams, masterListItemsById }) => {
       let combinedTeamsNodeResources = {
         nodeId,
         accounts: [],
-        regionalBreakdown: [],
         treatmentPlans: [],
       }
 
       teamsNodeResources.forEach((teamNodeResource) => {
-        const {
-          accounts = [],
-          regionalBreakdown = [],
-          treatmentPlans = [],
-        } = teamNodeResource
+        const { accounts = [], treatmentPlans = [] } = teamNodeResource
 
         addFormattedAccountsToCombinedTeamsNodeResources(
           accounts,
@@ -35,8 +30,6 @@ const combineTeamsResources = ({ teams, masterListItemsById }) => {
           masterListItemsById,
           combinedTeamsNodeResources
         )
-
-        combinedTeamsNodeResources.regionalBreakdown = regionalBreakdown
       })
 
       combinedTeamsNodeResources.accounts = _.uniqBy(
