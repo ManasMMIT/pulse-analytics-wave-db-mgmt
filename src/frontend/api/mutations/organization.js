@@ -315,6 +315,30 @@ export const UPDATE_OBM_ORGANIZATION = gql`
   }
 `
 
+export const DELETE_OBM_ORGANIZATION = gql`
+  mutation DeleteObmOrganization($input: DeleteObmOrganizationInput!) {
+    deleteObmOrganization(input: $input) {
+      _id
+      slug
+      organization
+      organizationTiny
+      start
+      businessModel
+      approvalTime
+      hasDecisionSupport
+      hasPbMbAuthorization
+      isEmrIntegrable
+      medicalReview
+      treatmentSelection
+      payer
+      pharmacyBenefitManager
+      specialtyPharmacy
+      labBenefitManager
+      parentCompany
+    }
+  }
+`
+
 export const CONNECT_OBM_SERVICE_AND_OBM_SERVICE_CATEGORY = gql`
   mutation ConnectObmServiceAndObmServiceCategory(
     $input: ConnectObmServiceAndObmServiceCategoryInput!

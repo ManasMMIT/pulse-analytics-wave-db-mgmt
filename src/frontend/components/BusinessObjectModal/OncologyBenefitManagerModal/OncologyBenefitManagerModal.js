@@ -3,6 +3,7 @@ import React from 'react'
 import {
   CREATE_OBM_ORGANIZATION,
   UPDATE_OBM_ORGANIZATION,
+  DELETE_OBM_ORGANIZATION,
 } from 'frontend/api/mutations'
 
 import {
@@ -65,6 +66,7 @@ const OncologyBenefitManagerModal = ({
     mutationDocs={{
       create: CREATE_OBM_ORGANIZATION,
       update: UPDATE_OBM_ORGANIZATION,
+      delete: DELETE_OBM_ORGANIZATION,
     }}
     refetchQueries={[
       ...refetchQueries,

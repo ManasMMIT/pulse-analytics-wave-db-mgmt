@@ -1,5 +1,6 @@
 const createObmOrganizationTypeDefs = require('./create')
 const updateObmOrganizationTypeDefs = require('./update')
+const deleteObmOrganizationTypeDefs = require('./delete')
 
 const obmServiceTypeDefs = require('./service')
 const obmServiceCategoryTypeDefs = require('./serviceCategory')
@@ -9,6 +10,7 @@ const obmRelationalTypeDefs = require('./relational-typeDefs')
 module.exports = [
   createObmOrganizationTypeDefs,
   updateObmOrganizationTypeDefs,
+  deleteObmOrganizationTypeDefs,
   ...obmServiceTypeDefs,
   ...obmServiceCategoryTypeDefs,
   ...obmTypeTypeDefs,
