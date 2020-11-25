@@ -410,9 +410,18 @@ const queries = gql`
     _id: ID!
     obmId: String!
     payerId: String!
-    bookIds: [String]
+    books: [JSON!]!
     note: String
   }
+
+  # TODO: can't use _id here because caching problems on frontend;
+  # temporarily using JSON type for books
+  # type ObmAndPayerConnectionBookObj {
+  #   _id: ID!
+  #   name: String!
+  #   isNational: Boolean!
+  #   states: [String!]!
+  # }
 
   type ObmKeyEvent {
     _id: ID!
