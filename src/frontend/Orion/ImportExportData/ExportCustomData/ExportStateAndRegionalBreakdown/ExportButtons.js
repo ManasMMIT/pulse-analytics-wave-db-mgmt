@@ -84,6 +84,10 @@ const ExportButtons = ({
         Note: All lives are DRG lives, and regional breakdown sheets only become
         downloadable if the selected team has regional breakdown data.
       </div>
+      <div style={{ marginTop: 16, color: Color.RED, ...FontSpace.FS2 }}>
+        <sup>*</sup> Make sure team has <u>at least a single user</u> before
+        exporting data.
+      </div>
 
       <div style={{ display: 'flex' }}>
         <ExportExcelButton
