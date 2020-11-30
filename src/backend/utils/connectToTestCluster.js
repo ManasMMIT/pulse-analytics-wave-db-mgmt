@@ -1,8 +1,8 @@
 require('dotenv').config()
 
-const { MONGO_KEY } = process.env
+const { MONGO_USERNAME, MONGO_PASSWORD } = process.env
 
-const LOADER_URI = `mongodb://pulse-admin:${MONGO_KEY}@wave-staging-shard-00-00-ik4h2.mongodb.net:27017,wave-staging-shard-00-01-ik4h2.mongodb.net:27017,wave-staging-shard-00-02-ik4h2.mongodb.net:27017/pulse-dev?ssl=true&replicaSet=wave-staging-shard-0&authSource=admin`
+const LOADER_URI = `mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@wave-staging-shard-00-00-ik4h2.mongodb.net:27017,wave-staging-shard-00-01-ik4h2.mongodb.net:27017,wave-staging-shard-00-02-ik4h2.mongodb.net:27017/pulse-dev?ssl=true&replicaSet=wave-staging-shard-0&authSource=admin`
 
 const MongoClient = require('mongodb').MongoClient
 
