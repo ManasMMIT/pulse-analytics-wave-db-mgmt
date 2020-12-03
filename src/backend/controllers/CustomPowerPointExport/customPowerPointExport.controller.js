@@ -3,7 +3,10 @@ const pptxgen = require('pptxgenjs')
 const path = require('path')
 
 const { deleteFile } = require('./../../utils/fileHandler')
-const { AccessAcrossIndicationSlide } = require('./slides')
+const {
+  AccessAcrossIndicationSlide,
+  AccessSummaryTopPayersSlide,
+} = require('./slides')
 
 class CustomPowerPointExportController {
   constructor(db) {
@@ -14,12 +17,14 @@ class CustomPowerPointExportController {
   }
 
   async createSlides({ pptx, book }) {
+    const { db } = this
+
     // Create Slides
-    const accessIndicationSlide = new AccessAcrossIndicationSlide({
-      db: this.db,
-      book,
-    })
+    const accessIndicationSlide = new AccessAcrossIndicationSlide({ db, book })
+    const accessSummaryTopPayersSlide = new AccessSummaryTopPayersSlide({ db })
+
     await accessIndicationSlide.createPowerPointSlide(pptx)
+    await accessSummaryTopPayersSlide.createPowerPointSlide(pptx)
   }
 
   async apiDownloadPptReport(req, res) {

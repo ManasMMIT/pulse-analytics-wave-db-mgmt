@@ -65,7 +65,9 @@ const ExportRegionalBreakdown = () => {
     <SectionContainer>
       <SectionHeader>Regional Targeting Export</SectionHeader>
       <div style={{ marginTop: 24 }}>
-        <SelectLabel>Select a team:</SelectLabel>
+        <SelectLabel>
+          <sup style={{ color: 'red' }}>*</sup>Select a team:
+        </SelectLabel>
         {teamsLoading ? (
           <Spinner />
         ) : (

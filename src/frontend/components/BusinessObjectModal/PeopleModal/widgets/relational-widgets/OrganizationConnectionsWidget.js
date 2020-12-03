@@ -7,35 +7,14 @@ import { useQuery } from '@apollo/react-hooks'
 import { GET_ORGANIZATION_TYPES } from 'frontend/api/queries'
 import usePathwaysPersonConnections from 'frontend/hooks/usePathwaysPersonConnections'
 import Spinner from 'frontend/components/Spinner'
+import manualBoModalLockOverlay from 'frontend/components/BusinessObjectModal/shared/widget/manualBoModalLockOverlay'
+
 import ConnectionListItem from './ConnectionListItem'
 import ConnectionsList from '../../../shared/widget/ConnectionsList'
 import ConnectionPanel from '../../../shared/widget/ConnectionPanel'
 import { INFLUENCER_ALERT_TYPE } from '../../../shared/widget/alert-types'
 import CreateButton from './CreateButton'
 import PathwaysInfluencerForm from '../../../shared/widget/PathwaysInfluencersForm'
-
-// TODO: Move overlay code into shared components
-const OVERLAY_1_STYLE_RAW = `
-  position: absolute;
-  top: 0px;
-  left: 0px;
-  background: #0A2E4D;
-  width: 100%;
-  height: 102%;
-  opacity: 0.5;
-  border-bottom: 0px;
-`
-
-const OVERLAY_2_STYLE_RAW = `
-  position: absolute;
-  top: 0px;
-  left: 0px;
-  background: #0A2E4D;
-  width: 100%;
-  height: 100%;
-  opacity: 0.5;
-  border-bottom: 0px;
-`
 
 const WidgetContainer = styled.div({
   display: 'flex',
@@ -110,30 +89,7 @@ const OrganizationConnectionsWidget = ({ entity }) => {
 
   const { organizationTypes } = organizationTypeData
 
-  // TODO: Move overlay code into shared components
-  const boModalHeaderNode = document.querySelector('#BoModalHeader')
-  const bomSidebar = document.querySelector('#BomSidebar')
-  const headerOverlay = boModalHeaderNode.querySelector('#bomHeaderOverlay')
-  const sidebarOverlay = bomSidebar.querySelector('#bomSidebarOverlay')
-
-  if (anyUnsavedChanges) {
-    if (!headerOverlay) {
-      const overlayDiv = document.createElement('div')
-      overlayDiv.id = 'bomHeaderOverlay'
-      overlayDiv.style = OVERLAY_1_STYLE_RAW
-      boModalHeaderNode.appendChild(overlayDiv)
-    }
-
-    if (!sidebarOverlay) {
-      const overlayDiv2 = document.createElement('div')
-      overlayDiv2.id = 'bomSidebarOverlay'
-      overlayDiv2.style = OVERLAY_2_STYLE_RAW
-      bomSidebar.appendChild(overlayDiv2)
-    }
-  } else {
-    if (headerOverlay) boModalHeaderNode.removeChild(headerOverlay)
-    if (sidebarOverlay) bomSidebar.removeChild(sidebarOverlay)
-  }
+  manualBoModalLockOverlay(anyUnsavedChanges)
 
   const createOrgConnectionHandler = (orgType) => {
     if (anyUnsavedChanges) {

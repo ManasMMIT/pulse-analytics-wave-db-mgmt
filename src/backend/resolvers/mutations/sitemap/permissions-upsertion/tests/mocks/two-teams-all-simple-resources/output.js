@@ -20,7 +20,6 @@ module.exports = [
         slug: 'aegon',
       },
     ],
-    regionalBreakdown: [],
     treatmentPlans: [
       {
         _id: indicationId1,

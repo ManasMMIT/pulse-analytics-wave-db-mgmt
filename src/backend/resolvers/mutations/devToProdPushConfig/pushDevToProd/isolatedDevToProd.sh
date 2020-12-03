@@ -45,8 +45,8 @@ do
   mongodump \
     --host $HOST \
     --ssl \
-    --username pulse-admin \
-    --password $MONGO_KEY \
+    --username $MONGO_USERNAME \
+    --password $MONGO_PASSWORD \
     --authenticationDatabase admin \
     --db pulse-dev \
     --collection $COLLECTION_NAME \
@@ -60,8 +60,8 @@ echo "Restoring dumped collections to pulse-prod DB..."
 mongorestore \
   --host $HOST \
   --ssl \
-  --username pulse-admin \
-  --password $MONGO_KEY \
+  --username $MONGO_USERNAME \
+  --password $MONGO_PASSWORD \
   --authenticationDatabase admin \
   --db pulse-prod ./current-dump/pulse-dev \
   --drop \

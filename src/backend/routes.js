@@ -1,11 +1,12 @@
 require('dotenv').config()
 
 let LOADER_URI = ''
-const MONGO_KEY = process.env.MONGO_KEY
+const { MONGO_USERNAME, MONGO_PASSWORD } = process.env
+
 if (process.env.DB_CLUSTER_ENV === 'production') {
-  LOADER_URI = `mongodb://pulse-admin:${MONGO_KEY}@wave-shard-00-00-ik4h2.mongodb.net:27017,wave-shard-00-01-ik4h2.mongodb.net:27017,wave-shard-00-02-ik4h2.mongodb.net:27017/pulse-dev?ssl=true&replicaSet=wave-shard-0&authSource=admin`
+  LOADER_URI = `mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@wave-shard-00-00-ik4h2.mongodb.net:27017,wave-shard-00-01-ik4h2.mongodb.net:27017,wave-shard-00-02-ik4h2.mongodb.net:27017/pulse-dev?ssl=true&replicaSet=wave-shard-0&authSource=admin`
 } else if (process.env.DB_CLUSTER_ENV === 'staging') {
-  LOADER_URI = `mongodb://pulse-admin:${MONGO_KEY}@wave-staging-shard-00-00-ik4h2.mongodb.net:27017,wave-staging-shard-00-01-ik4h2.mongodb.net:27017,wave-staging-shard-00-02-ik4h2.mongodb.net:27017/pulse-dev?ssl=true&replicaSet=wave-staging-shard-0&authSource=admin`
+  LOADER_URI = `mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@wave-staging-shard-00-00-ik4h2.mongodb.net:27017,wave-staging-shard-00-01-ik4h2.mongodb.net:27017,wave-staging-shard-00-02-ik4h2.mongodb.net:27017/pulse-dev?ssl=true&replicaSet=wave-staging-shard-0&authSource=admin`
 } else if (process.env.DB_CLUSTER_ENV === 'local') {
   LOADER_URI = 'mongodb://localhost:27017'
 }

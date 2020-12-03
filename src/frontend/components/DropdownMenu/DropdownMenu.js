@@ -26,7 +26,7 @@ const DropdownMenu = ({ style, buttonContent, children }) => {
       <Button type={'secondary'} onClick={handleClick}>
         <Icon iconName="add" color1={Color.PRIMARY} width={16} />
       </Button>
-      {showMenu && <Menu style={menuStyle}>{children}</Menu>}
+      {showMenu && <Menu style={{ ...menuStyle, ...style }}>{children}</Menu>}
     </div>
   )
 }

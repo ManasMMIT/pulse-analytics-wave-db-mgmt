@@ -142,6 +142,9 @@ const mutationType = gql`
     createObmOrganization(
       input: CreateObmOrganizationInput!
     ): CreateObmOrganizationPayload!
+    deleteObmOrganization(
+      input: DeleteObmOrganizationInput!
+    ): DeleteObmOrganizationPayload!
     updateObmOrganization(
       input: UpdateObmOrganizationInput!
     ): UpdateObmOrganizationPayload!
@@ -342,6 +345,14 @@ const mutationType = gql`
     deletePathwaysAndPersonConnection(
       input: DeletePathwaysAndPersonConnectionInput!
     ): PathwaysAndPersonConnection!
+
+    upsertObmAndPayerConnection(
+      input: UpsertObmAndPayerConnectionInput!
+    ): ObmAndPayerConnection!
+
+    deleteObmAndPayerConnection(
+      input: DeleteObmAndPayerConnectionInput!
+    ): ObmAndPayerConnection!
   }
 `
 

@@ -4,7 +4,6 @@ import styled from '@emotion/styled'
 import { transparentize } from 'polished'
 
 import { UnderlinedTabs } from '../../../../../../../components/Tabs'
-import RegionalBreakdownTabContent from './RegionalBreakdownTabContent'
 import AccountsTabContent from './AccountsTabContent'
 import SubmitButton from './SubmitButton'
 import TreatmentPlansTabContent from './TreatmentPlansTabContent'
@@ -12,11 +11,7 @@ import trimTreatmentPlansToIds from './trim-treatment-plans-to-ids'
 
 import { Colors, Spacing } from '../../../../../../../utils/pulseStyles'
 
-const TABS_DATA = [
-  'Treatment Plans',
-  'Accounts',
-  'Regional Breakdown',
-]
+const TABS_DATA = ['Treatment Plans', 'Accounts']
 
 const tabsContainerStyle = {
   borderTop: `2px solid ${transparentize(0.9, Colors.BLACK)}`,
@@ -45,11 +40,11 @@ const CancelButton = styled.button({
     background: transparentize(0.7, Colors.RED),
   },
   ':active': {
-    outline: 'none'
+    outline: 'none',
   },
   ':focus': {
-    outline: 'none'
-  }
+    outline: 'none',
+  },
 })
 
 const ModalHeader = styled.div({
@@ -66,13 +61,13 @@ const ModalTitle = styled.div({
 const ParentNodeTitle = styled.h2({
   fontSize: 14,
   fontWeight: 700,
-  color: Colors.BLACK
+  color: Colors.BLACK,
 })
 
 const CurrentNodeTitle = styled.h2({
   fontSize: 14,
   fontWeight: 700,
-  color: Colors.PRIMARY
+  color: Colors.PRIMARY,
 })
 
 const ModalContent = ({
@@ -82,17 +77,12 @@ const ModalContent = ({
   currentNode,
   parentNode,
   enabledResources,
-  toolRegionalBreakdown,
   resources, // available treatment plans and accounts to diff against
   closeModal,
 }) => {
   const [state, setState] = useState(enabledResources)
 
-  const {
-    treatmentPlans,
-    accounts,
-    regionalBreakdown,
-  } = state
+  const { treatmentPlans, accounts } = state
 
   const {
     treatmentPlans: baseTreatmentPlans,
@@ -101,20 +91,17 @@ const ModalContent = ({
 
   // must manually merge state to achieve old merge behavior
   // see: https://reactjs.org/docs/hooks-faq.html#should-i-use-one-or-many-state-variables
-  const setStagedAccounts = accounts => {
-    setState(prevState => ({ ...prevState, accounts }))
+  const setStagedAccounts = (accounts) => {
+    setState((prevState) => ({ ...prevState, accounts }))
   }
 
-  const setStagedTreatmentPlans = treatmentPlans => {
+  const setStagedTreatmentPlans = (treatmentPlans) => {
     treatmentPlans = trimTreatmentPlansToIds(treatmentPlans)
-    setState(prevState => ({ ...prevState, treatmentPlans }))
+    setState((prevState) => ({ ...prevState, treatmentPlans }))
   }
 
-  const setStagedRegionalBreakdown = regionalBreakdown => {
-    setState(prevState => ({ ...prevState, regionalBreakdown }))
-  }
-
-  const stageAllTreatmentPlans = () => setStagedTreatmentPlans(baseTreatmentPlans)
+  const stageAllTreatmentPlans = () =>
+    setStagedTreatmentPlans(baseTreatmentPlans)
 
   const unstageAllTreatmentPlans = () => setStagedTreatmentPlans([])
 
@@ -131,11 +118,7 @@ const ModalContent = ({
             alignItems: 'center',
           }}
         >
-          <CancelButton
-            onClick={closeModal}
-          >
-            Cancel
-          </CancelButton>
+          <CancelButton onClick={closeModal}>Cancel</CancelButton>
           <SubmitButton
             updatedResources={state}
             nodeId={nodeId}
@@ -162,13 +145,6 @@ const ModalContent = ({
           accounts={accounts}
           setStagedAccounts={setStagedAccounts}
         />
-        <RegionalBreakdownTabContent
-          nodeId={nodeId}
-          nodeType={nodeType}
-          toolRegionalBreakdown={toolRegionalBreakdown}
-          setStagedRegionalBreakdown={setStagedRegionalBreakdown}
-          regionalBreakdown={regionalBreakdown}
-        />
       </UnderlinedTabs>
     </>
   )
@@ -178,7 +154,6 @@ ModalContent.propTypes = {
   nodeId: PropTypes.string,
   nodeType: PropTypes.string,
   resources: PropTypes.object,
-  toolRegionalBreakdown: PropTypes.array,
   closeModal: PropTypes.func,
 }
 
