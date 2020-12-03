@@ -17,9 +17,7 @@ const deleteObmAndPayerConnection = async (
       .findOneAndDelete({ _id }, { session })
       .then(({ value }) => value)
 
-    await pulseDevDb
-      .collection('NEW_obmsPayers')
-      .deleteOne({ _id }, { session })
+    await pulseDevDb.collection('obmsPayers').deleteOne({ _id }, { session })
   })
 
   return deletedConnection

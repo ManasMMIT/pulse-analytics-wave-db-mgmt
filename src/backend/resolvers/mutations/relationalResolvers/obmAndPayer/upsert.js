@@ -117,9 +117,7 @@ const upsertObmAndPayerConnection = async (
       )
       .then(({ value }) => value)
 
-    await pulseDevDb
-      .collection('NEW_obmsPayers')
-      .deleteOne({ _id }, { session })
+    await pulseDevDb.collection('obmsPayers').deleteOne({ _id }, { session })
 
     const docToInsertIntoDev = await pulseCoreDb
       .collection('JOIN_obms_payers')
@@ -127,7 +125,7 @@ const upsertObmAndPayerConnection = async (
       .next()
 
     await pulseDevDb
-      .collection('NEW_obmsPayers')
+      .collection('obmsPayers')
       .insertOne(docToInsertIntoDev, { session })
   })
 
