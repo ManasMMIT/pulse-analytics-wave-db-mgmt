@@ -345,6 +345,14 @@ const mutationType = gql`
     deletePathwaysAndPersonConnection(
       input: DeletePathwaysAndPersonConnectionInput!
     ): PathwaysAndPersonConnection!
+
+    upsertObmAndPayerConnection(
+      input: UpsertObmAndPayerConnectionInput!
+    ): ObmAndPayerConnection!
+
+    deleteObmAndPayerConnection(
+      input: DeleteObmAndPayerConnectionInput!
+    ): ObmAndPayerConnection!
   }
 `
 

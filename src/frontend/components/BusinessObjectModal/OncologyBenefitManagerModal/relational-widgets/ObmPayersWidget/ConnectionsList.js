@@ -1,30 +1,61 @@
 import React from 'react'
+import PropTypes from 'prop-types'
+import _ from 'lodash'
+import styled from '@emotion/styled'
+
+import ConnectionListItem from './ConnectionListItem'
+import SectionTitle from 'frontend/components/SectionTitle'
+import List from 'frontend/components/List'
+import Color from 'frontend/utils/color'
+import Button from 'frontend/components/Button'
+import Icon from 'frontend/components/Icon'
+
+const ConnectionsListWrapper = styled.div({
+  display: 'flex',
+  flexDirection: 'column',
+  width: '50%',
+})
 
 const ConnectionsList = ({
-  stagedConnections,
-  // stageConnections,
+  connections,
+  widgetTitle,
+  createConnectionHandler,
   selectedConnectionId,
   selectConnectionId,
+  isNewConnectionBeingCreated,
+  anyUnsavedChanges,
   payerOrgById,
 }) => {
+  const clickHandler = (id) => {
+    if (anyUnsavedChanges || isNewConnectionBeingCreated) {
+      // Disable selection whenever edits are in progress
+      alert(
+        "You have unsaved changes! First save or cancel the connection you're on."
+      )
+    } else {
+      selectConnectionId(id)
+    }
+  }
+
   return (
-    <div style={{ width: '50%' }}>
-      <h4>WIDGET UNDER CONSTRUCTION</h4>
+    <ConnectionsListWrapper>
+      <SectionTitle title={widgetTitle}>
+        <Button type={'secondary'} onClick={createConnectionHandler}>
+          <Icon iconName="add" color1={Color.PRIMARY} width={16} />
+        </Button>
+      </SectionTitle>
 
-      <div>
-        <button
-          style={{
-            border: '1px solid black',
-            cursor: 'pointer',
-          }}
-        >
-          Add payer connection
-        </button>
-      </div>
+      <List>
+        {isNewConnectionBeingCreated && (
+          <ConnectionListItem isActive title="New Payer Connection" />
+        )}
 
-      <div>
-        {stagedConnections.map(({ _id, payerId, books }) => {
-          const label = books
+        {connections.map((datum) => {
+          const { _id, payerId, books } = datum
+          const isActive =
+            !isNewConnectionBeingCreated && selectedConnectionId === _id
+
+          const booksLabel = books
             .map(
               ({ name, isNational }) =>
                 `${name} (${isNational ? 'National' : 'States'})`
@@ -32,23 +63,29 @@ const ConnectionsList = ({
             .join(', ')
 
           return (
-            <div
-              key={_id}
-              style={{
-                color: _id === selectedConnectionId ? 'red' : 'black',
-                border: '1px solid black',
-                padding: 24,
-              }}
-              onClick={() => selectConnectionId(_id)}
-            >
-              <p>{payerOrgById[payerId]}</p>
-              <p style={{ fontSize: 10 }}>{label}</p>
-            </div>
+            <ConnectionListItem
+              key={datum._id}
+              isActive={isActive}
+              clickHandler={() => clickHandler(datum._id)}
+              title={payerOrgById[payerId]}
+              subtitle={booksLabel}
+            />
           )
         })}
-      </div>
-    </div>
+      </List>
+    </ConnectionsListWrapper>
   )
+}
+
+ConnectionsList.propTypes = {
+  connections: PropTypes.array,
+  widgetTitle: PropTypes.string,
+  createConnectionHandler: PropTypes.func,
+  selectedConnectionId: PropTypes.string,
+  selectConnectionId: PropTypes.func,
+  isNewConnectionBeingCreated: PropTypes.bool,
+  anyUnsavedChanges: PropTypes.bool,
+  payerOrgById: PropTypes.object,
 }
 
 export default ConnectionsList

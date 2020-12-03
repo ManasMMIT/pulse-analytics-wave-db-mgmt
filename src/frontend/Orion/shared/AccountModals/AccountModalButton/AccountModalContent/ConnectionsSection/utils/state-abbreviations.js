@@ -49,4 +49,6 @@ export default [
   'WV',
   'WI',
   'WY',
+  'PR',
+  'DC',
 ]

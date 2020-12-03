@@ -14,6 +14,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased] - Started: 11-18-20
 
+### Added
+- `Orion/Obm Bo Modal/Obm Payer Widget`: Built out new obm payer widget following [v3 data/API edits](https://dedhamgroup.atlassian.net/wiki/spaces/OBM/pages/1713569814/v3+Data+API+Edits+OBM+Tool) to the obm tool [#860](https://github.com/pulse-data/wave-db-mgmt/pull/860)
+
 ## [3.12.0] - Started: 11-3-20
 
 ### Added
