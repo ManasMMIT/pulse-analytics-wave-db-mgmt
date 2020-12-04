@@ -1,7 +1,7 @@
+import getChildNodes from './getChildNodes'
 const _ = require('lodash')
 
 const getResourcesDiff = require('./getResourcesDiff')
-const getChildNodes = require('./getChildNodes')
 const { keyOutTreatmentPlans, arrayifyTreatmentPlans } = require('./utils')
 
 const addAccounts = (targetAccounts, newAccounts) => {

@@ -1,7 +1,7 @@
 import React from 'react'
 
-import Color from 'frontend/utils/color'
-import Icon from 'frontend/components/Icon'
+import Color from '../utils/color'
+import Icon from '../components/Icon'
 
 import { useAuth0 } from '../../react-auth0-spa'
 
@@ -96,7 +96,7 @@ const Home = () => {
             fontWeight: 500,
           }}
         >
-          Hello {user.name}
+          Hello {user.name}!!
         </div>
         <div style={{ display: 'flex' }}>{toolCards}</div>
       </div>
