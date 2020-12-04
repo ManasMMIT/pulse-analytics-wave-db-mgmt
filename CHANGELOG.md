@@ -17,6 +17,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - `Orion/OBM Payer Connections`: Updated VIEW endpoint for [OBM Payer Partnerships](http://localhost:3000/orion/organizations/obm/payer-partnerships) page in Orion to reflect state vs. national lives changes; add reach columns to table [#864](https://github.com/pulse-analytics/wave-db-mgmt/pull/864)
 
+### Removed
+- `Orion/OBM Payer Connections`: Deleted deprecated obm/payer connections endpoint and affiliated typeDefs, frontend code [#865](https://github.com/pulse-analytics/wave-db-mgmt/pull/865)
+
 ## [3.13.0] - Started: 11-18-20
 
 ### Added
