@@ -12,7 +12,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Fixed** for any bug fixes.
 - **Security** in case of vulnerabilities.
 
-## [Unreleased] - Started: 12-3-20
+## [Unreleased] - Started: 12-4-20
+
+## [3.13.1] - Started: 12-3-20
 
 ### Changed
 - `Orion/OBM Payer Connections`: Updated VIEW endpoint for [OBM Payer Partnerships](http://localhost:3000/orion/organizations/obm/payer-partnerships) page in Orion to reflect state vs. national lives changes; add reach columns to table [#864](https://github.com/pulse-analytics/wave-db-mgmt/pull/864)
