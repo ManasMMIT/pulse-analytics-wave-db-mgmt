@@ -10,7 +10,7 @@ import Button from 'frontend/components/Button'
 import Spinner from 'frontend/components/Spinner'
 import {
   GET_JOIN_OBMS_AND_PAYERS,
-  // GET_VIEW_OBM_PAYER_PARTNERSHIPS,
+  GET_VIEW_OBM_PAYER_PARTNERSHIPS,
 } from 'frontend/api/queries'
 
 import Color from 'frontend/utils/color'
@@ -60,7 +60,10 @@ const ButtonCluster = ({
       variables: {
         input: stagedConnection,
       },
-      refetchQueries: [{ query: GET_JOIN_OBMS_AND_PAYERS }],
+      refetchQueries: [
+        { query: GET_JOIN_OBMS_AND_PAYERS },
+        { query: GET_VIEW_OBM_PAYER_PARTNERSHIPS },
+      ],
       awaitRefetchQueries: true,
       onCompleted: (res) => {
         if (isNewConnectionBeingCreated) {
@@ -80,7 +83,10 @@ const ButtonCluster = ({
     variables: {
       input: { _id: stagedConnection._id },
     },
-    refetchQueries: [{ query: GET_JOIN_OBMS_AND_PAYERS }],
+    refetchQueries: [
+      { query: GET_JOIN_OBMS_AND_PAYERS },
+      { query: GET_VIEW_OBM_PAYER_PARTNERSHIPS },
+    ],
     awaitRefetchQueries: true,
     onCompleted: () => {
       selectConnectionId(_.isEmpty(connections) ? null : connections[0]._id)
