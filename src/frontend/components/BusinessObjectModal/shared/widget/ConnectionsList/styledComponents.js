@@ -9,14 +9,17 @@ export const ContentWrapper = styled.div(
   {
     display: 'flex',
     justifyContent: 'space-between',
-    padding: Spacing.S4,
+    padding: `${Spacing.S2} ${Spacing.S4}`,
     borderRadius: 4,
-    ':hover': {
-      cursor: 'pointer',
-    },
+    cursor: 'pointer',
   },
   ({ isActive }) => ({
     backgroundColor: isActive ? transparentize(0.85, Color.BLUE) : Color.WHITE,
+    ':hover': {
+      backgroundColor: isActive
+        ? transparentize(0.85, Color.BLUE)
+        : transparentize(0.85, Color.BLACK),
+    },
   })
 )
 

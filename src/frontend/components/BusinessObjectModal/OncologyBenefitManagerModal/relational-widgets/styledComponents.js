@@ -16,10 +16,9 @@ export const WidgetPanelHeader = styled.div({
 })
 
 export const WidgetPanelTitle = styled.h2({
-  color: Color.PRIMARY,
-  fontSize: 12,
-  textTransform: 'uppercase',
-  letterSpacing: '0.4px',
+  color: Color.BLACK,
+  fontSize: 16,
+  fontWeight: 700,
 })
 
 export const RelationalRow = styled.div({
@@ -113,11 +112,9 @@ export const SaveWarningBox = styled.div({
 
 export const EventSection = styled.div({
   background: Color.WHITE,
-  borderBottom: borderStyle,
+  borderRadius: 4,
+  margin: 24,
   padding: '8px 12px',
-  ':hover': {
-    background: transparentize(0.85, Color.MEDIUM_GRAY_2),
-  },
   '& > :not(:last-child)': {
     marginBottom: Spacing.SMALL,
   },

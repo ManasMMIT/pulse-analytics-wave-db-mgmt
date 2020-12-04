@@ -10,6 +10,7 @@ import Button from 'frontend/components/Button'
 
 import Color from 'frontend/utils/color'
 import Spacing from 'frontend/utils/spacing'
+import { customSelectStyles } from 'frontend/components/customSelectStyles'
 
 import stateAbbreviations from 'frontend/Orion/shared/AccountModals/AccountModalButton/AccountModalContent/ConnectionsSection/utils/state-abbreviations'
 
@@ -18,6 +19,10 @@ import {
   FormLabel,
   FieldWrapper,
   FormWrapper,
+  BookHeader,
+  BookContainer,
+  BookWrapper,
+  BookLabel,
 } from './styledComponents'
 
 const stateDropdownOptions = stateAbbreviations.map((state) => ({
@@ -108,6 +113,7 @@ const ConnectionForm = ({
           <Select
             isDisabled={!isNewConnectionBeingCreated}
             options={payerDropdownOptions}
+            styles={customSelectStyles}
             value={
               payerId
                 ? payerDropdownOptions.find(({ value }) => value === payerId)
@@ -122,12 +128,12 @@ const ConnectionForm = ({
         </FieldWrapper>
       </FieldContainer>
 
-      <FieldContainer>
+      <BookContainer>
         <FieldWrapper>
           <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <h2>Books:</h2>
+            <BookHeader>Books Applicable to Partnership</BookHeader>
 
-            <DropdownMenu style={{ right: 20 }}>
+            <DropdownMenu style={{ right: 20 }} textLabel label="Add Book">
               <MenuGroup menuGroupLabel={'Add New Book:'}>
                 {arbitraryThreeBooks.reduce((acc, { _id, name }) => {
                   if (
@@ -158,12 +164,12 @@ const ConnectionForm = ({
             </DropdownMenu>
           </div>
         </FieldWrapper>
-      </FieldContainer>
+      </BookContainer>
 
       {sortedBooks.map(({ _id, name, isNational, states }) => {
         return (
-          <FieldContainer key={_id}>
-            <FieldWrapper>
+          <BookContainer key={_id}>
+            <BookWrapper>
               <div
                 style={{
                   display: 'flex',
@@ -172,7 +178,7 @@ const ConnectionForm = ({
                   padding: '12px 0',
                 }}
               >
-                <h3>{name}</h3>
+                <BookLabel>{name}</BookLabel>
 
                 <Button
                   buttonStyle={{ margin: `0 ${Spacing.S3}` }}
@@ -185,6 +191,7 @@ const ConnectionForm = ({
               </div>
               <Select
                 options={isNationalOptions}
+                styles={customSelectStyles}
                 value={isNationalOptions.find(
                   ({ value }) => value === isNational
                 )}
@@ -192,10 +199,10 @@ const ConnectionForm = ({
                   handleBookUpdate(_id, 'isNational', value)
                 }
               />
-            </FieldWrapper>
+            </BookWrapper>
 
             {!isNational && (
-              <FieldWrapper>
+              <BookWrapper>
                 <div
                   style={{
                     display: 'flex',
@@ -222,6 +229,7 @@ const ConnectionForm = ({
                 <Select
                   isMulti
                   options={stateDropdownOptions}
+                  styles={customSelectStyles}
                   value={states.map((state) => ({
                     label: state,
                     value: state,
@@ -236,9 +244,9 @@ const ConnectionForm = ({
                     handleBookUpdate(_id, 'states', newSelectedStates)
                   }}
                 />
-              </FieldWrapper>
+              </BookWrapper>
             )}
-          </FieldContainer>
+          </BookContainer>
         )
       })}
     </FormWrapper>
