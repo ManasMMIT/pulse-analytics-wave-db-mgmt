@@ -96,7 +96,7 @@ const Home = () => {
             fontWeight: 500,
           }}
         >
-          Hello {user.name}!!
+          Hello {user.name}
         </div>
         <div style={{ display: 'flex' }}>{toolCards}</div>
       </div>
