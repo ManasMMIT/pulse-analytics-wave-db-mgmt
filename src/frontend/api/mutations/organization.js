@@ -384,18 +384,6 @@ export const CONNECT_OBM_AND_PERSON = gql`
   }
 `
 
-export const CONNECT_OBM_AND_PAYER = gql`
-  mutation ConnectObmAndPayer($input: ConnectObmAndPayerInput!) {
-    connectObmAndPayer(input: $input) {
-      _id
-      obmId
-      payerId
-      bookIds
-      note
-    }
-  }
-`
-
 export const CONNECT_OBM_AND_KEY_EVENT = gql`
   mutation ConnectObmAndKeyEvent($input: ConnectObmAndKeyEventInput!) {
     connectObmAndKeyEvent(input: $input) {

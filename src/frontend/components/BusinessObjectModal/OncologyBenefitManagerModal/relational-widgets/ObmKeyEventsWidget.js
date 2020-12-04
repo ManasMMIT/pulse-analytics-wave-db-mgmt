@@ -69,7 +69,14 @@ const ObmKeyEventsWidget = ({ entity }) => {
   const clonedStagedEvents = _.cloneDeep(stagedEvents)
 
   return (
-    <div style={{ width: '100%', height: '100%', overflowY: 'auto' }}>
+    <div
+      style={{
+        width: '100%',
+        height: '100%',
+        overflowY: 'auto',
+        background: Color.LIGHT_BLUE_GRAY_1,
+      }}
+    >
       <WidgetPanelHeader>
         <WidgetPanelTitle>OBM Key Events</WidgetPanelTitle>
       </WidgetPanelHeader>
@@ -170,6 +177,9 @@ const ObmKeyEventsWidget = ({ entity }) => {
                 }}
               >
                 <FontAwesomeIcon size="lg" icon={faTrashAlt} />
+                <span style={{ fontWeight: 700, fontSize: 12, marginLeft: 8 }}>
+                  Delete Event
+                </span>
               </DeleteButton>
             </div>
           </EventSection>

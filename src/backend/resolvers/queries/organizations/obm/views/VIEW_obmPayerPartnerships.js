@@ -1,117 +1,103 @@
-const _ = require('lodash')
+const payerPartnerLivesAggPipeline = require('./payerPartnerLivesAggPipeline')
 
-const VIEW_obmPayerPartnerships = async (
-  parent,
-  args,
-  { pulseCoreDb, pulseDevDb }
-) => {
-  const [
-    obmsJoinedToPayers,
-    payerHistoricalDrgNationalLives,
-  ] = await Promise.all([
-    pulseCoreDb
-      .collection('organizations')
-      .aggregate(JOIN_OBMS_TO_PAYERS_AGG)
-      .toArray(),
-    pulseDevDb.collection('payerHistoricalDrgNationalLives').find().toArray(),
-  ])
-
-  const nationalLivesBySlug = _.keyBy(payerHistoricalDrgNationalLives, 'slug')
-
-  const result = obmsJoinedToPayers.map(({ payerSlug, ...rest }) => {
-    let livesFlattened = {}
-
-    if (payerSlug) {
-      if (payerSlug && payerSlug in nationalLivesBySlug) {
-        const { structuredLives } = nationalLivesBySlug[payerSlug]
-
-        const initialAcc = {
-          commercialMedicalLives: 0,
-          commercialMedicalLivesPercent: 0,
-          medicareMedicalLives: 0,
-          medicareMedicalLivesPercent: 0,
-          managedMedicaidMedicalLives: 0,
-          managedMedicaidMedicalLivesPercent: 0,
-        }
-
-        livesFlattened = structuredLives.reduce(
-          (acc, { book, coverage, lives, livesPercent }) => {
-            if (
-              coverage === 'Medical' &&
-              ['Commercial', 'Medicare', 'Managed Medicaid'].includes(book)
-            ) {
-              const livesKey = _.camelCase(`${book} ${coverage} Lives`)
-              const livesPercentKey = _.camelCase(
-                `${book} ${coverage} Lives Percent`
-              )
-
-              acc[livesKey] = lives
-              acc[livesPercentKey] = livesPercent
-            }
-
-            return acc
-          },
-          initialAcc
-        )
-      }
-    }
-
-    return {
-      ...rest,
-      payerSlug,
-      ...livesFlattened,
-    }
-  })
-
-  return result
-}
-
-const JOIN_OBMS_TO_PAYERS_AGG = [
+const VIEW_OBM_PAYER_PARTNERSHIPS_AGG_PIPELINE = [
+  ...payerPartnerLivesAggPipeline,
   {
-    $match: {
-      type: 'Oncology Benefit Manager',
-    },
-  },
-  {
-    $lookup: {
-      from: 'JOIN_obms_payers',
-      localField: '_id',
-      foreignField: 'obmId',
-      as: 'obmPayerJoinEntries',
-    },
-  },
-  {
-    $unwind: '$obmPayerJoinEntries',
-  },
-  {
-    $lookup: {
-      from: 'organizations',
-      localField: 'obmPayerJoinEntries.payerId',
-      foreignField: '_id',
-      as: 'payer',
-    },
-  },
-  {
-    $project: {
-      _id: '$obmPayerJoinEntries._id',
-      obm: {
+    $group: {
+      _id: {
         _id: '$_id',
-        organization: '$organization',
+        obmId: '$obm._id',
+        obmOrganization: '$obm.organization',
+        payerId: '$payer._id',
+        payerSlug: '$payer.slug',
+        payerOrganization: '$payer.organization',
       },
-      payer: {
-        $arrayElemAt: ['$payer', 0],
+      bookObjs: {
+        $push: '$$ROOT',
       },
     },
   },
   {
     $project: {
-      obmId: '$obm._id',
-      obmOrganization: '$obm.organization',
-      payerId: '$payer._id',
-      payerSlug: '$payer.slug',
-      payerOrganization: '$payer.organization',
+      _id: '$_id._id',
+      obmId: '$_id.obmId',
+      obmOrganization: '$_id.obmOrganization',
+      payerId: '$_id.payerId',
+      payerSlug: '$_id.payerSlug',
+      payerOrganization: '$_id.payerOrganization',
+      bookObjs: {
+        $map: {
+          input: '$bookObjs',
+          in: {
+            book: '$$this.book',
+            isNational: '$$this.isNational',
+            states: '$$this.states',
+            lives: '$$this.payer.lives',
+            livesPercent: '$$this.payer.livesPercent',
+          },
+        },
+      },
     },
   },
 ]
+
+// Refer to type VIEW_ObmPayerPartnership in src/backend/typeDefs/queries.js for desired schema output
+const VIEW_obmPayerPartnerships = async (parent, args, { pulseDevDb }) => {
+  const data = await pulseDevDb
+    .collection('obmsPayers')
+    .aggregate(VIEW_OBM_PAYER_PARTNERSHIPS_AGG_PIPELINE, { allowDiskUse: true })
+    .toArray()
+
+  const formattedData = data.map(
+    ({
+      _id,
+      obmId,
+      obmOrganization,
+      payerId,
+      payerSlug,
+      payerOrganization,
+      bookObjs,
+    }) => {
+      const flattenedBooksData = bookObjs.reduce(
+        (acc, { book, isNational, states, lives, livesPercent }) => {
+          if (book === 'Commercial') {
+            acc['commercialMedicalLives'] = lives
+            acc['commercialMedicalLivesPercent'] = livesPercent
+            acc['commercialReach'] = isNational
+              ? 'National'
+              : states.sort().join(', ')
+          } else if (book === 'Medicare') {
+            acc['medicareMedicalLives'] = lives
+            acc['medicareMedicalLivesPercent'] = livesPercent
+            acc['medicareReach'] = isNational
+              ? 'National'
+              : states.sort().join(', ')
+          } else if (book === 'Managed Medicaid') {
+            acc['managedMedicaidMedicalLives'] = lives
+            acc['managedMedicaidMedicalLivesPercent'] = livesPercent
+            acc['managedMedicaidReach'] = isNational
+              ? 'National'
+              : states.sort().join(', ')
+          }
+
+          return acc
+        },
+        {}
+      )
+
+      return {
+        _id,
+        obmId,
+        obmOrganization,
+        payerId,
+        payerSlug,
+        payerOrganization,
+        ...flattenedBooksData,
+      }
+    }
+  )
+
+  return formattedData
+}
 
 module.exports = VIEW_obmPayerPartnerships

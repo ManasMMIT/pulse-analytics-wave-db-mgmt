@@ -464,10 +464,13 @@ const queries = gql`
     payerOrganization: String!
     commercialMedicalLives: Float
     commercialMedicalLivesPercent: Float
+    commercialReach: String
     medicareMedicalLives: Float
     medicareMedicalLivesPercent: Float
+    medicareReach: String
     managedMedicaidMedicalLives: Float
     managedMedicaidMedicalLivesPercent: Float
+    managedMedicaidReach: String
   }
 
   type VIEW_PathwaysInfluencer {

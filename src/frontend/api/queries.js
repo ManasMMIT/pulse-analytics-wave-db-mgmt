@@ -1060,10 +1060,13 @@ export const GET_VIEW_OBM_PAYER_PARTNERSHIPS = gql`
       payerOrganization
       commercialMedicalLives
       commercialMedicalLivesPercent
+      commercialReach
       medicareMedicalLives
       medicareMedicalLivesPercent
+      medicareReach
       managedMedicaidMedicalLives
       managedMedicaidMedicalLivesPercent
+      managedMedicaidReach
     }
   }
 `
