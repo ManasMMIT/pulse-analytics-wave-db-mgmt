@@ -14,6 +14,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased] - Started: 12-7-20
 
+## [4.0.1] - Started: 12-7-20
+
+### Changed
+- Minor text change to duplicate person alert [#867](https://github.com/pulse-analytics/wave-db-mgmt/pull/867)
+
 ## [4.0.0] - Started: 12-4-20
 
 ### Changed

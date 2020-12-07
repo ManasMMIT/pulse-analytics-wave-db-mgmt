@@ -64,7 +64,7 @@ const ButtonGroup = ({
         if (error.message.match(/similar names/i)) {
           if (
             window.confirm(
-              `${error.message} -- you're sure this wouldn't duplicate someone? Click 'OK' to save anyway.`
+              `${error.message} -- Are you sure this wouldn't duplicate an existing Person? Click 'OK' to save anyway. Clicking 'Cancel' closes this error message (Return to the list of all People to verify duplicate people entries before creating people with duplicate names).`
             )
           ) {
             save({
