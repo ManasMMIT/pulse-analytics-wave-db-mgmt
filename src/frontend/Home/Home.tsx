@@ -1,7 +1,7 @@
 import React from 'react'
 
-import Color from 'frontend/utils/color'
-import Icon from 'frontend/components/Icon'
+import Color from '../utils/color'
+import Icon from '../components/Icon'
 
 import { useAuth0 } from '../../react-auth0-spa'
 

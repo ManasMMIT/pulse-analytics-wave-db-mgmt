@@ -1,6 +1,6 @@
-const { ObjectId } = require('mongodb')
+import { ObjectId } from 'mongodb'
 
-module.exports = (value) => {
+const isValidObjectId = (value: any): boolean => {
   if (!value || typeof value === 'number') return false
 
   const stringValue = value.toString()
@@ -8,7 +8,9 @@ module.exports = (value) => {
 
   return (
     ObjectId.isValid(stringValue) &&
-    ObjectId(stringValue).equals(stringValue) &&
+    new ObjectId(stringValue).equals(stringValue) &&
     checkForHexRegExp.test(stringValue)
   )
 }
+
+export default isValidObjectId

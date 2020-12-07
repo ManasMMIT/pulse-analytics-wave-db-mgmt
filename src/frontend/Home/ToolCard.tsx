@@ -3,12 +3,12 @@ import { Link } from 'react-router-dom'
 import styled from '@emotion/styled'
 import { transparentize } from 'polished'
 
-import Icon from 'frontend/components/Icon'
-import { Colors, Spacing } from 'frontend/utils/pulseStyles'
+import Icon from '../components/Icon/index'
+import { Colors, Spacing } from '../utils/pulseStyles'
 
 const ICON_SIZE = 30
 
-const StyledLink = styled(Link)((props) => ({
+const StyledLink = styled(Link)((props: any) => ({
   display: 'flex',
   padding: 12,
   margin: 12,
@@ -25,8 +25,7 @@ const StyledLink = styled(Link)((props) => ({
   },
 }))
 
-const IconWrapper = styled('div')(
-  {
+const IconWrapper = styled('div')((props: any) => ({
     width: 'fit-content',
     height: 'fit-content',
     color: Colors.WHITE,
@@ -38,16 +37,24 @@ const IconWrapper = styled('div')(
     ':hover': {
       background: transparentize(0.92, Colors.WHITE),
     },
-  },
-  ({ style }) => ({ ...style })
+    ...props.style,
+  }),
 )
 
-const getStyle = (activeColor) => ({
+const getStyle = (activeColor: string): { background: string, opacity: number } => ({
   background: transparentize(0.8, activeColor),
   opacity: 1,
 })
 
-const ToolCard = ({ title, description, iconId, to, iconColor }) => {
+const ToolCard = (props: {
+  title: string
+  description: string
+  iconId: string
+  to: string
+  iconColor: string
+}) => {
+  const { title, description, iconId, to, iconColor } = props
+
   return (
     <StyledLink to={to} color={iconColor}>
       <div>

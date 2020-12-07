@@ -1,8 +1,7 @@
+import isValidObjectId from '../../../../utils/isValidObjectId'
 const { ObjectId } = require('mongodb')
 const flatten = require('flat')
 const _ = require('lodash')
-
-const isValidObjectId = require('../../../../utils/isValidObjectId')
 
 class Event {
   constructor(metaData) {

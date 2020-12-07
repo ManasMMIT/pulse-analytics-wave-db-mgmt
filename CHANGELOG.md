@@ -12,7 +12,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Fixed** for any bug fixes.
 - **Security** in case of vulnerabilities.
 
-## [Unreleased] - Started: 12-4-20
+## [Unreleased] - Started: 12-7-20
+
+## [4.0.0] - Started: 12-4-20
+
+### Changed
+- Setup TypeScript for front- and back-end [#868](https://github.com/pulse-analytics/wave-db-mgmt/pull/868)
 
 ## [3.13.1] - Started: 12-3-20
 
