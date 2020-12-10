@@ -85,7 +85,9 @@ const BusinessObjectModal = ({
       const mappedEntitiesToFields = schema.tags.reduce((acc, { sections }) => {
         sections.forEach(({ fields }) => {
           fields.forEach(({ key }) => {
-            acc[key] = entity[key] || null
+            acc[key] = [undefined, '', NaN].includes(entity[key])
+              ? null
+              : entity[key]
           })
         })
         return acc

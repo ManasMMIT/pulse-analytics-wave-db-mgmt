@@ -1,12 +1,13 @@
 import React from 'react'
-
 import Select from 'react-select'
 import FieldLabel from '../FieldLabel'
 import Input from '../Input'
+import YesNoBlankSelect from '../YesNoBlankSelect'
 
-const INPUT_MAP = {
+export const INPUT_MAP = {
   Select,
   MultiSelect: Select,
+  YesNoBlankSelect: YesNoBlankSelect,
   TextInput: Input,
   DateInput: Input,
   EmailInput: Input,
@@ -21,7 +22,7 @@ const generateCardInput = ({ field, fieldLabelStyle, fieldStyle }) => {
 
   const InputComponent = INPUT_MAP[inputComponent]
   if (!InputComponent) return null
-  if (inputComponent == 'MultiSelect') inputProps.isMulti = true
+  if (inputComponent === 'MultiSelect') inputProps.isMulti = true
 
   return (
     <div key={`field-section-card-${key}-${label}-input`} style={fieldStyle}>

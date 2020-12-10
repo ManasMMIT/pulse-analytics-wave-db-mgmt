@@ -16,6 +16,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - `Dev Ops`: Check in `ecosystem.config.js` with new memory configuration to account for JS heap allocation failure encountered on production [#872](https://github.com/pulse-analytics/wave-db-mgmt/pull/872)
+- `Orion`: Adds YesNoBlankSelect option for Business Object Modal field input type [#877](https://github.com/pulse-analytics/wave-db-mgmt/pull/877)
+
+### Fixed
+- `Orion`: Stop Business Object Modals from coercing all falsey values on mount, instead only `[undefined, '', NaN]` [#877](https://github.com/pulse-analytics/wave-db-mgmt/pull/877)
 
 ## [4.0.1] - Started: 12-7-20
 
