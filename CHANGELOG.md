@@ -14,6 +14,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased] - Started: 12-7-20
 
+### Added
+- `Dev Ops`: Check in `ecosystem.config.js` with new memory configuration to account for JS heap allocation failure encountered on production [#872](https://github.com/pulse-analytics/wave-db-mgmt/pull/872)
+
 ## [4.0.1] - Started: 12-7-20
 
 ### Changed
