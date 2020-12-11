@@ -1,4 +1,4 @@
-const { MBM_TOOL_ID } = require('../../../../global-tool-ids')
+const { MBM_TOOL_ID } = require('../../../../../global-tool-ids')
 
 const obmOrganizations = async (parent, args, { pulseCoreDb }) =>
   pulseCoreDb
