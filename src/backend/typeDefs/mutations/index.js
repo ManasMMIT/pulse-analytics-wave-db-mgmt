@@ -1,3 +1,4 @@
+import node from './node'
 const { gql } = require('apollo-server-express')
 
 const client = require('./client')
@@ -56,6 +57,7 @@ const mutationType = gql`
 
     createSourceNode(input: CreateSourceNodeInput!): Node
     updateTeamNode(input: UpdateTeamNodeInput!): Node
+    updateNode(input: UpdateNodeInput): Node
 
     updateTdgTimestamps(input: UpdateTdgTimestampsInput!): JSON
 
@@ -358,6 +360,7 @@ module.exports = [
   ...client,
   ...teams,
   ...user,
+  ...node,
   ...sitemap,
   ...indication,
   ...therapeuticArea,

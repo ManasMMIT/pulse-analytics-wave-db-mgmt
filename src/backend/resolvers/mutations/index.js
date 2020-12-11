@@ -1,3 +1,5 @@
+import nodeResolvers from './node'
+
 const clientResolvers = require('./client')
 const teamResolvers = require('./team')
 const userResolvers = require('./user')
@@ -83,4 +85,5 @@ module.exports = {
   ...devToProdPushConfigResolvers,
 
   ...relationalResolvers,
+  ...nodeResolvers,
 }

@@ -440,7 +440,6 @@ export const GET_SOURCE_NODES = gql`
       caption
       order
       parentId
-      resources
     }
   }
 `
