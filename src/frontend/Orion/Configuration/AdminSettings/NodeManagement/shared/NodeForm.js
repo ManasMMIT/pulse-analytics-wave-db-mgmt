@@ -23,7 +23,7 @@ const getTextInputs = ({ text }, handleInputChange, handleRemoveTextField) => {
     const isTdgTimestamp = Boolean(key === 'tdgTimestamp')
 
     return (
-      <InputContainer>
+      <InputContainer key={key}>
         <InputLabel>{_.startCase(key)}</InputLabel>
         <div style={{ display: 'flex', alignItems: 'center' }}>
           <StyledInput
