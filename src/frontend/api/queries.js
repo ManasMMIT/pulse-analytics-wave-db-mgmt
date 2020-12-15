@@ -829,6 +829,57 @@ export const GET_OBM_ORGANIZATIONS = gql`
   }
 `
 
+export const GET_MBM_ORGANIZATIONS = gql`
+  query getMbmOrganizations {
+    mbmOrganizations {
+      ...ObmFields
+      ...LbmFields
+    }
+  }
+
+  fragment ObmFields on ObmOrganization {
+    _id
+    slug
+    organization
+    organizationTiny
+    type
+    start
+    businessModel
+    approvalTime
+    hasDecisionSupport
+    hasPbMbAuthorization
+    isEmrIntegrable
+    medicalReview
+    treatmentSelection
+    payer
+    pharmacyBenefitManager
+    specialtyPharmacy
+    labBenefitManager
+    parentCompany
+  }
+
+  fragment LbmFields on LbmOrganization {
+    _id
+    slug
+    organization
+    organizationTiny
+    type
+    start
+    businessModel
+    approvalTime
+    hasDecisionSupport
+    hasPbMbAuthorization
+    isEmrIntegrable
+    medicalReview
+    treatmentSelection
+    payer
+    pharmacyBenefitManager
+    specialtyPharmacy
+    oncologyBenefitManager
+    parentCompany
+  }
+`
+
 export const GET_DEV_COLLECTION_NAMES = gql`
   query getDevCollectionNames {
     collections(type: "dev")
