@@ -1,0 +1,29 @@
+version: "3.8"
+   
+services:
+  nginx:
+    depends_on:
+      - polaris_app
+      - polaris_api
+    restart: always
+    build:
+      dockerfile: Dockerfile
+      context: ./nginx
+    ports:
+      - "80:80"
+  polaris_app:
+    build:
+      dockerfile: ./src/frontend/Dockerfile
+      context: .
+    command: yarn start
+    ports:
+      - "3000:3000"
+    container_name: polaris_app
+  polaris_api:
+    build:
+      dockerfile: ./src/backend/Dockerfile
+      context: .
+    command: yarn phoenix
+    ports:
+      - "1337:1337"
+    container_name: polaris_api

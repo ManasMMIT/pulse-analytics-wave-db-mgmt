@@ -3,7 +3,6 @@
   "version": "4.1.0",
   "description": "A repository for managing data into Pulse databases.",
   "repository": "https://github.com/pulse-data/wave-db-mgmt.git",
-  "proxy": "http://localhost:1337/",
   "license": "MIT",
   "dependencies": {
     "@apollo/client": "^3.1.1",
@@ -47,6 +46,7 @@
     "graphql-iso-date": "^3.6.1",
     "graphql-tag": "^2.10.3",
     "graphql-type-json": "^0.3.1",
+    "http-proxy-middleware": "^1.0.6",
     "jszip": "^3.2.2",
     "jwks-rsa": "^1.7.0",
     "lodash": "^4.17.11",
