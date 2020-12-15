@@ -68,6 +68,7 @@ MongoClient.connect(LOADER_URI, { useUnifiedTopology: true }, (err, client) => {
   const io = subApp.get('io')
 
   const apolloServer = new ApolloServer({
+    introspection: true,
     typeDefs,
     resolvers,
     context: ({ req }) => {
