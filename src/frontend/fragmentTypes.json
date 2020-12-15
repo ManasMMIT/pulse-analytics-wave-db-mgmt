@@ -1,0 +1,22 @@
+{
+  "__schema": {
+    "types": [
+      {
+        "kind": "UNION",
+        "name": "MbmOrganization",
+        "possibleTypes": [
+          {
+            "name": "ObmOrganization",
+            "__typename": "__Type"
+          },
+          {
+            "name": "LbmOrganization",
+            "__typename": "__Type"
+          }
+        ],
+        "__typename": "__Type"
+      }
+    ],
+    "__typename": "__Schema"
+  }
+}
