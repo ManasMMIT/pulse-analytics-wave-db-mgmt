@@ -3,7 +3,11 @@ import styled from '@emotion/styled'
 import { useAuth0 } from '../react-auth0-spa'
 import { transparentize } from 'polished'
 import { ApolloProvider } from '@apollo/react-hooks'
-import ApolloClient from 'apollo-boost'
+import ApolloClient, {
+  InMemoryCache,
+  IntrospectionFragmentMatcher,
+} from 'apollo-boost'
+import introspectionQueryResultData from './fragmentTypes.json'
 import UserProfile from './UserProfile'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
@@ -36,6 +40,10 @@ import PayerLivesImport from './PayerProjects/PayerLivesImport'
 
 import { Spacing } from './utils/pulseStyles'
 import Color from './utils/color'
+
+const fragmentMatcher = new IntrospectionFragmentMatcher({
+  introspectionQueryResultData,
+})
 
 const SIDE_BAR_ITEMS = [
   {
@@ -172,6 +180,7 @@ const App = () => {
       resolvers,
       typeDefs,
     },
+    cache: new InMemoryCache({ fragmentMatcher }),
     request: (operation) => {
       operation.setContext((context) => ({
         headers: {
