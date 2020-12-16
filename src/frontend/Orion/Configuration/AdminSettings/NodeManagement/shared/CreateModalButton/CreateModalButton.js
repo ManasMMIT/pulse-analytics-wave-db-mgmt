@@ -1,15 +1,14 @@
 import React, { useState } from 'react'
 import styled from '@emotion/styled'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEdit } from '@fortawesome/free-solid-svg-icons'
+import { faPlus } from '@fortawesome/free-solid-svg-icons'
 import { transparentize } from 'polished'
 
 import { Colors } from 'frontend/utils/pulseStyles'
 import Modal from 'frontend/components/Modal'
+import CreateModalContent from './CreateModalContent'
 
-import EditModalContent from './EditModalContent'
-
-const EditIcon = styled(FontAwesomeIcon)({
+const CreateIcon = styled(FontAwesomeIcon)({
   border: 'none',
   background: 'none',
   padding: 12,
@@ -22,7 +21,7 @@ const EditIcon = styled(FontAwesomeIcon)({
   },
 })
 
-const EditButton = styled.button({
+const CreateButton = styled.button({
   background: 'none',
   border: 'none',
   padding: 0,
@@ -35,23 +34,24 @@ const EditButton = styled.button({
   },
 })
 
-const EditModalButton = ({ node }) => {
+const CreateSourceNodeButton = ({ type, isEnabled }) => {
   const [showModal, setShowModal] = useState(false)
 
-  const handleModalClose = () => {
-    setShowModal(false)
-  }
+  if (!isEnabled) return null
+
+  const handleModalOpen = () => setShowModal(true)
+  const handleModalClose = () => setShowModal(false)
 
   return (
     <>
-      <EditButton onClick={() => setShowModal(true)}>
-        <EditIcon size="lg" icon={faEdit} />
-      </EditButton>
+      <CreateButton onClick={handleModalOpen}>
+        <CreateIcon size="lg" icon={faPlus} />
+      </CreateButton>
       <Modal disableHeader show={showModal} handleClose={handleModalClose}>
-        <EditModalContent node={node} handleModalClose={handleModalClose} />
+        <CreateModalContent type={type} handleModalClose={handleModalClose} />
       </Modal>
     </>
   )
 }
 
-export default EditModalButton
+export default CreateSourceNodeButton

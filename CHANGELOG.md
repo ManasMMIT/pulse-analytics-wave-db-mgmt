@@ -14,6 +14,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased] - Started: 12-11-20
 
+### Added
+- `Orion/Node CRUD`: Build out ability to create source nodes in new panel view [#880](https://github.com/pulse-analytics/wave-db-mgmt/pull/880)
+
 ## [4.1.0] - Started: 12-7-20
 
 ### Added

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { useQuery } from '@apollo/react-hooks'
 import queryString from 'query-string'
@@ -158,6 +158,13 @@ const NodeForm = ({ data, setData, type }) => {
     data.parentId || getParentIdFromParams(type, locationSearch)
   const isTool = !Boolean(newOrOldParentId)
 
+  useEffect(() => {
+    setData((state) => ({
+      ...state,
+      parentId: newOrOldParentId,
+    }))
+  }, [])
+
   let parent = null
   if (!loading)
     parent = sourceNodeData.nodes.find(({ _id }) => _id === newOrOldParentId)
@@ -184,10 +191,11 @@ const NodeForm = ({ data, setData, type }) => {
       <InputContainer>
         <InputLabel>Type:</InputLabel>
         <StyledInput
-          value={data.type || ''}
+          disabled
+          value={data.type}
           name="type"
           type="text"
-          onChange={handleInputChange}
+          onChange={() => alert('Type field should be disabled')}
         />
       </InputContainer>
 

@@ -175,10 +175,6 @@ const ADMIN_SETTINGS_LINKS_CONFIG = [
     link: '/orion/configuration/admin-settings/aquila-management',
   },
   {
-    label: 'Add Source Node',
-    link: '/orion/configuration/admin-settings/add-source-node',
-  },
-  {
     label: 'Edit Role Node',
     link: '/orion/configuration/admin-settings/edit-role-node',
   },

@@ -11,7 +11,7 @@ import {
   panelTitleStyle,
 } from 'frontend/Phoenix/SitemapPanel/shared/panelStyles'
 import NodeMgmtPanelItem from './shared/NodeMgmtPanelItem/NodeMgmtPanelItem'
-import CreateSourceNodeButton from './shared/CreateSourceNodeButton'
+import CreateModalButton from './shared/CreateModalButton/CreateModalButton'
 
 const PANEL_TITLE = 'Tools'
 
@@ -68,7 +68,7 @@ const ToolsPanel = () => {
         title={PANEL_TITLE}
         titleStyle={panelTitleStyle}
       >
-        <CreateSourceNodeButton type="tool" />
+        <CreateModalButton isEnabled type="tool" />
       </PanelHeader>
 
       <div>

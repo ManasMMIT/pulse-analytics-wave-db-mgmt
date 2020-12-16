@@ -43,10 +43,18 @@ export const UPDATE_ROLE_SITEMAP = gql`
 
   mutation UpdateRoleSitemap($input: UpdateRoleSitemapInput!) {
     updateRoleSitemap(input: $input) {
-      tools { ...NodeFields }
-      dashboards { ...NodeFields }
-      pages { ...NodeFields }
-      cards { ...NodeFields }
+      tools {
+        ...NodeFields
+      }
+      dashboards {
+        ...NodeFields
+      }
+      pages {
+        ...NodeFields
+      }
+      cards {
+        ...NodeFields
+      }
     }
   }
 `
@@ -107,20 +115,6 @@ export const SET_STAGED_SITEMAP = gql`
       dashboards
       pages
       cards
-    }
-  }
-`
-
-export const CREATE_SOURCE_NODE = gql`
-  mutation CreateSourceNode($input: CreateSourceNodeInput!) {
-    createSourceNode(input: $input) {
-      _id
-      name
-      type
-      componentPath
-      text
-      order
-      parentId
     }
   }
 `

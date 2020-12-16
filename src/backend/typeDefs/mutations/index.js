@@ -55,9 +55,9 @@ const mutationType = gql`
     updateTeam(input: UpdateTeamInput!): UpdateTeamPayload
     deleteTeam(input: DeleteTeamInput!): DeleteTeamPayload
 
-    createSourceNode(input: CreateSourceNodeInput!): Node
-    updateTeamNode(input: UpdateTeamNodeInput!): Node
+    createNode(input: CreateNodeInput): Node
     updateNode(input: UpdateNodeInput): Node
+    updateTeamNode(input: UpdateTeamNodeInput!): Node
 
     updateTdgTimestamps(input: UpdateTdgTimestampsInput!): JSON
 

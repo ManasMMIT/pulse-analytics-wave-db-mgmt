@@ -11,7 +11,7 @@ import {
   panelTitleStyle,
 } from 'frontend/Phoenix/SitemapPanel/shared/panelStyles'
 import NodeMgmtPanelItem from './shared/NodeMgmtPanelItem/NodeMgmtPanelItem'
-import CreateSourceNodeButton from './shared/CreateSourceNodeButton'
+import CreateModalButton from './shared/CreateModalButton/CreateModalButton'
 
 const getNodeIds = (card, nodes) => {
   const page = nodes.find(({ _id }) => _id === card.parentId) || {}
@@ -74,7 +74,7 @@ const CardsPanel = () => {
         title={PANEL_TITLE}
         titleStyle={panelTitleStyle}
       >
-        <CreateSourceNodeButton type="card" />
+        <CreateModalButton isEnabled={selectedPageId} type="card" />
       </PanelHeader>
 
       <div>
