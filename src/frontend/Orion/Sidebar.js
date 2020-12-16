@@ -268,37 +268,77 @@ const Sidebar = () => {
         </StyledDropdown>
         <StyledDropdown
           style={inactiveLinkStyle}
-          label={'Oncology Benefit Managers'}
+          label={'Medical Benefit Managers'}
         >
-          <StyledNavLink
-            style={dropdownInactiveLinkStyle}
-            activeStyle={dropdownActiveLinkStyle}
-            to={getToolItemPath('obm', 'account-overview')}
+          <StyledDropdown
+            style={inactiveLinkStyle}
+            label={'Oncology Benefit Managers'}
           >
-            Account Overview
-          </StyledNavLink>
-          <StyledNavLink
-            style={dropdownInactiveLinkStyle}
-            activeStyle={dropdownActiveLinkStyle}
-            to={getToolItemPath('obm', 'services')}
+            <StyledNavLink
+              style={dropdownInactiveLinkStyle}
+              activeStyle={dropdownActiveLinkStyle}
+              to={getToolItemPath('obm', 'account-overview')}
+            >
+              Account Overview
+            </StyledNavLink>
+            <StyledNavLink
+              style={dropdownInactiveLinkStyle}
+              activeStyle={dropdownActiveLinkStyle}
+              to={getToolItemPath('obm', 'services')}
+            >
+              Services
+            </StyledNavLink>
+            <StyledNavLink
+              style={dropdownInactiveLinkStyle}
+              activeStyle={dropdownActiveLinkStyle}
+              to={getToolItemPath('obm', 'influencers')}
+            >
+              Influencers
+            </StyledNavLink>
+            <StyledNavLink
+              style={dropdownInactiveLinkStyle}
+              activeStyle={dropdownActiveLinkStyle}
+              to={getToolItemPath('obm', 'payer-partnerships')}
+            >
+              Payer Partnerships
+            </StyledNavLink>
+          </StyledDropdown>
+
+          <StyledDropdown
+            style={inactiveLinkStyle}
+            label={'Laboratory Benefit Managers'}
           >
-            Services
-          </StyledNavLink>
-          <StyledNavLink
-            style={dropdownInactiveLinkStyle}
-            activeStyle={dropdownActiveLinkStyle}
-            to={getToolItemPath('obm', 'influencers')}
-          >
-            Influencers
-          </StyledNavLink>
-          <StyledNavLink
-            style={dropdownInactiveLinkStyle}
-            activeStyle={dropdownActiveLinkStyle}
-            to={getToolItemPath('obm', 'payer-partnerships')}
-          >
-            Payer Partnerships
-          </StyledNavLink>
+            <StyledNavLink
+              style={dropdownInactiveLinkStyle}
+              activeStyle={dropdownActiveLinkStyle}
+              to={getToolItemPath('lbm', 'account-overview')}
+            >
+              Account Overview
+            </StyledNavLink>
+            <StyledNavLink
+              style={dropdownInactiveLinkStyle}
+              activeStyle={dropdownActiveLinkStyle}
+              to={getToolItemPath('lbm', 'services')}
+            >
+              Services
+            </StyledNavLink>
+            <StyledNavLink
+              style={dropdownInactiveLinkStyle}
+              activeStyle={dropdownActiveLinkStyle}
+              to={getToolItemPath('lbm', 'influencers')}
+            >
+              Influencers
+            </StyledNavLink>
+            <StyledNavLink
+              style={dropdownInactiveLinkStyle}
+              activeStyle={dropdownActiveLinkStyle}
+              to={getToolItemPath('lbm', 'payer-partnerships')}
+            >
+              Payer Partnerships
+            </StyledNavLink>
+          </StyledDropdown>
         </StyledDropdown>
+
         <StyledDropdown style={inactiveLinkStyle} label={'Pathways'}>
           <StyledNavLink
             style={dropdownInactiveLinkStyle}

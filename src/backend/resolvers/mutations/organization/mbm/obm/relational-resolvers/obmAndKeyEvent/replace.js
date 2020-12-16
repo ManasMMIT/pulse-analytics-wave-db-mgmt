@@ -1,7 +1,7 @@
 const _ = require('lodash')
 const { ObjectId } = require('mongodb')
 const { zonedTimeToUtc } = require('date-fns-tz')
-const DEFAULT_TIMEZONE = require('../../../../../../utils/defaultTimeZone')
+const DEFAULT_TIMEZONE = require('../../../../../../../utils/defaultTimeZone')
 
 // ! ASSUMPTION: this resolver is for connecting a SINGLE OBM to many key events
 const connectObmAndKeyEvent = async (

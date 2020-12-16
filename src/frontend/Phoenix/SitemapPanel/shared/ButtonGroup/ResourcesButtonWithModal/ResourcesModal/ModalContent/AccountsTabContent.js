@@ -1,8 +1,8 @@
 import React from 'react'
 import _ from 'lodash'
-import styled from "@emotion/styled"
+import styled from '@emotion/styled'
 import Switch from '@material-ui/core/Switch'
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles'
 import { transparentize, mix } from 'polished'
 
 import { Colors, Spacing } from '../../../../../../../utils/pulseStyles'
@@ -33,34 +33,37 @@ const ToggleButtonContainer = styled.div({
   zIndex: 100,
 })
 
-const ToggleButton = styled.button({
-  border: 'none',
-  borderRadius: 4,
-  cursor: 'pointer',
-  fontSize: 10,
-  fontWeight: 700,
-  padding: `${Spacing.SMALL} ${Spacing.NORMAL}`,
-  textTransform: 'uppercase',
-  ':active': {
-    outline: 'none'
+const ToggleButton = styled.button(
+  {
+    border: 'none',
+    borderRadius: 4,
+    cursor: 'pointer',
+    fontSize: 10,
+    fontWeight: 700,
+    padding: `${Spacing.SMALL} ${Spacing.NORMAL}`,
+    textTransform: 'uppercase',
+    ':active': {
+      outline: 'none',
+    },
+    ':focus': {
+      outline: 'none',
+    },
   },
-  ':focus': {
-    outline: 'none'
-  },
-}, props => ({
-  color: props.color,
-  background: transparentize(0.85, props.color),
-  ':hover': {
-    background: transparentize(0.7, props.color),
-  },
-}))
+  (props) => ({
+    color: props.color,
+    background: transparentize(0.85, props.color),
+    ':hover': {
+      background: transparentize(0.7, props.color),
+    },
+  })
+)
 
 const AccountRowItem = styled.div({
   borderBottom: `1px solid ${transparentize(0.9, Colors.BLACK)}`,
   paddingLeft: Spacing.NORMAL,
   ':hover': {
     background: transparentize(0.92, Colors.BLACK),
-  }
+  },
 })
 
 const switchColor = Colors.GREEN
@@ -82,19 +85,26 @@ const PhoenixSwitch = withStyles({
   },
 })(Switch)
 
-const AccountsTabContent = ({
-  baseAccounts,
-  accounts,
-  setStagedAccounts,
-}) => {
+const getOrgTypeLabel = (type) => {
+  let typeLabel = ''
+  if (
+    ['Oncology Benefit Manager', 'Laboratory Benefit Manager'].includes(type)
+  ) {
+    typeLabel = type === 'Oncology Benefit Manager' ? ' (OBM)' : ' (LBM)'
+  }
+
+  return typeLabel
+}
+
+const AccountsTabContent = ({ baseAccounts, accounts, setStagedAccounts }) => {
   const enabledAccountsById = _.keyBy(accounts, '_id')
 
-  const enableAccount = account => {
+  const enableAccount = (account) => {
     const accountsPlusNewAccount = accounts.concat({ _id: account._id })
     setStagedAccounts(accountsPlusNewAccount)
   }
 
-  const disableAccount = account => {
+  const disableAccount = (account) => {
     const accountsMinusRemovedAccount = accounts.filter(
       ({ _id }) => account._id !== _id
     )
@@ -106,11 +116,11 @@ const AccountsTabContent = ({
 
   const disableAllAccounts = () => setStagedAccounts([])
 
-  const [
-    enabledAccounts,
-    disabledAccounts,
-  ] = _.partition(baseAccounts, account => enabledAccountsById[account._id])
-  
+  const [enabledAccounts, disabledAccounts] = _.partition(
+    baseAccounts,
+    (account) => enabledAccountsById[account._id]
+  )
+
   return (
     <div style={{ maxHeight: 700, overflow: 'auto', background: Colors.WHITE }}>
       <ToggleButtonContainer>
@@ -121,10 +131,7 @@ const AccountsTabContent = ({
         >
           Toggle on All Accounts
         </ToggleButton>
-        <ToggleButton
-          onClick={disableAllAccounts}
-          color={Colors.MEDIUM_GRAY_2}
-        >
+        <ToggleButton onClick={disableAllAccounts} color={Colors.MEDIUM_GRAY_2}>
           Toggle off All Accounts
         </ToggleButton>
       </ToggleButtonContainer>
@@ -132,34 +139,36 @@ const AccountsTabContent = ({
       <AccountsPanelContainer>
         <ActiveRow>ACTIVE ({enabledAccounts.length})</ActiveRow>
         <UnorderedList>
-          {
-            enabledAccounts.map(account => (
-              <AccountRowItem key={account._id}>
-                <PhoenixSwitch
-                  checked
-                  onChange={() => disableAccount(account)}
-                  value={account._id}
-                />
-                <span style={{ fontWeight: 500 }}>{account.organization} ({account.slug})</span>
-              </AccountRowItem>
-            ))
-          }
+          {enabledAccounts.map((account) => (
+            <AccountRowItem key={account._id}>
+              <PhoenixSwitch
+                checked
+                onChange={() => disableAccount(account)}
+                value={account._id}
+              />
+              <span style={{ fontWeight: 500 }}>
+                {account.organization} ({account.slug})
+                {getOrgTypeLabel(account.type)}
+              </span>
+            </AccountRowItem>
+          ))}
         </UnorderedList>
 
         <InactiveRow>INACTIVE ({disabledAccounts.length})</InactiveRow>
         <UnorderedList>
-          {
-            disabledAccounts.map(account => (
-              <AccountRowItem key={account._id}>
-                <PhoenixSwitch
-                  checked={false}
-                  onChange={() => enableAccount(account)}
-                  value={account._id}
-                />
-                <span style={{ fontWeight: 500 }}>{account.organization} ({account.slug})</span>
-              </AccountRowItem>
-            ))
-          }
+          {disabledAccounts.map((account) => (
+            <AccountRowItem key={account._id}>
+              <PhoenixSwitch
+                checked={false}
+                onChange={() => enableAccount(account)}
+                value={account._id}
+              />
+              <span style={{ fontWeight: 500 }}>
+                {account.organization} ({account.slug})
+                {getOrgTypeLabel(account.type)}
+              </span>
+            </AccountRowItem>
+          ))}
         </UnorderedList>
       </AccountsPanelContainer>
     </div>

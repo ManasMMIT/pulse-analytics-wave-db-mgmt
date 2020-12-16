@@ -1,6 +1,6 @@
 const { ObjectId } = require('mongodb')
 
-const cascadePolicyUpdate = require('../../../utils/cascadePolicyUpdate')
+const cascadePolicyUpdate = require('../../../../utils/cascadePolicyUpdate')
 const getCascadePolicy = require('./getCascadePolicy')
 
 const updateObmOrganization = async (

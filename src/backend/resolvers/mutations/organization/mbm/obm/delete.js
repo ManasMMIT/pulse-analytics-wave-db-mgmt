@@ -1,6 +1,6 @@
 const { ObjectId } = require('mongodb')
 
-const basicOrgDeletionOps = require('../basicOrgDeletionOps')
+const basicOrgDeletionOps = require('../../basicOrgDeletionOps')
 
 const getCascadeCollectionConfigs = ({ pulseDevDb, pulseCoreDb }) => [
   {

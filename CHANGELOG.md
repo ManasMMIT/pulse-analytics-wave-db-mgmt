@@ -17,6 +17,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - `Orion/Node CRUD`: Build out ability to create source nodes in new panel view [#880](https://github.com/pulse-analytics/wave-db-mgmt/pull/880)
 
+### Changed
+- `LBM/MBM Migration`
+  - Adjusted querying on backend and frontend to have Phoenix show mix of lbms and obms through custom hook while staying cache-aligned with Orion activity [#882](https://github.com/pulse-analytics/wave-db-mgmt/pull/882)
+  - Moved existing obm resolvers under `mbm` resolvers folder and obm typeDefs under `mbm` typeDefs folder; stubbed `lbm` scaffold folders [#883](https://github.com/pulse-analytics/wave-db-mgmt/pull/883)
+
 ## [4.1.0] - Started: 12-7-20
 
 ### Added
