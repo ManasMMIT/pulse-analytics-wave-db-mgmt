@@ -1,5 +1,5 @@
+import isValidObjectId from '../../../../../utils/isValidObjectId'
 const { BASIC } = require('../../event-meta-types')
-const isValidObjectId = require('../../../../../utils/isValidObjectId')
 
 module.exports = (events) => {
   return events.reduce((acc, event) => {
