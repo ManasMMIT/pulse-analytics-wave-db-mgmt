@@ -67,10 +67,7 @@ const ToolsPanel = () => {
         headerContainerStyle={panelHeaderStyle}
         title={PANEL_TITLE}
         titleStyle={panelTitleStyle}
-      >
-        <CreateModalButton isEnabled type="tool" />
-      </PanelHeader>
-
+      />
       <div>
         {tools.map((tool) => (
           <NodeMgmtPanelItem

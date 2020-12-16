@@ -9,7 +9,7 @@ interface Option {
 const OPTIONS = [
   { label: 'Yes', value: true },
   { label: 'No', value: false },
-  { label: ' ', value: null },
+  { label: '(Blank)', value: null },
 ]
 
 const YesNoNullSelect = (props: any) => {
