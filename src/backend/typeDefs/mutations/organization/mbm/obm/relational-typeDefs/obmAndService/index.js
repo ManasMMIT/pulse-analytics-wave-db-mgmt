@@ -1,5 +1,3 @@
 const connectObmAndObmServiceTypeDefs = require('./upsert')
 
-module.exports = [
-  connectObmAndObmServiceTypeDefs,
-]
+module.exports = [connectObmAndObmServiceTypeDefs]
