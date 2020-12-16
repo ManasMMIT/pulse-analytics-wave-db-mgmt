@@ -1,4 +1,4 @@
-const { MBM_TOOL_ID } = require('./../../../../global-tool-ids')
+const { MBM_TOOL_ID } = require('../../../../../global-tool-ids')
 
 const createObmAccount = async (
   parent,
