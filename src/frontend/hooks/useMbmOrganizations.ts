@@ -8,10 +8,10 @@ import {
 import stripTypename from '../Orion/shared/strip-typename'
 
 interface MbmOrganization {
-  _id: string;
-  slug: string;
-  organization: string;
-  type: string;
+  _id: string
+  slug: string
+  organization: string
+  type: string
 }
 
 const useMbmOrganizations = (): { data: undefined | { [key: string]: any }, loading: boolean } => {
