@@ -2,7 +2,7 @@ const providerOrganizations = require('./providers')
 const payerOrganizations = require('./payers')
 const pathwaysResolvers = require('./pathways')
 const apmOrganizations = require('./apm')
-const obmResolvers = require('./obm')
+const mbmResolvers = require('./mbm')
 const organizationMeta = require('./meta')
 const organizationTypes = require('./organizationTypes')
 
@@ -11,7 +11,7 @@ module.exports = {
   payerOrganizations,
   ...pathwaysResolvers,
   apmOrganizations,
-  ...obmResolvers,
+  ...mbmResolvers,
   organizationMeta,
   organizationTypes,
 }

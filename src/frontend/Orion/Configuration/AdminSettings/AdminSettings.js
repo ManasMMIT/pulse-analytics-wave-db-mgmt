@@ -7,7 +7,6 @@ import AquilaManagement from './AquilaManagement'
 import SheetManagement from './SheetManagement'
 import NodeManagement from './NodeManagement'
 import DevToProdPushManagement from './DevToProdPushManagement'
-import AddSourceNode from './AddSourceNode'
 import EditRoleNodeView from './EditRoleNodeView'
 import EndUserTerms from './EndUserTerms'
 import TotalHistory from './TotalHistory'
@@ -33,10 +32,6 @@ const AdminSettings = () => (
     <Route
       path={'/orion/configuration/admin-settings/aquila-management'}
       component={AquilaManagement}
-    />
-    <Route
-      path={'/orion/configuration/admin-settings/add-source-node'}
-      component={AddSourceNode}
     />
     <Route
       path={'/orion/configuration/admin-settings/edit-role-node'}

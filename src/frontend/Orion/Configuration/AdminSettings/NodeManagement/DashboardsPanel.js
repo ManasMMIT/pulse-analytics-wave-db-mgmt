@@ -11,7 +11,7 @@ import {
   panelTitleStyle,
 } from 'frontend/Phoenix/SitemapPanel/shared/panelStyles'
 import NodeMgmtPanelItem from './shared/NodeMgmtPanelItem/NodeMgmtPanelItem'
-import CreateSourceNodeButton from './shared/CreateSourceNodeButton'
+import CreateModalButton from './shared/CreateModalButton/CreateModalButton'
 
 const getNodeIds = (dashboard, nodes) => {
   const toolId = dashboard.parentId
@@ -76,7 +76,7 @@ const DashboardsPanel = () => {
         title={PANEL_TITLE}
         titleStyle={panelTitleStyle}
       >
-        <CreateSourceNodeButton type="dashboard" />
+        <CreateModalButton isEnabled={selectedToolId} type="dashboard" />
       </PanelHeader>
 
       <div>

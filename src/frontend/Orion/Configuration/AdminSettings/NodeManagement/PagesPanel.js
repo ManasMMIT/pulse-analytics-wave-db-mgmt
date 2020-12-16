@@ -11,7 +11,7 @@ import {
   panelHeaderStyle,
   panelTitleStyle,
 } from 'frontend/Phoenix/SitemapPanel/shared/panelStyles'
-import CreateSourceNodeButton from './shared/CreateSourceNodeButton'
+import CreateModalButton from './shared/CreateModalButton/CreateModalButton'
 
 const getNodeIds = (page, nodes) => {
   const pageId = page._id
@@ -82,7 +82,7 @@ const PagesPanel = () => {
         title={PANEL_TITLE}
         titleStyle={panelTitleStyle}
       >
-        <CreateSourceNodeButton type="page" />
+        <CreateModalButton isEnabled={selectedDashboardId} type="page" />
       </PanelHeader>
 
       <div>

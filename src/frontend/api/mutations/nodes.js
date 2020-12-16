@@ -16,3 +16,20 @@ export const UPDATE_NODE = gql`
     }
   }
 `
+
+export const CREATE_NODE = gql`
+  mutation CreateNode($input: CreateNodeInput!) {
+    createNode(input: $input) {
+      _id
+      name
+      type
+      componentPath
+      text
+      subtitle
+      caption
+      order
+      parentId
+      icon
+    }
+  }
+`

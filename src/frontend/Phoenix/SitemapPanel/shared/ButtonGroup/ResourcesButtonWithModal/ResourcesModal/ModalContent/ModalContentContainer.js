@@ -6,6 +6,8 @@ import Spinner from 'frontend/components/Spinner'
 
 import ModalContent from './ModalContent'
 
+import { Colors, Spacing } from 'frontend/utils/pulseStyles'
+
 import {
   GET_SELECTED_TEAM,
   GET_SOURCE_INDICATIONS,
@@ -13,20 +15,127 @@ import {
   GET_SELECTED_DASHBOARD,
   GET_SELECTED_PAGE,
   GET_SELECTED_CARD,
-} from '../../../../../../../api/queries'
+} from 'frontend/api/queries'
 
-import { TOOL_ID_TO_ORG_QUERY_MAP } from './toolId-to-org-query-map'
+import useMbmOrganizations from 'frontend/hooks/useMbmOrganizations'
 
-import { Colors, Spacing } from '../../../../../../../utils/pulseStyles'
+import {
+  TOOL_ID_TO_ORG_QUERY_MAP,
+  MBM_TOOL_ID,
+} from './toolId-to-org-query-map'
 
-const ModalContentContainer = ({
-  nodeId,
-  nodeType,
-  selectedTeamNode,
-  closeModal,
-  selectedToolId, // ! HACK: gotten from ANOTHER container wrapping this component because it's needed in org query
-  flatSelectedNodes,
-}) => {
+const Soil = (props) => {
+  // ! We have no clue why `notifyOnNetworkStatusChange is needed, but it fixes the following
+  /*
+    If you click directly on the modal button on an UN-selected node, the modal is behind in selection when it opens
+      for some reason, without the networkStatus option set to true, the selected nodes stay behind.
+  */
+  const {
+    data: selectedToolData,
+    loading: selectedToolLoading,
+    error: toolError,
+  } = useQuery(GET_SELECTED_TOOL, {
+    notifyOnNetworkStatusChange: true,
+  })
+
+  const {
+    data: selectedDashboardData,
+    loading: selectedDashboardLoading,
+    error: dashboardError,
+  } = useQuery(GET_SELECTED_DASHBOARD, {
+    notifyOnNetworkStatusChange: true,
+  })
+
+  const {
+    data: selectedPageData,
+    loading: selectedPageLoading,
+    error: pageError,
+  } = useQuery(GET_SELECTED_PAGE, {
+    notifyOnNetworkStatusChange: true,
+  })
+
+  const {
+    data: selectedCardData,
+    loading: selectedCardLoading,
+    error: cardError,
+  } = useQuery(GET_SELECTED_CARD, {
+    notifyOnNetworkStatusChange: true,
+  })
+
+  if (
+    selectedToolLoading ||
+    selectedDashboardLoading ||
+    selectedPageLoading ||
+    selectedCardLoading
+  )
+    return 'Loading...'
+
+  if (toolError || dashboardError || pageError || cardError) return 'Error!'
+
+  const {
+    selectedTool: { _id: selectedToolId },
+  } = selectedToolData
+
+  const flatSelectedNodes = [
+    selectedToolData && selectedToolData.selectedTool,
+    selectedDashboardData && selectedDashboardData.selectedDashboard,
+    selectedPageData && selectedPageData.selectedPage,
+    selectedCardData && selectedCardData.selectedCard,
+  ]
+
+  return (
+    <Crust
+      {...props}
+      selectedToolId={selectedToolId}
+      flatSelectedNodes={_.compact(flatSelectedNodes)}
+    />
+  )
+}
+
+const Crust = (props) => {
+  const { selectedToolId } = props
+
+  if (selectedToolId === MBM_TOOL_ID) {
+    return <Mantle1 {...props} />
+  }
+
+  return <Mantle2 {...props} />
+}
+
+const Mantle1 = (props) => {
+  const {
+    data: selectedTeamData,
+    loading: teamLoading,
+    error: teamError,
+  } = useQuery(GET_SELECTED_TEAM)
+
+  const { data: indData, loading: indLoading, error: indError } = useQuery(
+    GET_SOURCE_INDICATIONS
+  )
+
+  const {
+    data: orgData,
+    loading: orgLoading,
+    error: orgError,
+  } = useMbmOrganizations()
+
+  return (
+    <OuterCore
+      teamLoading={teamLoading}
+      orgLoading={orgLoading}
+      indLoading={indLoading}
+      teamError={teamError}
+      orgError={orgError}
+      indError={indError}
+      selectedTeamData={selectedTeamData}
+      indData={indData}
+      orgData={orgData}
+      {...props}
+    />
+  )
+}
+
+const Mantle2 = (props) => {
   const {
     data: selectedTeamData,
     loading: teamLoading,
@@ -41,9 +150,41 @@ const ModalContentContainer = ({
   // appropriate query doc for organizations (a tool's child node should only have a subset of
   // a tool's accounts)
   const { data: orgData, loading: orgLoading, error: orgError } = useQuery(
-    TOOL_ID_TO_ORG_QUERY_MAP[selectedToolId]
+    TOOL_ID_TO_ORG_QUERY_MAP[props.selectedToolId]
   )
 
+  return (
+    <OuterCore
+      teamLoading={teamLoading}
+      orgLoading={orgLoading}
+      indLoading={indLoading}
+      teamError={teamError}
+      orgError={orgError}
+      indError={indError}
+      selectedTeamData={selectedTeamData}
+      indData={indData}
+      orgData={orgData}
+      {...props}
+    />
+  )
+}
+
+const OuterCore = ({
+  teamLoading,
+  orgLoading,
+  indLoading,
+  teamError,
+  orgError,
+  indError,
+  selectedTeamData,
+  indData,
+  orgData,
+  nodeId,
+  flatSelectedNodes,
+  nodeType,
+  closeModal,
+  selectedTeamNode,
+}) => {
   if (teamLoading || orgLoading || indLoading)
     return (
       <div
@@ -194,83 +335,15 @@ const ModalContentContainer = ({
   )
 }
 
-const ModalOuterContentContainer = (props) => {
-  // ! We have no clue why `notifyOnNetworkStatusChange is needed, but it fixes the following
-  /*
-    If you click directly on the modal button on an UN-selected node, the modal is behind in selection when it opens
-      for some reason, without the networkStatus option set to true, the selected nodes stay behind.
-  */
-  const {
-    data: selectedToolData,
-    loading: selectedToolLoading,
-    error: toolError,
-  } = useQuery(GET_SELECTED_TOOL, {
-    notifyOnNetworkStatusChange: true,
-  })
-
-  const {
-    data: selectedDashboardData,
-    loading: selectedDashboardLoading,
-    error: dashboardError,
-  } = useQuery(GET_SELECTED_DASHBOARD, {
-    notifyOnNetworkStatusChange: true,
-  })
-
-  const {
-    data: selectedPageData,
-    loading: selectedPageLoading,
-    error: pageError,
-  } = useQuery(GET_SELECTED_PAGE, {
-    notifyOnNetworkStatusChange: true,
-  })
-
-  const {
-    data: selectedCardData,
-    loading: selectedCardLoading,
-    error: cardError,
-  } = useQuery(GET_SELECTED_CARD, {
-    notifyOnNetworkStatusChange: true,
-  })
-
-  if (
-    selectedToolLoading ||
-    selectedDashboardLoading ||
-    selectedPageLoading ||
-    selectedCardLoading
-  )
-    return 'Loading...'
-
-  if (toolError || dashboardError || pageError || cardError) return 'Error!'
-
-  const {
-    selectedTool: { _id: selectedToolId },
-  } = selectedToolData
-
-  const flatSelectedNodes = [
-    selectedToolData && selectedToolData.selectedTool,
-    selectedDashboardData && selectedDashboardData.selectedDashboard,
-    selectedPageData && selectedPageData.selectedPage,
-    selectedCardData && selectedCardData.selectedCard,
-  ]
-
-  return (
-    <ModalContentContainer
-      {...props}
-      selectedToolId={selectedToolId}
-      flatSelectedNodes={_.compact(flatSelectedNodes)}
-    />
-  )
-}
-
-ModalOuterContentContainer.propTypes = {
+Soil.propTypes = {
   nodeId: PropTypes.string,
   nodeType: PropTypes.string,
   selectedTeamNode: PropTypes.object,
   closeModal: PropTypes.func,
 }
 
-ModalOuterContentContainer.defaultProps = {
+Soil.defaultProps = {
   selectedTeamNode: {},
 }
 
-export default ModalOuterContentContainer
+export default Soil

@@ -47,7 +47,7 @@ const EditModalButton = ({ node }) => {
       <EditButton onClick={() => setShowModal(true)}>
         <EditIcon size="lg" icon={faEdit} />
       </EditButton>
-      <Modal disableHeader show={showModal}>
+      <Modal disableHeader show={showModal} handleClose={handleModalClose}>
         <EditModalContent node={node} handleModalClose={handleModalClose} />
       </Modal>
     </>
