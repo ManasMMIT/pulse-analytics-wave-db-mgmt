@@ -829,6 +829,31 @@ export const GET_OBM_ORGANIZATIONS = gql`
   }
 `
 
+export const GET_LBM_ORGANIZATIONS = gql`
+  query getLbmOrganizations {
+    lbmOrganizations {
+      _id
+      slug
+      organization
+      organizationTiny
+      type
+      start
+      businessModel
+      approvalTime
+      hasDecisionSupport
+      hasPbMbAuthorization
+      isEmrIntegrable
+      medicalReview
+      treatmentSelection
+      payer
+      pharmacyBenefitManager
+      specialtyPharmacy
+      oncologyBenefitManager
+      parentCompany
+    }
+  }
+`
+
 export const GET_DEV_COLLECTION_NAMES = gql`
   query getDevCollectionNames {
     collections(type: "dev")
