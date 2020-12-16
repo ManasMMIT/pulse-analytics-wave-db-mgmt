@@ -6,6 +6,8 @@ import Spinner from 'frontend/components/Spinner'
 
 import ModalContent from './ModalContent'
 
+import { Colors, Spacing } from 'frontend/utils/pulseStyles'
+
 import {
   GET_SELECTED_TEAM,
   GET_SOURCE_INDICATIONS,
@@ -13,37 +15,31 @@ import {
   GET_SELECTED_DASHBOARD,
   GET_SELECTED_PAGE,
   GET_SELECTED_CARD,
-} from '../../../../../../../api/queries'
+} from 'frontend/api/queries'
 
-import { TOOL_ID_TO_ORG_QUERY_MAP } from './toolId-to-org-query-map'
+import useMbmOrganizations from 'frontend/hooks/useMbmOrganizations'
 
-import { Colors, Spacing } from '../../../../../../../utils/pulseStyles'
+import {
+  TOOL_ID_TO_ORG_QUERY_MAP,
+  MBM_TOOL_ID,
+} from './toolId-to-org-query-map'
 
-const ModalContentContainer = ({
+const InnermostContainer = ({
+  teamLoading,
+  orgLoading,
+  indLoading,
+  teamError,
+  orgError,
+  indError,
+  selectedTeamData,
+  indData,
+  orgData,
   nodeId,
-  nodeType,
-  selectedTeamNode,
-  closeModal,
-  selectedToolId, // ! HACK: gotten from ANOTHER container wrapping this component because it's needed in org query
   flatSelectedNodes,
+  nodeType,
+  closeModal,
+  selectedTeamNode,
 }) => {
-  const {
-    data: selectedTeamData,
-    loading: teamLoading,
-    error: teamError,
-  } = useQuery(GET_SELECTED_TEAM)
-
-  const { data: indData, loading: indLoading, error: indError } = useQuery(
-    GET_SOURCE_INDICATIONS
-  )
-
-  // For organizations, use selectedToolId and TOOL_ID_TO_ORG_QUERY_MAP to execute the
-  // appropriate query doc for organizations (a tool's child node should only have a subset of
-  // a tool's accounts)
-  const { data: orgData, loading: orgLoading, error: orgError } = useQuery(
-    TOOL_ID_TO_ORG_QUERY_MAP[selectedToolId]
-  )
-
   if (teamLoading || orgLoading || indLoading)
     return (
       <div
@@ -194,6 +190,86 @@ const ModalContentContainer = ({
   )
 }
 
+const ModalContentContainer1 = (props) => {
+  const {
+    data: selectedTeamData,
+    loading: teamLoading,
+    error: teamError,
+  } = useQuery(GET_SELECTED_TEAM)
+
+  const { data: indData, loading: indLoading, error: indError } = useQuery(
+    GET_SOURCE_INDICATIONS
+  )
+
+  // For organizations, use selectedToolId and TOOL_ID_TO_ORG_QUERY_MAP to execute the
+  // appropriate query doc for organizations (a tool's child node should only have a subset of
+  // a tool's accounts)
+  const { data: orgData, loading: orgLoading, error: orgError } = useQuery(
+    TOOL_ID_TO_ORG_QUERY_MAP[props.selectedToolId]
+  )
+
+  return (
+    <InnermostContainer
+      teamLoading={teamLoading}
+      orgLoading={orgLoading}
+      indLoading={indLoading}
+      teamError={teamError}
+      orgError={orgError}
+      indError={indError}
+      selectedTeamData={selectedTeamData}
+      indData={indData}
+      orgData={orgData}
+      {...props}
+    />
+  )
+}
+
+const ModalContentContainer2 = (props) => {
+  const {
+    data: selectedTeamData,
+    loading: teamLoading,
+    error: teamError,
+  } = useQuery(GET_SELECTED_TEAM)
+
+  const { data: indData, loading: indLoading, error: indError } = useQuery(
+    GET_SOURCE_INDICATIONS
+  )
+
+  // For organizations, use selectedToolId and TOOL_ID_TO_ORG_QUERY_MAP to execute the
+  // appropriate query doc for organizations (a tool's child node should only have a subset of
+  // a tool's accounts)
+  const {
+    data: orgData,
+    loading: orgLoading,
+    error: orgError,
+  } = useMbmOrganizations()
+
+  return (
+    <InnermostContainer
+      teamLoading={teamLoading}
+      orgLoading={orgLoading}
+      indLoading={indLoading}
+      teamError={teamError}
+      orgError={orgError}
+      indError={indError}
+      selectedTeamData={selectedTeamData}
+      indData={indData}
+      orgData={orgData}
+      {...props}
+    />
+  )
+}
+
+const ModalMiddleContentContent = (props) => {
+  const { selectedToolId } = props
+
+  if (selectedToolId === MBM_TOOL_ID) {
+    return <ModalContentContainer2 {...props} />
+  }
+
+  return <ModalContentContainer1 {...props} />
+}
+
 const ModalOuterContentContainer = (props) => {
   // ! We have no clue why `notifyOnNetworkStatusChange is needed, but it fixes the following
   /*
@@ -254,7 +330,7 @@ const ModalOuterContentContainer = (props) => {
   ]
 
   return (
-    <ModalContentContainer
+    <ModalMiddleContentContent
       {...props}
       selectedToolId={selectedToolId}
       flatSelectedNodes={_.compact(flatSelectedNodes)}
