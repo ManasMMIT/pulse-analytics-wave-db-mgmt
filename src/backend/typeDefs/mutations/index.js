@@ -151,6 +151,10 @@ const mutationType = gql`
       input: UpdateObmOrganizationInput!
     ): UpdateObmOrganizationPayload!
 
+    createLbmOrganization(input: CreateLbmOrganizationInput!): LbmOrganization! # reusing LbmOrganization type from src/backend/typeDefs/queries.js
+    deleteLbmOrganization(input: DeleteLbmOrganizationInput!): LbmOrganization!
+    updateLbmOrganization(input: UpdateLbmOrganizationInput!): LbmOrganization!
+
     createObmService(input: CreateObmServiceInput!): CreateObmServicePayload!
     updateObmService(input: UpdateObmServiceInput!): UpdateObmServicePayload!
     deleteObmService(input: DeleteObmServiceInput!): DeleteObmServicePayload!

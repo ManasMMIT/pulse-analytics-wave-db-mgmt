@@ -397,3 +397,75 @@ export const CONNECT_OBM_AND_KEY_EVENT = gql`
     }
   }
 `
+
+export const CREATE_LBM_ORGANIZATION = gql`
+  mutation CreateLbmOrganization($input: CreateLbmOrganizationInput!) {
+    createLbmOrganization(input: $input) {
+      _id
+      slug
+      organization
+      organizationTiny
+      start
+      businessModel
+      approvalTime
+      hasDecisionSupport
+      hasPbMbAuthorization
+      isEmrIntegrable
+      medicalReview
+      treatmentSelection
+      payer
+      pharmacyBenefitManager
+      specialtyPharmacy
+      oncologyBenefitManager
+      parentCompany
+    }
+  }
+`
+
+export const UPDATE_LBM_ORGANIZATION = gql`
+  mutation UpdateLbmOrganization($input: UpdateLbmOrganizationInput!) {
+    updateLbmOrganization(input: $input) {
+      _id
+      slug
+      organization
+      organizationTiny
+      start
+      businessModel
+      approvalTime
+      hasDecisionSupport
+      hasPbMbAuthorization
+      isEmrIntegrable
+      medicalReview
+      treatmentSelection
+      payer
+      pharmacyBenefitManager
+      specialtyPharmacy
+      oncologyBenefitManager
+      parentCompany
+    }
+  }
+`
+
+export const DELETE_LBM_ORGANIZATION = gql`
+  mutation DeleteLbmOrganization($input: DeleteLbmOrganizationInput!) {
+    deleteLbmOrganization(input: $input) {
+      _id
+      slug
+      organization
+      organizationTiny
+      start
+      businessModel
+      approvalTime
+      hasDecisionSupport
+      hasPbMbAuthorization
+      isEmrIntegrable
+      medicalReview
+      treatmentSelection
+      payer
+      pharmacyBenefitManager
+      specialtyPharmacy
+      oncologyBenefitManager
+      parentCompany
+    }
+  }
+`

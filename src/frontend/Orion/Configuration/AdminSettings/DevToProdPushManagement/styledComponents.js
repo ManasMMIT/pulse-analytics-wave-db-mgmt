@@ -18,25 +18,28 @@ export const StyledTopButton = styled.button({
   },
 })
 
-export const StyledCardButton = styled.button({
-  background: Color.PRIMARY,
-  color: Color.WHITE,
-  fontSize: 12,
-  fontWeight: 700,
-  padding: `${Spacing.SMALL} ${Spacing.NORMAL}`,
-  border: 'none',
-  borderRadius: 4,
-  cursor: 'pointer',
-  lineHeight: 1.5,
-  textAlign: 'left',
-  ':hover': {
-    background: transparentize(0.9, Color.PRIMARY),
-    color: Color.PRIMARY,
+export const StyledCardButton = styled.button(
+  {
+    background: Color.PRIMARY,
+    color: Color.WHITE,
+    fontSize: 12,
+    fontWeight: 700,
+    padding: `${Spacing.SMALL} ${Spacing.NORMAL}`,
+    border: 'none',
+    borderRadius: 4,
+    cursor: 'pointer',
+    lineHeight: 1.5,
+    textAlign: 'left',
+    ':hover': {
+      background: transparentize(0.9, Color.PRIMARY),
+      color: Color.PRIMARY,
+    },
+    ':focus': {
+      outline: 'none',
+    },
   },
-  ':focus': {
-    outline: 'none',
-  },
-})
+  ({ buttonStyle }) => buttonStyle
+)
 
 export const InputSection = styled.div({
   marginBottom: 16,

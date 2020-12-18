@@ -1,4 +1,3 @@
-import { jsx } from '@emotion/core'
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
@@ -27,20 +26,29 @@ const ExportButton = styled.button(
       background: transparentize(0.75, primaryColor),
     },
   },
-  ({ disabled }) => {
-    return disabled
+  ({ disabled, buttonStyle }) => {
+    const disabledStyle = disabled
       ? {
           background: transparentize(0.85, Color.MEDIUM_GRAY_2),
           color: 'grey',
           cursor: 'not-allowed',
         }
       : {}
+
+    return {
+      buttonStyle,
+      ...disabledStyle,
+    }
   }
 )
 
 const ExportExcelButton = ({ isDisabled, onClick, children, buttonStyle }) => {
   return (
-    <ExportButton css={buttonStyle} disabled={isDisabled} onClick={onClick}>
+    <ExportButton
+      buttonStyle={buttonStyle}
+      disabled={isDisabled}
+      onClick={onClick}
+    >
       {children}
     </ExportButton>
   )

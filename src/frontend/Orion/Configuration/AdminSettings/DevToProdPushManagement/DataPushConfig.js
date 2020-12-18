@@ -1,4 +1,3 @@
-import { jsx } from '@emotion/core'
 import React, { useState } from 'react'
 import _ from 'lodash'
 import { useQuery, useMutation } from '@apollo/react-hooks'
@@ -130,7 +129,10 @@ const DataPushConfig = ({ _id, name, collections }) => {
             {pushingData ? <Spinner fill="white" /> : 'Push to Prod'}
           </StyledCardButton>
         ) : (
-          <StyledCardButton onClick={updateConfig} css={{ background: 'red' }}>
+          <StyledCardButton
+            onClick={updateConfig}
+            buttonStyle={{ background: 'red' }}
+          >
             {savingChanges ? <Spinner fill="white" /> : 'Save Changes'}
           </StyledCardButton>
         )}

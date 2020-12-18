@@ -1,4 +1,3 @@
-import { jsx } from '@emotion/core'
 import React from 'react'
 import styled from '@emotion/styled'
 import PropTypes from 'prop-types'
@@ -8,21 +7,24 @@ import Color from '../../utils/color'
 import Spacing from '../../utils/spacing'
 import FontSpace from '../../utils/fontspace'
 
-const InputComponent = styled.input({
-  background: Color.WHITE,
-  width: '100%',
-  padding: `${Spacing.S3}`,
-  borderRadius: 4,
-  ...FontSpace.FS2,
-  border: `1px solid ${transparentize(0.96, Color.BLACK)}`,
-  ':hover': {
-    border: `1px solid ${transparentize(0.9, Color.BLACK)}`,
+const InputComponent = styled.input(
+  {
+    background: Color.WHITE,
+    width: '100%',
+    padding: `${Spacing.S3}`,
+    borderRadius: 4,
+    ...FontSpace.FS2,
+    border: `1px solid ${transparentize(0.96, Color.BLACK)}`,
+    ':hover': {
+      border: `1px solid ${transparentize(0.9, Color.BLACK)}`,
+    },
+    ':focus': {
+      border: `1px solid ${transparentize(0.1, Color.PRIMARY)}`,
+      outline: 'none',
+    },
   },
-  ':focus': {
-    border: `1px solid ${transparentize(0.1, Color.PRIMARY)}`,
-    outline: 'none',
-  },
-})
+  ({ inputStyle }) => inputStyle
+)
 
 const Input = ({ name, type, value, onChange, disabled, style }) => {
   let inputPropOverflow = {}
@@ -63,7 +65,7 @@ const Input = ({ name, type, value, onChange, disabled, style }) => {
       name={name}
       onChange={onEventChange}
       disabled={disabled}
-      css={style}
+      inputStyle={style}
       {...stateProp}
       {...inputPropOverflow}
     />
