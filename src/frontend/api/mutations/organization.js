@@ -372,6 +372,16 @@ export const CONNECT_OBM_AND_OBM_TYPE = gql`
   }
 `
 
+export const CONNECT_LBM_AND_LBM_TYPE = gql`
+  mutation ConnectLbmAndLbmType($input: ConnectLbmAndLbmTypeInput!) {
+    connectLbmAndLbmType(input: $input) {
+      _id
+      lbmId
+      lbmTypeId
+    }
+  }
+`
+
 export const CONNECT_OBM_AND_PERSON = gql`
   mutation ConnectObmAndPerson($input: [ConnectObmAndPersonInput!]!) {
     connectObmAndPerson(input: $input) {
@@ -466,6 +476,36 @@ export const DELETE_LBM_ORGANIZATION = gql`
       specialtyPharmacy
       oncologyBenefitManager
       parentCompany
+    }
+  }
+`
+
+export const UPDATE_LBM_TYPE = gql`
+  mutation UpdateLbmType($input: UpdateLbmTypeInput!) {
+    updateLbmType(input: $input) {
+      _id
+      name
+      description
+    }
+  }
+`
+
+export const CREATE_LBM_TYPE = gql`
+  mutation CreateLbmType($input: CreateLbmTypeInput!) {
+    createLbmType(input: $input) {
+      _id
+      name
+      description
+    }
+  }
+`
+
+export const DELETE_LBM_TYPE = gql`
+  mutation DeleteLbmType($input: DeleteLbmTypeInput!) {
+    deleteLbmType(input: $input) {
+      _id
+      name
+      description
     }
   }
 `

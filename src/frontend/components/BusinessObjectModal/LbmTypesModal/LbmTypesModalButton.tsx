@@ -2,19 +2,20 @@ import React, { FunctionComponent, useState } from 'react'
 
 import Button from 'frontend/components/Button'
 
-import LbmModal from './LbmModal'
+import LbmTypesModal from './LbmTypesModal'
 
 import { ModalAndModalButtonSharedProps } from '../shared/interfaces'
-interface LbmModalButton extends ModalAndModalButtonSharedProps {
+
+interface LbmTypesModalButton extends ModalAndModalButtonSharedProps {
   buttonStyle: { [key: string]: any }
 }
 
-const LbmModalButton: FunctionComponent<LbmModalButton> = ({
+const LbmTypesModalButton: FunctionComponent<LbmTypesModalButton> = ({
   children,
-  buttonStyle = {},
   entityId,
   refetchQueries,
   afterMutationHook,
+  buttonStyle = {},
 }) => {
   const [showModal, setModal] = useState(false)
 
@@ -25,7 +26,7 @@ const LbmModalButton: FunctionComponent<LbmModalButton> = ({
       </Button>
 
       {showModal && (
-        <LbmModal
+        <LbmTypesModal
           entityId={entityId}
           closeModal={() => setModal(false)}
           refetchQueries={refetchQueries}
@@ -36,4 +37,4 @@ const LbmModalButton: FunctionComponent<LbmModalButton> = ({
   )
 }
 
-export default LbmModalButton
+export default LbmTypesModalButton

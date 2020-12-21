@@ -9,7 +9,8 @@
     "baseUrl": "src",
     "target": "es5",
     "lib": [
-      "es6"
+      "es6",
+      "dom"
     ],
     "allowJs": true,
     "outDir": "build",

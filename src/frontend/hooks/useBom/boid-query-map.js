@@ -11,6 +11,7 @@ import {
   GET_THERAPEUTIC_AREAS,
   GET_OBM_TYPES,
   GET_LBM_ORGANIZATIONS,
+  GET_LBM_TYPES,
 } from 'frontend/api/queries'
 
 export default {
@@ -24,4 +25,5 @@ export default {
   '5f2ac32600b9d74431f9bc6f': GET_THERAPEUTIC_AREAS,
   '5eac39250cce12751670c82f': GET_APM_ORGANIZATIONS,
   '5fb2978ee9e85c26fe9503c7': GET_OBM_TYPES,
+  '5fdbd5b23c043d44ad4bf089': GET_LBM_TYPES,
 }

@@ -790,6 +790,16 @@ export const GET_OBM_TYPES = gql`
   }
 `
 
+export const GET_LBM_TYPES = gql`
+  query getLbmTypes {
+    lbmTypes {
+      _id
+      name
+      description
+    }
+  }
+`
+
 export const GET_OBM_KEY_EVENTS = gql`
   query getObmKeyEvents($obmId: String) {
     obmKeyEvents(obmId: $obmId) {
@@ -1030,6 +1040,16 @@ export const GET_JOIN_OBMS_AND_OBMS_TYPES = gql`
       _id
       obmId
       obmTypeId
+    }
+  }
+`
+
+export const GET_JOIN_LBMS_AND_LBMS_TYPES = gql`
+  query getJoinLbmsAndLbmsTypes($lbmId: String) {
+    JOIN_lbms_lbmsTypes(lbmId: $lbmId) {
+      _id
+      lbmId
+      lbmTypeId
     }
   }
 `

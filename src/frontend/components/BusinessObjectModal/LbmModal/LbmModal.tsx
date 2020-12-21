@@ -16,19 +16,21 @@ import {
 // import ObmServicesWidget from './relational-widgets/ObmServicesWidget'
 // import ObmInfluencersWidget from './relational-widgets/ObmInfluencersWidget'
 // import ObmPayersWidget from './relational-widgets/ObmPayersWidget'
-// import ObmTypesWidget from './relational-widgets/ObmTypesWidget'
+import LbmTypesWidget from './relational-widgets/LbmTypesWidget'
 // import ObmKeyEventsWidget from './relational-widgets/ObmKeyEventsWidget'
 import BusinessObjectModal from '../BusinessObjectModal/BusinessObjectModal'
+
+import { ModalAndModalButtonSharedProps } from '../shared/interfaces'
 
 const LBM_BOID = '5fdb8b4dc1587918d2033dea'
 const HEADER_TEXT = 'Laboratory Benefit Manager Accounts'
 
-// const WIDGETS = [
-//   {
-//     _id: 'RELATIONAL_obmTypesWidget',
-//     label: 'Connect to OBM Type',
-//     Component: ObmTypesWidget,
-//   },
+const WIDGETS = [
+  {
+    _id: 'RELATIONAL_lbmTypesWidget',
+    label: 'Connect to LBM Type',
+    Component: LbmTypesWidget,
+  },
 //   {
 //     _id: 'RELATIONAL_obmServicesWidget',
 //     label: 'Connect to OBM Services',
@@ -49,19 +51,9 @@ const HEADER_TEXT = 'Laboratory Benefit Manager Accounts'
 //     label: 'Manage Key Events',
 //     Component: ObmKeyEventsWidget,
 //   },
-// ]
+]
 
-interface Datum {
-  [key: string]: any
-}
-
-export interface LbmModalAndModalButtonSharedProps {
-  entityId?: string
-  refetchQueries?: any[]
-  afterMutationHook?: (datum: Datum) => void
-}
-
-interface LbmModalProps extends LbmModalAndModalButtonSharedProps {
+interface LbmModalProps extends ModalAndModalButtonSharedProps {
   closeModal: () => void
 }
 
@@ -90,7 +82,7 @@ const LbmModal = ({
       // { query: GET_VIEW_OBM_INFLUENCERS },
     ]}
     afterMutationHook={afterMutationHook}
-    widgets={[]}
+    widgets={WIDGETS}
   />
 )
 

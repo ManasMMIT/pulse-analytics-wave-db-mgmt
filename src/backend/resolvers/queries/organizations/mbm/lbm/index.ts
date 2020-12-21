@@ -1,11 +1,13 @@
 import lbmOrganizations from './lbm'
-// const obmServices = require('./service')
-// const obmServicesCategories = require('./serviceCategory')
-// const obmTypes = require('./type')
-// const obmKeyEvents = require('./keyEvents')
-// const joins = require('./joins')
-// const views = require('./views')
+// import lbmServices from './service'
+// import lbmServicesCategories from './serviceCategory'
+import lbmTypes from './type'
+// import lbmKeyEvents from './keyEvents'
+import joins from './joins'
+// import views from './views'
 
 export default {
-  lbmOrganizations
+  lbmOrganizations,
+  lbmTypes,
+  ...joins,
 }

@@ -4,8 +4,8 @@ import deleteLbmOrganizationTypeDefs from './delete'
 
 // import lbmServiceTypeDefs from './service'
 // import lbmServiceCategoryTypeDefs from './serviceCategory'
-// import lbmTypeTypeDefs from './type'
-// import lbmRelationalTypeDefs from './relational-typeDefs'
+import lbmTypeTypeDefs from './type'
+import lbmRelationalTypeDefs from './relational-typeDefs'
 
 export default [
   createLbmOrganizationTypeDefs,
@@ -13,6 +13,6 @@ export default [
   deleteLbmOrganizationTypeDefs,
   // ...lbmServiceTypeDefs,
   // ...lbmServiceCategoryTypeDefs,
-  // ...lbmTypeTypeDefs,
-  // ...lbmRelationalTypeDefs,
+  ...lbmTypeTypeDefs,
+  ...lbmRelationalTypeDefs,
 ]

@@ -6,8 +6,7 @@ import { GET_LBM_ORGANIZATIONS } from 'frontend/api/queries'
 import PanelHeader from 'frontend/components/Panel/PanelHeader'
 import LbmModalButton from 'frontend/components/BusinessObjectModal/LbmModal/LbmModalButton'
 import LbmModal from 'frontend/components/BusinessObjectModal/LbmModal'
-// import ObmTypesModal from 'frontend/components/BusinessObjectModal/ObmTypesModal'
-// import ObmTypePowerSelect from 'frontend/components/BoPowerSelect/ObmTypePowerSelect'
+import LbmTypePowerSelect from 'frontend/components/BoPowerSelect/LbmTypePowerSelect'
 import Icon from 'frontend/components/Icon'
 import Table from 'frontend/components/Table'
 
@@ -69,7 +68,7 @@ const AccountOverview = () => {
     >
       <PanelHeader title={PAGE_TITLE}>
         <div style={{ display: 'flex', alignItems: 'center' }}>
-          {/* <ObmTypePowerSelect /> */}
+          <LbmTypePowerSelect />
           <LbmModalButton buttonStyle={createButtonStyle}>
             <Icon
               iconName="add"

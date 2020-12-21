@@ -15,7 +15,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased] - Started: 12-16-20
 
 ### Added
-- `Orion/LBM CRUD`: Build out LBM basic CRUD and Account Overview [#886](https://github.com/pulse-analytics/wave-db-mgmt/pull/886)
+- `Orion/LBM CRUD`
+  - Build out LBM basic CRUD and Account Overview [#886](https://github.com/pulse-analytics/wave-db-mgmt/pull/886)
+  - Build out LBM types basic CRUD and power select [#887](https://github.com/pulse-analytics/wave-db-mgmt/pull/887)
+  - Build out LBM <=> LBM types connections widget and CRUD [#888](https://github.com/pulse-analytics/wave-db-mgmt/pull/888)
 
 ## [4.2.0] - Started: 12-11-20
 
