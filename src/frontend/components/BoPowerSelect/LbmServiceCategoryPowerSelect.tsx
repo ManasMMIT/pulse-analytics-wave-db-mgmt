@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
 
-import LbmModal from 'frontend/components/BusinessObjectModal/LbmModal'
-import { GET_LBM_ORGANIZATIONS } from 'frontend/api/queries'
+import LbmServicesCategoriesModal from 'frontend/components/BusinessObjectModal/LbmServicesCategoriesModal'
+import { GET_LBM_SERVICES_CATEGORIES } from 'frontend/api/queries'
 import BoPowerSelectNew from './BoPowerSelectNew'
 
-const LbmPowerSelect = () => {
+const LbmServiceCategoryPowerSelect = () => {
   const [selectedId, selectId] = useState<string | null>(null)
   const [isModalOpen, openModal] = useState(false)
 
@@ -20,24 +20,24 @@ const LbmPowerSelect = () => {
 
   const createOptionConfig = {
     clickHandler: () => openModal(true),
-    createOptionText: 'Create LBM',
+    createOptionText: 'Create Service Category',
   }
 
   return (
     <>
       <BoPowerSelectNew
-        placeholder={'Select LBM'}
-        getLabel={({ organization }: { organization: string }) => organization}
-        queryDoc={GET_LBM_ORGANIZATIONS}
+        placeholder={'Select Service Category'}
+        getLabel={({ name }: { name: string }) => name}
+        queryDoc={GET_LBM_SERVICES_CATEGORIES}
         selectedId={selectedId}
         changeHandler={changeHandler}
         createOptionConfig={createOptionConfig}
       />
       {isModalOpen && (
-        <LbmModal entityId={selectedId} closeModal={closeModalHandler} />
+        <LbmServicesCategoriesModal entityId={selectedId} closeModal={closeModalHandler} />
       )}
     </>
   )
 }
 
-export default LbmPowerSelect
+export default LbmServiceCategoryPowerSelect

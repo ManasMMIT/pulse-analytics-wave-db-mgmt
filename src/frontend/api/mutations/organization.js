@@ -190,6 +190,15 @@ export const DELETE_OBM_SERVICE_CATEGORY = gql`
   }
 `
 
+export const DELETE_LBM_SERVICE_CATEGORY = gql`
+  mutation DeleteLbmServiceCategory($input: DeleteLbmServiceCategoryInput!) {
+    deleteLbmServiceCategory(input: $input) {
+      _id
+      name
+    }
+  }
+`
+
 export const UPDATE_OBM_SERVICE_CATEGORY = gql`
   mutation UpdateObmServiceCategory($input: UpdateObmServiceCategoryInput!) {
     updateObmServiceCategory(input: $input) {
@@ -199,9 +208,27 @@ export const UPDATE_OBM_SERVICE_CATEGORY = gql`
   }
 `
 
+export const UPDATE_LBM_SERVICE_CATEGORY = gql`
+  mutation UpdateLbmServiceCategory($input: UpdateLbmServiceCategoryInput!) {
+    updateLbmServiceCategory(input: $input) {
+      _id
+      name
+    }
+  }
+`
+
 export const DELETE_OBM_SERVICE = gql`
   mutation DeleteObmService($input: DeleteObmServiceInput!) {
     deleteObmService(input: $input) {
+      _id
+      name
+    }
+  }
+`
+
+export const DELETE_LBM_SERVICE = gql`
+  mutation DeleteLbmService($input: DeleteLbmServiceInput!) {
+    deleteLbmService(input: $input) {
       _id
       name
     }
@@ -218,9 +245,28 @@ export const UPDATE_OBM_SERVICE = gql`
   }
 `
 
+export const UPDATE_LBM_SERVICE = gql`
+  mutation UpdateLbmService($input: UpdateLbmServiceInput!) {
+    updateLbmService(input: $input) {
+      _id
+      name
+      description
+    }
+  }
+`
+
 export const CREATE_OBM_SERVICE_CATEGORY = gql`
   mutation CreateObmServiceCategory($input: CreateObmServiceCategoryInput!) {
     createObmServiceCategory(input: $input) {
+      _id
+      name
+    }
+  }
+`
+
+export const CREATE_LBM_SERVICE_CATEGORY = gql`
+  mutation CreateLbmServiceCategory($input: CreateLbmServiceCategoryInput!) {
+    createLbmServiceCategory(input: $input) {
       _id
       name
     }
@@ -260,6 +306,16 @@ export const DELETE_OBM_TYPE = gql`
 export const CREATE_OBM_SERVICE = gql`
   mutation CreateObmService($input: CreateObmServiceInput!) {
     createObmService(input: $input) {
+      _id
+      name
+      description
+    }
+  }
+`
+
+export const CREATE_LBM_SERVICE = gql`
+  mutation CreateLbmService($input: CreateLbmServiceInput!) {
+    createLbmService(input: $input) {
       _id
       name
       description

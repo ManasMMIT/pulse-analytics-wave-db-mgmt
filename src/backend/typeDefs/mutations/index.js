@@ -159,6 +159,10 @@ const mutationType = gql`
     updateObmService(input: UpdateObmServiceInput!): UpdateObmServicePayload!
     deleteObmService(input: DeleteObmServiceInput!): DeleteObmServicePayload!
 
+    createLbmService(input: CreateLbmServiceInput!): CreateLbmServicePayload!
+    updateLbmService(input: UpdateLbmServiceInput!): UpdateLbmServicePayload!
+    deleteLbmService(input: DeleteLbmServiceInput!): DeleteLbmServicePayload!
+
     createObmServiceCategory(
       input: CreateObmServiceCategoryInput!
     ): CreateObmServiceCategoryPayload!
@@ -168,6 +172,16 @@ const mutationType = gql`
     deleteObmServiceCategory(
       input: DeleteObmServiceCategoryInput!
     ): DeleteObmServiceCategoryPayload!
+
+    createLbmServiceCategory(
+      input: CreateLbmServiceCategoryInput!
+    ): CreateLbmServiceCategoryPayload!
+    updateLbmServiceCategory(
+      input: UpdateLbmServiceCategoryInput!
+    ): UpdateLbmServiceCategoryPayload!
+    deleteLbmServiceCategory(
+      input: DeleteLbmServiceCategoryInput!
+    ): DeleteLbmServiceCategoryPayload!
 
     createObmType(input: CreateObmTypeInput!): CreateObmTypePayload!
     updateObmType(input: UpdateObmTypeInput!): UpdateObmTypePayload!

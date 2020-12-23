@@ -771,9 +771,28 @@ export const GET_OBM_SERVICES = gql`
   }
 `
 
+export const GET_LBM_SERVICES = gql`
+  query getLbmServices {
+    lbmServices {
+      _id
+      name
+      description
+    }
+  }
+`
+
 export const GET_OBM_SERVICES_CATEGORIES = gql`
   query getObmServicesCategories {
     obmServicesCategories {
+      _id
+      name
+    }
+  }
+`
+
+export const GET_LBM_SERVICES_CATEGORIES = gql`
+  query getLbmServicesCategories {
+    lbmServicesCategories {
       _id
       name
     }

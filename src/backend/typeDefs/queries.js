@@ -26,7 +26,10 @@ const queries = gql`
     lbmOrganizations: [LbmOrganization]
 
     obmServices: [ObmService]
+    lbmServices: [LbmService]
+
     obmServicesCategories: [ObmServiceCategory]
+    lbmServicesCategories: [LbmServiceCategory]
 
     obmTypes: [ObmType]
     lbmTypes: [LbmType!]!
@@ -410,7 +413,18 @@ const queries = gql`
     description: String
   }
 
+  type LbmService {
+    _id: ID!
+    name: String!
+    description: String
+  }
+
   type ObmServiceCategory {
+    _id: ID!
+    name: String!
+  }
+
+  type LbmServiceCategory {
     _id: ID!
     name: String!
   }

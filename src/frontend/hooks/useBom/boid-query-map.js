@@ -12,6 +12,8 @@ import {
   GET_OBM_TYPES,
   GET_LBM_ORGANIZATIONS,
   GET_LBM_TYPES,
+  GET_LBM_SERVICES_CATEGORIES,
+  GET_LBM_SERVICES,
 } from 'frontend/api/queries'
 
 export default {
@@ -26,4 +28,6 @@ export default {
   '5eac39250cce12751670c82f': GET_APM_ORGANIZATIONS,
   '5fb2978ee9e85c26fe9503c7': GET_OBM_TYPES,
   '5fdbd5b23c043d44ad4bf089': GET_LBM_TYPES,
+  '5fe35a551ba1c4203efe8912': GET_LBM_SERVICES_CATEGORIES,
+  '5fe35a151ba1c4203efe890e': GET_LBM_SERVICES,
 }
