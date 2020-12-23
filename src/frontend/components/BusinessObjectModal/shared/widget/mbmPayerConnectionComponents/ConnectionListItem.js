@@ -13,7 +13,7 @@ import {
   Subtitle,
   IconWrapper,
   listItemStyle,
-} from 'frontend/components/BusinessObjectModal/shared/widget/ConnectionsList/styledComponents'
+} from 'frontend/components/BusinessObjectModal/shared/widget/orgInfluencerConnectionComponents/ConnectionsList/styledComponents'
 
 const ConnectionListItem = ({ isActive, clickHandler, title, subtitle }) => {
   return (

@@ -19,9 +19,11 @@ const ConnectionPanel = ({
   setWhetherNewConnectionBeingCreated,
   isNewConnectionBeingCreated,
   setWhetherUnsavedChanges,
-  obmId,
+  mbmIdObj,
   selectConnectionId,
   allBooks,
+  refetchQueries,
+  mutationDocs,
 }) => {
   const [stagedConnection, stageConnection] = useState(
     _.cloneDeep(connection || {})
@@ -31,7 +33,7 @@ const ConnectionPanel = ({
     if (isNewConnectionBeingCreated) {
       stageConnection({
         payerId: null,
-        obmId,
+        ...mbmIdObj,
         note: null,
         books: [],
       })
@@ -53,7 +55,7 @@ const ConnectionPanel = ({
 
   console.log('stagedConnection', stagedConnection)
 
-  if (_.isEmpty(stagedConnection)) return 'No connections'
+  if (_.isEmpty(stagedConnection)) return <>No connections</>
 
   return (
     <ConnectionPanelWrapper>
@@ -71,6 +73,8 @@ const ConnectionPanel = ({
           setWhetherNewConnectionBeingCreated={
             setWhetherNewConnectionBeingCreated
           }
+          refetchQueries={refetchQueries}
+          mutationDocs={mutationDocs}
         />
       </SectionTitle>
 
@@ -87,7 +91,7 @@ const ConnectionPanel = ({
 }
 
 ConnectionPanel.propTypes = {
-  obmId: PropTypes.string.isRequired,
+  mbmIdObj: PropTypes.object.isRequired,
   selectConnectionId: PropTypes.func.isRequired,
   isNewConnectionBeingCreated: PropTypes.bool.isRequired,
   connections: PropTypes.array.isRequired,
@@ -95,6 +99,8 @@ ConnectionPanel.propTypes = {
   allBooks: PropTypes.array.isRequired,
   setWhetherNewConnectionBeingCreated: PropTypes.func.isRequired,
   setWhetherUnsavedChanges: PropTypes.func.isRequired,
+  refetchQueries: PropTypes.arrayOf(PropTypes.object).isRequired,
+  mutationDocs: PropTypes.object.isRequired,
 }
 
 export default ConnectionPanel

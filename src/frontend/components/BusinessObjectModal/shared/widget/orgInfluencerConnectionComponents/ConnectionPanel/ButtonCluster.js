@@ -8,19 +8,29 @@ import styled from '@emotion/styled'
 
 import Button from 'frontend/components/Button'
 import Spinner from 'frontend/components/Spinner'
-import {
-  GET_JOIN_OBMS_AND_PAYERS,
-  GET_VIEW_OBM_PAYER_PARTNERSHIPS,
-} from 'frontend/api/queries'
+import { GET_EVENTS, GET_JOIN_PATHWAYS_AND_PEOPLE } from 'frontend/api/queries'
 
 import Color from 'frontend/utils/color'
 import Spacing from 'frontend/utils/spacing'
 import stripTypename from 'frontend/Orion/shared/strip-typename'
 
+// TODO: Pass in mutations and refetch gql tags to button cluster
 import {
-  UPSERT_OBM_AND_PAYER_CONNECTION,
-  DELETE_OBM_AND_PAYER_CONNECTION,
+  UPSERT_PATHWAYS_AND_PERSON_CONNECTION,
+  DELETE_PATHWAYS_AND_PERSON_CONNECTION,
 } from 'frontend/api/mutations'
+
+const REQUIRED_FIELD_KEYS = [
+  'pathwaysId',
+  'personId',
+  'indicationIds',
+  'pathwaysInfluencerTypes',
+  'pathwaysInfluencerTypes',
+  'position',
+]
+
+const areRequiredFieldsBlank = (data) =>
+  REQUIRED_FIELD_KEYS.some((key) => _.isEmpty(data[key]))
 
 const Alert = (props) => {
   return <MuiAlert elevation={6} variant="filled" {...props} />
@@ -44,32 +54,70 @@ const ButtonsWrapper = styled.div({
 const ButtonCluster = ({
   isNewConnectionBeingCreated,
   cancelHandler,
-  stagedConnection,
+  connectionData,
   setWhetherUnsavedChanges,
   setWhetherNewConnectionBeingCreated,
-  selectConnectionId,
-  connections,
+  changeConnection,
+  connectionsData,
 }) => {
   const [snackbarOpen, toggleSnackbar] = useState(false)
 
-  stagedConnection = stripTypename(_.cloneDeep(stagedConnection))
+  connectionData = stripTypename(_.cloneDeep(connectionData))
+
+  const {
+    _id,
+    pathwaysId,
+    personId,
+    indicationIds,
+    pathwaysInfluencerTypes,
+    tumorTypeSpecialty,
+    internalFields,
+    position,
+    priority,
+    alert,
+    exclusionSettings,
+    startDate,
+    endDate,
+    startQuarter,
+    endQuarter,
+  } = connectionData
+
+  const dataToPersist = {
+    _id,
+    pathwaysId,
+    personId,
+    indicationIds,
+    pathwaysInfluencerTypes,
+    tumorTypeSpecialty,
+    internalFields,
+    position,
+    priority,
+    alert,
+    exclusionSettings,
+    startDate,
+    endDate,
+    startQuarter,
+    endQuarter,
+  }
 
   const [upsert, { loading: upsertLoading }] = useMutation(
-    UPSERT_OBM_AND_PAYER_CONNECTION,
+    UPSERT_PATHWAYS_AND_PERSON_CONNECTION,
     {
       variables: {
-        input: stagedConnection,
+        input: dataToPersist,
       },
       refetchQueries: [
-        { query: GET_JOIN_OBMS_AND_PAYERS },
-        { query: GET_VIEW_OBM_PAYER_PARTNERSHIPS },
+        { query: GET_EVENTS },
+        { query: GET_JOIN_PATHWAYS_AND_PEOPLE },
       ],
       awaitRefetchQueries: true,
       onCompleted: (res) => {
         if (isNewConnectionBeingCreated) {
           setWhetherNewConnectionBeingCreated(false)
           const newConnectionId = Object.values(res)[0]._id
-          selectConnectionId(newConnectionId)
+          changeConnection(
+            connectionsData.find(({ _id }) => _id === newConnectionId)
+          )
         }
 
         toggleSnackbar(true)
@@ -79,21 +127,24 @@ const ButtonCluster = ({
     }
   )
 
-  const [deleteConnection] = useMutation(DELETE_OBM_AND_PAYER_CONNECTION, {
-    variables: {
-      input: { _id: stagedConnection._id },
-    },
-    refetchQueries: [
-      { query: GET_JOIN_OBMS_AND_PAYERS },
-      { query: GET_VIEW_OBM_PAYER_PARTNERSHIPS },
-    ],
-    awaitRefetchQueries: true,
-    onCompleted: () => {
-      selectConnectionId(_.isEmpty(connections) ? null : connections[0]._id)
-      setWhetherUnsavedChanges(false)
-    },
-    onError: window.alert,
-  })
+  const [deleteConnection] = useMutation(
+    DELETE_PATHWAYS_AND_PERSON_CONNECTION,
+    {
+      variables: {
+        input: dataToPersist,
+      },
+      refetchQueries: [
+        { query: GET_EVENTS },
+        { query: GET_JOIN_PATHWAYS_AND_PEOPLE },
+      ],
+      awaitRefetchQueries: true,
+      onCompleted: () => {
+        changeConnection(connectionsData[0] || {}) // ! if no more connections, pass empty object
+        setWhetherUnsavedChanges(false)
+      },
+      onError: window.alert,
+    }
+  )
 
   const deleteHandler = () => {
     if (
@@ -103,6 +154,20 @@ const ButtonCluster = ({
     ) {
       deleteConnection()
     }
+  }
+
+  const handleUpsertion = () => {
+    if (
+      areRequiredFieldsBlank(connectionData) &&
+      !exclusionSettings.isExcluded
+    ) {
+      window.alert(
+        `Please fill out the fields marked required OR check off "Exclude From Tool"`
+      )
+      return
+    }
+
+    upsert()
   }
 
   return (
@@ -123,7 +188,7 @@ const ButtonCluster = ({
         ) : (
           <Button
             type="secondary"
-            onClick={upsert}
+            onClick={handleUpsertion}
             color={Color.GREEN}
             buttonStyle={{ margin: `0 ${Spacing.S3}` }}
           >
@@ -163,11 +228,13 @@ const ButtonCluster = ({
 ButtonCluster.propTypes = {
   isNewConnectionBeingCreated: PropTypes.bool.isRequired,
   cancelHandler: PropTypes.func.isRequired,
-  stagedConnection: PropTypes.object.isRequired,
+  connectionData: PropTypes.object.isRequired,
   setWhetherUnsavedChanges: PropTypes.func.isRequired,
   setWhetherNewConnectionBeingCreated: PropTypes.func.isRequired,
-  selectConnectionId: PropTypes.func.isRequired,
-  connections: PropTypes.array.isRequired,
+  changeConnection: PropTypes.func.isRequired,
+  connectionsData: PropTypes.array.isRequired,
 }
+
+ButtonCluster.defaultProps = {}
 
 export default ButtonCluster

@@ -3,13 +3,23 @@ import { useQuery } from '@apollo/react-hooks'
 import _ from 'lodash'
 import styled from '@emotion/styled'
 
-import useObmAndPayerConnections from 'frontend/hooks/useObmPayerConnections'
+import useLbmAndPayerConnections from 'frontend/hooks/useLbmPayerConnections'
 import manualBoModalLockOverlay from 'frontend/components/BusinessObjectModal/shared/widget/manualBoModalLockOverlay'
 
-import ConnectionPanel from './ConnectionPanel'
-import ConnectionsList from './ConnectionsList'
+import ConnectionPanel from '../../shared/widget/mbmPayerConnectionComponents/ConnectionPanel'
+import ConnectionsList from '../../shared/widget/mbmPayerConnectionComponents/ConnectionsList'
 
-import { GET_PAYER_ORGANIZATIONS, GET_BOOKS } from '../../../../../api/queries'
+import {
+  GET_JOIN_LBMS_AND_PAYERS,
+  GET_VIEW_LBM_PAYER_PARTNERSHIPS,
+  GET_PAYER_ORGANIZATIONS,
+  GET_BOOKS,
+} from 'frontend/api/queries'
+
+import {
+  UPSERT_LBM_AND_PAYER_CONNECTION,
+  DELETE_LBM_AND_PAYER_CONNECTION,
+} from 'frontend/api/mutations'
 
 const WidgetContainer = styled.div({
   display: 'flex',
@@ -18,7 +28,7 @@ const WidgetContainer = styled.div({
 
 const WIDGET_TITLE = 'Payer Connections'
 
-const ObmPayersWidget = ({ entity }) => {
+const LbmPayersWidget = ({ entity }: { _id: string, [key: string]: any }) => {
   const [selectedConnectionId, selectConnectionId] = useState(null)
   const [
     isNewConnectionBeingCreated,
@@ -33,7 +43,7 @@ const ObmPayersWidget = ({ entity }) => {
   const {
     data: connections,
     loading: connectionsLoading,
-  } = useObmAndPayerConnections({ obmId: entity._id })
+  } = useLbmAndPayerConnections({ lbmId: entity._id })
 
   useEffect(() => {
     if (!payersLoading && !booksLoading && !connectionsLoading) {
@@ -54,11 +64,11 @@ const ObmPayersWidget = ({ entity }) => {
     }
   }
 
-  let allPayers = []
+  let allPayers: any = []
   if (!payersLoading) allPayers = Object.values(payersData)[0]
   const payerOrgById = _.mapValues(_.keyBy(allPayers, '_id'), 'organization')
 
-  let allBooks = []
+  let allBooks: any = []
   if (!booksLoading) allBooks = Object.values(booksData)[0]
 
   manualBoModalLockOverlay(anyUnsavedChanges)
@@ -81,16 +91,24 @@ const ObmPayersWidget = ({ entity }) => {
         connections={connections}
         payerOrgById={payerOrgById}
         isNewConnectionBeingCreated={isNewConnectionBeingCreated}
-        obmId={entity._id}
+        mbmIdObj={{ lbmId: entity._id }}
         setWhetherNewConnectionBeingCreated={
           setWhetherNewConnectionBeingCreated
         }
         setWhetherUnsavedChanges={setWhetherUnsavedChanges}
         selectConnectionId={selectConnectionId}
         allBooks={allBooks}
+        refetchQueries={[
+          { query: GET_JOIN_LBMS_AND_PAYERS },
+          { query: GET_VIEW_LBM_PAYER_PARTNERSHIPS },
+        ]}
+        mutationDocs={{
+          upsert: UPSERT_LBM_AND_PAYER_CONNECTION,
+          delete: DELETE_LBM_AND_PAYER_CONNECTION,
+        }}
       />
     </WidgetContainer>
   )
 }
 
-export default ObmPayersWidget
+export default LbmPayersWidget

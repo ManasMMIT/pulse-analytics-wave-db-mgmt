@@ -79,9 +79,22 @@ const updatePayerOrganization = async (
       { session }
     )
 
+    // Step 5: cascade update pulse-dev.lbmsPayers
+    await pulseDevDb.collection('lbmsPayers').updateMany(
+      { 'payer._id': _id },
+      {
+        $set: {
+          'payer.slug': result.slug,
+          'payer.organization': result.organization,
+          'payer.organizationTiny': result.organizationTiny,
+        },
+      },
+      { session }
+    )
+
     const { type, toolIds, ...devPayerSetObj } = setObj
 
-    // Step 5: update dev payers collection
+    // Step 6: update dev payers collection
     await pulseDevDb
       .collection('payers')
       .updateOne({ _id }, { $set: devPayerSetObj }, { session })

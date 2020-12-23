@@ -45,9 +45,13 @@ const queries = gql`
     JOIN_obms_people: [ObmAndPersonConnection]
 
     JOIN_obms_payers(obmId: ID): [ObmAndPayerConnection]
+    JOIN_lbms_payers(lbmId: ID): [LbmAndPayerConnection]
 
     VIEW_obmServices: [VIEW_ObmService]
+
     VIEW_obmPayerPartnerships: [VIEW_ObmPayerPartnership]
+    VIEW_lbmPayerPartnerships: [VIEW_LbmPayerPartnership]
+
     VIEW_obmInfluencers: [VIEW_ObmInfluencer]
 
     JOIN_pathways_people: [PathwaysAndPersonConnection]
@@ -464,6 +468,14 @@ const queries = gql`
     note: String
   }
 
+  type LbmAndPayerConnection {
+    _id: ID!
+    lbmId: String!
+    payerId: String!
+    books: [JSON!]!
+    note: String
+  }
+
   # TODO: can't use _id here because caching problems on frontend;
   # temporarily using JSON type for books
   # type ObmAndPayerConnectionBookObj {
@@ -509,6 +521,24 @@ const queries = gql`
     _id: ID!
     obmId: String!
     obmOrganization: String!
+    payerId: String!
+    payerSlug: String!
+    payerOrganization: String!
+    commercialMedicalLives: Float
+    commercialMedicalLivesPercent: Float
+    commercialReach: String
+    medicareMedicalLives: Float
+    medicareMedicalLivesPercent: Float
+    medicareReach: String
+    managedMedicaidMedicalLives: Float
+    managedMedicaidMedicalLivesPercent: Float
+    managedMedicaidReach: String
+  }
+
+  type VIEW_LbmPayerPartnership {
+    _id: ID!
+    lbmId: String!
+    lbmOrganization: String!
     payerId: String!
     payerSlug: String!
     payerOrganization: String!

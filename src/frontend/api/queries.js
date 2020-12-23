@@ -1078,6 +1078,18 @@ export const GET_JOIN_OBMS_AND_PAYERS = gql`
   }
 `
 
+export const GET_JOIN_LBMS_AND_PAYERS = gql`
+  query getJoinLbmsAndPayers($lbmId: ID) {
+    JOIN_lbms_payers(lbmId: $lbmId) {
+      _id
+      lbmId
+      payerId
+      books
+      note
+    }
+  }
+`
+
 export const GET_VIEW_OBM_SERVICES = gql`
   query getViewObmServices {
     VIEW_obmServices {
@@ -1099,6 +1111,28 @@ export const GET_VIEW_OBM_PAYER_PARTNERSHIPS = gql`
       _id
       obmId
       obmOrganization
+      payerId
+      payerSlug
+      payerOrganization
+      commercialMedicalLives
+      commercialMedicalLivesPercent
+      commercialReach
+      medicareMedicalLives
+      medicareMedicalLivesPercent
+      medicareReach
+      managedMedicaidMedicalLives
+      managedMedicaidMedicalLivesPercent
+      managedMedicaidReach
+    }
+  }
+`
+
+export const GET_VIEW_LBM_PAYER_PARTNERSHIPS = gql`
+  query getViewLbmPayerPartnerships {
+    VIEW_lbmPayerPartnerships {
+      _id
+      lbmId
+      lbmOrganization
       payerId
       payerSlug
       payerOrganization

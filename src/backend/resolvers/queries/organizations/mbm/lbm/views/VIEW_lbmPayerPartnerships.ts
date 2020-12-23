@@ -1,13 +1,13 @@
 import getPayerPartnerLivesAggPipelines from '../../getPayerPartnerLivesAggPipeline'
 
-const VIEW_OBM_PAYER_PARTNERSHIPS_AGG_PIPELINE = [
-  ...getPayerPartnerLivesAggPipelines('obm'),
+const VIEW_LBM_PAYER_PARTNERSHIPS_AGG_PIPELINE = [
+  ...getPayerPartnerLivesAggPipelines('lbm'),
   {
     $group: {
       _id: {
         _id: '$_id',
-        obmId: '$mbm._id',
-        obmOrganization: '$mbm.organization',
+        lbmId: '$mbm._id',
+        lbmOrganization: '$mbm.organization',
         payerId: '$payer._id',
         payerSlug: '$payer.slug',
         payerOrganization: '$payer.organization',
@@ -20,8 +20,8 @@ const VIEW_OBM_PAYER_PARTNERSHIPS_AGG_PIPELINE = [
   {
     $project: {
       _id: '$_id._id',
-      obmId: '$_id.obmId',
-      obmOrganization: '$_id.obmOrganization',
+      lbmId: '$_id.lbmId',
+      lbmOrganization: '$_id.lbmOrganization',
       payerId: '$_id.payerId',
       payerSlug: '$_id.payerSlug',
       payerOrganization: '$_id.payerOrganization',
@@ -42,17 +42,17 @@ const VIEW_OBM_PAYER_PARTNERSHIPS_AGG_PIPELINE = [
 ]
 
 // Refer to type VIEW_ObmPayerPartnership in src/backend/typeDefs/queries.js for desired schema output
-const VIEW_obmPayerPartnerships = async (parent, args, { pulseDevDb }) => {
+const VIEW_lbmPayerPartnerships = async (parent, args, { pulseDevDb }) => {
   const data = await pulseDevDb
-    .collection('obmsPayers')
-    .aggregate(VIEW_OBM_PAYER_PARTNERSHIPS_AGG_PIPELINE, { allowDiskUse: true })
+    .collection('lbmsPayers')
+    .aggregate(VIEW_LBM_PAYER_PARTNERSHIPS_AGG_PIPELINE, { allowDiskUse: true })
     .toArray()
 
   const formattedData = data.map(
     ({
       _id,
-      obmId,
-      obmOrganization,
+      lbmId,
+      lbmOrganization,
       payerId,
       payerSlug,
       payerOrganization,
@@ -87,8 +87,8 @@ const VIEW_obmPayerPartnerships = async (parent, args, { pulseDevDb }) => {
 
       return {
         _id,
-        obmId,
-        obmOrganization,
+        lbmId,
+        lbmOrganization,
         payerId,
         payerSlug,
         payerOrganization,
@@ -100,4 +100,4 @@ const VIEW_obmPayerPartnerships = async (parent, args, { pulseDevDb }) => {
   return formattedData
 }
 
-module.exports = VIEW_obmPayerPartnerships
+export default VIEW_lbmPayerPartnerships

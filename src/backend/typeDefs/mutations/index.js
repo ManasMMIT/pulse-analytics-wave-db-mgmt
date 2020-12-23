@@ -368,6 +368,14 @@ const mutationType = gql`
     deleteObmAndPayerConnection(
       input: DeleteObmAndPayerConnectionInput!
     ): ObmAndPayerConnection!
+
+    upsertLbmAndPayerConnection(
+      input: UpsertLbmAndPayerConnectionInput!
+    ): LbmAndPayerConnection!
+
+    deleteLbmAndPayerConnection(
+      input: DeleteLbmAndPayerConnectionInput!
+    ): LbmAndPayerConnection!
   }
 `
 

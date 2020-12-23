@@ -3,6 +3,7 @@
 // import lbmAndPersonResolvers from './lbmAndPerson'
 import lbmAndLbmTypeResolvers from './lbmAndLbmType'
 // import lbmAndKeyEventResolvers from './lbmAndKeyEvent'
+import lbmAndPayer from './lbmAndPayer'
 
 export default {
   // ...serviceAndServiceCategoryResolvers,
@@ -10,4 +11,5 @@ export default {
   // ...lbmAndPersonResolvers,
   ...lbmAndLbmTypeResolvers,
   // ...lbmAndKeyEventResolvers,
+  ...lbmAndPayer,
 }

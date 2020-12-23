@@ -8,14 +8,14 @@ import {
 
 import {
   GET_LBM_ORGANIZATIONS,
-  // GET_VIEW_OBM_SERVICES,
-  // GET_VIEW_OBM_PAYER_PARTNERSHIPS,
-  // GET_VIEW_OBM_INFLUENCERS,
+  // GET_VIEW_LBM_SERVICES,
+  GET_VIEW_LBM_PAYER_PARTNERSHIPS,
+  // GET_VIEW_LBM_INFLUENCERS,
 } from 'frontend/api/queries'
 
 // import ObmServicesWidget from './relational-widgets/ObmServicesWidget'
 // import ObmInfluencersWidget from './relational-widgets/ObmInfluencersWidget'
-// import ObmPayersWidget from './relational-widgets/ObmPayersWidget'
+import LbmPayersWidget from './relational-widgets/LbmPayersWidget'
 import LbmTypesWidget from './relational-widgets/LbmTypesWidget'
 // import ObmKeyEventsWidget from './relational-widgets/ObmKeyEventsWidget'
 import BusinessObjectModal from '../BusinessObjectModal/BusinessObjectModal'
@@ -31,26 +31,26 @@ const WIDGETS = [
     label: 'Connect to LBM Type',
     Component: LbmTypesWidget,
   },
-//   {
-//     _id: 'RELATIONAL_obmServicesWidget',
-//     label: 'Connect to OBM Services',
-//     Component: ObmServicesWidget,
-//   },
-//   {
-//     _id: 'RELATIONAL_obmInfluencersWidget',
-//     label: 'Connect to OBM Influencers',
-//     Component: ObmInfluencersWidget,
-//   },
-//   {
-//     _id: 'RELATIONAL_obmPayersWidget',
-//     label: 'Connect to Payers',
-//     Component: ObmPayersWidget,
-//   },
-//   {
-//     _id: 'RELATIONAL_obmKeyEvents',
-//     label: 'Manage Key Events',
-//     Component: ObmKeyEventsWidget,
-//   },
+  // {
+  //   _id: 'RELATIONAL_obmServicesWidget',
+  //   label: 'Connect to LBM Services',
+  //   Component: ObmServicesWidget,
+  // },
+  // {
+  //   _id: 'RELATIONAL_obmInfluencersWidget',
+  //   label: 'Connect to LBM Influencers',
+  //   Component: ObmInfluencersWidget,
+  // },
+  {
+    _id: 'RELATIONAL_obmPayersWidget',
+    label: 'Connect to Payers',
+    Component: LbmPayersWidget,
+  },
+  // {
+  //   _id: 'RELATIONAL_obmKeyEvents',
+  //   label: 'Manage Key Events',
+  //   Component: ObmKeyEventsWidget,
+  // },
 ]
 
 interface LbmModalProps extends ModalAndModalButtonSharedProps {
@@ -77,9 +77,9 @@ const LbmModal = ({
     refetchQueries={[
       ...refetchQueries!,
       { query: GET_LBM_ORGANIZATIONS },
-      // { query: GET_VIEW_OBM_SERVICES },
-      // { query: GET_VIEW_OBM_PAYER_PARTNERSHIPS },
-      // { query: GET_VIEW_OBM_INFLUENCERS },
+      // { query: GET_VIEW_LBM_SERVICES },
+      { query: GET_VIEW_LBM_PAYER_PARTNERSHIPS },
+      // { query: GET_VIEW_LBM_INFLUENCERS },
     ]}
     afterMutationHook={afterMutationHook}
     widgets={WIDGETS}

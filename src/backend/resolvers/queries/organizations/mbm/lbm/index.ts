@@ -4,10 +4,11 @@ import lbmOrganizations from './lbm'
 import lbmTypes from './type'
 // import lbmKeyEvents from './keyEvents'
 import joins from './joins'
-// import views from './views'
+import views from './views'
 
 export default {
   lbmOrganizations,
   lbmTypes,
   ...joins,
+  ...views,
 }
