@@ -1042,12 +1042,33 @@ export const GET_JOIN_OBMS_SERVICES_AND_OBMS_SERVICES_CATEGORIES = gql`
   }
 `
 
+export const GET_JOIN_LBMS_SERVICES_AND_LBMS_SERVICES_CATEGORIES = gql`
+  query getJoinLbmsServicesAndLbmsServicesCategories($lbmServiceId: String) {
+    JOIN_lbmsServices_lbmsServicesCategories(lbmServiceId: $lbmServiceId) {
+      _id
+      lbmServiceId
+      lbmServiceCategoryId
+    }
+  }
+`
+
 export const GET_JOIN_OBMS_AND_OBMS_SERVICES = gql`
   query getJoinObmsAndObmsServices($obmId: String) {
     JOIN_obms_obmsServices(obmId: $obmId) {
       _id
       obmId
       obmServiceId
+      rating
+    }
+  }
+`
+
+export const GET_JOIN_LBMS_AND_LBMS_SERVICES = gql`
+  query getJoinLbmsAndLbmsServices($lbmId: String) {
+    JOIN_lbms_lbmsServices(lbmId: $lbmId) {
+      _id
+      lbmId
+      lbmServiceId
       rating
     }
   }
@@ -1114,6 +1135,21 @@ export const GET_VIEW_OBM_SERVICES = gql`
     VIEW_obmServices {
       _id
       obmId
+      serviceId
+      serviceCategoryId
+      organization
+      serviceCategory
+      service
+      serviceRating
+    }
+  }
+`
+
+export const GET_VIEW_LBM_SERVICES = gql`
+  query getViewLbmServices {
+    VIEW_lbmServices {
+      _id
+      lbmId
       serviceId
       serviceCategoryId
       organization

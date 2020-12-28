@@ -22,7 +22,7 @@ const deleteLbmServiceCategory = async (
     // Step 2: Cascade delete service category connections to services
     await pulseCoreDb
       .collection('JOIN_lbms.services_lbms.services.categories')
-      .deleteMany({ obmServiceCategoryId: _id }, { session })
+      .deleteMany({ lbmServiceCategoryId: _id }, { session })
 
     // Step 3: Cascade delete dev lbmsServices docs connected to category
     await pulseDevDb

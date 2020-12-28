@@ -8,16 +8,16 @@ import {
 
 import {
   GET_LBM_ORGANIZATIONS,
-  // GET_VIEW_LBM_SERVICES,
+  GET_VIEW_LBM_SERVICES,
   GET_VIEW_LBM_PAYER_PARTNERSHIPS,
   // GET_VIEW_LBM_INFLUENCERS,
 } from 'frontend/api/queries'
 
-// import ObmServicesWidget from './relational-widgets/ObmServicesWidget'
-// import ObmInfluencersWidget from './relational-widgets/ObmInfluencersWidget'
+import LbmServicesWidget from './relational-widgets/LbmServicesWidget'
+// import LbmInfluencersWidget from './relational-widgets/LbmInfluencersWidget'
 import LbmPayersWidget from './relational-widgets/LbmPayersWidget'
 import LbmTypesWidget from './relational-widgets/LbmTypesWidget'
-// import ObmKeyEventsWidget from './relational-widgets/ObmKeyEventsWidget'
+// import LbmKeyEventsWidget from './relational-widgets/LbmKeyEventsWidget'
 import BusinessObjectModal from '../BusinessObjectModal/BusinessObjectModal'
 
 import { ModalAndModalButtonSharedProps } from '../shared/interfaces'
@@ -31,25 +31,25 @@ const WIDGETS = [
     label: 'Connect to LBM Type',
     Component: LbmTypesWidget,
   },
+  {
+    _id: 'RELATIONAL_LbmServicesWidget',
+    label: 'Connect to LBM Services',
+    Component: LbmServicesWidget,
+  },
   // {
-  //   _id: 'RELATIONAL_obmServicesWidget',
-  //   label: 'Connect to LBM Services',
-  //   Component: ObmServicesWidget,
-  // },
-  // {
-  //   _id: 'RELATIONAL_obmInfluencersWidget',
+  //   _id: 'RELATIONAL_LbmInfluencersWidget',
   //   label: 'Connect to LBM Influencers',
-  //   Component: ObmInfluencersWidget,
+  //   Component: LbmInfluencersWidget,
   // },
   {
-    _id: 'RELATIONAL_obmPayersWidget',
+    _id: 'RELATIONAL_LbmPayersWidget',
     label: 'Connect to Payers',
     Component: LbmPayersWidget,
   },
   // {
-  //   _id: 'RELATIONAL_obmKeyEvents',
+  //   _id: 'RELATIONAL_LbmKeyEvents',
   //   label: 'Manage Key Events',
-  //   Component: ObmKeyEventsWidget,
+  //   Component: LbmKeyEventsWidget,
   // },
 ]
 
@@ -77,7 +77,7 @@ const LbmModal = ({
     refetchQueries={[
       ...refetchQueries!,
       { query: GET_LBM_ORGANIZATIONS },
-      // { query: GET_VIEW_LBM_SERVICES },
+      { query: GET_VIEW_LBM_SERVICES },
       { query: GET_VIEW_LBM_PAYER_PARTNERSHIPS },
       // { query: GET_VIEW_LBM_INFLUENCERS },
     ]}

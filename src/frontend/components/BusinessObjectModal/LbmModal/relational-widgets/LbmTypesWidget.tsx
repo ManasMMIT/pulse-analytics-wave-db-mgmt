@@ -41,7 +41,7 @@ const LbmTypesWidget = ({ entity }: { entity: { _id: string } }) => {
     }
   )
 
-  const [selectedTypeId, selectCategoryId] = useState<string | null>(null)
+  const [selectedTypeId, selectTypeId] = useState<string | null>(null)
 
   const connections = Object.values(connectionsData || {})[0]
 
@@ -76,11 +76,11 @@ const LbmTypesWidget = ({ entity }: { entity: { _id: string } }) => {
           (connection: LbmAndLbmTypeConnection) => typesById[connection.lbmTypeId]
         )
 
-        const initialCategoryId = validConnections.length
+        const initialTypeId = validConnections.length
           ? validConnections[0].lbmTypeId
           : null
 
-        selectCategoryId(initialCategoryId)
+        selectTypeId(initialTypeId)
       }
     }
   }, [typesLoading, connectionsLoading])
@@ -97,7 +97,7 @@ const LbmTypesWidget = ({ entity }: { entity: { _id: string } }) => {
       <Select
         options={options}
         value={options.find(({ value }) => value === selectedTypeId)}
-        onChange={selection => selectCategoryId(selection!.value)} // can't figure out how to destructure value with TS
+        onChange={selection => selectTypeId(selection!.value)} // can't figure out how to destructure value with TS
       />
 
       <button

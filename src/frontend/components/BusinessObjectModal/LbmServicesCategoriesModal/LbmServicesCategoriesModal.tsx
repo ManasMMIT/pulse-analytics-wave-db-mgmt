@@ -8,8 +8,8 @@ import {
 
 import {
   GET_LBM_SERVICES_CATEGORIES,
-  // GET_VIEW_LBM_SERVICES,
-} from '../../../api/queries'
+  GET_VIEW_LBM_SERVICES,
+} from 'frontend/api/queries'
 
 import BusinessObjectModal from '../BusinessObjectModal/BusinessObjectModal'
 
@@ -41,7 +41,7 @@ const LbmServicesCategoriesModal = ({
     refetchQueries={[
       ...refetchQueries!,
       { query: GET_LBM_SERVICES_CATEGORIES },
-      // { query: GET_VIEW_LBM_SERVICES },
+      { query: GET_VIEW_LBM_SERVICES },
     ]}
     afterMutationHook={afterMutationHook}
   />

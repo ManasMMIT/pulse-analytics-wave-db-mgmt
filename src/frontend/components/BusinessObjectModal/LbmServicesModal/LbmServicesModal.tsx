@@ -8,10 +8,10 @@ import {
 
 import { 
   GET_LBM_SERVICES,
-  // GET_VIEW_LBM_SERVICES 
-} from '../../../api/queries'
+  GET_VIEW_LBM_SERVICES 
+} from 'frontend/api/queries'
 
-// import LbmServiceCategoryWidget from './relational-widgets/LbmServiceCategoryWidget'
+import LbmServiceCategoryWidget from './relational-widgets/LbmServiceCategoryWidget'
 import BusinessObjectModal from '../BusinessObjectModal/BusinessObjectModal'
 
 import { ModalAndModalButtonSharedProps } from '../shared/interfaces'
@@ -23,13 +23,13 @@ interface LbmServicesModalProps extends ModalAndModalButtonSharedProps {
   closeModal: () => void
 }
 
-// const WIDGETS = [
-//   {
-//     _id: 'RELATIONAL_lbmServiceCategoryWidget',
-//     label: 'Connect to LBM Service Category',
-//     Component: LbmServiceCategoryWidget,
-//   },
-// ]
+const WIDGETS = [
+  {
+    _id: 'RELATIONAL_lbmServiceCategoryWidget',
+    label: 'Connect to LBM Service Category',
+    Component: LbmServiceCategoryWidget,
+  },
+]
 
 const LbmServicesModal = ({
   closeModal,
@@ -50,10 +50,10 @@ const LbmServicesModal = ({
     refetchQueries={[
       ...refetchQueries!,
       { query: GET_LBM_SERVICES },
-      // { query: GET_VIEW_LBM_SERVICES },
+      { query: GET_VIEW_LBM_SERVICES },
     ]}
     afterMutationHook={afterMutationHook}
-    // widgets={WIDGETS}
+    widgets={WIDGETS}
   />
 )
 
