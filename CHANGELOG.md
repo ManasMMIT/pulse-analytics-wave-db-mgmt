@@ -12,7 +12,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Fixed** for any bug fixes.
 - **Security** in case of vulnerabilities.
 
-## [Unreleased] - Started: 12-16-20
+## [Unreleased] - Started: 12-28-20
+
+## [4.3.0] - Started: 12-16-20
 
 ### Added
 - `Orion/LBM CRUD`
