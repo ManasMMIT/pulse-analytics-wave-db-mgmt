@@ -1120,6 +1120,18 @@ export const GET_JOIN_OBMS_AND_PEOPLE = gql`
   }
 `
 
+export const GET_JOIN_LBMS_AND_PEOPLE = gql`
+  query getJoinLbmsAndPeople {
+    JOIN_lbms_people {
+      _id
+      lbmId
+      personId
+      position
+      managementTypes
+    }
+  }
+`
+
 export const GET_JOIN_OBMS_AND_PAYERS = gql`
   query getJoinObmsAndPayers($obmId: ID) {
     JOIN_obms_payers(obmId: $obmId) {
@@ -1224,6 +1236,21 @@ export const GET_VIEW_OBM_INFLUENCERS = gql`
       _id
       obmId
       obmOrganization
+      influencerPosition
+      influencerId
+      influencerFirstName
+      influencerLastName
+      influencerNpiNumber
+    }
+  }
+`
+
+export const GET_VIEW_LBM_INFLUENCERS = gql`
+  query getViewLbmInfluencers {
+    VIEW_lbmInfluencers {
+      _id
+      lbmId
+      lbmOrganization
       influencerPosition
       influencerId
       influencerFirstName

@@ -10,11 +10,11 @@ import {
   GET_LBM_ORGANIZATIONS,
   GET_VIEW_LBM_SERVICES,
   GET_VIEW_LBM_PAYER_PARTNERSHIPS,
-  // GET_VIEW_LBM_INFLUENCERS,
+  GET_VIEW_LBM_INFLUENCERS,
 } from 'frontend/api/queries'
 
+import LbmInfluencersWidget from './relational-widgets/LbmInfluencersWidget'
 import LbmServicesWidget from './relational-widgets/LbmServicesWidget'
-// import LbmInfluencersWidget from './relational-widgets/LbmInfluencersWidget'
 import LbmPayersWidget from './relational-widgets/LbmPayersWidget'
 import LbmTypesWidget from './relational-widgets/LbmTypesWidget'
 import LbmKeyEventsWidget from './relational-widgets/LbmKeyEventsWidget'
@@ -36,11 +36,11 @@ const WIDGETS = [
     label: 'Connect to LBM Services',
     Component: LbmServicesWidget,
   },
-  // {
-  //   _id: 'RELATIONAL_LbmInfluencersWidget',
-  //   label: 'Connect to LBM Influencers',
-  //   Component: LbmInfluencersWidget,
-  // },
+  {
+    _id: 'RELATIONAL_lbmInfluencersWidget',
+    label: 'Connect to LBM Influencers',
+    Component: LbmInfluencersWidget,
+  },
   {
     _id: 'RELATIONAL_lbmPayersWidget',
     label: 'Connect to Payers',
@@ -79,7 +79,7 @@ const LbmModal = ({
       { query: GET_LBM_ORGANIZATIONS },
       { query: GET_VIEW_LBM_SERVICES },
       { query: GET_VIEW_LBM_PAYER_PARTNERSHIPS },
-      // { query: GET_VIEW_LBM_INFLUENCERS },
+      { query: GET_VIEW_LBM_INFLUENCERS },
     ]}
     afterMutationHook={afterMutationHook}
     widgets={WIDGETS}

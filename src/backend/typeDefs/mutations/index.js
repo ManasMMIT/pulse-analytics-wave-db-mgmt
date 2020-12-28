@@ -219,6 +219,10 @@ const mutationType = gql`
       input: [ConnectObmAndPersonInput!]!
     ): [ConnectObmAndPersonPayload!]!
 
+    connectLbmAndPerson(
+      input: [ConnectLbmAndPersonInput!]!
+    ): [ConnectLbmAndPersonPayload!]!
+
     connectObmAndKeyEvent(input: ConnectObmAndKeyEventInput!): [ObmKeyEvent!]!
     connectLbmAndKeyEvent(input: ConnectLbmAndKeyEventInput!): [LbmKeyEvent!]!
 

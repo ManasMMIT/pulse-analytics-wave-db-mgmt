@@ -5,7 +5,7 @@ import Button from 'frontend/components/Button'
 import PeopleModal from './PeopleModal'
 
 const PeopleModalButton = ({
-  buttonStyle = {},
+  buttonStyle,
   children,
   entityId,
   refetchQueries,
@@ -29,6 +29,14 @@ const PeopleModalButton = ({
       )}
     </>
   )
+}
+
+PeopleModalButton.defaultProps = {
+  buttonStyle: {},
+  children: undefined,
+  entityId: undefined,
+  refetchQueries: undefined,
+  afterMutationHook: undefined,
 }
 
 export default PeopleModalButton

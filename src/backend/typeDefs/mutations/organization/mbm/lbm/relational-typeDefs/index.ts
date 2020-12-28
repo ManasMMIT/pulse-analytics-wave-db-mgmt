@@ -1,7 +1,7 @@
 import serviceAndServiceCategoryTypeDefs from './serviceAndServiceCategory'
 import lbmAndServiceTypeDefs from './lbmAndService'
 import lbmAndLbmTypeTypeDefs from './lbmAndLbmType'
-// import lbmAndPersonTypeDefs from './lbmAndPerson'
+import lbmAndPersonTypeDefs from './lbmAndPerson'
 import lbmAndKeyEvent from './lbmAndKeyEvent'
 import lbmAndPayer from './lbmAndPayer'
 
@@ -9,7 +9,7 @@ export default [
   ...serviceAndServiceCategoryTypeDefs,
   ...lbmAndServiceTypeDefs,
   ...lbmAndLbmTypeTypeDefs,
-  // ...lbmAndPersonTypeDefs,
+  ...lbmAndPersonTypeDefs,
   ...lbmAndKeyEvent,
   ...lbmAndPayer,
 ]

@@ -473,6 +473,18 @@ export const CONNECT_OBM_AND_PERSON = gql`
   }
 `
 
+export const CONNECT_LBM_AND_PERSON = gql`
+  mutation ConnectLbmAndPerson($input: [ConnectLbmAndPersonInput!]!) {
+    connectLbmAndPerson(input: $input) {
+      _id
+      lbmId
+      personId
+      position
+      managementTypes
+    }
+  }
+`
+
 export const CONNECT_OBM_AND_KEY_EVENT = gql`
   mutation ConnectObmAndKeyEvent($input: ConnectObmAndKeyEventInput!) {
     connectObmAndKeyEvent(input: $input) {

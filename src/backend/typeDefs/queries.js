@@ -52,6 +52,7 @@ const queries = gql`
     JOIN_lbms_lbmsTypes(lbmId: String): [LbmAndLbmTypeConnection]
 
     JOIN_obms_people: [ObmAndPersonConnection]
+    JOIN_lbms_people: [LbmAndPersonConnection]
 
     JOIN_obms_payers(obmId: ID): [ObmAndPayerConnection]
     JOIN_lbms_payers(lbmId: ID): [LbmAndPayerConnection]
@@ -63,6 +64,7 @@ const queries = gql`
     VIEW_lbmPayerPartnerships: [VIEW_LbmPayerPartnership]
 
     VIEW_obmInfluencers: [VIEW_ObmInfluencer]
+    VIEW_lbmInfluencers: [VIEW_LbmInfluencer]
 
     JOIN_pathways_people: [PathwaysAndPersonConnection]
 
@@ -494,6 +496,14 @@ const queries = gql`
     managementTypes: [String!]
   }
 
+  type LbmAndPersonConnection {
+    _id: ID!
+    lbmId: ID!
+    personId: ID!
+    position: String
+    managementTypes: [String!]
+  }
+
   type ObmAndPayerConnection {
     _id: ID!
     obmId: String!
@@ -543,6 +553,17 @@ const queries = gql`
     _id: ID!
     obmId: String!
     obmOrganization: String!
+    influencerPosition: String
+    influencerId: String!
+    influencerFirstName: String!
+    influencerLastName: String!
+    influencerNpiNumber: Float
+  }
+
+  type VIEW_LbmInfluencer {
+    _id: ID!
+    lbmId: String!
+    lbmOrganization: String!
     influencerPosition: String
     influencerId: String!
     influencerFirstName: String!
