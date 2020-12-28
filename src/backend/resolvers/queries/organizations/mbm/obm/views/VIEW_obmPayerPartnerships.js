@@ -1,13 +1,13 @@
-const payerPartnerLivesAggPipeline = require('./payerPartnerLivesAggPipeline')
+import getPayerPartnerLivesAggPipelines from '../../getPayerPartnerLivesAggPipeline'
 
 const VIEW_OBM_PAYER_PARTNERSHIPS_AGG_PIPELINE = [
-  ...payerPartnerLivesAggPipeline,
+  ...getPayerPartnerLivesAggPipelines('obm'),
   {
     $group: {
       _id: {
         _id: '$_id',
-        obmId: '$obm._id',
-        obmOrganization: '$obm.organization',
+        obmId: '$mbm._id',
+        obmOrganization: '$mbm.organization',
         payerId: '$payer._id',
         payerSlug: '$payer.slug',
         payerOrganization: '$payer.organization',

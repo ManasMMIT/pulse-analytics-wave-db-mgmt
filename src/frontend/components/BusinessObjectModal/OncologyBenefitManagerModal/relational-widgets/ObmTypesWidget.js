@@ -21,7 +21,7 @@ const ObmTypesWidget = ({ entity }) => {
     }
   )
 
-  const [selectedTypeId, selectCategoryId] = useState(null)
+  const [selectedTypeId, selectTypeId] = useState(null)
 
   const connections = Object.values(connectionsData || {})[0]
 
@@ -56,11 +56,11 @@ const ObmTypesWidget = ({ entity }) => {
           (connection) => typesById[connection.obmTypeId]
         )
 
-        const initialCategoryId = validConnections.length
+        const initialTypeId = validConnections.length
           ? validConnections[0].obmTypeId
           : null
 
-        selectCategoryId(initialCategoryId)
+        selectTypeId(initialTypeId)
       }
     }
   }, [typesLoading, connectionsLoading])
@@ -77,7 +77,7 @@ const ObmTypesWidget = ({ entity }) => {
       <Select
         options={options}
         value={options.find(({ value }) => value === selectedTypeId)}
-        onChange={({ value }) => selectCategoryId(value)}
+        onChange={({ value }) => selectTypeId(value)}
       />
 
       <button

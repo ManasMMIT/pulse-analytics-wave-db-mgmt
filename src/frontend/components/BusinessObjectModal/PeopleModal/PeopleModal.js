@@ -11,6 +11,7 @@ import {
   GET_JOIN_OBMS_AND_PEOPLE,
   GET_JOIN_PATHWAYS_AND_PEOPLE,
   GET_VIEW_OBM_INFLUENCERS,
+  GET_VIEW_LBM_INFLUENCERS,
   GET_EVENTS,
 } from '../../../api/queries'
 
@@ -81,6 +82,7 @@ const PeopleModal = ({
       { query: GET_PEOPLE },
       { query: GET_JOIN_OBMS_AND_PEOPLE },
       { query: GET_VIEW_OBM_INFLUENCERS },
+      { query: GET_VIEW_LBM_INFLUENCERS },
       { query: GET_EVENTS },
     ]}
     afterMutationHook={afterMutationHook}

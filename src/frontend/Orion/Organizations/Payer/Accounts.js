@@ -17,6 +17,9 @@ import {
   GET_PATHWAYS_ORGANIZATIONS,
   GET_APM_ORGANIZATIONS,
   GET_VIEW_OBM_PAYER_PARTNERSHIPS,
+  GET_JOIN_OBMS_AND_PAYERS,
+  GET_JOIN_LBMS_AND_PAYERS,
+  GET_VIEW_LBM_PAYER_PARTNERSHIPS,
 } from './../../../api/queries'
 
 import Color from './../../../utils/color'
@@ -77,6 +80,9 @@ const buttonGroupCallback = (entity) => (
         { query: GET_PATHWAYS_ORGANIZATIONS },
         { query: GET_APM_ORGANIZATIONS },
         { query: GET_VIEW_OBM_PAYER_PARTNERSHIPS },
+        { query: GET_JOIN_OBMS_AND_PAYERS },
+        { query: GET_JOIN_LBMS_AND_PAYERS },
+        { query: GET_VIEW_LBM_PAYER_PARTNERSHIPS },
       ]}
     />
   </>

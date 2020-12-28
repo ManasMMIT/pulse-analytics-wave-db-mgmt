@@ -24,21 +24,47 @@ const queries = gql`
 
     obmOrganizations: [ObmOrganization]
     lbmOrganizations: [LbmOrganization]
+
     obmServices: [ObmService]
+    lbmServices: [LbmService]
+
     obmServicesCategories: [ObmServiceCategory]
+    lbmServicesCategories: [LbmServiceCategory]
+
     obmTypes: [ObmType]
+    lbmTypes: [LbmType!]!
+
     obmKeyEvents(obmId: String): [ObmKeyEvent!]!
+    lbmKeyEvents(lbmId: String): [LbmKeyEvent!]!
+
     JOIN_obmsServices_obmsServicesCategories(
       obmServiceId: String
     ): [ObmServiceAndObmServiceCategoryConnection]
+
+    JOIN_lbmsServices_lbmsServicesCategories(
+      lbmServiceId: String
+    ): [LbmServiceAndLbmServiceCategoryConnection]
+
     JOIN_obms_obmsServices(obmId: String): [ObmAndObmServiceConnection]
+    JOIN_lbms_lbmsServices(lbmId: String): [LbmAndLbmServiceConnection]
+
     JOIN_obms_obmsTypes(obmId: String): [ObmAndObmTypeConnection]
+    JOIN_lbms_lbmsTypes(lbmId: String): [LbmAndLbmTypeConnection]
+
     JOIN_obms_people: [ObmAndPersonConnection]
+    JOIN_lbms_people: [LbmAndPersonConnection]
+
     JOIN_obms_payers(obmId: ID): [ObmAndPayerConnection]
+    JOIN_lbms_payers(lbmId: ID): [LbmAndPayerConnection]
 
     VIEW_obmServices: [VIEW_ObmService]
+    VIEW_lbmServices: [VIEW_LbmService]
+
     VIEW_obmPayerPartnerships: [VIEW_ObmPayerPartnership]
+    VIEW_lbmPayerPartnerships: [VIEW_LbmPayerPartnership]
+
     VIEW_obmInfluencers: [VIEW_ObmInfluencer]
+    VIEW_lbmInfluencers: [VIEW_LbmInfluencer]
 
     JOIN_pathways_people: [PathwaysAndPersonConnection]
 
@@ -396,12 +422,29 @@ const queries = gql`
     description: String
   }
 
+  type LbmService {
+    _id: ID!
+    name: String!
+    description: String
+  }
+
   type ObmServiceCategory {
     _id: ID!
     name: String!
   }
 
+  type LbmServiceCategory {
+    _id: ID!
+    name: String!
+  }
+
   type ObmType {
+    _id: ID!
+    name: String!
+    description: String
+  }
+
+  type LbmType {
     _id: ID!
     name: String!
     description: String
@@ -413,6 +456,12 @@ const queries = gql`
     obmServiceCategoryId: String!
   }
 
+  type LbmServiceAndLbmServiceCategoryConnection {
+    _id: ID!
+    lbmServiceId: String!
+    lbmServiceCategoryId: String!
+  }
+
   type ObmAndObmServiceConnection {
     _id: ID!
     obmId: String!
@@ -420,10 +469,23 @@ const queries = gql`
     rating: Int!
   }
 
+  type LbmAndLbmServiceConnection {
+    _id: ID!
+    lbmId: String!
+    lbmServiceId: String!
+    rating: Int!
+  }
+
   type ObmAndObmTypeConnection {
     _id: ID!
     obmId: String!
     obmTypeId: String!
+  }
+
+  type LbmAndLbmTypeConnection {
+    _id: ID!
+    lbmId: String!
+    lbmTypeId: String!
   }
 
   type ObmAndPersonConnection {
@@ -434,9 +496,25 @@ const queries = gql`
     managementTypes: [String!]
   }
 
+  type LbmAndPersonConnection {
+    _id: ID!
+    lbmId: ID!
+    personId: ID!
+    position: String
+    managementTypes: [String!]
+  }
+
   type ObmAndPayerConnection {
     _id: ID!
     obmId: String!
+    payerId: String!
+    books: [JSON!]!
+    note: String
+  }
+
+  type LbmAndPayerConnection {
+    _id: ID!
+    lbmId: String!
     payerId: String!
     books: [JSON!]!
     note: String
@@ -461,10 +539,31 @@ const queries = gql`
     internalTdgNote: String
   }
 
+  type LbmKeyEvent {
+    _id: ID!
+    lbmId: String!
+    date: Date
+    title: String
+    description: String
+    link: String
+    internalTdgNote: String
+  }
+
   type VIEW_ObmInfluencer {
     _id: ID!
     obmId: String!
     obmOrganization: String!
+    influencerPosition: String
+    influencerId: String!
+    influencerFirstName: String!
+    influencerLastName: String!
+    influencerNpiNumber: Float
+  }
+
+  type VIEW_LbmInfluencer {
+    _id: ID!
+    lbmId: String!
+    lbmOrganization: String!
     influencerPosition: String
     influencerId: String!
     influencerFirstName: String!
@@ -483,10 +582,39 @@ const queries = gql`
     serviceRating: Int!
   }
 
+  type VIEW_LbmService {
+    _id: ID!
+    lbmId: String!
+    serviceId: String!
+    serviceCategoryId: String
+    organization: String!
+    serviceCategory: String
+    service: String!
+    serviceRating: Int!
+  }
+
   type VIEW_ObmPayerPartnership {
     _id: ID!
     obmId: String!
     obmOrganization: String!
+    payerId: String!
+    payerSlug: String!
+    payerOrganization: String!
+    commercialMedicalLives: Float
+    commercialMedicalLivesPercent: Float
+    commercialReach: String
+    medicareMedicalLives: Float
+    medicareMedicalLivesPercent: Float
+    medicareReach: String
+    managedMedicaidMedicalLives: Float
+    managedMedicaidMedicalLivesPercent: Float
+    managedMedicaidReach: String
+  }
+
+  type VIEW_LbmPayerPartnership {
+    _id: ID!
+    lbmId: String!
+    lbmOrganization: String!
     payerId: String!
     payerSlug: String!
     payerOrganization: String!

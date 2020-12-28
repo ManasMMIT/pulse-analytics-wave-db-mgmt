@@ -151,9 +151,17 @@ const mutationType = gql`
       input: UpdateObmOrganizationInput!
     ): UpdateObmOrganizationPayload!
 
+    createLbmOrganization(input: CreateLbmOrganizationInput!): LbmOrganization! # reusing LbmOrganization type from src/backend/typeDefs/queries.js
+    deleteLbmOrganization(input: DeleteLbmOrganizationInput!): LbmOrganization!
+    updateLbmOrganization(input: UpdateLbmOrganizationInput!): LbmOrganization!
+
     createObmService(input: CreateObmServiceInput!): CreateObmServicePayload!
     updateObmService(input: UpdateObmServiceInput!): UpdateObmServicePayload!
     deleteObmService(input: DeleteObmServiceInput!): DeleteObmServicePayload!
+
+    createLbmService(input: CreateLbmServiceInput!): CreateLbmServicePayload!
+    updateLbmService(input: UpdateLbmServiceInput!): UpdateLbmServicePayload!
+    deleteLbmService(input: DeleteLbmServiceInput!): DeleteLbmServicePayload!
 
     createObmServiceCategory(
       input: CreateObmServiceCategoryInput!
@@ -165,23 +173,58 @@ const mutationType = gql`
       input: DeleteObmServiceCategoryInput!
     ): DeleteObmServiceCategoryPayload!
 
+    createLbmServiceCategory(
+      input: CreateLbmServiceCategoryInput!
+    ): CreateLbmServiceCategoryPayload!
+    updateLbmServiceCategory(
+      input: UpdateLbmServiceCategoryInput!
+    ): UpdateLbmServiceCategoryPayload!
+    deleteLbmServiceCategory(
+      input: DeleteLbmServiceCategoryInput!
+    ): DeleteLbmServiceCategoryPayload!
+
     createObmType(input: CreateObmTypeInput!): CreateObmTypePayload!
     updateObmType(input: UpdateObmTypeInput!): UpdateObmTypePayload!
     deleteObmType(input: DeleteObmTypeInput!): DeleteObmTypePayload!
 
+    createLbmType(input: CreateLbmTypeInput!): LbmType!
+    updateLbmType(input: UpdateLbmTypeInput!): LbmType!
+    deleteLbmType(input: DeleteLbmTypeInput!): LbmType!
+
     connectObmServiceAndObmServiceCategory(
       input: ConnectObmServiceAndObmServiceCategoryInput!
     ): ConnectObmServiceAndObmServiceCategoryPayload!
+
+    connectLbmServiceAndLbmServiceCategory(
+      input: ConnectLbmServiceAndLbmServiceCategoryInput!
+    ): ConnectLbmServiceAndLbmServiceCategoryPayload!
+
     connectObmAndObmService(
       input: [ConnectObmAndObmServiceInput!]!
     ): [ConnectObmAndObmServicePayload!]!
+
+    connectLbmAndLbmService(
+      input: [ConnectLbmAndLbmServiceInput!]!
+    ): [ConnectLbmAndLbmServicePayload!]!
+
     connectObmAndObmType(
       input: ConnectObmAndObmTypeInput!
     ): ConnectObmAndObmTypePayload!
+
+    connectLbmAndLbmType(
+      input: ConnectLbmAndLbmTypeInput!
+    ): ConnectLbmAndLbmTypePayload!
+
     connectObmAndPerson(
       input: [ConnectObmAndPersonInput!]!
     ): [ConnectObmAndPersonPayload!]!
+
+    connectLbmAndPerson(
+      input: [ConnectLbmAndPersonInput!]!
+    ): [ConnectLbmAndPersonPayload!]!
+
     connectObmAndKeyEvent(input: ConnectObmAndKeyEventInput!): [ObmKeyEvent!]!
+    connectLbmAndKeyEvent(input: ConnectLbmAndKeyEventInput!): [LbmKeyEvent!]!
 
     upsertOrganizationMeta(
       input: UpsertOrganizationMetaInput!
@@ -352,6 +395,14 @@ const mutationType = gql`
     deleteObmAndPayerConnection(
       input: DeleteObmAndPayerConnectionInput!
     ): ObmAndPayerConnection!
+
+    upsertLbmAndPayerConnection(
+      input: UpsertLbmAndPayerConnectionInput!
+    ): LbmAndPayerConnection!
+
+    deleteLbmAndPayerConnection(
+      input: DeleteLbmAndPayerConnectionInput!
+    ): LbmAndPayerConnection!
   }
 `
 

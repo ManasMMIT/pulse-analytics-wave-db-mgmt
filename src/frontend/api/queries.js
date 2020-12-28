@@ -771,9 +771,28 @@ export const GET_OBM_SERVICES = gql`
   }
 `
 
+export const GET_LBM_SERVICES = gql`
+  query getLbmServices {
+    lbmServices {
+      _id
+      name
+      description
+    }
+  }
+`
+
 export const GET_OBM_SERVICES_CATEGORIES = gql`
   query getObmServicesCategories {
     obmServicesCategories {
+      _id
+      name
+    }
+  }
+`
+
+export const GET_LBM_SERVICES_CATEGORIES = gql`
+  query getLbmServicesCategories {
+    lbmServicesCategories {
       _id
       name
     }
@@ -790,11 +809,35 @@ export const GET_OBM_TYPES = gql`
   }
 `
 
+export const GET_LBM_TYPES = gql`
+  query getLbmTypes {
+    lbmTypes {
+      _id
+      name
+      description
+    }
+  }
+`
+
 export const GET_OBM_KEY_EVENTS = gql`
   query getObmKeyEvents($obmId: String) {
     obmKeyEvents(obmId: $obmId) {
       _id
       obmId
+      date
+      title
+      description
+      link
+      internalTdgNote
+    }
+  }
+`
+
+export const GET_LBM_KEY_EVENTS = gql`
+  query getLbmKeyEvents($lbmId: String) {
+    lbmKeyEvents(lbmId: $lbmId) {
+      _id
+      lbmId
       date
       title
       description
@@ -1013,12 +1056,33 @@ export const GET_JOIN_OBMS_SERVICES_AND_OBMS_SERVICES_CATEGORIES = gql`
   }
 `
 
+export const GET_JOIN_LBMS_SERVICES_AND_LBMS_SERVICES_CATEGORIES = gql`
+  query getJoinLbmsServicesAndLbmsServicesCategories($lbmServiceId: String) {
+    JOIN_lbmsServices_lbmsServicesCategories(lbmServiceId: $lbmServiceId) {
+      _id
+      lbmServiceId
+      lbmServiceCategoryId
+    }
+  }
+`
+
 export const GET_JOIN_OBMS_AND_OBMS_SERVICES = gql`
   query getJoinObmsAndObmsServices($obmId: String) {
     JOIN_obms_obmsServices(obmId: $obmId) {
       _id
       obmId
       obmServiceId
+      rating
+    }
+  }
+`
+
+export const GET_JOIN_LBMS_AND_LBMS_SERVICES = gql`
+  query getJoinLbmsAndLbmsServices($lbmId: String) {
+    JOIN_lbms_lbmsServices(lbmId: $lbmId) {
+      _id
+      lbmId
+      lbmServiceId
       rating
     }
   }
@@ -1034,11 +1098,33 @@ export const GET_JOIN_OBMS_AND_OBMS_TYPES = gql`
   }
 `
 
+export const GET_JOIN_LBMS_AND_LBMS_TYPES = gql`
+  query getJoinLbmsAndLbmsTypes($lbmId: String) {
+    JOIN_lbms_lbmsTypes(lbmId: $lbmId) {
+      _id
+      lbmId
+      lbmTypeId
+    }
+  }
+`
+
 export const GET_JOIN_OBMS_AND_PEOPLE = gql`
   query getJoinObmsAndPeople {
     JOIN_obms_people {
       _id
       obmId
+      personId
+      position
+      managementTypes
+    }
+  }
+`
+
+export const GET_JOIN_LBMS_AND_PEOPLE = gql`
+  query getJoinLbmsAndPeople {
+    JOIN_lbms_people {
+      _id
+      lbmId
       personId
       position
       managementTypes
@@ -1058,11 +1144,38 @@ export const GET_JOIN_OBMS_AND_PAYERS = gql`
   }
 `
 
+export const GET_JOIN_LBMS_AND_PAYERS = gql`
+  query getJoinLbmsAndPayers($lbmId: ID) {
+    JOIN_lbms_payers(lbmId: $lbmId) {
+      _id
+      lbmId
+      payerId
+      books
+      note
+    }
+  }
+`
+
 export const GET_VIEW_OBM_SERVICES = gql`
   query getViewObmServices {
     VIEW_obmServices {
       _id
       obmId
+      serviceId
+      serviceCategoryId
+      organization
+      serviceCategory
+      service
+      serviceRating
+    }
+  }
+`
+
+export const GET_VIEW_LBM_SERVICES = gql`
+  query getViewLbmServices {
+    VIEW_lbmServices {
+      _id
+      lbmId
       serviceId
       serviceCategoryId
       organization
@@ -1095,12 +1208,49 @@ export const GET_VIEW_OBM_PAYER_PARTNERSHIPS = gql`
   }
 `
 
+export const GET_VIEW_LBM_PAYER_PARTNERSHIPS = gql`
+  query getViewLbmPayerPartnerships {
+    VIEW_lbmPayerPartnerships {
+      _id
+      lbmId
+      lbmOrganization
+      payerId
+      payerSlug
+      payerOrganization
+      commercialMedicalLives
+      commercialMedicalLivesPercent
+      commercialReach
+      medicareMedicalLives
+      medicareMedicalLivesPercent
+      medicareReach
+      managedMedicaidMedicalLives
+      managedMedicaidMedicalLivesPercent
+      managedMedicaidReach
+    }
+  }
+`
+
 export const GET_VIEW_OBM_INFLUENCERS = gql`
   query getViewObmInfluencers {
     VIEW_obmInfluencers {
       _id
       obmId
       obmOrganization
+      influencerPosition
+      influencerId
+      influencerFirstName
+      influencerLastName
+      influencerNpiNumber
+    }
+  }
+`
+
+export const GET_VIEW_LBM_INFLUENCERS = gql`
+  query getViewLbmInfluencers {
+    VIEW_lbmInfluencers {
+      _id
+      lbmId
+      lbmOrganization
       influencerPosition
       influencerId
       influencerFirstName

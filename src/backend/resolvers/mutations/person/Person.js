@@ -98,8 +98,22 @@ class Person {
       )
       .then(({ value }) => value)
 
-    // Step 2: Cascade update pulse-dev.obmsInfluencers
+    // Step 2: Cascade update mbmInfluencers collections:
+    // pulse-dev.obmsInfluencers and pulse-dev.lbmsInfluencers
     await pulseDevDb.collection('obmsInfluencers').updateMany(
+      { 'person._id': updatedPerson._id },
+      {
+        $set: {
+          'person.firstName': updatedPerson.firstName,
+          'person.lastName': updatedPerson.lastName,
+          'person.nationalProviderIdentifier':
+            updatedPerson.nationalProviderIdentifier,
+        },
+      },
+      { session }
+    )
+
+    await pulseDevDb.collection('lbmsInfluencers').updateMany(
       { 'person._id': updatedPerson._id },
       {
         $set: {
@@ -146,14 +160,23 @@ class Person {
       .collection(SOURCE_COLLECTION)
       .findOneAndDelete({ _id }, { session })
 
-    // Step 2: Cascade delete person if an obm influencer
+    // Step 2: Cascade delete person if an obm or lbm influencer
     await pulseCoreDb
       .collection('JOIN_obms_people')
       .deleteMany({ personId: _id }, { session })
 
-    // Step 3: Cascade delete JOIN entries connected to person in pulse-dev.obmsInfluencers
+    await pulseCoreDb
+      .collection('JOIN_lbms_people')
+      .deleteMany({ personId: _id }, { session })
+
+    // Step 3: Cascade delete JOIN entries connected to person in mbmInfluencerCollections:
+    // pulse-dev.obmsInfluencers and pulse-dev.lbmsInfluencers
     await pulseDevDb
       .collection('obmsInfluencers')
+      .deleteMany({ 'person._id': _id }, { session })
+
+    await pulseDevDb
+      .collection('lbmsInfluencers')
       .deleteMany({ 'person._id': _id }, { session })
 
     // Step 4: Delete all pathways/people connections touching that person, core and dev

@@ -1,6 +1,6 @@
 {
   "name": "wave-db-mgmt",
-  "version": "4.2.0",
+  "version": "4.3.0",
   "description": "A repository for managing data into Pulse databases.",
   "repository": "https://github.com/pulse-data/wave-db-mgmt.git",
   "license": "MIT",

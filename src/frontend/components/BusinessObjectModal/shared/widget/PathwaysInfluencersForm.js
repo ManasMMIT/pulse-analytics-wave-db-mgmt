@@ -23,7 +23,7 @@ import {
   FormWrapper,
   FlexWrapper,
   RequiredLabel,
-} from './ConnectionPanel/styledComponents'
+} from './orgInfluencerConnectionComponents/ConnectionPanel/styledComponents'
 
 import { ALERT_TYPES } from './alert-types'
 

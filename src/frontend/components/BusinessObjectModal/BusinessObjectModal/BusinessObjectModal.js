@@ -163,7 +163,7 @@ const BusinessObjectModal = ({
 }
 
 BusinessObjectModal.propTypes = {
-  entityId: PropTypes.string.isRequired,
+  entityId: PropTypes.string, // could be null when creating an instance of a bo
   boId: PropTypes.string.isRequired,
   closeModal: PropTypes.func,
   headerText: PropTypes.string,

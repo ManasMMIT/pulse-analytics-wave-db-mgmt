@@ -16,7 +16,7 @@ import {
   Description,
   IconWrapper,
   listItemStyle,
-} from '../../../shared/widget/ConnectionsList/styledComponents'
+} from '../../../shared/widget/orgInfluencerConnectionComponents/ConnectionsList/styledComponents'
 
 const ConnectionListItem = ({
   formatter,

@@ -26,6 +26,7 @@ const getCascadeCollectionConfigs = ({ pulseDevDb, pulseCoreDb }) => [
       'JOIN_obms_payers',
       'JOIN_obms_obms.types',
       'JOIN_obms_obms.services',
+      'obms.keyEvents',
     ],
   },
 ]

@@ -12,7 +12,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Fixed** for any bug fixes.
 - **Security** in case of vulnerabilities.
 
-## [Unreleased] - Started: 12-16-20
+## [Unreleased] - Started: 12-28-20
+
+## [4.3.0] - Started: 12-16-20
+
+### Added
+- `Orion/LBM CRUD`
+  - Build out LBM basic CRUD and Account Overview [#886](https://github.com/pulse-analytics/wave-db-mgmt/pull/886)
+  - Build out LBM types basic CRUD and power select [#887](https://github.com/pulse-analytics/wave-db-mgmt/pull/887)
+  - Build out LBM <=> LBM types connections widget and CRUD [#888](https://github.com/pulse-analytics/wave-db-mgmt/pull/888)
+  - Build out LBM <=> Payer connections widget and CRUD [#892](https://github.com/pulse-analytics/wave-db-mgmt/pull/892)
+  - Build out LBM Payer Partnerships template table view [#893](https://github.com/pulse-analytics/wave-db-mgmt/pull/893)
+  - Build out LBM Service Category CRUD [#894](https://github.com/pulse-analytics/wave-db-mgmt/pull/894)
+  - Build out LBM Service CRUD [#895](https://github.com/pulse-analytics/wave-db-mgmt/pull/895)
+  - Build out LBM <=> People connections widget and CRUD [#899](https://github.com/pulse-analytics/wave-db-mgmt/pull/899)
+  - Build out LBM Influencers template table view [#900](https://github.com/pulse-analytics/wave-db-mgmt/pull/900)
+  - Build out LBM Service <=> LBM Service Category CRUD [#896](https://github.com/pulse-analytics/wave-db-mgmt/pull/896)
+  - Build out LBM <=> LBM Service CRUD [#897](https://github.com/pulse-analytics/wave-db-mgmt/pull/897)
+  - Build out LBM Services VIEW page [#898](https://github.com/pulse-analytics/wave-db-mgmt/pull/898)
+  - Build out LBM Key Events CRUD [#901](https://github.com/pulse-analytics/wave-db-mgmt/pull/901)
 
 ## [4.2.0] - Started: 12-11-20
 

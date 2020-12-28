@@ -1,5 +1,6 @@
-import { jsx } from '@emotion/core'
 import React, { useState } from 'react'
+
+import Button from 'frontend/components/Button'
 
 import ApmsModal from './ApmsModal'
 
@@ -14,9 +15,9 @@ const ApmsModalButton = ({
 
   return (
     <>
-      <button css={buttonStyle} onClick={() => setModal(!showModal)}>
+      <Button buttonStyle={buttonStyle} onClick={() => setModal(!showModal)}>
         {children}
-      </button>
+      </Button>
 
       {showModal && (
         <ApmsModal
