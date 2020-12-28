@@ -17,7 +17,7 @@ import LbmServicesWidget from './relational-widgets/LbmServicesWidget'
 // import LbmInfluencersWidget from './relational-widgets/LbmInfluencersWidget'
 import LbmPayersWidget from './relational-widgets/LbmPayersWidget'
 import LbmTypesWidget from './relational-widgets/LbmTypesWidget'
-// import LbmKeyEventsWidget from './relational-widgets/LbmKeyEventsWidget'
+import LbmKeyEventsWidget from './relational-widgets/LbmKeyEventsWidget'
 import BusinessObjectModal from '../BusinessObjectModal/BusinessObjectModal'
 
 import { ModalAndModalButtonSharedProps } from '../shared/interfaces'
@@ -32,7 +32,7 @@ const WIDGETS = [
     Component: LbmTypesWidget,
   },
   {
-    _id: 'RELATIONAL_LbmServicesWidget',
+    _id: 'RELATIONAL_lbmServicesWidget',
     label: 'Connect to LBM Services',
     Component: LbmServicesWidget,
   },
@@ -42,15 +42,15 @@ const WIDGETS = [
   //   Component: LbmInfluencersWidget,
   // },
   {
-    _id: 'RELATIONAL_LbmPayersWidget',
+    _id: 'RELATIONAL_lbmPayersWidget',
     label: 'Connect to Payers',
     Component: LbmPayersWidget,
   },
-  // {
-  //   _id: 'RELATIONAL_LbmKeyEvents',
-  //   label: 'Manage Key Events',
-  //   Component: LbmKeyEventsWidget,
-  // },
+  {
+    _id: 'RELATIONAL_lbmKeyEvents',
+    label: 'Manage Key Events',
+    Component: LbmKeyEventsWidget,
+  },
 ]
 
 interface LbmModalProps extends ModalAndModalButtonSharedProps {

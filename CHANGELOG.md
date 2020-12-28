@@ -26,6 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Build out LBM Service <=> LBM Service Category CRUD [#896](https://github.com/pulse-analytics/wave-db-mgmt/pull/896)
   - Build out LBM <=> LBM Service CRUD [#897](https://github.com/pulse-analytics/wave-db-mgmt/pull/897)
   - Build out LBM Services VIEW page [#898](https://github.com/pulse-analytics/wave-db-mgmt/pull/898)
+  - Build out LBM Key Events CRUD [#901](https://github.com/pulse-analytics/wave-db-mgmt/pull/901)
 
 ## [4.2.0] - Started: 12-11-20
 

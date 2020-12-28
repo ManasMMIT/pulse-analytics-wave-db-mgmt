@@ -220,6 +220,7 @@ const mutationType = gql`
     ): [ConnectObmAndPersonPayload!]!
 
     connectObmAndKeyEvent(input: ConnectObmAndKeyEventInput!): [ObmKeyEvent!]!
+    connectLbmAndKeyEvent(input: ConnectLbmAndKeyEventInput!): [LbmKeyEvent!]!
 
     upsertOrganizationMeta(
       input: UpsertOrganizationMetaInput!

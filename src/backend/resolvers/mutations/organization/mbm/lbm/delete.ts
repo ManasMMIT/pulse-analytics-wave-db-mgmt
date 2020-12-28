@@ -26,6 +26,7 @@ const getCascadeCollectionConfigs = ({ pulseDevDb, pulseCoreDb }) => [
       'JOIN_lbms_payers',
       'JOIN_lbms_lbms.types',
       'JOIN_lbms_lbms.services',
+      'lbms.keyEvents',
     ],
   },
 ]

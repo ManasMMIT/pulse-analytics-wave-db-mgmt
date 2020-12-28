@@ -487,6 +487,20 @@ export const CONNECT_OBM_AND_KEY_EVENT = gql`
   }
 `
 
+export const CONNECT_LBM_AND_KEY_EVENT = gql`
+  mutation ConnectLbmAndKeyEvent($input: ConnectLbmAndKeyEventInput!) {
+    connectLbmAndKeyEvent(input: $input) {
+      _id
+      lbmId
+      date
+      title
+      description
+      link
+      internalTdgNote
+    }
+  }
+`
+
 export const CREATE_LBM_ORGANIZATION = gql`
   mutation CreateLbmOrganization($input: CreateLbmOrganizationInput!) {
     createLbmOrganization(input: $input) {

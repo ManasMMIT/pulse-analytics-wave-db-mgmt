@@ -74,7 +74,11 @@ const Input = ({ name, type, value, onChange, disabled, style }) => {
 
 Input.propTypes = {
   name: PropTypes.string.isRequired,
-  value: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
+  value: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.bool,
+    PropTypes.instanceOf(Date),
+  ]),
   type: PropTypes.string,
   onChange: PropTypes.func,
   disabled: PropTypes.bool,

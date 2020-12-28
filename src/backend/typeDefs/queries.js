@@ -35,6 +35,7 @@ const queries = gql`
     lbmTypes: [LbmType!]!
 
     obmKeyEvents(obmId: String): [ObmKeyEvent!]!
+    lbmKeyEvents(lbmId: String): [LbmKeyEvent!]!
 
     JOIN_obmsServices_obmsServicesCategories(
       obmServiceId: String
@@ -521,6 +522,16 @@ const queries = gql`
   type ObmKeyEvent {
     _id: ID!
     obmId: String!
+    date: Date
+    title: String
+    description: String
+    link: String
+    internalTdgNote: String
+  }
+
+  type LbmKeyEvent {
+    _id: ID!
+    lbmId: String!
     date: Date
     title: String
     description: String

@@ -833,6 +833,20 @@ export const GET_OBM_KEY_EVENTS = gql`
   }
 `
 
+export const GET_LBM_KEY_EVENTS = gql`
+  query getLbmKeyEvents($lbmId: String) {
+    lbmKeyEvents(lbmId: $lbmId) {
+      _id
+      lbmId
+      date
+      title
+      description
+      link
+      internalTdgNote
+    }
+  }
+`
+
 export const GET_OBM_ORGANIZATIONS = gql`
   query getObmOrganizations {
     obmOrganizations {
