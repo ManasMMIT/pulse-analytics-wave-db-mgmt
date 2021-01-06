@@ -12,7 +12,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Fixed** for any bug fixes.
 - **Security** in case of vulnerabilities.
 
-## [Unreleased] - Started: 12-28-20
+## [Unreleased] - Started: 1-6-21
+
+## [4.3.1] - Started: 12-28-20
+
+### Changed
+- `Orion`: Switched CRUD relevant to dev pathways influencers to real collection instead of TEMP [#904](https://github.com/pulse-analytics/wave-db-mgmt/pull/904)
 
 ## [4.3.0] - Started: 12-16-20
 
