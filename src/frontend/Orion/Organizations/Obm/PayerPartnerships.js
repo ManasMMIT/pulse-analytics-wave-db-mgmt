@@ -33,6 +33,22 @@ const MODAL_TO_COL_MAP = {
   },
 }
 
+const showDashIfNull = (value) => (value === null ? '-' : value)
+
+const formatLivesCell = ({ value }) => (
+  <div style={{ textAlign: 'right' }}>
+    {showDashIfNull(numberFormatter(value))}
+  </div>
+)
+
+const formatLivesPercentCell = ({ value }) => (
+  <div style={{ textAlign: 'right' }}>
+    {showDashIfNull(percentageFormatter(value, 2))}
+  </div>
+)
+
+const formatReachCell = ({ value }) => showDashIfNull(value)
+
 const COLUMNS = [
   {
     Header: 'Account',
@@ -60,64 +76,73 @@ const COLUMNS = [
     sortType: 'text',
   },
   {
+    Header: 'Commercial Reach',
+    accessor: 'commercialReach',
+    Cell: formatReachCell,
+    Filter: MultiSelectColumnFilter,
+    filter: customMultiSelectFilterFn,
+    sortType: 'text',
+    width: 200,
+  },
+  {
     Header: 'Commercial Medical Lives',
     accessor: 'commercialMedicalLives',
-    Cell: (props) => (
-      <div style={{ textAlign: 'right' }}>{numberFormatter(props.value)}</div>
-    ),
+    Cell: formatLivesCell,
     Filter: NumberRangeColumnFilter,
     filter: 'between',
   },
   {
     Header: 'Commercial Medical Lives Percent',
     accessor: 'commercialMedicalLivesPercent',
-    Cell: (props) => (
-      <div style={{ textAlign: 'right' }}>
-        {percentageFormatter(props.value, 2)}
-      </div>
-    ),
+    Cell: formatLivesPercentCell,
     sortType: 'float',
     Filter: NumberRangeColumnFilter,
     filter: customBetweenPercentsFilterFn,
   },
   {
+    Header: 'Medicare Reach',
+    accessor: 'medicareReach',
+    Cell: formatReachCell,
+    Filter: MultiSelectColumnFilter,
+    filter: customMultiSelectFilterFn,
+    sortType: 'text',
+    width: 200,
+  },
+  {
     Header: 'Medicare Medical Lives',
     accessor: 'medicareMedicalLives',
-    Cell: (props) => (
-      <div style={{ textAlign: 'right' }}>{numberFormatter(props.value)}</div>
-    ),
+    Cell: formatLivesCell,
     Filter: NumberRangeColumnFilter,
     filter: 'between',
   },
   {
     Header: 'Medicare Medical Lives Percent',
     accessor: 'medicareMedicalLivesPercent',
-    Cell: (props) => (
-      <div style={{ textAlign: 'right' }}>
-        {percentageFormatter(props.value, 2)}
-      </div>
-    ),
+    Cell: formatLivesPercentCell,
     sortType: 'float',
     Filter: NumberRangeColumnFilter,
     filter: customBetweenPercentsFilterFn,
   },
   {
+    Header: 'Managed Medicaid Reach',
+    accessor: 'managedMedicaidReach',
+    Cell: formatReachCell,
+    Filter: MultiSelectColumnFilter,
+    filter: customMultiSelectFilterFn,
+    sortType: 'text',
+    width: 200,
+  },
+  {
     Header: 'Medicaid Medical Lives',
     accessor: 'managedMedicaidMedicalLives',
-    Cell: (props) => (
-      <div style={{ textAlign: 'right' }}>{numberFormatter(props.value)}</div>
-    ),
+    Cell: formatLivesCell,
     Filter: NumberRangeColumnFilter,
     filter: 'between',
   },
   {
     Header: 'Medicaid Medical Lives Percent',
     accessor: 'managedMedicaidMedicalLivesPercent',
-    Cell: (props) => (
-      <div style={{ textAlign: 'right' }}>
-        {percentageFormatter(props.value, 2)}
-      </div>
-    ),
+    Cell: formatLivesPercentCell,
     sortType: 'float',
     Filter: NumberRangeColumnFilter,
     filter: customBetweenPercentsFilterFn,

@@ -71,6 +71,7 @@ const joinDataCallBack = ({
     endDate,
     exclusionSettings,
     indicationIds,
+    updatedOn: connectionUpdatedOn,
   } = datum
 
   // Append Derived Fields
@@ -95,7 +96,13 @@ const joinDataCallBack = ({
     slug: pathwaysSlug,
   } = pathwaysDatum
 
-  const { _id, __typename, ...restPersonDatum } = personDatum
+  const {
+    _id,
+    __typename,
+    updatedOn: personUpdatedOn,
+    createdOn: personCreatedOn,
+    ...restPersonDatum
+  } = personDatum
 
   acc.push({
     ...datum,
@@ -104,6 +111,7 @@ const joinDataCallBack = ({
     organizationType,
     pathwaysSlug,
     ...restPersonDatum,
+    updatedOn: connectionUpdatedOn,
     description,
     status,
     indicationPermissions,

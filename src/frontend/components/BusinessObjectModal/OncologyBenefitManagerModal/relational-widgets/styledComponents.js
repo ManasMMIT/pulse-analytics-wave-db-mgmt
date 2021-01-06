@@ -2,6 +2,7 @@ import styled from '@emotion/styled'
 import { transparentize } from 'polished'
 
 import Color from '../../../../utils/color'
+import { Spacing } from '../../../../utils/pulseStyles'
 
 const borderStyle = `1px solid ${transparentize(0.9, Color.BLACK)}`
 
@@ -15,10 +16,9 @@ export const WidgetPanelHeader = styled.div({
 })
 
 export const WidgetPanelTitle = styled.h2({
-  color: Color.PRIMARY,
-  fontSize: 12,
-  textTransform: 'uppercase',
-  letterSpacing: '0.4px',
+  color: Color.BLACK,
+  fontSize: 16,
+  fontWeight: 700,
 })
 
 export const RelationalRow = styled.div({
@@ -108,4 +108,20 @@ export const SaveWarningBox = styled.div({
   fontSize: 12,
   fontWeight: 700,
   marginRight: 12,
+})
+
+export const EventSection = styled.div({
+  background: Color.WHITE,
+  borderRadius: 4,
+  margin: 24,
+  padding: '8px 12px',
+  '& > :not(:last-child)': {
+    marginBottom: Spacing.SMALL,
+  },
+})
+
+export const LabelAndInputWrapper = styled.div({
+  display: 'flex',
+  alignItems: 'center',
+  marginLeft: 12,
 })

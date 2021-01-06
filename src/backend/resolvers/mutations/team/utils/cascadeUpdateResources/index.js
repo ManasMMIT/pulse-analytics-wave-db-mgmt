@@ -1,7 +1,7 @@
+import getChildNodes from './getChildNodes'
 const _ = require('lodash')
 
 const getResourcesDiff = require('./getResourcesDiff')
-const getChildNodes = require('./getChildNodes')
 const { keyOutTreatmentPlans, arrayifyTreatmentPlans } = require('./utils')
 
 const addAccounts = (targetAccounts, newAccounts) => {
@@ -25,10 +25,7 @@ const cascadeUpdateResources = ({
   // THE CURRENT VERSION OF IT IN THE DATABASE
   const { nodeId } = nextResources
 
-  const resourcesByNodeId = _.keyBy(
-    _.cloneDeep(resourcesAcrossNodes),
-    'nodeId',
-  )
+  const resourcesByNodeId = _.keyBy(_.cloneDeep(resourcesAcrossNodes), 'nodeId')
 
   const prevResources = resourcesByNodeId[nodeId]
 
@@ -60,15 +57,8 @@ const cascadeUpdateResources = ({
     if (targetNodeResourcesObj) {
       const {
         accounts: prevAccounts = [],
-        treatmentPlans:  prevTreatmentPlans = [],
-        regionalBreakdown,
+        treatmentPlans: prevTreatmentPlans = [],
       } = targetNodeResourcesObj
-
-      // if regionalBreakdown is toggled on for child node, always keep it on
-      // until we decide how to handle regionalBreakdown stuff
-      if (regionalBreakdown) {
-        childPermissionsObj.regionalBreakdown = regionalBreakdown
-      }
 
       // REMOVE ACCOUNTS AND TREATMENT PLANS AS NEEDED
       let updatedAccounts = prevAccounts.filter(
@@ -77,22 +67,20 @@ const cascadeUpdateResources = ({
 
       let updatedTreatmentPlans = prevTreatmentPlans.reduce((acc, indObj) => {
         if (
-          treatmentPlansToRemove.find(({ _id, regimens }) => (
-            _id.equals(indObj._id) && regimens === null
-          ))
+          treatmentPlansToRemove.find(
+            ({ _id, regimens }) => _id.equals(indObj._id) && regimens === null
+          )
         ) {
           return acc
         }
 
         if (indObj.regimens && indObj.regimens.length) {
           indObj.regimens = indObj.regimens.filter(
-            ({ _id: regId }) => (
+            ({ _id: regId }) =>
               !treatmentPlansToRemove.find(
-                ({ _id, regimens }) => (
+                ({ _id, regimens }) =>
                   indObj._id.equals(_id) && regimens._id.equals(regId)
-                )
               )
-            )
           )
         }
 
@@ -102,13 +90,18 @@ const cascadeUpdateResources = ({
 
       // ADD ACCOUNTS AND TREATMENT PLANS AS NEEDED
       updatedAccounts = addAccounts(updatedAccounts, accountsToAdd)
-      updatedTreatmentPlans = addTreatmentPlans(updatedTreatmentPlans, treatmentPlansToAdd)
+      updatedTreatmentPlans = addTreatmentPlans(
+        updatedTreatmentPlans,
+        treatmentPlansToAdd
+      )
 
       childPermissionsObj.accounts = updatedAccounts
       childPermissionsObj.treatmentPlans = updatedTreatmentPlans
     } else {
       childPermissionsObj.accounts = Object.values(accountsToAdd)
-      childPermissionsObj.treatmentPlans = arrayifyTreatmentPlans(treatmentPlansToAdd)
+      childPermissionsObj.treatmentPlans = arrayifyTreatmentPlans(
+        treatmentPlansToAdd
+      )
     }
 
     return childPermissionsObj

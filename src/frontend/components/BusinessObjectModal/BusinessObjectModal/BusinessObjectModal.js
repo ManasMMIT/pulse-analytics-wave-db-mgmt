@@ -58,16 +58,17 @@ const BusinessObjectModal = ({
   afterMutationHook,
   widgets,
 }) => {
-  const isEditModal = Boolean(entityId)
+  const [currentEntityId, setCurrentEntityId] = useState(entityId)
+  const isEditModal = Boolean(currentEntityId)
 
-  const { schema, entity, loading } = useBom(boId, entityId)
+  const { schema, entity, loading } = useBom(boId, currentEntityId)
 
   const [selectedTab, setSelectedTab] = useState({})
-  const [inputFields, setInputField] = useState({})
+  const [boData, setBoData] = useState({})
   const [showDeleteConfirmation, toggleDeleteConfirmation] = useState(false)
 
   const [deleteHandler] = useMutation(mutationDocs.delete || STUB_DOC, {
-    variables: { input: { _id: entityId } },
+    variables: { input: { _id: currentEntityId } },
     refetchQueries,
     onCompleted: (data) => {
       afterMutationHook(data)
@@ -84,14 +85,16 @@ const BusinessObjectModal = ({
       const mappedEntitiesToFields = schema.tags.reduce((acc, { sections }) => {
         sections.forEach(({ fields }) => {
           fields.forEach(({ key }) => {
-            acc[key] = entity[key] || null
+            acc[key] = [undefined, '', NaN].includes(entity[key])
+              ? null
+              : entity[key]
           })
         })
         return acc
       }, {})
 
       setSelectedTab(firstTab)
-      setInputField(mappedEntitiesToFields)
+      setBoData(mappedEntitiesToFields)
     }
   }, [loading])
 
@@ -115,14 +118,17 @@ const BusinessObjectModal = ({
           <ModalSubtitle>{modalSubtitle}</ModalSubtitle>
         </ModalTitleContainer>
         <ButtonGroup
+          setBoData={setBoData}
           mutationDocs={mutationDocs}
           toggleDeleteConfirmation={toggleDeleteConfirmation}
           showDeleteConfirmation={showDeleteConfirmation}
           closeModal={closeModal}
-          inputFields={inputFields}
-          entityId={entityId}
+          boData={boData}
+          entityId={currentEntityId}
           refetchQueries={refetchQueries}
           afterMutationHook={afterMutationHook}
+          isEditModal={isEditModal}
+          setCurrentEntityId={setCurrentEntityId}
         />
       </Header>
       <DeleteConfirmation
@@ -145,9 +151,9 @@ const BusinessObjectModal = ({
             <selectedTab.Component entity={entity} />
           ) : (
             <BomSections
-              inputFields={inputFields}
+              boData={boData}
               selectedTab={selectedTab}
-              setInputField={setInputField}
+              setBoData={setBoData}
             />
           )}
         </BoContent>
@@ -157,7 +163,7 @@ const BusinessObjectModal = ({
 }
 
 BusinessObjectModal.propTypes = {
-  entityId: PropTypes.string.isRequired,
+  entityId: PropTypes.string, // could be null when creating an instance of a bo
   boId: PropTypes.string.isRequired,
   closeModal: PropTypes.func,
   headerText: PropTypes.string,

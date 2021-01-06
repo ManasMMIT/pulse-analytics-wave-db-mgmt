@@ -151,46 +151,6 @@ const COLUMNS = [
     width: 200,
   },
   {
-    Header: 'Total Disclosures',
-    accessor: 'internalFields.totalDisclosures',
-    Filter: MultiSelectColumnFilter,
-    filter: customMultiSelectFilterFn,
-    sortType: 'text',
-    width: 200,
-  },
-  {
-    Header: 'Date Disclosure 1',
-    accessor: 'internalFields.dateDisclosure1',
-    Filter: MultiSelectColumnFilter,
-    filter: customMultiSelectFilterFn,
-    sortType: 'text',
-    width: 200,
-  },
-  {
-    Header: 'Date Disclosure 2',
-    accessor: 'internalFields.dateDisclosure2',
-    Filter: MultiSelectColumnFilter,
-    filter: customMultiSelectFilterFn,
-    sortType: 'text',
-    width: 200,
-  },
-  {
-    Header: 'Date Disclosure 3',
-    accessor: 'internalFields.dateDisclosure3',
-    Filter: MultiSelectColumnFilter,
-    filter: customMultiSelectFilterFn,
-    sortType: 'text',
-    width: 200,
-  },
-  {
-    Header: 'Date Disclosure 4',
-    accessor: 'internalFields.dateDisclosure4',
-    Filter: MultiSelectColumnFilter,
-    filter: customMultiSelectFilterFn,
-    sortType: 'text',
-    width: 200,
-  },
-  {
     Header: 'Tumor Type Specialty',
     accessor: 'tumorTypeSpecialty',
     Filter: MultiSelectColumnFilter,
@@ -303,15 +263,6 @@ const PathwaysInfluencers = () => {
       <PanelHeader title={PAGE_TITLE}>
         <div style={{ display: 'flex', alignItems: 'center' }}>
           <PeoplePowerSelect />
-          <PeopleModalButton buttonStyle={createButtonStyle}>
-            <Icon
-              iconName="add"
-              color1={Color.WHITE}
-              width={16}
-              style={{ marginRight: 8 }}
-            />
-            Create Person
-          </PeopleModalButton>
         </div>
       </PanelHeader>
       <Table

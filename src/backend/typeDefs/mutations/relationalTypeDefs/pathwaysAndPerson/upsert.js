@@ -1,6 +1,9 @@
 const { gql } = require('apollo-server-express')
 
 const upsertPathwaysAndPersonConnectionTypeDefs = gql`
+  # some of these fields might be labeled as "required" on the FE form but
+  # because there's an exclusion escape clause, they're ALLOWED to be empty arrays
+  # or null -- that's a "draft state"
   input UpsertPathwaysAndPersonConnectionInput {
     _id: ID
     personId: String!
@@ -23,11 +26,6 @@ const upsertPathwaysAndPersonConnectionTypeDefs = gql`
     internalNotes: String
     pathwaysManagementTypes: [String!]!
     valueChairsIndications: [String!]!
-    totalDisclosures: String
-    dateDisclosure1: String
-    dateDisclosure2: String
-    dateDisclosure3: String
-    dateDisclosure4: String
   }
 
   input PathwaysAndPersonConnectionAlertInput {

@@ -1,3 +1,4 @@
+import node from './node'
 const { gql } = require('apollo-server-express')
 
 const client = require('./client')
@@ -54,7 +55,8 @@ const mutationType = gql`
     updateTeam(input: UpdateTeamInput!): UpdateTeamPayload
     deleteTeam(input: DeleteTeamInput!): DeleteTeamPayload
 
-    createSourceNode(input: CreateSourceNodeInput!): Node
+    createNode(input: CreateNodeInput): Node
+    updateNode(input: UpdateNodeInput): Node
     updateTeamNode(input: UpdateTeamNodeInput!): Node
 
     updateTdgTimestamps(input: UpdateTdgTimestampsInput!): JSON
@@ -142,13 +144,24 @@ const mutationType = gql`
     createObmOrganization(
       input: CreateObmOrganizationInput!
     ): CreateObmOrganizationPayload!
+    deleteObmOrganization(
+      input: DeleteObmOrganizationInput!
+    ): DeleteObmOrganizationPayload!
     updateObmOrganization(
       input: UpdateObmOrganizationInput!
     ): UpdateObmOrganizationPayload!
 
+    createLbmOrganization(input: CreateLbmOrganizationInput!): LbmOrganization! # reusing LbmOrganization type from src/backend/typeDefs/queries.js
+    deleteLbmOrganization(input: DeleteLbmOrganizationInput!): LbmOrganization!
+    updateLbmOrganization(input: UpdateLbmOrganizationInput!): LbmOrganization!
+
     createObmService(input: CreateObmServiceInput!): CreateObmServicePayload!
     updateObmService(input: UpdateObmServiceInput!): UpdateObmServicePayload!
     deleteObmService(input: DeleteObmServiceInput!): DeleteObmServicePayload!
+
+    createLbmService(input: CreateLbmServiceInput!): CreateLbmServicePayload!
+    updateLbmService(input: UpdateLbmServiceInput!): UpdateLbmServicePayload!
+    deleteLbmService(input: DeleteLbmServiceInput!): DeleteLbmServicePayload!
 
     createObmServiceCategory(
       input: CreateObmServiceCategoryInput!
@@ -160,18 +173,58 @@ const mutationType = gql`
       input: DeleteObmServiceCategoryInput!
     ): DeleteObmServiceCategoryPayload!
 
+    createLbmServiceCategory(
+      input: CreateLbmServiceCategoryInput!
+    ): CreateLbmServiceCategoryPayload!
+    updateLbmServiceCategory(
+      input: UpdateLbmServiceCategoryInput!
+    ): UpdateLbmServiceCategoryPayload!
+    deleteLbmServiceCategory(
+      input: DeleteLbmServiceCategoryInput!
+    ): DeleteLbmServiceCategoryPayload!
+
+    createObmType(input: CreateObmTypeInput!): CreateObmTypePayload!
+    updateObmType(input: UpdateObmTypeInput!): UpdateObmTypePayload!
+    deleteObmType(input: DeleteObmTypeInput!): DeleteObmTypePayload!
+
+    createLbmType(input: CreateLbmTypeInput!): LbmType!
+    updateLbmType(input: UpdateLbmTypeInput!): LbmType!
+    deleteLbmType(input: DeleteLbmTypeInput!): LbmType!
+
     connectObmServiceAndObmServiceCategory(
       input: ConnectObmServiceAndObmServiceCategoryInput!
     ): ConnectObmServiceAndObmServiceCategoryPayload!
+
+    connectLbmServiceAndLbmServiceCategory(
+      input: ConnectLbmServiceAndLbmServiceCategoryInput!
+    ): ConnectLbmServiceAndLbmServiceCategoryPayload!
+
     connectObmAndObmService(
       input: [ConnectObmAndObmServiceInput!]!
     ): [ConnectObmAndObmServicePayload!]!
+
+    connectLbmAndLbmService(
+      input: [ConnectLbmAndLbmServiceInput!]!
+    ): [ConnectLbmAndLbmServicePayload!]!
+
+    connectObmAndObmType(
+      input: ConnectObmAndObmTypeInput!
+    ): ConnectObmAndObmTypePayload!
+
+    connectLbmAndLbmType(
+      input: ConnectLbmAndLbmTypeInput!
+    ): ConnectLbmAndLbmTypePayload!
+
     connectObmAndPerson(
       input: [ConnectObmAndPersonInput!]!
     ): [ConnectObmAndPersonPayload!]!
-    connectObmAndPayer(
-      input: ConnectObmAndPayerInput!
-    ): [ConnectObmAndPayerPayload!]!
+
+    connectLbmAndPerson(
+      input: [ConnectLbmAndPersonInput!]!
+    ): [ConnectLbmAndPersonPayload!]!
+
+    connectObmAndKeyEvent(input: ConnectObmAndKeyEventInput!): [ObmKeyEvent!]!
+    connectLbmAndKeyEvent(input: ConnectLbmAndKeyEventInput!): [LbmKeyEvent!]!
 
     upsertOrganizationMeta(
       input: UpsertOrganizationMetaInput!
@@ -334,6 +387,22 @@ const mutationType = gql`
     deletePathwaysAndPersonConnection(
       input: DeletePathwaysAndPersonConnectionInput!
     ): PathwaysAndPersonConnection!
+
+    upsertObmAndPayerConnection(
+      input: UpsertObmAndPayerConnectionInput!
+    ): ObmAndPayerConnection!
+
+    deleteObmAndPayerConnection(
+      input: DeleteObmAndPayerConnectionInput!
+    ): ObmAndPayerConnection!
+
+    upsertLbmAndPayerConnection(
+      input: UpsertLbmAndPayerConnectionInput!
+    ): LbmAndPayerConnection!
+
+    deleteLbmAndPayerConnection(
+      input: DeleteLbmAndPayerConnectionInput!
+    ): LbmAndPayerConnection!
   }
 `
 
@@ -342,6 +411,7 @@ module.exports = [
   ...client,
   ...teams,
   ...user,
+  ...node,
   ...sitemap,
   ...indication,
   ...therapeuticArea,

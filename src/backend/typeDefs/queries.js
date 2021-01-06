@@ -23,18 +23,48 @@ const queries = gql`
     apmOrganizations: [ApmOrganization]
 
     obmOrganizations: [ObmOrganization]
+    lbmOrganizations: [LbmOrganization]
+
     obmServices: [ObmService]
+    lbmServices: [LbmService]
+
     obmServicesCategories: [ObmServiceCategory]
+    lbmServicesCategories: [LbmServiceCategory]
+
+    obmTypes: [ObmType]
+    lbmTypes: [LbmType!]!
+
+    obmKeyEvents(obmId: String): [ObmKeyEvent!]!
+    lbmKeyEvents(lbmId: String): [LbmKeyEvent!]!
+
     JOIN_obmsServices_obmsServicesCategories(
       obmServiceId: String
     ): [ObmServiceAndObmServiceCategoryConnection]
+
+    JOIN_lbmsServices_lbmsServicesCategories(
+      lbmServiceId: String
+    ): [LbmServiceAndLbmServiceCategoryConnection]
+
     JOIN_obms_obmsServices(obmId: String): [ObmAndObmServiceConnection]
+    JOIN_lbms_lbmsServices(lbmId: String): [LbmAndLbmServiceConnection]
+
+    JOIN_obms_obmsTypes(obmId: String): [ObmAndObmTypeConnection]
+    JOIN_lbms_lbmsTypes(lbmId: String): [LbmAndLbmTypeConnection]
+
     JOIN_obms_people: [ObmAndPersonConnection]
+    JOIN_lbms_people: [LbmAndPersonConnection]
+
     JOIN_obms_payers(obmId: ID): [ObmAndPayerConnection]
+    JOIN_lbms_payers(lbmId: ID): [LbmAndPayerConnection]
 
     VIEW_obmServices: [VIEW_ObmService]
+    VIEW_lbmServices: [VIEW_LbmService]
+
     VIEW_obmPayerPartnerships: [VIEW_ObmPayerPartnership]
+    VIEW_lbmPayerPartnerships: [VIEW_LbmPayerPartnership]
+
     VIEW_obmInfluencers: [VIEW_ObmInfluencer]
+    VIEW_lbmInfluencers: [VIEW_LbmInfluencer]
 
     JOIN_pathways_people: [PathwaysAndPersonConnection]
 
@@ -220,6 +250,7 @@ const queries = gql`
     _id: String
     name: String
     description: String
+    icon: String
   }
 
   type Team {
@@ -235,6 +266,8 @@ const queries = gql`
 
   type User {
     _id: String
+    firstName: String
+    lastName: String
     username: String
     email: String
     client: Client
@@ -330,6 +363,7 @@ const queries = gql`
   }
 
   type ObmOrganization {
+    # base fields
     _id: ID!
     slug: String!
     type: String
@@ -337,9 +371,58 @@ const queries = gql`
     organizationTiny: String
     start: Int
     businessModel: String
+
+    # "technology" fields
+    approvalTime: String
+    hasDecisionSupport: Boolean
+    hasPbMbAuthorization: Boolean
+    isEmrIntegrable: Boolean
+    medicalReview: String
+    treatmentSelection: String
+
+    # "vertical integration" fields that in the future should likely
+    # be handled by org-to-org connections
+    payer: String
+    pharmacyBenefitManager: String
+    specialtyPharmacy: String
+    labBenefitManager: String
+    parentCompany: String
+  }
+
+  type LbmOrganization {
+    # base fields
+    _id: ID!
+    slug: String!
+    type: String
+    organization: String
+    organizationTiny: String
+    start: Int
+    businessModel: String
+
+    # "technology" fields
+    approvalTime: String
+    hasDecisionSupport: Boolean
+    hasPbMbAuthorization: Boolean
+    isEmrIntegrable: Boolean
+    medicalReview: String
+    treatmentSelection: String
+
+    # "vertical integration" fields that in the future should likely
+    # be handled by org-to-org connections
+    payer: String
+    pharmacyBenefitManager: String
+    specialtyPharmacy: String
+    oncologyBenefitManager: String
+    parentCompany: String
   }
 
   type ObmService {
+    _id: ID!
+    name: String!
+    description: String
+  }
+
+  type LbmService {
     _id: ID!
     name: String!
     description: String
@@ -350,10 +433,33 @@ const queries = gql`
     name: String!
   }
 
+  type LbmServiceCategory {
+    _id: ID!
+    name: String!
+  }
+
+  type ObmType {
+    _id: ID!
+    name: String!
+    description: String
+  }
+
+  type LbmType {
+    _id: ID!
+    name: String!
+    description: String
+  }
+
   type ObmServiceAndObmServiceCategoryConnection {
     _id: ID!
     obmServiceId: String!
     obmServiceCategoryId: String!
+  }
+
+  type LbmServiceAndLbmServiceCategoryConnection {
+    _id: ID!
+    lbmServiceId: String!
+    lbmServiceCategoryId: String!
   }
 
   type ObmAndObmServiceConnection {
@@ -361,6 +467,25 @@ const queries = gql`
     obmId: String!
     obmServiceId: String!
     rating: Int!
+  }
+
+  type LbmAndLbmServiceConnection {
+    _id: ID!
+    lbmId: String!
+    lbmServiceId: String!
+    rating: Int!
+  }
+
+  type ObmAndObmTypeConnection {
+    _id: ID!
+    obmId: String!
+    obmTypeId: String!
+  }
+
+  type LbmAndLbmTypeConnection {
+    _id: ID!
+    lbmId: String!
+    lbmTypeId: String!
   }
 
   type ObmAndPersonConnection {
@@ -371,16 +496,74 @@ const queries = gql`
     managementTypes: [String!]
   }
 
+  type LbmAndPersonConnection {
+    _id: ID!
+    lbmId: ID!
+    personId: ID!
+    position: String
+    managementTypes: [String!]
+  }
+
   type ObmAndPayerConnection {
     _id: ID!
     obmId: String!
     payerId: String!
+    books: [JSON!]!
+    note: String
+  }
+
+  type LbmAndPayerConnection {
+    _id: ID!
+    lbmId: String!
+    payerId: String!
+    books: [JSON!]!
+    note: String
+  }
+
+  # TODO: can't use _id here because caching problems on frontend;
+  # temporarily using JSON type for books
+  # type ObmAndPayerConnectionBookObj {
+  #   _id: ID!
+  #   name: String!
+  #   isNational: Boolean!
+  #   states: [String!]!
+  # }
+
+  type ObmKeyEvent {
+    _id: ID!
+    obmId: String!
+    date: Date
+    title: String
+    description: String
+    link: String
+    internalTdgNote: String
+  }
+
+  type LbmKeyEvent {
+    _id: ID!
+    lbmId: String!
+    date: Date
+    title: String
+    description: String
+    link: String
+    internalTdgNote: String
   }
 
   type VIEW_ObmInfluencer {
     _id: ID!
     obmId: String!
     obmOrganization: String!
+    influencerPosition: String
+    influencerId: String!
+    influencerFirstName: String!
+    influencerLastName: String!
+    influencerNpiNumber: Float
+  }
+
+  type VIEW_LbmInfluencer {
+    _id: ID!
+    lbmId: String!
+    lbmOrganization: String!
     influencerPosition: String
     influencerId: String!
     influencerFirstName: String!
@@ -399,6 +582,17 @@ const queries = gql`
     serviceRating: Int!
   }
 
+  type VIEW_LbmService {
+    _id: ID!
+    lbmId: String!
+    serviceId: String!
+    serviceCategoryId: String
+    organization: String!
+    serviceCategory: String
+    service: String!
+    serviceRating: Int!
+  }
+
   type VIEW_ObmPayerPartnership {
     _id: ID!
     obmId: String!
@@ -408,10 +602,31 @@ const queries = gql`
     payerOrganization: String!
     commercialMedicalLives: Float
     commercialMedicalLivesPercent: Float
+    commercialReach: String
     medicareMedicalLives: Float
     medicareMedicalLivesPercent: Float
+    medicareReach: String
     managedMedicaidMedicalLives: Float
     managedMedicaidMedicalLivesPercent: Float
+    managedMedicaidReach: String
+  }
+
+  type VIEW_LbmPayerPartnership {
+    _id: ID!
+    lbmId: String!
+    lbmOrganization: String!
+    payerId: String!
+    payerSlug: String!
+    payerOrganization: String!
+    commercialMedicalLives: Float
+    commercialMedicalLivesPercent: Float
+    commercialReach: String
+    medicareMedicalLives: Float
+    medicareMedicalLivesPercent: Float
+    medicareReach: String
+    managedMedicaidMedicalLives: Float
+    managedMedicaidMedicalLivesPercent: Float
+    managedMedicaidReach: String
   }
 
   type VIEW_PathwaysInfluencer {
@@ -677,6 +892,8 @@ const queries = gql`
 
   type PathwaysAndPersonConnection {
     _id: ID
+    createdOn: DateTime
+    updatedOn: DateTime
     personId: String!
     pathwaysId: String!
     indicationIds: [String!]!
@@ -697,11 +914,6 @@ const queries = gql`
     internalNotes: String
     pathwaysManagementTypes: [String!]!
     valueChairsIndications: [String!]!
-    totalDisclosures: String
-    dateDisclosure1: String
-    dateDisclosure2: String
-    dateDisclosure3: String
-    dateDisclosure4: String
   }
 
   type PathwaysAndPersonConnectionAlert {

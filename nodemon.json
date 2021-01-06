@@ -1,0 +1,13 @@
+{
+  "watch": [
+    "src/backend"
+  ],
+  "ext": ".ts,.js",
+  "ignore": [
+    "**/*.test.ts",
+    "**/*.spec.ts",
+    ".git",
+    "node_modules"
+  ],
+  "exec": "node --inspect=0.0.0.0:2000 -r ts-node/register ./src/backend/index.js"
+}

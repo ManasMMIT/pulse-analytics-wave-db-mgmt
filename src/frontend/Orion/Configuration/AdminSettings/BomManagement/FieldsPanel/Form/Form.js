@@ -3,6 +3,8 @@ import PropTypes from 'prop-types'
 import Select from 'react-select'
 import { useMutation, useQuery } from '@apollo/react-hooks'
 
+import { INPUT_MAP } from 'frontend/components/FieldsSectionCard/utils'
+
 import {
   FormLabel,
   FieldContainer,
@@ -18,17 +20,7 @@ import {
   GET_BOM_SCHEMA,
 } from 'frontend/api/queries'
 
-const HARD_CODED_INPUT_OPTIONS = [
-  'Select',
-  'MultiSelect',
-  'TextInput',
-  'DateInput',
-  'EmailInput',
-  'NumberInput',
-  'RangeInput',
-  'TimeInput',
-  'CheckboxInput',
-]
+const HARD_CODED_INPUT_OPTIONS = Object.keys(INPUT_MAP)
 
 const Form = ({
   data,

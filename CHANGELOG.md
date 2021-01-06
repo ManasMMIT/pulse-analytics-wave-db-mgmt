@@ -12,7 +12,107 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Fixed** for any bug fixes.
 - **Security** in case of vulnerabilities.
 
-## [Unreleased] - Started: 10-23-20
+## [Unreleased] - Started: 12-28-20
+
+## [4.3.0] - Started: 12-16-20
+
+### Added
+- `Orion/LBM CRUD`
+  - Build out LBM basic CRUD and Account Overview [#886](https://github.com/pulse-analytics/wave-db-mgmt/pull/886)
+  - Build out LBM types basic CRUD and power select [#887](https://github.com/pulse-analytics/wave-db-mgmt/pull/887)
+  - Build out LBM <=> LBM types connections widget and CRUD [#888](https://github.com/pulse-analytics/wave-db-mgmt/pull/888)
+  - Build out LBM <=> Payer connections widget and CRUD [#892](https://github.com/pulse-analytics/wave-db-mgmt/pull/892)
+  - Build out LBM Payer Partnerships template table view [#893](https://github.com/pulse-analytics/wave-db-mgmt/pull/893)
+  - Build out LBM Service Category CRUD [#894](https://github.com/pulse-analytics/wave-db-mgmt/pull/894)
+  - Build out LBM Service CRUD [#895](https://github.com/pulse-analytics/wave-db-mgmt/pull/895)
+  - Build out LBM <=> People connections widget and CRUD [#899](https://github.com/pulse-analytics/wave-db-mgmt/pull/899)
+  - Build out LBM Influencers template table view [#900](https://github.com/pulse-analytics/wave-db-mgmt/pull/900)
+  - Build out LBM Service <=> LBM Service Category CRUD [#896](https://github.com/pulse-analytics/wave-db-mgmt/pull/896)
+  - Build out LBM <=> LBM Service CRUD [#897](https://github.com/pulse-analytics/wave-db-mgmt/pull/897)
+  - Build out LBM Services VIEW page [#898](https://github.com/pulse-analytics/wave-db-mgmt/pull/898)
+  - Build out LBM Key Events CRUD [#901](https://github.com/pulse-analytics/wave-db-mgmt/pull/901)
+
+## [4.2.0] - Started: 12-11-20
+
+### Added
+- `Orion/Node CRUD`: Build out ability to create source nodes in new panel view [#880](https://github.com/pulse-analytics/wave-db-mgmt/pull/880)
+
+### Changed
+- `LBM/MBM Migration`
+  - Adjusted querying on backend and frontend to have Phoenix show mix of lbms and obms through custom hook while staying cache-aligned with Orion activity [#882](https://github.com/pulse-analytics/wave-db-mgmt/pull/882)
+  - Moved existing obm resolvers under `mbm` resolvers folder and obm typeDefs under `mbm` typeDefs folder; stubbed `lbm` scaffold folders [#883](https://github.com/pulse-analytics/wave-db-mgmt/pull/883)
+
+## [4.1.0] - Started: 12-7-20
+
+### Added
+- `Dev Ops`: Check in `ecosystem.config.js` with new memory configuration to account for JS heap allocation failure encountered on production [#872](https://github.com/pulse-analytics/wave-db-mgmt/pull/872)
+- `Orion`: Adds YesNoBlankSelect option for Business Object Modal field input type [#877](https://github.com/pulse-analytics/wave-db-mgmt/pull/877)
+- `Orion/Node CRUD`: Build out ability to update source nodes AND global override update of a node [#873](https://github.com/pulse-analytics/wave-db-mgmt/pull/873)
+
+### Fixed
+- `Orion`: Stop Business Object Modals from coercing all falsey values on mount, instead only `[undefined, '', NaN]` [#877](https://github.com/pulse-analytics/wave-db-mgmt/pull/877)
+
+## [4.0.1] - Started: 12-7-20
+
+### Changed
+- Minor text change to duplicate person alert [#867](https://github.com/pulse-analytics/wave-db-mgmt/pull/867)
+
+## [4.0.0] - Started: 12-4-20
+
+### Changed
+- Setup TypeScript for front- and back-end [#868](https://github.com/pulse-analytics/wave-db-mgmt/pull/868)
+
+## [3.13.1] - Started: 12-3-20
+
+### Changed
+- `Orion/OBM Payer Connections`: Updated VIEW endpoint for [OBM Payer Partnerships](http://localhost:3000/orion/organizations/obm/payer-partnerships) page in Orion to reflect state vs. national lives changes; add reach columns to table [#864](https://github.com/pulse-analytics/wave-db-mgmt/pull/864)
+
+### Removed
+- `Orion/OBM Payer Connections`: Deleted deprecated obm/payer connections endpoint and affiliated typeDefs, frontend code [#865](https://github.com/pulse-analytics/wave-db-mgmt/pull/865)
+
+## [3.13.0] - Started: 11-18-20
+
+### Added
+- `Orion/Obm Bo Modal/Obm Payer Widget`: Built out new obm payer widget following [v3 data/API edits](https://dedhamgroup.atlassian.net/wiki/spaces/OBM/pages/1713569814/v3+Data+API+Edits+OBM+Tool) to the obm tool [#860](https://github.com/pulse-data/wave-db-mgmt/pull/860)
+
+## [3.12.0] - Started: 11-3-20
+
+### Added
+- `Orion/Node Mgmt`: Scaffold of new admin view for managing source nodes. (READ ONLY) [#841](https://github.com/pulse-data/wave-db-mgmt/pull/841)
+- `Orion OBM Tool Updates`:
+  - Added new one-to-one fields to OBM business object [#843](https://github.com/pulse-data/wave-db-mgmt/pull/843)
+  - Built out OBM key events widget [#850](https://github.com/pulse-data/wave-db-mgmt/pull/850)
+  - Built out OBM types widget, bo, and bom [#847](https://github.com/pulse-data/wave-db-mgmt/pull/847) + [#848](https://github.com/pulse-data/wave-db-mgmt/pull/848)
+
+### Changed
+- `Orion/OBM Payer Connections`: BookIds and note fields can now be added to connections [#842](https://github.com/pulse-data/wave-db-mgmt/pull/842)
+
+## [3.11.1] - Started: 10-27-20
+
+### Added
+- `Orion/APM BO`: Builds out APM BO Modal [#827](https://github.com/pulse-data/wave-db-mgmt/pull/827)
+
+### Changed
+- `Orion/Pathways-Person Connection Widget and Form`:
+  - Don't let user save connection with missing required fields unless they also mark the connection as excluded [#831](https://github.com/pulse-data/wave-db-mgmt/pull/831)
+  - Create Person button is removed from Pathways Influencers page in favor of a power select search creation functionality [#837](https://github.com/pulse-data/wave-db-mgmt/pull/837)
+- `Orion/Business Object Modal`: Button group now adjusts to state of changes within modal; cancel + close buttons are now two, discrete buttons [#832](https://github.com/pulse-data/wave-db-mgmt/pull/832)
+- `Orion/Person Create`: Warn users when they're creating a person whose name is very similar to already existing names in the core `people` collection [#833](https://github.com/pulse-data/wave-db-mgmt/pull/833)
+
+### Fixed
+- `Orion/Pathways-Person Connection Widget and Form`:
+  - Fixed null and NaN npi bug in seed script [#839](https://github.com/pulse-data/wave-db-mgmt/pull/839)
+
+## [3.10.1] - Started: 10-23-20
+
+### Added
+- `Phoenix`: Client names and icons can now be updated by users. [#819](https://github.com/pulse-data/wave-db-mgmt/pull/819)
+
+### Changed
+- `Orion/Pathways-Person Connection Widget and Form`:
+  - Added overlay interaction to Pathways Connection CRUD form; added save button feedback interaction [#823](https://github.com/pulse-data/wave-db-mgmt/pull/823)
+  - Tweaked Bulk import script logic to include all data rows from `RAW_pathwaysInfluencers` [#822](https://github.com/pulse-data/wave-db-mgmt/pull/822)
+- `Orion`: Replaced old Pathways Accounts view with new view [#826](https://github.com/pulse-data/wave-db-mgmt/pull/826)
 
 ## [3.9.1] - Started: 10-22-20
 
@@ -22,6 +122,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [3.9.0] - Started: 10-6-20
 
 ### Changed
+- `Phoenix`: Added `lastName` and `firstName` fields to UserForm. [#810](https://github.com/pulse-data/wave-db-mgmt/pull/810)
 - `Orion/Pathways-Person Connection Widget and Form`:
   - Refactored widget/form; wired up to React local state as well as API upsert and delete endpoints; tweaked the `JOIN_pathways_people` schema and form fields/interactions [#798](https://github.com/pulse-data/wave-db-mgmt/pull/798) [#799](https://github.com/pulse-data/wave-db-mgmt/pull/799) [#800](https://github.com/pulse-data/wave-db-mgmt/pull/800)
   - Added materialization steps to CUD ops in PathwaysAndPersonConnection to materialize data to `pulse-dev.TEMP_pathwaysInfluencers` for now [#805](https://github.com/pulse-data/wave-db-mgmt/pull/805)

@@ -1,5 +1,5 @@
+import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
-import React, { useState } from 'react'
 import styled from '@emotion/styled'
 
 import {
@@ -22,6 +22,7 @@ import Pagination from './Pagination'
 import ModalManager from './ModalManager'
 import sortTypes from './custom-sort-types'
 import formatDataForExport from './formatDataForExport'
+import { Spacing, Colors } from 'frontend/utils/pulseStyles'
 
 const TemplateWrapper = styled.div(
   {
@@ -48,8 +49,25 @@ const DefaultColumnFilter = ({
   )
 }
 
-const DEFAULT_COLUMN = {
-  Filter: DefaultColumnFilter,
+const DEFAULT_COLUMN = { Filter: DefaultColumnFilter }
+const INITIAL_PAGE_SIZE = 50
+
+const TableHint = () => (
+  <span
+    style={{
+      margin: Spacing.NORMAL,
+      fontSize: Spacing.NORMAL,
+      color: Colors.MEDIUM_GRAY_2,
+      fontStyle: 'italic',
+    }}
+  >
+    Hold shift while clicking column headers for multi-column sort
+  </span>
+)
+
+const resetTableScroll = () => {
+  const tableBodyNode = document.querySelector('.table.sticky')
+  tableBodyNode.scrollTo(0, 0)
 }
 
 const Table = ({
@@ -80,7 +98,7 @@ const Table = ({
       maxMultiSortColCount: 5,
       disableMultiRemove: true,
       sortTypes,
-      initialState: { pageSize: 50, pageIndex: 0 },
+      initialState: { pageSize: INITIAL_PAGE_SIZE, pageIndex: 0 },
     },
     useFilters,
     useSortBy,
@@ -88,6 +106,9 @@ const Table = ({
     useSticky,
     usePagination
   )
+
+  // whenever page changes on table, scroll to top
+  useEffect(resetTableScroll, [pageIndex])
 
   const dataFormattedForExport = formatDataForExport(sortedRows, columns)
 
@@ -104,6 +125,7 @@ const Table = ({
         {data.length ? (
           <Pagination {...{ pageIndex, pageSize, ...tablePropOverflow }} />
         ) : null}
+        <TableHint />
         <div style={{ margin: '0 24px 0 auto', ...exportStyle }}>
           <ExportExcelButton
             data={dataFormattedForExport}

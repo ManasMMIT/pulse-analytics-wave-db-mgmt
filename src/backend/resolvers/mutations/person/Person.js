@@ -10,6 +10,10 @@ const PathwaysAndPersonConnectionDeletionEvent = require('../relationalResolvers
 const PERSON_BUSINESS_OBJECT_ID = ObjectId('5eea22d5adbf920fa4320487')
 const SOURCE_COLLECTION = 'people'
 
+// TODO: Remove coercion once frontend number input no longer defaults to 0
+const guardAgainstZeroNpiNumberValue = (npiNumber) =>
+  npiNumber !== 0 ? npiNumber : null
+
 // factory pattern: https://qwtel.com/posts/software/async-constructor-pattern/#factory-functions
 class Person {
   static async init({ data, dbs }) {
@@ -28,6 +32,9 @@ class Person {
       // ! incoming data is splatted in like this because I'm worried
       // ! the class won't be able to keep up with the changing fields on Person
       ...data,
+      nationalProviderIdentifier: guardAgainstZeroNpiNumberValue(
+        data.nationalProviderIdentifier
+      ),
       _id: data._id ? ObjectId(data._id) : ObjectId(),
     }
 
@@ -91,8 +98,22 @@ class Person {
       )
       .then(({ value }) => value)
 
-    // Step 2: Cascade update pulse-dev.obmsInfluencers
+    // Step 2: Cascade update mbmInfluencers collections:
+    // pulse-dev.obmsInfluencers and pulse-dev.lbmsInfluencers
     await pulseDevDb.collection('obmsInfluencers').updateMany(
+      { 'person._id': updatedPerson._id },
+      {
+        $set: {
+          'person.firstName': updatedPerson.firstName,
+          'person.lastName': updatedPerson.lastName,
+          'person.nationalProviderIdentifier':
+            updatedPerson.nationalProviderIdentifier,
+        },
+      },
+      { session }
+    )
+
+    await pulseDevDb.collection('lbmsInfluencers').updateMany(
       { 'person._id': updatedPerson._id },
       {
         $set: {
@@ -118,7 +139,10 @@ class Person {
           affiliation: updatedPerson.affiliation,
           affiliationPosition: updatedPerson.affiliationPosition,
           primaryState: updatedPerson.primaryState,
-          npiNumber: String(updatedPerson.nationalProviderIdentifier),
+          // ! Do not stringify nationalProviderIdentifier if it's null
+          npiNumber:
+            updatedPerson.nationalProviderIdentifier &&
+            String(updatedPerson.nationalProviderIdentifier),
           updatedOn: new Date(),
         },
       },
@@ -136,14 +160,23 @@ class Person {
       .collection(SOURCE_COLLECTION)
       .findOneAndDelete({ _id }, { session })
 
-    // Step 2: Cascade delete person if an obm influencer
+    // Step 2: Cascade delete person if an obm or lbm influencer
     await pulseCoreDb
       .collection('JOIN_obms_people')
       .deleteMany({ personId: _id }, { session })
 
-    // Step 3: Cascade delete JOIN entries connected to person in pulse-dev.obmsInfluencers
+    await pulseCoreDb
+      .collection('JOIN_lbms_people')
+      .deleteMany({ personId: _id }, { session })
+
+    // Step 3: Cascade delete JOIN entries connected to person in mbmInfluencerCollections:
+    // pulse-dev.obmsInfluencers and pulse-dev.lbmsInfluencers
     await pulseDevDb
       .collection('obmsInfluencers')
+      .deleteMany({ 'person._id': _id }, { session })
+
+    await pulseDevDb
+      .collection('lbmsInfluencers')
       .deleteMany({ 'person._id': _id }, { session })
 
     // Step 4: Delete all pathways/people connections touching that person, core and dev

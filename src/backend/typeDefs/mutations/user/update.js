@@ -3,6 +3,8 @@ const { gql } = require('apollo-server-express')
 const updateUserTypeDefs = gql`
   input UpdateUserInput {
     _id: ID!
+    firstName: String!
+    lastName: String!
     username: String!
     email: String!
     password: String
@@ -13,6 +15,8 @@ const updateUserTypeDefs = gql`
 
   type UpdateUserPayload {
     _id: ID!
+    firstName: String
+    lastName: String
     username: String
     email: String
     password: String

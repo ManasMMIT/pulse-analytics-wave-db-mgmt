@@ -287,6 +287,7 @@ export const GET_CLIENTS = gql`
       _id
       name
       description
+      icon
     }
   }
 `
@@ -297,6 +298,7 @@ export const GET_SELECTED_CLIENT = gql`
       _id
       name
       description
+      icon
     }
   }
 `
@@ -313,6 +315,7 @@ export const GET_CLIENT_TEAMS = gql`
         _id
         name
         description
+        icon
       }
       resources
       defaultLandingPath
@@ -344,6 +347,8 @@ export const GET_USERS = gql`
   query getUsers($subscriptionId: String) {
     users(subscriptionId: $subscriptionId) {
       _id
+      firstName
+      lastName
       username
       email
       client {
@@ -359,6 +364,8 @@ export const GET_TEAM_USERS = gql`
   query getTeamUsers($teamId: String) {
     users(teamId: $teamId) {
       _id
+      firstName
+      lastName
       username
       email
       emailSubscriptions {
@@ -408,6 +415,8 @@ export const GET_SELECTED_USER = gql`
   query getSelectedUser {
     selectedUser @client {
       _id
+      firstName
+      lastName
       username
       email
       # Note: don't think the below is needed for this
@@ -431,7 +440,6 @@ export const GET_SOURCE_NODES = gql`
       caption
       order
       parentId
-      resources
     }
   }
 `
@@ -763,11 +771,78 @@ export const GET_OBM_SERVICES = gql`
   }
 `
 
+export const GET_LBM_SERVICES = gql`
+  query getLbmServices {
+    lbmServices {
+      _id
+      name
+      description
+    }
+  }
+`
+
 export const GET_OBM_SERVICES_CATEGORIES = gql`
   query getObmServicesCategories {
     obmServicesCategories {
       _id
       name
+    }
+  }
+`
+
+export const GET_LBM_SERVICES_CATEGORIES = gql`
+  query getLbmServicesCategories {
+    lbmServicesCategories {
+      _id
+      name
+    }
+  }
+`
+
+export const GET_OBM_TYPES = gql`
+  query getObmTypes {
+    obmTypes {
+      _id
+      name
+      description
+    }
+  }
+`
+
+export const GET_LBM_TYPES = gql`
+  query getLbmTypes {
+    lbmTypes {
+      _id
+      name
+      description
+    }
+  }
+`
+
+export const GET_OBM_KEY_EVENTS = gql`
+  query getObmKeyEvents($obmId: String) {
+    obmKeyEvents(obmId: $obmId) {
+      _id
+      obmId
+      date
+      title
+      description
+      link
+      internalTdgNote
+    }
+  }
+`
+
+export const GET_LBM_KEY_EVENTS = gql`
+  query getLbmKeyEvents($lbmId: String) {
+    lbmKeyEvents(lbmId: $lbmId) {
+      _id
+      lbmId
+      date
+      title
+      description
+      link
+      internalTdgNote
     }
   }
 `
@@ -782,6 +857,42 @@ export const GET_OBM_ORGANIZATIONS = gql`
       type
       start
       businessModel
+      approvalTime
+      hasDecisionSupport
+      hasPbMbAuthorization
+      isEmrIntegrable
+      medicalReview
+      treatmentSelection
+      payer
+      pharmacyBenefitManager
+      specialtyPharmacy
+      labBenefitManager
+      parentCompany
+    }
+  }
+`
+
+export const GET_LBM_ORGANIZATIONS = gql`
+  query getLbmOrganizations {
+    lbmOrganizations {
+      _id
+      slug
+      organization
+      organizationTiny
+      type
+      start
+      businessModel
+      approvalTime
+      hasDecisionSupport
+      hasPbMbAuthorization
+      isEmrIntegrable
+      medicalReview
+      treatmentSelection
+      payer
+      pharmacyBenefitManager
+      specialtyPharmacy
+      oncologyBenefitManager
+      parentCompany
     }
   }
 `
@@ -945,6 +1056,16 @@ export const GET_JOIN_OBMS_SERVICES_AND_OBMS_SERVICES_CATEGORIES = gql`
   }
 `
 
+export const GET_JOIN_LBMS_SERVICES_AND_LBMS_SERVICES_CATEGORIES = gql`
+  query getJoinLbmsServicesAndLbmsServicesCategories($lbmServiceId: String) {
+    JOIN_lbmsServices_lbmsServicesCategories(lbmServiceId: $lbmServiceId) {
+      _id
+      lbmServiceId
+      lbmServiceCategoryId
+    }
+  }
+`
+
 export const GET_JOIN_OBMS_AND_OBMS_SERVICES = gql`
   query getJoinObmsAndObmsServices($obmId: String) {
     JOIN_obms_obmsServices(obmId: $obmId) {
@@ -952,6 +1073,37 @@ export const GET_JOIN_OBMS_AND_OBMS_SERVICES = gql`
       obmId
       obmServiceId
       rating
+    }
+  }
+`
+
+export const GET_JOIN_LBMS_AND_LBMS_SERVICES = gql`
+  query getJoinLbmsAndLbmsServices($lbmId: String) {
+    JOIN_lbms_lbmsServices(lbmId: $lbmId) {
+      _id
+      lbmId
+      lbmServiceId
+      rating
+    }
+  }
+`
+
+export const GET_JOIN_OBMS_AND_OBMS_TYPES = gql`
+  query getJoinObmsAndObmsTypes($obmId: String) {
+    JOIN_obms_obmsTypes(obmId: $obmId) {
+      _id
+      obmId
+      obmTypeId
+    }
+  }
+`
+
+export const GET_JOIN_LBMS_AND_LBMS_TYPES = gql`
+  query getJoinLbmsAndLbmsTypes($lbmId: String) {
+    JOIN_lbms_lbmsTypes(lbmId: $lbmId) {
+      _id
+      lbmId
+      lbmTypeId
     }
   }
 `
@@ -968,12 +1120,38 @@ export const GET_JOIN_OBMS_AND_PEOPLE = gql`
   }
 `
 
+export const GET_JOIN_LBMS_AND_PEOPLE = gql`
+  query getJoinLbmsAndPeople {
+    JOIN_lbms_people {
+      _id
+      lbmId
+      personId
+      position
+      managementTypes
+    }
+  }
+`
+
 export const GET_JOIN_OBMS_AND_PAYERS = gql`
   query getJoinObmsAndPayers($obmId: ID) {
     JOIN_obms_payers(obmId: $obmId) {
       _id
       obmId
       payerId
+      books
+      note
+    }
+  }
+`
+
+export const GET_JOIN_LBMS_AND_PAYERS = gql`
+  query getJoinLbmsAndPayers($lbmId: ID) {
+    JOIN_lbms_payers(lbmId: $lbmId) {
+      _id
+      lbmId
+      payerId
+      books
+      note
     }
   }
 `
@@ -983,6 +1161,21 @@ export const GET_VIEW_OBM_SERVICES = gql`
     VIEW_obmServices {
       _id
       obmId
+      serviceId
+      serviceCategoryId
+      organization
+      serviceCategory
+      service
+      serviceRating
+    }
+  }
+`
+
+export const GET_VIEW_LBM_SERVICES = gql`
+  query getViewLbmServices {
+    VIEW_lbmServices {
+      _id
+      lbmId
       serviceId
       serviceCategoryId
       organization
@@ -1004,10 +1197,35 @@ export const GET_VIEW_OBM_PAYER_PARTNERSHIPS = gql`
       payerOrganization
       commercialMedicalLives
       commercialMedicalLivesPercent
+      commercialReach
       medicareMedicalLives
       medicareMedicalLivesPercent
+      medicareReach
       managedMedicaidMedicalLives
       managedMedicaidMedicalLivesPercent
+      managedMedicaidReach
+    }
+  }
+`
+
+export const GET_VIEW_LBM_PAYER_PARTNERSHIPS = gql`
+  query getViewLbmPayerPartnerships {
+    VIEW_lbmPayerPartnerships {
+      _id
+      lbmId
+      lbmOrganization
+      payerId
+      payerSlug
+      payerOrganization
+      commercialMedicalLives
+      commercialMedicalLivesPercent
+      commercialReach
+      medicareMedicalLives
+      medicareMedicalLivesPercent
+      medicareReach
+      managedMedicaidMedicalLives
+      managedMedicaidMedicalLivesPercent
+      managedMedicaidReach
     }
   }
 `
@@ -1018,6 +1236,21 @@ export const GET_VIEW_OBM_INFLUENCERS = gql`
       _id
       obmId
       obmOrganization
+      influencerPosition
+      influencerId
+      influencerFirstName
+      influencerLastName
+      influencerNpiNumber
+    }
+  }
+`
+
+export const GET_VIEW_LBM_INFLUENCERS = gql`
+  query getViewLbmInfluencers {
+    VIEW_lbmInfluencers {
+      _id
+      lbmId
+      lbmOrganization
       influencerPosition
       influencerId
       influencerFirstName
@@ -1078,11 +1311,6 @@ export const GET_JOIN_PATHWAYS_AND_PEOPLE = gql`
         internalNotes
         pathwaysManagementTypes
         valueChairsIndications
-        totalDisclosures
-        dateDisclosure1
-        dateDisclosure2
-        dateDisclosure3
-        dateDisclosure4
       }
       position
       priority
@@ -1099,6 +1327,8 @@ export const GET_JOIN_PATHWAYS_AND_PEOPLE = gql`
       endDate
       startQuarter
       endQuarter
+      updatedOn
+      createdOn
     }
   }
 `

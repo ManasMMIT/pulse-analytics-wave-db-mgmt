@@ -38,8 +38,8 @@ echo "Dumping pulse-dev DB into current-dump folder..."
 mongodump \
   --host $HOST \
   --ssl \
-  --username pulse-admin \
-  --password $MONGO_KEY \
+  --username $MONGO_USERNAME \
+  --password $MONGO_PASSWORD \
   --authenticationDatabase admin \
   --db pulse-dev \
   --excludeCollection exportQueue \
@@ -53,8 +53,8 @@ echo "Restoring pulse-dev DB to pulse-prod DB..."
 mongorestore \
   --host $HOST \
   --ssl \
-  --username pulse-admin \
-  --password $MONGO_KEY \
+  --username $MONGO_USERNAME \
+  --password $MONGO_PASSWORD \
   --authenticationDatabase admin \
   --db pulse-prod ./current-dump/pulse-dev \
   --drop \

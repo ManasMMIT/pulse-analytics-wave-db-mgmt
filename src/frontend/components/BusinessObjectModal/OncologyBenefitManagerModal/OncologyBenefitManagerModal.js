@@ -3,6 +3,7 @@ import React from 'react'
 import {
   CREATE_OBM_ORGANIZATION,
   UPDATE_OBM_ORGANIZATION,
+  DELETE_OBM_ORGANIZATION,
 } from 'frontend/api/mutations'
 
 import {
@@ -15,12 +16,19 @@ import {
 import ObmServicesWidget from './relational-widgets/ObmServicesWidget'
 import ObmInfluencersWidget from './relational-widgets/ObmInfluencersWidget'
 import ObmPayersWidget from './relational-widgets/ObmPayersWidget'
+import ObmTypesWidget from './relational-widgets/ObmTypesWidget'
+import ObmKeyEventsWidget from './relational-widgets/ObmKeyEventsWidget'
 import BusinessObjectModal from '../BusinessObjectModal/BusinessObjectModal'
 
 const OBM_BOID = '5ec81a40b2cfb87bb15373ec'
 const HEADER_TEXT = 'Oncology Benefit Manager Accounts'
 
 const WIDGETS = [
+  {
+    _id: 'RELATIONAL_obmTypesWidget',
+    label: 'Connect to OBM Type',
+    Component: ObmTypesWidget,
+  },
   {
     _id: 'RELATIONAL_obmServicesWidget',
     label: 'Connect to OBM Services',
@@ -35,6 +43,11 @@ const WIDGETS = [
     _id: 'RELATIONAL_obmPayersWidget',
     label: 'Connect to Payers',
     Component: ObmPayersWidget,
+  },
+  {
+    _id: 'RELATIONAL_obmKeyEvents',
+    label: 'Manage Key Events',
+    Component: ObmKeyEventsWidget,
   },
 ]
 
@@ -53,6 +66,7 @@ const OncologyBenefitManagerModal = ({
     mutationDocs={{
       create: CREATE_OBM_ORGANIZATION,
       update: UPDATE_OBM_ORGANIZATION,
+      delete: DELETE_OBM_ORGANIZATION,
     }}
     refetchQueries={[
       ...refetchQueries,

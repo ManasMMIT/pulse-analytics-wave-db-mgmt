@@ -1,168 +1,113 @@
 import React, { useEffect, useState } from 'react'
-import { ObjectId } from 'mongodb'
+import { useQuery } from '@apollo/react-hooks'
 import _ from 'lodash'
-import Select from 'react-select'
-import { useQuery, useMutation } from '@apollo/react-hooks'
+import styled from '@emotion/styled'
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTrashAlt } from '@fortawesome/free-solid-svg-icons'
+import useObmAndPayerConnections from 'frontend/hooks/useObmPayerConnections'
+import manualBoModalLockOverlay from 'frontend/components/BusinessObjectModal/shared/widget/manualBoModalLockOverlay'
+
+import ConnectionPanel from '../../shared/widget/mbmPayerConnectionComponents/ConnectionPanel'
+import ConnectionsList from '../../shared/widget/mbmPayerConnectionComponents/ConnectionsList'
 
 import {
-  GET_PAYER_ORGANIZATIONS,
   GET_JOIN_OBMS_AND_PAYERS,
   GET_VIEW_OBM_PAYER_PARTNERSHIPS,
-} from '../../../../api/queries'
-
-import { CONNECT_OBM_AND_PAYER } from '../../../../api/mutations'
-
-import { customSelectStyles } from '../../../../components/customSelectStyles'
-import Button from '../../../../components/Button'
-import Color from '../../../../utils/color'
+  GET_PAYER_ORGANIZATIONS,
+  GET_BOOKS,
+} from 'frontend/api/queries'
 
 import {
-  RelationalRow,
-  InputContainer,
-  InputLabel,
-  // RowInput,
-  FixedControlRow,
-  SaveWarningBox,
-  SaveContainer,
-  WidgetPanelHeader,
-  WidgetPanelTitle,
-  DeleteButton,
-} from './styledComponents'
+  UPSERT_OBM_AND_PAYER_CONNECTION,
+  DELETE_OBM_AND_PAYER_CONNECTION,
+} from 'frontend/api/mutations'
+
+const WidgetContainer = styled.div({
+  display: 'flex',
+  width: '100%',
+})
+
+const WIDGET_TITLE = 'Payer Connections'
 
 const ObmPayersWidget = ({ entity }) => {
+  const [selectedConnectionId, selectConnectionId] = useState(null)
+  const [
+    isNewConnectionBeingCreated,
+    setWhetherNewConnectionBeingCreated,
+  ] = useState(false)
+  const [anyUnsavedChanges, setWhetherUnsavedChanges] = useState(false)
+
   const { data: payersData, loading: payersLoading } = useQuery(
     GET_PAYER_ORGANIZATIONS
   )
-
-  const { data: connectionsData, loading: connectionsLoading } = useQuery(
-    GET_JOIN_OBMS_AND_PAYERS,
-    {
-      variables: { obmId: entity._id },
-    }
-  )
-
-  const [stagedConnections, stageConnections] = useState([])
-
-  console.log(stagedConnections)
-
-  const [save] = useMutation(CONNECT_OBM_AND_PAYER, {
-    variables: {
-      input: {
-        obmId: entity._id,
-        connections: stagedConnections,
-      },
-    },
-    refetchQueries: [
-      {
-        query: GET_JOIN_OBMS_AND_PAYERS,
-        variables: { obmId: entity._id },
-      },
-      {
-        query: GET_VIEW_OBM_PAYER_PARTNERSHIPS,
-      },
-    ],
-    onError: alert,
-  })
+  const { data: booksData, loading: booksLoading } = useQuery(GET_BOOKS)
+  const {
+    data: connections,
+    loading: connectionsLoading,
+  } = useObmAndPayerConnections({ obmId: entity._id })
 
   useEffect(() => {
-    if (!payersLoading && !connectionsLoading) {
-      // ! HOTFIX: make sure there are no connections in the cache for removed payers
-      const payersById = _.keyBy(Object.values(payersData)[0], '_id')
-      const validConnections = Object.values(connectionsData)[0].filter(
-        (connection) => payersById[connection.payerId]
-      )
-
-      // clean data of __typename and anything else
-      const initialConnections = validConnections.map(({ _id, payerId }) => ({
-        _id,
-        payerId,
-      }))
-
-      stageConnections(initialConnections)
+    if (!payersLoading && !booksLoading && !connectionsLoading) {
+      const { _id: firstConnectionId } = connections[0] || {}
+      selectConnectionId(firstConnectionId)
     }
-  }, [payersLoading, connectionsLoading])
+  }, [payersLoading, connectionsLoading, booksLoading])
 
-  if (payersLoading || connectionsLoading) return 'Loading...'
+  if (payersLoading || connectionsLoading || booksLoading) return 'Loading...'
 
-  const payerDropdownOptions = payersData.payerOrganizations.map(
-    ({ _id, organization }) => ({
-      value: _id,
-      label: organization,
-    })
-  )
+  const createConnectionHandler = () => {
+    if (anyUnsavedChanges) {
+      alert(
+        "You have unsaved changes! Please save or cancel the connection you're on."
+      )
+    } else {
+      setWhetherNewConnectionBeingCreated(true)
+    }
+  }
 
-  const clonedStagedConnections = _.cloneDeep(stagedConnections)
+  let allPayers = []
+  if (!payersLoading) allPayers = Object.values(payersData)[0]
+  const payerOrgById = _.mapValues(_.keyBy(allPayers, '_id'), 'organization')
+
+  let allBooks = []
+  if (!booksLoading) allBooks = Object.values(booksData)[0]
+
+  manualBoModalLockOverlay(anyUnsavedChanges)
 
   return (
-    <div style={{ width: '100%', height: '100%', overflowY: 'auto' }}>
-      <WidgetPanelHeader>
-        <WidgetPanelTitle>OBM Payer Partnerships</WidgetPanelTitle>
-      </WidgetPanelHeader>
-      {stagedConnections.map((connection, idx) => {
-        const { _id, payerId } = connection
+    <WidgetContainer>
+      <ConnectionsList
+        connections={connections}
+        widgetTitle={WIDGET_TITLE}
+        createConnectionHandler={createConnectionHandler}
+        selectedConnectionId={selectedConnectionId}
+        selectConnectionId={selectConnectionId}
+        isNewConnectionBeingCreated={isNewConnectionBeingCreated}
+        anyUnsavedChanges={anyUnsavedChanges}
+        payerOrgById={payerOrgById}
+      />
 
-        return (
-          <RelationalRow key={_id}>
-            <InputContainer>
-              <InputLabel>Payer:</InputLabel>
-              <div style={{ width: 300 }}>
-                <Select
-                  styles={customSelectStyles}
-                  options={payerDropdownOptions}
-                  value={payerDropdownOptions.find(
-                    ({ value }) => value === payerId
-                  )}
-                  onChange={({ value }) => {
-                    const newDoc = _.merge(clonedStagedConnections[idx], {
-                      payerId: value,
-                    })
-                    clonedStagedConnections.splice(idx, 1, newDoc)
-                    stageConnections(clonedStagedConnections)
-                  }}
-                />
-              </div>
-            </InputContainer>
-
-            <div style={{ marginLeft: 'auto' }}>
-              <DeleteButton
-                onClick={() => {
-                  clonedStagedConnections.splice(idx, 1)
-                  stageConnections(clonedStagedConnections)
-                }}
-              >
-                <FontAwesomeIcon size="lg" icon={faTrashAlt} />
-              </DeleteButton>
-            </div>
-          </RelationalRow>
-        )
-      })}
-
-      <FixedControlRow>
-        <div>
-          <Button
-            onClick={() => {
-              const newConnection = { _id: ObjectId(), payerId: null }
-              clonedStagedConnections.push(newConnection)
-              stageConnections(clonedStagedConnections)
-            }}
-          >
-            + Add Payer
-          </Button>
-        </div>
-
-        <SaveContainer>
-          <SaveWarningBox>
-            IMPORTANT: You must click this save button to persist payer changes.
-          </SaveWarningBox>
-          <Button color={Color.GREEN} onClick={save}>
-            Save
-          </Button>
-        </SaveContainer>
-      </FixedControlRow>
-    </div>
+      <ConnectionPanel
+        connection={connections.find(({ _id }) => _id === selectedConnectionId)}
+        connections={connections}
+        payerOrgById={payerOrgById}
+        isNewConnectionBeingCreated={isNewConnectionBeingCreated}
+        mbmIdObj={{ obmId: entity._id }}
+        setWhetherNewConnectionBeingCreated={
+          setWhetherNewConnectionBeingCreated
+        }
+        setWhetherUnsavedChanges={setWhetherUnsavedChanges}
+        selectConnectionId={selectConnectionId}
+        allBooks={allBooks}
+        refetchQueries={[
+          { query: GET_JOIN_OBMS_AND_PAYERS },
+          { query: GET_VIEW_OBM_PAYER_PARTNERSHIPS },
+        ]}
+        mutationDocs={{
+          upsert: UPSERT_OBM_AND_PAYER_CONNECTION,
+          delete: DELETE_OBM_AND_PAYER_CONNECTION,
+        }}
+      />
+    </WidgetContainer>
   )
 }
 

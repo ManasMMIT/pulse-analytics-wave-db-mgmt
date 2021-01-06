@@ -35,8 +35,6 @@ const ObmServiceCategoryWidget = ({ entity }) => {
         _id: connectionId,
         obmServiceId: entity._id,
         obmServiceCategoryId: selectedCategoryId,
-        // obmServiceId: { _id: entity._id, boId: '5ed81e5fb8ebf33703463750' },
-        // obmServiceCategoryId: { _id: selectedCategoryId, boId: '5ed81ed8bcfdf6381562c17e' },
       },
     },
     refetchQueries: [

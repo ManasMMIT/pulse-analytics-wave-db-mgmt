@@ -11,6 +11,7 @@ import {
   GET_JOIN_OBMS_AND_PEOPLE,
   GET_JOIN_PATHWAYS_AND_PEOPLE,
   GET_VIEW_OBM_INFLUENCERS,
+  GET_VIEW_LBM_INFLUENCERS,
   GET_EVENTS,
 } from '../../../api/queries'
 
@@ -20,7 +21,7 @@ import OrganizationConnectionsWidget from './widgets/relational-widgets/Organiza
 import ProviderInfluencerWidget from './widgets/external-data-widgets/ProviderInfluencerWidget'
 import PhysiciansCompareWidget from './widgets/external-data-widgets/PhysiciansCompareWidget'
 import OpenPaymentsWidget from './widgets/external-data-widgets/OpenPaymentsWidget'
-import HistoryWidget from './widgets/HistoryWidget'
+import HistoryWidget from '../shared/widget/HistoryWidget'
 
 const WIDGETS = [
   {
@@ -81,6 +82,7 @@ const PeopleModal = ({
       { query: GET_PEOPLE },
       { query: GET_JOIN_OBMS_AND_PEOPLE },
       { query: GET_VIEW_OBM_INFLUENCERS },
+      { query: GET_VIEW_LBM_INFLUENCERS },
       { query: GET_EVENTS },
     ]}
     afterMutationHook={afterMutationHook}

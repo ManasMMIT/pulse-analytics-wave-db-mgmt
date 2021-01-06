@@ -42,19 +42,19 @@ const fieldStyle = {
   padding: '12px 0',
 }
 
-const BomSections = ({ selectedTab, inputFields, setInputField }) => {
+const BomSections = ({ selectedTab, boData, setBoData }) => {
   if (!selectedTab.sections) return null
   const { sections } = selectedTab
 
   const onEventChange = ({ name, value }) => {
-    setInputField((inputs) => ({
+    setBoData((inputs) => ({
       ...inputs,
       [name]: value,
     }))
   }
 
   const onSelectChange = (selected, { name }) => {
-    setInputField((inputs) => ({
+    setBoData((inputs) => ({
       ...inputs,
       [name]: selected.value,
     }))
@@ -64,7 +64,7 @@ const BomSections = ({ selectedTab, inputFields, setInputField }) => {
     // ! clearing last element makes selected `null`
     if (!selected) selected = []
 
-    setInputField((inputs) => ({
+    setBoData((inputs) => ({
       ...inputs,
       [name]: selected.map(({ value }) => value),
     }))
@@ -75,19 +75,19 @@ const BomSections = ({ selectedTab, inputFields, setInputField }) => {
       const { inputComponent, key, inputProps } = field
 
       let onChange = onEventChange
-      let value = inputFields[key]
+      let value = boData[key]
       let clonedInputProps = _.cloneDeep(inputProps)
 
       if (inputComponent === 'Select') {
         onChange = onSelectChange
-        value = { value: inputFields[key], label: inputFields[key] }
+        value = { value: boData[key], label: boData[key] }
         clonedInputProps.options = clonedInputProps.options.map((value) => ({
           value,
           label: value,
         }))
       } else if (inputComponent === 'MultiSelect') {
         onChange = onMultiSelectChange
-        const selectedValues = (inputFields[key] || []).map((value) => ({
+        const selectedValues = (boData[key] || []).map((value) => ({
           value,
           label: value,
         }))
@@ -135,8 +135,8 @@ const BomSections = ({ selectedTab, inputFields, setInputField }) => {
 
 BomSections.propTypes = {
   selectedTab: PropTypes.object.isRequired,
-  inputFields: PropTypes.object.isRequired,
-  setInputField: PropTypes.func.isRequired,
+  boData: PropTypes.object.isRequired,
+  setBoData: PropTypes.func.isRequired,
 }
 
 export default BomSections

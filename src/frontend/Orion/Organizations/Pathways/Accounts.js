@@ -1,105 +1,102 @@
 import React from 'react'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEdit } from '@fortawesome/free-solid-svg-icons'
-import { transparentize } from 'polished'
+import { useQuery } from '@apollo/react-hooks'
 
-import Panel from 'frontend/components/Panel'
-import { PathwaysAccountModalButton } from './../../shared/AccountModals'
-import DeleteButton from './../../shared/DeleteButton'
-import CopyOneOfStringButton from './../../shared/CopyOneOfStringButton'
+import { GET_PATHWAYS_ORGANIZATIONS } from 'frontend/api/queries'
 
-import { DELETE_PATHWAYS_ORGANIZATION } from './../../../api/mutations'
+import PanelHeader from 'frontend/components/Panel/PanelHeader'
+import Table from 'frontend/components/Table'
+import PathwaysModal from 'frontend/components/BusinessObjectModal/PathwaysModal'
+import { CONFIG_TABLE_WIDTH } from 'frontend/components/Table/tableWidths'
+import MultiSelectColumnFilter from 'frontend/components/Table/custom-filters/MultiSelect/MultiSelectColumnFilter'
+import customMultiSelectFilterFn from 'frontend/components/Table/custom-filters/MultiSelect/customMultiSelectFilterFn'
+import Icon from 'frontend/components/Icon'
+import Color from 'frontend/utils/color'
+import createButtonStyle from 'frontend/components/BusinessObjectModal/PeopleModal/createButtonStyle'
+import PathwaysModalButton from 'frontend/components/BusinessObjectModal/PathwaysModal/PathwaysModalButton'
 
-import {
-  GET_EVENTS,
-  GET_JOIN_PATHWAYS_AND_PEOPLE,
-  GET_PATHWAYS_ORGANIZATIONS,
-  GET_PAYER_ORGANIZATIONS,
-  GET_PROVIDER_ORGANIZATIONS,
-} from './../../../api/queries'
+const PAGE_TITLE = 'Pathways Accounts'
 
-import Color from './../../../utils/color'
-
-const editIcon = <FontAwesomeIcon size="lg" icon={faEdit} />
-
-const CREATE_BUTTON_TXT = 'Create Pathways Account'
-
-const buttonStyle = {
-  background: Color.PRIMARY,
-  color: Color.WHITE,
-  fontWeight: 700,
-}
-
-const defaultPanelItemStyle = {
-  display: 'flex',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-  padding: '8px 24px',
-  color: Color.BLACK,
-  fontWeight: 600,
-  fontSize: 12,
-  borderBottom: `1px solid ${transparentize(0.9, Color.BLACK)}`,
-  ':hover': {
-    background: transparentize(0.95, Color.BLACK),
+const MODAL_TO_COL_MAP = {
+  slug: {
+    Modal: PathwaysModal,
+    idKey: '_id',
+  },
+  organization: {
+    Modal: PathwaysModal,
+    idKey: '_id',
+  },
+  organizationTiny: {
+    Modal: PathwaysModal,
+    idKey: '_id',
   },
 }
 
-const headerChildren = (
-  <div>
-    <PathwaysAccountModalButton
-      buttonLabel={CREATE_BUTTON_TXT}
-      buttonStyle={buttonStyle}
-    />
+const COLUMNS = [
+  {
+    Header: 'Slug',
+    accessor: 'slug',
+    Filter: MultiSelectColumnFilter,
+    filter: customMultiSelectFilterFn,
+    sortType: 'text',
+    width: 300,
+  },
+  {
+    Header: 'Organization',
+    accessor: 'organization',
+    Filter: MultiSelectColumnFilter,
+    filter: customMultiSelectFilterFn,
+    sortType: 'text',
+    width: 300,
+  },
+  {
+    Header: 'Short Name',
+    accessor: 'organizationTiny',
+    Filter: MultiSelectColumnFilter,
+    filter: customMultiSelectFilterFn,
+    sortType: 'text',
+    width: 300,
+  },
+]
 
-    <CopyOneOfStringButton
-      queryDoc={GET_PATHWAYS_ORGANIZATIONS}
-      dataKey="pathwaysOrganizations"
-      datumKey="slug"
-    />
-  </div>
-)
+const Accounts = () => {
+  const { data, loading } = useQuery(GET_PATHWAYS_ORGANIZATIONS)
 
-const buttonGroupCallback = (entity) => (
-  <>
-    <PathwaysAccountModalButton
-      account={entity}
-      buttonLabel={editIcon}
-      isEditModal
-    />
+  if (loading) return null
 
-    <DeleteButton
-      itemId={entity._id}
-      mutationDoc={DELETE_PATHWAYS_ORGANIZATION}
-      refetchQueries={[
-        { query: GET_JOIN_PATHWAYS_AND_PEOPLE },
-        { query: GET_PATHWAYS_ORGANIZATIONS },
-        { query: GET_PAYER_ORGANIZATIONS },
-        { query: GET_PROVIDER_ORGANIZATIONS },
-        { query: GET_EVENTS },
-      ]}
-    />
-  </>
-)
+  const { pathwaysOrganizations } = data
 
-const panelItemConfig = {
-  style: defaultPanelItemStyle,
-  buttonGroupCallback,
-  label1Callback: ({ organization }) => <div>{organization}</div>,
+  return (
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+      }}
+    >
+      <PanelHeader title={PAGE_TITLE}>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <PathwaysModalButton buttonStyle={createButtonStyle}>
+            <Icon
+              iconName="add"
+              color1={Color.WHITE}
+              width={16}
+              style={{ marginRight: 8 }}
+            />
+            Create Pathways
+          </PathwaysModalButton>
+        </div>
+      </PanelHeader>
+      <Table
+        width={CONFIG_TABLE_WIDTH}
+        data={pathwaysOrganizations}
+        columns={COLUMNS}
+        modalColMap={MODAL_TO_COL_MAP}
+        exportProps={{
+          filename: 'PathwaysAccounts',
+          sheetName: 'Pathways Accounts',
+        }}
+      />
+    </div>
+  )
 }
 
-const PathwaysAccounts = () => (
-  <Panel
-    title="Pathways Accounts"
-    headerChildren={headerChildren}
-    headerContainerStyle={{
-      background: '#FFF',
-      borderBottom: `1px solid ${transparentize(0.9, Color.BLACK)}`,
-    }}
-    queryDocs={{
-      fetchAllQueryProps: { query: GET_PATHWAYS_ORGANIZATIONS },
-    }}
-    panelItemConfig={panelItemConfig}
-  />
-)
-
-export default PathwaysAccounts
+export default Accounts

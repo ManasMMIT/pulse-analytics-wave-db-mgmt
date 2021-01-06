@@ -10,7 +10,9 @@ module.exports = async ({ targetTeam, result, db }) => {
 }
 
 const getRegionalBreakdown = async (targetTeam, db) => {
-  return await db
+  const doc = await db
     .collection('roles.nodes.regionalBreakdowns')
     .findOne({ nodeId: REGIONAL_TARGETING_ID, roleId: targetTeam._id })
+
+  return doc || { breakdowns: [] }
 }

@@ -1,7 +1,7 @@
 const updateClient = async (
   parent,
-  { input: { _id, description } },
-  { mongoClient, coreClients, coreRoles, coreUsers, pulseDevDb },
+  { input: { _id, description, icon } },
+  { mongoClient, coreClients, coreRoles, coreUsers, pulseDevDb, pulseProdDb },
   info
 ) => {
   const session = mongoClient.startSession()
@@ -19,6 +19,7 @@ const updateClient = async (
         $set: {
           name: description,
           description,
+          icon,
         },
       },
       { returnOriginal: false, session }
@@ -28,6 +29,7 @@ const updateClient = async (
       $set: {
         'client.name': description,
         'client.description': description,
+        'client.icon': icon,
       },
     }
 
@@ -40,6 +42,9 @@ const updateClient = async (
     })
 
     await pulseDevDb
+      .collection('users.sitemaps')
+      .updateMany({ 'client._id': _id }, embeddedSetOperation, { session })
+    await pulseProdDb
       .collection('users.sitemaps')
       .updateMany({ 'client._id': _id }, embeddedSetOperation, { session })
 

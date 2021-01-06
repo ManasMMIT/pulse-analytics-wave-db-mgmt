@@ -1,0 +1,26 @@
+version: "3.8"
+   
+services:
+  polaris_app:
+    build:
+      dockerfile: ./src/frontend/dev.Dockerfile
+      context: .
+    command: yarn start
+    ports:
+      - "3000:3000"
+    container_name: polaris_app
+    working_dir: /root/app
+    volumes:
+      - ./:/root/app:cached
+  polaris_api:
+    build:
+      dockerfile: ./src/backend/dev.Dockerfile
+      context: .
+    command: yarn phoenix
+    ports:
+      - "1337:1337"
+      - "2000:2000"
+    container_name: polaris_api
+    working_dir: /root/api
+    volumes:
+      - ./:/root/api:cached

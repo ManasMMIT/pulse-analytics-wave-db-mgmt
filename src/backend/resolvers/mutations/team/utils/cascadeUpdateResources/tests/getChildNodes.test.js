@@ -1,6 +1,6 @@
+import getChildNodes from '../getChildNodes'
 const _ = require('lodash')
 
-const getChildNodes = require('../getChildNodes')
 const nodes = require('./mocks/input/nodes-collection')
 const nextResources = require('./mocks/input/next-resources')
 const childNodes = require('./mocks/output/childNodes')

@@ -84,7 +84,17 @@ const deletePayerOrganization = async (
       .collection('obmsPayers')
       .deleteMany({ 'payer._id': _id }, { session })
 
-    // STEP 7: delete payer copies in dev
+    // STEP 7: Delete all lbm-payer connections
+    await pulseCoreDb
+      .collection('JOIN_lbms_payers')
+      .deleteMany({ payerId: _id }, { session })
+
+    // STEP 8: Cascade delete entries connected to the payer in pulse-dev.lbmsPayers
+    await pulseDevDb
+      .collection('lbmsPayers')
+      .deleteMany({ 'payer._id': _id }, { session })
+
+    // STEP 9: delete payer copies in dev
     await pulseDevDb.collection('payers').deleteOne({ _id }, { session })
   })
 

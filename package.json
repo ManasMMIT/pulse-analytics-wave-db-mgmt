@@ -1,9 +1,8 @@
 {
   "name": "wave-db-mgmt",
-  "version": "3.9.1",
+  "version": "4.3.0",
   "description": "A repository for managing data into Pulse databases.",
   "repository": "https://github.com/pulse-data/wave-db-mgmt.git",
-  "proxy": "http://localhost:1337/",
   "license": "MIT",
   "dependencies": {
     "@apollo/client": "^3.1.1",
@@ -20,6 +19,13 @@
     "@material-ui/pickers": "^3.2.10",
     "@sendgrid/mail": "^6.5.4",
     "@testing-library/react": "^10.4.7",
+    "@types/jest": "^26.0.16",
+    "@types/lodash": "^4.14.165",
+    "@types/node": "^14.14.10",
+    "@types/react": "^17.0.0",
+    "@types/react-dom": "^17.0.0",
+    "@types/react-router-dom": "^5.1.6",
+    "@types/react-select": "^3.0.27",
     "ajv": "^6.12.0",
     "ajv-errors": "^1.0.1",
     "apollo-boost": "^0.4.7",
@@ -40,6 +46,7 @@
     "graphql-iso-date": "^3.6.1",
     "graphql-tag": "^2.10.3",
     "graphql-type-json": "^0.3.1",
+    "http-proxy-middleware": "^1.0.6",
     "jszip": "^3.2.2",
     "jwks-rsa": "^1.7.0",
     "lodash": "^4.17.11",
@@ -68,6 +75,7 @@
     "socket.io": "^2.3.0",
     "socket.io-client": "^2.3.0",
     "string-similarity": "^4.0.1",
+    "typescript": "^4.1.2",
     "uuid": "^7.0.2",
     "xlsx": "^0.15.6",
     "yargs": "^15.3.1"
@@ -79,10 +87,10 @@
     "react:test": "react-scripts test --env=jest-environment-jsdom-sixteen",
     "react:test:debug": "react-scripts --inspect-brk test --runInBand --env=jest-environment-jsdom-sixteen",
     "eject": "react-scripts eject",
-    "repl": "node --inspect=127.0.0.1:2000 ./pulse-core-psql/sequelizeConsole.js",
-    "phoenix": "nodemon --inspect=127.0.0.1:2000 ./src/backend",
-    "phoenix-prod": "node --inspect=127.0.0.1:2000 ./src/backend",
-    "test": "jest --testPathIgnorePatterns src/frontend/.*.test.js .*.integration.test.js .*.cache.test.js",
+    "repl": "node --inspect=0.0.0.0:2000 ./pulse-core-psql/sequelizeConsole.js",
+    "phoenix": "nodemon",
+    "phoenix-prod": "node ./src/backend",
+    "test": "react-scripts test --watchAll=false --env=jest-environment-jsdom-sixteen --testPathIgnorePatterns src/frontend/.*.test.js .*.integration.test.js .*.cache.test.js",
     "integration-test": "jest .*.integration.test.js",
     "test:debug": "node --inspect node_modules/.bin/jest --runInBand",
     "start:prod": "NODE_ENV=production node ./src/backend",
@@ -118,9 +126,13 @@
     ]
   },
   "devDependencies": {
+    "@types/express": "types/express",
+    "@types/graphql": "^14.5.0",
+    "@types/mongodb": "^3.6.0",
     "jest-environment-jsdom-sixteen": "^1.0.3",
     "lint-staged": "^10.2.11",
     "pre-commit": "^1.2.2",
-    "prettier": "2.0.5"
+    "prettier": "2.0.5",
+    "ts-node": "^9.1.0"
   }
 }

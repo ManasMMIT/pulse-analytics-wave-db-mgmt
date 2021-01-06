@@ -3,6 +3,8 @@ const { gql } = require('apollo-server-express')
 const createUserTypeDefs = gql`
   input CreateUserInput {
     _id: ID # re-using the update form sends { _id: null } through
+    firstName: String!
+    lastName: String!
     username: String!
     email: String!
     password: String!
@@ -24,6 +26,8 @@ const createUserTypeDefs = gql`
 
   type CreateUserPayload {
     _id: ID!
+    firstName: String
+    lastName: String
     username: String!
     email: String
     emailSubscriptions: [Subscription]

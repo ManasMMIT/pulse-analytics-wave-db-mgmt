@@ -1,11 +1,11 @@
-/** @jsx jsx */
-import { jsx } from '@emotion/core'
 import React, { useState } from 'react'
+
+import Button from 'frontend/components/Button'
 
 import PeopleModal from './PeopleModal'
 
 const PeopleModalButton = ({
-  buttonStyle = {},
+  buttonStyle,
   children,
   entityId,
   refetchQueries,
@@ -15,9 +15,9 @@ const PeopleModalButton = ({
 
   return (
     <>
-      <button css={buttonStyle} onClick={() => setModal(!showModal)}>
+      <Button buttonStyle={buttonStyle} onClick={() => setModal(!showModal)}>
         {children}
-      </button>
+      </Button>
 
       {showModal && (
         <PeopleModal
@@ -29,6 +29,14 @@ const PeopleModalButton = ({
       )}
     </>
   )
+}
+
+PeopleModalButton.defaultProps = {
+  buttonStyle: {},
+  children: undefined,
+  entityId: undefined,
+  refetchQueries: undefined,
+  afterMutationHook: undefined,
 }
 
 export default PeopleModalButton
