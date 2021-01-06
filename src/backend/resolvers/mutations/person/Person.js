@@ -130,8 +130,8 @@ class Person {
     if (updatedPerson.middleName) member += ` ${updatedPerson.middleName}`
     if (updatedPerson.lastName) member += ` ${updatedPerson.lastName}`
 
-    // Step 3: Cascade update TEMP_pathwaysInfluencers collection (soon to be pathwaysInfluencers) in pulse-dev
-    await pulseDevDb.collection('TEMP_pathwaysInfluencers').updateMany(
+    // Step 3: Cascade update pathwaysInfluencers collection in pulse-dev
+    await pulseDevDb.collection('pathwaysInfluencers').updateMany(
       { personId: updatedPerson._id },
       {
         $set: {
@@ -208,7 +208,7 @@ class Person {
     await Promise.all(deletionOps)
 
     await pulseDevDb
-      .collection('TEMP_pathwaysInfluencers')
+      .collection('pathwaysInfluencers')
       .deleteMany({ personId: deletedPerson._id }, { session })
 
     return deletedPerson

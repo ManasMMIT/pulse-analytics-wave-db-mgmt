@@ -110,7 +110,7 @@ const deletePathwaysOrganization = async (
     // STEP 6: Delete the same connections from the materialized
     // pulse-dev.pathwaysInfluencers collection.
     await pulseDevDb
-      .collection('TEMP_pathwaysInfluencers')
+      .collection('pathwaysInfluencers')
       .deleteMany({ pathwaysId: _id }, { session })
   })
 
