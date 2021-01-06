@@ -81,8 +81,8 @@ const updatePathwaysOrganization = async (
       updateProvidersCollectionOp,
     ])
 
-    // Step 5: Update the TEMP_pathwaysInfluencers collection (soon to be pathwaysInfluencers) in pulse-dev
-    await pulseDevDb.collection('TEMP_pathwaysInfluencers').updateMany(
+    // Step 5: Update the pathwaysInfluencers collection in pulse-dev
+    await pulseDevDb.collection('pathwaysInfluencers').updateMany(
       { pathwaysId: updatedPathways._id },
       {
         $set: {

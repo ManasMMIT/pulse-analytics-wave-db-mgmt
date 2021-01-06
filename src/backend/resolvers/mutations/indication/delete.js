@@ -121,7 +121,7 @@ const deleteSourceIndication = async (
     await Promise.all(updateOps)
 
     await pulseDevDb
-      .collection('TEMP_pathwaysInfluencers')
+      .collection('pathwaysInfluencers')
       .updateMany(
         { indication: deletedIndication.name },
         { $pull: { indication: deletedIndication.name } },

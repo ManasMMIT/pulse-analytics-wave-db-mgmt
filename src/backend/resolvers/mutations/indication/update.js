@@ -95,7 +95,7 @@ const updateSourceIndication = async (
       .collection('indicationsTherapeuticAreas')
       .updateOne({ _id }, { $set: docToUpdate }, { session, upsert: true })
 
-    // Step 4: Update the materialized TEMP_pathwaysInfluencers (soon to become pathwaysInfluencers)
+    // Step 4: Update the materialized pathwaysInfluencers
     // collection in pulse-dev
 
     // we first need to find what the indication used to be, before it was updated
@@ -106,7 +106,7 @@ const updateSourceIndication = async (
 
     // with the old name known, we can now update every instance of the old name to
     // the new name in the `indication` array in pathwaysInfluencers
-    await pulseDevDb.collection('TEMP_pathwaysInfluencers').updateMany(
+    await pulseDevDb.collection('pathwaysInfluencers').updateMany(
       { indication: indicationNameBeforeUpdate },
       {
         $set: {
