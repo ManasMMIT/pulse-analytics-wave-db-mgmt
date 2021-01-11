@@ -12,7 +12,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Fixed** for any bug fixes.
 - **Security** in case of vulnerabilities.
 
-## [Unreleased] - Started: 1-6-21
+## [Unreleased] - Started: 1-11-21
+
+## [4.3.2] - Started: 1-6-21
+
+### Changed
+- `Orion/Payer Project Import`: Changed pipeline for materialization of old additional criteria data (`payerHistoricalAdditionalCriteria` and `payerHistoricalAdditionalCriteriaHt`) to use the latest additional criteria data even if there is none for a given PTP [#906](https://github.com/pulse-analytics/wave-db-mgmt/pull/906)
 
 ## [4.3.1] - Started: 12-28-20
 
