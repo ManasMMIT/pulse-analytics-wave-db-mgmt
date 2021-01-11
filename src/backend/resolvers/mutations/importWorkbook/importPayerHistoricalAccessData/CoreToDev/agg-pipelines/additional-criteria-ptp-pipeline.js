@@ -2,19 +2,14 @@ const getLatestWithinEachMonthYearPtp = require('./get-latest-within-each-month-
 
 module.exports = (limit) => [
   {
-    $match: {
-      additionalCriteriaData: {
-        $exists: true,
-        $nin: [null, []],
-      },
-    },
-  },
-  {
     $addFields: {
       dateParts: {
         $dateToParts: {
           date: '$timestamp',
         },
+      },
+      additionalCriteriaData: {
+        $ifNull: ['$additionalCriteriaData', []],
       },
     },
   },
