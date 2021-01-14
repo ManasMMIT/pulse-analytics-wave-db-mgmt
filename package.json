@@ -30,6 +30,7 @@
     "ajv-errors": "^1.0.1",
     "apollo-boost": "^0.4.7",
     "apollo-server-express": "^2.11.0",
+    "axios": "^0.21.1",
     "body-parser": "^1.19.0",
     "d3-collection": "^1.0.7",
     "date-fns": "^2.11.0",
