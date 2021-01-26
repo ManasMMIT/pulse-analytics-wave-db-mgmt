@@ -417,7 +417,7 @@ const queries = gql`
   }
 
   type ObmService {
-    id: ID!
+    _id: ID!
     name: String!
     description: String
   }
@@ -429,7 +429,7 @@ const queries = gql`
   }
 
   type ObmServiceCategory {
-    id: ID!
+    _id: ID!
     name: String!
   }
 
