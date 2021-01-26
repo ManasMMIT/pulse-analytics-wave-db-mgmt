@@ -764,7 +764,7 @@ export const GET_APM_ORGANIZATIONS = gql`
 export const GET_OBM_SERVICES = gql`
   query getObmServices {
     obmServices {
-      _id
+      id
       name
       description
     }
@@ -784,7 +784,7 @@ export const GET_LBM_SERVICES = gql`
 export const GET_OBM_SERVICES_CATEGORIES = gql`
   query getObmServicesCategories {
     obmServicesCategories {
-      _id
+      id
       name
     }
   }
