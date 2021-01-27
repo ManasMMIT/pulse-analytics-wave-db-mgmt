@@ -25,6 +25,7 @@ const ObmServiceCategoryWidget = ({ entity }) => {
     variables: {
       input: {
         id: entity.id,
+        name: entity.name,
         category_id: selectedCategoryId,
       },
     },
