@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const obmServices = (parent, args, { pulseCoreDb }) => {
+const obmServices = (parent, args, context) => {
   return axios
     .get('obm-services/')
     .then(({ data }) => data)
