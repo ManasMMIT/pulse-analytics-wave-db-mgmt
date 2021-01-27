@@ -23,6 +23,7 @@ const ObmServicesCategoriesModal = ({
   afterMutationHook,
 }) => (
   <BusinessObjectModal
+    isVega
     closeModal={closeModal}
     entityId={entityId}
     boId={OBM_SERVICES_CATEGORIES_BOID}
