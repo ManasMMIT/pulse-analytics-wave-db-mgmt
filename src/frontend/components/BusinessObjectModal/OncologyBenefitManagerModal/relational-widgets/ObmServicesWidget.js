@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { ObjectId } from 'mongodb'
+import { v4 } from 'uuid'
 import _ from 'lodash'
 import Select from 'react-select'
 import { useQuery, useMutation } from '@apollo/react-hooks'
@@ -40,7 +41,7 @@ const ObmServicesWidget = ({ entity }) => {
   const { data: connectionsData, loading: connectionsLoading } = useQuery(
     GET_JOIN_OBMS_AND_OBMS_SERVICES,
     {
-      variables: { obmId: entity._id },
+      variables: { obmId: entity.uuid },
     }
   )
 
@@ -55,7 +56,7 @@ const ObmServicesWidget = ({ entity }) => {
     refetchQueries: [
       {
         query: GET_JOIN_OBMS_AND_OBMS_SERVICES,
-        variables: { obmId: entity._id },
+        variables: { obmId: entity.uuid },
       },
       {
         query: GET_VIEW_OBM_SERVICES,
@@ -67,15 +68,16 @@ const ObmServicesWidget = ({ entity }) => {
   useEffect(() => {
     if (!servicesLoading && !connectionsLoading) {
       // ! HOTFIX: make sure there are no connections in the cache for removed services
-      const servicesById = _.keyBy(Object.values(servicesData)[0], '_id')
+      const servicesById = _.keyBy(Object.values(servicesData)[0], 'id')
+
       const validConnections = Object.values(connectionsData)[0].filter(
         (connection) => servicesById[connection.obmServiceId]
       )
 
       // clean data of __typename and anything else
       const initialConnections = validConnections.map(
-        ({ _id, obmServiceId, obmId, rating }) => ({
-          _id,
+        ({ id, obmServiceId, obmId, rating }) => ({
+          id,
           obmServiceId,
           obmId,
           rating,
@@ -89,8 +91,8 @@ const ObmServicesWidget = ({ entity }) => {
   if (servicesLoading || connectionsLoading) return 'Loading...'
 
   const serviceDropdownOptions = servicesData.obmServices.map(
-    ({ _id, name }) => ({
-      value: _id,
+    ({ id, name }) => ({
+      value: id,
       label: name,
     })
   )
@@ -103,10 +105,10 @@ const ObmServicesWidget = ({ entity }) => {
         <WidgetPanelTitle>OBM Services</WidgetPanelTitle>
       </WidgetPanelHeader>
       {stagedConnections.map((connection, idx) => {
-        const { _id, obmServiceId, rating } = connection
+        const { id, obmServiceId, rating } = connection
 
         return (
-          <RelationalRow key={_id}>
+          <RelationalRow key={id}>
             <InputContainer
               style={{ display: 'flex', width: 400, alignItems: 'center' }}
             >
@@ -167,10 +169,10 @@ const ObmServicesWidget = ({ entity }) => {
           <Button
             onClick={() => {
               const newConnection = {
-                _id: ObjectId(),
+                id: v4(),
                 obmServiceId: null,
                 rating: 0,
-                obmId: entity._id,
+                obmId: entity.uuid,
               }
               clonedStagedConnections.push(newConnection)
               stageConnections(clonedStagedConnections)
