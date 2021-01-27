@@ -1,76 +1,44 @@
-import React, { useEffect, useState } from 'react'
+// TODO: Remove this widget by adding one-to-one relational field as BOM input
+// * The field service.category exists and should be used w/
+// * a dropdown in the regular bom profile section
+
+import React, { useState } from 'react'
 import Select from 'react-select'
 import { useQuery, useMutation } from '@apollo/react-hooks'
-import _ from 'lodash'
 
 import {
   GET_OBM_SERVICES_CATEGORIES,
-  GET_JOIN_OBMS_SERVICES_AND_OBMS_SERVICES_CATEGORIES,
+  GET_OBM_SERVICES,
   GET_VIEW_OBM_SERVICES,
 } from '../../../../api/queries'
 
-import { CONNECT_OBM_SERVICE_AND_OBM_SERVICE_CATEGORY } from '../../../../api/mutations'
+import { UPDATE_OBM_SERVICE } from '../../../../api/mutations'
 
 const ObmServiceCategoryWidget = ({ entity }) => {
   const { data: categoriesData, loading: categoriesLoading } = useQuery(
     GET_OBM_SERVICES_CATEGORIES
   )
 
-  const { data: connectionsData, loading: connectionsLoading } = useQuery(
-    GET_JOIN_OBMS_SERVICES_AND_OBMS_SERVICES_CATEGORIES,
-    {
-      variables: { obmServiceId: entity._id },
-    }
-  )
+  const [selectedCategoryId, selectCategoryId] = useState(entity.category_id)
 
-  const [selectedCategoryId, selectCategoryId] = useState(null)
-
-  const connections = Object.values(connectionsData || {})[0]
-
-  const connectionId = connections && connections[0] && connections[0]._id
-
-  const [save] = useMutation(CONNECT_OBM_SERVICE_AND_OBM_SERVICE_CATEGORY, {
+  const [save] = useMutation(UPDATE_OBM_SERVICE, {
     variables: {
       input: {
-        _id: connectionId,
-        obmServiceId: entity._id,
-        obmServiceCategoryId: selectedCategoryId,
+        id: entity.id,
+        category_id: selectedCategoryId,
       },
     },
     refetchQueries: [
-      {
-        query: GET_JOIN_OBMS_SERVICES_AND_OBMS_SERVICES_CATEGORIES,
-        variables: { obmServiceId: entity._id },
-      },
-      {
-        query: GET_VIEW_OBM_SERVICES,
-      },
+      { query: GET_OBM_SERVICES },
+      { query: GET_VIEW_OBM_SERVICES },
     ],
     onError: alert,
   })
 
-  useEffect(() => {
-    if (!categoriesLoading && !connectionsLoading) {
-      if (connections && connections[0]) {
-        // ! HOTFIX: make sure there are no connections in the cache for removed categories
-        const categoriesById = _.keyBy(Object.values(categoriesData)[0], '_id')
-        const validConnections = connections.filter(
-          (connection) => categoriesById[connection.obmServiceCategoryId]
-        )
+  if (categoriesLoading) return 'Loading...'
 
-        const initialCategoryId = validConnections.length
-          ? validConnections[0].obmServiceCategoryId
-          : null
-
-        selectCategoryId(initialCategoryId)
-      }
-    }
-  }, [categoriesLoading, connectionsLoading])
-
-  if (categoriesLoading || connectionsLoading) return 'Loading...'
-
-  const options = categoriesData.obmServicesCategories.map(({ _id, name }) => ({
-    value: _id,
+  const options = categoriesData.obmServicesCategories.map(({ id, name }) => ({
+    value: id,
     label: name,
   }))
 
