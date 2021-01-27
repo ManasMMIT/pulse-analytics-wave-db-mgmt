@@ -767,6 +767,7 @@ export const GET_OBM_SERVICES = gql`
       id
       name
       description
+      category_id
     }
   }
 `
