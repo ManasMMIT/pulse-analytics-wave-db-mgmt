@@ -57,18 +57,23 @@ const BusinessObjectModal = ({
   refetchQueries,
   afterMutationHook,
   widgets,
+  // ! Migrating data to vega means id instead of _id
+  // ! REMOVE WHEN ALL BO DATA IS IN VEGA
+  isVega,
 }) => {
+  const entityIdField = isVega ? 'id' : '_id'
+
   const [currentEntityId, setCurrentEntityId] = useState(entityId)
   const isEditModal = Boolean(currentEntityId)
 
-  const { schema, entity, loading } = useBom(boId, currentEntityId)
+  const { schema, entity, loading } = useBom(boId, currentEntityId, isVega)
 
   const [selectedTab, setSelectedTab] = useState({})
   const [boData, setBoData] = useState({})
   const [showDeleteConfirmation, toggleDeleteConfirmation] = useState(false)
 
   const [deleteHandler] = useMutation(mutationDocs.delete || STUB_DOC, {
-    variables: { input: { _id: currentEntityId } },
+    variables: { input: { [entityIdField]: currentEntityId } },
     refetchQueries,
     onCompleted: (data) => {
       afterMutationHook(data)
@@ -125,6 +130,7 @@ const BusinessObjectModal = ({
           closeModal={closeModal}
           boData={boData}
           entityId={currentEntityId}
+          entityIdField={entityIdField}
           refetchQueries={refetchQueries}
           afterMutationHook={afterMutationHook}
           isEditModal={isEditModal}
@@ -172,6 +178,7 @@ BusinessObjectModal.propTypes = {
   refetchQueries: PropTypes.array,
   afterMutationHook: PropTypes.func,
   widgets: PropTypes.array,
+  isVega: PropTypes.bool, // ! REMOVE WHEN ALL BO DATA IS IN VEGA
 }
 
 BusinessObjectModal.defaultProps = {
@@ -182,6 +189,7 @@ BusinessObjectModal.defaultProps = {
   refetchQueries: [],
   afterMutationHook: () => {},
   widgets: [],
+  isVega: false, // ! REMOVE WHEN ALL BO DATA IS IN VEGA
 }
 
 export default BusinessObjectModal

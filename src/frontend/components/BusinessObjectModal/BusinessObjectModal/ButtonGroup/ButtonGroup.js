@@ -17,6 +17,7 @@ const ButtonGroup = ({
   showDeleteConfirmation,
   closeModal,
   entityId,
+  entityIdField, // ! TEMP prop for split psql/mongo data
   boData,
   refetchQueries,
   afterMutationHook,
@@ -38,7 +39,9 @@ const ButtonGroup = ({
     ? mutationDocs.update || STUB_DOC
     : mutationDocs.create || STUB_DOC
 
-  const inputToUse = isEditModal ? { _id: entityId, ...boData } : boData
+  const inputToUse = isEditModal
+    ? { [entityIdField]: entityId, ...boData }
+    : boData
 
   const [save, { loading: isMutationLoading }] = useMutation(
     saveMutationToUse,
@@ -46,7 +49,10 @@ const ButtonGroup = ({
       refetchQueries,
       onCompleted: (data) => {
         afterMutationHook(data)
-        const { _id: currentEntityId, ...restOfEntity } = Object.values(data)[0]
+        const {
+          [entityIdField]: currentEntityId,
+          ...restOfEntity
+        } = Object.values(data)[0]
 
         // only use returned entity fields that are part of input
         const entityDataToStage = Object.keys(boData).reduce((acc, key) => {
