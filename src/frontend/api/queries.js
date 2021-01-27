@@ -869,6 +869,7 @@ export const GET_OBM_ORGANIZATIONS = gql`
       specialtyPharmacy
       labBenefitManager
       parentCompany
+      uuid
     }
   }
 `
@@ -1070,7 +1071,7 @@ export const GET_JOIN_LBMS_SERVICES_AND_LBMS_SERVICES_CATEGORIES = gql`
 export const GET_JOIN_OBMS_AND_OBMS_SERVICES = gql`
   query getJoinObmsAndObmsServices($obmId: String) {
     JOIN_obms_obmsServices(obmId: $obmId) {
-      _id
+      id
       obmId
       obmServiceId
       rating

@@ -365,6 +365,7 @@ const queries = gql`
   type ObmOrganization {
     # base fields
     _id: ID!
+    uuid: String
     slug: String!
     type: String
     organization: String
@@ -464,7 +465,7 @@ const queries = gql`
   }
 
   type ObmAndObmServiceConnection {
-    _id: ID!
+    id: ID!
     obmId: String!
     obmServiceId: String!
     rating: Int!
