@@ -1160,7 +1160,7 @@ export const GET_JOIN_LBMS_AND_PAYERS = gql`
 export const GET_VIEW_OBM_SERVICES = gql`
   query getViewObmServices {
     VIEW_obmServices {
-      _id
+      id
       obmId
       serviceId
       serviceCategoryId

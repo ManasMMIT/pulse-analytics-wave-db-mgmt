@@ -5,6 +5,7 @@ const updateObmServiceTypeDefs = gql`
     id: ID!
     name: String!
     description: String
+    category_id: String
   }
 
   type UpdateObmServicePayload {

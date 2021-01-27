@@ -573,7 +573,7 @@ const queries = gql`
   }
 
   type VIEW_ObmService {
-    _id: ID!
+    id: ID!
     obmId: String!
     serviceId: String!
     serviceCategoryId: String
