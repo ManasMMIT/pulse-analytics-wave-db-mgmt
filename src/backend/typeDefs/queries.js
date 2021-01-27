@@ -417,7 +417,7 @@ const queries = gql`
   }
 
   type ObmService {
-    _id: ID!
+    id: ID!
     name: String!
     description: String
   }

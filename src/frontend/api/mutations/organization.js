@@ -306,7 +306,7 @@ export const DELETE_OBM_TYPE = gql`
 export const CREATE_OBM_SERVICE = gql`
   mutation CreateObmService($input: CreateObmServiceInput!) {
     createObmService(input: $input) {
-      _id
+      id
       name
       description
     }

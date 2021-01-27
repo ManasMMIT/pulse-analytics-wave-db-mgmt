@@ -7,10 +7,7 @@ const createObmService = async (parent, { input }, { pulseCoreDb }, info) => {
       throw new Error(JSON.stringify(e.response.data))
     })
 
-  return {
-    _id: data.id,
-    ...data,
-  }
+  return data
 }
 
 module.exports = createObmService

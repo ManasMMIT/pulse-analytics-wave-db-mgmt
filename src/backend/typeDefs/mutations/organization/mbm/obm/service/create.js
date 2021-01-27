@@ -7,7 +7,7 @@ const createObmServiceTypeDefs = gql`
   }
 
   type CreateObmServicePayload {
-    _id: ID!
+    id: ID!
     name: String!
     description: String
   }
