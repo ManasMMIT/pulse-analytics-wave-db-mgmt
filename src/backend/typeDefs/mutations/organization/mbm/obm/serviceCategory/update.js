@@ -2,12 +2,12 @@ const { gql } = require('apollo-server-express')
 
 const updateObmServiceCategoryTypeDefs = gql`
   input UpdateObmServiceCategoryInput {
-    _id: ID!
+    id: ID!
     name: String!
   }
 
   type UpdateObmServiceCategoryPayload {
-    _id: ID!
+    id: ID!
     name: String!
   }
 `

@@ -5,12 +5,13 @@ const updateObmService = async (
   { input: { id, ...body } },
   context,
   info
-) =>
-  axios
+) => {
+  return axios
     .put(`obm-services/${id}/`, body)
     .then(({ data }) => data)
     .catch((e) => {
       throw new Error(JSON.stringify(e.response.data))
     })
+}
 
 module.exports = updateObmService

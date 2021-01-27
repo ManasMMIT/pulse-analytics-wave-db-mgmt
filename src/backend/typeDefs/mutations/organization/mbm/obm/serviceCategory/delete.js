@@ -2,11 +2,11 @@ const { gql } = require('apollo-server-express')
 
 const deleteObmServiceCategoryTypeDefs = gql`
   input DeleteObmServiceCategoryInput {
-    _id: ID!
+    id: ID!
   }
 
   type DeleteObmServiceCategoryPayload {
-    _id: ID
+    id: ID
     name: String
   }
 `

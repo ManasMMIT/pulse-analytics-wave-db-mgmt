@@ -1,14 +1,11 @@
-const createObmServiceCategory = async (
-  parent,
-  { input },
-  { pulseCoreDb },
-  info
-) => {
-  const { ops } = await pulseCoreDb
-    .collection('obms.services.categories')
-    .insertOne({ ...input })
+const axios = require('axios')
 
-  return ops[0]
-}
+const createObmServiceCategory = async (parent, { input }, context, info) =>
+  axios
+    .post('obm-service-categories/', input)
+    .then(({ data }) => data)
+    .catch((e) => {
+      throw new Error(JSON.stringify(e.response.data))
+    })
 
 module.exports = createObmServiceCategory

@@ -184,8 +184,7 @@ export const UPDATE_APM_ORGANIZATION = gql`
 export const DELETE_OBM_SERVICE_CATEGORY = gql`
   mutation DeleteObmServiceCategory($input: DeleteObmServiceCategoryInput!) {
     deleteObmServiceCategory(input: $input) {
-      _id
-      name
+      id
     }
   }
 `
@@ -202,7 +201,7 @@ export const DELETE_LBM_SERVICE_CATEGORY = gql`
 export const UPDATE_OBM_SERVICE_CATEGORY = gql`
   mutation UpdateObmServiceCategory($input: UpdateObmServiceCategoryInput!) {
     updateObmServiceCategory(input: $input) {
-      _id
+      id
       name
     }
   }
@@ -257,7 +256,7 @@ export const UPDATE_LBM_SERVICE = gql`
 export const CREATE_OBM_SERVICE_CATEGORY = gql`
   mutation CreateObmServiceCategory($input: CreateObmServiceCategoryInput!) {
     createObmServiceCategory(input: $input) {
-      _id
+      id
       name
     }
   }

@@ -6,7 +6,7 @@ const createObmServiceCategoryTypeDefs = gql`
   }
 
   type CreateObmServiceCategoryPayload {
-    _id: ID!
+    id: ID!
     name: String!
   }
 `
