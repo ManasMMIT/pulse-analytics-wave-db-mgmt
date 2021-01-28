@@ -9,28 +9,28 @@ const defaultTabContainerStyle = {
   fontSize: 13,
   fontWeight: 700,
   letterSpacing: -0.2,
-  textAlign: 'center'
+  textAlign: 'center',
 }
 
 const tabBorderRadius = '3px'
 
 const defaultActiveTabStyle = {
   backgroundColor: Colors.White,
-  borderRadius: `${ tabBorderRadius } ${ tabBorderRadius } 0 0`
+  borderRadius: `${tabBorderRadius} ${tabBorderRadius} 0 0`,
 }
 
 const defaultInactiveTabStyle = {
   backgroundColor: 'transparent',
-  borderRadius: `${ tabBorderRadius } ${ tabBorderRadius } 0 0`,
+  borderRadius: `${tabBorderRadius} ${tabBorderRadius} 0 0`,
   color: AlphaColors.Black30,
   transition: 'color 250ms ease, background-color 250ms ease',
   ':hover': {
     backgroundColor: AlphaColors.White50,
-    color: AlphaColors.Blue70
-  }
+    color: AlphaColors.Blue70,
+  },
 }
 
-const FilingTabs = props => {
+const FilingTabs = (props) => {
   const {
     tabContainerStyle,
     tabsContainerStyle,
@@ -41,9 +41,21 @@ const FilingTabs = props => {
     onTabClick,
   } = props
 
-  const combinedTabContainerStyle = _.merge({}, defaultTabContainerStyle, tabContainerStyle)
-  const combinedActiveTabStyle = _.merge({}, defaultActiveTabStyle, activeTabStyle)
-  const combinedInactiveTabStyle = _.merge({}, defaultInactiveTabStyle, inactiveTabStyle)
+  const combinedTabContainerStyle = _.merge(
+    {},
+    defaultTabContainerStyle,
+    tabContainerStyle
+  )
+  const combinedActiveTabStyle = _.merge(
+    {},
+    defaultActiveTabStyle,
+    activeTabStyle
+  )
+  const combinedInactiveTabStyle = _.merge(
+    {},
+    defaultInactiveTabStyle,
+    inactiveTabStyle
+  )
 
   return (
     <Tabs
@@ -58,15 +70,14 @@ const FilingTabs = props => {
   )
 }
 
-
 FilingTabs.propTypes = {
   tabsData: PropTypes.arrayOf(
     PropTypes.oneOfType([
       PropTypes.string,
       PropTypes.shape({
         value: PropTypes.string,
-        label: PropTypes.node // can be a React el or anything else that's renderable
-      })
+        label: PropTypes.node, // can be a React el or anything else that's renderable
+      }),
     ])
   ),
   selectedTab: PropTypes.string,

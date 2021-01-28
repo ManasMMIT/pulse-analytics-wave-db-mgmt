@@ -1,2 +1,7 @@
 node_modules
 npm-debug.log
+exports-backups
+DEPRECATED_importHistoricalData
+temp-seed-scripts
+.vscode
+.env

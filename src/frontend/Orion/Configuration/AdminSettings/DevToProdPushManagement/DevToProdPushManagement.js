@@ -9,6 +9,7 @@ import Spacing from 'frontend/utils/spacing'
 import DataPushConfig from './DataPushConfig'
 import CreateDataPushConfigButton from './CreateDataPushConfigButton'
 import PushAllDataToProdButton from './PushAllDataToProdButton'
+import PushPsqlDataToProdButton from './PushPsqlDataToProdButton'
 
 const Wrapper = styled.div({
   background: Color.GRAY_LIGHT,
@@ -48,6 +49,7 @@ const DevToProdPushManagement = () => {
     <Wrapper>
       <TopButtonsWrapper>
         <PushAllDataToProdButton />
+        <PushPsqlDataToProdButton />
         <CreateDataPushConfigButton />
       </TopButtonsWrapper>
 

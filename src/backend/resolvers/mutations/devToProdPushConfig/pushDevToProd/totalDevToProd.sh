@@ -11,12 +11,13 @@ set -e
 clean_up () {
   ARG=$? # $? is the exit code of the last op; save it to ARG
   rm -rf ./current-dump
+  rm -f ./vega-core.dump
   exit $ARG
 }
 
 trap clean_up EXIT
 
-echo "totalDevToProd script beginning against $DB_CLUSTER_ENV cluster"
+echo "totalDevToProd script beginning on MongoDB $DB_CLUSTER_ENV cluster and AWS PostgreSQL"
 
 # WARNING: use single =, not double == because on Ubuntu server, 'sh' not okay with double ==
 # Ref: https://stackoverflow.com/a/3411105
@@ -33,7 +34,7 @@ else
   HOST='wave-staging-shard-0/wave-staging-shard-00-00-ik4h2.mongodb.net:27017,wave-staging-shard-00-01-ik4h2.mongodb.net:27017,wave-staging-shard-00-02-ik4h2.mongodb.net:27017'
 fi
 
-echo "Dumping pulse-dev DB into current-dump folder..."
+echo "MONGODB: Dumping pulse-dev DB into current-dump folder..."
 
 mongodump \
   --host $HOST \
@@ -46,9 +47,9 @@ mongodump \
   --excludeCollection users \
   --out ./current-dump
 
-echo "Dumping completed successfully"
+echo "MONGODB: Dumping completed successfully"
 
-echo "Restoring pulse-dev DB to pulse-prod DB..."
+echo "MONGODB: Restoring pulse-dev DB to pulse-prod DB..."
 
 mongorestore \
   --host $HOST \
@@ -59,4 +60,9 @@ mongorestore \
   --db pulse-prod ./current-dump/pulse-dev \
   --drop \
 
-echo "Restoring completed successfully"
+echo "MONGODB: Restoring completed successfully"
+
+# get current directory: https://stackoverflow.com/a/20434740/10957842
+DIR="$( cd "$( dirname "$0" )" && pwd )"
+
+sh "${DIR}/../psqlPushCoreToProd/dumpCoreRestoreProd.sh"

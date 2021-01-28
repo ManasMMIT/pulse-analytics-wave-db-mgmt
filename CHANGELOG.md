@@ -12,8 +12,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Fixed** for any bug fixes.
 - **Security** in case of vulnerabilities.
 
-## [Unreleased] - Started: 1-11-21
+## [Unreleased] - Started: 1-28-21
 
+## [4.4.0] - Started: 1-11-21
+
+### Added
+- `Orion`: Added `VegaClient` for accessing `vega` data [#909](https://github.com/pulse-analytics/wave-db-mgmt/pull/909)
+- `Orion/Push to Prod`: Adds vega data push to prod button and bundles vega data with rest of data in push all to prod button [#912](https://github.com/pulse-analytics/wave-db-mgmt/pull/912)
+
+### Fixed
+- `Phoenix`: Fixed oplog breakage when trying to hydrate values for deleted teams/nodes [#914](https://github.com/pulse-analytics/wave-db-mgmt/pull/914)
 ## [4.3.2] - Started: 1-6-21
 
 ### Changed

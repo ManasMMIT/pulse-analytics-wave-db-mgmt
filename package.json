@@ -1,6 +1,6 @@
 {
   "name": "wave-db-mgmt",
-  "version": "4.3.2",
+  "version": "4.4.0",
   "description": "A repository for managing data into Pulse databases.",
   "repository": "https://github.com/pulse-data/wave-db-mgmt.git",
   "license": "MIT",
@@ -26,10 +26,14 @@
     "@types/react-dom": "^17.0.0",
     "@types/react-router-dom": "^5.1.6",
     "@types/react-select": "^3.0.27",
+    "@types/express": "types/express",
+    "@types/graphql": "^14.5.0",
+    "@types/mongodb": "^3.6.0",
     "ajv": "^6.12.0",
     "ajv-errors": "^1.0.1",
     "apollo-boost": "^0.4.7",
     "apollo-server-express": "^2.11.0",
+    "axios": "^0.21.1",
     "body-parser": "^1.19.0",
     "d3-collection": "^1.0.7",
     "date-fns": "^2.11.0",
@@ -78,7 +82,8 @@
     "typescript": "^4.1.2",
     "uuid": "^7.0.2",
     "xlsx": "^0.15.6",
-    "yargs": "^15.3.1"
+    "yargs": "^15.3.1",
+    "ts-node": "^9.1.0"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -93,7 +98,7 @@
     "test": "react-scripts test --watchAll=false --env=jest-environment-jsdom-sixteen --testPathIgnorePatterns src/frontend/.*.test.js .*.integration.test.js .*.cache.test.js",
     "integration-test": "jest .*.integration.test.js",
     "test:debug": "node --inspect node_modules/.bin/jest --runInBand",
-    "start:prod": "NODE_ENV=production node ./src/backend",
+    "start:prod": "NODE_ENV=production node -r ts-node/register --max-old-space-size=6000 ./src/backend",
     "lint-staged": "lint-staged"
   },
   "eslintConfig": {
@@ -126,13 +131,9 @@
     ]
   },
   "devDependencies": {
-    "@types/express": "types/express",
-    "@types/graphql": "^14.5.0",
-    "@types/mongodb": "^3.6.0",
     "jest-environment-jsdom-sixteen": "^1.0.3",
     "lint-staged": "^10.2.11",
     "pre-commit": "^1.2.2",
-    "prettier": "2.0.5",
-    "ts-node": "^9.1.0"
+    "prettier": "2.0.5"
   }
 }

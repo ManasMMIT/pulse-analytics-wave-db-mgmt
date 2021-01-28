@@ -1,13 +1,11 @@
 version: "3.8"
-   
+
 services:
   polaris_prod:
+    network_mode: host
     image: registry.digitalocean.com/pulse-docker/polaris_prod:latest
-    build:
-      dockerfile: Dockerfile
-      context: .
+    container_name: polaris_prod
     env_file: .env
     ports:
       - "1337:1337"
     restart: always
-    container_name: polaris_prod
