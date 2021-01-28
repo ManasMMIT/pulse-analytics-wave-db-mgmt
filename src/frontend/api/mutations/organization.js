@@ -393,18 +393,6 @@ export const DELETE_OBM_ORGANIZATION = gql`
   }
 `
 
-export const CONNECT_OBM_SERVICE_AND_OBM_SERVICE_CATEGORY = gql`
-  mutation ConnectObmServiceAndObmServiceCategory(
-    $input: ConnectObmServiceAndObmServiceCategoryInput!
-  ) {
-    connectObmServiceAndObmServiceCategory(input: $input) {
-      _id
-      obmServiceId
-      obmServiceCategoryId
-    }
-  }
-`
-
 export const CONNECT_LBM_SERVICE_AND_LBM_SERVICE_CATEGORY = gql`
   mutation ConnectLbmServiceAndLbmServiceCategory(
     $input: ConnectLbmServiceAndLbmServiceCategoryInput!

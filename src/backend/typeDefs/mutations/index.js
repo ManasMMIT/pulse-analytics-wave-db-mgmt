@@ -191,10 +191,6 @@ const mutationType = gql`
     updateLbmType(input: UpdateLbmTypeInput!): LbmType!
     deleteLbmType(input: DeleteLbmTypeInput!): LbmType!
 
-    connectObmServiceAndObmServiceCategory(
-      input: ConnectObmServiceAndObmServiceCategoryInput!
-    ): ConnectObmServiceAndObmServiceCategoryPayload!
-
     connectLbmServiceAndLbmServiceCategory(
       input: ConnectLbmServiceAndLbmServiceCategoryInput!
     ): ConnectLbmServiceAndLbmServiceCategoryPayload!
