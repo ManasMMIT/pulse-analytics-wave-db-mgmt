@@ -3,7 +3,7 @@ const axios = require('axios')
 const VIEW_obmServices = async (parent, args, { pulseCoreDb }) => {
   const mongoCoreObmIdMap = await pulseCoreDb
     .collection('organizations')
-    .find()
+    .find({ type: 'Oncology Benefit Manager' })
     .toArray()
     .then((obms) =>
       obms.reduce((acc, obm) => ({ ...acc, [obm.uuid]: obm._id }), {})
