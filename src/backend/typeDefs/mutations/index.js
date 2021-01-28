@@ -378,7 +378,9 @@ const mutationType = gql`
     deleteDevToProdPushConfig(
       input: DeleteDevToProdPushConfigInput!
     ): DevToProdPushConfig!
+
     pushDevToProd(input: PushDevToProdInput!): String!
+    psqlPushCoreToProd: String!
 
     upsertPathwaysAndPersonConnection(
       input: UpsertPathwaysAndPersonConnectionInput!

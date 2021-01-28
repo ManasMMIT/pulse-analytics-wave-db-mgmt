@@ -35,3 +35,9 @@ export const PUSH_DEV_TO_PROD = gql`
     pushDevToProd(input: $input)
   }
 `
+
+export const PSQL_PUSH_CORE_TO_PROD = gql`
+  mutation PsqlPushCoreToProd {
+    psqlPushCoreToProd
+  }
+`
