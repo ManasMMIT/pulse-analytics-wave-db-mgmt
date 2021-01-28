@@ -23,7 +23,9 @@ const VIEW_obmServices = async (parent, args, { pulseCoreDb }) => {
           organization: datum.obm.name,
           service: datum.obm_service.name,
           serviceRating: datum.rating,
-          serviceCategory: datum.obm_service.category.name,
+          serviceCategory: datum.obm_service.category
+            ? datum.obm_service.category.name
+            : null,
         }
       })
     )
