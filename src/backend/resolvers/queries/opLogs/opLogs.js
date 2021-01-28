@@ -73,11 +73,25 @@ const opLogs = async (parent, args, { coreNodes, coreRoles }, info) => {
 
           if (operationName === 'UpdatePermissions') {
             const { nodeId, teamId } = operationVariables.input
-            const { name: nodeName, type: nodeType } = nodes[nodeId]
-            const {
-              name: teamName,
-              client: { name: clientName },
-            } = teams[teamId]
+            const nodeStillExists = Boolean(nodes[nodeId])
+            const teamStillExists = Boolean(teams[teamId])
+
+            let nodeName = 'deleted'
+            let nodeType = 'deleted'
+            if (nodeStillExists) {
+              const node = nodes[nodeId]
+
+              nodeName = node.name
+              nodeType = node.type
+            }
+
+            let teamName = 'deleted'
+            let clientName = ''
+            if (teamStillExists) {
+              const team = teams[teamId]
+              teamName = team.name
+              clientName = team.client.name
+            }
 
             operationVariables = {
               input: {
@@ -89,10 +103,15 @@ const opLogs = async (parent, args, { coreNodes, coreRoles }, info) => {
 
           if (operationName === 'UpdateRoleSitemap') {
             const { teamId } = operationVariables.input
-            const {
-              name: teamName,
-              client: { name: clientName },
-            } = teams[teamId]
+            const teamStillExists = Boolean(teams[teamId])
+
+            let teamName = 'deleted'
+            let clientName = ''
+            if (teamStillExists) {
+              const team = teams[teamId]
+              teamName = team.name
+              clientName = team.client.name
+            }
 
             operationVariables = {
               input: {
