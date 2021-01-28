@@ -420,7 +420,7 @@ export const CONNECT_LBM_SERVICE_AND_LBM_SERVICE_CATEGORY = gql`
 export const CONNECT_OBM_AND_OBM_SERVICE = gql`
   mutation ConnectObmAndObmService($input: [ConnectObmAndObmServiceInput!]!) {
     connectObmAndObmService(input: $input) {
-      _id
+      id
       obmId
       obmServiceId
       rating
