@@ -51,7 +51,10 @@ const ObmServicesWidget = ({ entity }) => {
 
   const [save] = useMutation(CONNECT_OBM_AND_OBM_SERVICE, {
     variables: {
-      input: stagedConnections,
+      input: {
+        obmId: entity.uuid,
+        connections: stagedConnections,
+      },
     },
     refetchQueries: [
       {

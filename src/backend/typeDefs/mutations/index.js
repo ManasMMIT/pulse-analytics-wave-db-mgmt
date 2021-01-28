@@ -200,7 +200,7 @@ const mutationType = gql`
     ): ConnectLbmServiceAndLbmServiceCategoryPayload!
 
     connectObmAndObmService(
-      input: [ConnectObmAndObmServiceInput!]!
+      input: ConnectObmAndObmServiceInput!
     ): [ConnectObmAndObmServicePayload!]!
 
     connectLbmAndLbmService(

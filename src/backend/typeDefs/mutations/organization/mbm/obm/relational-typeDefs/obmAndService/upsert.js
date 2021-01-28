@@ -2,6 +2,11 @@ const { gql } = require('apollo-server-express')
 
 const connectObmAndObmServiceTypeDefs = gql`
   input ConnectObmAndObmServiceInput {
+    obmId: String!
+    connections: [ConnectObmAndObmServiceInputConnections!]!
+  }
+
+  input ConnectObmAndObmServiceInputConnections {
     id: ID
     obmServiceId: String!
     obmId: String!
