@@ -12,7 +12,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Fixed** for any bug fixes.
 - **Security** in case of vulnerabilities.
 
-## [Unreleased] - Started: 1-28-21
+## [Unreleased] - Started: 1-29-21
+
+## [4.5.0] - Started: 1-28-21
+
+### Added
+- `Polaris/Obms`: Vega obm CRUD and vega-migration scripts for obms and service/service category [#918](https://github.com/pulse-analytics/wave-db-mgmt/pull/918)
 
 ## [4.4.0] - Started: 1-11-21
 
