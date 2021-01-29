@@ -1,4 +1,4 @@
-const obmOrganizations = require('./obm')
+import obmOrganizations from './obm'
 const obmServices = require('./service')
 const obmServicesCategories = require('./serviceCategory')
 const obmTypes = require('./type')

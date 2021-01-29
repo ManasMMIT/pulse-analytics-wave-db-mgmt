@@ -1,4 +1,5 @@
 const { ObjectId } = require('mongodb')
+const axios = require('axios')
 
 const basicOrgDeletionOps = require('../../basicOrgDeletionOps')
 
@@ -38,6 +39,20 @@ const deleteObm = async (
   info
 ) => {
   const _id = ObjectId(stringId)
+
+  // ! Vega Op
+  // ? Looking up obm doc for uuid, instead of passing from frontend
+  const { uuid } = await pulseCoreDb
+    .collection('organizations')
+    .findOne({ _id })
+
+  if (uuid) {
+    await axios.delete(`obms/${uuid}`).catch((e) => {
+      throw new Error(JSON.stringify(e.response.data))
+    })
+  }
+
+  // ! Mongo Op
 
   const session = mongoClient.startSession()
 
