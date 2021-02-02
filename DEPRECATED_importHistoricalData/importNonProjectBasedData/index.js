@@ -1,6 +1,7 @@
 const connectToMongoDb = require('../../connect-to-mongodb')
 const parseCsvFile = require('../parse-csv-file')
 const pushToDev = require('./pushToDev')
+const synchronizeDrgMmitMedicalLives = require('./syncDrgMmitMedicalLives')
 const { STATE_LONG_BY_ABBREV } = require('../states-data-util')
 const {
   getScriptTerminator,
@@ -58,6 +59,8 @@ const importNonProjectBasedData = async filepath => {
 
     await pulseCoreDb.collection(collectionName).insertMany(formattedData)
     console.log(`New data for ${monthYear} inserted into pulse-core \n`)
+
+    if (isMmitStateLives) await synchronizeDrgMmitMedicalLives(pulseCoreDb)
   } catch (e) {
     await terminateScript(e)
   }
