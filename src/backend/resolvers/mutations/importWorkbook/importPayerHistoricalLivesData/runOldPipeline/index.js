@@ -1,5 +1,4 @@
 const pushSheetToCore = require('./pushSheetToCore')
-const synchronizeDrgMmitMedicalLives = require('./syncDrgMmitMedicalLives')
 const pushCoreToDev = require('./pushCoreToDev')
 
 const OLD_CORE_COLLECTION_NAMES = {
@@ -40,10 +39,6 @@ const runOldPipeline = async ({
     pulseCoreDb,
     mongoClient,
   })
-
-  if (collectionName === 'payerHistoricalMmitStateLives') {
-    await synchronizeDrgMmitMedicalLives(pulseCoreDb)
-  }
 
   // ! This op has side-effects that involve totaling up lives and replacing
   // ! 4 corresponding collections on pulse-core;

@@ -1,7 +1,6 @@
 const connectToMongoDb = require('../../connect-to-mongodb')
 const parseCsvFile = require('../parse-csv-file')
 const pushToDev = require('./pushToDev')
-const synchronizeDrgMmitMedicalLives = require('./syncDrgMmitMedicalLives')
 const { STATE_LONG_BY_ABBREV } = require('../states-data-util')
 const {
   getScriptTerminator,
@@ -11,7 +10,7 @@ const {
 const importNonProjectBasedData = async filepath => {
   // Extract filename, month, year based on filepath
   const filePathArr = filepath.split('/')
-  const filenameWithExtension =   filePathArr[filePathArr.length - 1]
+  const filenameWithExtension = filePathArr[filePathArr.length - 1]
   const regEx = /(.+?)(\.[^.]*$|$)/g
   const capturedFilename = regEx.exec(filenameWithExtension)
   let [collectionName, fileMonth, fileYear] = capturedFilename[1].split('-')
@@ -59,8 +58,6 @@ const importNonProjectBasedData = async filepath => {
 
     await pulseCoreDb.collection(collectionName).insertMany(formattedData)
     console.log(`New data for ${monthYear} inserted into pulse-core \n`)
-
-    if (isMmitStateLives) await synchronizeDrgMmitMedicalLives(pulseCoreDb)
   } catch (e) {
     await terminateScript(e)
   }
