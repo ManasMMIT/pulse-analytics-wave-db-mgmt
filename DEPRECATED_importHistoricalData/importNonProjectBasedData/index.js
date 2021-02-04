@@ -11,7 +11,7 @@ const {
 const importNonProjectBasedData = async filepath => {
   // Extract filename, month, year based on filepath
   const filePathArr = filepath.split('/')
-  const filenameWithExtension =   filePathArr[filePathArr.length - 1]
+  const filenameWithExtension = filePathArr[filePathArr.length - 1]
   const regEx = /(.+?)(\.[^.]*$|$)/g
   const capturedFilename = regEx.exec(filenameWithExtension)
   let [collectionName, fileMonth, fileYear] = capturedFilename[1].split('-')
