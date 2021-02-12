@@ -74,6 +74,8 @@ const getIdMaps = ({ books, coverages, payers }) => {
 const VALID_BOOK_KEY_COMBOS = {
   commercialMedical: true,
   commercialPharmacy: true,
+  medicaidMedical: true,
+  medicaidPharmacy: true,
   ffsMedicaidMedical: true,
   ffsMedicaidPharmacy: true,
   macMedical: true,

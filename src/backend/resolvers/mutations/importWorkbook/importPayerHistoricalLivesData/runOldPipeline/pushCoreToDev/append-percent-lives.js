@@ -9,6 +9,16 @@ const appendStructuredLivesField = async ({
 }) => {
   const livesFields = [
     {
+      key: 'medicaidMedical',
+      book: 'Medicaid',
+      coverage: 'Medical',
+    },
+    {
+      key: 'medicaidPharmacy',
+      book: 'Medicaid',
+      coverage: 'Pharmacy',
+    },
+    {
       key: 'managedMedicaidMedical',
       book: 'Managed Medicaid',
       coverage: 'Medical',
