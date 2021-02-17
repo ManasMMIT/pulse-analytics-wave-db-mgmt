@@ -1,9 +1,9 @@
 version: "3.8"
 
 services:
-  polaris_prod:
+  polaris_staging:
     network_mode: host
     image: ghcr.io/pulse-analytics/polaris:${IMAGE_TAG}
-    container_name: polaris_production
+    container_name: polaris_staging
     env_file: .env
     restart: always

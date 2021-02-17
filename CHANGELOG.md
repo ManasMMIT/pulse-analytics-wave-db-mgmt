@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - `Polaris/Obms`: Vega obm CRUD and vega-migration scripts for obms and service/service category [#918](https://github.com/pulse-analytics/wave-db-mgmt/pull/918)
+- `Dockerization`: Sets up Docker with Github Actions to allow for continuous integration on deployment servers [#922](https://github.com/pulse-analytics/wave-db-mgmt/pull/922)
 
 ## [4.4.0] - Started: 1-11-21
 
