@@ -5,6 +5,8 @@ const getStateLivesTotals = (stateLives) => {
 
   const result = _.map(livesByState, (payers, state) => {
     const livesTypesAccumulator = {
+      medicaidMedical: 0,
+      medicaidPharmacy: 0,
       managedMedicaidMedical: 0,
       managedMedicaidPharmacy: 0,
       ffsMedicaidMedical: 0,
@@ -48,6 +50,8 @@ const getStateLivesTotals = (stateLives) => {
 
 const getNationalLivesTotals = (data) => {
   const livesType = {
+    medicaidMedical: 0,
+    medicaidPharmacy: 0,
     commercialMedical: 0,
     medicareMedical: 0,
     commercialPharmacy: 0,

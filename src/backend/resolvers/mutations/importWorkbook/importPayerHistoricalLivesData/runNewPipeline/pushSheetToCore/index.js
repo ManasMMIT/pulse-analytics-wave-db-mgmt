@@ -1,5 +1,4 @@
 const formatData = require('./format-data')
-const mergeLatestDrgStateMedicalLives = require('./mergeLatestDrgStateMedicalLives')
 
 const pushSheetToCore = async ({
   timestamp,
@@ -23,19 +22,7 @@ const pushSheetToCore = async ({
     })
     console.log(`Sheet data formatted for core`)
 
-    // Step 2: If the data is MMIT state data, replace any medical coverage data
-    // with the latest DRG state medical lives data
-    if (source === 'MMIT' && territoryType === 'U.S. State') {
-      formattedData = await mergeLatestDrgStateMedicalLives({
-        formattedData,
-        pulseCoreDb,
-        timestamp,
-      })
-
-      console.log(`MMIT state Lives data synced with DRG medical state lives`)
-    }
-
-    // Step 3: Delete any existing lives.history data for source/timestamp/territoryType
+    // Step 2: Delete any existing lives.history data for source/timestamp/territoryType
     await pulseCoreDb.collection('lives.history').deleteMany(
       {
         source,
@@ -47,7 +34,7 @@ const pushSheetToCore = async ({
       }
     )
 
-    // Step 4: Insert the new data into lives.history
+    // Step 3: Insert the new data into lives.history
     await pulseCoreDb
       .collection('lives.history')
       .insertMany(formattedData, { session })
