@@ -2,7 +2,7 @@ version: "3.8"
    
 services:
   polaris_prod:
-    image: registry.digitalocean.com/pulse-docker/polaris_prod:latest
+    image: ghcr.io/pulse-analytics/polaris:latest
     build:
       dockerfile: Dockerfile
       context: .
