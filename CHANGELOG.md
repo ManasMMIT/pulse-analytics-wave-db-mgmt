@@ -12,13 +12,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Fixed** for any bug fixes.
 - **Security** in case of vulnerabilities.
 
-## [Unreleased] - Started: 1-29-21
+## [Unreleased] - Started: 2-26-21
+
+## [4.6.2] - Started: 2-19-21
+
+### Fixed
+- `Dockerization`: Fixes opLog read/write and push to prod feature [#926](https://github.com/pulse-analytics/wave-db-mgmt/pull/926)
+
+## [4.6.1] - Started: 1-29-21
+
+### Added
+- `Dockerization`: Sets up Docker with Github Actions to allow for continuous integration on deployment servers [#922](https://github.com/pulse-analytics/wave-db-mgmt/pull/922)
 
 ## [4.5.0] - Started: 1-28-21
 
 ### Added
 - `Polaris/Obms`: Vega obm CRUD and vega-migration scripts for obms and service/service category [#918](https://github.com/pulse-analytics/wave-db-mgmt/pull/918)
-- `Dockerization`: Sets up Docker with Github Actions to allow for continuous integration on deployment servers [#922](https://github.com/pulse-analytics/wave-db-mgmt/pull/922)
 
 ## [4.4.0] - Started: 1-11-21
 

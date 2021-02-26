@@ -5,3 +5,4 @@ DEPRECATED_importHistoricalData
 temp-seed-scripts
 .vscode
 .env
+src/backend/logs

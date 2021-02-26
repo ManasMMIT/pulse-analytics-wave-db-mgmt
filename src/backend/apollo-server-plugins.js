@@ -2,9 +2,12 @@ const _ = require('lodash')
 const fs = require('fs')
 const path = require('path')
 
-const logWriteStream = fs.createWriteStream(path.join(__dirname, 'api.log'), {
-  flags: 'a',
-})
+const logWriteStream = fs.createWriteStream(
+  path.join(__dirname, '/logs/api.log'),
+  {
+    flags: 'a',
+  }
+)
 
 module.exports = [
   {
