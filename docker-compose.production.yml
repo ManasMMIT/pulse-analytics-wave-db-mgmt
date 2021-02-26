@@ -4,6 +4,8 @@ services:
   polaris_prod:
     network_mode: host
     image: ghcr.io/pulse-analytics/polaris:${IMAGE_TAG}
+    volumes:
+      - /home/deploy/logs:/polaris/src/backend/logs
     container_name: polaris_production
     env_file: .env
     restart: always

@@ -41,7 +41,13 @@ const readFirstLine = (path, usrOpts) => {
 }
 
 const opLogs = async (parent, args, { coreNodes, coreRoles }, info) => {
-  const pathToLog = path.join(process.cwd(), 'src', 'backend', 'api.log')
+  const pathToLog = path.join(
+    process.cwd(),
+    'src',
+    'backend',
+    'logs',
+    'api.log'
+  )
 
   if (!fileExists(pathToLog)) return []
 
