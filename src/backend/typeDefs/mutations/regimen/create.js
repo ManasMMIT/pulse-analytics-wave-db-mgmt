@@ -17,6 +17,7 @@ const createRegimenTypeDefs = gql`
   type CreateRegimenPayload {
     _id: ID!
     name: String!
+    uuid: String
     products: [Product!]!
   }
 `

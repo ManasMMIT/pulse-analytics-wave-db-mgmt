@@ -288,6 +288,7 @@ const queries = gql`
   type Indication {
     _id: ID!
     name: String
+    uuid: String
     regimens: [Regimen]
     therapeuticAreaId: String
   }
@@ -301,12 +302,14 @@ const queries = gql`
     _id: ID!
     nameGeneric: String
     nameBrand: String
+    uuid: String
     tags: [String]
   }
 
   type Regimen {
     _id: ID!
     name: String!
+    uuid: String
     products: [Product!]!
   }
 

@@ -6,6 +6,7 @@ const updateSourceIndicationTypeDefs = gql`
   input UpdateSourceIndicationInput {
     _id: ID!
     name: String!
+    uuid: String
     # can't do [UpdateSourceRegimenInput!]! because the regular indications panel
     # doesn't pass regimens and has no bearing on that slice
     regimens: [UpdateSourceRegimenInput!]
@@ -17,6 +18,7 @@ const updateSourceIndicationTypeDefs = gql`
   type UpdateSourceIndicationPayload {
     _id: ID
     name: String
+    uuid: String
     regimens: [UpdateSourceRegimenPayload]
     therapeuticAreaId: String
   }

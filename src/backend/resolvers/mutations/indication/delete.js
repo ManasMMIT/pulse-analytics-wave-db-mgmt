@@ -1,3 +1,4 @@
+const axios = require('axios')
 const { ObjectId } = require('mongodb')
 const _ = require('lodash')
 
@@ -21,6 +22,18 @@ const deleteSourceIndication = async (
   const session = mongoClient.startSession()
 
   await session.withTransaction(async () => {
+    // ! Vega OP
+    const { uuid } = await pulseCoreDb
+      .collection('indications')
+      .findOne({ _id })
+
+    if (uuid) {
+      await axios.delete(`indications/${uuid}`).catch((e) => {
+        throw new Error(JSON.stringify(e.response.data))
+      })
+    }
+
+    // ! Mongo OPS
     // STEP 1: delete indication itself
     deletedIndication = await pulseCoreDb
       .collection('indications')

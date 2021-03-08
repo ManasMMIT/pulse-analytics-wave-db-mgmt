@@ -594,14 +594,17 @@ export const GET_SOURCE_INDICATIONS = gql`
     indications {
       _id
       name
+      uuid
       therapeuticAreaId
       regimens {
         _id
         name
+        uuid
         products {
           _id
           nameGeneric
           nameBrand
+          uuid
           tags
         }
       }

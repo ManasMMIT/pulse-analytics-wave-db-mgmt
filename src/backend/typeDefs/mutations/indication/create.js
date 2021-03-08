@@ -11,6 +11,7 @@ const createIndicationTypeDefs = gql`
   type CreateIndicationPayload {
     _id: ID
     name: String
+    uuid: String
     regimens: [CreateRegimenPayload]
     therapeuticAreaId: String
   }
