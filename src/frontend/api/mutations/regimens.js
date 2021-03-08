@@ -9,6 +9,7 @@ export const CREATE_REGIMEN = gql`
         _id
         nameGeneric
         nameBrand
+        uuid
         tags
       }
     }
@@ -24,6 +25,7 @@ export const UPDATE_SOURCE_REGIMEN = gql`
         _id
         nameGeneric
         nameBrand
+        uuid
         tags
       }
     }
@@ -39,6 +41,7 @@ export const DELETE_SOURCE_REGIMEN = gql`
         _id
         nameGeneric
         nameBrand
+        uuid
         tags
       }
     }

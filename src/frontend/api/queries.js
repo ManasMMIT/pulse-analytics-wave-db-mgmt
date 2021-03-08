@@ -649,6 +649,7 @@ export const GET_SELECTED_REGIMENS = gql`
         _id
         nameGeneric
         nameBrand
+        uuid
         tags
       }
     }
@@ -661,10 +662,12 @@ export const GET_SOURCE_PRODUCTS = gql`
       _id
       nameGeneric
       nameBrand
+      uuid
       tags
     }
   }
 `
+
 export const GET_SOURCE_REGIMENS = gql`
   query getSourceRegimens {
     regimens {
