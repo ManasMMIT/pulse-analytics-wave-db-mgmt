@@ -15,8 +15,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased] - Started: 2-26-21
 
 ### Added
-- `Perception Tool/Vega Migration`: Added Indication/Regimen/Product seed scripts [#928](https://github.com/pulse-analytics/wave-db-mgmt/pull/928)
-
+- `Perception Tool/Vega Migration`:
+  - Added Indication/Regimen/Product seed scripts [#928](https://github.com/pulse-analytics/wave-db-mgmt/pull/928)
+  - Added Client/Team seed scripts [#932](https://github.com/pulse-analytics/wave-db-mgmt/pull/932)
 ### Changed
 - `Perception Tool/Vega Migration`: Added vega ops to necessary mongo CUD
   - Indication CUD [#929](https://github.com/pulse-analytics/wave-db-mgmt/pull/929)
