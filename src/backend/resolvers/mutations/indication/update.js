@@ -1,5 +1,5 @@
 // TODO: Deprecate old Phoenix Treatment Plans Panel; this resolver is bad
-
+const axios = require('axios')
 const { ObjectId } = require('mongodb')
 const getIndTherapeuticAreaPipeline = require('./getIndTherapeuticAreaPipeline')
 
@@ -56,6 +56,10 @@ const updateSourceIndication = async (
 
   let updatedIndication
   await session.withTransaction(async () => {
+    // ! Vega OP
+    await updateVegaIndication(_id, body, pulseCoreDb)
+
+    // ! Mongo OPs
     // Step 1: Update the indication
     updatedIndication = await pulseCoreDb
       .collection('indications')
@@ -122,6 +126,48 @@ const updateSourceIndication = async (
   })
 
   return updatedIndication
+}
+
+// ! Don't trust frontend input for indication uuid or actual regimen data
+async function updateVegaIndication(_id, body, pulseCoreDb) {
+  const { uuid } = await pulseCoreDb.collection('indications').findOne({ _id })
+
+  // ! should always be true after seeding vega
+  if (uuid) {
+    let regimensInputObj = {}
+    if (body.regimens) {
+      let vegaRegimens = await getVegaRegimens(body, pulseCoreDb)
+      regimensInputObj = { regimens: vegaRegimens }
+    }
+
+    const vegaInput = {
+      name: body.name,
+      ...regimensInputObj,
+    }
+
+    await axios.put(`indications/${uuid}/`, vegaInput).catch((e) => {
+      throw new Error(JSON.stringify(e.response.data))
+    })
+  }
+}
+
+async function getVegaRegimens(body, pulseCoreDb) {
+  let vegaRegimens = []
+
+  const regimenIds = body.regimens.map(({ _id }) => ObjectId(_id))
+  // ! nested regimens sent to this resolver are copies w/o seeded uuids
+  // ! need to lookup in source regimens collection
+  const sourceRegimens = await pulseCoreDb
+    .collection('regimens')
+    .find({ _id: { $in: regimenIds } })
+    .toArray()
+
+  vegaRegimens = sourceRegimens.reduce((acc, { uuid }) => {
+    if (uuid) return [...acc, uuid]
+    return acc
+  }, [])
+
+  return vegaRegimens
 }
 
 module.exports = updateSourceIndication

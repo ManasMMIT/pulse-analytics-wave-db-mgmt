@@ -5,13 +5,16 @@ export const CREATE_INDICATION = gql`
     createIndication(input: $input) {
       _id
       name
+      uuid
       regimens {
         _id
         name
+        uuid
         products {
           _id
           nameGeneric
           nameBrand
+          uuid
           tags
         }
       }

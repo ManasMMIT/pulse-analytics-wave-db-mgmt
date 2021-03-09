@@ -594,14 +594,17 @@ export const GET_SOURCE_INDICATIONS = gql`
     indications {
       _id
       name
+      uuid
       therapeuticAreaId
       regimens {
         _id
         name
+        uuid
         products {
           _id
           nameGeneric
           nameBrand
+          uuid
           tags
         }
       }
@@ -646,6 +649,7 @@ export const GET_SELECTED_REGIMENS = gql`
         _id
         nameGeneric
         nameBrand
+        uuid
         tags
       }
     }
@@ -658,10 +662,12 @@ export const GET_SOURCE_PRODUCTS = gql`
       _id
       nameGeneric
       nameBrand
+      uuid
       tags
     }
   }
 `
+
 export const GET_SOURCE_REGIMENS = gql`
   query getSourceRegimens {
     regimens {

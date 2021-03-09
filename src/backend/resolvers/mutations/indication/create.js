@@ -1,4 +1,7 @@
 const { ObjectId } = require('mongodb')
+const axios = require('axios')
+const { v4: uuid } = require('uuid')
+
 const getIndTherapeuticAreaPipeline = require('./getIndTherapeuticAreaPipeline')
 
 const createIndication = async (
@@ -14,6 +17,26 @@ const createIndication = async (
   let newIndication
 
   await session.withTransaction(async () => {
+    // ! VEGA POST OP
+    const vegaId = uuid()
+
+    const vegaRegimens = regimens.reduce((acc, regimen) => {
+      if (regimen.uuid) return [...acc, regimen.uuid]
+
+      return acc
+    }, [])
+
+    const vegaIndicationInput = {
+      id: vegaId,
+      name,
+      regimens: vegaRegimens,
+    }
+
+    await axios.post('indications/', vegaIndicationInput).catch((e) => {
+      throw new Error(JSON.stringify(e.response.data))
+    })
+
+    // ! MONGO POST OP
     // Step 1: Create the indication
     newIndication = await pulseCoreDb
       .collection('indications')
@@ -22,6 +45,7 @@ const createIndication = async (
           name,
           regimens,
           therapeuticAreaId,
+          uuid: vegaId,
         },
         { session }
       )
