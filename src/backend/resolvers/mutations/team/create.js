@@ -1,10 +1,11 @@
-const uuid = require('uuid/v4')
+const { v4: uuid } = require('uuid')
+const axios = require('axios')
 
 const createTeam = async (
   parent,
   { input: { description, clientId, defaultLandingPath } },
   { mongoClient, coreClients, coreRoles },
-  info,
+  info
 ) => {
   if (!Boolean(description)) {
     throw Error('text field invalid')
@@ -17,23 +18,40 @@ const createTeam = async (
   let result = null
 
   await session.withTransaction(async () => {
+    const roleUuid = uuid()
     const client = await coreClients.findOne({ _id: clientId }, { session })
 
-    const role = await coreRoles.insertOne({
-      _id: uuid(),
-      name: description,
-      description,
-      client,
-      sitemap: {
-        tools: [],
-        dashboards: [],
-        pages: [],
-        cards: [],
+    // ! Vega Op
+    await axios
+      .post('teams/', {
+        id: roleUuid,
+        name: description,
+        client: client.uuid,
+      })
+      .catch((e) => {
+        throw new Error(JSON.stringify(e.response.data))
+      })
+
+    // ! Mongo Op
+    const role = await coreRoles.insertOne(
+      {
+        _id: roleUuid,
+        name: description,
+        description,
+        client,
+        sitemap: {
+          tools: [],
+          dashboards: [],
+          pages: [],
+          cards: [],
+        },
+        uuid: roleUuid, // stabilize schema with seeded roles in vega
+        users: [],
+        defaultLandingPath,
+        schemaVersion: 'v1.1.0',
       },
-      users: [],
-      defaultLandingPath,
-      schemaVersion: 'v1.1.0'
-    }, { session })
+      { session }
+    )
 
     result = role.ops[0]
   })

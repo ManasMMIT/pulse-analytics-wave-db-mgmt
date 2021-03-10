@@ -14,6 +14,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased] - Started: 3-9-21
 
+### Changed
+- `Perception Tool/Vega Migration`: Added vega ops to necessary mongo CUD
+  - Client CU/Team CUD [#935](https://github.com/pulse-analytics/wave-db-mgmt/pull/935)
+
 ## [4.7.0] - Started: 2-26-21
 
 ### Added

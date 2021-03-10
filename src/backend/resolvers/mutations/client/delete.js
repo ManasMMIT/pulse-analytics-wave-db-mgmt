@@ -1,16 +1,11 @@
 const wait = require('./../../../utils/wait')
 
+// !! DEPRECATED
+// ! THIS RESOLVER IS OLD AND UNUSED. REWRITE BEFORE USING TO INCLUDE VEGA'S CLIENT DATA
 const deleteClient = async (
   parent,
   { input: { _id } },
-  {
-    mongoClient,
-    coreClients,
-    coreRoles,
-    coreUsers,
-    pulseDevDb,
-    auth0,
-  },
+  { mongoClient, coreClients, coreRoles, coreUsers, pulseDevDb, auth0 },
   info
 ) => {
   const session = mongoClient.startSession()
@@ -35,20 +30,22 @@ const deleteClient = async (
 
     const clientUserIds = clientUsers.map(({ _id }) => _id)
 
-    const deleteUserSitemapsOp = pulseDevDb.collection('users.sitemaps')
-      .deleteMany(
-        { _id: { $in: clientUserIds } },
-        { session }
-      )
+    const deleteUserSitemapsOp = pulseDevDb
+      .collection('users.sitemaps')
+      .deleteMany({ _id: { $in: clientUserIds } }, { session })
 
-    const deleteUserResourcesOp = pulseDevDb.collection('users.nodes.resources')
-      .deleteMany(
-        { _id: { $in: clientUserIds } },
-        { session }
-      )
+    const deleteUserResourcesOp = pulseDevDb
+      .collection('users.nodes.resources')
+      .deleteMany({ _id: { $in: clientUserIds } }, { session })
 
-    const deleteTeamsOp = coreRoles.deleteMany({ 'client._id': _id }, { session })
-    const deleteUsersOp = coreUsers.deleteMany({ 'client._id': _id }, { session })
+    const deleteTeamsOp = coreRoles.deleteMany(
+      { 'client._id': _id },
+      { session }
+    )
+    const deleteUsersOp = coreUsers.deleteMany(
+      { 'client._id': _id },
+      { session }
+    )
 
     await Promise.all([
       deleteTeamsOp,
@@ -76,7 +73,9 @@ const deleteClient = async (
     }
   })
 
-  console.log(`Successfully deleted client ${client.description} and connected roles and users`)
+  console.log(
+    `Successfully deleted client ${client.description} and connected roles and users`
+  )
 
   return client
 }

@@ -1,3 +1,5 @@
+const axios = require('axios')
+
 const updateClient = async (
   parent,
   { input: { _id, description, icon } },
@@ -9,6 +11,18 @@ const updateClient = async (
   let updatedClient
 
   await session.withTransaction(async () => {
+    // ! Vega Op
+    const { uuid: mongoClientUuid } = await coreClients.findOne({ _id })
+
+    if (mongoClientUuid) {
+      await axios
+        .put(`clients/${mongoClientUuid}/`, { name: description, icon })
+        .catch((e) => {
+          throw new Error(JSON.stringify(e.response.data))
+        })
+    }
+
+    // ! Mongo Ops
     // ! Ops below used to be put in Promise.all but then during
     // ! testing, transaction breakage was observed with unknown root cause
     // ! Error would say: `MongoError: Given transaction number 1 does not match any in-progress transactions. The active transaction number is -1`
