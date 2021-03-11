@@ -2,8 +2,9 @@ import React from 'react'
 import styled from '@emotion/styled'
 import { useAuth0 } from '../react-auth0-spa'
 import { transparentize } from 'polished'
-import { ApolloProvider } from '@apollo/react-hooks'
-import ApolloClient from 'apollo-boost'
+import { ApolloLink, HttpLink, ApolloProvider, ApolloClient, InMemoryCache } from '@apollo/client'
+import { onError } from "@apollo/client/link/error"
+
 import UserProfile from './UserProfile'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
@@ -166,32 +167,46 @@ const App = () => {
     return
   }
 
-  const client = new ApolloClient({
+  const httpLink = new HttpLink({
     uri: '/api/graphql',
-    clientState: {
-      resolvers,
-      typeDefs,
-    },
-    request: (operation) => {
-      operation.setContext((context) => ({
-        headers: {
-          ...context.headers,
-          Authorization: `Bearer ${accessToken}` || null,
-        },
-      }))
-    },
-    onError: (errors) => {
-      const { networkError } = errors
+  })
 
-      if (
-        networkError &&
-        networkError.result &&
-        networkError.result.message === 'jwt expired'
-      ) {
-        localStorage.clear()
-        client.clearStore().then(logoutWithRedirect)
-      }
-    },
+  const authLink = new ApolloLink((operation, forward) => {
+    // Use the setContext method to set the HTTP headers.
+    operation.setContext({
+      headers: {
+        authorization: accessToken ? `Bearer ${accessToken}` : "",
+      },
+    });
+
+    // Call the next link in the middleware chain.
+    return forward(operation);
+  })
+
+  const errorLink = onError(({ graphQLErrors, networkError, operation, forward }) => {
+    if (
+      networkError &&
+      networkError.result &&
+      networkError.result.message === 'jwt expired'
+    ) {
+      localStorage.clear()
+      client.clearStore().then(logoutWithRedirect)
+    }
+
+    forward(operation)
+  })
+
+  const link = ApolloLink.from([
+    authLink,
+    httpLink,
+    errorLink
+  ])
+
+  const client = new ApolloClient({
+    cache: new InMemoryCache(),
+    resolvers,
+    typeDefs,
+    link,
   })
 
   const isSuperUser = user.sub in superUsersById
