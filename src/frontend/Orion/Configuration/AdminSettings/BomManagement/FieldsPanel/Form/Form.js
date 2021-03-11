@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import Select from 'react-select'
-import { useMutation, useQuery } from '@apollo/react-hooks'
+import { useMutation, useQuery } from '@apollo/client'
 
 import { INPUT_MAP } from 'frontend/components/FieldsSectionCard/utils'
 
@@ -191,8 +191,8 @@ Form.defaultProps = {
   data: {},
   mutationDoc: null,
   mutationVars: {},
-  afterMutationHook: () => {},
-  closeModal: () => {},
+  afterMutationHook: () => { },
+  closeModal: () => { },
   selectedBom: {},
 }
 

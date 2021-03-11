@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import Select from 'react-select'
-import { useQuery } from '@apollo/react-hooks'
-import {transparentize} from 'polished'
+import { useQuery } from '@apollo/client'
+import { transparentize } from 'polished'
 
 import FontSpace from '../../../../../../utils/fontspace'
 import Color from '../../../../../../utils/color'
@@ -60,8 +60,8 @@ const BusinessObjectValidationForm = ({
 
   const handleCheckboxChange = e => {
     const updatedBoRef = Object.assign(
-      {}, 
-      stagedBusinessObjRef, 
+      {},
+      stagedBusinessObjRef,
       { allowBlankValues: e.currentTarget.checked },
     )
 
@@ -88,7 +88,7 @@ const BusinessObjectValidationForm = ({
 
   return (
     <div style={{ borderRadius: 4, background: transparentize(0.4, Color.WHITE), marginBottom: 24, padding: 16 }}>
-      <h4 style={{...FontSpace.FS2, textTransform: 'uppercase', fontWeight: 700, color: transparentize(0, Color.BLACK), margin: 0}}>Business Object Restrictions</h4>
+      <h4 style={{ ...FontSpace.FS2, textTransform: 'uppercase', fontWeight: 700, color: transparentize(0, Color.BLACK), margin: 0 }}>Business Object Restrictions</h4>
 
       <div style={{ color: transparentize(0.5, Color.BLACK), ...FontSpace.FS2 }}>
         Setting business object restrictions overrides any oneOf restrictions.
@@ -142,7 +142,7 @@ BusinessObjectValidationForm.propTypes = {
 
 BusinessObjectValidationForm.defaultProps = {
   stagedBusinessObjRef: null,
-  setBusinessObjRef: () => {},
+  setBusinessObjRef: () => { },
 }
 
 export default BusinessObjectValidationForm

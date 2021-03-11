@@ -1,6 +1,6 @@
 import React from 'react'
 import { useParams } from 'react-router-dom'
-import { useQuery } from '@apollo/react-hooks'
+import { useQuery } from '@apollo/client'
 import _ from 'lodash'
 
 import {
@@ -25,7 +25,7 @@ const PayerProjectTreatmentPlanContainer = () => {
       // ! fetchPolicy needed because PayerProjectTreatmentPlan updates 
       // ! for a single project but may affect other tables and 
       // ! no easy way to refresh cache for those other tables otherwise
-      fetchPolicy: 'network-only', 
+      fetchPolicy: 'network-only',
     }
   )
 

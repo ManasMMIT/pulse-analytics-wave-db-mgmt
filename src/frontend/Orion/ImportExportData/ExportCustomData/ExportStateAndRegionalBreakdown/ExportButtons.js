@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { useLazyQuery } from '@apollo/react-hooks'
+import { useLazyQuery } from '@apollo/client'
 import _ from 'lodash'
 
 import ExportExcelButton from '../../../../components/ExportExcelButton'

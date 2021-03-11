@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import { useMutation } from '@apollo/react-hooks'
+import { useMutation } from '@apollo/client'
 import _ from 'lodash'
 
 import {
@@ -25,14 +25,14 @@ const Form = ({
 
   const input = _.isEmpty(data)
     ? {
-        name: stagedName,
-        sourceCollection: stagedSourceColl,
-      }
+      name: stagedName,
+      sourceCollection: stagedSourceColl,
+    }
     : {
-        _id: data._id,
-        name: stagedName,
-        sourceCollection: stagedSourceColl
-      }
+      _id: data._id,
+      name: stagedName,
+      sourceCollection: stagedSourceColl
+    }
 
   const [saveBusinessObject] = useMutation(mutationDoc, {
     variables: { input },
@@ -95,7 +95,7 @@ Form.propTypes = {
 Form.defaultProps = {
   data: {},
   mutationDoc: null,
-  afterMutationHook: () => {},
+  afterMutationHook: () => { },
 }
 
 export default Form

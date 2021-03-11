@@ -1,5 +1,5 @@
 import React from 'react'
-import { useMutation } from '@apollo/react-hooks'
+import { useMutation } from '@apollo/client'
 
 import Spinner from 'frontend/components/Spinner'
 import { PUSH_SITEMAP_TO_DEV } from '../../../api/mutations'

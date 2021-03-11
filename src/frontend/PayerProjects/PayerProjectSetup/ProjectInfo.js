@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
-import { useMutation } from '@apollo/react-hooks'
+import { useMutation } from '@apollo/client'
 
 import FieldLabel from 'frontend/components/FieldLabel'
 import Title from 'frontend/components/Title'

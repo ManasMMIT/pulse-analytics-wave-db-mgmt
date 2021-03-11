@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import { useMutation } from '@apollo/react-hooks'
+import { useMutation } from '@apollo/client'
 
 import { GET_WORKBOOKS } from '../../../../../../api/queries'
 
@@ -87,7 +87,7 @@ Form.propTypes = {
 Form.defaultProps = {
   data: {},
   mutationDoc: null,
-  afterMutationHook: () => {},
+  afterMutationHook: () => { },
 }
 
 export default Form

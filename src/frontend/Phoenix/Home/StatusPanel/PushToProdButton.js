@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from '@emotion/styled'
 import { keyframes } from '@emotion/core'
-import { useMutation } from '@apollo/react-hooks'
+import { useMutation } from '@apollo/client'
 import { transparentize, mix } from 'polished'
 
 import { Colors, Spacing, Transitions } from '../../../utils/pulseStyles'

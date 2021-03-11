@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from '@emotion/styled'
 import { transparentize } from 'polished'
-import { useQuery } from '@apollo/react-hooks'
+import { useQuery } from '@apollo/client'
 import Spinner from 'frontend/components/Spinner'
 
 // ! temporary usage of account modal button to emulate style

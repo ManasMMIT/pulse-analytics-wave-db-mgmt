@@ -1,6 +1,6 @@
 import { GET_LBM_KEY_EVENTS } from 'frontend/api/queries'
 
-import { useQuery } from '@apollo/react-hooks'
+import { useQuery } from '@apollo/client'
 
 const useLbmKeyEvents = (args = {}) => {
   const { lbmId }: { lbmId?: string } = args

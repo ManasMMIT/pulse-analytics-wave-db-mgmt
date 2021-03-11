@@ -1,6 +1,6 @@
 import { GET_JOIN_LBMS_AND_PEOPLE } from 'frontend/api/queries'
 
-import { useQuery } from '@apollo/react-hooks'
+import { useQuery } from '@apollo/client'
 
 const useLbmPersonConnections = (args: { lbmId?: string, personId?: string }) => {
   const { lbmId, personId } = args || {}

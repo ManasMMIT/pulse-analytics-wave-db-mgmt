@@ -1,5 +1,5 @@
 import React from 'react'
-import { useQuery } from '@apollo/react-hooks'
+import { useQuery } from '@apollo/client'
 import _ from 'lodash'
 import styled from "@emotion/styled"
 import { transparentize } from 'polished'

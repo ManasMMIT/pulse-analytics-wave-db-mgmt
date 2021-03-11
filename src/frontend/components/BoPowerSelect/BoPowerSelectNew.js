@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
 import React from 'react'
 import Select from 'react-select'
-import { useQuery } from '@apollo/react-hooks'
+import { useQuery } from '@apollo/client'
 import styled from '@emotion/styled'
 import { customSelectStyles } from 'frontend/components/customSelectStyles'
 

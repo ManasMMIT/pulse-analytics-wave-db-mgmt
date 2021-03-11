@@ -1,5 +1,5 @@
 import React from 'react'
-import { useApolloClient } from '@apollo/react-hooks'
+import { useApolloClient } from '@apollo/client'
 import { Route, Switch, Redirect } from 'react-router-dom'
 
 import { SELECT_INDICATION } from './../api/mutations'

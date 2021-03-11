@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useQuery } from '@apollo/react-hooks'
+import { useQuery } from '@apollo/client'
 import styled from '@emotion/styled'
 // import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 // import { faEdit } from "@fortawesome/free-solid-svg-icons"
@@ -69,17 +69,17 @@ const TreatmentPlansPanel = () => {
         .join('')
 
       treatmentPlans = treatmentPlans.filter(treatmentPlan => {
-          const tpString = [
-            treatmentPlan.indication.toLowerCase(),
-            treatmentPlan.regimen.toLowerCase(),
-            treatmentPlan.population.toLowerCase(),
-            treatmentPlan.line.toLowerCase(),
-            treatmentPlan.book.toLowerCase(),
-          ].join('')
+        const tpString = [
+          treatmentPlan.indication.toLowerCase(),
+          treatmentPlan.regimen.toLowerCase(),
+          treatmentPlan.population.toLowerCase(),
+          treatmentPlan.line.toLowerCase(),
+          treatmentPlan.book.toLowerCase(),
+        ].join('')
           .split(' ') // some parts have internal spaces
           .join('')
 
-          return tpString.includes(cleanedSearchInputValue)
+        return tpString.includes(cleanedSearchInputValue)
       })
     }
   }
@@ -133,44 +133,44 @@ const TreatmentPlansPanel = () => {
         loading
           ? <Spinner />
           : (
-              treatmentPlans.map(({ _id, ...tpParts }) => {
-                const rowStyle = {
-                  width: COLUMN_WIDTH,
-                  padding: 6,
-                  border: SHARED_BORDER,
-                  fontSize: 12,
-                }
+            treatmentPlans.map(({ _id, ...tpParts }) => {
+              const rowStyle = {
+                width: COLUMN_WIDTH,
+                padding: 6,
+                border: SHARED_BORDER,
+                fontSize: 12,
+              }
 
-                return (
-                  <div key={_id} style={{ display: 'flex' }}>
-                    <span style={{ ...rowStyle, marginLeft: 24 }}>
-                      {tpParts.indication}
-                    </span>
-                    <span style={rowStyle}>
-                      {tpParts.regimen}
-                    </span>
-                    <span style={rowStyle}>
-                      {tpParts.population}
-                    </span>
-                    <span style={rowStyle}>
-                      {tpParts.line}
-                    </span>
-                    <span style={rowStyle}>
-                      {tpParts.book}
-                    </span>
-                    <span style={rowStyle}>
-                      {tpParts.coverage}
-                    </span>
-                    <span style={{ ...rowStyle, marginRight: 24 }}>
-                      <DeleteButton
-                        itemId={_id}
-                        mutationDoc={DELETE_SOURCE_TREATMENT_PLAN}
-                        refetchQueries={[{ query: GET_SOURCE_TREATMENT_PLANS }]}
-                      />
-                    </span>
-                  </div>)
-              })
-            )
+              return (
+                <div key={_id} style={{ display: 'flex' }}>
+                  <span style={{ ...rowStyle, marginLeft: 24 }}>
+                    {tpParts.indication}
+                  </span>
+                  <span style={rowStyle}>
+                    {tpParts.regimen}
+                  </span>
+                  <span style={rowStyle}>
+                    {tpParts.population}
+                  </span>
+                  <span style={rowStyle}>
+                    {tpParts.line}
+                  </span>
+                  <span style={rowStyle}>
+                    {tpParts.book}
+                  </span>
+                  <span style={rowStyle}>
+                    {tpParts.coverage}
+                  </span>
+                  <span style={{ ...rowStyle, marginRight: 24 }}>
+                    <DeleteButton
+                      itemId={_id}
+                      mutationDoc={DELETE_SOURCE_TREATMENT_PLAN}
+                      refetchQueries={[{ query: GET_SOURCE_TREATMENT_PLANS }]}
+                    />
+                  </span>
+                </div>)
+            })
+          )
       }
     </Wrapper>
   )

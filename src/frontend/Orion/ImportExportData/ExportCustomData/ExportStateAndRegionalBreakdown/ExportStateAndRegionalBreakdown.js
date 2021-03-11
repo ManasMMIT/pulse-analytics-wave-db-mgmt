@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { useQuery } from '@apollo/react-hooks'
+import { useQuery } from '@apollo/client'
 import Select from 'react-select'
 
 import { GET_SOURCE_TREATMENT_PLANS, GET_TEAMS } from '../../../../api/queries'
@@ -74,9 +74,8 @@ const ExportRegionalBreakdown = () => {
           <Select
             value={{
               value: selectedTeam,
-              label: `Client: ${
-                selectedTeam.client && selectedTeam.client.name
-              } | Team: ${selectedTeam.name}`,
+              label: `Client: ${selectedTeam.client && selectedTeam.client.name
+                } | Team: ${selectedTeam.name}`,
             }}
             onChange={({ value }) => selectTeam(value)}
             options={teamsDropdownOptions}

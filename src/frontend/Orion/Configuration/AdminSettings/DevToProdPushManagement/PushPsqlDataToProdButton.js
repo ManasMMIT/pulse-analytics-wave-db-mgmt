@@ -1,5 +1,5 @@
 import React from 'react'
-import { useMutation } from '@apollo/react-hooks'
+import { useMutation } from '@apollo/client'
 
 import { PSQL_PUSH_CORE_TO_PROD } from 'frontend/api/mutations'
 import Spinner from 'frontend/components/Spinner'

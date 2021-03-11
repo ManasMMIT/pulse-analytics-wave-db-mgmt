@@ -1,5 +1,5 @@
 import _ from 'lodash'
-import { useQuery } from '@apollo/react-hooks'
+import { useQuery } from '@apollo/client'
 
 import {
   GET_JOIN_PATHWAYS_AND_PEOPLE,

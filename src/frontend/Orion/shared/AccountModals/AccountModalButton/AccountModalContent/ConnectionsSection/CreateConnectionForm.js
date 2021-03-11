@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import Select from 'react-select'
-import { useMutation } from '@apollo/react-hooks'
+import { useMutation } from '@apollo/client'
 import styled from '@emotion/styled'
 
 import {
@@ -109,12 +109,12 @@ const CreateConnectionForm = ({
 
   const formLanguage = from.type === 'Provider' || from.type === 'Payer'
     ? (
-        <>
-          <span style={{ fontWeight: 600 }}>
-            {from.organization}
-          </span>
-          <span> participates in </span>
-        </>
+      <>
+        <span style={{ fontWeight: 600 }}>
+          {from.organization}
+        </span>
+        <span> participates in </span>
+      </>
     )
     : 'Add participant:'
 
@@ -207,8 +207,8 @@ const CreateConnectionForm = ({
         <Select
           isDisabled
           styles={connectionSelectStyles}
-          defaultValue={{ label: 'Provider', value: 'Provider'}}
-          value={{ label: 'Provider', value: 'Provider'}}
+          defaultValue={{ label: 'Provider', value: 'Provider' }}
+          value={{ label: 'Provider', value: 'Provider' }}
           options={[{ label: 'Provider', value: 'Provider' }]}
         />
       </FormSection>

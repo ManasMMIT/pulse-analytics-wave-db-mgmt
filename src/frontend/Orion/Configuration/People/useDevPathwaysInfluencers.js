@@ -1,4 +1,4 @@
-import { useQuery } from '@apollo/react-hooks'
+import { useQuery } from '@apollo/client'
 
 import { GET_DEV_PATHWAYS_INFLUENCERS } from 'frontend/api/queries'
 

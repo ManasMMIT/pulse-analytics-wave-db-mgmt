@@ -1,7 +1,7 @@
 import React from 'react'
 import {
   useQuery,
-} from '@apollo/react-hooks'
+} from '@apollo/client'
 
 import UserForm from './UserForm'
 import Spinner from 'frontend/components/Spinner'

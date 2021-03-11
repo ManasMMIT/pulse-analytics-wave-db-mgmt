@@ -6,7 +6,7 @@
   ! The current logic will be moved into a sub-hook
     ! something like 'useAllAccounts`
 */
-import { useQuery } from '@apollo/react-hooks'
+import { useQuery } from '@apollo/client'
 
 import {
   GET_APM_ORGANIZATIONS,

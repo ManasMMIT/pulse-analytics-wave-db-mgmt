@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import Select from 'react-select'
-import { useMutation, useQuery } from '@apollo/react-hooks'
+import { useMutation, useQuery } from '@apollo/client'
 import _ from 'lodash'
 
 import {
@@ -25,15 +25,15 @@ const Form = ({
   mutationVars,
 }) => {
   const [stagedBomLabel, setBomLabel] = useState(data.label)
-  
+
   // Make this null on mount because even if this is the update form,
   // we don't know the bo name needed in the react-select label 
   // 'till after bo is fetched; another reason to not store react-select's
   // formatting in React local state
-  const [stagedBusinessObj, setStagedBusinessObj] = useState(null) 
+  const [stagedBusinessObj, setStagedBusinessObj] = useState(null)
 
   const boId = (stagedBusinessObj || {}).value
-  
+
   const [saveBom] = useMutation(mutationDoc, {
     variables: {
       input: { ...mutationVars, label: stagedBomLabel, boId }
@@ -119,7 +119,7 @@ Form.propTypes = {
 Form.defaultProps = {
   data: {},
   mutationDoc: null,
-  afterMutationHook: () => {},
+  afterMutationHook: () => { },
   mutationVars: {},
 }
 

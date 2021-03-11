@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useHistory, useLocation } from 'react-router-dom'
-import { useQuery } from '@apollo/react-hooks'
+import { useQuery } from '@apollo/client'
 import queryString from 'query-string'
 // import _ from 'lodash'
 
@@ -45,8 +45,8 @@ const BusinessObjectsPanel = () => {
 
   const selectedBusinessObjectId = (
     location.search
-      && queryString.parse(location.search)
-      && queryString.parse(location.search).businessObjectId
+    && queryString.parse(location.search)
+    && queryString.parse(location.search).businessObjectId
   ) || ''
 
   const { data, loading } = useQuery(GET_BUSINESS_OBJECTS)

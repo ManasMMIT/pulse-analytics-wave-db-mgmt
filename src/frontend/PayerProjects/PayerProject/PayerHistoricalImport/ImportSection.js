@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react'
 import XLSX from 'xlsx'
 import PropTypes from 'prop-types'
-import { useMutation } from '@apollo/react-hooks'
+import { useMutation } from '@apollo/client'
 import styled from '@emotion/styled'
 import { Alert, AlertTitle } from '@material-ui/lab'
 import socket from 'frontend/api/socket'

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import Select from 'react-select'
-import { useMutation, useQuery } from '@apollo/react-hooks'
+import { useMutation, useQuery } from '@apollo/client'
 
 import {
   FieldContainer,
@@ -109,7 +109,7 @@ Form.propTypes = {
 Form.defaultProps = {
   data: {},
   mutationDoc: null,
-  afterMutationHook: () => {},
+  afterMutationHook: () => { },
   mutationVars: {},
 }
 

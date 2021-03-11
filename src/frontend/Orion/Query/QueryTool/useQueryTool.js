@@ -7,7 +7,7 @@
     ! something like 'useAllAccounts`
 */
 
-import { useQuery } from '@apollo/react-hooks'
+import { useQuery } from '@apollo/client'
 
 import {
   GET_APM_ORGANIZATIONS,
@@ -31,7 +31,7 @@ export default () => {
     data: PayerData,
     loading: PayerLoading,
   } = useQuery(GET_PAYER_ORGANIZATIONS)
-  
+
   const {
     data: ProviderData,
     loading: ProviderLoading,

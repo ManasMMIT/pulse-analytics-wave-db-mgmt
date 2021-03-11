@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useHistory, useLocation } from 'react-router-dom'
-import { useQuery } from '@apollo/react-hooks'
+import { useQuery } from '@apollo/client'
 import queryString from 'query-string'
 import _ from 'lodash'
 import { transparentize } from 'polished'
@@ -59,8 +59,8 @@ const AquilaConfigsPanel = () => {
 
   const selectedAquilaConfigId = (
     location.search
-      && queryString.parse(location.search)
-      && queryString.parse(location.search).aquilaConfigId
+    && queryString.parse(location.search)
+    && queryString.parse(location.search).aquilaConfigId
   ) || ''
 
   const { data, loading } = useQuery(GET_AQUILA_CONFIGS)
@@ -83,7 +83,7 @@ const AquilaConfigsPanel = () => {
   }, [loading, selectedAquilaConfigId])
 
   if (loading || boLoading) return 'Loading...'
-  
+
   const businessObjectsById = _.keyBy(boData.businessObjects, '_id')
 
   const getBoLabel = aquilaConfigObj => {

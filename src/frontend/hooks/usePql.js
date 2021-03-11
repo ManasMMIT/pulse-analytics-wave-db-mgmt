@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { useHistory, useLocation } from 'react-router-dom'
-import { useLazyQuery } from '@apollo/react-hooks'
+import { useLazyQuery } from '@apollo/client'
 import queryString from 'query-string'
 
 import { GET_AQUILA_PQL_RESULTS } from 'frontend/api/queries'

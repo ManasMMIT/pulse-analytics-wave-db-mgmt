@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
 import { transparentize } from 'polished'
-import { useQuery } from '@apollo/react-hooks'
+import { useQuery } from '@apollo/client'
 import _ from 'lodash'
 
 import Spinner from 'frontend/components/Spinner'

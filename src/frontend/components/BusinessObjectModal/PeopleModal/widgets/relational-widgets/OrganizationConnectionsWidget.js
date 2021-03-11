@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 
 import styled from '@emotion/styled'
-import { useQuery } from '@apollo/react-hooks'
+import { useQuery } from '@apollo/client'
 
 import { GET_ORGANIZATION_TYPES } from 'frontend/api/queries'
 import usePathwaysPersonConnections from 'frontend/hooks/usePathwaysPersonConnections'

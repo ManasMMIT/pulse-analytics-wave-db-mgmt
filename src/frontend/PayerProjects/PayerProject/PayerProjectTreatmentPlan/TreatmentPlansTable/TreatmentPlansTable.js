@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
-import { useMutation } from '@apollo/react-hooks'
+import { useMutation } from '@apollo/client'
 import styled from '@emotion/styled'
 import _ from 'lodash'
 import { lighten, darken, transparentize } from 'polished'

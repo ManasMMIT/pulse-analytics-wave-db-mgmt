@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useHistory, useLocation } from 'react-router-dom'
-import { useQuery } from '@apollo/react-hooks'
+import { useQuery } from '@apollo/client'
 import queryString from 'query-string'
 import _ from 'lodash'
 
@@ -44,8 +44,8 @@ const WorkbooksPanel = () => {
 
   const selectedWorkbookId = (
     location.search
-      && queryString.parse(location.search)
-      && queryString.parse(location.search).workbookId
+    && queryString.parse(location.search)
+    && queryString.parse(location.search).workbookId
   ) || ''
 
   const { data, loading } = useQuery(GET_WORKBOOKS)

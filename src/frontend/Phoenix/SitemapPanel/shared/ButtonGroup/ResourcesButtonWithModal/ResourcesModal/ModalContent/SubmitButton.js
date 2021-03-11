@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from '@emotion/styled'
-import { useMutation } from '@apollo/react-hooks'
+import { useMutation } from '@apollo/client'
 import PropTypes from 'prop-types'
 import { transparentize } from 'polished'
 

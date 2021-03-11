@@ -1,5 +1,5 @@
 import React from 'react'
-import { useQuery } from '@apollo/react-hooks'
+import { useQuery } from '@apollo/client'
 import _ from 'lodash'
 import util from 'util'
 
@@ -97,11 +97,11 @@ const OpLog = () => {
                   {['UpdatePermissions', 'UpdateRoleSitemap'].includes(
                     operationName
                   ) && (
-                    <Client>
-                      [<span>{operationVariables.input.team.clientName}</span>:
-                      <span>{operationVariables.input.team.teamName}</span>]
-                    </Client>
-                  )}
+                      <Client>
+                        [<span>{operationVariables.input.team.clientName}</span>:
+                        <span>{operationVariables.input.team.teamName}</span>]
+                      </Client>
+                    )}
                   <Action title={util.inspect(operationVariables)}>
                     {_.startCase(operationName)}
                   </Action>

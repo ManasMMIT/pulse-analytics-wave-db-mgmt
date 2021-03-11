@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useQuery } from '@apollo/react-hooks'
+import { useQuery } from '@apollo/client'
 import _ from 'lodash'
 
 import { GET_EVENTS } from 'frontend/api/queries'

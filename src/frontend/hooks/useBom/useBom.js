@@ -1,4 +1,4 @@
-import { useQuery } from '@apollo/react-hooks'
+import { useQuery } from '@apollo/client'
 import _ from 'lodash'
 
 import BOID_QUERY_MAP from './boid-query-map'
@@ -19,7 +19,7 @@ export default (boId, entityId) => {
 
     loadingEntity = loading
     entityData = data
-  } catch(e) {
+  } catch (e) {
     alert(`Business object likely has no modal button built for it\nFull Error: ${e}`)
 
     return {

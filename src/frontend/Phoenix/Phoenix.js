@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Route, Switch } from 'react-router-dom'
-import { useApolloClient } from '@apollo/react-hooks' // option 3: react-hooks, PROB UNRELIABLE
+import { useApolloClient } from '@apollo/client' // option 3: react-hooks, PROB UNRELIABLE
 
 import { GET_CLIENTS, GET_SOURCE_TOOLS } from './../api/queries'
 import { SELECT_CLIENT, SELECT_TOOL } from './../api/mutations'

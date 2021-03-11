@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import Snackbar from '@material-ui/core/Snackbar'
 import MuiAlert from '@material-ui/lab/Alert'
 import _ from 'lodash'
-import { useMutation } from '@apollo/react-hooks'
+import { useMutation } from '@apollo/client'
 import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
 

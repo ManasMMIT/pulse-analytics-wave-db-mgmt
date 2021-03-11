@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
-import { useMutation } from '@apollo/react-hooks'
+import { useMutation } from '@apollo/client'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faTrashAlt } from "@fortawesome/free-solid-svg-icons"
 import { transparentize } from 'polished'
@@ -11,9 +11,9 @@ import Spinner from 'frontend/components/Spinner'
 
 import { Colors, Spacing } from '../../../../../utils/pulseStyles'
 
-import { 
-  GET_BUSINESS_OBJECTS, 
-  GET_WORKBOOKS, 
+import {
+  GET_BUSINESS_OBJECTS,
+  GET_WORKBOOKS,
   GET_BOM_CONFIGS,
   GET_AQUILA_CONFIGS,
 } from '../../../../../api/queries'

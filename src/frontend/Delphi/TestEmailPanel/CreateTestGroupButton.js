@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from '@emotion/styled'
 import { transparentize } from 'polished'
-import { useMutation } from '@apollo/react-hooks'
+import { useMutation } from '@apollo/client'
 
 import { GET_TEST_EMAIL_GROUPS } from '../../api/queries'
 import { CREATE_TEST_EMAIL_GROUP } from '../../api/mutations'

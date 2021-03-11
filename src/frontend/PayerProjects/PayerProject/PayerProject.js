@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import _ from 'lodash'
-import { useQuery } from '@apollo/react-hooks'
+import { useQuery } from '@apollo/client'
 
 import { Route, Switch } from 'react-router-dom'
 
@@ -35,7 +35,7 @@ const PayerProject = ({ match, location }) => {
   const { path } = match
   const { data, loading } = useQuery(
     GET_SINGLE_PAYER_PROJECT,
-    { variables: { projectId: match.params.projectId }}
+    { variables: { projectId: match.params.projectId } }
   )
 
   const projectName = loading ? '' : data.singlePayerProject.name

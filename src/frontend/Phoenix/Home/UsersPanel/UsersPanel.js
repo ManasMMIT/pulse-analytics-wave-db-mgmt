@@ -1,6 +1,6 @@
 import React from 'react'
 import _ from 'lodash'
-import { useQuery } from '@apollo/react-hooks'
+import { useQuery } from '@apollo/client'
 import { transparentize } from 'polished'
 
 import Panel from '../../../components/Panel'
@@ -102,9 +102,9 @@ const panelItemConfig = {
       <>
         <span>{username}</span>
         {
-          !_.isEmpty(defaultLanding) 
-            && defaultLanding.locked 
-            && <span style={lockedDefaultPathStyle}>PL</span>
+          !_.isEmpty(defaultLanding)
+          && defaultLanding.locked
+          && <span style={lockedDefaultPathStyle}>PL</span>
         }
       </>
     )

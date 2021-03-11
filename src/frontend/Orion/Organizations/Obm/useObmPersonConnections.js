@@ -1,6 +1,6 @@
 import { GET_JOIN_OBMS_AND_PEOPLE } from 'frontend/api/queries'
 
-import { useQuery } from '@apollo/react-hooks'
+import { useQuery } from '@apollo/client'
 
 const useObmPersonConnections = (args = {}) => {
   const { obmId, personId } = args

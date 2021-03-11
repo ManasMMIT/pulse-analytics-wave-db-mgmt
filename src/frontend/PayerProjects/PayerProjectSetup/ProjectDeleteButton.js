@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useMutation } from '@apollo/react-hooks'
+import { useMutation } from '@apollo/client'
 import styled from '@emotion/styled'
 import { useHistory, useParams } from 'react-router-dom'
 

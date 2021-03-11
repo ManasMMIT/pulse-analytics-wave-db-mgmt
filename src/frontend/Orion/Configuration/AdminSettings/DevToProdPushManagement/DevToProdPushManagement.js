@@ -1,5 +1,5 @@
 import React from 'react'
-import { useQuery } from '@apollo/react-hooks'
+import { useQuery } from '@apollo/client'
 import styled from '@emotion/styled'
 
 import { GET_DEV_TO_PROD_PUSH_CONFIGS } from 'frontend/api/queries'

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { transparentize } from 'polished'
 import { ObjectId } from 'mongodb'
 import _ from 'lodash'
-import { useMutation } from '@apollo/react-hooks'
+import { useMutation } from '@apollo/client'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons'
@@ -81,7 +81,7 @@ const LbmKeyEventsWidget = ({ entity }: { _id: string, [key: string]: any }) => 
   return (
     <div
       style={{
-        width: '100%',  
+        width: '100%',
         height: '100%',
         overflowY: 'auto',
         background: Color.LIGHT_BLUE_GRAY_1,

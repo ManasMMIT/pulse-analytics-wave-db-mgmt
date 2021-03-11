@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
-import { useMutation, useApolloClient } from '@apollo/react-hooks'
+import { useMutation, useApolloClient } from '@apollo/client'
 import { lighten } from 'polished'
 
 import Spinner from 'frontend/components/Spinner'
@@ -25,11 +25,11 @@ const Button = styled.button(
   ({ disabled }) =>
     disabled
       ? {
-          background: Colors.LIGHT_GRAY_1,
-          color: Colors.BLACK,
-          cursor: 'not-allowed',
-          ':hover': { background: Colors.LIGHT_GRAY_1 },
-        }
+        background: Colors.LIGHT_GRAY_1,
+        color: Colors.BLACK,
+        cursor: 'not-allowed',
+        ':hover': { background: Colors.LIGHT_GRAY_1 },
+      }
       : {}
 )
 

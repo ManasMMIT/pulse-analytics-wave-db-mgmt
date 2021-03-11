@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { useMutation } from '@apollo/react-hooks'
+import { useMutation } from '@apollo/client'
 import styled from '@emotion/styled'
 import PropTypes from 'prop-types'
 import _ from 'lodash'
@@ -180,7 +180,7 @@ BusinessObjectModal.defaultProps = {
   getEntityTitle: (entity) => entity.name,
   mutationDocs: {},
   refetchQueries: [],
-  afterMutationHook: () => {},
+  afterMutationHook: () => { },
   widgets: [],
 }
 

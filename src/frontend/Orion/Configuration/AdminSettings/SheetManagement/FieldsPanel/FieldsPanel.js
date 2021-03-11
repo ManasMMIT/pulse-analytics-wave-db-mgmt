@@ -1,6 +1,6 @@
 import React from 'react'
 import { useHistory, useLocation } from 'react-router-dom'
-import { useQuery } from '@apollo/react-hooks'
+import { useQuery } from '@apollo/client'
 import queryString from 'query-string'
 
 import FieldPanelItem from './FieldPanelItem'
@@ -23,7 +23,7 @@ import {
   CREATE_SHEET_FIELD,
   UPDATE_SHEET_FIELD,
   DELETE_SHEET_FIELD,
- } from '../../../../../api/mutations'
+} from '../../../../../api/mutations'
 
 const FieldsPanel = () => {
   const history = useHistory()

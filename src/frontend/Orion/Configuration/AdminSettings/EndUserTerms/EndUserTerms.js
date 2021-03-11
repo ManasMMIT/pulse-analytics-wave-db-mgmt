@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { useQuery, useMutation } from '@apollo/react-hooks'
+import { useQuery, useMutation } from '@apollo/client'
 import styled from '@emotion/styled'
 
 import { GET_END_USER_TERMS_LINK } from 'frontend/api/queries'

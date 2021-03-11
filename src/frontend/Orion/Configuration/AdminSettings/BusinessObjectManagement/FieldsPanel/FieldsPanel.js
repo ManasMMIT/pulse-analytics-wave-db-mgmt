@@ -1,6 +1,6 @@
 import React from 'react'
 import { useHistory, useLocation } from 'react-router-dom'
-import { useQuery } from '@apollo/react-hooks'
+import { useQuery } from '@apollo/client'
 import queryString from 'query-string'
 
 import FieldPanelItem from './FieldPanelItem'
@@ -23,7 +23,7 @@ import {
   CREATE_BUSINESS_OBJECT_FIELD,
   UPDATE_BUSINESS_OBJECT_FIELD,
   DELETE_BUSINESS_OBJECT_FIELD,
- } from '../../../../../api/mutations'
+} from '../../../../../api/mutations'
 
 const FieldsPanel = () => {
   const history = useHistory()
@@ -85,7 +85,7 @@ const FieldsPanel = () => {
                 handleClick={() => handleClick(fieldObj)}
               >
                 <DeleteButton
-                  extraRefetchQueries={[{ query: GET_BOM_SCHEMA, variables: { boId: selectedBusinessObjectId} }]}
+                  extraRefetchQueries={[{ query: GET_BOM_SCHEMA, variables: { boId: selectedBusinessObjectId } }]}
                   mutationDoc={DELETE_BUSINESS_OBJECT_FIELD}
                   mutationVars={{
                     fieldId: selectedFieldId,

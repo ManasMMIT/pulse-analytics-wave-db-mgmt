@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import Select from 'react-select'
-import { useMutation, useQuery } from '@apollo/react-hooks'
+import { useMutation, useQuery } from '@apollo/client'
 
 import {
   FormLabel,
@@ -43,7 +43,7 @@ const Form = ({
     refetchQueries: [
       { query: GET_AQUILA_CONFIGS },
       { query: GET_AQUILA_BUSINESS_OBJECTS },
-      { query: GET_AQUILA_BO_FILTER_SETTINGS, variables: { boId: selectedAquilaConfig.boId }}
+      { query: GET_AQUILA_BO_FILTER_SETTINGS, variables: { boId: selectedAquilaConfig.boId } }
     ],
     awaitRefetchQueries: true,
     onCompleted: result => {
@@ -149,8 +149,8 @@ Form.defaultProps = {
   data: {},
   mutationDoc: null,
   mutationVars: {},
-  afterMutationHook: () => {},
-  closeModal: () => {},
+  afterMutationHook: () => { },
+  closeModal: () => { },
   selectedAquilaConfig: {},
 }
 

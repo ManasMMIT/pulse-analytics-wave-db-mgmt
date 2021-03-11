@@ -1,5 +1,5 @@
 import _ from 'lodash'
-import { useQuery } from '@apollo/react-hooks'
+import { useQuery } from '@apollo/client'
 
 import {
   GET_JOIN_LBMS_AND_PAYERS,
@@ -42,7 +42,7 @@ const useLbmAndPayerConnections = (args: { lbmId?: string } = {}) => {
   if (loading || payersLoading) return { data: [], loading: true }
 
   const connections = Object.values(data!)[0]
-  
+
   let filteredData = connections
   // Only filter if there's filter params passed in
   if (lbmId) {

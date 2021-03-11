@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import _ from 'lodash'
 import {
   useQuery,
-} from '@apollo/react-hooks'
+} from '@apollo/client'
 
 import {
   GET_CLIENT_TEAMS,

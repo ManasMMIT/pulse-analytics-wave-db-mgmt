@@ -1,5 +1,5 @@
 import React from 'react'
-import { useMutation } from '@apollo/react-hooks'
+import { useMutation } from '@apollo/client'
 
 import { GET_DEV_TO_PROD_PUSH_CONFIGS } from 'frontend/api/queries'
 import { CREATE_DEV_TO_PROD_PUSH_CONFIG } from 'frontend/api/mutations'

@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useMutation } from '@apollo/react-hooks'
+import { useMutation } from '@apollo/client'
 import PropTypes from 'prop-types'
 import XLSX from 'xlsx'
 
@@ -37,7 +37,7 @@ const ImportButton = ({
   onClick,
 }) => {
   const [data, setData] = useState(null)
-  const [isImportingData, setIsImportingData]= useState(false)
+  const [isImportingData, setIsImportingData] = useState(false)
 
   const [writeMetaData] = useMutation(UPSERT_ORGANIZATION_META, {
     variables: {
@@ -97,7 +97,7 @@ ImportButton.propTypes = {
 }
 
 ImportButton.defaultProps = {
-  onClick: () => {},
+  onClick: () => { },
 }
 
 export default ImportButton

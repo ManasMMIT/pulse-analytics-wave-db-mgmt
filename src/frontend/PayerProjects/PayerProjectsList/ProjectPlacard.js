@@ -1,5 +1,6 @@
+import _ from 'lodash'
 import React, { useState, useEffect } from 'react'
-import { useQuery } from '@apollo/react-hooks'
+import { useQuery } from '@apollo/client'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import styled from '@emotion/styled'
@@ -62,7 +63,7 @@ const ProjectPlacard = ({ projectName, projectId }) => {
     if (!loading) {
       const [
         sortedTimestamps,
-      ] = data.payerProjectPtpsImportTimestamps.timestamps.sort().reverse()
+      ] = _.cloneDeep(data).payerProjectPtpsImportTimestamps.timestamps.sort().reverse()
 
       setLastImportDate(sortedTimestamps)
     }

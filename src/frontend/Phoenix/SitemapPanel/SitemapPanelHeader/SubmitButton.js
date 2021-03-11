@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
-import { useMutation } from '@apollo/react-hooks'
+import { useMutation } from '@apollo/client'
 import { lighten } from 'polished'
 
 import {
@@ -37,9 +37,9 @@ const SubmitButton = ({
 }) => {
   const [updateRoleSitemap, { loading, error }] = useMutation(
     UPDATE_ROLE_SITEMAP, {
-      variables: { input: { updatedSitemap, teamId } },
-      refetchQueries: [{ query: GET_CLIENT_TEAMS }]
-    }
+    variables: { input: { updatedSitemap, teamId } },
+    refetchQueries: [{ query: GET_CLIENT_TEAMS }]
+  }
   )
 
   if (loading) return (

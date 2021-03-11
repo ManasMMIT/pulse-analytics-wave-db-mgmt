@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import Select from 'react-select'
-import { useMutation } from '@apollo/react-hooks'
+import { useMutation } from '@apollo/client'
 
 import {
   FormLabel,
@@ -112,8 +112,8 @@ Form.propTypes = {
 Form.defaultProps = {
   data: {},
   mutationDoc: null,
-  afterMutationHook: () => {},
-  closeModal: () => {},
+  afterMutationHook: () => { },
+  closeModal: () => { },
 }
 
 export default Form

@@ -1,5 +1,5 @@
 import React from 'react'
-import { useQuery } from '@apollo/react-hooks'
+import { useQuery } from '@apollo/client'
 
 import { GET_VIEW_OBM_PAYER_PARTNERSHIPS } from 'frontend/api/queries'
 

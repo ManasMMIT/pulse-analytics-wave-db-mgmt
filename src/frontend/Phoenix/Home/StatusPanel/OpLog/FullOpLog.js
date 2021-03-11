@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useLazyQuery } from '@apollo/react-hooks'
+import { useLazyQuery } from '@apollo/client'
 import _ from 'lodash'
 import util from 'util'
 
@@ -75,11 +75,11 @@ const FullOpLog = () => {
                     {['UpdatePermissions', 'UpdateRoleSitemap'].includes(
                       operationName
                     ) && (
-                      <Client>
-                        [<span>{operationVariables.input.team.clientName}</span>
+                        <Client>
+                          [<span>{operationVariables.input.team.clientName}</span>
                         :<span>{operationVariables.input.team.teamName}</span>]
-                      </Client>
-                    )}
+                        </Client>
+                      )}
                     <Action title={util.inspect(operationVariables)}>
                       {_.startCase(operationName)}
                     </Action>

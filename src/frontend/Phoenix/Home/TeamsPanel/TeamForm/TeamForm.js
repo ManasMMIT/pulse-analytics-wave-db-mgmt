@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import styled from "@emotion/styled"
-import { useMutation, useApolloClient } from '@apollo/react-hooks'
+import { useMutation, useApolloClient } from '@apollo/client'
 import { transparentize, lighten } from 'polished'
 
 import Spinner from 'frontend/components/Spinner'
@@ -70,8 +70,8 @@ class TeamForm extends Component {
     } = props
 
     this.state = {
-      _id, 
-      description, 
+      _id,
+      description,
       defaultLandingPath: defaultLandingPath || '',
     }
 
@@ -153,7 +153,7 @@ const TeamFormContainer = ({
         variables: { data },
       })
     }
-    : () => {}
+    : () => { }
 
   const [handleSubmit, { loading, error }] = useMutation(
     mutationDoc,

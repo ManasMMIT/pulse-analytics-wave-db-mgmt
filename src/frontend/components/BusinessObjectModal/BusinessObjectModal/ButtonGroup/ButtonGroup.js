@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import _ from 'lodash'
-import { useMutation } from '@apollo/react-hooks'
+import { useMutation } from '@apollo/client'
 
 import Spacing from 'frontend/utils/spacing'
 import STUB_DOC from 'frontend/api/utils/stub-doc'

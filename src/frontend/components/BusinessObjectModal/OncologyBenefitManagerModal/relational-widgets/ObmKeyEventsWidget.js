@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { transparentize } from 'polished'
 import { ObjectId } from 'mongodb'
 import _ from 'lodash'
-import { useMutation } from '@apollo/react-hooks'
+import { useMutation } from '@apollo/client'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons'

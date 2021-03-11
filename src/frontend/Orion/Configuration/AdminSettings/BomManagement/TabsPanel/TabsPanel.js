@@ -1,6 +1,6 @@
 import React from 'react'
 import { useHistory, useLocation } from 'react-router-dom'
-import { useQuery } from '@apollo/react-hooks'
+import { useQuery } from '@apollo/client'
 import queryString from 'query-string'
 // import _ from 'lodash'
 
@@ -71,7 +71,7 @@ const TabsPanel = () => {
   const tabs = selectedBom ? selectedBom.tags : []
 
   return (
-    <ListContainer style={{  width: '25%' }}>
+    <ListContainer style={{ width: '25%' }}>
       <ListHeader>
         <ListTitle>
           <span>Tabs / </span>

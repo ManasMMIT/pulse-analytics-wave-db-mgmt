@@ -1,5 +1,5 @@
 import React from 'react'
-import { useQuery } from '@apollo/react-hooks'
+import { useQuery } from '@apollo/client'
 
 import PanelHeader from 'frontend/components/Panel/PanelHeader'
 import TherapeuticAreaModalButton from 'frontend/components/BusinessObjectModal/TherapeuticAreaModal/TherapeuticAreaModalButton'

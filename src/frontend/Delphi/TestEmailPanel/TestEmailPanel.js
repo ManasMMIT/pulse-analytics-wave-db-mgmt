@@ -1,5 +1,5 @@
 import React from 'react'
-import { useQuery } from '@apollo/react-hooks'
+import { useQuery } from '@apollo/client'
 import styled from '@emotion/styled'
 import { lighten } from 'polished'
 
@@ -44,7 +44,7 @@ const TestEmailPanel = () => {
       }}
     >
       <div>
-        <p style={{ color: Colors.PRIMARY, fontSize: 12, fontWeight: 600,}}>
+        <p style={{ color: Colors.PRIMARY, fontSize: 12, fontWeight: 600, }}>
           Loading Test Emails
         </p>
         <Spinner size="32" />

@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { useMutation } from '@apollo/react-hooks'
+import { useMutation } from '@apollo/client'
 
 import {
   GET_PAYER_PROJECT_PTPS
@@ -66,7 +66,7 @@ const ModalContent = ({
         style={{ margin: 12 }}
         onClick={updatePtps}
       >
-        { loading ? <Spinner /> : 'Submit' }
+        {loading ? <Spinner /> : 'Submit'}
       </SubmitButton>
     </div>
   )

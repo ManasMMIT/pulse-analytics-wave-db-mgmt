@@ -1,7 +1,7 @@
 import React from 'react'
 import { useRouteMatch } from 'react-router-dom'
 import styled from '@emotion/styled'
-import { useQuery } from '@apollo/react-hooks'
+import { useQuery } from '@apollo/client'
 
 import { GET_PAYER_PROJECT_PTPS } from 'frontend/api/queries'
 
@@ -50,7 +50,7 @@ const ProjectDetails = () => {
           const [name, values] = panel
           const valuesArr = [...values].sort()
 
-          return <ProjectDetailsPanel key={name} name={name} values={valuesArr}/>
+          return <ProjectDetailsPanel key={name} name={name} values={valuesArr} />
         })
       }
     </Wrapper>

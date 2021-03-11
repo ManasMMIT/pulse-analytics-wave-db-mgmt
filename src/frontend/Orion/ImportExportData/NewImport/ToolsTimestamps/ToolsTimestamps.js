@@ -1,5 +1,5 @@
 import React from 'react'
-import { useQuery } from '@apollo/react-hooks'
+import { useQuery } from '@apollo/client'
 
 import ToolTimestamp from './ToolTimestamp'
 import { GET_SOURCE_TOOLS } from '../../../../api/queries'

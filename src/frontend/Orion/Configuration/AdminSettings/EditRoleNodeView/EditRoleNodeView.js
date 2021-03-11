@@ -1,6 +1,6 @@
-import React, { useState, useEffect} from 'react'
+import React, { useState, useEffect } from 'react'
 import Select from 'react-select'
-import { useQuery } from '@apollo/react-hooks'
+import { useQuery } from '@apollo/client'
 import _ from 'lodash'
 
 import EditRoleNodeForm from './EditRoleNodeForm'
@@ -36,7 +36,7 @@ const EditRoleNodeView = () => {
 
   const teamsDropdownOptions = teams.map(team => ({
     value: team,
-    label: `Client: ${team.client.name } | Team: ${team.name}`,
+    label: `Client: ${team.client.name} | Team: ${team.name}`,
   }))
 
   let roleNodeOptions = []

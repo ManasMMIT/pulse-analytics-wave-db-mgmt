@@ -3,7 +3,7 @@ import _ from 'lodash'
 import {
   useQuery,
   useApolloClient,
-} from '@apollo/react-hooks'
+} from '@apollo/client'
 
 // TODO: Grab all selected nodes at each level,
 // * to pass appropriate indications/accounts

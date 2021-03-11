@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import _ from 'lodash'
-import { useQuery, useMutation } from '@apollo/react-hooks'
+import { useQuery, useMutation } from '@apollo/client'
 import Select from 'react-select'
 import PropTypes from 'prop-types'
 import styled from '@emotion/styled'

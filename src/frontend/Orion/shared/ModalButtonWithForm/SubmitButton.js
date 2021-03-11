@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from '@emotion/styled'
 import { lighten } from 'polished'
-import { useMutation } from '@apollo/react-hooks'
+import { useMutation } from '@apollo/client'
 import Spinner from 'frontend/components/Spinner'
 
 import { Colors, Spacing, Transitions } from '../../../utils/pulseStyles'

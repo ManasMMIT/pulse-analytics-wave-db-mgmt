@@ -1,6 +1,6 @@
 import React from 'react'
 import { useHistory, useLocation } from 'react-router-dom'
-import { useQuery } from '@apollo/react-hooks'
+import { useQuery } from '@apollo/client'
 import queryString from 'query-string'
 
 import FieldPanelItem from './FieldPanelItem'
@@ -25,7 +25,7 @@ import {
   CREATE_BOM_CONFIG_FIELD,
   DELETE_BOM_CONFIG_FIELD,
   UPDATE_BOM_CONFIG_FIELD,
- } from 'frontend/api/mutations'
+} from 'frontend/api/mutations'
 
 const FieldsPanel = () => {
   const history = useHistory()
@@ -72,7 +72,7 @@ const FieldsPanel = () => {
 
   const fields = selectedSection ? selectedSection.fields : []
 
-  const selectedField = fields.find(({ _id}) => (
+  const selectedField = fields.find(({ _id }) => (
     _id === selectedFieldId
   ))
 

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { ObjectId } from 'mongodb'
 import _ from 'lodash'
 import Select from 'react-select'
-import { useQuery, useMutation } from '@apollo/react-hooks'
+import { useQuery, useMutation } from '@apollo/client'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons'

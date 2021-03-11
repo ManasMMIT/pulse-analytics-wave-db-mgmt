@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { useMutation, useQuery } from '@apollo/react-hooks'
+import { useMutation, useQuery } from '@apollo/client'
 import PropTypes from 'prop-types'
 import _ from 'lodash'
 import XLSX from 'xlsx'
@@ -36,11 +36,11 @@ const getOrgsWithMetaData = (data, metaData) => {
 
     const metaFieldObj = metaFields
       ? {
-          exportedAt: exportedAt ? formatDateTime(exportedAt) : null,
-          exporter: exporter ? exporter.name : null,
-          updatedAt: updatedAt ? formatDateTime(updatedAt) : null,
-          updater: updater ? updater.name : null,
-        }
+        exportedAt: exportedAt ? formatDateTime(exportedAt) : null,
+        exporter: exporter ? exporter.name : null,
+        updatedAt: updatedAt ? formatDateTime(updatedAt) : null,
+        updater: updater ? updater.name : null,
+      }
       : {}
 
     return {

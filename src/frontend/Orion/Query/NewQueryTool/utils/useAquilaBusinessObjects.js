@@ -1,4 +1,4 @@
-import { useLazyQuery, useQuery } from '@apollo/react-hooks'
+import { useLazyQuery, useQuery } from '@apollo/client'
 
 import {
   GET_AQUILA_BUSINESS_OBJECTS,

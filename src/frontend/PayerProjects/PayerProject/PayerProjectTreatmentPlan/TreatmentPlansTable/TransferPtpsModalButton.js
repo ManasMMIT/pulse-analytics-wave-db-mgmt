@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { useMutation, useQuery } from '@apollo/react-hooks'
+import { useMutation, useQuery } from '@apollo/client'
 import styled from '@emotion/styled'
 import Select from 'react-select'
-import {lighten, darken } from 'polished'
+import { lighten, darken } from 'polished'
 
 import {
   GET_PAYER_PROJECTS_LIST,
