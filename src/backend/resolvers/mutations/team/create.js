@@ -27,6 +27,7 @@ const createTeam = async (
         id: roleUuid,
         name: description,
         client: client.uuid,
+        marketbasket_subscriptions: []
       })
       .catch((e) => {
         throw new Error(JSON.stringify(e.response.data))

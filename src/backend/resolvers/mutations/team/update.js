@@ -21,10 +21,13 @@ const updateTeam = async (
       _id: clientId,
     })
     if (mongoTeamUuid) {
+      const { data } = await axios.get(`teams/${mongoTeamUuid}/`)
+
       await axios
         .put(`teams/${mongoTeamUuid}/`, {
           name: description,
           client: mongoClientUuid,
+          marketbasket_subscriptions: data.marketbasket_subscriptions,
         })
         .catch((e) => {
           throw new Error(JSON.stringify(e.response.data))
