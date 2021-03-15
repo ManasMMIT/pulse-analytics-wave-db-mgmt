@@ -59,6 +59,7 @@ const createClient = async (
         id: roleUuid,
         name: defaultRoleDescrip,
         client: clientUuid,
+        marketbasket_subscriptions: []
       })
       .catch((e) => {
         throw new Error(JSON.stringify(e.response.data))
