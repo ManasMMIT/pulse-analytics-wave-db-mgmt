@@ -198,8 +198,8 @@ const App = () => {
 
   const link = ApolloLink.from([
     authLink,
+    errorLink,
     httpLink,
-    errorLink
   ])
 
   const client = new ApolloClient({
