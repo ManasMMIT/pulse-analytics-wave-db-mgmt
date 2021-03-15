@@ -1,3 +1,5 @@
+import _ from 'lodash'
+
 import {
   GET_SELECTED_CLIENT,
   GET_CLIENT_TEAMS,
@@ -41,7 +43,7 @@ const teamResolvers = {
 
     return selectedTeam
   },
-  manageCreatedTeam: async (parent, { data: { createTeam } }, { client, cache}) => {
+  manageCreatedTeam: async (parent, { data: { createTeam } }, { client, cache }) => {
     const {
       selectedClient: {
         _id: clientId
@@ -68,7 +70,7 @@ const teamResolvers = {
 
     return createTeam
   },
-  manageDeletedTeam: async (parent, { data: { deleteTeam }}, { client, cache }) => {
+  manageDeletedTeam: async (parent, { data: { deleteTeam } }, { client, cache }) => {
     const {
       users,
     } = cache.readQuery({
@@ -148,18 +150,20 @@ const teamResolvers = {
       variables: { clientId }, // needed despite @export var in query itself
     })
 
-    const targetTeamIdx = teams.findIndex(({ _id }) => teamId === _id)
-    teams[targetTeamIdx] = editedTeam
+    const clonedTeams = _.cloneDeep(teams)
+
+    const targetTeamIdx = clonedTeams.findIndex(({ _id }) => teamId === _id)
+    clonedTeams[targetTeamIdx] = _.cloneDeep(editedTeam)
 
     client.writeQuery({
       query: GET_CLIENT_TEAMS,
       variables: { clientId }, // needed despite @export var in query itself
-      data: { teams },
+      data: { teams: clonedTeams },
     })
 
     client.writeQuery({
       query: GET_SELECTED_TEAM,
-      data: { selectedTeam: editedTeam }
+      data: { selectedTeam: _.cloneDeep(editedTeam) }
     })
 
     // network-only necessary here because we need to force refresh this slice of the cache
