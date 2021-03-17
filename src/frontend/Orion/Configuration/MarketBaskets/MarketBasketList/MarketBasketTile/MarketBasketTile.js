@@ -1,10 +1,12 @@
 import React, { useState } from 'react'
+import { Link } from 'react-router-dom'
+
 import TileForm from './TileForm'
 
 export const TILE_STYLE = {
   display: 'flex',
   flexDirection: 'column',
-  justifyContent: 'center',
+  justifyContent: 'space-evenly',
   alignItems: 'center',
   padding: 12,
   margin: 12,
@@ -13,6 +15,8 @@ export const TILE_STYLE = {
   background: '#eef4fa',
   borderRadius: 4,
 }
+
+
 
 const MarketBasketTile = ({ data }) => {
   const [isUpdating, setIsUpdating] = useState(false)
@@ -32,8 +36,13 @@ const MarketBasketTile = ({ data }) => {
     )
 
   return (
-    <div onDoubleClick={() => setIsUpdating(!isUpdating)} style={TILE_STYLE}>
-      {content}
+    <div style={TILE_STYLE}>
+      <div onDoubleClick={() => setIsUpdating(!isUpdating)}>
+        {content}
+      </div>
+      <Link style={{ alignSelf: 'flex-end' }} to={`/orion/configuration/market-baskets/${data.id}`}>
+        detail
+      </Link>
     </div>
   )
 }
