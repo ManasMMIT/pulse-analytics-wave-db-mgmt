@@ -60,7 +60,7 @@ const useMarketBasketData = () => {
     marketBaskets: hydratedMbs,
     // ? not sure about load state yet
     // * thinking if maps aren't ready or hydratedMbs haven't been set at least once to have data
-    loading: areAnyMapsLoadingOrEmpty && _.isEmpty(hydratedMbs),
+    loading: areAnyMapsLoadingOrEmpty || _.isEmpty(hydratedMbs),
   }
 }
 
