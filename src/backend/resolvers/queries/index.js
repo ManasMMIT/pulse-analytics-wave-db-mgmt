@@ -1,3 +1,4 @@
+import marketBaskets from './marketBaskets'
 const clients = require('./clients')
 const teams = require('./teams')
 const users = require('./users')
@@ -66,4 +67,5 @@ module.exports = {
   usStates,
   therapeuticAreas,
   events,
+  marketBaskets,
 }

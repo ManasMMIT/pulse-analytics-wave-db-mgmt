@@ -1,5 +1,20 @@
 import gql from 'graphql-tag'
 
+export const GET_MARKET_BASKETS = gql`
+  query getMarketBaskets {
+      marketBaskets {
+        id
+        name
+        description
+        indication
+        created_at
+        updated_at
+        products
+        team_subscriptions
+      }
+  }
+`
+
 export const GET_EVENTS = gql`
   query getEvents {
     events {
@@ -399,6 +414,7 @@ export const GET_TEAMS = gql`
     teams {
       _id
       name
+      uuid
       description
       isDefault
       sitemap

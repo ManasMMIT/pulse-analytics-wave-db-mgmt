@@ -1,4 +1,6 @@
 import node from './node'
+import marketBasket from './marketBasket'
+
 const { gql } = require('apollo-server-express')
 
 const client = require('./client')
@@ -43,6 +45,9 @@ const relationalTypeDefs = require('./relationalTypeDefs')
 
 const mutationType = gql`
   type Mutation {
+    createMarketBasket(input: CreateMarketBasketInput!): MarketBasket
+    updateMarketBasket(input: UpdateMarketBasketInput!): MarketBasket
+
     createUser(input: CreateUserInput!): CreateUserPayload
     updateUser(input: UpdateUserInput!): UpdateUserPayload
     deleteUser(input: DeleteUserInput!): DeleteUserPayload
@@ -448,4 +453,5 @@ module.exports = [
   ...devToProdPushConfig,
 
   ...relationalTypeDefs,
+  ...marketBasket,
 ]

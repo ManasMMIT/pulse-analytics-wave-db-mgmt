@@ -20,6 +20,7 @@ const typeDefs = gql`
 
   type Team {
     _id: String # why not ID type?
+    uuid: String
     name: String
     description: String
     isDefault: Boolean
