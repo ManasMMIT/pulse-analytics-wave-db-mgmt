@@ -15,7 +15,9 @@ const queries = gql`
     indications: [Indication]
     therapeuticAreas: [TherapeuticArea]
     products: [Product]
+    vegaProducts: [VegaProduct]
     regimens: [Regimen]
+    vegaRegimens: [VegaRegimen]
 
     organizationTypes: [String]
 
@@ -318,6 +320,19 @@ const queries = gql`
     nameBrand: String
     uuid: String
     tags: [String]
+  }
+
+  type VegaProduct {
+    id: ID!
+    generic_name: String
+    brand_name: String
+    logo_link: String
+    regimens: [ID!]!
+  }
+
+  type VegaRegimen {
+    id: ID!
+    name: String
   }
 
   type Regimen {

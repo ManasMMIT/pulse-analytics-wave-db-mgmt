@@ -1,5 +1,25 @@
 import gql from 'graphql-tag'
 
+export const GET_VEGA_PRODUCTS = gql`
+  query getVegaProducts {
+    vegaProducts {
+      id
+      generic_name
+      brand_name
+      regimens
+    }
+  }
+`
+
+export const GET_VEGA_REGIMENS = gql`
+  query getVegaRegimens {
+    vegaRegimens {
+      id
+      name
+    }
+  }
+`
+
 export const GET_MARKET_BASKETS = gql`
   query getMarketBaskets {
       marketBaskets {
