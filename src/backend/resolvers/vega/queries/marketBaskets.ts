@@ -1,7 +1,7 @@
 import axios from 'axios'
 import _ from 'lodash'
 
-module.exports = async (
+const marketBaskets = async (
   parent,
   args,
   context,
@@ -11,3 +11,5 @@ module.exports = async (
 
   return _.sortBy(marketBaskets.data, ({ name }) => name.toLowerCase())
 }
+
+export default marketBaskets

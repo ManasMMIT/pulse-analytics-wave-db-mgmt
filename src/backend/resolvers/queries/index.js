@@ -1,4 +1,3 @@
-import marketBaskets from './marketBaskets'
 import vegaQueries from './../vega/queries'
 
 const clients = require('./clients')
@@ -70,5 +69,4 @@ module.exports = {
   usStates,
   therapeuticAreas,
   events,
-  marketBaskets,
 }
