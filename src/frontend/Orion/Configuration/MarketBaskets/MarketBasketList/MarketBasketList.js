@@ -1,17 +1,29 @@
 import React from 'react'
 
 import Spinner from 'frontend/components/Spinner'
-import useMarketBasketData from '../useMarketBasketData'
+import useMarketBasketListData from './useMarketBasketListData'
 
 import MarketBasketTile from './MarketBasketTile'
 import CreationTile from './MarketBasketTile/CreationTile'
 
 const MarketBasketList = () => {
-  const { marketBaskets, loading } = useMarketBasketData()
+  const [{
+    marketBaskets: {
+      data,
+      loading,
+      isHydrating,
+    }
+  }] = useMarketBasketListData()
 
   if (loading) return <Spinner />
 
-  let marketBasketList = marketBaskets.map(marketBasket => <MarketBasketTile key={marketBasket.id} data={marketBasket} />)
+  let marketBasketList = data.map(marketBasket => (
+    <MarketBasketTile
+      key={marketBasket.id}
+      data={marketBasket}
+      isHydrating={isHydrating}
+    />
+  ))
   marketBasketList.push(<CreationTile key="market-basket-creation-tile" />)
 
   return (

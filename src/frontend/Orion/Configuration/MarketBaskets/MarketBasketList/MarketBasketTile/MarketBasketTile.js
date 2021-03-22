@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 
+import Spinner from 'frontend/components/Spinner'
 import TileForm from './TileForm'
 
 export const TILE_STYLE = {
@@ -16,9 +17,7 @@ export const TILE_STYLE = {
   borderRadius: 4,
 }
 
-
-
-const MarketBasketTile = ({ data }) => {
+const MarketBasketTile = ({ data, isHydrating }) => {
   const [isUpdating, setIsUpdating] = useState(false)
 
   const {
@@ -31,7 +30,7 @@ const MarketBasketTile = ({ data }) => {
     : (
       <>
         <div>{name}</div>
-        <div style={{ fontSize: 11 }}>({indName})</div>
+        <div style={{ fontSize: 11 }}>({isHydrating ? <Spinner /> : indName})</div>
       </>
     )
 
