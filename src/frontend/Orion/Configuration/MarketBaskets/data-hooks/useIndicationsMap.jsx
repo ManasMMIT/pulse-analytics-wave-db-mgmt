@@ -1,3 +1,5 @@
+// TODO: Migrate GQL to a vega query endpoint
+
 import _ from 'lodash'
 import { useState, useEffect } from 'react'
 import { useQuery } from '@apollo/react-hooks'
