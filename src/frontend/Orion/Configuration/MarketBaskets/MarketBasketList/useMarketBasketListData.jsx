@@ -2,34 +2,27 @@ import { useState, useEffect } from 'react'
 import { useQuery } from '@apollo/react-hooks'
 import _ from 'lodash'
 
-import {
-  GET_MARKET_BASKETS,
-  GET_SOURCE_INDICATIONS,
-} from 'frontend/api/queries'
+import { GET_MARKET_BASKETS } from 'frontend/api/queries'
+import { useIndicationsMap } from '../data-hooks'
 
 const useMarketBasketListData = () => {
   const marketBasketQuery = useQuery(GET_MARKET_BASKETS)
-  const indicationQuery = useQuery(GET_SOURCE_INDICATIONS)
 
-  const [indMap, setIndMap] = useState({})
   const [hydratedMbs, setHydratedMbData] = useState([])
   const [isHydrating, setIsHydrating] = useState(true)
 
+  const {
+    data: indicationsMap,
+    loading: isIndicationMapCreating,
+  } = useIndicationsMap()
+
   const areAnyMapsLoadingOrEmpty = [
-    indicationQuery.loading || _.isEmpty(indMap),
+    isIndicationMapCreating || _.isEmpty(indicationsMap),
   ].some(bool => bool)
 
   useEffect(() => {
-    if (!marketBasketQuery.loading && !indicationQuery.loading) {
-      const map = _.keyBy(indicationQuery.data.indications, 'uuid')
-
-      setIndMap(map)
-    }
-  }, [marketBasketQuery.loading, indicationQuery.loading])
-
-  useEffect(() => {
     if (marketBasketQuery.data && !areAnyMapsLoadingOrEmpty) {
-      const hydratedMbs = getHydratedMbs(marketBasketQuery.data, { indMap })
+      const hydratedMbs = getHydratedMbs(marketBasketQuery.data, { indicationsMap })
 
       setHydratedMbData(hydratedMbs)
       setIsHydrating(false)
@@ -61,12 +54,12 @@ const useMarketBasketListData = () => {
   ]
 }
 
-const getHydratedMbs = (data, { indMap }) => {
+const getHydratedMbs = (data, { indicationsMap }) => {
   return data.marketBaskets.map(({
     indication,
     ...rest
   }) => ({
-    indication: indMap[indication],
+    indication: indicationsMap[indication],
     ...rest
   }))
 }
