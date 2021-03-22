@@ -2,7 +2,8 @@ const { gql } = require('apollo-server-express')
 
 const queries = gql`
   type Query {
-    marketBaskets: [MarketBasket]!
+    marketBaskets: [MarketBasket!]!
+    marketBasketsSubscriptions: [MarketBasketSubscription!]!
 
     nodes(parentId: String, type: String): [Node]
 
@@ -143,6 +144,16 @@ const queries = gql`
     updated_at: DateTime
     products: [ID]!
     team_subscriptions: [ID]!
+  }
+
+  type MarketBasketSubscription {
+    id: ID!
+    team: ID
+    market_basket: ID
+    start_date: DateTime
+    end_date: DateTime
+    created_at: DateTime
+    updated_at: DateTime
   }
 
   type Event {

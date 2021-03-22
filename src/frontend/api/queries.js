@@ -35,6 +35,20 @@ export const GET_MARKET_BASKETS = gql`
   }
 `
 
+export const GET_MARKET_BASKETS_SUBSCRIPTIONS = gql`
+  query getMarketsBaskets {
+      marketBasketsSubscriptions {
+        id
+        team
+        market_basket
+        start_date
+        end_date
+        created_at
+        updated_at
+      }
+  }
+`
+
 export const GET_EVENTS = gql`
   query getEvents {
     events {
