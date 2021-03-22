@@ -8,17 +8,21 @@ import {
   GET_VEGA_PRODUCTS,
   GET_VEGA_REGIMENS,
   GET_MARKET_BASKETS,
+  GET_MARKET_BASKETS_SUBSCRIPTIONS,
 } from 'frontend/api/queries'
 
 const useMarketBasketData = () => {
   const { data: mbData, loading: mbLoading } = useQuery(GET_MARKET_BASKETS)
+  // ! change to vega query?
   const { data: indData, loading: indLoading } = useQuery(GET_SOURCE_INDICATIONS)
   const { data: vegaProdData, loading: vegaProdLoading } = useQuery(GET_VEGA_PRODUCTS)
   const { data: vegaRegimenData, loading: vegaRegimenLoading } = useQuery(GET_VEGA_REGIMENS)
+  const { data: mbSubData, loading: mbSubLoading } = useQuery(GET_MARKET_BASKETS_SUBSCRIPTIONS)
 
   const [indMap, setIndMap] = useState({})
   const [productMap, setProductMap] = useState({})
   const [regimenMap, setRegimenMap] = useState({})
+  const [mbSubMap, setMbSubMap] = useState({})
   const [hydratedMbs, setHydratedMbData] = useState([])
 
   const areAnyMapsLoadingOrEmpty = [
@@ -34,6 +38,7 @@ const useMarketBasketData = () => {
       setMapData: setIndMap,
       data: indData,
       dataKey: 'indications',
+      groupKey: 'uuid',
     }),
     [mbLoading, indLoading]
   )
@@ -45,6 +50,7 @@ const useMarketBasketData = () => {
       setMapData: setProductMap,
       data: vegaProdData,
       dataKey: 'vegaProducts',
+      groupKey: 'id',
     }),
     [mbLoading, vegaProdLoading]
   )
@@ -56,14 +62,40 @@ const useMarketBasketData = () => {
       setMapData: setRegimenMap,
       data: vegaRegimenData,
       dataKey: 'vegaRegimens',
+      groupKey: 'id',
     }),
     [mbLoading, vegaRegimenLoading]
+  )
+
+  useEffect(
+    getMapSetterCallback({
+      mbLoading,
+      mapDataLoading: vegaRegimenLoading,
+      setMapData: setRegimenMap,
+      data: vegaRegimenData,
+      dataKey: 'vegaRegimens',
+      groupKey: 'id',
+    }),
+    [mbLoading, vegaRegimenLoading]
+  )
+
+  useEffect(
+    getMapSetterCallback({
+      mbLoading,
+      mapDataLoading: mbSubLoading,
+      setMapData: setMbSubMap,
+      data: mbSubData,
+      dataKey: 'marketBasketsSubscriptions',
+      groupKey: 'id',
+    }),
+    [mbLoading, mbSubLoading]
   )
 
   useEffect(() => {
     if (mbData && !areAnyMapsLoadingOrEmpty) {
       const hydratedMbs = getHydratedMbs({
         mbData,
+        mbSubMap,
         indMap,
         productMap,
         regimenMap,
@@ -79,19 +111,19 @@ const useMarketBasketData = () => {
   }
 }
 
-const getMapSetterCallback = ({ mbLoading, mapDataLoading, setMapData, data, dataKey }) => () => {
+const getMapSetterCallback = ({ mbLoading, mapDataLoading, setMapData, data, dataKey, groupKey = 'id' }) => () => {
   if (!mbLoading && !mapDataLoading) {
-    const id = data[dataKey][0].uuid ? 'uuid' : 'id'
-    const map = _.keyBy(data[dataKey], id)
+    const map = _.keyBy(data[dataKey], groupKey)
 
     setMapData(map)
   }
 }
 
-const getHydratedMbs = ({ mbData, indMap, productMap, regimenMap }) => {
+const getHydratedMbs = ({ mbData, indMap, productMap, regimenMap, mbSubMap }) => {
   return mbData.marketBaskets.map(({
     indication,
     products,
+    team_subscriptions,
     ...rest
   }) => ({
     indication: indMap[indication],
@@ -103,6 +135,7 @@ const getHydratedMbs = ({ mbData, indMap, productMap, regimenMap }) => {
         regimens: product.regimens.map(id => regimenMap[id]),
       }
     }),
+    team_subscriptions: team_subscriptions.map(id => mbSubMap[id]),
     ...rest
   }))
 }
