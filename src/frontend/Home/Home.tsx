@@ -33,7 +33,7 @@ const TOOL_CARD_CONFIGS = [
   },
   {
     title: 'Delphi',
-    description: 'Email Alert Service',
+    description: 'Emails Alert Service',
     to: '/delphi',
     iconId: 'mercury-1-white',
     iconColor: Color.DELPHI,
