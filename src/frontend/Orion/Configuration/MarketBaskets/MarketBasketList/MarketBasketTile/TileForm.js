@@ -1,12 +1,12 @@
 import React, { useState } from 'react'
-import { useQuery, useMutation } from '@apollo/react-hooks'
+import { useQuery } from '@apollo/react-hooks'
 import Select from 'react-select'
 import _ from 'lodash'
 
 import Spinner from 'frontend/components/Spinner'
 
-import { GET_MARKET_BASKETS, GET_SOURCE_INDICATIONS } from 'frontend/api/queries'
-import { CREATE_MARKET_BASKET, UPDATE_MARKET_BASKET } from 'frontend/api/mutations'
+import { GET_SOURCE_INDICATIONS } from 'frontend/api/queries'
+import useMarketBasketListData from '../useMarketBasketListData'
 
 // TODO: Decide if we should exclude indications already selected in other MBs
 const TileForm = ({
@@ -18,13 +18,8 @@ const TileForm = ({
   data = data || { name: '', indication: null }
   const [formData, setFormData] = useState(data)
   const { data: indData, loading: indLoading } = useQuery(GET_SOURCE_INDICATIONS)
-
-  const op = isEdit ? UPDATE_MARKET_BASKET : CREATE_MARKET_BASKET
-  const [submit] = useMutation(op, {
-    refetchQueries: [{ query: GET_MARKET_BASKETS }],
-    onCompleted,
-    onError: alert,
-  })
+  const [ø, { marketBasket: { save, update } }] = useMarketBasketListData()
+  const submit = isEdit ? update : save
 
   if (indLoading) return <Spinner />
 
@@ -50,7 +45,7 @@ const TileForm = ({
 
   const handleOnSubmit = e => {
     e.preventDefault()
-    submit({ variables: { input: formData } })
+    submit({ variables: { input: formData }, update: onCompleted })
   }
 
   return (
