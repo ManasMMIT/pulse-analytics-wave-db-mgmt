@@ -12,6 +12,8 @@ When you first clone this repo and `cd` into the root directory in your terminal
 
 In order for the script to connect to MongoDB, you'll also need a `.env` file. Contact the backend team to get a copy of that file.
 
+Also, make sure you have the `src/backend/logs/api.log` file created prior to starting the application. This file is gitignored and also dockerignored.
+
 # Running the application locally WITHOUT Docker
 
 1. Change the `PROXY_URL` value in your `.env` file to `http://localhost:1337`.
