@@ -1,24 +1,3 @@
-// TODO: FIGURE OUT IF THIS SHOULD JUST BE:
-// ! useMarketBasketData
-// after getting detail page up and running
-
-// TODO: Make it easy for frontend team to stub values inside hook?
-// or maybe just where hook is used
-
-/* 
-  ? Premise-lvl ideas:
-    * These view hooks will output all data
-    * needed for a page to completely render.
-    * 
-    * These view hooks can safely be used for
-    * any children components in a view without making
-    * additional network requests.
-    * 
-    * Mutations are tied to a view's data -- the idea being
-    * the page will need to either refetch/re-hydrate its data
-    * post-op or will need data to populate forms with the data.
-*/
-
 import { useState, useEffect } from 'react'
 import { useQuery, useMutation } from '@apollo/react-hooks'
 import _ from 'lodash'
