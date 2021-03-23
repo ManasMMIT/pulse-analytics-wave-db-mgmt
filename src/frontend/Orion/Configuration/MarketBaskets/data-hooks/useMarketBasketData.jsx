@@ -60,6 +60,7 @@ const useData = ({ marketBasketId }) => {
 
       setHydratedMbData(hydratedMbs)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [marketBasketQuery.data, areAnyMapsLoadingOrEmpty])
 
   return {
