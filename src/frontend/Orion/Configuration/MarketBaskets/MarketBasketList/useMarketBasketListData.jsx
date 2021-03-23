@@ -1,3 +1,10 @@
+// TODO: FIGURE OUT IF THIS SHOULD JUST BE:
+// ! useMarketBasketData
+// after getting detail page up and running
+
+// TODO: Make it easy for frontend team to stub values inside hook?
+// or maybe just where hook is used
+
 /* 
   ? Premise-lvl ideas:
     * These view hooks will output all data
@@ -85,7 +92,7 @@ const useData = () => {
 }
 
 const useMutations = () => {
-  const [save] = useMutation(CREATE_MARKET_BASKET, {
+  const [create] = useMutation(CREATE_MARKET_BASKET, {
     refetchQueries: [{ query: GET_MARKET_BASKETS }],
     onError: alert,
   })
@@ -97,7 +104,7 @@ const useMutations = () => {
 
   return {
     marketBasket: {
-      save,
+      create,
       update,
     }
   }
