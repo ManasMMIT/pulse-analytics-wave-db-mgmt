@@ -6,10 +6,10 @@ import _ from 'lodash'
 import Spinner from 'frontend/components/Spinner'
 
 import { GET_SOURCE_INDICATIONS } from 'frontend/api/queries'
-import useMarketBasketListData from '../useMarketBasketListData'
+import useMarketBasketListData from './MarketBasketList/useMarketBasketListData'
 
 // TODO: Decide if we should exclude indications already selected in other MBs
-const TileForm = ({
+const MarketBasketForm = ({
   onCompleted,
   data,
 }) => {
@@ -18,8 +18,8 @@ const TileForm = ({
   data = data || { name: '', indication: null }
   const [formData, setFormData] = useState(data)
   const { data: indData, loading: indLoading } = useQuery(GET_SOURCE_INDICATIONS)
-  const [ø, { marketBasket: { save, update } }] = useMarketBasketListData()
-  const submit = isEdit ? update : save
+  const [ø, { marketBasket: { create, update } }] = useMarketBasketListData()
+  const submit = isEdit ? update : create
 
   if (indLoading) return <Spinner />
 
@@ -65,4 +65,4 @@ const TileForm = ({
   )
 }
 
-export default TileForm
+export default MarketBasketForm
