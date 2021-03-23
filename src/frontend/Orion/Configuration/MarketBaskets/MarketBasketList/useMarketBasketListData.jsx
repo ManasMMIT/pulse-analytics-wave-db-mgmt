@@ -18,14 +18,29 @@ import _ from 'lodash'
 
 import { GET_MARKET_BASKETS } from 'frontend/api/queries'
 import { CREATE_MARKET_BASKET, UPDATE_MARKET_BASKET } from 'frontend/api/mutations'
-import { useIndicationsMap } from '../data-hooks'
+import { useIndicationsMap, useProductsMap } from '../useEntityMap'
 
-const getHydratedMbs = (data, { indicationsMap }) => {
+const getHydrateMbProducts = (products, productsMap) => {
+  if (_.isEmpty(productsMap)) return products
+
+  return products.map(id => productsMap[id].generic_name).join(', ')
+}
+
+const getHydratedIndication = (indication, indicationsMap) => {
+  return indicationsMap[indication]
+    ? indicationsMap[indication].name
+    : null
+}
+
+const getHydratedMbs = (data, { indicationsMap, productsMap }) => {
+
   return data.marketBaskets.map(({
     indication,
+    products,
     ...rest
   }) => ({
-    indication: indicationsMap[indication],
+    indication: getHydratedIndication(indication, indicationsMap),
+    products: getHydrateMbProducts(products, productsMap),
     ...rest
   }))
 }
@@ -34,38 +49,37 @@ const useData = () => {
   const marketBasketQuery = useQuery(GET_MARKET_BASKETS)
 
   const [hydratedMbs, setHydratedMbData] = useState([])
-  const [isHydrating, setIsHydrating] = useState(true)
 
   const {
     data: indicationsMap,
     loading: isIndicationMapCreating,
   } = useIndicationsMap()
 
+  const {
+    data: productsMap,
+    loading: isProductsMapCreating,
+  } = useProductsMap()
+
   const areAnyMapsLoadingOrEmpty = [
     isIndicationMapCreating || _.isEmpty(indicationsMap),
+    isProductsMapCreating || _.isEmpty(productsMap),
   ].some(bool => bool)
 
   useEffect(() => {
-    if (marketBasketQuery.data && !areAnyMapsLoadingOrEmpty) {
-      const hydratedMbs = getHydratedMbs(marketBasketQuery.data, { indicationsMap })
+    if (marketBasketQuery.data) {
+      const hydratedMbs = getHydratedMbs(marketBasketQuery.data, { indicationsMap, productsMap })
 
       setHydratedMbData(hydratedMbs)
-      setIsHydrating(false)
     }
   }, [marketBasketQuery.data, areAnyMapsLoadingOrEmpty])
 
-  let marketBasketsData = []
-  if (!isHydrating) {
-    marketBasketsData = hydratedMbs
-  } else if (!marketBasketQuery.loading) {
-    marketBasketsData = marketBasketQuery.data.marketBaskets
-  }
-
   return {
     marketBaskets: {
-      data: marketBasketsData,
+      data: {
+        raw: (marketBasketQuery.data || {}).marketBaskets,
+        hydrated: hydratedMbs,
+      },
       loading: marketBasketQuery.loading,
-      isHydrating,
     }
   }
 }
