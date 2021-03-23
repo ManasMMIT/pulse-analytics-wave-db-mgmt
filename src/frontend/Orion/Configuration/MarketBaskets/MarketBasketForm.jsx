@@ -6,7 +6,7 @@ import _ from 'lodash'
 import Spinner from 'frontend/components/Spinner'
 
 import { GET_SOURCE_INDICATIONS } from 'frontend/api/queries'
-import useMarketBasketListData from './MarketBasketList/useMarketBasketListData'
+import useMarketBasketListData from './data-hooks/useMarketBasketData'
 
 // TODO: Decide if we should exclude indications already selected in other MBs
 const MarketBasketForm = ({

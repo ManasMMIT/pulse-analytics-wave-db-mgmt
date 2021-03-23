@@ -9,7 +9,7 @@ import Table from 'frontend/components/Table'
 import MultiSelectColumnFilter from 'frontend/components/Table/custom-filters/MultiSelect/MultiSelectColumnFilter'
 import customMultiSelectFilterFn from 'frontend/components/Table/custom-filters/MultiSelect/customMultiSelectFilterFn'
 
-import useMarketBasketListData from './useMarketBasketListData'
+import useMarketBasketListData from '../data-hooks/useMarketBasketData'
 import _ from 'lodash'
 import MarketBasketForm from '../MarketBasketForm'
 

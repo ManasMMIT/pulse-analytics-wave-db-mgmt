@@ -25,7 +25,7 @@ import _ from 'lodash'
 
 import { GET_MARKET_BASKETS } from 'frontend/api/queries'
 import { CREATE_MARKET_BASKET, UPDATE_MARKET_BASKET } from 'frontend/api/mutations'
-import { useIndicationsMap, useProductsMap } from '../data-hooks/useEntityMap'
+import { useIndicationsMap, useProductsMap } from './useEntityMap'
 
 const getHydrateMbProducts = (products, productsMap) => {
   if (_.isEmpty(productsMap)) return products
@@ -110,6 +110,5 @@ const useMutations = () => {
   }
 }
 
-const useMarketBasketListData = () => [useData(), useMutations()]
+export default () => [useData(), useMutations()]
 
-export default useMarketBasketListData
