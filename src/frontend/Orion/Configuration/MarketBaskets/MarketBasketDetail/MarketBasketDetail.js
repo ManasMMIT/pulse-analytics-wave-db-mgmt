@@ -6,7 +6,7 @@ import _ from 'lodash'
 import React from 'react'
 import { Link, useParams } from 'react-router-dom'
 
-import useMarketBasketData from './../useMarketBasketData'
+import useMarketBasketData from './../data-hooks/useMarketBasketData'
 
 const TeamSection = ({ teamSubscriptions }) => {
   const { data, loading } = useQuery(GET_TEAMS)
@@ -51,15 +51,32 @@ const TeamSection = ({ teamSubscriptions }) => {
 
 const MarketBasketDetail = () => {
   const { marketBasketId } = useParams()
-  const { marketBaskets, loading } = useMarketBasketData()
-  if (loading) return <Spinner />
-  const { name, products, team_subscriptions: teamSubscriptions } = marketBaskets.find(({ id }) => id === marketBasketId)
-  const uniqRegs = _.uniqBy(products.reduce((acc, { regimens }) => [...acc, ...regimens], []), 'id')
+  const [{
+    marketBaskets: {
+      data: { hydrated: [hydratedMarketBasket] },
+      loading,
+    },
+  }] = useMarketBasketData({ marketBasketId })
+  if (loading || !hydratedMarketBasket) return <Spinner />
+
+  const {
+    name,
+    indication,
+    description,
+    products,
+    team_subscriptions: teamSubscriptions,
+  } = hydratedMarketBasket
+
+  // const uniqRegs = _.uniqBy(products.reduce((acc, { regimens }) => [...acc, ...regimens], []), 'id')
 
   return (
     <div>
-      <Link to="/orion/configuration/market-baskets/">Back</Link>
+      <Link to="/orion/configuration/market-baskets">Back</Link>
       <h1>{name}</h1>
+      <h2>Indication</h2>
+      <div>{indication}</div>
+      <h2>Description</h2>
+      <div>{description}</div>
       <h2>Products</h2>
       <ul>
         {
@@ -68,15 +85,15 @@ const MarketBasketDetail = () => {
           ))
         }
       </ul>
-      <h2>Products' Unique Regimens</h2>
-      <ul>
+      {/* <h2>Products' Unique Regimens</h2> */}
+      {/* <ul>
         {
           uniqRegs.map(({ id, name }) => (
             <li key={id}>{name}</li>
           ))
         }
-      </ul>
-      <TeamSection teamSubscriptions={teamSubscriptions} />
+      </ul> */}
+      {/* <TeamSection teamSubscriptions={teamSubscriptions} /> */}
     </div>
   )
 }

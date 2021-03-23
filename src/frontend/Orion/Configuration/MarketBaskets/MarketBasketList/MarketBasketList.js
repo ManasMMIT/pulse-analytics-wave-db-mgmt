@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-
+import { Link } from 'react-router-dom'
 import { MODAL_TABLE_WIDTH } from 'frontend/components/Table/tableWidths'
 
 import Modal from 'frontend/components/Modal'
@@ -21,6 +21,10 @@ const COLUMNS = [
     filter: customMultiSelectFilterFn,
     sortType: 'text',
     sticky: 'left',
+    Cell: ({
+      value,
+      row: { original: { id } },
+    }) => <Link to={`/orion/configuration/market-baskets/${id}`}>{value}</Link>,
   },
   {
     Header: 'Last Survey Date',
@@ -53,8 +57,8 @@ const COLUMNS = [
     Cell: ({ value }) => {
       if (Array.isArray(value) && _.isEmpty(value))
         return ''
-      else if (typeof value === 'string') {
-        return value
+      else if (Array.isArray(value) && typeof value[0] === 'object') {
+        return value.map(({ generic_name }) => generic_name)
       }
       else if (Array.isArray(value))
         return <Spinner />
