@@ -27,10 +27,10 @@ import { GET_MARKET_BASKETS } from 'frontend/api/queries'
 import { CREATE_MARKET_BASKET, UPDATE_MARKET_BASKET } from 'frontend/api/mutations'
 import { useIndicationsMap, useProductsMap } from './useEntityMap'
 
-const getHydrateMbProducts = (products, productsMap) => {
+const getHydratedMbProducts = (products, productsMap) => {
   if (_.isEmpty(productsMap)) return products
 
-  return products.map(id => productsMap[id].generic_name).join(', ')
+  return products.map(id => productsMap[id])
 }
 
 const getHydratedIndication = (indication, indicationsMap) => {
@@ -39,20 +39,19 @@ const getHydratedIndication = (indication, indicationsMap) => {
     : null
 }
 
-const getHydratedMbs = (data, { indicationsMap, productsMap }) => {
-
-  return data.marketBaskets.map(({
+const getHydratedMbs = (marketBaskets, { indicationsMap, productsMap }) => {
+  return marketBaskets.map(({
     indication,
     products,
     ...rest
   }) => ({
     indication: getHydratedIndication(indication, indicationsMap),
-    products: getHydrateMbProducts(products, productsMap),
+    products: getHydratedMbProducts(products, productsMap),
     ...rest
   }))
 }
 
-const useData = () => {
+const useData = ({ marketBasketId }) => {
   const marketBasketQuery = useQuery(GET_MARKET_BASKETS)
 
   const [hydratedMbs, setHydratedMbData] = useState([])
@@ -74,7 +73,11 @@ const useData = () => {
 
   useEffect(() => {
     if (marketBasketQuery.data) {
-      const hydratedMbs = getHydratedMbs(marketBasketQuery.data, { indicationsMap, productsMap })
+      const marketBaskets = marketBasketId
+        ? [marketBasketQuery.data.marketBaskets.find(({ id }) => id === marketBasketId)]
+        : marketBasketQuery.data.marketBaskets
+
+      const hydratedMbs = getHydratedMbs(marketBaskets, { indicationsMap, productsMap })
 
       setHydratedMbData(hydratedMbs)
     }
@@ -110,5 +113,5 @@ const useMutations = () => {
   }
 }
 
-export default () => [useData(), useMutations()]
+export default (props = {}) => [useData(props), useMutations()]
 
