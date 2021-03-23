@@ -8,8 +8,9 @@ import MultiSelectColumnFilter from 'frontend/components/Table/custom-filters/Mu
 import customMultiSelectFilterFn from 'frontend/components/Table/custom-filters/MultiSelect/customMultiSelectFilterFn'
 
 import useMarketBasketListData from './useMarketBasketListData'
+import _ from 'lodash'
 
-const getColumns = (isHydrating) => [
+const COLUMNS = [
   {
     Header: 'Market Basket',
     accessor: 'name',
@@ -34,11 +35,11 @@ const getColumns = (isHydrating) => [
   },
   {
     Header: 'Indication',
-    accessor: 'indication.name',
+    accessor: 'indication',
     Filter: MultiSelectColumnFilter,
     filter: customMultiSelectFilterFn,
     sortType: 'text',
-    Cell: ({ value }) => isHydrating ? <Spinner /> : value,
+    Cell: ({ value }) => value || <Spinner />,
   },
   {
     Header: 'Products',
@@ -46,7 +47,15 @@ const getColumns = (isHydrating) => [
     Filter: MultiSelectColumnFilter,
     filter: customMultiSelectFilterFn,
     sortType: 'text',
-    Cell: ({ value }) => value[0] && typeof value[0] === 'string' ? <Spinner /> : value.map(({ name }) => name),
+    Cell: ({ value }) => {
+      if (Array.isArray(value) && _.isEmpty(value))
+        return ''
+      else if (typeof value === 'string') {
+        return value
+      }
+      else if (Array.isArray(value))
+        return <Spinner />
+    },
   },
   {
     Header: '# Stakeholders (last survey)',
@@ -66,22 +75,28 @@ const getColumns = (isHydrating) => [
 
 const MarketBasketList = () => {
   const [{
-    marketBaskets: {
-      data,
-      loading,
-      isHydrating,
-    }
+    marketBaskets: { data: { hydrated } },
+    loading,
   }] = useMarketBasketListData()
 
-  if (loading) return <Spinner />
-
-  const columns = getColumns(isHydrating)
+  if (loading) return (
+    <>
+      <Spinner />
+      <Table
+        width={MODAL_TABLE_WIDTH}
+        data={[]}
+        columns={COLUMNS}
+        exportStyle={{ margin: 24 }}
+        exportProps={{ filename: 'market-basket-list' }}
+      />
+    </>
+  )
 
   return (
     <Table
       width={MODAL_TABLE_WIDTH}
-      data={data}
-      columns={columns}
+      data={hydrated}
+      columns={COLUMNS}
       exportStyle={{ margin: 24 }}
       exportProps={{ filename: 'market-basket-list' }}
     />
