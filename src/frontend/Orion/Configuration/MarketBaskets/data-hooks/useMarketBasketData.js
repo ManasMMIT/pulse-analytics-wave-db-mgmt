@@ -4,7 +4,7 @@ import _ from 'lodash'
 
 import { GET_MARKET_BASKETS } from 'frontend/api/queries'
 import { CREATE_MARKET_BASKET, UPDATE_MARKET_BASKET } from 'frontend/api/mutations'
-import { useIndicationsMap, useProductsMap } from './useEntityMap'
+import { useIndicationsMap, useProductsMap, useTeamsMap } from './useEntityMap'
 
 const getHydratedMbProducts = (products, productsMap) => {
   if (_.isEmpty(productsMap)) return products
@@ -18,7 +18,11 @@ const getHydratedIndication = (indication, indicationsMap) => {
     : null
 }
 
-const getHydratedMbs = (marketBaskets, { indicationsMap, productsMap }) => {
+const getHydratedMbs = (marketBaskets, {
+  indicationsMap,
+  productsMap,
+  teamsMap,
+}) => {
   return marketBaskets.map(({
     indication,
     products,
@@ -45,9 +49,15 @@ const useData = ({ marketBasketId }) => {
     loading: isProductsMapCreating,
   } = useProductsMap()
 
+  const {
+    data: teamsMap,
+    loading: isTeamsMapCreating,
+  } = useTeamsMap()
+
   const areAnyMapsLoadingOrEmpty = [
     isIndicationMapCreating || _.isEmpty(indicationsMap),
     isProductsMapCreating || _.isEmpty(productsMap),
+    isTeamsMapCreating || _.isEmpty(teamsMap),
   ].some(bool => bool)
 
   useEffect(() => {
@@ -56,17 +66,28 @@ const useData = ({ marketBasketId }) => {
         ? [marketBasketQuery.data.marketBaskets.find(({ id }) => id === marketBasketId)]
         : marketBasketQuery.data.marketBaskets
 
-      const hydratedMbs = getHydratedMbs(marketBaskets, { indicationsMap, productsMap })
+      const hydratedMbs = getHydratedMbs(marketBaskets, {
+        indicationsMap,
+        productsMap,
+        teamsMap,
+      })
 
       setHydratedMbData(hydratedMbs)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [marketBasketQuery.data, areAnyMapsLoadingOrEmpty])
 
+  let raw = []
+  if (!marketBasketQuery.loading) {
+    raw = marketBasketId
+      ? [marketBasketQuery.data.marketBaskets.find(({ id }) => id === marketBasketId)]
+      : marketBasketQuery.data.marketBaskets
+  }
+
   return {
     marketBaskets: {
       data: {
-        raw: (marketBasketQuery.data || {}).marketBaskets,
+        raw,
         hydrated: hydratedMbs,
       },
       loading: marketBasketQuery.loading,
