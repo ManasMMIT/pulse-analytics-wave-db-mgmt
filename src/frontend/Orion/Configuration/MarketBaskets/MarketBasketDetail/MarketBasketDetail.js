@@ -1,22 +1,22 @@
+import React, { useState } from 'react'
 import { nest } from 'd3-collection'
-import { useQuery } from '@apollo/react-hooks'
-import { GET_TEAMS } from 'frontend/api/queries'
-import Spinner from 'frontend/components/Spinner'
-import _ from 'lodash'
-import React from 'react'
 import { Link, useParams } from 'react-router-dom'
 
-import useMarketBasketData from './../data-hooks/useMarketBasketData'
+import Spinner from 'frontend/components/Spinner'
+import Modal from 'frontend/components/Modal'
+import Button from 'frontend/components/Button'
 
+import MarketBasketForm from '../MarketBasketForm'
+import useMarketBasketData from './../data-hooks/useMarketBasketData'
+import { useTeamsMap } from './../data-hooks/useEntityMap'
 const TeamSection = ({ teamSubscriptions }) => {
-  const { data, loading } = useQuery(GET_TEAMS)
+  const { data, loading } = useTeamsMap()
 
   if (loading) return <Spinner />
-  const { teams } = data
-  const teamsByUuid = _.keyBy(teams, 'uuid')
+
   const teamSubsHydrated = teamSubscriptions.map(({ team, ...rest }) => ({
-    team: teamsByUuid[team],
-    client: teamsByUuid[team].client,
+    team: data[team],
+    client: data[team].client,
     ...rest,
   }))
 
@@ -51,9 +51,14 @@ const TeamSection = ({ teamSubscriptions }) => {
 
 const MarketBasketDetail = () => {
   const { marketBasketId } = useParams()
+
+  const [isModalOpen, setIsModalOpen] = useState(false)
   const [{
     marketBaskets: {
-      data: { hydrated: [hydratedMarketBasket] },
+      data: {
+        raw: [rawMarketBasket],
+        hydrated: [hydratedMarketBasket]
+      },
       loading,
     },
   }] = useMarketBasketData({ marketBasketId })
@@ -67,11 +72,22 @@ const MarketBasketDetail = () => {
     team_subscriptions: teamSubscriptions,
   } = hydratedMarketBasket
 
-  // const uniqRegs = _.uniqBy(products.reduce((acc, { regimens }) => [...acc, ...regimens], []), 'id')
+  const { id: rawId, name: rawName, indication: rawIndication } = rawMarketBasket
 
   return (
     <div>
       <Link to="/orion/configuration/market-baskets">Back</Link>
+      <Button onClick={() => setIsModalOpen(true)}>Update Market Basket</Button>
+      <Modal
+        show={isModalOpen}
+        modalStyle={{ height: 600, width: 800 }}
+        handleClose={() => setIsModalOpen(false)}
+      >
+        <MarketBasketForm
+          onCompleted={() => setIsModalOpen(false)}
+          data={{ id: rawId, name: rawName, indication: rawIndication }}
+        />
+      </Modal>
       <h1>{name}</h1>
       <h2>Indication</h2>
       <div>{indication}</div>
@@ -85,14 +101,6 @@ const MarketBasketDetail = () => {
           ))
         }
       </ul>
-      {/* <h2>Products' Unique Regimens</h2> */}
-      {/* <ul>
-        {
-          uniqRegs.map(({ id, name }) => (
-            <li key={id}>{name}</li>
-          ))
-        }
-      </ul> */}
       {/* <TeamSection teamSubscriptions={teamSubscriptions} /> */}
     </div>
   )

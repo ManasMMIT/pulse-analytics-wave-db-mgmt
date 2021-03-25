@@ -116,3 +116,19 @@ const useMutations = () => {
 
 export default (props = {}) => [useData(props), useMutations()]
 
+/*
+  FORKS:
+
+  A.
+    Individual queries
+    1. Query required data
+      - query market baskets
+      - query products
+      - query indications
+      - query all the things, separately
+    2. Create maps -- e.g., const productsMap = { '1232-421': { id, name, ...prodFields } }
+    3. Hydration step: use maps to hydrate market basket data
+      - hydrate or reHydrate if any map base data changes || market baskets change
+  B.
+    1. Query market baskets fully hydrated
+*/
