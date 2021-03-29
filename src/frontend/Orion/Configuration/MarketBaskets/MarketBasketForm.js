@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useHistory } from 'react-router-dom'
-import { useMutation, useQuery, useApolloClient } from '@apollo/react-hooks'
+import { useMutation, useQuery } from '@apollo/react-hooks'
 import Select from 'react-select'
 import _ from 'lodash'
 
@@ -21,25 +21,37 @@ const MarketBasketForm = ({
 
   const { data: indData, loading: indLoading } = useQuery(GET_SOURCE_INDICATIONS)
   const { data: marketBasketData } = useQuery(GET_MARKET_BASKETS)
-  const apolloClient = useApolloClient()
 
   const mutationDoc = isEdit ? UPDATE_MARKET_BASKET : CREATE_MARKET_BASKET
   const [submit] = useMutation(mutationDoc, {
     onError: alert,
+    update: (cache, { data }) => {
+      const { createMarketBasket } = data
+
+      if (createMarketBasket) {
+        const newMbs = [...marketBasketData.marketBaskets, createMarketBasket]
+
+        cache.writeQuery({
+          query: GET_MARKET_BASKETS,
+          data: { marketBaskets: newMbs },
+        })
+      }
+    },
     onCompleted,
   })
 
   const [deleteMarketBasket] = useMutation(DELETE_MARKET_BASKET, {
     onError: alert,
-    onCompleted: ({ deleteMarketBasket }) => {
+    update: (cache, { data: { deleteMarketBasket } }) => {
       const newMbs = marketBasketData.marketBaskets
         .filter(({ id }) => id !== deleteMarketBasket.id)
 
-      apolloClient.cache.writeQuery({
+      cache.writeQuery({
         query: GET_MARKET_BASKETS,
         data: { marketBaskets: newMbs },
       })
-      onCompleted(deleteMarketBasket)
+    },
+    onCompleted: () => {
       history.push("/orion/configuration/market-baskets")
     }
   })

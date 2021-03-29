@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useQuery, useApolloClient } from '@apollo/react-hooks'
+import { useQuery } from '@apollo/react-hooks'
 import { Link } from 'react-router-dom'
 import { MODAL_TABLE_WIDTH } from 'frontend/components/Table/tableWidths'
 
@@ -85,24 +85,8 @@ const COLUMNS = [
 ]
 
 const MarketBasketList = () => {
-  const apolloClient = useApolloClient()
   const [isModalOpen, setIsModalOpen] = useState(false)
   const { data, loading } = useQuery(GET_MARKET_BASKETS)
-
-  const onCreationCompleted = result => {
-    const { createMarketBasket } = result
-
-    if (createMarketBasket) {
-      const newMbs = [...data.marketBaskets, createMarketBasket]
-
-      apolloClient.cache.writeQuery({
-        query: GET_MARKET_BASKETS,
-        data: { marketBaskets: newMbs },
-      })
-    }
-
-    setIsModalOpen(false)
-  }
 
   const table = loading
     ? (
@@ -135,7 +119,7 @@ const MarketBasketList = () => {
         modalStyle={{ height: 600, width: 800 }}
         handleClose={() => setIsModalOpen(false)}
       >
-        <MarketBasketForm onCompleted={onCreationCompleted} />
+        <MarketBasketForm onCompleted={() => setIsModalOpen(false)} />
       </Modal>
       {table}
     </div>
