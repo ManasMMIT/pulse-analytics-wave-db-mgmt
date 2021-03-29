@@ -1,9 +1,10 @@
 const _ = require('lodash')
+const axios = require('axios')
 
 const updateTeam = async (
   parent,
   { input: { _id, description, defaultLandingPath } },
-  { coreRoles, coreUsers, mongoClient, pulseDevDb },
+  { coreRoles, coreUsers, mongoClient, pulseDevDb, coreClients },
   info
 ) => {
   let updatedTeam
@@ -11,34 +12,58 @@ const updateTeam = async (
   const session = mongoClient.startSession()
 
   await session.withTransaction(async () => {
-    // STEP 1: Update the role; any users affiliated with the role will be updated in step 3
+    // ! Vega Op
     const {
-      value: roleInMongo
-    } = await coreRoles.findOneAndUpdate(
+      uuid: mongoTeamUuid,
+      client: { _id: clientId },
+    } = await coreRoles.findOne({ _id })
+    const { uuid: mongoClientUuid } = await coreClients.findOne({
+      _id: clientId,
+    })
+    if (mongoTeamUuid) {
+      const { data } = await axios.get(`teams/${mongoTeamUuid}/`)
+
+      await axios
+        .put(`teams/${mongoTeamUuid}/`, {
+          name: description,
+          client: mongoClientUuid,
+          marketbasket_subscriptions: data.marketbasket_subscriptions,
+        })
+        .catch((e) => {
+          throw new Error(JSON.stringify(e.response.data))
+        })
+    }
+
+    // ! Mongo Ops
+    // STEP 1: Update the role; any users affiliated with the role will be updated in step 3
+    const { value: roleInMongo } = await coreRoles.findOneAndUpdate(
       { _id },
       {
         $set: {
           name: description,
           description,
           defaultLandingPath,
-        }
+        },
       },
-      { 
-        session, 
-        returnOriginal: false 
-      },
+      {
+        session,
+        returnOriginal: false,
+      }
     )
 
     updatedTeam = roleInMongo
 
     // STEP 2: Gather the `_id`s of users who have to be updated
-    const usersToUpdate = updatedTeam.users.reduce((acc, { _id: userId, defaultLanding }) => {
-      if (_.isEmpty(defaultLanding) || !defaultLanding.locked) {
-        acc.push(userId)
-      }
+    const usersToUpdate = updatedTeam.users.reduce(
+      (acc, { _id: userId, defaultLanding }) => {
+        if (_.isEmpty(defaultLanding) || !defaultLanding.locked) {
+          acc.push(userId)
+        }
 
-      return acc
-    }, [])
+        return acc
+      },
+      []
+    )
 
     // STEP 3: Update target users on this team and in all teams affiliated with those users.
     // This represents the most recently updated team "winning" its users' default landing paths.
@@ -54,9 +79,7 @@ const updateTeam = async (
       },
       {
         session,
-        arrayFilters: [
-          { 'user._id': { $in: usersToUpdate } }
-        ]
+        arrayFilters: [{ 'user._id': { $in: usersToUpdate } }],
       }
     )
 
@@ -68,10 +91,10 @@ const updateTeam = async (
           defaultLanding: {
             path: defaultLandingPath,
             locked: false,
-          }
-        }
+          },
+        },
       },
-      { session },
+      { session }
     )
 
     // STEP 5: Update appropriate users in dev users.sitemaps for defaultLandingPath
@@ -79,17 +102,16 @@ const updateTeam = async (
     // ! selectively updating users.sitemaps for `defaultLandingPath`
     const updatedAt = new Date()
 
-    await pulseDevDb.collection('users.sitemaps')
-      .updateMany(
-        { _id: { $in: usersToUpdate } },
-        { 
-          $set: { 
-            defaultLandingPath,
-            updatedAt,
-          } 
+    await pulseDevDb.collection('users.sitemaps').updateMany(
+      { _id: { $in: usersToUpdate } },
+      {
+        $set: {
+          defaultLandingPath,
+          updatedAt,
         },
-        { session },
-      )
+      },
+      { session }
+    )
   })
 
   return updatedTeam

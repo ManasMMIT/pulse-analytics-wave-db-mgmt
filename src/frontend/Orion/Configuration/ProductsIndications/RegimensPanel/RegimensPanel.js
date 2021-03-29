@@ -15,6 +15,7 @@ import { StyledInput, FormLabel, createObjectModalStyle, defaultPanelItemStyle }
 
 import {
   GET_SOURCE_REGIMENS,
+  GET_VEGA_REGIMENS,
   GET_SOURCE_INDICATIONS,
   GET_SELECTED_REGIMENS,
   GET_SOURCE_TREATMENT_PLANS,
@@ -75,7 +76,7 @@ const headerChildren = (
       buttonStyle={buttonStyle}
       modalStyle={createObjectModalStyle}
       mutationDoc={CREATE_REGIMEN}
-      refetchQueries={[{ query: GET_SOURCE_REGIMENS }]}
+      refetchQueries={[{ query: GET_SOURCE_REGIMENS }, { query: GET_VEGA_REGIMENS }]}
       getInputFields={getInputFields}
     />
 
@@ -110,6 +111,7 @@ const getButtonGroupCallback = treatmentPlansByReg => regimen => (
       mutationDoc={UPDATE_SOURCE_REGIMEN}
       refetchQueries={[
         { query: GET_SOURCE_REGIMENS },
+        { query: GET_VEGA_REGIMENS },
         { query: GET_SOURCE_INDICATIONS },
       ]}
       afterMutationHook={(cache, { data }) => {
@@ -134,6 +136,7 @@ const getButtonGroupCallback = treatmentPlansByReg => regimen => (
       itemId={regimen._id}
       mutationDoc={DELETE_SOURCE_REGIMEN}
       refetchQueries={[
+        { query: GET_SOURCE_REGIMENS },
         { query: GET_SOURCE_REGIMENS },
         { query: GET_SOURCE_INDICATIONS },
       ]}

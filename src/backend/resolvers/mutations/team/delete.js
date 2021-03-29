@@ -1,3 +1,5 @@
+const axios = require('axios')
+
 const upsertUsersSitemaps = require('../sitemap/upsertUsersSitemaps')
 const upsertUsersPermissions = require('../sitemap/permissions-upsertion/upsertUsersPermissions')
 
@@ -17,8 +19,16 @@ const deleteTeam = async (
     const session = mongoClient.startSession()
 
     await session.withTransaction(async () => {
-      // Step 1: Delete Team
+      // ! Vega Op
+      const { uuid } = await pulseCoreDb.collection('roles').findOne({ _id })
+      if (uuid) {
+        await axios.delete(`teams/${uuid}`).catch((e) => {
+          throw new Error(JSON.stringify(e.response.data))
+        })
+      }
 
+      // ! Mongo Op
+      // Step 1: Delete Team
       const { value: deletedTeam } = await pulseCoreDb
         .collection('roles')
         .findOneAndDelete({ _id }, { session })

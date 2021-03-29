@@ -224,6 +224,13 @@ const Sidebar = () => {
         <StyledNavLink
           style={dropdownInactiveLinkStyle}
           activeStyle={dropdownActiveLinkStyle}
+          to={'/orion/configuration/market-baskets'}
+        >
+          Market Baskets
+        </StyledNavLink>
+        <StyledNavLink
+          style={dropdownInactiveLinkStyle}
+          activeStyle={dropdownActiveLinkStyle}
           to={'/orion/configuration/people'}
         >
           People

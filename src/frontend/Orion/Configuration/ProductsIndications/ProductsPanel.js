@@ -10,7 +10,7 @@ import CreatableMultiSelect from '../../shared/CreatableMultiSelect';
 
 import { StyledInput, FormLabel, createObjectModalStyle } from '../../Organizations/styledComponents'
 
-import { GET_SOURCE_PRODUCTS, GET_SOURCE_REGIMENS } from '../../../api/queries'
+import { GET_SOURCE_PRODUCTS, GET_VEGA_PRODUCTS, GET_SOURCE_REGIMENS, GET_VEGA_REGIMENS } from '../../../api/queries'
 
 import {
   CREATE_PRODUCT,
@@ -80,7 +80,7 @@ const headerChildren = (
     buttonStyle={createButtonStyle}
     modalStyle={createObjectModalStyle}
     mutationDoc={CREATE_PRODUCT}
-    refetchQueries={[{ query: GET_SOURCE_PRODUCTS }]}
+    refetchQueries={[{ query: GET_SOURCE_PRODUCTS }, { query: GET_VEGA_PRODUCTS }]}
     getInputFields={getInputFields}
   />
 )
@@ -99,6 +99,8 @@ const buttonGroupCallback = ({
       refetchQueries={[
         { query: GET_SOURCE_PRODUCTS },
         { query: GET_SOURCE_REGIMENS }, // refresh regimens cache after update
+        { query: GET_VEGA_PRODUCTS },
+        { query: GET_VEGA_REGIMENS },
       ]}
       getInputFields={getInputFields}
     />
@@ -109,6 +111,8 @@ const buttonGroupCallback = ({
       refetchQueries={[
         { query: GET_SOURCE_PRODUCTS },
         { query: GET_SOURCE_REGIMENS }, // refresh regimens cache after delete
+        { query: GET_VEGA_PRODUCTS },
+        { query: GET_VEGA_REGIMENS },
       ]}
     />
   </>

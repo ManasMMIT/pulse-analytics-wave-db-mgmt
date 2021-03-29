@@ -8,10 +8,10 @@ module.exports = async (dbs) => {
     .find()
     .toArray()
 
-  for (const { _id, name } of coreClients) {
+  for (const { _id, name, icon } of coreClients) {
     const uuid = uuid4()
 
-    await axios.post('clients/', { id: uuid, name })
+    await axios.post('clients/', { id: uuid, name, icon })
       .catch(e => { throw new Error(e) })
 
     await pulseCoreDb.collection('clients')

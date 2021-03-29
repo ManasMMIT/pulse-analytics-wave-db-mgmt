@@ -1,3 +1,5 @@
+import vegaQueries from './../vega/queries'
+
 const clients = require('./clients')
 const teams = require('./teams')
 const users = require('./users')
@@ -33,6 +35,7 @@ const usStates = require('./usStates')
 const events = require('./events')
 
 module.exports = {
+  ...vegaQueries,
   collections,
   clients,
   devToProdPushConfigs,
