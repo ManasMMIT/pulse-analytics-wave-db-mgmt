@@ -45,6 +45,7 @@ const relationalTypeDefs = require('./relationalTypeDefs')
 
 const mutationType = gql`
   type Mutation {
+    deleteMarketBasket(input: DeleteMarketBasketInput!): MarketBasket
     createMarketBasket(input: CreateMarketBasketInput!): MarketBasket
     updateMarketBasket(input: UpdateMarketBasketInput!): MarketBasket
 

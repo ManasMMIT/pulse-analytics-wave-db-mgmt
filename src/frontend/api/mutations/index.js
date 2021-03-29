@@ -1,4 +1,5 @@
 import {
+  DELETE_MARKET_BASKET,
   CREATE_MARKET_BASKET,
   UPDATE_MARKET_BASKET,
 } from './marketBaskets'
@@ -243,6 +244,7 @@ import {
 } from './relationalMutations'
 
 export {
+  DELETE_MARKET_BASKET,
   CREATE_MARKET_BASKET,
   UPDATE_MARKET_BASKET,
   SELECT_CLIENT,

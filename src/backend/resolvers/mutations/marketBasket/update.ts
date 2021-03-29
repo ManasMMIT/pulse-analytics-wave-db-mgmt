@@ -11,11 +11,13 @@ const updateMarketBasket = async (
     team_subscriptions: [],
   }
 
-  return await axios.put(`market-baskets/${id}/`, vegaInput)
+  await axios.put(`market-baskets/${id}/`, vegaInput)
     .then(({ data }) => data)
     .catch((e) => {
       throw new Error(JSON.stringify(e.response.data))
     })
+
+  return axios.get(`hydrated-market-baskets/${id}`).then(({ data }) => data)
 }
 
 export default updateMarketBasket

@@ -5,6 +5,7 @@ const updateMarketBasketTypeDefs = gql`
     id: ID!
     name: String!
     indication: ID!
+    description: String
   }
 `
 

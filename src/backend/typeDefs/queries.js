@@ -2,7 +2,8 @@ const { gql } = require('apollo-server-express')
 
 const queries = gql`
   type Query {
-    marketBaskets: [MarketBasket]!
+    marketBaskets: [MarketBasket!]!
+    marketBasketsSubscriptions: [MarketBasketSubscription!]!
 
     nodes(parentId: String, type: String): [Node]
 
@@ -15,7 +16,9 @@ const queries = gql`
     indications: [Indication]
     therapeuticAreas: [TherapeuticArea]
     products: [Product]
+    vegaProducts: [VegaProduct]
     regimens: [Regimen]
+    vegaRegimens: [VegaRegimen]
 
     organizationTypes: [String]
 
@@ -136,11 +139,21 @@ const queries = gql`
     id: ID!
     name: String
     description: String
-    indication: ID
+    indication: JSON
     created_at: DateTime
     updated_at: DateTime
-    products: [ID]!
-    team_subscriptions: [ID]!
+    products: [JSON]!
+    team_subscriptions: [JSON]!
+  }
+
+  type MarketBasketSubscription {
+    id: ID!
+    team: ID
+    market_basket: ID
+    start_date: DateTime
+    end_date: DateTime
+    created_at: DateTime
+    updated_at: DateTime
   }
 
   type Event {
@@ -318,6 +331,19 @@ const queries = gql`
     nameBrand: String
     uuid: String
     tags: [String]
+  }
+
+  type VegaProduct {
+    id: ID!
+    generic_name: String
+    brand_name: String
+    logo_link: String
+    regimens: [ID!]!
+  }
+
+  type VegaRegimen {
+    id: ID!
+    name: String
   }
 
   type Regimen {

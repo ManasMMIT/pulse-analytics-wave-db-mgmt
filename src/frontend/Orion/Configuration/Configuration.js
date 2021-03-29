@@ -5,6 +5,7 @@ import { useAuth0 } from '../../../react-auth0-spa'
 import superUsersById from '../../utils/super-users'
 
 import MarketBaskets from './MarketBaskets'
+import MarketBasketDetail from './MarketBaskets/MarketBasketDetail'
 import People from './People'
 import UsStates from './UsStates'
 import ProductsIndications from './ProductsIndications'
@@ -17,6 +18,8 @@ const Configuration = () => {
 
   return (
     <Switch>
+      <Route exact={true} path={'/orion/configuration/market-baskets'} component={MarketBaskets} />
+      <Route path={'/orion/configuration/market-baskets/:marketBasketId'} component={MarketBasketDetail} />
       <Route path={'/orion/configuration/market-baskets'} component={MarketBaskets} />
       <Route path={'/orion/configuration/people'} component={People} />
       <Route path={'/orion/configuration/us-states'} component={UsStates} />

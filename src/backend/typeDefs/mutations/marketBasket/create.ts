@@ -4,6 +4,7 @@ const createMarketBasketTypeDefs = gql`
   input CreateMarketBasketInput {
     name: String!
     indication: ID!
+    description: String
   }
 `
 
