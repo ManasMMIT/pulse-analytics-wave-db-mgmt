@@ -12,11 +12,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Fixed** for any bug fixes.
 - **Security** in case of vulnerabilities.
 
-## [Unreleased] - Started: 3-9-21
+## [Unreleased] - Started: 3-29-21
+
+## [4.7.1] - Started: 3-9-21
 
 ### Changed
+- `Payer Projects`: Access sheet import now materializes `orgTiny` field to dev access collections [#939](https://github.com/pulse-analytics/wave-db-mgmt/pull/939)
 - `Perception Tool/Vega Migration`: Added vega ops to necessary mongo CUD
   - Client CU/Team CUD [#935](https://github.com/pulse-analytics/wave-db-mgmt/pull/935)
+  - Products/Regimens
 
 ## [4.7.0] - Started: 2-26-21
 
