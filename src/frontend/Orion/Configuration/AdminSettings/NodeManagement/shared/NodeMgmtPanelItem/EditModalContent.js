@@ -4,6 +4,7 @@ import { useMutation } from '@apollo/react-hooks'
 import Switch from '@material-ui/core/Switch'
 import { withStyles } from '@material-ui/core/styles'
 import { transparentize, mix } from 'polished'
+import _ from 'lodash'
 
 import { UPDATE_NODE } from 'frontend/api/mutations'
 import { GET_SOURCE_NODES } from 'frontend/api/queries'
@@ -49,11 +50,25 @@ const EditModalContent = ({ node, handleModalClose }) => {
   const { __typename, ...nodeFields } = node
 
   const [shouldCascadeChanges, setShouldCascadeChanges] = useState(false)
+  const [cascadeExclusions, setCascadeExclusions] = useState({})
   const [nodeFormData, setNodeFormData] = useState(nodeFields)
 
+  const handleSetCascadeExclusions = ({ target: { checked }, currentTarget: { name } }) => {
+    if (!checked) {
+      setCascadeExclusions(prevState => ({ ...prevState, [name]: true }))
+    } else {
+      setCascadeExclusions(prevState => {
+        const clonedState = _.cloneDeep(prevState)
+        delete clonedState[name]
+        return clonedState
+      })
+    }
+  }
+  console.log(cascadeExclusions)
   const input = {
     node: nodeFormData,
     cascade: shouldCascadeChanges,
+    cascadeExclusions,
   }
 
   const [save, { loading }] = useMutation(UPDATE_NODE, {
@@ -102,7 +117,13 @@ const EditModalContent = ({ node, handleModalClose }) => {
           </div>
         )}
       </div>
-      <NodeForm data={nodeFormData} setData={setNodeFormData} />
+      <NodeForm
+        shouldCascadeChanges={shouldCascadeChanges}
+        data={nodeFormData}
+        setData={setNodeFormData}
+        handleSetCascadeExclusions={handleSetCascadeExclusions}
+        cascadeExclusions={cascadeExclusions}
+      />
     </>
   )
 }

@@ -4,6 +4,7 @@ const updateNodeTypeDefs = gql`
   input UpdateNodeInput {
     node: UpdateNode
     cascade: Boolean
+    cascadeExclusions: JSON
   }
 
   input UpdateNode {

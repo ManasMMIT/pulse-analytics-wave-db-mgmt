@@ -14,6 +14,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased] - Started: 3-29-21
 
+### Changed
+- `Node CRUD`: Users can now exclude fields from cascading node updates [#957](https://github.com/pulse-analytics/wave-db-mgmt/pull/957) and can now update all role-node fields [#955](https://github.com/pulse-analytics/wave-db-mgmt/pull/955)
+
 ## [4.7.1] - Started: 3-9-21
 
 ### Changed

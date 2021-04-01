@@ -8,6 +8,8 @@ import Color from 'frontend/utils/color'
 
 import { GET_SOURCE_NODES } from 'frontend/api/queries'
 
+import CascadeSwitch from './CascadeSwitch'
+
 import {
   FormLabel,
   StyledInput,
@@ -15,7 +17,14 @@ import {
   InputLabel,
 } from '../../EditRoleNodeView/styledComponents'
 
-const getTextInputs = ({ text }, handleInputChange, handleRemoveTextField) => {
+const getTextInputs = ({
+  data: { text },
+  handleInputChange,
+  handleRemoveTextField,
+  handleSetCascadeExclusions,
+  shouldCascadeChanges,
+  cascadeExclusions,
+}) => {
   const orderedKeys = Object.keys(text).sort()
 
   return orderedKeys.map((key) => {
@@ -24,6 +33,12 @@ const getTextInputs = ({ text }, handleInputChange, handleRemoveTextField) => {
 
     return (
       <InputContainer key={key}>
+        {!isTdgTimestamp && <CascadeSwitch
+          name={`text.${key}`}
+          handleSetCascadeExclusions={handleSetCascadeExclusions}
+          shouldCascadeChanges={shouldCascadeChanges}
+          cascadeExclusions={cascadeExclusions}
+        />}
         <InputLabel>{_.startCase(key)}</InputLabel>
         <div style={{ display: 'flex', alignItems: 'center' }}>
           <StyledInput
@@ -85,7 +100,7 @@ const getParentIdFromParams = (type, locationSearch) => {
   return parentId
 }
 
-const NodeForm = ({ data, setData, type }) => {
+const NodeForm = ({ cascadeExclusions, shouldCascadeChanges, data, setData, type, handleSetCascadeExclusions }) => {
   // type is only used in create to determine parentId
   const { data: sourceNodeData, loading } = useQuery(GET_SOURCE_NODES)
   const location = useLocation()
@@ -146,13 +161,20 @@ const NodeForm = ({ data, setData, type }) => {
         ...restState,
       }
     })
+    handleSetCascadeExclusions({
+      target: { checked: false },
+      currentTarget: { name: `text.${key}` },
+    })
   }
 
-  const textInputs = getTextInputs(
+  const textInputs = getTextInputs({
     data,
-    handleTextInputChange,
-    handleRemoveTextField
-  )
+    handleInputChange: handleTextInputChange,
+    handleRemoveTextField,
+    handleSetCascadeExclusions,
+    shouldCascadeChanges,
+    cascadeExclusions,
+  })
 
   const newOrOldParentId =
     data.parentId || getParentIdFromParams(type, locationSearch)
@@ -179,6 +201,12 @@ const NodeForm = ({ data, setData, type }) => {
       )}
 
       <InputContainer>
+        <CascadeSwitch
+          name={'name'}
+          handleSetCascadeExclusions={handleSetCascadeExclusions}
+          shouldCascadeChanges={shouldCascadeChanges}
+          cascadeExclusions={cascadeExclusions}
+        />
         <InputLabel>Name:</InputLabel>
         <StyledInput
           value={data.name || ''}
@@ -200,6 +228,12 @@ const NodeForm = ({ data, setData, type }) => {
       </InputContainer>
 
       <InputContainer>
+        <CascadeSwitch
+          name={'componentPath'}
+          handleSetCascadeExclusions={handleSetCascadeExclusions}
+          shouldCascadeChanges={shouldCascadeChanges}
+          cascadeExclusions={cascadeExclusions}
+        />
         <InputLabel>Component Path:</InputLabel>
         <StyledInput
           value={data.componentPath || ''}
@@ -210,6 +244,12 @@ const NodeForm = ({ data, setData, type }) => {
       </InputContainer>
 
       <InputContainer>
+        <CascadeSwitch
+          name={'order'}
+          handleSetCascadeExclusions={handleSetCascadeExclusions}
+          shouldCascadeChanges={shouldCascadeChanges}
+          cascadeExclusions={cascadeExclusions}
+        />
         <InputLabel>Order:</InputLabel>
         <StyledInput
           value={data.order}

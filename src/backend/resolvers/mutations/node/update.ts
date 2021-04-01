@@ -20,13 +20,27 @@ interface Node {
   icon: string | null
 }
 
+interface Body {
+  name: string
+  type: string
+  componentPath: string | null
+  text?: TextObj | null | any
+  order: number
+  parentId: string | null
+  // TODO: Deprecate following fields from schema (now inside textObj)
+  caption: string | null
+  subtitle: string | null
+  icon: string | null
+}
+
 const updateNode = async (
   parent,
-  args: { input: { node: Node, cascade: boolean } },
+  args: { input: { node: Node, cascade: boolean, cascadeExclusions: any } },
   { pulseCoreDb, pulseDevDb, mongoClient },
   info
 ) => {
   const {
+    cascadeExclusions,
     cascade,
     node: { _id, ...body },
   } = args.input
@@ -53,8 +67,10 @@ const updateNode = async (
       .then(({ value }) => value)
 
     if (cascade) {
-      const setObj = Object.keys(body).reduce((acc, key) => {
-        acc[`sitemap.${body.type}s.$.${key}`] = body[key]
+      const cascadeBodyWithFlattenedTextObject = getCascadeBodyWithFlattenedTextObject(body, cascadeExclusions)
+
+      const setObj = Object.keys(cascadeBodyWithFlattenedTextObject).reduce((acc, key) => {
+        acc[`sitemap.${body.type}s.$.${key}`] = cascadeBodyWithFlattenedTextObject[key]
 
         return acc
       }, {})
@@ -90,3 +106,32 @@ const updateNode = async (
 }
 
 export default updateNode
+
+const getCascadeBodyWithFlattenedTextObject = (body: Body, cascadeExclusions: any): Body => {
+  let cascadeBody = _.cloneDeep(body)
+  cascadeBody = replaceNestedTextObject(cascadeBody)
+
+  removeExcludedFieldsFromBody(cascadeExclusions, cascadeBody)
+
+  return cascadeBody
+}
+
+function removeExcludedFieldsFromBody(cascadeExclusions: any, bodyWithFlatTextObj: Body) {
+  Object.keys(cascadeExclusions).forEach((exclusionKey): void => {
+    delete bodyWithFlatTextObj[exclusionKey]
+  })
+}
+
+function replaceNestedTextObject(clonedBody: Body) {
+  const flatTextObject = Object.entries(clonedBody.text || {})
+    .reduce((acc, [key, value]) => ({ ...acc, [`text.${key}`]: value }), {})
+
+  delete clonedBody.text
+
+  const bodyWithFlatTextObj = {
+    ...clonedBody,
+    ...flatTextObject,
+  }
+  return bodyWithFlatTextObj
+}
+
