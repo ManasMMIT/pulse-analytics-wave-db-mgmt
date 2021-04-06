@@ -1,9 +1,14 @@
 import React, { useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
+import {
+  Button,
+  UnderlinedTabs,
+  Tag,
+} from '@pulse-analytics/wave-design-system'
 
 import Spinner from 'frontend/components/Spinner'
 import Modal from 'frontend/components/Modal'
-import Button from 'frontend/components/Button'
+// import Button from 'frontend/components/Button'
 
 import MarketBasketForm from '../MarketBasketForm'
 import { useQuery } from '@apollo/react-hooks'
@@ -47,7 +52,9 @@ const MarketBasketDetail = () => {
 
   const { data, loading } = useQuery(GET_MARKET_BASKETS)
   if (loading) return <Spinner />
-  const marketBasket = data.marketBaskets.find(({ id }) => id === marketBasketId)
+  const marketBasket = data.marketBaskets.find(
+    ({ id }) => id === marketBasketId
+  )
 
   // ! after deletion, market basket doesn't exist in cache before redirect
   if (!marketBasket) return <Spinner />
@@ -65,11 +72,24 @@ const MarketBasketDetail = () => {
   return (
     <div>
       <Link to="/orion/configuration/market-baskets">Back</Link>
-
+      <Button text={'hello'} />
+      <UnderlinedTabs
+        tabsData={[
+          {
+            value: 'Label as React ele',
+            label: <div>Label as React ele, div</div>,
+          },
+          {
+            value: 'Just a String',
+            label: 'Just a String',
+          },
+        ]}
+      />
+      <Tag>hello!</Tag>
       <h1>Market Basket Overview</h1>
       <h2>Market Basket Details</h2>
       <div>
-        <Button onClick={() => setIsModalOpen(true)}>Edit Market Basket Details</Button>
+        {/* <Button onClick={() => setIsModalOpen(true)}>Edit Market Basket Details</Button> */}
         <Modal
           show={isModalOpen}
           modalStyle={{ height: 600, width: 800 }}
