@@ -25,7 +25,7 @@ const COLUMNS = [
     Cell: ({
       value,
       row: { original: { id } },
-    }) => <Link to={`/orion/configuration/market-baskets/${id}`}>{value}</Link>,
+    }) => <Link to={`/orion/configuration/sandbox-market-baskets/${id}`}>{value}</Link>,
   },
   {
     Header: 'Last Survey Date',
@@ -51,11 +51,11 @@ const COLUMNS = [
   },
   {
     Header: 'Products',
-    accessor: 'products',
+    accessor: 'products_regimens',
     Filter: MultiSelectColumnFilter,
     filter: customMultiSelectFilterFn,
     sortType: 'text',
-    Cell: ({ value }) => value.map(({ generic_name }) => generic_name).join(', '),
+    Cell: ({ value }) => _.uniq(value.map(({ product: { generic_name } }) => generic_name)).join(', '),
   },
   {
     Header: '# Stakeholders (last survey)',

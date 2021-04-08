@@ -6,12 +6,7 @@ const updateMarketBasket = async (
   context,
   info
 ) => {
-  const vegaInput = {
-    ...body,
-    team_subscriptions: [],
-  }
-
-  await axios.put(`market-baskets/${id}/`, vegaInput)
+  await axios.patch(`market-baskets/${id}/`, body)
     .then(({ data }) => data)
     .catch((e) => {
       throw new Error(JSON.stringify(e.response.data))

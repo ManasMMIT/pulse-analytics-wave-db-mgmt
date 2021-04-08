@@ -4,8 +4,8 @@ import { Switch, Route, Redirect } from 'react-router-dom'
 import { useAuth0 } from '../../../react-auth0-spa'
 import superUsersById from '../../utils/super-users'
 
-import MarketBaskets from './MarketBaskets'
-import MarketBasketDetail from './MarketBaskets/MarketBasketDetail'
+import SANDBOX_MarketBaskets from './SANDBOX_MarketBaskets'
+import SANDBOX_MarketBasketDetail from './SANDBOX_MarketBaskets/MarketBasketDetail'
 import People from './People'
 import UsStates from './UsStates'
 import ProductsIndications from './ProductsIndications'
@@ -18,9 +18,6 @@ const Configuration = () => {
 
   return (
     <Switch>
-      <Route exact={true} path={'/orion/configuration/market-baskets'} component={MarketBaskets} />
-      <Route path={'/orion/configuration/market-baskets/:marketBasketId'} component={MarketBasketDetail} />
-      <Route path={'/orion/configuration/market-baskets'} component={MarketBaskets} />
       <Route path={'/orion/configuration/people'} component={People} />
       <Route path={'/orion/configuration/us-states'} component={UsStates} />
       <Route
@@ -28,16 +25,20 @@ const Configuration = () => {
         component={ProductsIndications}
       />
       {isSuperUser && (
-        <Route
-          path={'/orion/configuration/admin-settings'}
-          component={AdminSettings}
-        />
+        <>
+          <Route
+            path={'/orion/configuration/admin-settings'}
+            component={AdminSettings}
+          />
+          <Route exact={true} path={'/orion/configuration/sandbox-market-baskets'} component={SANDBOX_MarketBaskets} />
+          <Route path={'/orion/configuration/sandbox-market-baskets/:marketBasketId'} component={SANDBOX_MarketBasketDetail} />
+        </>
       )}
       <Route
         path="/orion/configuration/dev-to-prod-push-console"
         component={DevToProdPushConsole}
       />
-      <Redirect to="/orion/configuration/market-baskets" />
+      <Redirect to="/orion/configuration/people" />
     </Switch>
   )
 }

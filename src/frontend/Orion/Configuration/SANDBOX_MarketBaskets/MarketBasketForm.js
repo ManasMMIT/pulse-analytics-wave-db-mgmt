@@ -52,7 +52,7 @@ const MarketBasketForm = ({
       })
     },
     onCompleted: () => {
-      history.push("/orion/configuration/market-baskets")
+      history.push("/orion/configuration/sandbox-market-baskets")
     }
   })
 

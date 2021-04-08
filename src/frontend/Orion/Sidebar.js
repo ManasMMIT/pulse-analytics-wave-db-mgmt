@@ -221,13 +221,13 @@ const Sidebar = () => {
         >
           Push Dev to Prod
         </StyledNavLink>
-        <StyledNavLink
+        {isSuperUser && <StyledNavLink
           style={dropdownInactiveLinkStyle}
           activeStyle={dropdownActiveLinkStyle}
-          to={'/orion/configuration/market-baskets'}
+          to={'/orion/configuration/sandbox-market-baskets'}
         >
-          Market Baskets
-        </StyledNavLink>
+          SANDBOX Market Baskets
+        </StyledNavLink>}
         <StyledNavLink
           style={dropdownInactiveLinkStyle}
           activeStyle={dropdownActiveLinkStyle}
