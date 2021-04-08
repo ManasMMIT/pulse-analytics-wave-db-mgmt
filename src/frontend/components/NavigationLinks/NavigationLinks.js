@@ -23,14 +23,14 @@ const Header = styled.div({
 })
 
 // * recursively nest link items
-const getNestedLinkItems = (listConfig, parentLink = null) => {
+const getNestedLinkItems = (listConfig, isSuperUser, parentLink = null) => {
   const data = []
 
-  listConfig.forEach(({ label, link, childLinks }) => {
+  listConfig.forEach(({ label, link, showOnSuperUserOnly, childLinks }) => {
     const combinedLink = parentLink ? `${parentLink}${link}` : link
 
     const nestedLinks = childLinks
-      ? getNestedLinkItems(childLinks, combinedLink)
+      ? getNestedLinkItems(childLinks, isSuperUser, combinedLink)
       : null
 
     let component = childLinks ? (
@@ -41,15 +41,19 @@ const getNestedLinkItems = (listConfig, parentLink = null) => {
       <NavigationLink key={label} link={combinedLink} label={label} />
     )
 
-    data.push(component)
+    if (showOnSuperUserOnly) {
+      if (isSuperUser) data.push(component)
+    } else {
+      data.push(component)
+    }
   })
 
   return data
 }
 
 // * will also supported non-nested links!
-const NavigationLinks = ({ sectionHeader, linkConfig }) => {
-  const links = getNestedLinkItems(linkConfig)
+const NavigationLinks = ({ sectionHeader, linkConfig, isSuperUser }) => {
+  const links = getNestedLinkItems(linkConfig, isSuperUser)
 
   return (
     <NavigationLinkContainer>
@@ -65,20 +69,24 @@ NavigationLinks.propTypes = {
     PropTypes.shape({
       label: PropTypes.string,
       link: PropTypes.string,
+      showOnSuperUserOnly: PropTypes.bool,
       childLinks: PropTypes.arrayOf(
         PropTypes.shape({
           label: PropTypes.string,
           link: PropTypes.string,
+          showOnSuperUserOnly: PropTypes.bool,
           childLinks: PropTypes.array,
         })
       ),
     })
   ),
+  isSuperUser: PropTypes.bool,
 }
 
 NavigationLinks.defaultProps = {
   sectionHeader: 'Section Header',
   linkConfig: [{ label: '', link: '', childLinks: null }],
+  isSuperUser: false,
 }
 
 export default NavigationLinks

@@ -67,13 +67,13 @@ const Sidebar = () => {
         <NavigationLinks
           sectionHeader="Specialized Data"
           linkConfig={SPECIALIZED_DATA_CONFIG}
+          isSuperUser={isSuperUser}
         />
-        {isSuperUser && (
-          <NavigationLinks
-            sectionHeader="Administrator"
-            linkConfig={ADMINISTRATOR_DATA_CONFIG}
-          />
-        )}
+        <NavigationLinks
+          sectionHeader="Administrator"
+          linkConfig={ADMINISTRATOR_DATA_CONFIG}
+          isSuperUser={isSuperUser}
+        />
         <NavigationLinks
           sectionHeader="Experimental"
           linkConfig={EXPERIMENTAL_DATA_CONFIG}

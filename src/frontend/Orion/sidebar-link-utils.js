@@ -112,7 +112,11 @@ export const SPECIALIZED_DATA_CONFIG = [
     link: '/orion/specialized/value-perception',
     childLinks: [
       { label: 'Market Baskets', link: '/market-baskets' },
-      { label: 'SANDBOX Market Baskets', link: '/sandbox-market-baskets' },
+      {
+        label: 'SANDBOX Market Baskets',
+        link: '/sandbox-market-baskets',
+        showOnSuperUserOnly: true,
+      },
       // { label: 'Stakeholders', link: '/stakeholders' },
       // { label: 'Stakeholders Types', link: '/stakeholders-types' },
       // { label: 'Stakeholders Categories', link: '/stakeholders-categories' },
@@ -122,15 +126,25 @@ export const SPECIALIZED_DATA_CONFIG = [
 
 export const ADMINISTRATOR_DATA_CONFIG = [
   { label: 'Push Dev to Prod', link: '/orion/administrator/push-dev-prod' },
-  { label: 'Sheet Management', link: '/orion/administrator/sheet-mgmt' },
-  { label: 'Node Management', link: '/orion/administrator/node-mgmt' },
+  {
+    label: 'Sheet Management',
+    link: '/orion/administrator/sheet-mgmt',
+    showOnSuperUserOnly: true,
+  },
+  {
+    label: 'Node Management',
+    link: '/orion/administrator/node-mgmt',
+    showOnSuperUserOnly: true,
+  },
   {
     label: 'Push Dev to Prod Management',
     link: '/orion/administrator/push-dev-prod-mgmt',
+    showOnSuperUserOnly: true,
   },
   {
     label: 'Business Object',
     link: '/orion/administrator/business-object',
+    showOnSuperUserOnly: true,
     childLinks: [
       {
         label: 'Business Object Management',
@@ -145,13 +159,23 @@ export const ADMINISTRATOR_DATA_CONFIG = [
   {
     label: 'Query Tool Management',
     link: '/orion/administrator/query-tool-mgmt',
+    showOnSuperUserOnly: true,
   },
-  { label: 'Edit Role Node', link: '/orion/administrator/edit-role-node' },
+  {
+    label: 'Edit Role Node',
+    link: '/orion/administrator/edit-role-node',
+    showOnSuperUserOnly: true,
+  },
   {
     label: 'End-User Terms Management',
     link: '/orion/administrator/user-term-mgmt',
+    showOnSuperUserOnly: true,
   },
-  { label: 'Total History', link: '/orion/administrator/total-history' },
+  {
+    label: 'Total History',
+    link: '/orion/administrator/total-history',
+    showOnSuperUserOnly: true,
+  },
 ]
 
 export const EXPERIMENTAL_DATA_CONFIG = [
