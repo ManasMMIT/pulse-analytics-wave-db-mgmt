@@ -1,4 +1,7 @@
-const tracer = require('dd-trace').init()
+if (process.env.NODE_ENV === 'production') {
+  // For Application Performance Monitoring
+  const tracer = require('dd-trace').init() // eslint-disable-line
+}
 require('dotenv').config()
 
 const express = require('express')
