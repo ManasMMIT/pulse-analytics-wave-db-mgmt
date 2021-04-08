@@ -9,19 +9,19 @@ import PayerPartnerships from './PayerPartnerships'
 const Lbm = () => (
   <Switch>
     <Route
-      path={'/orion/organizations/lbm/account-overview'}
+      path={'/orion/organizations/mbm/lbm/account-overview'}
       component={AccountOverview}
     />
-    <Route path={'/orion/organizations/lbm/services'} component={Services} />
+    <Route path={'/orion/organizations/mbm/lbm/services'} component={Services} />
     <Route
-      path={'/orion/organizations/lbm/influencers'}
+      path={'/orion/organizations/mbm/lbm/influencers'}
       component={Influencers}
     />
     <Route
-      path={'/orion/organizations/lbm/payer-partnerships'}
+      path={'/orion/organizations/mbm/lbm/payer-partnerships'}
       component={PayerPartnerships}
     />
-    <Redirect to={'/orion/organizations/lbm/account-overview'} />
+    <Redirect to={'/orion/organizations/mbm/lbm/account-overview'} />
   </Switch>
 )
 

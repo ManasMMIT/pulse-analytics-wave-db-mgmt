@@ -32,30 +32,30 @@ export const GET_VEGA_REGIMENS = gql`
 
 export const GET_MARKET_BASKETS = gql`
   query getMarketBaskets($marketBasketId: ID) {
-      marketBaskets(marketBasketId: $marketBasketId) {
-        id
-        name
-        description
-        indication
-        created_at
-        updated_at
-        products_regimens
-        team_subscriptions
-      }
+    marketBaskets(marketBasketId: $marketBasketId) {
+      id
+      name
+      description
+      indication
+      created_at
+      updated_at
+      products_regimens
+      team_subscriptions
+    }
   }
 `
 
 export const GET_MARKET_BASKETS_SUBSCRIPTIONS = gql`
   query getMarketsBaskets {
-      marketBasketsSubscriptions {
-        id
-        team
-        market_basket
-        start_date
-        end_date
-        created_at
-        updated_at
-      }
+    marketBasketsSubscriptions {
+      id
+      team
+      market_basket
+      start_date
+      end_date
+      created_at
+      updated_at
+    }
   }
 `
 
