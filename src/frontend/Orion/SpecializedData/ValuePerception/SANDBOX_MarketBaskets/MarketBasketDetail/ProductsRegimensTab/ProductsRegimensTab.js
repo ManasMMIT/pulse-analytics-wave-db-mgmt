@@ -25,7 +25,7 @@ const PRODUCT_TABLE_COLUMNS = [
   },
   {
     Header: 'Manufacturers',
-    accessor: 'manufacturersPlaceholder',
+    accessor: 'manufacturers',
     Filter: MultiSelectColumnFilter,
     filter: customMultiSelectFilterFn,
     sortType: 'text',
@@ -82,9 +82,12 @@ const getTableData = (products_regimens) => {
       const regimens = regimenCombos
         .map(({ regimen: { name } }) => name)
         .join(', ')
+      const manufacturers = _.uniq(regimenCombos
+        .map(({ product: { manufacturers } }) => manufacturers.map(({ name }) => name).join(',')))
       const nestedComboObj = {
         product: genericName,
         regimens,
+        manufacturers,
       }
       return [...acc, nestedComboObj]
     },

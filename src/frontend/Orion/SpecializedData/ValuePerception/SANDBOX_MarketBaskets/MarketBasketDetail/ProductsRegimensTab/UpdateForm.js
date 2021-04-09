@@ -114,7 +114,7 @@ const UpdateForm = ({ product }) => {
 
   return (
     <form style={FORM_STYLE} onSubmit={handleUpdate}>
-      <h3>{`Update Form / ${product.name}`}</h3>
+      <h3>{`Update Form / ${product.generic_name}`}</h3>
       <Select
         isDisabled
         value={{ label: product.generic_name, value: product.id }}
