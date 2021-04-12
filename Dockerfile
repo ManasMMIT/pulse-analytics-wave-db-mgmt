@@ -12,6 +12,8 @@ RUN mkdir -p ./src/backend/logs
 
 COPY package.json .
 
+COPY .npmrc .npmrc
+
 RUN yarn --production
 
 EXPOSE 1337
