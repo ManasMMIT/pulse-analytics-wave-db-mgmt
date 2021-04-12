@@ -48,3 +48,4 @@ yarn-error.log*
 
 src/backend/api/resolvers/mutations/customData/pipeDelimitedScript/exports/
 exports-backups/
+.npmrc

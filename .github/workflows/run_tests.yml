@@ -5,11 +5,10 @@ name: Polaris Run Tests
 
 on:
   pull_request:
-    branches: [ develop ]
+    branches: [develop]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     strategy:
@@ -17,24 +16,30 @@ jobs:
         node-version: [12.18.3]
 
     steps:
-    - name: Setup timezone # Set timezone so tests containing date packages will pass
-      uses: zcong1993/setup-timezone@master
-      with:
-        timezone: America/New_York
-    - uses: actions/checkout@v2
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
-      with:
-        node-version: ${{ matrix.node-version }}
-    - uses: actions/cache@v2 # cache node modules
-      with:
-        path: '**/node_modules'
-        key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
-    - name: Install project dependencies
-      run: yarn
-    - name: Run tests
-      env:
-        DB_CLUSTER_ENV: ${{ secrets.DB_CLUSTER_ENV }}
-        MONGO_USERNAME: ${{ secrets.MONGO_USERNAME }}
-        MONGO_PASSWORD: ${{ secrets.MONGO_PASSWORD }}
-      run: yarn test
+      - name: Setup timezone # Set timezone so tests containing date packages will pass
+        uses: zcong1993/setup-timezone@master
+        with:
+          timezone: America/New_York
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - uses: actions/cache@v2 # cache node modules
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+      - name: Configure NPM
+        run: |
+          echo "//npm.pkg.github.com/:_authToken=$NPM_TOKEN" > .npmrc
+          echo "@pulse-analytics:registry=https://npm.pkg.github.com" >> .npmrc
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Install project dependencies
+        run: yarn
+      - name: Run tests
+        env:
+          DB_CLUSTER_ENV: ${{ secrets.DB_CLUSTER_ENV }}
+          MONGO_USERNAME: ${{ secrets.MONGO_USERNAME }}
+          MONGO_PASSWORD: ${{ secrets.MONGO_PASSWORD }}
+        run: yarn test

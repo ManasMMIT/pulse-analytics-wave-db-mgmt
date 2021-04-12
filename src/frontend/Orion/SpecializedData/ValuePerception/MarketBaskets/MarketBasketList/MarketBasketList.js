@@ -9,6 +9,11 @@ import Spinner from 'frontend/components/Spinner'
 import Table from 'frontend/components/Table'
 import MultiSelectColumnFilter from 'frontend/components/Table/custom-filters/MultiSelect/MultiSelectColumnFilter'
 import customMultiSelectFilterFn from 'frontend/components/Table/custom-filters/MultiSelect/customMultiSelectFilterFn'
+import {
+  Button as PulseButton,
+  UnderlinedTabs,
+  Tag,
+} from '@pulse-analytics/pulse-design-system'
 
 import _ from 'lodash'
 import MarketBasketForm from '../MarketBasketForm'
@@ -124,6 +129,20 @@ const MarketBasketList = () => {
 
   return (
     <div>
+      <PulseButton text={'hello'} />
+      <UnderlinedTabs
+        tabsData={[
+          {
+            value: 'Label as React ele',
+            label: <div>Label as React ele, div</div>,
+          },
+          {
+            value: 'Just a String',
+            label: 'Just a String',
+          },
+        ]}
+      />
+      <Tag>hello!</Tag>
       <Button onClick={() => setIsModalOpen(true)}>
         + Create Market Basket
       </Button>
