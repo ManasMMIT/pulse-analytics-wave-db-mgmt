@@ -14,6 +14,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased] - Started: 3-29-21
 
+### Added
+- `Lists Config Mgmt`: Built out dashboard to replace local json files [#979](https://github.com/pulse-analytics/wave-db-mgmt/pull/979)
+
 ### Changed
 - `Node CRUD`: Users can now exclude fields from cascading node updates [#957](https://github.com/pulse-analytics/wave-db-mgmt/pull/957) and can now update all role-node fields [#955](https://github.com/pulse-analytics/wave-db-mgmt/pull/955)
 - `Orion Sidebar`: The Orion sidebar has been re-organized and code has been moved around to match new layout [#956](https://github.com/pulse-analytics/wave-db-mgmt/pull/956) & [#960](https://github.com/pulse-analytics/wave-db-mgmt/pull/960).

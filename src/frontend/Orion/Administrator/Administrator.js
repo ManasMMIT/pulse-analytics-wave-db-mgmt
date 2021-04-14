@@ -4,6 +4,7 @@ import { Switch, Route, Redirect } from 'react-router-dom'
 import { useAuth0 } from '../../../react-auth0-spa'
 import superUsersById from '../../utils/super-users'
 
+import ListsConfigManagement from './ListsConfigManagement'
 import DevToProdPushConsole from './DevToProdPushConsole'
 import SheetManagement from './SheetManagement'
 import NodeManagement from './NodeManagement'
@@ -26,6 +27,10 @@ const Administrator = () => {
       />
       {isSuperUser && (
         <>
+          <Route
+            path={'/orion/administrator/lists-config-mgmt'}
+            component={ListsConfigManagement}
+          />
           <Route
             path={'/orion/administrator/sheet-mgmt'}
             component={SheetManagement}

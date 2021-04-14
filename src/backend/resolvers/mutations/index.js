@@ -1,6 +1,8 @@
 import nodeResolvers from './node'
 import marketBasketResolvers from './marketBasket'
 
+import listsConfigResolvers from './listsConfig'
+
 const clientResolvers = require('./client')
 const teamResolvers = require('./team')
 const userResolvers = require('./user')
@@ -88,4 +90,6 @@ module.exports = {
   ...relationalResolvers,
   ...nodeResolvers,
   ...marketBasketResolvers,
+
+  ...listsConfigResolvers,
 }

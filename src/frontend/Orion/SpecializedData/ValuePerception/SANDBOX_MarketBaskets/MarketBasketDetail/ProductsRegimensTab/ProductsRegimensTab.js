@@ -82,8 +82,11 @@ const getTableData = (products_regimens) => {
       const regimens = regimenCombos
         .map(({ regimen: { name } }) => name)
         .join(', ')
-      const manufacturers = _.uniq(regimenCombos
-        .map(({ product: { manufacturers } }) => manufacturers.map(({ name }) => name).join(',')))
+      const manufacturers = _.uniq(
+        regimenCombos.map(({ product: { manufacturers } }) =>
+          manufacturers.map(({ name }) => name).join(',')
+        )
+      )
       const nestedComboObj = {
         product: genericName,
         regimens,
