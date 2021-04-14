@@ -12,7 +12,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Fixed** for any bug fixes.
 - **Security** in case of vulnerabilities.
 
-## [Unreleased] - Started: 3-29-21
+## [Unreleased] - Started: 4-14-21
+
+## [4.8.0] - Started: 3-29-21
 
 ### Added
 - `Lists Config Mgmt`: Built out dashboard to replace local json files [#979](https://github.com/pulse-analytics/wave-db-mgmt/pull/979)
