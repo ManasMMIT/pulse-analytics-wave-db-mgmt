@@ -9,7 +9,7 @@ export const DELETE_MARKET_BASKET = gql`
       indication
       created_at
       updated_at
-      products
+      products_regimens
       team_subscriptions
     }
   }
@@ -24,7 +24,7 @@ export const CREATE_MARKET_BASKET = gql`
       indication
       created_at
       updated_at
-      products
+      products_regimens
       team_subscriptions
     }
   }
@@ -39,7 +39,7 @@ export const UPDATE_MARKET_BASKET = gql`
       indication
       created_at
       updated_at
-      products
+      products_regimens
       team_subscriptions
     }
   }

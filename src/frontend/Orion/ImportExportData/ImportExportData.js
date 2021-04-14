@@ -9,11 +9,11 @@ const ImportExport = () => (
   <Switch>
     <Route path="/orion/import-export/import-sheets" component={NewImport} />
     <Route
-      path="/orion/import-export/export-custom-data"
+      path="/orion/import-export/export/export-custom-data"
       component={ExportCustomData}
     />
     <Route
-      path="/orion/import-export/export-custom-powerpoint"
+      path="/orion/import-export/export/export-custom-powerpoint"
       component={ExportCustomPowerPoint}
     />
     <Redirect to="/orion/import-export/import-sheets" />

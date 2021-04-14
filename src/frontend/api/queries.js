@@ -1,5 +1,15 @@
 import gql from 'graphql-tag'
 
+export const GET_VEGA_PRODUCTS_REGIMENS = gql`
+  query getVegaProductsRegimens($input: QueryVegaProdRegInput) {
+    vegaProductsRegimens(input: $input) {
+      id
+      product
+      regimen
+    }
+  }
+`
+
 export const GET_VEGA_PRODUCTS = gql`
   query getVegaProducts {
     vegaProducts {
@@ -21,31 +31,56 @@ export const GET_VEGA_REGIMENS = gql`
 `
 
 export const GET_MARKET_BASKETS = gql`
-  query getMarketBaskets {
-      marketBaskets {
-        id
-        name
-        description
-        indication
-        created_at
-        updated_at
-        products
-        team_subscriptions
+  query getMarketBaskets($marketBasketId: ID) {
+    marketBaskets(marketBasketId: $marketBasketId) {
+      id
+      name
+      description
+      indication
+      created_at
+      updated_at
+      products_regimens
+      team_subscriptions
+    }
+  }
+`
+
+export const GET_LISTS_CONFIG = gql`
+  query getListsConfig($input: ListsConfigInput) {
+    listsConfig(input: $input) {
+      _id
+      listId
+      nodeId
+      listTitle
+      listInfo
+      meta {
+        location
+        note
+        type
       }
+      dashboardTool
+      labelKeys {
+        labelKey
+        labelName
+        labelInfo
+        valueWrapperType
+      }
+      createdOn
+    }
   }
 `
 
 export const GET_MARKET_BASKETS_SUBSCRIPTIONS = gql`
   query getMarketsBaskets {
-      marketBasketsSubscriptions {
-        id
-        team
-        market_basket
-        start_date
-        end_date
-        created_at
-        updated_at
-      }
+    marketBasketsSubscriptions {
+      id
+      team
+      market_basket
+      start_date
+      end_date
+      created_at
+      updated_at
+    }
   }
 `
 

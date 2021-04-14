@@ -8,7 +8,7 @@ import Spacing from '../../../utils/spacing'
 export const PageContainer = styled.div({
   padding: Spacing.EXTRA_LARGE,
   flex: '1 1 auto',
-  overflowY: 'scroll',
+  overflowY: 'auto',
   boxSizing: 'border-box',
   display: 'flex',
   flexDirection: 'column',

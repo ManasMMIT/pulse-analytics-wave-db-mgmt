@@ -22,7 +22,7 @@ module.exports = async (dbs) => {
 
     const { uuid: clientUuid } = sourceClientsById[clientId]
 
-    await axios.post('teams/', { id: uuid, name: description, client: clientUuid })
+    await axios.post('teams/', { id: uuid, name: description, client: clientUuid, marketbasket_subscriptions: [] })
       .catch(e => { throw new Error(e) })
 
     await pulseCoreDb.collection('roles')

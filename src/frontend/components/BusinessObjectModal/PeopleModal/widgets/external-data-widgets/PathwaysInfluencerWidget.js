@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from '@emotion/styled'
 
-import useDevPathwaysInfluencers from 'frontend/Orion/Configuration/People/useDevPathwaysInfluencers'
+import useDevPathwaysInfluencers from 'frontend/Orion/GeneralData/People/useDevPathwaysInfluencers'
 import DataSections from './DataSections'
 import Spinner from 'frontend/components/Spinner'
 

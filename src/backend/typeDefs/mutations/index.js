@@ -1,6 +1,8 @@
 import node from './node'
 import marketBasket from './marketBasket'
 
+import listsConfig from './listsConfig'
+
 const { gql } = require('apollo-server-express')
 
 const client = require('./client')
@@ -45,6 +47,10 @@ const relationalTypeDefs = require('./relationalTypeDefs')
 
 const mutationType = gql`
   type Mutation {
+    createListsConfig(input: CreateListsConfigInput!): ListsConfig
+    updateListsConfig(input: UpdateListsConfigInput!): ListsConfig
+    deleteListsConfig(input: DeleteListsConfigInput!): ListsConfig
+
     deleteMarketBasket(input: DeleteMarketBasketInput!): MarketBasket
     createMarketBasket(input: CreateMarketBasketInput!): MarketBasket
     updateMarketBasket(input: UpdateMarketBasketInput!): MarketBasket
@@ -455,4 +461,6 @@ module.exports = [
 
   ...relationalTypeDefs,
   ...marketBasket,
+
+  ...listsConfig,
 ]

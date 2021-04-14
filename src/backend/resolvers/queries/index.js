@@ -1,4 +1,5 @@
 import vegaQueries from './../vega/queries'
+import listsConfig from './listsConfig'
 
 const clients = require('./clients')
 const teams = require('./teams')
@@ -69,4 +70,5 @@ module.exports = {
   usStates,
   therapeuticAreas,
   events,
+  listsConfig,
 }
