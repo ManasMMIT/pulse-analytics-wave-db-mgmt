@@ -16,7 +16,7 @@ const INVALID_LABEL_KEYS = [NEW_LIST_ITEM.labelKey, '']
 const UNIQUE_KEY_ERROR = 'Key must be unique.'
 const FORM_LABELS = {
   KEY_LABEL: 'Key (Required)',
-  LABEL_LABEL: 'Label (Required)',
+  LABEL_LABEL: 'Label',
   NOTE_LABEL: 'Note (Tooltip)',
   VALUE_WRAPPER_TYPE_LABEL: 'Value Wrapper Type',
 }
