@@ -36,7 +36,7 @@ const Header = ({ headerGroup }) => {
       {...column.getHeaderProps(column.getSortByToggleProps())}
       className="th"
     >
-      <div style={{ overflowX: 'scroll' }}>
+      <div style={{ overflowX: 'auto' }}>
         {column.render('Header')}
         <SortIcon>
           {column.isSorted ? (column.isSortedDesc ? ' ⬇︎' : ' ⬆︎') : ''}
