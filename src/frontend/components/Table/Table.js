@@ -111,7 +111,14 @@ const Table = ({
   // whenever page changes on table, scroll to top
   useEffect(resetTableScroll, [pageIndex])
 
-  const dataFormattedForExport = formatDataForExport(sortedRows, columns, true)
+  let dataFormattedForExport
+  if (showExportButton) {
+    dataFormattedForExport = formatDataForExport({
+      data: sortedRows,
+      columns,
+      isReactTableData: true,
+    })
+  }
 
   return (
     <TemplateWrapper width={width}>

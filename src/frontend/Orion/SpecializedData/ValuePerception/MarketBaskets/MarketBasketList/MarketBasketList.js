@@ -58,15 +58,18 @@ const COLUMNS = [
   },
   {
     Header: 'Indication',
-    accessor: 'indication',
+    accessor: ({ indication }) => indication.name,
     Filter: MultiSelectColumnFilter,
     filter: customMultiSelectFilterFn,
     sortType: 'text',
-    Cell: ({ value }) => value && value.name,
   },
   {
     Header: 'Products',
     accessor: 'products_regimens',
+    /*
+      ! This filter is not currently working as intended. We need to build a custom filterType
+      ! for react-table that can generate filter options from array values.
+    */
     Filter: MultiSelectColumnFilter,
     filter: customMultiSelectFilterFn,
     sortType: 'text',
@@ -135,7 +138,11 @@ const MarketBasketList = () => {
       showExportButton={false}
     />
   )
-  const dataFormattedForExport = formatDataForExport(tableData, COLUMNS)
+  const dataFormattedForExport = formatDataForExport({
+    data: tableData,
+    columns: COLUMNS,
+    cellsToFormat: ['products_regimens', 'team_subscriptions'],
+  })
 
   return (
     <div>
@@ -151,7 +158,7 @@ const MarketBasketList = () => {
               + Create Market Basket
             </Button>
           </div>
-          <div style={{ margin: '0 0 0 24px' }}>
+          <div style={{ marginLeft: 24 }}>
             <ExportExcelButton
               data={dataFormattedForExport}
               filename="market-basket-list"
