@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
-import { useHistory } from 'react-router-dom'
 import { useMutation, useQuery } from '@apollo/react-hooks'
 import Select from 'react-select'
 import _ from 'lodash'
+import styled from '@emotion/styled'
 
+import { SingleActionDialog } from 'frontend/components/Dialog'
 import Spinner from 'frontend/components/Spinner'
-import Button from 'frontend/components/Button'
 import {
   GET_MARKET_BASKETS,
   GET_SOURCE_INDICATIONS,
@@ -13,13 +13,18 @@ import {
 import {
   CREATE_MARKET_BASKET,
   UPDATE_MARKET_BASKET,
-  DELETE_MARKET_BASKET,
 } from 'frontend/api/mutations'
 
+import FontSpace from 'frontend/utils/fontspace'
+import Spacing from 'frontend/utils/spacing'
+
+const InputLabel = styled.div({
+  ...FontSpace.FS2,
+})
+
 // TODO: Decide if we should exclude indications already selected in other MBs
-const MarketBasketForm = ({ onCompleted, data }) => {
+const MarketBasketForm = ({ onCompleted, cancelHandler, data }) => {
   const isEdit = Boolean(data)
-  const history = useHistory()
   data = data || { name: '', indication: null, description: '' }
   const [formData, setFormData] = useState(data)
 
@@ -44,23 +49,6 @@ const MarketBasketForm = ({ onCompleted, data }) => {
       }
     },
     onCompleted,
-  })
-
-  const [deleteMarketBasket] = useMutation(DELETE_MARKET_BASKET, {
-    onError: alert,
-    update: (cache, { data: { deleteMarketBasket } }) => {
-      const newMbs = marketBasketData.marketBaskets.filter(
-        ({ id }) => id !== deleteMarketBasket.id
-      )
-
-      cache.writeQuery({
-        query: GET_MARKET_BASKETS,
-        data: { marketBaskets: newMbs },
-      })
-    },
-    onCompleted: () => {
-      history.push('/orion/specialized/value-perception/sandbox-market-baskets')
-    },
   })
 
   if (indLoading) return <Spinner />
@@ -97,52 +85,52 @@ const MarketBasketForm = ({ onCompleted, data }) => {
     submit({ variables: { input: formData } })
   }
 
-  const handleOnDelete = (e) => {
-    e.stopPropagation()
-    deleteMarketBasket({ variables: { input: { id: data.id } } })
-  }
-
   return (
-    <form onSubmit={handleOnSubmit}>
-      <div style={{ padding: 12 }}>
-        <label style={{ fontWeight: 700 }}>Name</label>
-        <input
-          style={{ display: 'block', background: 'white', padding: 12 }}
-          placeholder="Enter name..."
-          onChange={handleNameChange}
-          value={formData.name}
-        />
+    <SingleActionDialog
+      header="Create New Market Basket"
+      submitText="Create Market Basket"
+      submitHandler={handleOnSubmit}
+      cancelHandler={cancelHandler}
+    >
+      <div style={{ padding: Spacing.S7 }}>
+        <InputLabel>
+          <label style={{ fontWeight: 700 }}>Name (required)</label>
+          <input
+            style={{
+              display: 'block',
+              background: 'white',
+              padding: 12,
+              width: '100%',
+            }}
+            placeholder="Enter name..."
+            onChange={handleNameChange}
+            value={formData.name}
+          />
+        </InputLabel>
+        <InputLabel style={{ marginTop: Spacing.S7 }}>
+          <label style={{ fontWeight: 700 }}>Indication (required)</label>
+          <Select
+            value={selectedIndicationOption}
+            options={indicationSelectOptions}
+            onChange={handleSelectIndication}
+          />
+        </InputLabel>
+        <InputLabel style={{ marginTop: Spacing.S7 }}>
+          <label style={{ fontWeight: 700 }}>Description</label>
+          <input
+            style={{
+              display: 'block',
+              background: 'white',
+              padding: 12,
+              width: '100%',
+            }}
+            placeholder="Enter description..."
+            onChange={handleDescriptionChange}
+            value={formData.description}
+          />
+        </InputLabel>
       </div>
-      <div style={{ padding: 12 }}>
-        <label style={{ fontWeight: 700 }}>Description</label>
-        <div></div>
-        <input
-          style={{ display: 'block', background: 'white', padding: 12 }}
-          placeholder="Enter description..."
-          onChange={handleDescriptionChange}
-          value={formData.description}
-        />
-      </div>
-      <div style={{ padding: 12 }}>
-        <label style={{ fontWeight: 700 }}>Indication</label>
-        <div></div>
-        <Select
-          value={selectedIndicationOption}
-          options={indicationSelectOptions}
-          onChange={handleSelectIndication}
-        />
-      </div>
-      <Button buttonStyle={{ margin: 12 }}>Save</Button>
-      {isEdit && (
-        <Button
-          color="red"
-          onClick={handleOnDelete}
-          buttonStyle={{ margin: 12 }}
-        >
-          Delete
-        </Button>
-      )}
-    </form>
+    </SingleActionDialog>
   )
 }
 
