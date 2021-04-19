@@ -7,8 +7,8 @@ import _ from 'lodash'
 
   Exports from a detached export button will not retain the table's sorting order.
 
-  The cellsToFormat prop is needed so that Cell formatters that are meant to return JSX are
-  not applied.
+  The cellsToFormat argument is needed so that Cell formatters that are meant to return JSX are
+  not applied. It accepts an array of 'accessor' values for columns to format.
 */
 
 const formatDataForExport = ({
