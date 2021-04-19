@@ -30,16 +30,23 @@ const Content = styled.div({
   flexDirection: 'column',
 })
 
-const DialogComponent = ({ children }) => (
+const DialogComponent = ({ contentWrapperStyle, contentStyle, children }) => (
   <DialogOverlay>
-    <ContentWrapper>
-      <Content>{children}</Content>
+    <ContentWrapper style={contentWrapperStyle}>
+      <Content style={contentStyle}>{children}</Content>
     </ContentWrapper>
   </DialogOverlay>
 )
 
 DialogComponent.propTypes = {
   children: PropTypes.node.isRequired,
+  contentWrapperStyle: PropTypes.object,
+  contentStyle: PropTypes.object,
+}
+
+DialogComponent.defaultProps = {
+  contentWrapperStyle: {},
+  contentStyle: {},
 }
 
 export default DialogComponent
