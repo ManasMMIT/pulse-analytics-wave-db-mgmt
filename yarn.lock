@@ -1720,10 +1720,10 @@
   resolved "https://registry.yarnpkg.com/@protobufjs/utf8/-/utf8-1.1.0.tgz#a777360b5b39a1a2e5106f8e858f2fd2d060c570"
   integrity sha1-p3c2C1s5oaLlEG+OhY8v0tBgxXA=
 
-"@pulse-analytics/pulse-design-system@^0.1.1":
-  version "0.1.1"
-  resolved "https://npm.pkg.github.com/download/@pulse-analytics/pulse-design-system/0.1.1/c067e3a7a27e2007b4e3106075a301139622d487a9c4c4e5f5b971dc1076445e#2e100fa2d1ec53e5c14aa2f743d928a2dee215cc"
-  integrity sha512-8IIxKdIB8EA8pVZHj3nq77aQxeY7fwWxwzzmAy9de0Nwnjqe3WZqfm6bWZa6DDrG02DIIrO8P3qKetqY2bR0/w==
+"@pulse-analytics/pulse-design-system@^0.1.2":
+  version "0.1.2"
+  resolved "https://npm.pkg.github.com/download/@pulse-analytics/pulse-design-system/0.1.2/51057a4823756aed4efbccb8337d55f8e79150f1e29f9f5cde7ee35c3448031a#5e5287754535546e2e81cbb39397d1d88524f81b"
+  integrity sha512-TqJNGuiQ0a5rWXzSMlSWSQqgSfo1CYQsloLonks35oke1HKEPKBHc9dKvWFc6K/M1UdHtyZcqrueuBRkP2Hdbg==
   dependencies:
     "@testing-library/jest-dom" "^5.11.4"
     "@testing-library/react" "^11.1.0"
