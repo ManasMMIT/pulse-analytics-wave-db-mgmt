@@ -5,6 +5,7 @@ import _ from 'lodash'
 import styled from '@emotion/styled'
 
 import { SingleActionDialog } from 'frontend/components/Dialog'
+import Input from 'frontend/components/Input'
 import Spinner from 'frontend/components/Spinner'
 import {
   GET_MARKET_BASKETS,
@@ -64,20 +65,10 @@ const MarketBasketForm = ({ onCompleted, cancelHandler, data }) => {
     value: formData.indication,
   }
 
-  const handleNameChange = (e) => {
-    const name = e.target.value
+  const handleInputChange = ({ name, value }) => {
+    const key = name || 'indication'
 
-    setFormData((prevData) => ({ ...prevData, name }))
-  }
-
-  const handleDescriptionChange = (e) => {
-    const description = e.target.value
-
-    setFormData((prevData) => ({ ...prevData, description }))
-  }
-
-  const handleSelectIndication = ({ value }) => {
-    setFormData((prevData) => ({ ...prevData, indication: value }))
+    setFormData((prevData) => ({ ...prevData, [key]: value }))
   }
 
   const handleOnSubmit = (e) => {
@@ -95,16 +86,17 @@ const MarketBasketForm = ({ onCompleted, cancelHandler, data }) => {
       <div style={{ padding: Spacing.S7 }}>
         <InputLabel>
           <label style={{ fontWeight: 700 }}>Name (required)</label>
-          <input
+          <Input
+            name="name"
+            value={formData.name}
+            onChange={handleInputChange}
+            placeholder="Enter name..."
             style={{
               display: 'block',
               background: 'white',
               padding: 12,
               width: '100%',
             }}
-            placeholder="Enter name..."
-            onChange={handleNameChange}
-            value={formData.name}
           />
         </InputLabel>
         <InputLabel style={{ marginTop: Spacing.S7 }}>
@@ -112,21 +104,22 @@ const MarketBasketForm = ({ onCompleted, cancelHandler, data }) => {
           <Select
             value={selectedIndicationOption}
             options={indicationSelectOptions}
-            onChange={handleSelectIndication}
+            onChange={handleInputChange}
           />
         </InputLabel>
         <InputLabel style={{ marginTop: Spacing.S7 }}>
           <label style={{ fontWeight: 700 }}>Description</label>
-          <input
+          <Input
+            name="description"
+            value={formData.description}
+            onChange={handleInputChange}
+            placeholder="Enter description..."
             style={{
               display: 'block',
               background: 'white',
               padding: 12,
               width: '100%',
             }}
-            placeholder="Enter description..."
-            onChange={handleDescriptionChange}
-            value={formData.description}
           />
         </InputLabel>
       </div>
