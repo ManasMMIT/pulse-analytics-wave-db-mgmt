@@ -21,7 +21,7 @@ import Rows from './Rows'
 import Pagination from './Pagination'
 import ModalManager from './ModalManager'
 import sortTypes from './custom-sort-types'
-import formatDataForExport from './formatDataForExport'
+import formatDataForExport from '../ExportExcelButton/formatDataForExport'
 import { Spacing, Colors } from 'frontend/utils/pulseStyles'
 
 const TemplateWrapper = styled.div(
@@ -77,6 +77,7 @@ const Table = ({
   exportProps,
   exportStyle,
   width,
+  showExportButton,
 }) => {
   const [modalCell, setModalCell] = useState(null)
 
@@ -110,7 +111,14 @@ const Table = ({
   // whenever page changes on table, scroll to top
   useEffect(resetTableScroll, [pageIndex])
 
-  const dataFormattedForExport = formatDataForExport(sortedRows, columns)
+  let dataFormattedForExport
+  if (showExportButton) {
+    dataFormattedForExport = formatDataForExport({
+      data: sortedRows,
+      columns,
+      isReactTableData: true,
+    })
+  }
 
   return (
     <TemplateWrapper width={width}>
@@ -126,26 +134,28 @@ const Table = ({
           <Pagination {...{ pageIndex, pageSize, ...tablePropOverflow }} />
         ) : null}
         <TableHint />
-        <div style={{ margin: '0 24px 0 auto', ...exportStyle }}>
-          <ExportExcelButton
-            data={dataFormattedForExport}
-            buttonStyle={{
-              margin: '0 0 12px',
-              display: 'flex',
-              alignItems: 'center',
-            }}
-            {...exportProps}
-          >
-            <Icon
-              iconName="export"
-              color1={Color.PRIMARY}
-              width={16}
-              height={16}
-              style={{ marginRight: 8 }}
-            />
-            Export to Excel
-          </ExportExcelButton>
-        </div>
+        {showExportButton && (
+          <div style={{ margin: '0 24px 0 auto', ...exportStyle }}>
+            <ExportExcelButton
+              data={dataFormattedForExport}
+              buttonStyle={{
+                margin: '0 0 12px',
+                display: 'flex',
+                alignItems: 'center',
+              }}
+              {...exportProps}
+            >
+              <Icon
+                iconName="export"
+                color1={Color.PRIMARY}
+                width={16}
+                height={16}
+                style={{ marginRight: 8 }}
+              />
+              Export to Excel
+            </ExportExcelButton>
+          </div>
+        )}
       </div>
       <TableWrapper>
         <div
@@ -179,6 +189,7 @@ Table.propTypes = {
   exportStyle: PropTypes.object,
   modalColMap: PropTypes.object,
   width: PropTypes.string, // Dynamic width constants can be found in tableWidths.js
+  showExportButton: PropTypes.bool,
 }
 
 Table.defaultProps = {
@@ -186,6 +197,7 @@ Table.defaultProps = {
   exportProps: {},
   exportStyle: {},
   width: '100vw',
+  showExportButton: true,
 }
 
 export default Table

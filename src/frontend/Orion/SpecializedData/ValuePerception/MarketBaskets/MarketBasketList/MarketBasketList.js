@@ -1,23 +1,25 @@
 import React, { useState } from 'react'
 import { useQuery } from '@apollo/react-hooks'
 import { Link } from 'react-router-dom'
-import { MODAL_TABLE_WIDTH } from 'frontend/components/Table/tableWidths'
+import styled from '@emotion/styled'
 
-import Modal from 'frontend/components/Modal'
 import Button from 'frontend/components/Button'
 import Spinner from 'frontend/components/Spinner'
 import Table from 'frontend/components/Table'
+import Header from 'frontend/components/Header'
+import ExportExcelButton from 'frontend/components/ExportExcelButton'
+import Icon from 'frontend/components/Icon'
 import MultiSelectColumnFilter from 'frontend/components/Table/custom-filters/MultiSelect/MultiSelectColumnFilter'
 import customMultiSelectFilterFn from 'frontend/components/Table/custom-filters/MultiSelect/customMultiSelectFilterFn'
-import {
-  Button as PulseButton,
-  UnderlinedTabs,
-  Tag,
-} from '@pulse-analytics/pulse-design-system'
+import { CONFIG_TABLE_WIDTH } from 'frontend/components/Table/tableWidths'
+import formatDataForExport from 'frontend/components/ExportExcelButton/formatDataForExport'
 
 import _ from 'lodash'
-import MarketBasketForm from '../MarketBasketForm'
+import MarketBasketForm from './MarketBasketForm'
 import { GET_MARKET_BASKETS } from 'frontend/api/queries'
+import FontSpace from 'frontend/utils/fontspace'
+import Spacing from 'frontend/utils/spacing'
+import Color from 'frontend/utils/color'
 
 const COLUMNS = [
   {
@@ -54,15 +56,18 @@ const COLUMNS = [
   },
   {
     Header: 'Indication',
-    accessor: 'indication',
+    accessor: ({ indication }) => indication.name,
     Filter: MultiSelectColumnFilter,
     filter: customMultiSelectFilterFn,
     sortType: 'text',
-    Cell: ({ value }) => value && value.name,
   },
   {
     Header: 'Products',
     accessor: 'products_regimens',
+    /*
+      ! This filter is not currently working as intended. We need to build a custom filterType
+      ! for react-table that can generate filter options from array values.
+    */
     Filter: MultiSelectColumnFilter,
     filter: customMultiSelectFilterFn,
     sortType: 'text',
@@ -100,57 +105,84 @@ const COLUMNS = [
   },
 ]
 
+const HeaderWrapper = styled.div({
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  padding: Spacing.S7,
+})
+
 const MarketBasketList = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const { data, loading } = useQuery(GET_MARKET_BASKETS)
+
+  const tableData = loading ? [] : data.marketBaskets
 
   const table = loading ? (
     <>
       <Spinner />
       <Table
-        width={MODAL_TABLE_WIDTH}
-        data={[]}
+        width={CONFIG_TABLE_WIDTH}
+        data={tableData}
         columns={COLUMNS}
-        exportStyle={{ margin: 24 }}
-        exportProps={{ filename: 'market-basket-list' }}
+        showExportButton={false}
       />
     </>
   ) : (
     <Table
-      width={MODAL_TABLE_WIDTH}
-      data={data.marketBaskets}
+      width={CONFIG_TABLE_WIDTH}
+      data={tableData}
       columns={COLUMNS}
-      exportStyle={{ margin: 24 }}
-      exportProps={{ filename: 'market-basket-list' }}
+      showExportButton={false}
     />
   )
+  const dataFormattedForExport = formatDataForExport({
+    data: tableData,
+    columns: COLUMNS,
+    cellsToFormat: ['products_regimens', 'team_subscriptions'],
+  })
 
   return (
     <div>
-      <PulseButton text={'hello'} />
-      <UnderlinedTabs
-        tabsData={[
-          {
-            value: 'Label as React ele',
-            label: <div>Label as React ele, div</div>,
-          },
-          {
-            value: 'Just a String',
-            label: 'Just a String',
-          },
-        ]}
-      />
-      <Tag>hello!</Tag>
-      <Button onClick={() => setIsModalOpen(true)}>
-        + Create Market Basket
-      </Button>
-      <Modal
-        show={isModalOpen}
-        modalStyle={{ height: 600, width: 800 }}
-        handleClose={() => setIsModalOpen(false)}
-      >
-        <MarketBasketForm onCompleted={() => setIsModalOpen(false)} />
-      </Modal>
+      <HeaderWrapper>
+        <Header
+          header="Market Baskets"
+          subheader="Select a table row to view and edit Market Basket details and survey data"
+          headerStyle={{ ...FontSpace.FS5 }}
+        />
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <div>
+            <Button onClick={() => setIsModalOpen(true)}>
+              + Create Market Basket
+            </Button>
+          </div>
+          <div style={{ marginLeft: 24 }}>
+            <ExportExcelButton
+              data={dataFormattedForExport}
+              filename="market-basket-list"
+              buttonStyle={{
+                display: 'flex',
+                alignItems: 'center',
+              }}
+            >
+              <Icon
+                iconName="export"
+                color1={Color.PRIMARY}
+                width={12}
+                height={12}
+                style={{ marginRight: 8 }}
+              />
+              Export
+            </ExportExcelButton>
+          </div>
+        </div>
+      </HeaderWrapper>
+      {isModalOpen && (
+        <MarketBasketForm
+          onCompleted={() => setIsModalOpen(false)}
+          cancelHandler={() => setIsModalOpen(false)}
+        />
+      )}
       {table}
     </div>
   )
