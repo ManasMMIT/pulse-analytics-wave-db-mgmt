@@ -19,8 +19,12 @@ import {
 import FontSpace from 'frontend/utils/fontspace'
 import Spacing from 'frontend/utils/spacing'
 
-const InputLabel = styled.div({
+const InputWrapper = styled.div({
   ...FontSpace.FS2,
+})
+
+const Label = styled.div({
+  fontWeight: 700,
 })
 
 // TODO: Decide if we should exclude indications already selected in other MBs
@@ -84,8 +88,8 @@ const MarketBasketForm = ({ onCompleted, cancelHandler, data }) => {
       cancelHandler={cancelHandler}
     >
       <div style={{ padding: Spacing.S7 }}>
-        <InputLabel>
-          <label style={{ fontWeight: 700 }}>Name (required)</label>
+        <InputWrapper>
+          <Label>Name (required)</Label>
           <Input
             name="name"
             value={formData.name}
@@ -98,17 +102,17 @@ const MarketBasketForm = ({ onCompleted, cancelHandler, data }) => {
               width: '100%',
             }}
           />
-        </InputLabel>
-        <InputLabel style={{ marginTop: Spacing.S7 }}>
-          <label style={{ fontWeight: 700 }}>Indication (required)</label>
+        </InputWrapper>
+        <InputWrapper style={{ marginTop: Spacing.S7 }}>
+          <Label>Indication (required)</Label>
           <Select
             value={selectedIndicationOption}
             options={indicationSelectOptions}
             onChange={handleInputChange}
           />
-        </InputLabel>
-        <InputLabel style={{ marginTop: Spacing.S7 }}>
-          <label style={{ fontWeight: 700 }}>Description</label>
+        </InputWrapper>
+        <InputWrapper style={{ marginTop: Spacing.S7 }}>
+          <Label>Description</Label>
           <Input
             name="description"
             value={formData.description}
@@ -121,7 +125,7 @@ const MarketBasketForm = ({ onCompleted, cancelHandler, data }) => {
               width: '100%',
             }}
           />
-        </InputLabel>
+        </InputWrapper>
       </div>
     </SingleActionDialog>
   )

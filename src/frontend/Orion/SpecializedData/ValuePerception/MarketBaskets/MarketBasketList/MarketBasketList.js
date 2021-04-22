@@ -174,7 +174,7 @@ const MarketBasketList = () => {
                 height={12}
                 style={{ marginRight: 8 }}
               />
-              Export to Excel
+              Export
             </ExportExcelButton>
           </div>
         </div>
