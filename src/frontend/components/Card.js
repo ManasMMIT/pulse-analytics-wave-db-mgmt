@@ -23,29 +23,17 @@ const Body = styled.div({
   padding: Spacing.EXTRA_LARGE,
 })
 
-const Card = ({
-  title,
-  width,
-  children,
-}) => (
+const Card = ({ title, width, children, bodyStyle }) => (
   <Wrapper style={{ width }}>
-    {title && (
-      <Header>
-        {title}
-      </Header>
-    )}
-    <Body>
-      {children}
-    </Body>
+    {title && <Header>{title}</Header>}
+    <Body style={bodyStyle}>{children}</Body>
   </Wrapper>
 )
 
 Card.propTypes = {
   title: PropTypes.string,
-  width: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.number,
-  ]),
+  width: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  bodyStyle: PropTypes.object,
 }
 
 export default Card

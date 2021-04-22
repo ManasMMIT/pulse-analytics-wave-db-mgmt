@@ -35,9 +35,7 @@ const COLUMNS = [
         original: { id },
       },
     }) => (
-      <Link
-        to={`/orion/specialized/value-perception/sandbox-market-baskets/${id}`}
-      >
+      <Link to={`/orion/specialized/value-perception/market-baskets/${id}`}>
         {value}
       </Link>
     ),

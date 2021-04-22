@@ -2,6 +2,8 @@ const { gql } = require('apollo-server-express')
 
 const queries = gql`
   type Query {
+    listsConfig(input: ListsConfigInput): [ListsConfig!]!
+
     marketBaskets(marketBasketId: ID): [MarketBasket!]!
     marketBasketsSubscriptions: [MarketBasketSubscription!]!
 
@@ -134,6 +136,35 @@ const queries = gql`
     usStates: [UsState]
 
     events: [Event]
+  }
+
+  input ListsConfigInput {
+    dashboardTool: String
+  }
+
+  type MetaListsConfig {
+    location: String
+    note: String
+    type: String
+  }
+
+  type LabelKeyListsConfig {
+    labelKey: String
+    labelName: String
+    labelInfo: String
+    valueWrapperType: String
+  }
+
+  type ListsConfig {
+    _id: ID!
+    listId: String
+    nodeId: ID
+    listTitle: String
+    listInfo: String
+    meta: MetaListsConfig
+    dashboardTool: String
+    labelKeys: [LabelKeyListsConfig]!
+    createdOn: DateTime
   }
 
   input QueryVegaProdRegInput {

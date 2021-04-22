@@ -1,61 +1,89 @@
-import React, { useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
-
-import Spinner from 'frontend/components/Spinner'
-import Modal from 'frontend/components/Modal'
-import Button from 'frontend/components/Button'
-
-import MarketBasketForm from '../MarketBasketForm'
+import React from 'react'
+import { useParams, useLocation, useHistory } from 'react-router-dom'
 import { useQuery } from '@apollo/react-hooks'
+import styled from '@emotion/styled'
+import queryString from 'query-string'
+
+import { UnderlinedTabs } from '@pulse-analytics/pulse-design-system'
+import Spinner from 'frontend/components/Spinner'
+import Color from 'frontend/utils/color'
+
 import { GET_MARKET_BASKETS } from 'frontend/api/queries'
 
-// import ProductsRegimensTab from './ProductsRegimensTab'
+import MarketBasketDetailHeader from './MarketBasketDetailHeader'
+import Overview from './Overview'
+import PerceptionRegimens from './PerceptionRegimens'
+
+const Wrapper = styled.div({
+  display: 'flex',
+  flexDirection: 'column',
+  width: '100%',
+})
+
+const Body = styled.section({
+  background: Color.GRAY_LIGHT,
+  height: '100%',
+})
+
+const TABS_DATA = [
+  { label: 'Overview', value: 'overview' },
+  { label: 'Products and Regimens', value: 'product-regimens' },
+  { label: 'Surveys', value: 'surveys' },
+  { label: 'Client Subscriptions', value: 'client-subscriptions' },
+]
+
+const COMPONENT_MAP = {
+  overview: Overview,
+  'product-regimens': PerceptionRegimens,
+}
 
 const MarketBasketDetail = () => {
   const { marketBasketId } = useParams()
+  const location = useLocation()
+  const history = useHistory()
 
-  const [isModalOpen, setIsModalOpen] = useState(false)
+  const parsedSearch = queryString.parse(location.search)
+  const selectedTab = parsedSearch && parsedSearch.tab ? parsedSearch.tab : null
+
+  const setTab = (tab) => {
+    history.push({
+      search: queryString.stringify({ tab }),
+    })
+  }
 
   const { data, loading } = useQuery(GET_MARKET_BASKETS, {
     variables: { marketBasketId },
   })
-  if (loading) return <Spinner />
+
+  if (!selectedTab) {
+    setTab(TABS_DATA[0].value)
+  }
+
+  if (loading || !selectedTab) return <Spinner />
   const [marketBasket] = data.marketBaskets || []
 
   // ! after deletion, market basket doesn't exist in cache before redirect
   if (!marketBasket) return <Spinner />
-  const { id, name, indication, description } = marketBasket
 
-  const formData = { id, name, indication: indication.id, description }
+  const { name } = marketBasket
+
+  const Component = COMPONENT_MAP[selectedTab]
 
   return (
-    <div>
-      <Link to="/orion/configuration/sandbox-market-baskets">Back</Link>
-
-      <h1>Market Basket Overview</h1>
-      <h2>Market Basket Details</h2>
-      <div>
-        <Button onClick={() => setIsModalOpen(true)}>
-          Edit Market Basket Details
-        </Button>
-        <Modal
-          show={isModalOpen}
-          modalStyle={{ height: 600, width: 800 }}
-          handleClose={() => setIsModalOpen(false)}
-        >
-          <MarketBasketForm
-            onCompleted={() => setIsModalOpen(false)}
-            data={formData}
-          />
-        </Modal>
-      </div>
-      <div>{name}</div>
-      <h2>Indication</h2>
-      <div>{indication.name}</div>
-      <h2>Description</h2>
-      <div>{description}</div>
-      <hr />
-    </div>
+    <Wrapper>
+      <section>
+        <MarketBasketDetailHeader name={name} />
+        <UnderlinedTabs
+          tabsData={TABS_DATA}
+          onTabClick={setTab}
+          selectedTab={selectedTab}
+          tabsContainerStyle={{ padding: '0 12px' }}
+        />
+      </section>
+      <Body>
+        <Component marketBasket={marketBasket} name={name} />
+      </Body>
+    </Wrapper>
   )
 }
 

@@ -17,7 +17,8 @@ Also, make sure you have the `src/backend/logs/api.log` file created prior to st
 # Running the application locally WITHOUT Docker
 
 1. Change the `PROXY_URL` value in your `.env` file to `http://localhost:1337`.
-2. Run the following commands in separate terminal windows:
+2. Change the `VEGA_PROXY_URL` value in your `.env` file to `http://localhost:8000`.
+3. Run the following commands in separate terminal windows:
 
 Start the server:
 ```
@@ -31,6 +32,7 @@ yarn start
 # Running the application locally WITH Docker
 
 1. Change the `PROXY_URL` value in your `.env` file to `http://polaris_api:1337`
+2. Change the `VEGA_PROXY_URL` value in your `.env` file to `http://vega:8000`.
 2. Make sure you have Docker installed on your computer (Refer to https://docs.docker.com/docker-for-mac/install/ for instructions).
 3. To run the containers in a single terminal window, refer to the command below:
 

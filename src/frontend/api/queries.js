@@ -45,6 +45,31 @@ export const GET_MARKET_BASKETS = gql`
   }
 `
 
+export const GET_LISTS_CONFIG = gql`
+  query getListsConfig($input: ListsConfigInput) {
+    listsConfig(input: $input) {
+      _id
+      listId
+      nodeId
+      listTitle
+      listInfo
+      meta {
+        location
+        note
+        type
+      }
+      dashboardTool
+      labelKeys {
+        labelKey
+        labelName
+        labelInfo
+        valueWrapperType
+      }
+      createdOn
+    }
+  }
+`
+
 export const GET_MARKET_BASKETS_SUBSCRIPTIONS = gql`
   query getMarketsBaskets {
     marketBasketsSubscriptions {

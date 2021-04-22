@@ -35,12 +35,12 @@ const UpdateForm = ({ product }) => {
   const { data, loading } = useQuery(GET_MARKET_BASKETS, {
     variables: { marketBasketId },
   })
-  const {
-    data: productRegimenData,
-    loading: productRegimenLoading,
-  } = useQuery(GET_VEGA_PRODUCTS_REGIMENS, {
-    variables: { input: { productId: product.id } },
-  })
+  const { data: productRegimenData, loading: productRegimenLoading } = useQuery(
+    GET_VEGA_PRODUCTS_REGIMENS,
+    {
+      variables: { input: { productId: product.id } },
+    }
+  )
 
   useEffect(() => {
     if (!loading) {

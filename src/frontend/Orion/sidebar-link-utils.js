@@ -125,6 +125,10 @@ export const SPECIALIZED_DATA_CONFIG = [
 ]
 
 export const ADMINISTRATOR_DATA_CONFIG = [
+  {
+    label: 'Lists Config Management',
+    link: '/orion/administrator/lists-config-mgmt',
+  },
   { label: 'Push Dev to Prod', link: '/orion/administrator/push-dev-prod' },
   {
     label: 'Sheet Management',

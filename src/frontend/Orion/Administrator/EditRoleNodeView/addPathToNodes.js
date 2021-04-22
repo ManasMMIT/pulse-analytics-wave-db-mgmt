@@ -1,6 +1,6 @@
 import _ from 'lodash'
 
-export default nodes => {
+export default (nodes) => {
   const nodesById = _.keyBy(nodes, '_id')
 
   const memo = {}
@@ -20,11 +20,7 @@ const getPathString = (node, nodesById, memo) => {
 
   if (memo[node._id]) return memo[node._id]
 
-  const parentPath = getPathString(
-    nodesById[node.parentId],
-    nodesById,
-    memo,
-  )
+  const parentPath = getPathString(nodesById[node.parentId], nodesById, memo)
 
   path = parentPath + `/${node.name}`
 

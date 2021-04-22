@@ -10,14 +10,14 @@ import SANDBOX_MarketBasketDetail from './SANDBOX_MarketBaskets/MarketBasketDeta
 const ValuePerception = () => (
   <Switch>
     <Route
-      path={'/orion/specialized/value-perception/market-baskets'}
-      component={MarketBaskets}
-    />
-    <Route
       path={
         '/orion/specialized/value-perception/market-baskets/:marketBasketId'
       }
       component={MarketBasketDetail}
+    />
+    <Route
+      path={'/orion/specialized/value-perception/market-baskets'}
+      component={MarketBaskets}
     />
     <Route
       exact={true}

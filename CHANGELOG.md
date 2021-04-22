@@ -12,7 +12,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Fixed** for any bug fixes.
 - **Security** in case of vulnerabilities.
 
-## [Unreleased] - Started: 3-29-21
+## [Unreleased] - Started: 4-14-21
+
+## [4.8.0] - Started: 3-29-21
+
+### Added
+- `Lists Config Mgmt`: Built out dashboard to replace local json files [#979](https://github.com/pulse-analytics/wave-db-mgmt/pull/979)
+- `Data Dog`: Added APM trace monitoring [#964](https://github.com/pulse-analytics/wave-db-mgmt/pull/964) + [#968](https://github.com/pulse-analytics/wave-db-mgmt/pull/968) 
 
 ### Changed
 - `Node CRUD`: Users can now exclude fields from cascading node updates [#957](https://github.com/pulse-analytics/wave-db-mgmt/pull/957) and can now update all role-node fields [#955](https://github.com/pulse-analytics/wave-db-mgmt/pull/955)

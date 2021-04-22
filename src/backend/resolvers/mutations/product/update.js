@@ -8,7 +8,6 @@ const updateSourceProduct = async (
   info
 ) => {
   const _id = ObjectId(productId)
-
   let result
 
   const session = mongoClient.startSession()
@@ -23,7 +22,7 @@ const updateSourceProduct = async (
         generic_name: body.nameGeneric,
       }
 
-      await axios.put(`products/${uuid}/`, vegaInput).catch((e) => {
+      await axios.patch(`products/${uuid}/`, vegaInput).catch((e) => {
         throw new Error(JSON.stringify(e.response.data))
       })
     }
