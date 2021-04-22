@@ -15,7 +15,7 @@ import { CONFIG_TABLE_WIDTH } from 'frontend/components/Table/tableWidths'
 import formatDataForExport from 'frontend/components/ExportExcelButton/formatDataForExport'
 
 import _ from 'lodash'
-import MarketBasketForm from '../MarketBasketForm'
+import MarketBasketForm from './MarketBasketForm'
 import { GET_MARKET_BASKETS } from 'frontend/api/queries'
 import FontSpace from 'frontend/utils/fontspace'
 import Spacing from 'frontend/utils/spacing'
