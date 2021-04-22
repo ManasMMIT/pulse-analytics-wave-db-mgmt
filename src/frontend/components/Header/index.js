@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 
 import FontSpace from '../../utils/fontspace'
 
-const HeaderText = styled.p(
+const HeaderText = styled.div(
   {
     fontWeight: 700,
     ...FontSpace.FS6,
@@ -12,7 +12,7 @@ const HeaderText = styled.p(
   ({ headerStyle }) => headerStyle
 )
 
-const SubheaderText = styled.p(
+const SubheaderText = styled.div(
   {
     ...FontSpace.FS2,
   },
@@ -29,8 +29,8 @@ const Header = ({ header, subheader, headerStyle, subheaderStyle, style }) => (
 )
 
 Header.propTypes = {
-  header: PropTypes.string.isRequired,
-  subheader: PropTypes.string,
+  header: PropTypes.node.isRequired,
+  subheader: PropTypes.node,
   style: PropTypes.object,
   headerStyle: PropTypes.object,
   subheaderStyle: PropTypes.object,
