@@ -10,7 +10,7 @@ const createListsConfigTypeDefs = gql`
   input CreateListsConfigInput {
     listId: String!
     nodeId: ID
-    listTitle: String!
+    listTitle: String
     listInfo: String
     meta: CreateListsConfigMetaInput
     dashboardTool: String!

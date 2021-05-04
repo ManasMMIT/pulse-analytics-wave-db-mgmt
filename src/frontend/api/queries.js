@@ -46,8 +46,8 @@ export const GET_MARKET_BASKETS = gql`
 `
 
 export const GET_LISTS_CONFIG = gql`
-  query getListsConfig($input: ListsConfigInput) {
-    listsConfig(input: $input) {
+  query getListsConfig($dashboardTool: String) {
+    listsConfig(dashboardTool: $dashboardTool) {
       _id
       listId
       nodeId

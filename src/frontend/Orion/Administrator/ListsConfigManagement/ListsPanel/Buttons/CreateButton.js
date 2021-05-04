@@ -12,7 +12,7 @@ import { GET_LISTS_CONFIG } from 'frontend/api/queries'
 import { CREATE_LISTS_CONFIG } from 'frontend/api/mutations'
 import { getSelectedDashboardTool } from '../../utils'
 
-const CreateButton = ({ modalTitle, modalStyle, afterMutationHook, style }) => {
+const CreateButton = ({ handleClick, style }) => {
   const [isModalOpen, toggleModal] = useState(false)
   const openModal = () => toggleModal(true)
   const closeModal = () => toggleModal(false)
@@ -22,7 +22,7 @@ const CreateButton = ({ modalTitle, modalStyle, afterMutationHook, style }) => {
   const selectedDashboardTool = getSelectedDashboardTool(location)
 
   const { data: listsConfigData, loading } = useQuery(GET_LISTS_CONFIG, {
-    variables: { input: { dashboardTool: selectedDashboardTool } },
+    variables: { dashboardTool: selectedDashboardTool },
   })
 
   const [createList] = useMutation(CREATE_LISTS_CONFIG, {
@@ -42,12 +42,12 @@ const CreateButton = ({ modalTitle, modalStyle, afterMutationHook, style }) => {
       cache.writeQuery({
         query: GET_LISTS_CONFIG,
         data: { listsConfig: newListsConfigData },
-        variables: { input: { dashboardTool: selectedDashboardTool } },
+        variables: { dashboardTool: selectedDashboardTool },
       })
     },
     onCompleted: ({ createListsConfig }) => {
       closeModal()
-      afterMutationHook(createListsConfig)
+      handleClick(createListsConfig._id)
     },
   })
 
@@ -57,10 +57,10 @@ const CreateButton = ({ modalTitle, modalStyle, afterMutationHook, style }) => {
         +
       </StyledButton>
       <Modal
-        style={modalStyle}
+        style={{}}
         handleClose={closeModal}
         show={isModalOpen}
-        title={modalTitle}
+        title={'List Info'}
         width={500}
       >
         <Form mutationFunction={createList} closeModal={closeModal} />

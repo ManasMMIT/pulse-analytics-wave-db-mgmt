@@ -25,7 +25,7 @@ const UpdateButton = ({ data, modalTitle, modalStyle, style }) => {
   const selectedDashboardTool = getSelectedDashboardTool(location)
 
   const { data: listsConfigData } = useQuery(GET_LISTS_CONFIG, {
-    variables: { input: { dashboardTool: selectedDashboardTool } },
+    variables: { dashboardTool: selectedDashboardTool },
   })
 
   const [updateList] = useMutation(UPDATE_LISTS_CONFIG, {
@@ -46,7 +46,7 @@ const UpdateButton = ({ data, modalTitle, modalStyle, style }) => {
       cache.writeQuery({
         query: GET_LISTS_CONFIG,
         data: { listsConfig: newListsConfigData },
-        variables: { input: { dashboardTool: selectedDashboardTool } },
+        variables: { dashboardTool: selectedDashboardTool },
       })
     },
     onCompleted: closeModal,

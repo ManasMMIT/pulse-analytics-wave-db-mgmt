@@ -9,19 +9,20 @@ import { ListItem } from '../shared/styledComponents'
 import DragHandle from './DragHandle'
 
 const ListItemPanelItem = ({
+  data,
   isSelected,
   handleClick,
-  listItemLabelKey,
-  listItemLabelName,
-  style,
-  children,
+  searchParamKey,
 }) => {
+  const listItemHandleClick = isSelected
+    ? () => null
+    : () => handleClick(data[searchParamKey])
+
   const listItemActiveStyle = {
     background: isSelected ? transparentize(0.9, Colors.PRIMARY) : null,
     color: isSelected ? Colors.PRIMARY : Colors.BLACK,
     fontWeight: isSelected ? 700 : 500,
     justifyContent: 'left',
-    ...style,
   }
   const dragHandleSpanStyle = {
     width: 10,
@@ -34,15 +35,14 @@ const ListItemPanelItem = ({
   }
 
   return (
-    <ListItem onClick={handleClick} style={listItemActiveStyle}>
+    <ListItem onClick={listItemHandleClick} style={listItemActiveStyle}>
       <span style={dragHandleSpanStyle}>
-        {listItemLabelKey !== NEW_LIST_ITEM.labelKey && <DragHandle />}
+        {data.labelKey !== NEW_LIST_ITEM.labelKey && <DragHandle />}
       </span>
       <div style={listItemLabelStyle}>
-        <div>{listItemLabelKey}</div>
-        <div style={listItemSubFieldStyle}>{listItemLabelName}</div>
+        <div>{data.labelKey}</div>
+        <div style={listItemSubFieldStyle}>{data.labelName}</div>
       </div>
-      <div>{children}</div>
     </ListItem>
   )
 }

@@ -58,7 +58,6 @@ export const UpdateFormLabel = styled.div({
 })
 
 export const FieldsFormContainer = styled.div({
-  height: '100%',
   padding: 24,
 })
 

@@ -145,7 +145,7 @@ async function updateVegaIndication(_id, body, pulseCoreDb) {
       ...regimensInputObj,
     }
 
-    await axios.put(`indications/${uuid}/`, vegaInput).catch((e) => {
+    await axios.patch(`indications/${uuid}/`, vegaInput).catch((e) => {
       throw new Error(JSON.stringify(e.response.data))
     })
   }

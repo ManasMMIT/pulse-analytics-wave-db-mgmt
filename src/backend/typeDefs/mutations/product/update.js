@@ -6,6 +6,7 @@ const updateSourceProductTypeDefs = gql`
     nameGeneric: String
     nameBrand: String
     tags: [String]
+    uuid: String
   }
 
   type UpdateSourceProductPayload {
@@ -13,6 +14,7 @@ const updateSourceProductTypeDefs = gql`
     nameGeneric: String
     nameBrand: String
     tags: [String]
+    uuid: String
   }
 `
 

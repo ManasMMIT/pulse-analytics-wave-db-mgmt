@@ -2,7 +2,7 @@ const { gql } = require('apollo-server-express')
 
 const queries = gql`
   type Query {
-    listsConfig(input: ListsConfigInput): [ListsConfig!]!
+    listsConfig(dashboardTool: String): [ListsConfig!]!
 
     marketBaskets(marketBasketId: ID): [MarketBasket!]!
     marketBasketsSubscriptions: [MarketBasketSubscription!]!

@@ -85,7 +85,7 @@ async function updateVegaRegimen(_id, { name, products }, pulseCoreDb) {
       product_set: vegaProducts,
     }
 
-    await axios.put(`regimens/${uuid}/`, vegaInput).catch((e) => {
+    await axios.patch(`regimens/${uuid}/`, vegaInput).catch((e) => {
       throw new Error(JSON.stringify(e.response.data))
     })
   }

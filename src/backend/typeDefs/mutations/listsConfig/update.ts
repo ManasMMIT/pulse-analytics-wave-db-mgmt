@@ -10,7 +10,7 @@ const updateListsConfigTypeDefs = gql`
 
   input UpdateListsConfigLabelKeysInput {
     labelKey: String!
-    labelName: String!
+    labelName: String
     labelInfo: String
     valueWrapperType: String
   }

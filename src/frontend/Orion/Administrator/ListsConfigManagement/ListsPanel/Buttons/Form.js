@@ -15,7 +15,7 @@ import { getSelectedDashboardTool } from '../../utils'
 const FORM_LABELS = {
   LIST_ID_LABEL: 'List Id (Required)',
   NODE_ID_LABEL: 'Node Id',
-  TITLE_LABEL: 'Title (Required)',
+  TITLE_LABEL: 'Title',
   LIST_INFO_LABEL: 'List Info (Tooltip)',
   LOCATION_LABEL: 'Location',
   NOTE_LABEL: 'Note',
