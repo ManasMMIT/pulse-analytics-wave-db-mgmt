@@ -11,18 +11,11 @@ const StructuralListPanels = ({ panels, searchParamsAncestry }) => {
     each panel knows its preceding search string params.
     TODO: Write tests for this operation
   */
-  const injectSearchParamsAncestry = (panels) => {
-    const tempSearchParamsAncestry = [...searchParamsAncestry]
-    panels.map((panel) => {
-      tempSearchParamsAncestry.push(panel.searchParamConfig.searchParam)
-      panel.searchParamConfig.searchParamsAncestry = [
-        ...tempSearchParamsAncestry,
-      ]
-      return panel
-    })
-  }
-
-  useEffect(() => injectSearchParamsAncestry(panels), [])
+  const tempSearchParamsAncestry = [...searchParamsAncestry]
+  panels.forEach((panel) => {
+    tempSearchParamsAncestry.push(panel.searchParamConfig.searchParam)
+    panel.searchParamConfig.searchParamsAncestry = [...tempSearchParamsAncestry]
+  })
 
   return (
     <>
