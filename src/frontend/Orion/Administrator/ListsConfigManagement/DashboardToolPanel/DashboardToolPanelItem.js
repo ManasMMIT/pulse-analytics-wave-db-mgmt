@@ -10,6 +10,8 @@ const DashboardToolPanelItem = ({
   handleClick,
   dashboardToolLabel,
 }) => {
+  const listItemHandleClick = isSelected ? () => {} : handleClick
+
   const listItemActiveStyle = {
     background: isSelected ? transparentize(0.9, Colors.PRIMARY) : null,
     color: isSelected ? Colors.PRIMARY : Colors.BLACK,
@@ -17,7 +19,7 @@ const DashboardToolPanelItem = ({
   }
 
   return (
-    <ListItem onClick={handleClick} style={listItemActiveStyle}>
+    <ListItem onClick={listItemHandleClick} style={listItemActiveStyle}>
       <div>
         <div>{dashboardToolLabel}</div>
       </div>

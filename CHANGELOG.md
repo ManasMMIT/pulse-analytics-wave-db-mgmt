@@ -14,6 +14,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased] - Started: 4-14-21
 
+### Added
+- `Structural Components`: Built out structural list panels [#987](https://github.com/pulse-analytics/wave-db-mgmt/pull/987)
+
+### Changed
+- `Lists Config Mgmt`: Refactored to use structural list panels [#988](https://github.com/pulse-analytics/wave-db-mgmt/pull/988)
+
 ## [4.8.0] - Started: 3-29-21
 
 ### Added

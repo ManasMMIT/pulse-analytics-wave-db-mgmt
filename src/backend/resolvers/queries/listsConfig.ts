@@ -1,10 +1,11 @@
 const listsConfig = (
     parent,
-    { input },
+    { dashboardTool },
     { pulseDevDb },
     info
   ) => {
-    const findObj = input ? { dashboardTool: input.dashboardTool } : {}
+    const findObj = {}
+    if (dashboardTool) findObj['dashboardTool'] = dashboardTool
 
     return pulseDevDb
     .collection('listsConfig')

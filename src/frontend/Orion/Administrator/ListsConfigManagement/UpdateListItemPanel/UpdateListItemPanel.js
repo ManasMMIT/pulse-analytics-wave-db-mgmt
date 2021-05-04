@@ -39,7 +39,7 @@ const UpdateListItemPanel = () => {
   } = (location.search && queryString.parse(location.search)) || {}
 
   const { data, loading } = useQuery(GET_LISTS_CONFIG, {
-    variables: { input: { dashboardTool: selectedDashboardTool } },
+    variables: { dashboardTool: selectedDashboardTool },
   })
 
   const handleClick = (listItemObj) => {
@@ -103,8 +103,18 @@ const UpdateListItemPanel = () => {
     handleClick
   )
 
+  const panelHeight = 'calc(100vh - 40px)'
+
+  const panelStyle = {
+    height: panelHeight,
+    minHeight: panelHeight,
+    maxHeight: panelHeight,
+  }
+
   return (
-    <div style={{ flex: 1, background: Colors.LIGHT_BLUE_GRAY_2 }}>
+    <div
+      style={{ flex: 1, background: Colors.LIGHT_BLUE_GRAY_2, ...panelStyle }}
+    >
       <UpdateFormLabel>{UPDATE_LIST_ITEM_TITLE}</UpdateFormLabel>
       {selectedListItem && selectedListItemKey !== NEW_LIST_ITEM.labelKey && (
         <DeleteButton
