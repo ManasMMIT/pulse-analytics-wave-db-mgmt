@@ -6,12 +6,14 @@ const formatAjvErrors = require('./utils/formatAjvErrors')
 const importPayerHistoricalAccessData = require('./importPayerHistoricalAccessData')
 const importPayerHistoricalLivesData = require('./importPayerHistoricalLivesData')
 const PayerImportEmitter = require('./PayerImportEmitter')
+const importScraperData = require('./importScraperData')
 
 const {
   isQualityAccessSheet,
   isAdditionalCriteriaSheet,
   isPolicyLinksSheet,
 } = require('./importPayerHistoricalAccessData/utils')
+const { isScraperSheet } = require('./importScraperData/utils')
 
 const importWorkbook = async (
   parent,
@@ -19,6 +21,7 @@ const importWorkbook = async (
   { pulseCoreDb, pulseDevDb, mongoClient, io, user },
   info
 ) => {
+  const isIncomingDataScraperWorkbook = isScraperSheet(input[0].wb)
   const isIncomingDataPayerWorkbook =
     isQualityAccessSheet(input[0].sheet) ||
     isAdditionalCriteriaSheet(input[0].sheet) ||
@@ -28,6 +31,26 @@ const importWorkbook = async (
     input.length === 1 &&
     (/State Lives/.test(input[0].sheet) ||
       /National Lives/.test(input[0].sheet))
+
+  if (isIncomingDataScraperWorkbook) {
+    const { wb, data } = input[0]
+    const { result } = sanitize(data)
+    const pulseScraperDb = mongoClient.db('pulse-scraper')
+    const collection = wb.split('_')[0]
+
+    try {
+      importScraperData({
+        collection,
+        data: result,
+        pulseScraperDb,
+      })
+      return [`Import successful for ${wb} `]
+    } catch {
+      return [
+        `Import unsuccessful for ${wb}. Please reach out to engineering for assistance.`,
+      ]
+    }
+  }
 
   let payerImportEmitter
   if (isIncomingDataPayerWorkbook) {
