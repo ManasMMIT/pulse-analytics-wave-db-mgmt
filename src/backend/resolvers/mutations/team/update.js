@@ -24,7 +24,7 @@ const updateTeam = async (
       const { data } = await axios.get(`teams/${mongoTeamUuid}/`)
 
       await axios
-        .put(`teams/${mongoTeamUuid}/`, {
+        .patch(`teams/${mongoTeamUuid}/`, {
           name: description,
           client: mongoClientUuid,
           marketbasket_subscriptions: data.marketbasket_subscriptions,

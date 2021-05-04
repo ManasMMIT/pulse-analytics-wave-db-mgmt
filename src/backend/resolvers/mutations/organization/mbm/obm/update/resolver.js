@@ -38,7 +38,7 @@ const updateObmOrganization = async (
     }
 
     // ! NOTE: Trailing slash is REQUIRED
-    await axios.put(`obms/${uuid}/`, vegaInput).catch((e) => {
+    await axios.patch(`obms/${uuid}/`, vegaInput).catch((e) => {
       throw new Error(JSON.stringify(e.response.data))
     })
   }

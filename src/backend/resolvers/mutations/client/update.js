@@ -16,7 +16,7 @@ const updateClient = async (
 
     if (mongoClientUuid) {
       await axios
-        .put(`clients/${mongoClientUuid}/`, { name: description, icon })
+        .patch(`clients/${mongoClientUuid}/`, { name: description, icon })
         .catch((e) => {
           throw new Error(JSON.stringify(e.response.data))
         })
