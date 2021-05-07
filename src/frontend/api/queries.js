@@ -26,6 +26,22 @@ export const GET_VEGA_REGIMENS = gql`
     vegaRegimens {
       id
       name
+    }  }`
+
+export const GET_MARKET_BASKETS_CATEGORIES = gql`
+  query getMarketBasketsCategorires($marketBasketId: ID) {
+    marketBasketsCategories(marketBasketId: $marketBasketId) {
+      id
+      name
+      prompt
+      category_type
+      _order
+      characteristics
+      characteristics_full {
+        id
+        name
+        description
+      }
     }
   }
 `
@@ -41,6 +57,7 @@ export const GET_MARKET_BASKETS = gql`
       updated_at
       products_regimens
       team_subscriptions
+      categories
     }
   }
 `

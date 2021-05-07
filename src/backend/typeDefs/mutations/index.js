@@ -55,6 +55,14 @@ const mutationType = gql`
     createMarketBasket(input: CreateMarketBasketInput!): MarketBasket
     updateMarketBasket(input: UpdateMarketBasketInput!): MarketBasket
 
+    createMarketBasketCategory(input: CreateMarketBasketCategoryInput!): MarketBasketCategory
+    updateMarketBasketCategory(input: UpdateMarketBasketCategoryInput!): MarketBasketCategory
+    deleteMarketBasketCategory(input: DeleteMarketBasketCategoryInput!): MarketBasketCategory
+
+    createMarketBasketCategoryCharacteristic(input: CreateMarketBasketCategoryCharacteristicInput!): MarketBasketCategoryCharacteristic
+    updateMarketBasketCategoryCharacteristic(input: UpdateMarketBasketCategoryCharacteristicInput!): MarketBasketCategoryCharacteristic
+    deleteMarketBasketCategoryCharacteristic(input: DeleteMarketBasketCategoryCharacteristicInput!): MarketBasketCategoryCharacteristic
+
     createUser(input: CreateUserInput!): CreateUserPayload
     updateUser(input: UpdateUserInput!): UpdateUserPayload
     deleteUser(input: DeleteUserInput!): DeleteUserPayload

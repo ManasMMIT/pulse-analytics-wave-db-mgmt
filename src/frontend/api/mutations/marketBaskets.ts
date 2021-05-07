@@ -44,3 +44,90 @@ export const UPDATE_MARKET_BASKET = gql`
     }
   }
 `
+
+export const DELETE_MARKET_BASKET_CATEGORY = gql`
+  mutation DeleteMarketBasketCategory($input: DeleteMarketBasketCategoryInput!) {
+    deleteMarketBasketCategory(input: $input) {
+      id
+      market_basket
+      name
+      category_type
+      characteristics
+      characteristics_full {
+        id
+        name
+        description
+      }
+      prompt
+      _order
+    }
+  }
+`
+
+export const CREATE_MARKET_BASKET_CATEGORY = gql`
+  mutation CreateMarketBasketCategory($input: CreateMarketBasketCategoryInput!) {
+    createMarketBasketCategory(input: $input) {
+      id
+      market_basket
+      name
+      category_type
+      characteristics
+      characteristics_full {
+        id
+        name
+        description
+      }
+      prompt
+      _order
+    }
+  }
+`
+
+export const UPDATE_MARKET_BASKET_CATEGORY = gql`
+  mutation UpdateMarketBasketCategory($input: UpdateMarketBasketCategoryInput!) {
+    updateMarketBasketCategory(input: $input) {
+      id
+      market_basket
+      name
+      category_type
+      characteristics
+      characteristics_full {
+        id
+        name
+        description
+      }
+      prompt
+      _order
+    }
+  }
+`
+
+export const CREATE_MARKET_BASKET_CATEGORY_CHARACTERISTIC = gql`
+  mutation CreateMarketBasketCategoryCharacteristic($input: CreateMarketBasketCategoryCharacteristicInput!) {
+    createMarketBasketCategoryCharacteristic(input: $input) {
+      id
+      name
+      description
+    }
+  }
+`
+
+export const UPDATE_MARKET_BASKET_CATEGORY_CHARACTERISTIC = gql`
+  mutation UpdateMarketBasketCategoryCharacteristic($input: UpdateMarketBasketCategoryCharacteristicInput!) {
+    updateMarketBasketCategoryCharacteristic(input: $input) {
+      id
+      name
+      description
+    }
+  }
+`
+
+export const DELETE_MARKET_BASKET_CATEGORY_CHARACTERISTIC = gql`
+  mutation DeleteMarketBasketCategoryCharacteristic($input: DeleteMarketBasketCategoryCharacteristicInput!) {
+    deleteMarketBasketCategoryCharacteristic(input: $input) {
+      id
+      name
+      description
+    }
+  }
+`
