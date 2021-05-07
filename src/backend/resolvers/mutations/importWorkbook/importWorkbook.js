@@ -39,7 +39,7 @@ const importWorkbook = async (
     const collection = wb.split('_')[0]
 
     try {
-      importScraperData({
+      await importScraperData({
         collection,
         data: result,
         pulseScraperDb,
