@@ -30,7 +30,7 @@ const TemplateWrapper = styled.div(
     flexDirection: 'column',
     overflowY: 'scroll',
   },
-  ({ width }) => ({ width })
+  ({ width, wrapperStyle }) => ({ width, ...wrapperStyle })
 )
 
 const DefaultColumnFilter = ({
@@ -77,6 +77,7 @@ const Table = ({
   exportProps,
   exportStyle,
   width,
+  wrapperStyle,
   showExportButton,
 }) => {
   const [modalCell, setModalCell] = useState(null)
@@ -121,7 +122,7 @@ const Table = ({
   }
 
   return (
-    <TemplateWrapper width={width}>
+    <TemplateWrapper width={width} style={wrapperStyle}>
       <div
         style={{
           display: 'flex',
@@ -190,6 +191,7 @@ Table.propTypes = {
   modalColMap: PropTypes.object,
   width: PropTypes.string, // Dynamic width constants can be found in tableWidths.js
   showExportButton: PropTypes.bool,
+  wrapperStyle: PropTypes.object,
 }
 
 Table.defaultProps = {
@@ -198,6 +200,7 @@ Table.defaultProps = {
   exportStyle: {},
   width: '100vw',
   showExportButton: true,
+  wrapperStyle: {},
 }
 
 export default Table

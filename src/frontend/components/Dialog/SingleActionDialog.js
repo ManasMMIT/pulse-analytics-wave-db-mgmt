@@ -33,17 +33,20 @@ const SingleActionDialog = ({
   cancelHandler,
   submitHandler,
   submitText,
+  submitColor,
   contentWrapperStyle,
   contentStyle,
+  headerStyle,
+  isSubmitDisabled,
 }) => {
   const combinedContentWrapperStyle = {
     ...defaultContentWrapperStyle,
-    contentWrapperStyle,
+    ...contentWrapperStyle,
   }
 
   const combinedWrapperStyle = {
     ...defaultContentStyle,
-    contentStyle,
+    ...contentStyle,
   }
 
   return (
@@ -51,7 +54,11 @@ const SingleActionDialog = ({
       contentWrapperStyle={combinedContentWrapperStyle}
       contentStyle={combinedWrapperStyle}
     >
-      <Header header={header} style={{ padding: Spacing.S7 }} />
+      <Header
+        header={header}
+        style={{ padding: Spacing.S7 }}
+        headerStyle={headerStyle}
+      />
       <div style={{ background: Color.GRAY_LIGHT }}>{children}</div>
       <ActionBar>
         <Button
@@ -62,7 +69,12 @@ const SingleActionDialog = ({
         >
           Cancel
         </Button>
-        <Button type="primary" color={Color.GREEN} onClick={submitHandler}>
+        <Button
+          type="primary"
+          color={submitColor}
+          onClick={submitHandler}
+          isDisabled={isSubmitDisabled}
+        >
           {submitText}
         </Button>
       </ActionBar>
@@ -71,14 +83,25 @@ const SingleActionDialog = ({
 }
 
 SingleActionDialog.propTypes = {
+  header: PropTypes.node.isRequired,
   children: PropTypes.node.isRequired,
   submitHandler: PropTypes.func.isRequired,
   cancelHandler: PropTypes.func.isRequired,
   submitText: PropTypes.string,
+  submitColor: PropTypes.string,
+  contentWrapperStyle: PropTypes.object,
+  contentStyle: PropTypes.object,
+  headerStyle: PropTypes.object,
+  isSubmitDisabled: PropTypes.bool,
 }
 
 SingleActionDialog.defaultTypes = {
   submitText: 'Submit',
+  submitColor: Color.GREEN,
+  contentWrapperStyle: {},
+  contentStyle: {},
+  headerStyle: {},
+  isSubmitDisabled: false,
 }
 
 export default SingleActionDialog

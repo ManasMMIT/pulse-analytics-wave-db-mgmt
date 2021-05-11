@@ -3,6 +3,7 @@ import { useParams, useLocation, useHistory } from 'react-router-dom'
 import { useQuery } from '@apollo/react-hooks'
 import styled from '@emotion/styled'
 import queryString from 'query-string'
+import { transparentize } from 'polished'
 
 import { UnderlinedTabs } from '@pulse-analytics/pulse-design-system'
 import Spinner from 'frontend/components/Spinner'
@@ -12,7 +13,7 @@ import { GET_MARKET_BASKETS } from 'frontend/api/queries'
 
 import MarketBasketDetailHeader from './MarketBasketDetailHeader'
 import Overview from './Overview'
-import PerceptionRegimens from './PerceptionRegimens'
+import ProductsRegimens from './ProductsRegimens'
 
 const Wrapper = styled.div({
   display: 'flex',
@@ -34,7 +35,7 @@ const TABS_DATA = [
 
 const COMPONENT_MAP = {
   overview: Overview,
-  'product-regimens': PerceptionRegimens,
+  'product-regimens': ProductsRegimens,
 }
 
 const MarketBasketDetail = () => {
@@ -77,7 +78,10 @@ const MarketBasketDetail = () => {
           tabsData={TABS_DATA}
           onTabClick={setTab}
           selectedTab={selectedTab}
-          tabsContainerStyle={{ padding: '0 12px' }}
+          tabsContainerStyle={{
+            padding: '0 12px',
+            borderBottom: `1px solid ${transparentize(0.9, Color.BLACK)}`,
+          }}
         />
       </section>
       <Body>
