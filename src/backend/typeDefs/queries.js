@@ -184,6 +184,14 @@ const queries = gql`
     categories: JSON
   }
 
+  type DevMarketBasket {
+    _id: ID!
+    name: String
+    description: String
+    productsRegimens: JSON
+    categories: JSON
+  }
+
   type MarketBasketSubscription {
     id: ID!
     team: ID

@@ -7,6 +7,8 @@ import { Button, Tag } from '@pulse-analytics/pulse-design-system'
 import Icon from 'frontend/components/Icon'
 import Color from 'frontend/utils/color'
 
+import PushMarketBasketsToDevButton from '../PushMarketBasketsToDevButton'
+
 const TitleSection = styled.div({
   display: 'flex',
   padding: '24px 12px 0px',
@@ -47,6 +49,7 @@ const MarketBasketDetailHeader = ({ name }) => {
         >
           Market Basket
         </Tag>
+        <PushMarketBasketsToDevButton />
       </div>
       <Button
         color={Color.GRAY_DARK}

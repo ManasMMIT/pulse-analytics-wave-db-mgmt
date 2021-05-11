@@ -1,5 +1,17 @@
 import gql from 'graphql-tag'
 
+export const PUSH_MARKET_BASKETS_TO_DEV = gql`
+  mutation PushMarketBasketsToDev($input: PushMarketBasketsToDevInput!) {
+    pushMarketBasketsToDev(input: $input) {
+      _id
+      name
+      description
+      productsRegimens
+      categories
+    }
+  }
+`
+
 export const DELETE_MARKET_BASKET = gql`
   mutation DeleteMarketBasket($input: DeleteMarketBasketInput!) {
     deleteMarketBasket(input: $input) {
@@ -11,6 +23,7 @@ export const DELETE_MARKET_BASKET = gql`
       updated_at
       products_regimens
       team_subscriptions
+      categories
     }
   }
 `
@@ -26,6 +39,7 @@ export const CREATE_MARKET_BASKET = gql`
       updated_at
       products_regimens
       team_subscriptions
+      categories
     }
   }
 `
@@ -41,6 +55,7 @@ export const UPDATE_MARKET_BASKET = gql`
       updated_at
       products_regimens
       team_subscriptions
+      categories
     }
   }
 `

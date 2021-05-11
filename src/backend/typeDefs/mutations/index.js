@@ -51,6 +51,8 @@ const mutationType = gql`
     updateListsConfig(input: UpdateListsConfigInput!): ListsConfig
     deleteListsConfig(input: DeleteListsConfigInput!): ListsConfig
 
+    pushMarketBasketsToDev(input: PushMarketBasketsToDevInput!): [DevMarketBasket!]
+
     deleteMarketBasket(input: DeleteMarketBasketInput!): MarketBasket
     createMarketBasket(input: CreateMarketBasketInput!): MarketBasket
     updateMarketBasket(input: UpdateMarketBasketInput!): MarketBasket
