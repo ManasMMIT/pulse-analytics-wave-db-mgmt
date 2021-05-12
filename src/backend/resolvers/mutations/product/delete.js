@@ -17,7 +17,7 @@ const deleteSourceProduct = async (
     // ! Vega Op (keeping this as first op on purpose)
     const { uuid } = await pulseCoreDb.collection('products').findOne({ _id })
     if (uuid) {
-      await axios.delete(`products/${uuid}`).catch((e) => {
+      await axios.delete(`products/${uuid}/`).catch((e) => {
         throw new Error(JSON.stringify(e.response.data))
       })
     }

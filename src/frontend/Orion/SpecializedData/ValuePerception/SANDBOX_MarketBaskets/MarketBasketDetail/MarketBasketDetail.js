@@ -10,6 +10,7 @@ import { useQuery } from '@apollo/react-hooks'
 import { GET_MARKET_BASKETS } from 'frontend/api/queries'
 
 import ProductsRegimensTab from './ProductsRegimensTab'
+import CatCharTab from './CatCharTab'
 
 const MarketBasketDetail = () => {
   const { marketBasketId } = useParams()
@@ -58,6 +59,7 @@ const MarketBasketDetail = () => {
       <div>{description}</div>
       <hr />
       <ProductsRegimensTab />
+      <CatCharTab />
     </div>
   )
 }

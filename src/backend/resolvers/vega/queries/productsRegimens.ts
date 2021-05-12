@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const BASE_URI = 'product-regimens'
+const BASE_URI = 'product-regimens/'
 
 interface VegaProdRegQueryInput {
   productId?: String

@@ -12,7 +12,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Fixed** for any bug fixes.
 - **Security** in case of vulnerabilities.
 
-## [Unreleased] - Started: 5-4-21
+## [Unreleased] - Started: 5-12-21
+
+## [4.9.1] - Started: 5-4-21
+
+### Added
+- `Orion/Perception Tool`: Products and regimens market basket tab [#992](https://github.com/pulse-analytics/wave-db-mgmt/pull/992)
+
+### Fixed
+- `Orion Import`: Reinstated scraper import [#994](https://github.com/pulse-analytics/wave-db-mgmt/pull/994)
 
 ## [4.9.0] - Started: 4-14-21
 

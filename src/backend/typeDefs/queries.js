@@ -6,6 +6,7 @@ const queries = gql`
 
     marketBaskets(marketBasketId: ID): [MarketBasket!]!
     marketBasketsSubscriptions: [MarketBasketSubscription!]!
+    marketBasketsCategories(marketBasketId: ID): [MarketBasketCategory!]!
 
     nodes(parentId: String, type: String): [Node]
 
@@ -178,8 +179,17 @@ const queries = gql`
     indication: JSON
     created_at: DateTime
     updated_at: DateTime
-    products_regimens: [JSON]!
-    team_subscriptions: [JSON]!
+    products_regimens: JSON
+    team_subscriptions: JSON
+    categories: JSON
+  }
+
+  type DevMarketBasket {
+    _id: ID!
+    name: String
+    description: String
+    productsRegimens: JSON
+    categories: JSON
   }
 
   type MarketBasketSubscription {
@@ -190,6 +200,23 @@ const queries = gql`
     end_date: DateTime
     created_at: DateTime
     updated_at: DateTime
+  }
+
+  type MarketBasketCategory {
+    id: ID!
+    market_basket: ID
+    name: String
+    prompt: String
+    category_type: String
+    _order: Int
+    characteristics: [ID!]
+    characteristics_full: [MarketBasketCategoryCharacteristic!]
+  }
+
+  type MarketBasketCategoryCharacteristic {
+    id: ID!
+    name: String
+    description: String
   }
 
   type Event {

@@ -42,6 +42,7 @@ MongoClient.connect(LOADER_URI, { useUnifiedTopology: true }, (err, client) => {
   const pulseDevDb = client.db('pulse-dev')
   const pulseCoreDb = client.db('pulse-core')
   const pulseProdDb = client.db('pulse-prod')
+  const pulseScraperDb = client.db('pulse-scraper')
 
   const coreUsers = pulseCoreDb.collection('users')
   const coreRoles = pulseCoreDb.collection('roles')
@@ -58,6 +59,7 @@ MongoClient.connect(LOADER_URI, { useUnifiedTopology: true }, (err, client) => {
     pulseDevDb,
     pulseCoreDb,
     pulseProdDb,
+    pulseScraperDb,
 
     coreUsers,
     coreRoles,
