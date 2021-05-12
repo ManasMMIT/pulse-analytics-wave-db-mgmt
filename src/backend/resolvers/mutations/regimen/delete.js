@@ -21,7 +21,7 @@ const deleteSourceRegimen = async (
     const { uuid } = await pulseCoreDb.collection('regimens').findOne({ _id })
 
     if (uuid) {
-      await axios.delete(`regimens/${uuid}`).catch((e) => {
+      await axios.delete(`regimens/${uuid}/`).catch((e) => {
         throw new Error(JSON.stringify(e.response.data))
       })
     }

@@ -8,7 +8,7 @@ const marketBaskets = async (
   info
 ) => {
   if (marketBasketId) {
-    return axios.get(`hydrated-market-baskets/${marketBasketId}`).then(({ data }) => [data])
+    return axios.get(`hydrated-market-baskets/${marketBasketId}/`).then(({ data }) => [data])
   }
 
   const marketBaskets = await axios.get(`hydrated-market-baskets/`)

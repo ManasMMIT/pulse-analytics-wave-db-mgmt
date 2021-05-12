@@ -47,7 +47,7 @@ const deleteObm = async (
     .findOne({ _id })
 
   if (uuid) {
-    await axios.delete(`obms/${uuid}`).catch((e) => {
+    await axios.delete(`obms/${uuid}/`).catch((e) => {
       throw new Error(JSON.stringify(e.response.data))
     })
   }

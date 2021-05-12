@@ -23,7 +23,7 @@ const createMarketBasket = async (
       throw new Error(JSON.stringify(e.response.data))
     })
 
-  return axios.get(`hydrated-market-baskets/${id}`).then(({ data }) => data)
+  return axios.get(`hydrated-market-baskets/${id}/`).then(({ data }) => data)
 }
 
 export default createMarketBasket

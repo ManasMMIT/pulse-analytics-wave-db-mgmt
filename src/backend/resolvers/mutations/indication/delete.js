@@ -28,7 +28,7 @@ const deleteSourceIndication = async (
       .findOne({ _id })
 
     if (uuid) {
-      await axios.delete(`indications/${uuid}`).catch((e) => {
+      await axios.delete(`indications/${uuid}/`).catch((e) => {
         throw new Error(JSON.stringify(e.response.data))
       })
     }

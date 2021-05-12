@@ -9,7 +9,7 @@ const deleteMarketBasket = async (
   const hydratedMarketBasket = await axios.get(`market-baskets/${marketBasketId}`)
     .then(({ data }) => data)
 
-  await axios.delete(`market-baskets/${marketBasketId}`).catch((e) => {
+  await axios.delete(`market-baskets/${marketBasketId}/`).catch((e) => {
     throw new Error(JSON.stringify(e.response.data))
   })
 

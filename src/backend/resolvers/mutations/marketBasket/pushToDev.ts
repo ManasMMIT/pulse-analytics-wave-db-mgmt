@@ -27,7 +27,7 @@ export default pushMarketBasketsToDev
 
 const upsertSingleMarketBasket = async (marketBasketId: any, marketBasketsCollection: any, date: any) => {
   const marketBasket = await axios
-    .get(`${VEGA_ENDPOINT}/${marketBasketId}`)
+    .get(`${VEGA_ENDPOINT}/${marketBasketId}/`)
     .then(({ data }) => data)
 
   const mongoInput = mapSchemaVegaToMongo(marketBasket, date)
@@ -41,7 +41,7 @@ const upsertSingleMarketBasket = async (marketBasketId: any, marketBasketsCollec
 }
 
 const dropAndReplaceMarketBaskets = async (marketBasketsCollection: any, date: any) => {
-  const marketBaskets = await axios.get(VEGA_ENDPOINT).then(({ data }) => data)
+  const marketBaskets = await axios.get(`${VEGA_ENDPOINT}/`).then(({ data }) => data)
   const documentsToInsert = marketBaskets.map((marketBasket) => mapSchemaVegaToMongo(marketBasket, date))
 
   await marketBasketsCollection.deleteMany()
