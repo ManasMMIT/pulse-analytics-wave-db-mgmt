@@ -53,6 +53,8 @@ const mutationType = gql`
 
     pushMarketBasketsToDev(input: PushMarketBasketsToDevInput!): [DevMarketBasket!]
 
+    importMarketBasketSurvey(input: ImportMarketBasketSurveyInput!): JSON
+
     deleteMarketBasket(input: DeleteMarketBasketInput!): MarketBasket
     createMarketBasket(input: CreateMarketBasketInput!): MarketBasket
     updateMarketBasket(input: UpdateMarketBasketInput!): MarketBasket
