@@ -1,6 +1,8 @@
 import axios from 'axios'
 
-const getCompleteQuestionSet = require('./getCompleteQuestionSet')
+const getCompleteQuestionSet = require('./utils/getCompleteQuestionSet')
+const getCompleteAnswerSet = require('./utils/getCompleteAnswerSet')
+
 /*
   Needs to return data for export
 
@@ -74,15 +76,16 @@ const marketBasketSurveyExportData = async (
     hydratedMarketBasket.products_regimens,
   )
 
-  return null
-}
-
-export default marketBasketSurveyExportData
-
-const getStakeholderSet = (hydratedSurveyQuestionsAnswers) => {
   const {
     survey: { stakeholders: surveyStakeholders }
   } = hydratedSurveyQuestionsAnswers[0]
 
-  const surveyStakeholderIds = surveyStakeholders.map(({ id }) => id)
+  const completeAnswerSet = getCompleteAnswerSet(
+    completeQuestionSet,
+    surveyStakeholders,
+  )
+
+  return null
 }
+
+export default marketBasketSurveyExportData

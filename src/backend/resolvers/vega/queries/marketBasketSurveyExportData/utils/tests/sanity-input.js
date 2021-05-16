@@ -95,7 +95,13 @@ const productsRegimens = [
   },
 ]
 
+const stakeholders = [
+  { id: 0, first_name: 'Matt', last_name: 'The Law' },
+  { id: 0, first_name: 'Joe', last_name: 'Star' },
+]
+
 module.exports = {
   categories,
   productsRegimens,
+  stakeholders,
 }
