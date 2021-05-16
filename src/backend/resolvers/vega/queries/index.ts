@@ -5,6 +5,8 @@ import marketBaskets from './marketBaskets'
 import marketBasketsSubscriptions from './marketBasketsSubscriptions'
 import marketBasketsCategories from './marketBasketsCategories'
 
+import marketBasketSurveyExportData from './marketBasketSurveyExportData'
+
 export default {
   vegaProducts,
   vegaProductsRegimens,
@@ -12,4 +14,5 @@ export default {
   marketBaskets,
   marketBasketsSubscriptions,
   marketBasketsCategories,
+  marketBasketSurveyExportData,
 }
