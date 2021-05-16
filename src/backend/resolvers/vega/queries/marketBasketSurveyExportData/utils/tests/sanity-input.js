@@ -97,11 +97,33 @@ const productsRegimens = [
 
 const stakeholders = [
   { id: 0, first_name: 'Matt', last_name: 'The Law' },
-  { id: 0, first_name: 'Joe', last_name: 'Star' },
+  { id: 1, first_name: 'Joe', last_name: 'Star' },
+]
+
+const hydratedSurveyQuestionsAnswers = [
+  {
+    answers: [
+      {
+        rating: 22,
+        question: {
+          id: 0,
+          category: 1,
+          characteristic: 1,
+          regimen: null,
+          product: 1,
+          manufacturer: null
+        },
+        stakeholder: {
+          id: 0,
+        }
+      }
+    ],
+  }
 ]
 
 module.exports = {
   categories,
   productsRegimens,
   stakeholders,
+  hydratedSurveyQuestionsAnswers,
 }

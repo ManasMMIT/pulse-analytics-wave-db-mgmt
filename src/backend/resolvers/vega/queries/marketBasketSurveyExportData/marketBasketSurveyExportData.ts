@@ -2,36 +2,7 @@ import axios from 'axios'
 
 const getCompleteQuestionSet = require('./utils/getCompleteQuestionSet')
 const getCompleteAnswerSet = require('./utils/getCompleteAnswerSet')
-
-/*
-  Needs to return data for export
-
-  Final Schema:
-  [
-    {
-      person: String // firstname lastname, probably
-      category: String // probably just name
-      characteristic: String // probably just name
-      stakeholderRole: String // do later, probably
-      regimen: String
-      product: String
-      manufacturer: String
-      rating: Int
-
-      personId: ID
-      categoryId: ID
-      characteristicId: ID
-      regimenId: ID
-      productId: ID
-      manufacturerId: ID
-    }
-  ]
-
-  Well, how?
-
-  1. Get all permutations of market basket person+category+characteristic
-  2. Hydrate combos that have data with a rating
-*/
+const getFilledInCompleteAnswerSet = require('./utils/getFilledInCompleteAnswerSet')
 
 const marketBasketSurveyExportData = async (
   parent,
@@ -57,19 +28,6 @@ const marketBasketSurveyExportData = async (
     hydratedMarketBasketOp,
     hydratedSurveyQuestionsAnswersOp,
   ])
-  /* 
-    - From hydratedMarketBasket, I have category-characteristics and product-regimens
-    - From hydratedSurveyQA, I have category-characteristics-product-regimen-manufacturer stakeholder-rating
-
-    Goal:
-    - Get complete set of possible questions
-    - Hydrate questionId with questions that exist
-    - Create questions that do not exist and hydrate questionId
-
-    By this point, we have the entire question set stored in db
-
-    - For each question, multiply by stakeholder set to get answers and non-answers. Stored answers should propagate an id 
-  */
 
   const completeQuestionSet = getCompleteQuestionSet(
     hydratedMarketBasket.categories,
@@ -85,7 +43,12 @@ const marketBasketSurveyExportData = async (
     surveyStakeholders,
   )
 
-  return null
+  const filledInCompleteAnswerSet = getFilledInCompleteAnswerSet(
+    completeAnswerSet,
+    hydratedSurveyQuestionsAnswers,
+  )
+
+  return filledInCompleteAnswerSet
 }
 
 export default marketBasketSurveyExportData
