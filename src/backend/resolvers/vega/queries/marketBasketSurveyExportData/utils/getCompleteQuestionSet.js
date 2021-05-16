@@ -57,6 +57,7 @@ const getCategoriesCharacteristicsSetByType = (categories) => categories.reduce(
 }, {})
 
 const getProductsRegimensSets = (products_regimens) => products_regimens.reduce((acc, { product, regimen }) => {
+  // TODO: Figure out how we want to render product's generic and brand name. same field?
   acc.productsSet = [{
     product: product.generic_name,
     productId: product.id,
