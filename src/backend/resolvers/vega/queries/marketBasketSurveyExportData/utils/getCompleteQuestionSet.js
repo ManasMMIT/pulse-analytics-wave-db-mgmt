@@ -39,7 +39,7 @@ const getCategoriesCharacteristicsSetByType = (categories) => categories.reduce(
 
   const { id, name, characteristics_full, category_type } = category
 
-  const product = characteristics_full.map(({
+  const categoryCharacteristicCombo = characteristics_full.map(({
     id: characteristicId,
     name: characteristic,
   }) => ({
@@ -50,8 +50,8 @@ const getCategoriesCharacteristicsSetByType = (categories) => categories.reduce(
   }))
 
   acc[category_type]
-    ? acc[category_type] = [...product, ...acc[category_type]]
-    : acc[category_type] = product
+    ? acc[category_type] = [...categoryCharacteristicCombo, ...acc[category_type]]
+    : acc[category_type] = categoryCharacteristicCombo
 
   return acc
 }, {})
