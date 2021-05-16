@@ -5,8 +5,7 @@ module.exports = (questions, stakeholders) => questions.reduce((acc, question) =
     id: personId,
   }) => ({
     ...question,
-    first_name,
-    last_name,
+    person: first_name + ' ' + last_name,
     personId,
     rating: undefined,
   }))
