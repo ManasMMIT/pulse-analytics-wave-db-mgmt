@@ -14,6 +14,7 @@ import { GET_MARKET_BASKETS } from 'frontend/api/queries'
 import MarketBasketDetailHeader from './MarketBasketDetailHeader'
 import Overview from './Overview'
 import ProductsRegimens from './ProductsRegimens'
+import Surveys from './Surveys'
 
 const Wrapper = styled.div({
   display: 'flex',
@@ -36,6 +37,7 @@ const TABS_DATA = [
 const COMPONENT_MAP = {
   overview: Overview,
   'product-regimens': ProductsRegimens,
+  surveys: Surveys,
 }
 
 const MarketBasketDetail = () => {
