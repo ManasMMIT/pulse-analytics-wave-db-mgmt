@@ -3,6 +3,7 @@ import updateMarketBasket from './update'
 import deleteMarketBasket from './delete'
 import categoryMutations from './category'
 import characteristicMutations from './characteristic'
+import surveyMutations from './survey'
 import pushMarketBasketsToDev from './pushToDev'
 
 export default {
@@ -11,5 +12,6 @@ export default {
   deleteMarketBasket,
   ...categoryMutations,
   ...characteristicMutations,
+  ...surveyMutations,
   pushMarketBasketsToDev,
 }
