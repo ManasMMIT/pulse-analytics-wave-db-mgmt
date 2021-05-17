@@ -3,6 +3,7 @@ import updateMarketBasketTypeDefs from './update'
 import deleteMarketBasketTypeDefs from './delete'
 import categoryTypeDefs from './category'
 import characteristicTypeDefs from './characteristic'
+import surveyTypeDefs from './survey'
 import pushMarketBasketsToDevTypeDefs from './pushToDev'
 
 
@@ -13,4 +14,5 @@ export default [
   deleteMarketBasketTypeDefs,
   ...categoryTypeDefs,
   ...characteristicTypeDefs,
+  ...surveyTypeDefs,
 ]

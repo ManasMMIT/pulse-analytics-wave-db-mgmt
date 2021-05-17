@@ -51,19 +51,43 @@ const mutationType = gql`
     updateListsConfig(input: UpdateListsConfigInput!): ListsConfig
     deleteListsConfig(input: DeleteListsConfigInput!): ListsConfig
 
-    pushMarketBasketsToDev(input: PushMarketBasketsToDevInput!): [DevMarketBasket!]
+    pushMarketBasketsToDev(
+      input: PushMarketBasketsToDevInput!
+    ): [DevMarketBasket!]
 
     deleteMarketBasket(input: DeleteMarketBasketInput!): MarketBasket
     createMarketBasket(input: CreateMarketBasketInput!): MarketBasket
     updateMarketBasket(input: UpdateMarketBasketInput!): MarketBasket
 
-    createMarketBasketCategory(input: CreateMarketBasketCategoryInput!): MarketBasketCategory
-    updateMarketBasketCategory(input: UpdateMarketBasketCategoryInput!): MarketBasketCategory
-    deleteMarketBasketCategory(input: DeleteMarketBasketCategoryInput!): MarketBasketCategory
+    createMarketBasketCategory(
+      input: CreateMarketBasketCategoryInput!
+    ): MarketBasketCategory
+    updateMarketBasketCategory(
+      input: UpdateMarketBasketCategoryInput!
+    ): MarketBasketCategory
+    deleteMarketBasketCategory(
+      input: DeleteMarketBasketCategoryInput!
+    ): MarketBasketCategory
 
-    createMarketBasketCategoryCharacteristic(input: CreateMarketBasketCategoryCharacteristicInput!): MarketBasketCategoryCharacteristic
-    updateMarketBasketCategoryCharacteristic(input: UpdateMarketBasketCategoryCharacteristicInput!): MarketBasketCategoryCharacteristic
-    deleteMarketBasketCategoryCharacteristic(input: DeleteMarketBasketCategoryCharacteristicInput!): MarketBasketCategoryCharacteristic
+    createMarketBasketCategoryCharacteristic(
+      input: CreateMarketBasketCategoryCharacteristicInput!
+    ): MarketBasketCategoryCharacteristic
+    updateMarketBasketCategoryCharacteristic(
+      input: UpdateMarketBasketCategoryCharacteristicInput!
+    ): MarketBasketCategoryCharacteristic
+    deleteMarketBasketCategoryCharacteristic(
+      input: DeleteMarketBasketCategoryCharacteristicInput!
+    ): MarketBasketCategoryCharacteristic
+
+    createMarketBasketSurvey(
+      input: CreateMarketBasketSurveyInput!
+    ): MarketBasketSurvey
+    updateMarketBasketSurvey(
+      input: UpdateMarketBasketSurveyInput!
+    ): MarketBasketSurvey
+    deleteMarketBasketSurvey(
+      input: DeleteMarketBasketSurveyInput!
+    ): MarketBasketSurvey
 
     createUser(input: CreateUserInput!): CreateUserPayload
     updateUser(input: UpdateUserInput!): UpdateUserPayload
