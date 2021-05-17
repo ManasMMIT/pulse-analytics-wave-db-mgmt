@@ -11,7 +11,7 @@ const importMarketBasketSurvey = async (
   input.surveyId = "39e7f556-6d29-4b18-ac19-ab0c77caaff1"
   await validateSurveyData(input.data)
   await upsertRelationalData(input)
-  await materializeData(input.data, pulseDevDb)
+  await materializeData({ ...input, pulseDevDb })
 
   // TODO: decide to return data from replace job or reformatted input?
   return 'done'
