@@ -22,13 +22,14 @@ const getMapKey = (answer) => {
 
 const getMapValue = (answer) => {
   const {
+    id: answerId,
     question: {
       id: questionId,
     },
     rating,
   } = answer
 
-  return { questionId, rating }
+  return { questionId, answerId, rating }
 }
 
 module.exports = (completeAnswerSet, hydratedSurveyQuestionsAnswers) => {
@@ -65,7 +66,7 @@ module.exports = (completeAnswerSet, hydratedSurveyQuestionsAnswers) => {
     if (existingAnswerInfo) {
       return { ...answer, ...existingAnswerInfo }
     } else {
-      return { questionId: undefined, rating: undefined, ...answer }
+      return { questionId: undefined, answerId: undefined, rating: undefined, ...answer }
     }
   })
 }

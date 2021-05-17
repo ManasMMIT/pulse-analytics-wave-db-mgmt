@@ -81,6 +81,7 @@ export const GET_MARKET_BASKET_SURVEY_EXPORT_DATA = gql`
       productId
       manufacturerId
       questionId
+      answerId
     }
   }
 `
