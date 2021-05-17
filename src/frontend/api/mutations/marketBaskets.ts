@@ -146,3 +146,36 @@ export const DELETE_MARKET_BASKET_CATEGORY_CHARACTERISTIC = gql`
     }
   }
 `
+
+export const CREATE_MARKET_BASKET_SURVEY = gql`
+  mutation CreateMarketBasketSurvey($input: CreateMarketBasketSurveyInput!) {
+    createMarketBasketSurvey(input: $input) {
+      id
+      market_basket
+      stakeholders
+      date
+    }
+  }
+`
+
+export const UPDATE_MARKET_BASKET_SURVEY = gql`
+  mutation UpdateMarketBasketSurvey($input: UpdateMarketBasketSurveyInput!) {
+    updateMarketBasketSurvey(input: $input) {
+      id
+      market_basket
+      stakeholders
+      date
+    }
+  }
+`
+
+export const DELETE_MARKET_BASKET_SURVEY = gql`
+  mutation DeleteMarketBasketSurvey($input: DeleteMarketBasketSurveyInput!) {
+    deleteMarketBasketSurvey(input: $input) {
+      id
+      market_basket
+      stakeholders
+      date
+    }
+  }
+`
