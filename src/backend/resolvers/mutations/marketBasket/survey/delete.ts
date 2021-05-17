@@ -6,8 +6,11 @@ const deleteMarketBasketSurvey = async (
   context,
   info
 ) => {
-  const marketBasketSurvey = await axios.get(`market-basket-surveys/${marketBasketSurveyId}`)
+  const marketBasketSurvey = await axios.get(`market-basket-surveys/${marketBasketSurveyId}/`)
     .then(({ data }) => data)
+    .catch((e) => {
+      throw new Error(JSON.stringify(e.response.data))
+    })
 
   await axios.delete(`market-basket-surveys/${marketBasketSurveyId}/`).catch((e) => {
     throw new Error(JSON.stringify(e.response.data))

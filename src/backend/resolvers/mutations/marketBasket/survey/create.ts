@@ -1,4 +1,7 @@
 const axios = require('axios')
+const { zonedTimeToUtc } = require('date-fns-tz')
+
+const DEFAULT_TIMEZONE = require('../../../../utils/states-data-util')
 
 const createMarketBasketSurvey = async (
   parent,
@@ -6,22 +9,15 @@ const createMarketBasketSurvey = async (
   context,
   info
 ) => {
-  const headers = {
-    'Content-Type': 'application/json'
-  }
-
-  const vegaInput = JSON.stringify({
-    ...input,
-    stakeholders: [],
-  })
-
-  const { id } = await axios.post('market-basket-surveys/', vegaInput, { headers })
+  const { date, ...rest } = input
+  const standardizedDate = zonedTimeToUtc(date, DEFAULT_TIMEZONE)
+  input = { date: standardizedDate, ...rest }
+  
+  return await axios.post('market-basket-surveys/', input)
     .then(({ data }) => data)
     .catch((e) => {
       throw new Error(JSON.stringify(e.response.data))
     })
-
-  return axios.get(`market-basket-surveys/${id}/`).then(({ data }) => data)
 }
 
 export default createMarketBasketSurvey
