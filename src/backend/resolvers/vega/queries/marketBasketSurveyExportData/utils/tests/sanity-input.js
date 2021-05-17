@@ -104,6 +104,7 @@ const hydratedSurveyQuestionsAnswers = [
   {
     answers: [
       {
+        id: '1337',
         rating: 22,
         question: {
           id: 0,

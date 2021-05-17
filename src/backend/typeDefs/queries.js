@@ -237,6 +237,7 @@ const queries = gql`
       productId: ID
       manufacturerId: ID
       questionId: ID
+      answerId: ID
   }
 
   type Event {
