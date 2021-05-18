@@ -8,12 +8,12 @@ import ExportExcelButton from 'frontend/components/ExportExcelButton'
 import Icon from 'frontend/components/Icon'
 import Color from 'frontend/utils/color'
 
-const ExportSurveyDataButton = () => {
+const ExportSurveyDataButton = ({ surveyId }) => {
   const { marketBasketId } = useParams()
 
   const { data, loading } = useQuery(
     GET_MARKET_BASKET_SURVEY_EXPORT_DATA,
-    { variables: { marketBasketId, surveyId: '123' } }
+    { variables: { marketBasketId, surveyId } }
   )
 
   if (loading) return <Spinner />

@@ -11,7 +11,6 @@ import { GET_MARKET_BASKETS } from 'frontend/api/queries'
 
 import ProductsRegimensTab from './ProductsRegimensTab'
 import CatCharTab from './CatCharTab'
-import ExportSurveyDataButton from './ExportSurveyDataButton'
 import SurveyTab from './SurveyTab'
 
 const MarketBasketDetail = () => {
@@ -62,7 +61,6 @@ const MarketBasketDetail = () => {
       <hr />
       <ProductsRegimensTab />
       <CatCharTab />
-      <ExportSurveyDataButton />
       <SurveyTab marketBasket={marketBasket} />
     </div>
   )
