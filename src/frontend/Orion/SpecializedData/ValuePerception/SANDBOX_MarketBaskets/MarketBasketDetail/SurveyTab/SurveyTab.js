@@ -10,7 +10,7 @@ import Input from 'frontend/components/Input'
 import Questions from './Questions'
 import UpdateAndDeleteSurvey from './UpdateAndDeleteSurvey'
 
-const Surveys = ({ marketBasket }) => {
+const SurveyTab = ({ marketBasket }) => {
   const [stagedDate, setDate] = useState()
 
   const { data: marketBasketsSurveys, loading } = useQuery(
@@ -45,6 +45,7 @@ const Surveys = ({ marketBasket }) => {
 
   return (
     <div>
+      <h2>Surveys</h2>
       <Input
         name="createMarketBasketSurveyDate"
         type="date"
@@ -69,4 +70,4 @@ const Surveys = ({ marketBasket }) => {
   )
 }
 
-export default Surveys
+export default SurveyTab
