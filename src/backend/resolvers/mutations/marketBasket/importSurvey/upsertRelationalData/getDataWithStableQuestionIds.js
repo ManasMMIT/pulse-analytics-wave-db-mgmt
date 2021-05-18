@@ -49,7 +49,7 @@ const getDataWithStableQuestionIds = async (
       -> Answer is not to a pre-existing question
       -> Create new question for survey
     */
-    const newOp = async () => {
+    const createMissingQuestion = async () => {
       const postObj = {
         survey: surveyId,
         category: categoryId,
@@ -68,7 +68,7 @@ const getDataWithStableQuestionIds = async (
       datum.questionId = questionId
     }
 
-    return [...acc, newOp()]
+    return [...acc, createMissingQuestion()]
   }, [])
 
   await Promise.all(ops)
