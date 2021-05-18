@@ -8,7 +8,7 @@ import { CREATE_MARKET_BASKET_SURVEY } from 'frontend/api/mutations'
 import Input from 'frontend/components/Input'
 
 import Questions from './Questions'
-import UpdateSurvey from './UpdateSurvey'
+import UpdateAndDeleteSurvey from './UpdateAndDeleteSurvey'
 
 const Surveys = ({ marketBasket }) => {
   const [stagedDate, setDate] = useState()
@@ -28,12 +28,8 @@ const Surveys = ({ marketBasket }) => {
       },
     },
     update: (cache, { data: { createMarketBasketSurvey } }) => {
-      const { marketBasketsSurveys } = cache.readQuery({
-        query: GET_MARKET_BASKETS_SURVEYS,
-        variables: { marketBasketId: marketBasket.id },
-      })
       const newMarketBasketsSurveys = [
-        ...marketBasketsSurveys,
+        ...marketBasketsSurveys.marketBasketsSurveys,
         createMarketBasketSurvey,
       ]
       cache.writeQuery({
@@ -60,7 +56,7 @@ const Surveys = ({ marketBasket }) => {
       {marketBasketsSurveys.marketBasketsSurveys.map(({ id, date }) => (
         <div key={id}>
           Date: {date}
-          <UpdateSurvey
+          <UpdateAndDeleteSurvey
             marketBasketId={marketBasket.id}
             marketBasketSurveyId={id}
           />

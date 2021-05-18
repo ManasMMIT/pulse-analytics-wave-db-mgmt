@@ -10,7 +10,7 @@ import {
 
 import Input from 'frontend/components/Input'
 
-const UpdateSurvey = ({ marketBasketId, marketBasketSurveyId }) => {
+const UpdateAndDeleteSurvey = ({ marketBasketId, marketBasketSurveyId }) => {
   const [stagedDate, setDate] = useState()
 
   const [updateMarketBasketSurvey] = useMutation(UPDATE_MARKET_BASKET_SURVEY, {
@@ -48,7 +48,7 @@ const UpdateSurvey = ({ marketBasketId, marketBasketSurveyId }) => {
         variables: { marketBasketId },
       })
       const newMarketBasketsSurveys = marketBasketsSurveys.filter(
-        ({ id }) => id === marketBasketSurveyId
+        ({ id }) => id !== marketBasketSurveyId
       )
       cache.writeQuery({
         query: GET_MARKET_BASKETS_SURVEYS,
@@ -69,13 +69,13 @@ const UpdateSurvey = ({ marketBasketId, marketBasketSurveyId }) => {
         style={{ width: 250 }}
       />
       <Button onClick={updateMarketBasketSurvey}>
-        Update Market Baset Survey
+        Update Market Basket Survey
       </Button>
       <Button onClick={deleteMarketBasketSurvey}>
-        Delete Market Baset Survey
+        Delete Market Basket Survey
       </Button>
     </div>
   )
 }
 
-export default UpdateSurvey
+export default UpdateAndDeleteSurvey
