@@ -10,7 +10,6 @@ const marketBasketSurveyExportData = async (
   context,
   info
 ) => {
-  surveyId = "39e7f556-6d29-4b18-ac19-ab0c77caaff1"
   const hydratedMarketBasketOp = axios
     .get(`hydrated-market-baskets/${marketBasketId}/`)
     .then(({ data }) => data)
@@ -34,9 +33,12 @@ const marketBasketSurveyExportData = async (
     hydratedMarketBasket.products_regimens,
   )
 
-  const {
-    survey: { stakeholders: surveyStakeholders }
-  } = hydratedSurveyQuestionsAnswers[0]
+  let surveyStakeholders = []
+
+  if (hydratedSurveyQuestionsAnswers.length) {
+    const { survey: { stakeholders } } = hydratedSurveyQuestionsAnswers[0]
+    surveyStakeholders = stakeholders
+  }
 
   const completeAnswerSet = getCompleteAnswerSet(
     completeQuestionSet,
