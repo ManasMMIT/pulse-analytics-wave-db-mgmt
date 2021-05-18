@@ -10,9 +10,9 @@ module.exports = async ({ data, surveyId }) => {
   )
 
   const ops = dataWithStableQuestionIds.reduce((acc, datum) => {
-    const op = datum.answerId ? updateAnswer(datum) : createAnswer(datum)
+    const upsertAnswerOp = datum.answerId ? updateAnswer(datum) : createAnswer(datum)
 
-    return [...acc, op]
+    return [...acc, upsertAnswerOp]
   }, [])
 
   return Promise.all(ops)
