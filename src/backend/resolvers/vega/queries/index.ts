@@ -4,6 +4,8 @@ import vegaRegimens from './regimens'
 import marketBaskets from './marketBaskets'
 import marketBasketsSubscriptions from './marketBasketsSubscriptions'
 import marketBasketsCategories from './marketBasketsCategories'
+import marketBasketsSurveys from './marketBasketsSurveys'
+import marketBasketsSurveysQuestions from './marketBasketsSurveysQuestions'
 
 export default {
   vegaProducts,
@@ -12,4 +14,6 @@ export default {
   marketBaskets,
   marketBasketsSubscriptions,
   marketBasketsCategories,
+  marketBasketsSurveys,
+  marketBasketsSurveysQuestions,
 }
