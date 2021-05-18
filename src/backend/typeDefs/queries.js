@@ -8,6 +8,8 @@ const queries = gql`
     marketBasketsSubscriptions: [MarketBasketSubscription!]!
     marketBasketsCategories(marketBasketId: ID): [MarketBasketCategory!]!
     marketBasketSurveyExportData(marketBasketId: ID!, surveyId: ID!): [MarketBasketSurveyExportDatum!]!
+    marketBasketsSurveys(marketBasketId: ID): [MarketBasketSurvey!]!
+    marketBasketsSurveysQuestions(surveyId: ID): [MarketBasketSurveyQuestion!]!
 
     nodes(parentId: String, type: String): [Node]
 
@@ -238,6 +240,38 @@ const queries = gql`
       manufacturerId: ID
       questionId: ID
       answerId: ID
+  }
+
+  type MarketBasketSurvey {
+    id: ID!
+    market_basket: ID
+    stakeholders: [ID!]
+    date: DateTime
+  }
+
+  type MarketBasketSurveyHydrated {
+    id: ID!
+    date: DateTime
+  }
+
+  type MarketBasketStakeholder {
+    id: ID!
+    first_name: String
+    last_name: String
+  }
+
+  type MarketBasketSurveyQuestionAnswer {
+    id: ID!
+    rating: Int
+    stakeholder: MarketBasketStakeholder
+  }
+
+  type MarketBasketSurveyQuestion {
+    id: ID!
+    survey: MarketBasketSurveyHydrated
+    category: MarketBasketCategory
+    characteristic: MarketBasketCategoryCharacteristic
+    answers: [MarketBasketSurveyQuestionAnswer!]
   }
 
   type Event {

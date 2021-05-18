@@ -26,7 +26,53 @@ export const GET_VEGA_REGIMENS = gql`
     vegaRegimens {
       id
       name
-    }  }`
+    }
+  }
+`
+
+export const GET_MARKET_BASKETS_SURVEYS_QUESTIONS = gql`
+  query getMarketBasketsSurveysQuestions($surveyId: ID) {
+    marketBasketsSurveysQuestions(surveyId: $surveyId) {
+      id
+      survey {
+        id
+        date
+      }
+      category {
+        id
+        name
+        prompt
+        category_type
+        _order
+      }
+      characteristic {
+        id
+        name
+        description
+      }
+      answers {
+        id
+        rating
+        stakeholder {
+          id
+          first_name
+          last_name
+        }
+      }
+    }
+  }
+`
+
+export const GET_MARKET_BASKETS_SURVEYS = gql`
+  query getMarketBasketsSurveys($marketBasketId: ID) {
+    marketBasketsSurveys(marketBasketId: $marketBasketId) {
+      id
+      market_basket
+      stakeholders
+      date
+    }
+  }
+`
 
 export const GET_MARKET_BASKETS_CATEGORIES = gql`
   query getMarketBasketsCategorires($marketBasketId: ID) {
