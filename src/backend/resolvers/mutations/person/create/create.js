@@ -1,3 +1,6 @@
+const axios = require('axios')
+const { v4: uuid } = require('uuid')
+
 const Person = require('../Person')
 const PersonCreationEvent = require('./PersonCreationEvent')
 const EventProcessor = require('../../shared/Event/EventProcessor')
@@ -23,6 +26,23 @@ const createPerson = async (
   let createdPerson
 
   await session.withTransaction(async () => {
+    const personUuid = uuid()
+
+    // ! Vega Op
+    await axios
+      .post('people/', {
+        id: personUuid,
+        first_name: input.firstName,
+        last_name: input.lastName,
+        middle_name: input.middleName,
+      })
+      .catch((e) => {
+        throw new Error(JSON.stringify(e.response.data))
+      })
+
+    input.uuid = personUuid
+
+    // ! Mongo Op
     const person = await Person.init({
       data: input,
       dbs: { pulseCoreDb },
