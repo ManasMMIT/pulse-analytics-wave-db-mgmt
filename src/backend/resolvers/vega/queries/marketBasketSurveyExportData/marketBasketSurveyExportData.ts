@@ -20,12 +20,19 @@ const marketBasketSurveyExportData = async (
     .then(({ data }) => data)
     .catch(e => { throw new Error(e) })
 
+  const marketBasketSurveyOp = axios
+    .get(`market-basket-surveys/${surveyId}/`)
+    .then(({ data }) => data)
+    .catch(e => { throw new Error(e) })
+
   const [
     hydratedMarketBasket,
     hydratedSurveyQuestionsAnswers,
+    marketBasketSurvey,
   ] = await Promise.all([
     hydratedMarketBasketOp,
     hydratedSurveyQuestionsAnswersOp,
+    marketBasketSurveyOp,
   ])
 
   const completeQuestionSet = getCompleteQuestionSet(
@@ -33,12 +40,7 @@ const marketBasketSurveyExportData = async (
     hydratedMarketBasket.products_regimens,
   )
 
-  let surveyStakeholders = []
-
-  if (hydratedSurveyQuestionsAnswers.length) {
-    const { survey: { stakeholders } } = hydratedSurveyQuestionsAnswers[0]
-    surveyStakeholders = stakeholders
-  }
+  let { stakeholders_full: surveyStakeholders } = marketBasketSurvey
 
   const completeAnswerSet = getCompleteAnswerSet(
     completeQuestionSet,
