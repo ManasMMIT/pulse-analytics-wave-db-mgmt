@@ -6,7 +6,7 @@ const deleteMarketBasket = async (
   context,
   info
 ) => {
-  const hydratedMarketBasket = await axios.get(`market-baskets/${marketBasketId}`)
+  const hydratedMarketBasket = await axios.get(`hydrated-market-baskets/${marketBasketId}/`)
     .then(({ data }) => data)
 
   await axios.delete(`market-baskets/${marketBasketId}/`).catch((e) => {

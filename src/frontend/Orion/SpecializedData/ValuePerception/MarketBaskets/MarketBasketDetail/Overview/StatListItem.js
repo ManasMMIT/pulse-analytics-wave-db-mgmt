@@ -1,19 +1,19 @@
 import React from 'react'
-import styled from '@emotion/styled'
+import PropTypes from 'prop-types'
 
-const Title = styled.span({
-  fontSize: 12,
-  fontWeight: 700,
-  lineHeight: '20px',
-})
+import FontSpace from 'frontend/utils/fontspace'
+import Spacing from 'frontend/utils/spacing'
 
-const StatListItem = ({ title, description }) => {
-  return (
-    <div style={{ padding: 12 }}>
-      <Title>{title}</Title>
-      <p>{description}</p>
-    </div>
-  )
+const StatListItem = ({ title, description }) => (
+  <div style={{ padding: Spacing.S4 }}>
+    <span style={{ ...FontSpace.FS2, fontWeight: 700 }}>{title}</span>
+    <p>{description}</p>
+  </div>
+)
+
+StatListItem.propTypes = {
+  title: PropTypes.string.isRequired,
+  description: PropTypes.string.isRequired,
 }
 
 export default StatListItem

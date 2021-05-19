@@ -1,39 +1,29 @@
 import React, { useState } from 'react'
-import { useHistory } from 'react-router-dom'
+import PropTypes from 'prop-types'
 import { useMutation, useQuery } from '@apollo/react-hooks'
 import styled from '@emotion/styled'
 import Select from 'react-select'
 import _ from 'lodash'
 
-import { Button } from '@pulse-analytics/pulse-design-system'
+import { GET_SOURCE_INDICATIONS } from 'frontend/api/queries'
+import { UPDATE_MARKET_BASKET } from 'frontend/api/mutations'
 
-import Modal from 'frontend/components/Modal'
+import { SingleActionDialog } from 'frontend/components/Dialog'
 import Spinner from 'frontend/components/Spinner'
 import Input from 'frontend/components/Input'
+import FontSpace from 'frontend/utils/fontspace'
+import Spacing from 'frontend/utils/spacing'
 
-import {
-  GET_MARKET_BASKETS,
-  GET_SOURCE_INDICATIONS,
-} from 'frontend/api/queries'
-import {
-  UPDATE_MARKET_BASKET,
-  DELETE_MARKET_BASKET,
-} from 'frontend/api/mutations'
+import DeleteMarketBasketSection from './DeleteMarketBasketSection'
 
 const FormLabel = styled.label({
-  fontSize: 12,
+  ...FontSpace.FS2,
   fontWeight: 700,
-  lineHeight: '20px',
 })
 
-const MarketBasketDetailModal = ({
-  closeModal,
-  isModalOpen,
-  name,
-  marketBasket,
-}) => {
-  const history = useHistory()
+const padding = { padding: Spacing.S4 }
 
+const MarketBasketDetailModal = ({ closeModal, name, marketBasket }) => {
   const { id, indication, description } = marketBasket
 
   const [formData, setFormData] = useState({
@@ -46,8 +36,6 @@ const MarketBasketDetailModal = ({
   const { data: indData, loading: indLoading } = useQuery(
     GET_SOURCE_INDICATIONS
   )
-  const { data: marketBasketData } = useQuery(GET_MARKET_BASKETS)
-
   const [submit, { loading: mutationLoading }] = useMutation(
     UPDATE_MARKET_BASKET,
     {
@@ -55,23 +43,6 @@ const MarketBasketDetailModal = ({
       onCompleted: () => closeModal(),
     }
   )
-
-  const [deleteMarketBasket] = useMutation(DELETE_MARKET_BASKET, {
-    onError: alert,
-    update: (cache, { data: { deleteMarketBasket } }) => {
-      const newMbs = marketBasketData.marketBaskets.filter(
-        ({ id }) => id !== deleteMarketBasket.id
-      )
-
-      cache.writeQuery({
-        query: GET_MARKET_BASKETS,
-        data: { marketBaskets: newMbs },
-      })
-    },
-    onCompleted: () => {
-      history.push('/orion/specialized/value-perception/market-baskets')
-    },
-  })
 
   if (indLoading) return <Spinner />
 
@@ -91,30 +62,26 @@ const MarketBasketDetailModal = ({
     submit({ variables: { input: formData } })
   }
 
-  // const handleOnDelete = (e) => {
-  //   e.stopPropagation()
-  //   deleteMarketBasket({ variables: { input: { id } } })
-  // }
-
   const handleChange = ({ name, value }) => {
     const key = name || 'indication'
     setFormData((prevData) => ({ ...prevData, [key]: value }))
   }
 
   console.log(formData)
+
   return (
-    <Modal
-      title="Edit Market Basket"
-      handleClose={closeModal}
-      show={isModalOpen}
-      width={500}
+    <SingleActionDialog
+      header="Edit Market Basket"
+      submitText="Update Market Basket"
+      submitHandler={handleOnSubmit}
+      cancelHandler={closeModal}
     >
       {mutationLoading ? (
         <Spinner />
       ) : (
-        <>
-          <form>
-            <h4>Details</h4>
+        <div style={padding}>
+          <h4 style={{ ...padding, ...FontSpace.FS5 }}>Details</h4>
+          <form style={padding}>
             <div>
               <FormLabel>Name (required)</FormLabel>
               <Input
@@ -142,24 +109,21 @@ const MarketBasketDetailModal = ({
               />
             </div>
           </form>
-          <div>
-            <h4>Delete Market Basket</h4>
-            <p>
-              Deleting the Market Basket removes all data associated with it and
-              cannot be undone.
-            </p>
-            {/* <Button color="red" onClick={handleOnDelete}>
-              Delete Market Basket
-            </Button> */}
-          </div>
-          <div>
-            <Button onClick={closeModal}>Cancel</Button>
-            <Button onClick={handleOnSubmit}>Update Market Basket</Button>
-          </div>
-        </>
+          <DeleteMarketBasketSection
+            marketBasketId={id}
+            closeModal={closeModal}
+            marketBasketName={name}
+          />
+        </div>
       )}
-    </Modal>
+    </SingleActionDialog>
   )
+}
+
+MarketBasketDetailModal.propTypes = {
+  marketBasket: PropTypes.object.isRequired,
+  closeModal: PropTypes.func.isRequired,
+  name: PropTypes.string.isRequired,
 }
 
 export default MarketBasketDetailModal
