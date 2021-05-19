@@ -6,6 +6,7 @@ require('./../../../src/backend/auth0/vegaClient')
 const zero_resetPerceptionData = require('./zero_resetPerceptionData')
 const one_IndRegProdSteps = require('./one_IndRegProdSteps')
 const two_clientTeamSteps = require('./two_clientTeamSteps')
+const three_seedPeople = require('./three_seedPeople')
 
 /*
   Migration steps:
@@ -24,9 +25,10 @@ const migrateToVega = async () => {
 
   console.log(`Starting Perception Tool Vega Migration\n`)
 
-  await zero_resetPerceptionData()
-  await one_IndRegProdSteps(dbs)
-  await two_clientTeamSteps(dbs)
+  // await zero_resetPerceptionData()
+  // await one_IndRegProdSteps(dbs)
+  // await two_clientTeamSteps(dbs)
+  await three_seedPeople(dbs)
 
   console.log('Perception Tool Vega Migration Completed')
   dbs.close()
