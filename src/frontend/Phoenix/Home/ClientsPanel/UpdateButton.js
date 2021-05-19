@@ -9,7 +9,7 @@ import { GET_CLIENTS } from '../../../api/queries'
 import TextFormButton from '../../shared/TextForm/Button'
 
 const editIcon = (
-  <FontAwesomeIcon size="md" icon={faEdit} style={{ color: 'white' }} />
+  <FontAwesomeIcon size="lg" icon={faEdit} style={{ color: 'white' }} />
 )
 
 const buttonStyle = {

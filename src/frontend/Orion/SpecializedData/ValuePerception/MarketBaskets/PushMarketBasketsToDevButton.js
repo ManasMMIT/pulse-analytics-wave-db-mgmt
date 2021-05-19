@@ -15,24 +15,20 @@ const buttonStyle = {
 
 const PushMarketBasketsToDevButton = () => {
   const { marketBasketId } = useParams()
-  const [pushIt, { loading }] = useMutation(
-    PUSH_MARKET_BASKETS_TO_DEV,
-    {
-      variables: { input: { marketBasketId } },
-      onCompleted: () => alert("Market Basket Push Completed."),
-      onError: alert,
-    }
-  )
+  const [pushIt, { loading }] = useMutation(PUSH_MARKET_BASKETS_TO_DEV, {
+    variables: { input: { marketBasketId } },
+    onCompleted: () => alert('Market Basket Push Completed.'),
+    onError: alert,
+  })
 
-  const buttonText = marketBasketId
-    ? 'Stage Data'
-    : 'Stage All Data'
+  const buttonText = marketBasketId ? 'Stage Data' : 'Stage All Data'
 
-  if (loading) return (
-    <Button style={buttonStyle} onClick={() => { }} type="ghost">
-      <Spinner />
-    </Button>
-  )
+  if (loading)
+    return (
+      <Button style={buttonStyle} onClick={() => {}} type="ghost">
+        <Spinner />
+      </Button>
+    )
   return (
     <Button style={buttonStyle} onClick={pushIt} type="secondary">
       {buttonText}

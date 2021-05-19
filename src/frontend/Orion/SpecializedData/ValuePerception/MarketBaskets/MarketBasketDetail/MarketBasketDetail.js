@@ -13,6 +13,7 @@ import { GET_MARKET_BASKETS } from 'frontend/api/queries'
 
 import MarketBasketDetailHeader from './MarketBasketDetailHeader'
 import Overview from './Overview'
+import CategoriesCharacteristics from './CategoriesCharacteristics'
 import ProductsRegimens from './ProductsRegimens'
 
 const Wrapper = styled.div({
@@ -29,12 +30,17 @@ const Body = styled.section({
 const TABS_DATA = [
   { label: 'Overview', value: 'overview' },
   { label: 'Products and Regimens', value: 'product-regimens' },
+  {
+    label: 'Categories and Characteristics',
+    value: 'categories-characteristics',
+  },
   { label: 'Surveys', value: 'surveys' },
   { label: 'Client Subscriptions', value: 'client-subscriptions' },
 ]
 
 const COMPONENT_MAP = {
   overview: Overview,
+  'categories-characteristics': CategoriesCharacteristics,
   'product-regimens': ProductsRegimens,
 }
 

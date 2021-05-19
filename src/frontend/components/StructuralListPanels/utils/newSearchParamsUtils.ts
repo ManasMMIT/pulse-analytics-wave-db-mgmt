@@ -5,7 +5,7 @@ const getNewSearchParams = (
   searchParam: string,
   currentSearchParams: { [key: string]: string },
   newSearchInput: any
-): { [key: string]: any } => {
+  ): { [key: string]: any } => {
   const newSearchParams: { [key: string]: any } = {}
 
   searchParamsAncestry.forEach((searchParamsAncestor: string) => {
@@ -33,8 +33,12 @@ function pushNewSearchParams(
       newSearchInput
     )
     
+    const sortedSearchParmas = queryString.stringify(newSearchParams, {
+      sort: (a, b) => searchParamsAncestry.indexOf(a) - searchParamsAncestry.indexOf(b)
+    })
+
     history.push({
-      search: queryString.stringify(newSearchParams),
+      search: sortedSearchParmas,
     })
   }
 }
