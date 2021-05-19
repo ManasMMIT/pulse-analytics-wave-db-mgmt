@@ -6,12 +6,12 @@ const createMarketBasket = async (
   context,
   info
 ) => {
-  const vegaInput = JSON.stringify({
+  const vegaInput = {
     ...input,
     team_subscriptions: [],
     categories: [],
     question_rating_range: "{\"bounds\": \"[)\", \"lower\": \"0\", \"upper\": \"5\"}",
-  })
+  }
 
   const { id } = await axios.post('market-baskets/', vegaInput)
     .then(({ data }) => data)
