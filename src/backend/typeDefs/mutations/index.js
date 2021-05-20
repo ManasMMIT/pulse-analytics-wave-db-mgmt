@@ -89,17 +89,17 @@ const mutationType = gql`
       input: DeleteMarketBasketSurveyInput!
     ): MarketBasketSurvey
 
-    createUser(input: CreateUserInput!): CreateUserPayload
-    updateUser(input: UpdateUserInput!): UpdateUserPayload
-    deleteUser(input: DeleteUserInput!): DeleteUserPayload
+    createUser(input: CreateUserInput!): User
+    updateUser(input: UpdateUserInput!): User
+    deleteUser(input: DeleteUserInput!): User
 
-    createClient(input: CreateClientInput!): CreateClientPayload
-    deleteClient(input: DeleteClientInput!): DeleteClientPayload
-    updateClient(input: UpdateClientInput!): UpdateClientPayload
+    createClient(input: CreateClientInput!): Client
+    deleteClient(input: DeleteClientInput!): Client
+    updateClient(input: UpdateClientInput!): Client
 
-    createTeam(input: CreateTeamInput!): CreateTeamPayload
-    updateTeam(input: UpdateTeamInput!): UpdateTeamPayload
-    deleteTeam(input: DeleteTeamInput!): DeleteTeamPayload
+    createTeam(input: CreateTeamInput!): Team
+    updateTeam(input: UpdateTeamInput!): Team
+    deleteTeam(input: DeleteTeamInput!): Team
 
     createNode(input: CreateNodeInput): Node
     updateNode(input: UpdateNodeInput): Node
@@ -108,7 +108,7 @@ const mutationType = gql`
     updateTdgTimestamps(input: UpdateTdgTimestampsInput!): JSON
 
     updateRoleSitemap(input: UpdateRoleSitemapInput!): UpdateRoleSitemapPayload
-    updatePermissions(input: UpdatePermissionsInput!): UpdateTeamPayload
+    updatePermissions(input: UpdatePermissionsInput!): Team
     pushSitemapToDev: String
     pushSitemapToProd: String
 

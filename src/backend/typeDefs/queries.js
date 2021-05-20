@@ -12,11 +12,11 @@ const queries = gql`
 
     nodes(parentId: String, type: String): [Node]
 
-    clients(_id: String): [Client]
+    clients(_id: String): [Client!]!
 
-    teams(clientId: String, userId: String): [Team]
+    teams(clientId: String, userId: String): [Team!]!
 
-    users(teamId: String, clientId: String, subscriptionId: String): [User]
+    users(teamId: String, clientId: String, subscriptionId: String): [User!]!
 
     indications: [Indication]
     therapeuticAreas: [TherapeuticArea]

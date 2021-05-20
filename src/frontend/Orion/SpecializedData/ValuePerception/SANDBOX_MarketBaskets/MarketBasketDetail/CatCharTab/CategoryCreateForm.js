@@ -30,28 +30,34 @@ const formDataSchema = {
 
 const CategoryCreateForm = () => {
   const { marketBasketId } = useParams()
-  const [
-    formData,
-    setFormData,
-  ] = useState(formDataSchema)
+  const [formData, setFormData] = useState(formDataSchema)
 
-  const { data: marketBasketCategoryData } = useQuery(GET_MARKET_BASKETS_CATEGORIES, { variables: { marketBasketId } })
+  const {
+    data: marketBasketCategoryData,
+  } = useQuery(GET_MARKET_BASKETS_CATEGORIES, { variables: { marketBasketId } })
 
-  const [createMarketBasketCategory] = useMutation(CREATE_MARKET_BASKET_CATEGORY, {
-    update: (cache, { data: { createMarketBasketCategory } }) => {
-      const oldCachedCategories = marketBasketCategoryData.marketBasketsCategories
-      const orderedFullSetOfCategries = _.orderBy([...oldCachedCategories, createMarketBasketCategory], '_order')
+  const [createMarketBasketCategory] = useMutation(
+    CREATE_MARKET_BASKET_CATEGORY,
+    {
+      update: (cache, { data: { createMarketBasketCategory } }) => {
+        const oldCachedCategories =
+          marketBasketCategoryData.marketBasketsCategories
+        const orderedFullSetOfCategries = _.orderBy(
+          [...oldCachedCategories, createMarketBasketCategory],
+          '_order'
+        )
 
-      cache.writeQuery({
-        query: GET_MARKET_BASKETS_CATEGORIES,
-        variables: { marketBasketId },
-        data: { marketBasketsCategories: orderedFullSetOfCategries }
-      })
-    },
-    variables: {
-      input: { market_basket: marketBasketId, ...formData },
-    },
-  })
+        cache.writeQuery({
+          query: GET_MARKET_BASKETS_CATEGORIES,
+          variables: { marketBasketId },
+          data: { marketBasketsCategories: orderedFullSetOfCategries },
+        })
+      },
+      variables: {
+        input: { market_basket: marketBasketId, ...formData },
+      },
+    }
+  )
 
   const handleCreate = (e) => {
     e.preventDefault()
@@ -59,35 +65,29 @@ const CategoryCreateForm = () => {
   }
 
   const handleNameOnChange = ({ target: { value } }) => {
-    setFormData(prevState => ({ ...prevState, name: value }))
+    setFormData((prevState) => ({ ...prevState, name: value }))
   }
 
   const handlePromptOnChange = ({ target: { value } }) => {
-    setFormData(prevState => ({ ...prevState, prompt: value }))
+    setFormData((prevState) => ({ ...prevState, prompt: value }))
   }
 
   const handleCategoryTypeOnChange = ({ value }) => {
-    setFormData(prevState => ({ ...prevState, category_type: value }))
+    setFormData((prevState) => ({ ...prevState, category_type: value }))
   }
 
   return (
     <form style={FORM_STYLE} onSubmit={handleCreate}>
       <h3>Category Create Form</h3>
       <label>Name (required)</label>
-      <input
-        value={formData.name}
-        onChange={handleNameOnChange}
-      />
+      <input value={formData.name} onChange={handleNameOnChange} />
       <label>Category Type (required)</label>
       <Select
         options={CATEGORY_TYPE_OPTIONS}
         onChange={handleCategoryTypeOnChange}
       />
       <label>Prompt</label>
-      <input
-        value={formData.prompt}
-        onChange={handlePromptOnChange}
-      />
+      <input value={formData.prompt} onChange={handlePromptOnChange} />
       <Button>Create Category</Button>
     </form>
   )

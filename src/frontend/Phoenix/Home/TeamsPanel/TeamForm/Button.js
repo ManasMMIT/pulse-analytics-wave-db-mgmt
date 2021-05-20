@@ -7,6 +7,7 @@ import Color from 'frontend/utils/color'
 import Spacing from 'frontend/utils/spacing'
 
 import Modal from 'frontend/components/Modal'
+
 import TeamForm from './TeamForm'
 
 const StyledButton = styled.button(
@@ -46,14 +47,12 @@ class Button extends React.Component {
     const {
       team,
       clientId,
-      mutationDoc,
+      mutationObj,
       buttonLabel,
       buttonStyle,
       buttonColor,
       modalTitle,
       modalStyle,
-      clientMutation,
-      refetchQueries,
     } = this.props
 
     return (
@@ -74,10 +73,8 @@ class Button extends React.Component {
           <TeamForm
             team={team}
             clientId={clientId}
-            mutationDoc={mutationDoc}
-            clientMutation={clientMutation}
+            mutationObj={mutationObj}
             afterSubmitHook={this.closeModal}
-            refetchQueries={refetchQueries}
           />
         </Modal>
       </>

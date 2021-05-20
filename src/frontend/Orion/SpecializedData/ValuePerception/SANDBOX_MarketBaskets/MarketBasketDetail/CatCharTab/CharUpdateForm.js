@@ -22,25 +22,21 @@ const formDataSchema = {
 
 const CharUpdateForm = () => {
   const { marketBasketId } = useParams()
-  const [
-    formData,
-    setFormData,
-  ] = useState(formDataSchema)
+  const [formData, setFormData] = useState(formDataSchema)
 
-  const { data: marketBasketCategoryData, loading } = useQuery(GET_MARKET_BASKETS_CATEGORIES, { variables: { marketBasketId } })
+  const {
+    data: marketBasketCategoryData,
+    loading,
+  } = useQuery(GET_MARKET_BASKETS_CATEGORIES, { variables: { marketBasketId } })
 
   useEffect(() => {
     if (!loading) {
-      const exampleCategory = (
-        marketBasketCategoryData.marketBasketsCategories
-        && marketBasketCategoryData.marketBasketsCategories[0]
-      )
+      const exampleCategory =
+        marketBasketCategoryData.marketBasketsCategories &&
+        marketBasketCategoryData.marketBasketsCategories[0]
 
-      const {
-        id,
-        name,
-        description,
-      } = exampleCategory.characteristics_full[0] || {}
+      const { id, name, description } =
+        exampleCategory.characteristics_full[0] || {}
 
       setFormData({
         id,
@@ -50,11 +46,14 @@ const CharUpdateForm = () => {
     }
   }, [loading])
 
-  const [updateMarketBasketCategoryCharacteristic] = useMutation(UPDATE_MARKET_BASKET_CATEGORY_CHARACTERISTIC, {
-    variables: {
-      input: formData,
-    },
-  })
+  const [updateMarketBasketCategoryCharacteristic] = useMutation(
+    UPDATE_MARKET_BASKET_CATEGORY_CHARACTERISTIC,
+    {
+      variables: {
+        input: formData,
+      },
+    }
+  )
 
   const handleUpdate = (e) => {
     e.preventDefault()
@@ -62,21 +61,18 @@ const CharUpdateForm = () => {
   }
 
   const handleNameOnChange = ({ target: { value } }) => {
-    setFormData(prevState => ({ ...prevState, name: value }))
+    setFormData((prevState) => ({ ...prevState, name: value }))
   }
 
   const handleDescriptionOnChange = ({ target: { value } }) => {
-    setFormData(prevState => ({ ...prevState, description: value }))
+    setFormData((prevState) => ({ ...prevState, description: value }))
   }
 
   return (
     <form style={FORM_STYLE} onSubmit={handleUpdate}>
       <h3>Characteristic Update Form</h3>
       <label>Name (required)</label>
-      <input
-        value={formData.name}
-        onChange={handleNameOnChange}
-      />
+      <input value={formData.name} onChange={handleNameOnChange} />
       <label>Description</label>
       <input
         value={formData.description}

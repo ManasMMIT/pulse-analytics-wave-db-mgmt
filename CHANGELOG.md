@@ -14,6 +14,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased] - Started: 5-12-21
 
+### Changed
+- `Phoenix`: Home and SitemapPanel refactored; frontend resolvers removed [#1015](https://github.com/pulse-analytics/wave-db-mgmt/pull/1015)
+
 ## [4.9.1] - Started: 5-4-21
 
 ### Added

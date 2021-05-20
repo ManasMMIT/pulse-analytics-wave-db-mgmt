@@ -15,7 +15,9 @@ import CharDeleteButton from './CharDeleteButton'
 
 const CatCharTab = () => {
   const { marketBasketId } = useParams()
-  const { data, loading } = useQuery(GET_MARKET_BASKETS_CATEGORIES, { variables: { marketBasketId } })
+  const { data, loading } = useQuery(GET_MARKET_BASKETS_CATEGORIES, {
+    variables: { marketBasketId },
+  })
 
   if (loading) return <Spinner />
 
@@ -29,30 +31,22 @@ const CatCharTab = () => {
       <CharCreateForm />
       <CharUpdateForm />
       <ul>
-        {
-          categories.map(({
-            id,
-            name,
-            characteristics_full,
-          }) => (
-            <React.Fragment key={id}>
-              <li>
-                {name}
-                <CategoryDeleteButton id={id} />
-              </li>
-              <ul style={{ paddingLeft: 10 }}>
-                {
-                  characteristics_full.map(({ id: charId, name }) => (
-                    <li>
-                      {name}
-                      <CharDeleteButton categoryId={id} id={charId} />
-                    </li>
-                  ))
-                }
-              </ul>
-            </React.Fragment>
-          ))
-        }
+        {categories.map(({ id, name, characteristics_full }) => (
+          <React.Fragment key={id}>
+            <li>
+              {name}
+              <CategoryDeleteButton id={id} />
+            </li>
+            <ul style={{ paddingLeft: 10 }}>
+              {characteristics_full.map(({ id: charId, name }) => (
+                <li>
+                  {name}
+                  <CharDeleteButton categoryId={id} id={charId} />
+                </li>
+              ))}
+            </ul>
+          </React.Fragment>
+        ))}
       </ul>
     </div>
   )

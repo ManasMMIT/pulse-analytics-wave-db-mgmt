@@ -9,26 +9,29 @@ import Spacing from '../../../../utils/spacing'
 import Modal from '../../../../components/Modal'
 import UserForm from './UserFormContainer'
 
-const StyledButton = styled.button({
-  border: 'none',
-  height: 30,
-  borderRadius: 4,
-  fontWeight: 700,
-  cursor: 'pointer',
-  padding: `${Spacing.S3}`,
-  ':active': {
-    outline: 'none',
+const StyledButton = styled.button(
+  {
+    border: 'none',
+    height: 30,
+    borderRadius: 4,
+    fontWeight: 700,
+    cursor: 'pointer',
+    padding: `${Spacing.S3}`,
+    ':active': {
+      outline: 'none',
+    },
+    ':focus': {
+      outline: 'none',
+    },
   },
-  ':focus': {
-    outline: 'none',
-  },
-}, props => ({
-  background: transparentize(0.85, props.buttonColor),
-  color: props.buttonColor,
-  ':hover': {
-    background: transparentize(0.7, props.buttonColor),
-  }
-}))
+  (props) => ({
+    background: transparentize(0.85, props.buttonColor),
+    color: props.buttonColor,
+    ':hover': {
+      background: transparentize(0.7, props.buttonColor),
+    },
+  })
+)
 
 class Button extends React.Component {
   state = { isModalOpen: false }
@@ -50,7 +53,7 @@ class Button extends React.Component {
       selectedTeamId,
       mutationDoc,
       additionalFormData,
-      clientMutation,
+      handleClick,
     } = this.props
 
     return (
@@ -75,7 +78,7 @@ class Button extends React.Component {
             afterSubmitHook={this.closeModal}
             mutationDoc={mutationDoc}
             additionalFormData={additionalFormData}
-            clientMutation={clientMutation}
+            handleClick={handleClick}
           />
         </Modal>
       </>

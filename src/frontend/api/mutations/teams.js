@@ -14,44 +14,22 @@ export const UPDATE_TEAM_NODE = gql`
   }
 `
 
-export const SELECT_TEAM = gql`
-  mutation SelectTeam($_id: String) {
-    selectTeam(_id: $_id) @client {
-      _id
-      name
-      description
-      defaultLandingPath
-    }
-  }
-`
-
 export const CREATE_TEAM = gql`
   mutation CreateTeam($input: CreateTeamInput!) {
     createTeam(input: $input) {
       _id
       name
+      uuid
       description
       isDefault
       sitemap
       client {
         _id
+        name
+        description
+        icon
       }
-      defaultLandingPath
-    }
-  }
-`
-
-export const MANAGE_CREATED_TEAM = gql`
-  mutation ManageCreatedTeam($data: JSON) {
-    manageCreatedTeam(data: $data) @client {
-      _id
-      name
-      description
-      isDefault
-      sitemap
-      client {
-        _id
-      }
+      resources
       defaultLandingPath
     }
   }
@@ -62,18 +40,17 @@ export const DELETE_TEAM = gql`
     deleteTeam(input: $input) {
       _id
       name
+      uuid
       description
-      defaultLandingPath
-    }
-  }
-`
-
-export const MANAGE_DELETED_TEAM = gql`
-  mutation ManageDeletedTeam($data: JSON) {
-    manageDeletedTeam(data: $data) @client {
-      _id
-      name
-      description
+      isDefault
+      sitemap
+      client {
+        _id
+        name
+        description
+        icon
+      }
+      resources
       defaultLandingPath
     }
   }
@@ -84,26 +61,17 @@ export const UPDATE_TEAM = gql`
     updateTeam(input: $input) {
       _id
       name
+      uuid
       description
+      isDefault
       sitemap
       client {
         _id
+        name
+        description
+        icon
       }
-      defaultLandingPath
-    }
-  }
-`
-
-export const MANAGE_UPDATED_TEAM = gql`
-  mutation ManageUpdatedTeam($data: JSON) {
-    manageUpdatedTeam(data: $data) @client {
-      _id
-      name
-      description
-      sitemap
-      client {
-        _id
-      }
+      resources
       defaultLandingPath
     }
   }
@@ -116,10 +84,14 @@ export const UPDATE_PERMISSIONS = gql`
     updatePermissions(input: $input) {
       _id
       name
+      uuid
       description
+      isDefault
       sitemap
       client {
         _id
+        name
+        description
       }
       resources
       defaultLandingPath

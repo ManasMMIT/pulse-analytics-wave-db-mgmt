@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
 import { transparentize, lighten } from 'polished'
-import { useMutation, useApolloClient } from '@apollo/react-hooks'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons'
 
@@ -49,8 +48,7 @@ const DeleteForeverButton = styled.button({
 const modalButtonStyle = {}
 
 const DeleteButton = ({
-  mutationDoc,
-  clientMutation, // TODO: Change var name; confusing because this has nothing to do with Client business object, refers to frontend resolver mutation doc
+  mutationObj: { mutationFunc, loading, error },
   style,
   modalTitle,
   modalText,
@@ -61,22 +59,10 @@ const DeleteButton = ({
   const openModal = () => toggleModal(true)
   const closeModal = () => toggleModal(false)
 
-  const client = useApolloClient()
-
-  const updateClientMutationCallback = (store, { data }) =>
-    client.mutate({
-      mutation: clientMutation,
-      variables: { data },
-    })
-
-  const [deleteHandler, { loading, error }] = useMutation(mutationDoc, {
-    update: updateClientMutationCallback,
-  })
-
   if (error) return <div style={{ color: 'red' }}>Error processing request</div>
 
   const finalDeleteHandler = () =>
-    deleteHandler({
+    mutationFunc({
       variables: {
         input: {
           _id: itemId,
@@ -109,12 +95,10 @@ const DeleteButton = ({
 
 DeleteButton.propTypes = {
   style: PropTypes.object,
-  mutationDoc: PropTypes.object,
+  mutationObj: PropTypes.object,
   modalTitle: PropTypes.string,
   modalText: PropTypes.string,
   itemId: PropTypes.string,
-  clientMutation: PropTypes.object,
-  client: PropTypes.object,
   additionalFormData: PropTypes.object,
 }
 

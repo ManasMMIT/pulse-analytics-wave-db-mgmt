@@ -1,11 +1,9 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import styled from "@emotion/styled"
-import { useMutation, useApolloClient } from '@apollo/react-hooks'
+import styled from '@emotion/styled'
 import { transparentize, lighten } from 'polished'
 
 import Spinner from 'frontend/components/Spinner'
-
 import { Colors, Spacing, FontFamily } from 'frontend/utils/pulseStyles'
 
 const FormWrapper = styled.div({
@@ -18,7 +16,7 @@ const Label = styled.label({
   fontSize: 12,
   lineHeight: '22px',
   fontWeight: 600,
-  textTransform: 'capitalize'
+  textTransform: 'capitalize',
 })
 
 const InputSection = styled.div({
@@ -38,7 +36,7 @@ const Input = styled.input({
   ':focus': {
     border: `1px solid ${transparentize(0.1, Colors.PRIMARY)}`,
     outline: 'none',
-  }
+  },
 })
 
 const Button = styled.button({
@@ -55,23 +53,19 @@ const Button = styled.button({
   marginTop: Spacing.LARGE,
   ':hover': {
     background: lighten(0.1, Colors.PRIMARY),
-  }
+  },
 })
 
 class TeamForm extends Component {
   constructor(props) {
     super(props)
     const {
-      team: {
-        _id,
-        description,
-        defaultLandingPath = '',
-      },
+      team: { _id, description, defaultLandingPath = '' },
     } = props
 
     this.state = {
-      _id, 
-      description, 
+      _id,
+      description,
       defaultLandingPath: defaultLandingPath || '',
     }
 
@@ -79,11 +73,8 @@ class TeamForm extends Component {
     if (props.clientId) this.state.clientId = props.clientId
   }
 
-  handleChange = e => {
-    const {
-      value,
-      name,
-    } = e.target
+  handleChange = (e) => {
+    const { value, name } = e.target
 
     this.setState({ [name]: value })
   }
@@ -92,16 +83,10 @@ class TeamForm extends Component {
     const {
       state,
       handleChange,
-      props: {
-        handleSubmit,
-        afterSubmitHook,
-      },
+      props: { handleSubmit, afterSubmitHook },
     } = this
 
-    const {
-      description,
-      defaultLandingPath,
-    } = state
+    const { description, defaultLandingPath } = state
 
     return (
       <FormWrapper>
@@ -129,49 +114,24 @@ class TeamForm extends Component {
 
         <Button
           type="submit"
-          onClick={() => handleSubmit({ variables: { input: state } }).then(afterSubmitHook)}
+          onClick={() =>
+            handleSubmit({ variables: { input: state } }).then(afterSubmitHook)
+          }
         >
           submit
         </Button>
       </FormWrapper>
-    );
+    )
   }
 }
 
 const TeamFormContainer = ({
-  mutationDoc,
-  clientMutation,
-  refetchQueries,
+  mutationObj: { mutationFunc, loading, error },
   ...otherProps
 }) => {
-  const client = useApolloClient()
-
-  const updateClientMutationCallback = clientMutation
-    ? (cache, { data }) => {
-      client.mutate({
-        mutation: clientMutation,
-        variables: { data },
-      })
-    }
-    : () => {}
-
-  const [handleSubmit, { loading, error }] = useMutation(
-    mutationDoc,
-    {
-      update: updateClientMutationCallback,
-      refetchQueries,
-    },
-  )
-
   if (loading) return <Spinner />
   if (error) return <div style={{ color: 'red' }}>Error processing request</div>
-
-  return (
-    <TeamForm
-      handleSubmit={handleSubmit}
-      {...otherProps}
-    />
-  )
+  return <TeamForm handleSubmit={mutationFunc} {...otherProps} />
 }
 
 TeamFormContainer.propTypes = {
@@ -181,19 +141,15 @@ TeamFormContainer.propTypes = {
     defaultLandingPath: PropTypes.string,
   }),
   clientId: PropTypes.string,
-  mutationDoc: PropTypes.object,
+  mutationObj: PropTypes.object,
   afterMutationHook: PropTypes.func,
-  clientMutation: PropTypes.object,
-  refetchQueries: PropTypes.array,
 }
 
 TeamFormContainer.defaultProps = {
   team: { _id: null, description: '', defaultLandingPath: '' },
   clientId: null,
-  mutationDoc: {},
-  clientMutation: null,
+  mutationObj: { mutationFunc: () => null },
   afterMutationHook: () => null,
-  refetchQueries: [],
 }
 
 export default TeamFormContainer

@@ -20,7 +20,6 @@ import {
 } from 'react-router-dom'
 
 import resolvers from './api/resolvers'
-import typeDefs from './api/typeDefs'
 
 import superUsersById from './utils/super-users'
 
@@ -170,7 +169,6 @@ const App = () => {
     uri: '/api/graphql',
     clientState: {
       resolvers,
-      typeDefs,
     },
     request: (operation) => {
       operation.setContext((context) => ({

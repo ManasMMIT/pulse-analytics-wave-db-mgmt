@@ -1,25 +1,35 @@
 import React from 'react'
+import { useLocation } from 'react-router-dom'
+import queryString from 'query-string'
 import { useQuery } from '@apollo/react-hooks'
+import PropTypes from 'prop-types'
 
-import UserFormButton from './UserForm/Button'
+import { GET_TEAMS } from 'frontend/api/queries'
+import { CREATE_USER } from 'frontend/api/mutations'
 
 import { Colors } from '../../../utils/pulseStyles'
 
-import {
-  CREATE_USER,
-  MANAGE_CREATED_USER,
-} from '../../../api/mutations'
+import UserFormButton from './UserForm/Button'
 
-import {
-  GET_SELECTED_TEAM,
-} from '../../../api/queries'
+const CreateButton = ({ handleClick }) => {
+  const location = useLocation()
 
-const CreateButton = () => {
-  const { data, loading, error } = useQuery(GET_SELECTED_TEAM)
-  if (loading) return null
-  if (error) return <div>{error}</div>
+  const { clientId: selectedClientId, teamId: selectedTeamId } =
+    (location.search && queryString.parse(location.search)) || {}
 
-  const { selectedTeam } = data
+  const {
+    data: teamsData,
+    loading: teamsLoading,
+    error: teamsError,
+  } = useQuery(GET_TEAMS, {
+    variables: { clientId: selectedClientId },
+  })
+
+  if (teamsLoading) return null
+  if (teamsError) return <div>{teamsError}</div>
+
+  const selectedTeam =
+    teamsData.teams.find(({ _id }) => _id === selectedTeamId) || {}
 
   const defaultLanding = selectedTeam.defaultLandingPath
     ? { path: selectedTeam.defaultLandingPath, locked: false }
@@ -30,15 +40,20 @@ const CreateButton = () => {
       modalTitle="Create User"
       buttonLabel="Create User"
       buttonColor={Colors.PRIMARY}
-      selectedTeamId={selectedTeam._id}
+      selectedTeamId={selectedTeamId}
       userData={{
         _id: null, // for create user, _id has to be null bc undefined fetches all teams
         defaultLanding,
       }}
       mutationDoc={CREATE_USER}
-      additionalFormData={{ clientId: selectedTeam.client._id }}
-      clientMutation={MANAGE_CREATED_USER}
+      additionalFormData={{ clientId: selectedClientId }}
+      handleClick={handleClick}
     />
   )
 }
+
+CreateButton.propTypes = {
+  handleClick: PropTypes.func.isRequired,
+}
+
 export default CreateButton

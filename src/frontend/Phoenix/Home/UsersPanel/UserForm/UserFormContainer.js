@@ -1,29 +1,24 @@
 import React from 'react'
-import {
-  useQuery,
-} from '@apollo/react-hooks'
+import { useQuery } from '@apollo/react-hooks'
 
 import UserForm from './UserForm'
 import Spinner from 'frontend/components/Spinner'
 
-import {
-  GET_USER_TEAMS,
-} from '../../../../api/queries'
+import { GET_USER_TEAMS } from '../../../../api/queries'
 
 const UserFormContainer = ({
   userData,
   selectedTeamId,
   afterSubmitHook,
   mutationDoc,
-  clientMutation,
   additionalFormData,
+  handleClick,
 }) => {
   const { _id: userId } = userData
 
-  const { data, loading, error } = useQuery(
-    GET_USER_TEAMS,
-    { variables: { userId } }
-  )
+  const { data, loading, error } = useQuery(GET_USER_TEAMS, {
+    variables: { userId },
+  })
 
   if (error) return <div style={{ color: 'red' }}>Error processing request</div>
   if (loading) return <Spinner />
@@ -45,12 +40,12 @@ const UserFormContainer = ({
   return (
     <UserForm
       mutationDoc={mutationDoc}
-      clientMutation={clientMutation}
       userData={userData}
       selectedTeamId={selectedTeamId}
       allTeamsUserIsOn={data.teams}
       afterSubmitHook={afterSubmitHook}
       additionalFormData={additionalFormData}
+      handleClick={handleClick}
     />
   )
 }
