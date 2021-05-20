@@ -1,29 +1,47 @@
 import axios from 'axios'
 
+import SurveyExportEmitter from './SurveyExportEmitter'
+
 const getCompleteQuestionSet = require('./utils/getCompleteQuestionSet')
 const getCompleteAnswerSet = require('./utils/getCompleteAnswerSet')
 const getFilledInCompleteAnswerSet = require('./utils/getFilledInCompleteAnswerSet')
 
+const PROJECT_NAME = 'generating export data'
+const SOCKET_EMIT_ID = 'GENERATE_SURVEY_DATA_EXPORT'
+
 const marketBasketSurveyExportData = async (
   parent,
   { marketBasketId, surveyId },
-  context,
+  { io },
   info
 ) => {
+  const surveyExportEmitter = new SurveyExportEmitter(io, PROJECT_NAME, SOCKET_EMIT_ID)
+
+  surveyExportEmitter.start()
+
   const hydratedMarketBasketOp = axios
     .get(`hydrated-market-baskets/${marketBasketId}/`)
     .then(({ data }) => data)
-    .catch(e => { throw new Error(e) })
+    .catch(e => {
+      surveyExportEmitter.error()
+      throw new Error(e)
+    })
 
   const hydratedSurveyQuestionsAnswersOp = axios
     .get(`hydrated-market-basket-surveys-questions/?survey__id__in=${surveyId}`)
     .then(({ data }) => data)
-    .catch(e => { throw new Error(e) })
+    .catch(e => {
+      surveyExportEmitter.error()
+      throw new Error(e)
+    })
 
   const marketBasketSurveyOp = axios
     .get(`market-basket-surveys/${surveyId}/`)
     .then(({ data }) => data)
-    .catch(e => { throw new Error(e) })
+    .catch(e => {
+      surveyExportEmitter.error()
+      throw new Error(e)
+    })
 
   const [
     hydratedMarketBasket,
@@ -51,6 +69,8 @@ const marketBasketSurveyExportData = async (
     completeAnswerSet,
     hydratedSurveyQuestionsAnswers,
   )
+
+  surveyExportEmitter.success()
 
   return filledInCompleteAnswerSet
 }
