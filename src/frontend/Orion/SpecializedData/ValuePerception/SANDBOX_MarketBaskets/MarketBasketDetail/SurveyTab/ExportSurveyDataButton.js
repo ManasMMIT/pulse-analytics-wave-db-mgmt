@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import { useLazyQuery } from '@apollo/react-hooks'
 import { useParams } from 'react-router'
-import socket from 'frontend/api/socket'
+import { useAuth0 } from 'react-auth0-spa'
 
 import { GET_MARKET_BASKET_SURVEY_EXPORT_DATA } from 'frontend/api/queries'
+
+import socket from 'frontend/api/socket'
+
 import Spinner from 'frontend/components/Spinner'
 import ExportExcelButton from 'frontend/components/ExportExcelButton'
 import Button from 'frontend/components/Button'
@@ -11,11 +14,14 @@ import Icon from 'frontend/components/Icon'
 import Color from 'frontend/utils/color'
 
 const DEFAULT_NOTIFICATION = '✅ Good to generate export'
+const SOCKET_PROJECT_ID = 'GENERATE_SURVEY_DATA_EXPORT'
 
 const ExportSurveyDataButton = ({ surveyId }) => {
   const [notification, setNotification] = useState(DEFAULT_NOTIFICATION)
   const [generateExportStatus, setGenerateExportStatus] = useState(null)
+
   const { marketBasketId } = useParams()
+  const { user, loading: userLoading } = useAuth0()
 
   const [getExportData, { data, loading }] = useLazyQuery(
     GET_MARKET_BASKET_SURVEY_EXPORT_DATA,
@@ -26,14 +32,13 @@ const ExportSurveyDataButton = ({ surveyId }) => {
   )
 
   useEffect(() => {
-    socket.on('GENERATE_SURVEY_DATA_EXPORT', setNotification)
-  }, [])
-
-  useEffect(() => {
     setGenerateExportStatus(notification)
   }, [notification])
 
-  if (loading) return <Spinner />
+  if (loading || userLoading) return <Spinner />
+
+  const socketEmitId = `${SOCKET_PROJECT_ID}_${user.sub}_${surveyId}`
+  socket.on(socketEmitId, setNotification)
 
   // ! Likely want to hold data in state and disable the button after generating exprt data
   // * this will force users to export again, if they don't have the sheet handy or changed something.

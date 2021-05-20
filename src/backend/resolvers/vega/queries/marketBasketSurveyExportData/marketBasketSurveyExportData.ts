@@ -7,15 +7,16 @@ const getCompleteAnswerSet = require('./utils/getCompleteAnswerSet')
 const getFilledInCompleteAnswerSet = require('./utils/getFilledInCompleteAnswerSet')
 
 const PROJECT_NAME = 'generating export data'
-const SOCKET_EMIT_ID = 'GENERATE_SURVEY_DATA_EXPORT'
+const SOCKET_PROJECT_ID = 'GENERATE_SURVEY_DATA_EXPORT'
 
 const marketBasketSurveyExportData = async (
   parent,
   { marketBasketId, surveyId },
-  { io },
+  { user, io },
   info
 ) => {
-  const surveyExportEmitter = new SurveyExportEmitter(io, PROJECT_NAME, SOCKET_EMIT_ID)
+  const socketEmitId = `${SOCKET_PROJECT_ID}_${user.user_id}_${surveyId}`
+  const surveyExportEmitter = new SurveyExportEmitter(io, PROJECT_NAME, socketEmitId)
 
   surveyExportEmitter.start()
 
