@@ -242,12 +242,13 @@ const queries = gql`
   type MarketBasketSurveyQuestionAnswer {
     id: ID!
     rating: Int
-    stakeholder: MarketBasketStakeholder
+    stakeholder: ID
+    stakeholder_full: MarketBasketStakeholder
   }
 
   type MarketBasketSurveyQuestion {
     id: ID!
-    survey: MarketBasketSurveyHydrated
+    survey: ID
     category: MarketBasketCategory
     characteristic: MarketBasketCategoryCharacteristic
     answers: [MarketBasketSurveyQuestionAnswer!]

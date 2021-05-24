@@ -34,10 +34,7 @@ export const GET_MARKET_BASKETS_SURVEYS_QUESTIONS = gql`
   query getMarketBasketsSurveysQuestions($surveyId: ID) {
     marketBasketsSurveysQuestions(surveyId: $surveyId) {
       id
-      survey {
-        id
-        date
-      }
+      survey
       category {
         id
         name
@@ -53,7 +50,8 @@ export const GET_MARKET_BASKETS_SURVEYS_QUESTIONS = gql`
       answers {
         id
         rating
-        stakeholder {
+        stakeholder
+        stakeholder_full {
           id
           first_name
           last_name

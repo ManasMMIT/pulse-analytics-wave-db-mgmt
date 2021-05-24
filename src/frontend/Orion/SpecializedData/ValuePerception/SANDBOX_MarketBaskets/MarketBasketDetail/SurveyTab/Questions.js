@@ -20,7 +20,7 @@ const Questions = ({ surveyId }) => {
           <div key={id}>
             {category.name} - {characteristic.name}
             {answers.map(
-              ({ id, rating, stakeholder: { first_name, last_name } }) => (
+              ({ id, rating, stakeholder_full: { first_name, last_name } }) => (
                 <div key={id} style={{ marginLeft: 10 }}>
                   {first_name} {last_name} - {rating}
                 </div>
