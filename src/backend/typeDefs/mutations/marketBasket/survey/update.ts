@@ -3,7 +3,8 @@ import { gql } from 'apollo-server-express'
 const updateMarketBasketSurveyTypeDefs = gql`
   input UpdateMarketBasketSurveyInput {
     id: ID!
-    date: DateTime!
+    stakeholders: [ID!]
+    date: DateTime
   }
 `
 

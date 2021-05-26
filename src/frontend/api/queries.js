@@ -1,5 +1,27 @@
 import gql from 'graphql-tag'
 
+export const GET_VEGA_PEOPLE = gql`
+  query getVegaPeople {
+    vegaPeople {
+      id
+      first_name
+      last_name
+      middle_name
+      role_specialties {
+        id
+        person
+        person_role_indication
+      }
+      role_specialties_ids
+      role {
+        id
+        name
+        default_specialty_label
+      }
+    }
+  }
+`
+
 export const GET_VEGA_PRODUCTS_REGIMENS = gql`
   query getVegaProductsRegimens($input: QueryVegaProdRegInput) {
     vegaProductsRegimens(input: $input) {
@@ -62,11 +84,18 @@ export const GET_MARKET_BASKETS_SURVEYS_QUESTIONS = gql`
 `
 
 export const GET_MARKET_BASKETS_SURVEYS = gql`
-  query getMarketBasketsSurveys($marketBasketId: ID) {
-    marketBasketsSurveys(marketBasketId: $marketBasketId) {
+  query getMarketBasketsSurveys($surveyId: ID, $marketBasketId: ID) {
+    marketBasketsSurveys(surveyId: $surveyId, marketBasketId: $marketBasketId) {
       id
       market_basket
       stakeholders
+      stakeholders_full {
+        id
+        first_name
+        last_name
+        middle_name
+        role_specialties_ids
+      }
       date
     }
   }

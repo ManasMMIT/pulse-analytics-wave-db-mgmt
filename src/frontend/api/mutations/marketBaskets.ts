@@ -159,6 +159,13 @@ export const CREATE_MARKET_BASKET_SURVEY = gql`
       id
       market_basket
       stakeholders
+      stakeholders_full {
+        id
+        first_name
+        last_name
+        middle_name
+        role_specialties_ids
+      }
       date
     }
   }
@@ -170,6 +177,13 @@ export const UPDATE_MARKET_BASKET_SURVEY = gql`
       id
       market_basket
       stakeholders
+      stakeholders_full {
+        id
+        first_name
+        last_name
+        middle_name
+        role_specialties_ids
+      }
       date
     }
   }
@@ -181,6 +195,13 @@ export const DELETE_MARKET_BASKET_SURVEY = gql`
       id
       market_basket
       stakeholders
+      stakeholders_full {
+        id
+        first_name
+        last_name
+        middle_name
+        role_specialties_ids
+      }
       date
     }
   }

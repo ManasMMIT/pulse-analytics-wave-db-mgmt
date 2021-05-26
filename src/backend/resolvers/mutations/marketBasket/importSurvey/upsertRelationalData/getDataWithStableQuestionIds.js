@@ -2,18 +2,18 @@ const axios = require('axios')
 const _ = require('lodash')
 const { v4: uuid4 } = require('uuid')
 
-const getDataWithStableQuestionIds = async (
-  data,
-  surveyId,
-) => {
+const getDataWithStableQuestionIds = async (data, surveyId) => {
   const surveyQuestions = await axios
     .get(`market-basket-surveys-questions/?survey=${surveyId}`)
     .then(({ data }) => data)
-    .catch(e => { throw new Error(e) })
+    .catch((e) => {
+      throw new Error(e)
+    })
 
   const surveyQuestionsByParts = _.keyBy(
     surveyQuestions,
-    ({ category, characteristic, regimen, product, manufacturer }) => [category, characteristic, regimen, product, manufacturer].join('|')
+    ({ category, characteristic, regimen, product, manufacturer }) =>
+      [category, characteristic, regimen, product, manufacturer].join('|')
   )
 
   const clonedData = _.cloneDeep(data)
@@ -42,7 +42,9 @@ const getDataWithStableQuestionIds = async (
 
     if (preExistingQuestion) {
       datum.question_id = preExistingQuestion.id
-      console.log(`Missing question_id ${preExistingQuestion.id} injected into sheet data`)
+      console.log(
+        `Missing question_id ${preExistingQuestion.id} injected into sheet data`
+      )
       return acc
     }
 
@@ -68,9 +70,12 @@ const getDataWithStableQuestionIds = async (
   }, [])
 
   if (questionsToCreate.length) {
-    await axios.post('market-basket-surveys-questions/bulk_create/', questionsToCreate)
+    await axios
+      .post('market-basket-surveys-questions/bulk_create/', questionsToCreate)
       .then(({ data }) => data)
-      .catch(e => { throw new Error(e) })
+      .catch((e) => {
+        throw new Error(e)
+      })
   }
 
   return clonedData

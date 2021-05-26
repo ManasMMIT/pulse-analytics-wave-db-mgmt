@@ -7,8 +7,9 @@ import { CREATE_MARKET_BASKET_SURVEY } from 'frontend/api/mutations'
 
 import Input from 'frontend/components/Input'
 
-import Questions from './Questions'
 import UpdateAndDeleteSurvey from './UpdateAndDeleteSurvey'
+import Stakeholders from './Stakeholders'
+import Questions from './Questions'
 import ExportSurveyDataButton from './ExportSurveyDataButton'
 import ImportSurveyButton from './ImportSurveyButton'
 
@@ -66,6 +67,8 @@ const SurveyTab = ({ marketBasket }) => {
               marketBasketId={marketBasket.id}
               marketBasketSurveyId={id}
             />
+            <Stakeholders surveyId={id} />
+            <h3>Questions</h3>
             <div style={{ marginLeft: 10 }}>
               <Questions surveyId={id} />
             </div>

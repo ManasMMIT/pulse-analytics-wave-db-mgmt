@@ -1,3 +1,4 @@
+import vegaPeople from './people'
 import vegaProducts from './products'
 import vegaProductsRegimens from './productsRegimens'
 import vegaRegimens from './regimens'
@@ -10,6 +11,7 @@ import marketBasketsSurveysQuestions from './marketBasketsSurveysQuestions'
 import marketBasketSurveyExportData from './marketBasketSurveyExportData'
 
 export default {
+  vegaPeople,
   vegaProducts,
   vegaProductsRegimens,
   vegaRegimens,

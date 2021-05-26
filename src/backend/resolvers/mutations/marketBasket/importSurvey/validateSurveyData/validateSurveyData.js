@@ -13,8 +13,4 @@
   - Manufacturer is not associated with a product in the market basket
 */
 
-module.exports = async ({
-  data,
-  marketBasketId,
-  surveyId,
-}) => data
+module.exports = async ({ data, marketBasketId, surveyId }) => data

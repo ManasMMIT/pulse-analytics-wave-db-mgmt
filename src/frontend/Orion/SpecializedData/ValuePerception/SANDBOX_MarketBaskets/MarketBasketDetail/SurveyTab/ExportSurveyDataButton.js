@@ -13,7 +13,7 @@ const ExportSurveyDataButton = ({ surveyId }) => {
     GET_MARKET_BASKET_SURVEY_EXPORT_DATA,
     {
       variables: { surveyId },
-      fetchPolicy: 'network-only'
+      fetchPolicy: 'network-only',
     }
   )
 

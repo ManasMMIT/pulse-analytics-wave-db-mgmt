@@ -10,8 +10,11 @@ const updateMarketBasketSurvey = async (
   info
 ) => {
   const { date, ...rest } = body
-  const standardizedDate = zonedTimeToUtc(date, DEFAULT_TIMEZONE)
-  body = { date: standardizedDate, ...rest }
+  
+  if (date) {
+    const standardizedDate = zonedTimeToUtc(date, DEFAULT_TIMEZONE)
+    body = { date: standardizedDate, ...rest }
+  }
 
   return await axios.patch(`market-basket-surveys/${id}/`, body)
     .then(({ data }) => data)

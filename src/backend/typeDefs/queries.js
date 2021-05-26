@@ -7,8 +7,13 @@ const queries = gql`
     marketBaskets(marketBasketId: ID): [MarketBasket!]!
     marketBasketsSubscriptions: [MarketBasketSubscription!]!
     marketBasketsCategories(marketBasketId: ID): [MarketBasketCategory!]!
-    marketBasketSurveyExportData(surveyId: ID!): [MarketBasketSurveyExportDatum!]!
-    marketBasketsSurveys(marketBasketId: ID): [MarketBasketSurvey!]!
+    marketBasketSurveyExportData(
+      surveyId: ID!
+    ): [MarketBasketSurveyExportDatum!]!
+    marketBasketsSurveys(
+      surveyId: ID
+      marketBasketId: ID
+    ): [MarketBasketSurvey!]!
     marketBasketsSurveysQuestions(surveyId: ID): [MarketBasketSurveyQuestion!]!
 
     nodes(parentId: String, type: String): [Node]
@@ -129,6 +134,8 @@ const queries = gql`
     cMsOrgPrimarySpecialtyCounts(orgPacId: String): JSON
 
     people: [Person]
+    vegaPeople: [VegaPerson!]!
+
     DEV_pathwaysInfluencers: JSON # grabbing sheet data directly from dev. type def is in wave-api
     DEV_providerInfluencers: JSON # grabbing sheet data directly from dev. type def is in wave-api
     physiciansCompare(npi: Float): [PhysiciansCompareDatum]
@@ -223,35 +230,36 @@ const queries = gql`
   }
 
   type MarketBasketSurveyExportDatum {
-      first_name: String
-      middle_name: String
-      last_name: String
+    first_name: String
+    middle_name: String
+    last_name: String
 
-      category_name: String
-      category_type: String
-      characteristic_name: String
-      
-      regimen_name: String
-      product_brand_name: String
-      product_generic_name: String
-      manufacturer_name: String
+    category_name: String
+    category_type: String
+    characteristic_name: String
 
-      question_id: ID
-      answer_id: ID
-      rating: Int
+    regimen_name: String
+    product_brand_name: String
+    product_generic_name: String
+    manufacturer_name: String
 
-      person_id: ID
-      category_id: ID
-      characteristic_id: ID
-      regimen_id: ID
-      product_id: ID
-      manufacturer_id: ID
+    question_id: ID
+    answer_id: ID
+    rating: Int
+
+    person_id: ID
+    category_id: ID
+    characteristic_id: ID
+    regimen_id: ID
+    product_id: ID
+    manufacturer_id: ID
   }
 
   type MarketBasketSurvey {
     id: ID!
     market_basket: ID
     stakeholders: [ID!]
+    stakeholders_full: [VegaPerson!]
     date: DateTime
   }
 
@@ -380,6 +388,28 @@ const queries = gql`
     externalLink: String
     nationalProviderIdentifier: Float
     physicianProfileId: Float
+  }
+
+  type VegaPersonRoleSpecialty {
+    id: ID!
+    person: ID
+    person_role_indication: ID
+  }
+
+  type VegaPersonRole {
+    id: ID!
+    name: String
+    default_specialty_label: String
+  }
+
+  type VegaPerson {
+    id: ID!
+    first_name: String
+    last_name: String
+    middle_name: String
+    role_specialties: [VegaPersonRoleSpecialty!]
+    role_specialties_ids: [ID!]
+    role: VegaPersonRole
   }
 
   type Node {
