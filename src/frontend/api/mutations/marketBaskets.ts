@@ -1,5 +1,11 @@
 import gql from 'graphql-tag'
 
+export const IMPORT_MARKET_BASKET_SURVEY = gql`
+  mutation ImportMarketBasketSurvey($input: ImportMarketBasketSurveyInput!) {
+    importMarketBasketSurvey(input: $input)
+  }
+`
+
 export const PUSH_MARKET_BASKETS_TO_DEV = gql`
   mutation PushMarketBasketsToDev($input: PushMarketBasketsToDevInput!) {
     pushMarketBasketsToDev(input: $input) {

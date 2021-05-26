@@ -7,6 +7,7 @@ const queries = gql`
     marketBaskets(marketBasketId: ID): [MarketBasket!]!
     marketBasketsSubscriptions: [MarketBasketSubscription!]!
     marketBasketsCategories(marketBasketId: ID): [MarketBasketCategory!]!
+    marketBasketSurveyExportData(surveyId: ID!): [MarketBasketSurveyExportDatum!]!
     marketBasketsSurveys(marketBasketId: ID): [MarketBasketSurvey!]!
     marketBasketsSurveysQuestions(surveyId: ID): [MarketBasketSurveyQuestion!]!
 
@@ -219,6 +220,32 @@ const queries = gql`
     id: ID!
     name: String
     description: String
+  }
+
+  type MarketBasketSurveyExportDatum {
+      first_name: String
+      middle_name: String
+      last_name: String
+
+      category_name: String
+      category_type: String
+      characteristic_name: String
+      
+      regimen_name: String
+      product_brand_name: String
+      product_generic_name: String
+      manufacturer_name: String
+
+      question_id: ID
+      answer_id: ID
+      rating: Int
+
+      person_id: ID
+      category_id: ID
+      characteristic_id: ID
+      regimen_id: ID
+      product_id: ID
+      manufacturer_id: ID
   }
 
   type MarketBasketSurvey {

@@ -9,6 +9,8 @@ import Input from 'frontend/components/Input'
 
 import Questions from './Questions'
 import UpdateAndDeleteSurvey from './UpdateAndDeleteSurvey'
+import ExportSurveyDataButton from './ExportSurveyDataButton'
+import ImportSurveyButton from './ImportSurveyButton'
 
 const SurveyTab = ({ marketBasket }) => {
   const [stagedDate, setDate] = useState()
@@ -55,14 +57,18 @@ const SurveyTab = ({ marketBasket }) => {
       />
       <Button onClick={createMarketBasket}>Create Market Baset Survey</Button>
       {marketBasketsSurveys.marketBasketsSurveys.map(({ id, date }) => (
-        <div key={id}>
-          Date: {date}
-          <UpdateAndDeleteSurvey
-            marketBasketId={marketBasket.id}
-            marketBasketSurveyId={id}
-          />
-          <div style={{ marginLeft: 10 }}>
-            <Questions surveyId={id} />
+        <div>
+          <ExportSurveyDataButton surveyId={id} />
+          <ImportSurveyButton surveyId={id} />
+          <div key={id}>
+            Date: {date}
+            <UpdateAndDeleteSurvey
+              marketBasketId={marketBasket.id}
+              marketBasketSurveyId={id}
+            />
+            <div style={{ marginLeft: 10 }}>
+              <Questions surveyId={id} />
+            </div>
           </div>
         </div>
       ))}

@@ -106,6 +106,31 @@ export const GET_MARKET_BASKETS = gql`
   }
 `
 
+export const GET_MARKET_BASKET_SURVEY_EXPORT_DATA = gql`
+  query getMarketBasketSurveyExportData($surveyId: ID!) {
+    marketBasketSurveyExportData(surveyId: $surveyId) {
+      category_name
+      characteristic_name
+      first_name
+      last_name
+      category_type
+      regimen_name
+      product_brand_name
+      product_generic_name
+      manufacturer_name
+      rating
+      question_id
+      answer_id
+      person_id
+      category_id
+      characteristic_id
+      regimen_id
+      product_id
+      manufacturer_id
+    }
+  }
+`
+
 export const GET_LISTS_CONFIG = gql`
   query getListsConfig($dashboardTool: String) {
     listsConfig(dashboardTool: $dashboardTool) {

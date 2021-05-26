@@ -5,9 +5,10 @@ import categoryTypeDefs from './category'
 import characteristicTypeDefs from './characteristic'
 import surveyTypeDefs from './survey'
 import pushMarketBasketsToDevTypeDefs from './pushToDev'
-
+import importSurveyTypeDefs from './importSurvey'
 
 export default [
+  importSurveyTypeDefs,
   pushMarketBasketsToDevTypeDefs,
   createMarketBasketTypeDefs,
   updateMarketBasketTypeDefs,
