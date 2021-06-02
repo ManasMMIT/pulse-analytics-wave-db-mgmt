@@ -7,6 +7,7 @@ const queries = gql`
     marketBaskets(marketBasketId: ID): [MarketBasket!]!
     marketBasketsSubscriptions: [MarketBasketSubscription!]!
     marketBasketsCategories(marketBasketId: ID): [MarketBasketCategory!]!
+    marketBasketsSurveysStakeholders(surveyId: ID): [VegaPerson!]!
     marketBasketSurveyExportData(
       surveyId: ID!
     ): [MarketBasketSurveyExportDatum!]!
@@ -136,6 +137,9 @@ const queries = gql`
     people: [Person]
     vegaPeople: [VegaPerson!]!
 
+    vegaPeopleRoles: [VegaPersonRole!]!
+    vegaPeopleRolesTypes: [VegaPersonRoleType!]!
+
     DEV_pathwaysInfluencers: JSON # grabbing sheet data directly from dev. type def is in wave-api
     DEV_providerInfluencers: JSON # grabbing sheet data directly from dev. type def is in wave-api
     physiciansCompare(npi: Float): [PhysiciansCompareDatum]
@@ -145,6 +149,7 @@ const queries = gql`
     endUserTermsUsers: [EndUserTermsUser]
 
     usStates: [UsState]
+    vegaStates: [VegaState!]!
 
     events: [Event]
   }
@@ -325,6 +330,14 @@ const queries = gql`
     surveyCommercialLivesPercentInsured: Float
   }
 
+  type VegaState {
+    id: ID!
+    full_name: String
+    abbreviation: String
+    created_at: DateTime
+    updated_at: DateTime
+  }
+
   type OpenPaymentDatum {
     dateOfPayment: String
     totalAmountOfPaymentUsdollars: Float
@@ -390,16 +403,22 @@ const queries = gql`
     physicianProfileId: Float
   }
 
-  type VegaPersonRoleSpecialty {
+  type VegaPersonRoleType {
     id: ID!
-    person: ID
-    person_role_indication: ID
+    name: String
+    created_at: DateTime
+    updated_at: DateTime
   }
 
   type VegaPersonRole {
     id: ID!
     name: String
     default_specialty_label: String
+    type: VegaPersonRoleType
+    people: [ID!]
+    indication_specialties: [ID!]
+    created_at: DateTime
+    updated_at: DateTime
   }
 
   type VegaPerson {
@@ -407,9 +426,10 @@ const queries = gql`
     first_name: String
     last_name: String
     middle_name: String
-    role_specialties: [VegaPersonRoleSpecialty!]
-    role_specialties_ids: [ID!]
+    primary_state: VegaState
     role: VegaPersonRole
+    created_at: DateTime
+    updated_at: DateTime
   }
 
   type Node {

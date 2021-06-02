@@ -1,3 +1,5 @@
+import vegaResolvers from '../vega/mutations'
+
 import nodeResolvers from './node'
 import marketBasketResolvers from './marketBasket'
 
@@ -46,6 +48,8 @@ const devToProdPushConfigResolvers = require('./devToProdPushConfig')
 const relationalResolvers = require('./relationalResolvers')
 
 module.exports = {
+  ...vegaResolvers,
+
   ...clientResolvers,
   ...teamResolvers,
   ...userResolvers,

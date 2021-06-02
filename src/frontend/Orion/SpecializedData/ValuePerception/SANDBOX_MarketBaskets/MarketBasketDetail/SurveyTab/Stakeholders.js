@@ -17,9 +17,7 @@ const Stakeholders = ({ surveyId }) => {
   })
 
   const removeStakeholder = (stakeholderId, stakeholders) => {
-    const newStakeholders = stakeholders.filter(
-      (id) => id !== stakeholderId
-    )
+    const newStakeholders = stakeholders.filter((id) => id !== stakeholderId)
 
     updateStakeholders({
       variables: {

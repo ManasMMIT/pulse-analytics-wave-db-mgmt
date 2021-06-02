@@ -7,6 +7,7 @@ const zero_resetPerceptionData = require('./zero_resetPerceptionData')
 const one_IndRegProdSteps = require('./one_IndRegProdSteps')
 const two_clientTeamSteps = require('./two_clientTeamSteps')
 const three_seedPeople = require('./three_seedPeople')
+const four_seedStates = require('./four_seedStates')
 
 /*
   Migration steps:
@@ -28,7 +29,10 @@ const migrateToVega = async () => {
   // await zero_resetPerceptionData()
   // await one_IndRegProdSteps(dbs)
   // await two_clientTeamSteps(dbs)
+  
   await three_seedPeople(dbs)
+
+  // await four_seedStates(dbs)
 
   console.log('Perception Tool Vega Migration Completed')
   dbs.close()

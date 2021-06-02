@@ -101,6 +101,39 @@ export const GET_MARKET_BASKETS_SURVEYS = gql`
   }
 `
 
+export const GET_MARKET_BASKETS_SURVEYS_STAKEHOLDERS = gql`
+  query getMarketBasketsSurveysStakeholders($surveyId: ID) {
+    marketBasketsSurveysStakeholders(surveyId: $surveyId) {
+      id
+      first_name
+      last_name
+      middle_name
+      primary_state {
+        id
+        full_name
+        abbreviation
+        created_at
+        updated_at
+      }
+      role {
+        id
+        name
+        default_specialty_label
+        type {
+          id
+          name
+          created_at
+          updated_at
+        }
+        created_at
+        updated_at
+      }
+      created_at
+      updated_at
+    }
+  }
+`
+
 export const GET_MARKET_BASKETS_CATEGORIES = gql`
   query getMarketBasketsCategorires($marketBasketId: ID) {
     marketBasketsCategories(marketBasketId: $marketBasketId) {
@@ -239,6 +272,18 @@ export const GET_US_STATES = gql`
   }
 `
 
+export const GET_VEGA_STATES = gql`
+  query getVegaStates {
+    vegaStates {
+      id
+      full_name
+      abbreviation
+      created_at
+      updated_at
+    }
+  }
+`
+
 export const GET_OPEN_PAYMENTS = gql`
   query getOpenPayments($physicianProfileId: Float) {
     openPayments(physicianProfileId: $physicianProfileId) {
@@ -312,6 +357,37 @@ export const GET_PEOPLE = gql`
       externalLink
       nationalProviderIdentifier
       physicianProfileId
+    }
+  }
+`
+
+export const GET_VEGA_PEOPLE_ROLES = gql`
+  query getVegaPeopleRoles {
+    vegaPeopleRoles {
+      id
+      name
+      default_specialty_label
+      type {
+        id
+        name
+        created_at
+        updated_at
+      }
+      people
+      indication_specialties
+      created_at
+      updated_at
+    }
+  }
+`
+
+export const GET_VEGA_PEOPLE_ROLES_TYPES = gql`
+  query getVegaPeopleRolesTypes {
+    vegaPeopleRolesTypes {
+      id
+      name
+      created_at
+      updated_at
     }
   }
 `

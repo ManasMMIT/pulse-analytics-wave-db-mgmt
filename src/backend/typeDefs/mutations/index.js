@@ -1,3 +1,5 @@
+import vegaTypeDefs from '../vega/mutations'
+
 import node from './node'
 import marketBasket from './marketBasket'
 
@@ -411,6 +413,22 @@ const mutationType = gql`
     updatePerson(input: UpdatePersonInput!): UpdatePersonPayload
     deletePerson(input: DeletePersonInput!): DeletePersonPayload
 
+    updateVegaPerson(input: UpdateVegaPersonInput!): VegaPerson!
+
+    createVegaPersonRole(input: CreateVegaPersonRoleInput!): VegaPersonRole
+    updateVegaPersonRole(input: UpdateVegaPersonRoleInput!): VegaPersonRole
+    deleteVegaPersonRole(input: DeleteVegaPersonRoleInput!): VegaPersonRole
+
+    createVegaPersonRoleType(
+      input: CreateVegaPersonRoleTypeInput!
+    ): VegaPersonRoleType
+    updateVegaPersonRoleType(
+      input: UpdateVegaPersonRoleTypeInput!
+    ): VegaPersonRoleType
+    deleteVegaPersonRoleType(
+      input: DeleteVegaPersonRoleTypeInput!
+    ): VegaPersonRoleType
+
     updateEndUserTerms(
       input: UpdateEndUserTermsInput!
     ): UpdateEndUserTermsPayload
@@ -458,6 +476,9 @@ const mutationType = gql`
 
 module.exports = [
   mutationType,
+
+  ...vegaTypeDefs,
+
   ...client,
   ...teams,
   ...user,
