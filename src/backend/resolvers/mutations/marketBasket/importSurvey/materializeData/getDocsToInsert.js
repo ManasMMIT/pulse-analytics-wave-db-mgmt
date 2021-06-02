@@ -1,64 +1,84 @@
 module.exports = ({ surveyQuestionsAndAnswers, survey }) => {
-  return surveyQuestionsAndAnswers.reduce(
-    (
-      acc,
-      { category, characteristic, regimen, product, manufacturer, answers }
-    ) => {
+  return surveyQuestionsAndAnswers
+    .filter(({ rating }) => Boolean(rating))
+    .map(({
+      category_id,
+      category_name,
+      category_prompt,
+      category_type,
+      characteristic_id,
+      characteristic_name,
+      characteristic_description,
+      product_id,
+      product_generic_name,
+      product_brand_name,
+      regimen_id,
+      regimen_name,
+      manufacturer_id,
+      manufacturer_name,
+      person_id,
+      first_name,
+      middle_name,
+      last_name,
+      primary_role,
+      primary_role_type,
+      question_id,
+      answer_id,
+      rating,
+    }) => {
       let productObj
-      if (product) {
+      if (product_id) {
         productObj = {
-          _id: product.id,
-          genericName: product.generic_name,
-          brandName: product.brand_name,
+          _id: product_id,
+          genericName: product_generic_name,
+          brandName: product_brand_name,
         }
       }
 
       let regimenObj
-      if (regimen) {
+      if (regimen_id) {
         regimenObj = {
-          _id: regimen.id,
-          name: regimen.name,
+          _id: regimen_id,
+          name: regimen_name,
         }
       }
 
       let manufacturerObj
-      if (manufacturer) {
+      if (manufacturer_id) {
         manufacturerObj = {
-          _id: manufacturer.id,
-          name: manufacturer.name,
+          _id: manufacturer_id,
+          name: manufacturer_name,
         }
       }
-      const flatAnswerDocs = answers.map(
-        ({ id: answerId, rating, stakeholder_full }) => ({
-          _id: answerId,
-          surveyId: survey.id,
-          marketBasketId: survey.market_basket,
-          surveyDate: new Date(survey.date),
-          category: {
-            _id: category.id,
-            name: category.name,
-            prompt: category.prompt,
-            type: category.category_type,
-          },
-          characteristic: {
-            _id: characteristic.id,
-            name: characteristic.name,
-            description: characteristic.description,
-          },
-          regimen: regimenObj,
-          product: productObj,
-          manufacturer: manufacturerObj,
-          rating,
-          stakeholder: {
-            _id: stakeholder_full.id,
-            firstName: stakeholder_full.first_name,
-            lastName: stakeholder_full.last_name,
-          },
-        })
-      )
 
-      return [...acc, ...flatAnswerDocs]
-    },
-    []
-  )
+      return {
+        _id: answer_id,
+        surveyId: survey.id,
+        marketBasketId: survey.market_basket,
+        surveyDate: new Date(survey.date),
+        category: {
+          _id: category_id,
+          name: category_name,
+          prompt: category_prompt,
+          type: category_type,
+        },
+        characteristic: {
+          _id: characteristic_id,
+          name: characteristic_name,
+          description: characteristic_description,
+        },
+        regimen: regimenObj,
+        product: productObj,
+        manufacturer: manufacturerObj,
+        rating,
+        stakeholder: {
+          _id: person_id,
+          primaryRole: primary_role,
+          primaryRoleType: primary_role_type,
+          // firstName: first_name,
+          // middle_name: middle_name,
+          // lastName: last_name,
+        },
+      }
+    })
 }
