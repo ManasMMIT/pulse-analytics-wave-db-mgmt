@@ -18,13 +18,13 @@ module.exports = async ({ surveyId, pulseDevDb }) => {
       `Removing old, materialized survey data for ${surveyId}:${survey.date}`
     )
     await pulseDevDb
-      .collection('TEMP_marketBasketsSurveyAnswers')
+      .collection('marketBasketsSurveyAnswers')
       .deleteMany({ surveyId })
     console.log(
       `Adding new, materialized survey data for ${surveyId}:${survey.date}`
     )
     await pulseDevDb
-      .collection('TEMP_marketBasketsSurveyAnswers')
+      .collection('marketBasketsSurveyAnswers')
       .insertMany(docsToInsert)
     console.log(`Materialization successfull for ${surveyId}:${survey.date}`)
   }
