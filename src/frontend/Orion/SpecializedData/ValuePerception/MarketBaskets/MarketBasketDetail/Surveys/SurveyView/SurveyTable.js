@@ -35,20 +35,25 @@ const SurveyTable = ({
   )
 
   const tableDataObject = nest()
-    .key(({ first_name, last_name }) => `${first_name} ${last_name}`)
+    .key(({ first_name, last_name, product_id, regimen_id, manufacturer_id }) => `${first_name} ${last_name} ${product_id} ${regimen_id} ${manufacturer_id}`)
     .rollup((arr) => {
-      const { first_name, last_name } = arr[0]
-      const datum = { stakeholder: `${first_name} ${last_name}` }
-      arr.forEach(({ characteristic_name, rating }) => {
-        datum[characteristic_name] = rating
-      })
+      const [{ first_name, last_name, characteristic_name, rating, regimen_name, product_brand_name, product_generic_name, manufacturer_name }] = arr
+      const datum = {
+        stakeholder: `${first_name} ${last_name}`,
+        [characteristic_name]: rating,
+        regimen_name,
+        product_brand_name,
+        product_generic_name,
+        manufacturer_name,
+      }
+
       return datum
     })
     .object(selectedCategoryData)
 
   const tableData = Object.values(tableDataObject)
 
-  const columns = [
+  let columns = [
     {
       Header: 'Stakeholder',
       accessor: 'stakeholder',
@@ -62,6 +67,29 @@ const SurveyTable = ({
       accessor: name,
     })
   })
+
+  columns = columns.concat([
+    {
+      Header: 'Regimen',
+      accessor: 'regimen_name',
+      sortType: 'text',
+    },
+    {
+      Header: 'Product (brand)',
+      accessor: 'product_brand_name',
+      sortType: 'text',
+    },
+    {
+      Header: 'Product (generic)',
+      accessor: 'product_generic_name',
+      sortType: 'text',
+    },
+    {
+      Header: 'Manufacturer',
+      accessor: 'manufacturer_name',
+      sortType: 'text',
+    },
+  ])
 
   const data = Object.values(tableData)
 

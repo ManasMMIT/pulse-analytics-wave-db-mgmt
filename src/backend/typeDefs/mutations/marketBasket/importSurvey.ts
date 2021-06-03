@@ -12,6 +12,8 @@ const importMarketBasketSurveyTypeDefs = gql`
     first_name: String
     middle_name: String
     last_name: String
+    primary_role: String
+    primary_role_type: String
 
     category_name: String
     category_type: String

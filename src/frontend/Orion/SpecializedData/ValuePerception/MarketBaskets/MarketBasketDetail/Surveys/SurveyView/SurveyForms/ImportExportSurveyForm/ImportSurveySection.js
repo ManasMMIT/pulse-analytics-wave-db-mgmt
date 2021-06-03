@@ -61,7 +61,10 @@ const ImportSurveySection = ({ surveyId }) => {
     IMPORT_MARKET_BASKET_SURVEY,
     {
       variables: { input },
-      onError: (errorMessage) => setErrors(errorMessage.message),
+      onError: (errorMessage) => {
+        setErrors(errorMessage.message)
+        alert(errorMessage)
+      },
     }
   )
 

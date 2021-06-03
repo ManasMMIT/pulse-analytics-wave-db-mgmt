@@ -46,6 +46,8 @@ const getDataWithStableQuestionIds = async (data, surveyId) => {
         `Missing question_id ${preExistingQuestion.id} injected into sheet data`
       )
       return acc
+    } else {
+      surveyQuestionsByParts[mapKey] = { id: uuid4() }
     }
 
     /*
@@ -53,9 +55,10 @@ const getDataWithStableQuestionIds = async (data, surveyId) => {
       -> Answer is not to a pre-existing question
       -> Create new question for survey
     */
-    const id = uuid4()
+
+
     const questionToCreate = {
-      id,
+      id: surveyQuestionsByParts[mapKey],
       survey: surveyId,
       category: category_id,
       characteristic: characteristic_id,
@@ -64,14 +67,23 @@ const getDataWithStableQuestionIds = async (data, surveyId) => {
       manufacturer: manufacturer_id,
     }
 
-    datum.question_id = id
+    datum.question_id = surveyQuestionsByParts[mapKey]
 
     return [...acc, questionToCreate]
   }, [])
 
+  const uniqQuestionsToCreate = _.uniqBy(questionsToCreate, ({
+    category,
+    characteristic,
+    regimen,
+    product,
+    manufacturer,
+  }) => [category, characteristic, regimen, product, manufacturer]
+    .join('|'))
+
   if (questionsToCreate.length) {
     await axios
-      .post('market-basket-surveys-questions/bulk_create/', questionsToCreate)
+      .post('market-basket-surveys-questions/bulk_create/', uniqQuestionsToCreate)
       .then(({ data }) => data)
       .catch((e) => {
         throw new Error(e)
