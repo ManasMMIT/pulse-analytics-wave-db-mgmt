@@ -164,7 +164,6 @@ export const CREATE_MARKET_BASKET_SURVEY = gql`
         first_name
         last_name
         middle_name
-        role_specialties_ids
       }
       date
     }
@@ -182,7 +181,6 @@ export const UPDATE_MARKET_BASKET_SURVEY = gql`
         first_name
         last_name
         middle_name
-        role_specialties_ids
       }
       date
     }
@@ -200,7 +198,6 @@ export const DELETE_MARKET_BASKET_SURVEY = gql`
         first_name
         last_name
         middle_name
-        role_specialties_ids
       }
       date
     }

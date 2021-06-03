@@ -1,7 +1,7 @@
 const axios = require('axios')
 const { zonedTimeToUtc } = require('date-fns-tz')
 
-const DEFAULT_TIMEZONE = require('../../../../utils/states-data-util')
+const DEFAULT_TIMEZONE = require('../../../../utils/defaultTimeZone')
 
 const updateMarketBasketSurvey = async (
   parent,
@@ -10,7 +10,7 @@ const updateMarketBasketSurvey = async (
   info
 ) => {
   const { date, ...rest } = body
-  
+
   if (date) {
     const standardizedDate = zonedTimeToUtc(date, DEFAULT_TIMEZONE)
     body = { date: standardizedDate, ...rest }

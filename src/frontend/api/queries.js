@@ -7,12 +7,6 @@ export const GET_VEGA_PEOPLE = gql`
       first_name
       last_name
       middle_name
-      role_specialties {
-        id
-        person
-        person_role_indication
-      }
-      role_specialties_ids
       role {
         id
         name
@@ -94,7 +88,6 @@ export const GET_MARKET_BASKETS_SURVEYS = gql`
         first_name
         last_name
         middle_name
-        role_specialties_ids
       }
       date
     }
@@ -189,6 +182,8 @@ export const GET_MARKET_BASKET_SURVEY_EXPORT_DATA = gql`
       regimen_id
       product_id
       manufacturer_id
+      primary_role
+      primary_role_type
     }
   }
 `

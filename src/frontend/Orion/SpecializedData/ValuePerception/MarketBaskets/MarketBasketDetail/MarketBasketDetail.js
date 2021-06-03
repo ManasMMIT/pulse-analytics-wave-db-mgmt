@@ -15,6 +15,7 @@ import MarketBasketDetailHeader from './MarketBasketDetailHeader'
 import Overview from './Overview'
 import CategoriesCharacteristics from './CategoriesCharacteristics'
 import ProductsRegimens from './ProductsRegimens'
+import Surveys from './Surveys'
 
 const Wrapper = styled.div({
   display: 'flex',
@@ -42,6 +43,7 @@ const COMPONENT_MAP = {
   overview: Overview,
   'categories-characteristics': CategoriesCharacteristics,
   'product-regimens': ProductsRegimens,
+  surveys: Surveys,
 }
 
 const MarketBasketDetail = () => {

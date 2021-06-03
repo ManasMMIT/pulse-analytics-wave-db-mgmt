@@ -258,6 +258,8 @@ const queries = gql`
     regimen_id: ID
     product_id: ID
     manufacturer_id: ID
+    primary_role_type: String
+    primary_role: String
   }
 
   type MarketBasketSurvey {

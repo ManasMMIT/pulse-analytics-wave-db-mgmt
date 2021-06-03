@@ -39,7 +39,7 @@ const MarketBasketForm = ({ onCompleted, cancelHandler, data }) => {
   const { data: marketBasketData } = useQuery(GET_MARKET_BASKETS)
 
   const mutationDoc = isEdit ? UPDATE_MARKET_BASKET : CREATE_MARKET_BASKET
-  const [submit] = useMutation(mutationDoc, {
+  const [submit, { loading: mutationLoading }] = useMutation(mutationDoc, {
     onError: alert,
     update: (cache, { data }) => {
       const { createMarketBasket } = data
@@ -88,44 +88,50 @@ const MarketBasketForm = ({ onCompleted, cancelHandler, data }) => {
       cancelHandler={cancelHandler}
     >
       <div style={{ padding: Spacing.S7 }}>
-        <InputWrapper>
-          <Label>Name (required)</Label>
-          <Input
-            name="name"
-            value={formData.name}
-            onChange={handleInputChange}
-            placeholder="Enter name..."
-            style={{
-              display: 'block',
-              background: 'white',
-              padding: 12,
-              width: '100%',
-            }}
-          />
-        </InputWrapper>
-        <InputWrapper style={{ marginTop: Spacing.S7 }}>
-          <Label>Indication (required)</Label>
-          <Select
-            value={selectedIndicationOption}
-            options={indicationSelectOptions}
-            onChange={handleInputChange}
-          />
-        </InputWrapper>
-        <InputWrapper style={{ marginTop: Spacing.S7 }}>
-          <Label>Description</Label>
-          <Input
-            name="description"
-            value={formData.description}
-            onChange={handleInputChange}
-            placeholder="Enter description..."
-            style={{
-              display: 'block',
-              background: 'white',
-              padding: 12,
-              width: '100%',
-            }}
-          />
-        </InputWrapper>
+        {mutationLoading ? (
+          <Spinner />
+        ) : (
+          <>
+            <InputWrapper>
+              <Label>Name (required)</Label>
+              <Input
+                name="name"
+                value={formData.name}
+                onChange={handleInputChange}
+                placeholder="Enter name..."
+                style={{
+                  display: 'block',
+                  background: 'white',
+                  padding: 12,
+                  width: '100%',
+                }}
+              />
+            </InputWrapper>
+            <InputWrapper style={{ marginTop: Spacing.S7 }}>
+              <Label>Indication (required)</Label>
+              <Select
+                value={selectedIndicationOption}
+                options={indicationSelectOptions}
+                onChange={handleInputChange}
+              />
+            </InputWrapper>
+            <InputWrapper style={{ marginTop: Spacing.S7 }}>
+              <Label>Description</Label>
+              <Input
+                name="description"
+                value={formData.description}
+                onChange={handleInputChange}
+                placeholder="Enter description..."
+                style={{
+                  display: 'block',
+                  background: 'white',
+                  padding: 12,
+                  width: '100%',
+                }}
+              />
+            </InputWrapper>
+          </>
+        )}
       </div>
     </SingleActionDialog>
   )
