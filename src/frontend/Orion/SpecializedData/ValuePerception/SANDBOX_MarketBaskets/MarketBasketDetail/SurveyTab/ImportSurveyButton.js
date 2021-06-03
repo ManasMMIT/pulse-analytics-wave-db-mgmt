@@ -44,7 +44,11 @@ const ImportSurveyButton = ({ surveyId }) => {
     IMPORT_MARKET_BASKET_SURVEY,
     {
       variables: { input },
-      onError: (errorMessage) => setErrors(errorMessage.message),
+      onError: (errorMessage) => {
+        alert('Try re-exporting survey data. Required rows may be missing. Every row must also have a rating')
+        alert(errorMessage)
+        setErrors(errorMessage.message)
+      },
     }
   )
 
