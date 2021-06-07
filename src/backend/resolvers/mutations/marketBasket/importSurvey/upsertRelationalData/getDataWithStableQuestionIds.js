@@ -58,7 +58,7 @@ const getDataWithStableQuestionIds = async (data, surveyId) => {
 
 
     const questionToCreate = {
-      id: surveyQuestionsByParts[mapKey],
+      id: surveyQuestionsByParts[mapKey].id,
       survey: surveyId,
       category: category_id,
       characteristic: characteristic_id,
@@ -67,7 +67,7 @@ const getDataWithStableQuestionIds = async (data, surveyId) => {
       manufacturer: manufacturer_id,
     }
 
-    datum.question_id = surveyQuestionsByParts[mapKey]
+    datum.question_id = surveyQuestionsByParts[mapKey].id
 
     return [...acc, questionToCreate]
   }, [])
