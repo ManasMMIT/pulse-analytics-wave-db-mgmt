@@ -4,18 +4,25 @@ const getSurveyQuestionAnswerPartsMaps = require('./getSurveyQuestionAnswerParts
 const getRowErrors = require('./getRowErrors')
 
 module.exports = async ({ data, marketBasketId, surveyId }) => {
-  const getMarketBasketOp = axios.get(`hydrated-market-baskets/${marketBasketId}/`)
+  const getMarketBasketOp = axios
+    .get(`hydrated-market-baskets/${marketBasketId}/`)
     .then(({ data }) => data)
-  const getSurveyOp = axios.get(`market-basket-surveys/${surveyId}/`)
+  const getSurveyOp = axios
+    .get(`market-basket-surveys/${surveyId}/`)
     .then(({ data }) => data)
-  const getExportDataOp = axios
+  const exportData = await axios
     .get(`market-basket-surveys/${surveyId}/export_template`)
     .then(({ data }) => data)
 
-  const [marketBasket, survey, exportData] = await Promise.all([getMarketBasketOp, getSurveyOp, getExportDataOp])
+  const [marketBasket, survey] = await Promise.all([
+    getMarketBasketOp,
+    getSurveyOp,
+  ])
 
   if (data.length !== exportData.length) {
-    throw new Error('Incorrect row count. Additional rows were added or Removed. Please, export again before importing data.')
+    throw new Error(
+      'Incorrect row count. Additional rows were added or Removed. Please, export again before importing data.'
+    )
   }
 
   const maps = getSurveyQuestionAnswerPartsMaps(survey, marketBasket)

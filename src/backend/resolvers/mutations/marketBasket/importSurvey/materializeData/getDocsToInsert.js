@@ -1,6 +1,12 @@
+const FALSEY_VALUES = {
+  undefined: true,
+  null: true,
+  false: true,
+}
+
 module.exports = ({ surveyQuestionsAndAnswers, survey }) => {
   return surveyQuestionsAndAnswers
-    .filter(({ rating }) => Boolean(rating))
+    .filter(({ rating }) => !FALSEY_VALUES[rating])
     .map(
       ({
         category_id,
