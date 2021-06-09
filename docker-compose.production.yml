@@ -7,5 +7,5 @@ services:
     volumes:
       - /home/deploy/logs:/polaris/src/backend/logs
     container_name: polaris_production
-    env_file: .env
+    env_file: .env.production
     restart: always

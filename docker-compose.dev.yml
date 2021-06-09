@@ -12,6 +12,7 @@ services:
     working_dir: /root/app
     volumes:
       - ./:/root/app:cached
+    env_file: .env.development
   polaris_api:
     build:
       dockerfile: ./src/backend/dev.Dockerfile
@@ -24,6 +25,7 @@ services:
     working_dir: /root/api
     volumes:
       - ./:/root/api:cached
+    env_file: .env.development
 networks:
   default:
     name: pulse-local

@@ -7,5 +7,5 @@ services:
     volumes:
       - /home/deploy/logs:/polaris/src/backend/logs
     container_name: polaris_staging
-    env_file: .env
+    env_file: .env.staging
     restart: always
