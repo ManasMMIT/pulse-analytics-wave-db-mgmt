@@ -3,7 +3,9 @@ const axios = require('axios')
 const getSurveyQuestionAnswerPartsMaps = require('./getSurveyQuestionAnswerPartsMaps')
 const getRowErrors = require('./getRowErrors')
 
-module.exports = async ({ data, marketBasketId, surveyId }) => {
+module.exports = async ({ data, marketBasketId, surveyId, socket }) => {
+  socket.emit('Validating sheet data')
+
   const getMarketBasketOp = axios
     .get(`hydrated-market-baskets/${marketBasketId}/`)
     .then(({ data }) => data)
@@ -20,6 +22,7 @@ module.exports = async ({ data, marketBasketId, surveyId }) => {
   ])
 
   if (data.length !== exportData.length) {
+    socket.error()
     throw new Error(
       'Incorrect row count. Additional rows were added or Removed. Please, export again before importing data.'
     )
@@ -29,5 +32,10 @@ module.exports = async ({ data, marketBasketId, surveyId }) => {
 
   const rowErrors = getRowErrors(data, maps)
 
-  if (rowErrors.length) throw new Error(JSON.stringify(rowErrors))
+  if (rowErrors.length) {
+    socket.error()
+    throw new Error(JSON.stringify(rowErrors))
+  }
+
+  socket.emit('Sheet data validated')
 }

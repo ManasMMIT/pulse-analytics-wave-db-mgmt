@@ -7,6 +7,7 @@ import styled from '@emotion/styled'
 
 import { Button } from '@pulse-analytics/pulse-design-system'
 
+import socket from 'frontend/api/socket'
 import { IMPORT_MARKET_BASKET_SURVEY } from 'frontend/api/mutations'
 
 import Spinner from 'frontend/components/Spinner'
@@ -46,10 +47,17 @@ const onFileAdded = (e, setData) => {
   reader.readAsArrayBuffer(file)
 }
 
+const DEFAULT_NOTIFICATION = '✅ Good to import survey'
+const SOCKET_PROJECT_ID = 'IMPORT_MB_SURVEY_DATA'
+const SUCCESS_NOTIFICATION = 'finished importing market basket survey data'
+
 const ImportSurveySection = ({ surveyId }) => {
   const { marketBasketId } = useParams()
   const [data, setData] = useState(null)
   const [errors, setErrors] = useState(null)
+  const [notification, setNotification] = useState(null)
+  const socketEmitId = `${SOCKET_PROJECT_ID}_${surveyId}`
+  socket.on(socketEmitId, setNotification)
 
   const input = {
     marketBasketId,
@@ -80,6 +88,17 @@ const ImportSurveySection = ({ surveyId }) => {
     return <div>{errorMessages}</div>
   }
 
+  let importStatus = DEFAULT_NOTIFICATION
+  const isImportFinished = new RegExp(SUCCESS_NOTIFICATION).test(notification)
+  if (notification && !isImportFinished) {
+    importStatus = (
+      <>
+        <Spinner />
+        {notification}
+      </>
+    )
+  }
+
   // ! claire TODO: disable import button when data is not ready
   return (
     <Container>
@@ -107,6 +126,9 @@ const ImportSurveySection = ({ surveyId }) => {
       >
         {isImportingData ? <Spinner /> : 'Import Survey'}
       </Button>
+      <div>
+        {importStatus}
+      </div>
     </Container>
   )
 }

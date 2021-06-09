@@ -2,8 +2,8 @@ const axios = require('axios')
 
 const getDocsToInsert = require('./getDocsToInsert')
 
-module.exports = async ({ surveyId, pulseDevDb }) => {
-  console.log('Beginning materialization of survey data')
+module.exports = async ({ surveyId, pulseDevDb, socket }) => {
+  socket.emit('Beginning materialization of survey data')
   const surveyQuestionsAndAnswers = await axios
     .get(`market-basket-surveys/${surveyId}/export_template/`)
     .then(({ data }) => data)

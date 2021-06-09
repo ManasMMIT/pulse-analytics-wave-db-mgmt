@@ -1,22 +1,33 @@
-import _ from 'lodash'
 import validateSurveyData from './validateSurveyData'
 import upsertRelationalData from './upsertRelationalData'
 import materializeData from './materializeData'
+import SurveyImportEmitter from './SurveyImportEmitter'
+
+const PROJECT_NAME = 'importing market basket survey data'
+const SOCKET_PROJECT_ID = 'IMPORT_MB_SURVEY_DATA'
 
 const importMarketBasketSurvey = async (
   parent,
   { input },
-  { pulseDevDb },
+  { io, pulseDevDb },
   info
 ) => {
-  console.log('Validating sheet data')
-  await validateSurveyData(input)
-  console.log('Sheet data validated')
-  await upsertRelationalData(input)
-  console.log('Successfully upserted relation data')
-  await materializeData({ ...input, pulseDevDb })
+  const socketEmitId = `${SOCKET_PROJECT_ID}_${input.surveyId}`
+  const socket = new SurveyImportEmitter(io, PROJECT_NAME, socketEmitId)
 
-  // TODO: decide to return data from replace job or reformatted input?
+  socket.start()
+
+  try {
+    await validateSurveyData({ ...input, socket })
+    upsertRelationalData({ ...input, socket })
+      .then(() => materializeData({ ...input, pulseDevDb, socket }))
+      .then(() => socket.success())
+  } catch (e) {
+    socket.error()
+    throw new Error(e)
+  }
+
+
   return 'done'
 }
 

@@ -2,15 +2,15 @@ const axios = require('axios')
 
 const getDataWithStableQuestionIds = require('./getDataWithStableQuestionIds')
 
-module.exports = async ({ data, surveyId }) => {
-  console.log('Beginning upsertion of relational data')
+module.exports = async ({ data, surveyId, socket }) => {
+  socket.emit('Beginning upsertion of relational data')
   // fills in missing questionIds or creates questions and then injects questionIds
   const dataWithStableQuestionIds = await getDataWithStableQuestionIds(
     data,
     surveyId
   )
 
-  console.log('Questions in sheet stabilized')
+  socket.emit('Questions in sheet stabilized')
 
   const { updateData, createData } = dataWithStableQuestionIds.reduce(
     (acc, datum) => {
@@ -36,7 +36,7 @@ module.exports = async ({ data, surveyId }) => {
   )
 
   if (updateData.length) {
-    console.log('Updating survey answers')
+    socket.emit('Updating survey answers')
 
     await axios
       .patch('market-basket-surveys-questions-answers/bulk_update/', updateData)
@@ -44,11 +44,11 @@ module.exports = async ({ data, surveyId }) => {
         throw new Error(e)
       })
 
-    console.log('All existing answers have been updated')
+    socket.emit('All existing answers have been updated')
   }
 
   if (createData.length) {
-    console.log('Creating survey answers')
+    socket.emit('Creating survey answers')
 
     await axios
       .post('market-basket-surveys-questions-answers/bulk_create/', createData)
@@ -56,6 +56,8 @@ module.exports = async ({ data, surveyId }) => {
         throw new Error(e)
       })
 
-    console.log('All new answers have been created')
+    socket.emit('All new answers have been created')
   }
+
+  socket.emit('Successfully upserted relational data')
 }
