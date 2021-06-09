@@ -60,6 +60,63 @@ export const DELETE_VEGA_PERSON_ROLE = gql`
   }
 `
 
+export const CREATE_VEGA_PERSON_ROLE_INDICATION = gql`
+  mutation CreateVegaPersonRoleIndication($input: CreateVegaPersonRoleIndicationInput!) {
+    createVegaPersonRoleIndication(input: $input) {
+      id
+      specialty_label
+      person_role
+      indication {
+        id
+        name
+        regimens
+        created_at
+        updated_at
+      }
+      created_at
+      updated_at
+    }
+  }
+`
+
+export const UPDATE_VEGA_PERSON_ROLE_INDICATION = gql`
+  mutation UpdateVegaPersonRoleIndication($input: UpdateVegaPersonRoleIndicationInput!) {
+    updateVegaPersonRoleIndication(input: $input) {
+      id
+      specialty_label
+      person_role
+      indication {
+        id
+        name
+        regimens
+        created_at
+        updated_at
+      }
+      created_at
+      updated_at
+    }
+  }
+`
+
+export const DELETE_VEGA_PERSON_ROLE_INDICATION = gql`
+  mutation DeleteVegaPersonRoleIndication($input: DeleteVegaPersonRoleIndicationInput!) {
+    deleteVegaPersonRoleIndication(input: $input) {
+      id
+      specialty_label
+      person_role
+      indication {
+        id
+        name
+        regimens
+        created_at
+        updated_at
+      }
+      created_at
+      updated_at
+    }
+  }
+`
+
 export const CREATE_VEGA_PERSON_ROLE_TYPE = gql`
   mutation CreateVegaPersonRoleType($input: CreateVegaPersonRoleTypeInput!) {
     createVegaPersonRoleType(input: $input) {

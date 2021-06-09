@@ -419,6 +419,16 @@ const mutationType = gql`
     updateVegaPersonRole(input: UpdateVegaPersonRoleInput!): VegaPersonRole
     deleteVegaPersonRole(input: DeleteVegaPersonRoleInput!): VegaPersonRole
 
+    createVegaPersonRoleIndication(
+      input: CreateVegaPersonRoleIndicationInput!
+    ): VegaPersonRoleIndication
+    updateVegaPersonRoleIndication(
+      input: UpdateVegaPersonRoleIndicationInput!
+    ): VegaPersonRoleIndication
+    deleteVegaPersonRoleIndication(
+      input: DeleteVegaPersonRoleIndicationInput!
+    ): VegaPersonRoleIndication
+
     createVegaPersonRoleType(
       input: CreateVegaPersonRoleTypeInput!
     ): VegaPersonRoleType

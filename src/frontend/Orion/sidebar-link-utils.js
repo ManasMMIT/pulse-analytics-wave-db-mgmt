@@ -127,6 +127,11 @@ export const SPECIALIZED_DATA_CONFIG = [
         link: '/sandbox-roles',
         showOnSuperUserOnly: true,
       },
+      {
+        label: 'SANDBOX Role Specialties',
+        link: '/sandbox-role-specialties',
+        showOnSuperUserOnly: true,
+      },
       // { label: 'Stakeholders', link: '/stakeholders' },
       // { label: 'Stakeholders Types', link: '/stakeholders-types' },
       // { label: 'Stakeholders Categories', link: '/stakeholders-categories' },

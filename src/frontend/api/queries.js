@@ -376,6 +376,25 @@ export const GET_VEGA_PEOPLE_ROLES = gql`
   }
 `
 
+export const GET_VEGA_PEOPLE_ROLES_INDICATIONS = gql`
+  query getVegaPeopleRolesIndications {
+    vegaPeopleRolesIndications {
+      id
+      specialty_label
+      person_role
+      indication {
+        id
+        name
+        regimens
+        created_at
+        updated_at
+      }
+      created_at
+      updated_at
+    }
+  }
+`
+
 export const GET_VEGA_PEOPLE_ROLES_TYPES = gql`
   query getVegaPeopleRolesTypes {
     vegaPeopleRolesTypes {
@@ -729,6 +748,18 @@ export const GET_SOURCE_INDICATIONS = gql`
           tags
         }
       }
+    }
+  }
+`
+
+export const GET_VEGA_INDICATIONS = gql`
+  query getVegaIndications {
+    vegaIndications {
+      id
+      name
+      regimens
+      created_at
+      updated_at
     }
   }
 `

@@ -1,5 +1,7 @@
+import vegaIndications from './indications'
 import vegaPeople from './people'
 import vegaPeopleRoles from './peopleRoles'
+import vegaPeopleRolesIndications from './peopleRolesIndications'
 import vegaPeopleRolesTypes from './peopleRolesTypes'
 import vegaProducts from './products'
 import vegaProductsRegimens from './productsRegimens'
@@ -15,8 +17,10 @@ import vegaStates from './states'
 import marketBasketSurveyExportData from './marketBasketSurveyExportData'
 
 export default {
+  vegaIndications,
   vegaPeople,
   vegaPeopleRoles,
+  vegaPeopleRolesIndications,
   vegaPeopleRolesTypes,
   vegaProducts,
   vegaProductsRegimens,

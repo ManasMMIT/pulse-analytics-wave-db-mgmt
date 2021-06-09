@@ -8,6 +8,7 @@ import SANDBOX_MarketBaskets from './SANDBOX_MarketBaskets'
 import SANDBOX_MarketBasketDetail from './SANDBOX_MarketBaskets/MarketBasketDetail'
 import SANDBOX_Stakeholders from './SANDBOX_Stakeholders'
 import SANDBOX_Roles from './SANDBOX_Roles'
+import SANDBOX_RoleSpecialties from './SANDBOX_RoleSpecialties'
 
 const ValuePerception = () => (
   <Switch>
@@ -41,6 +42,11 @@ const ValuePerception = () => (
       exact={true}
       path={'/orion/specialized/value-perception/sandbox-roles'}
       component={SANDBOX_Roles}
+    />
+    <Route
+      exact={true}
+      path={'/orion/specialized/value-perception/sandbox-role-specialties'}
+      component={SANDBOX_RoleSpecialties}
     />
     <Redirect to={'/orion/specialized/value-perception/market-baskets'} />
   </Switch>

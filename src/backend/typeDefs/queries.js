@@ -26,6 +26,7 @@ const queries = gql`
     users(teamId: String, clientId: String, subscriptionId: String): [User!]!
 
     indications: [Indication]
+    vegaIndications: [VegaIndication!]!
     therapeuticAreas: [TherapeuticArea]
     products: [Product]
     vegaProducts: [VegaProduct]
@@ -138,6 +139,7 @@ const queries = gql`
     vegaPeople: [VegaPerson!]!
 
     vegaPeopleRoles: [VegaPersonRole!]!
+    vegaPeopleRolesIndications: [VegaPersonRoleIndication!]!
     vegaPeopleRolesTypes: [VegaPersonRoleType!]!
 
     DEV_pathwaysInfluencers: JSON # grabbing sheet data directly from dev. type def is in wave-api
@@ -403,6 +405,23 @@ const queries = gql`
     externalLink: String
     nationalProviderIdentifier: Float
     physicianProfileId: Float
+  }
+
+  type VegaIndication {
+    id: ID!
+    name: String
+    regimens: [ID!]
+    created_at: DateTime
+    updated_at: DateTime
+  }
+
+  type VegaPersonRoleIndication {
+    id: ID!
+    specialty_label: String
+    person_role: ID
+    indication: VegaIndication
+    created_at: DateTime
+    updated_at: DateTime
   }
 
   type VegaPersonRoleType {
