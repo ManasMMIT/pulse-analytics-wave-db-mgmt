@@ -1,6 +1,7 @@
 const axios = require('axios')
 
 const getDataWithStableQuestionIds = require('./getDataWithStableQuestionIds')
+const FALSEY_VALUES_MAP = require('./../utils/falsey-values-map')
 
 module.exports = async ({ data, surveyId, socket }) => {
   socket.emit('Beginning upsertion of relational data')
@@ -12,17 +13,29 @@ module.exports = async ({ data, surveyId, socket }) => {
 
   socket.emit('Questions in sheet stabilized')
 
-  const { updateData, createData } = dataWithStableQuestionIds.reduce(
+  const {
+    updateData,
+    createData,
+    deleteData,
+  } = dataWithStableQuestionIds.reduce(
     (acc, datum) => {
+      const isMissingRating = FALSEY_VALUES_MAP[datum.rating]
+      const doesAnswerExist = datum.answer_id
       // ? If answer_id is not in sheet, but exists
       // * should still fail to create any duplicate question+person id
       // * because of db validation
-      if (datum.answer_id) {
-        acc.updateData.push({
-          id: datum.answer_id,
-          rating: datum.rating,
-        })
+      if (doesAnswerExist) {
+        if (isMissingRating) {
+          acc.deleteData.push(datum.answer_id)
+        } else {
+          acc.updateData.push({
+            id: datum.answer_id,
+            rating: datum.rating,
+          })
+        }
       } else {
+        if (isMissingRating) return acc
+
         acc.createData.push({
           question: datum.question_id,
           rating: datum.rating,
@@ -32,7 +45,7 @@ module.exports = async ({ data, surveyId, socket }) => {
 
       return acc
     },
-    { updateData: [], createData: [] }
+    { updateData: [], createData: [], deleteData: [] }
   )
 
   if (updateData.length) {
@@ -57,6 +70,18 @@ module.exports = async ({ data, surveyId, socket }) => {
       })
 
     socket.emit('All new answers have been created')
+  }
+
+  if (deleteData.length) {
+    socket.emit('Deleting survey answers without ratings')
+
+    await axios
+      .delete('market-basket-surveys-questions-answers/bulk_delete/', { data: deleteData })
+      .catch((e) => {
+        throw new Error(e)
+      })
+
+    socket.emit('Answers without ratings deleted')
   }
 
   socket.emit('Successfully upserted relational data')

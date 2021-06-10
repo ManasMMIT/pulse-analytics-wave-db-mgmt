@@ -13,13 +13,14 @@ module.exports = async ({ surveyId, pulseDevDb, socket }) => {
 
   const docsToInsert = getDocsToInsert({ surveyQuestionsAndAnswers, survey })
 
+  console.log(
+    `Removing old, materialized survey data for ${surveyId}:${survey.date}`
+  )
+  await pulseDevDb
+    .collection('marketBasketsSurveyAnswers')
+    .deleteMany({ surveyId })
+
   if (docsToInsert.length) {
-    console.log(
-      `Removing old, materialized survey data for ${surveyId}:${survey.date}`
-    )
-    await pulseDevDb
-      .collection('marketBasketsSurveyAnswers')
-      .deleteMany({ surveyId })
     console.log(
       `Adding new, materialized survey data for ${surveyId}:${survey.date}`
     )

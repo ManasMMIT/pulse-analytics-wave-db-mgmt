@@ -1,12 +1,8 @@
-const FALSEY_VALUES = {
-  undefined: true,
-  null: true,
-  false: true,
-}
+const FALSEY_VALUES_MAP = require('./../utils/falsey-values-map')
 
 module.exports = ({ surveyQuestionsAndAnswers, survey }) => {
   return surveyQuestionsAndAnswers
-    .filter(({ rating }) => !FALSEY_VALUES[rating])
+    .filter(({ rating }) => !FALSEY_VALUES_MAP[rating])
     .map(
       ({
         category_id,

@@ -26,7 +26,7 @@ const importMarketBasketSurveyTypeDefs = gql`
 
     question_id: ID
     answer_id: ID
-    rating: Int!
+    rating: Int
 
     person_id: ID!
     category_id: ID!
