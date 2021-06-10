@@ -112,6 +112,18 @@ export const SPECIALIZED_DATA_CONFIG = [
     link: '/orion/specialized/value-perception',
     childLinks: [
       { label: 'Market Baskets', link: '/market-baskets' },
+      { label: 'Stakeholders', link: '/stakeholders' },
+      {
+        label: 'Stakeholder Roles',
+        link: '/stakeholder-roles',
+        childLinks: [
+          { label: 'Roles', link: '/roles' },
+          // {
+          //   label: 'Indication Role Specialties',
+          //   link: '/indication-role-specialties',
+          // },
+        ],
+      },
       {
         label: 'SANDBOX Market Baskets',
         link: '/sandbox-market-baskets',

@@ -56,7 +56,6 @@ const getDataWithStableQuestionIds = async (data, surveyId) => {
       -> Create new question for survey
     */
 
-
     const questionToCreate = {
       id: surveyQuestionsByParts[mapKey].id,
       survey: surveyId,
@@ -72,18 +71,18 @@ const getDataWithStableQuestionIds = async (data, surveyId) => {
     return [...acc, questionToCreate]
   }, [])
 
-  const uniqQuestionsToCreate = _.uniqBy(questionsToCreate, ({
-    category,
-    characteristic,
-    regimen,
-    product,
-    manufacturer,
-  }) => [category, characteristic, regimen, product, manufacturer]
-    .join('|'))
+  const uniqQuestionsToCreate = _.uniqBy(
+    questionsToCreate,
+    ({ category, characteristic, regimen, product, manufacturer }) =>
+      [category, characteristic, regimen, product, manufacturer].join('|')
+  )
 
   if (questionsToCreate.length) {
     await axios
-      .post('market-basket-surveys-questions/bulk_create/', uniqQuestionsToCreate)
+      .post(
+        'market-basket-surveys-questions/bulk_create/',
+        uniqQuestionsToCreate
+      )
       .then(({ data }) => data)
       .catch((e) => {
         throw new Error(e)

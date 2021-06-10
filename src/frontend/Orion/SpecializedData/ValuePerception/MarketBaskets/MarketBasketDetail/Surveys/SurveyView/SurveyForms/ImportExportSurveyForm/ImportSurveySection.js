@@ -126,9 +126,7 @@ const ImportSurveySection = ({ surveyId }) => {
       >
         {isImportingData ? <Spinner /> : 'Import Survey'}
       </Button>
-      <div>
-        {importStatus}
-      </div>
+      <div>{importStatus}</div>
     </Container>
   )
 }

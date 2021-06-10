@@ -7,13 +7,8 @@ import { GET_MARKET_BASKET_SURVEY_EXPORT_DATA } from 'frontend/api/queries'
 
 import Spinner from 'frontend/components/Spinner'
 import Table from 'frontend/components/Table'
-import { CONFIG_TABLE_WIDTH } from 'frontend/components/Table/tableWidths'
 
-const SurveyTable = ({
-  surveyId,
-  selectedCategory,
-  marketBasketsCategories,
-}) => {
+const SurveyTable = ({ surveyId, selectedCategory }) => {
   const { data: marketBasketsSurveysQuestions, loading } = useQuery(
     GET_MARKET_BASKET_SURVEY_EXPORT_DATA,
     {
@@ -35,9 +30,23 @@ const SurveyTable = ({
   )
 
   const tableDataObject = nest()
-    .key(({ first_name, last_name, product_id, regimen_id, manufacturer_id }) => `${first_name} ${last_name} ${product_id} ${regimen_id} ${manufacturer_id}`)
+    .key(
+      ({ first_name, last_name, product_id, regimen_id, manufacturer_id }) =>
+        `${first_name} ${last_name} ${product_id} ${regimen_id} ${manufacturer_id}`
+    )
     .rollup((arr) => {
-      const [{ first_name, last_name, characteristic_name, rating, regimen_name, product_brand_name, product_generic_name, manufacturer_name }] = arr
+      const [
+        {
+          first_name,
+          last_name,
+          characteristic_name,
+          rating,
+          regimen_name,
+          product_brand_name,
+          product_generic_name,
+          manufacturer_name,
+        },
+      ] = arr
       const datum = {
         stakeholder: `${first_name} ${last_name}`,
         [characteristic_name]: rating,

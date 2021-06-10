@@ -3,6 +3,8 @@ import { Switch, Route, Redirect } from 'react-router-dom'
 
 import MarketBaskets from './MarketBaskets'
 import MarketBasketDetail from './MarketBaskets/MarketBasketDetail'
+import Stakeholders from './Stakeholders'
+import StakeholderRoles from './StakeholderRoles'
 
 import SANDBOX_MarketBaskets from './SANDBOX_MarketBaskets'
 import SANDBOX_MarketBasketDetail from './SANDBOX_MarketBaskets/MarketBasketDetail'
@@ -21,6 +23,14 @@ const ValuePerception = () => (
     <Route
       path={'/orion/specialized/value-perception/market-baskets'}
       component={MarketBaskets}
+    />
+    <Route
+      path={'/orion/specialized/value-perception/stakeholders'}
+      component={Stakeholders}
+    />
+    <Route
+      path={'/orion/specialized/value-perception/stakeholder-roles'}
+      component={StakeholderRoles}
     />
     <Route
       exact={true}

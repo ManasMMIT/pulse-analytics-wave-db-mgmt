@@ -23,6 +23,10 @@ export const FormLabel = styled.label({
   padding: `${Spacing.S3} 0`,
 })
 
+export const BoldText = styled.span({
+  fontWeight: 700,
+})
+
 // ! claire TODO: hack styled should be moves into DS
 export const StyledButton = (props) => (
   <Button

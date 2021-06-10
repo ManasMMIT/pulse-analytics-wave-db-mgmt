@@ -12,7 +12,15 @@ const Row = styled.div({
   },
 })
 
-const Rows = ({ rows, prepareRow, setModalCell, modalColMap }) => {
+const Rows = ({
+  rows,
+  prepareRow,
+  setModalCell,
+  modalColMap,
+  onRowClickOverride,
+}) => {
+  const onClickFunc = onRowClickOverride || setModalCell
+
   return rows.map((row) => {
     prepareRow(row)
 
@@ -29,7 +37,7 @@ const Rows = ({ rows, prepareRow, setModalCell, modalColMap }) => {
           return (
             <Cell
               className={className}
-              onClick={() => setModalCell(cell)}
+              onClick={() => onClickFunc(cell)}
               {...cell.getCellProps()}
             >
               {cell.render('Cell')}
