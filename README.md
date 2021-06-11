@@ -11,7 +11,7 @@
 
 When you first clone this repo and `cd` into the root directory in your terminal, run `yarn` to install the packages required for this script.
 
-In order for the script to connect to MongoDB, you'll also need a `.env` or `.env.development` (Docker) file. Contact the backend team to get a copy of that file.
+In order for the script to connect to MongoDB, you'll also need a `.env` or `.env.development` (Docker) file which is currently stored in an S3 bucket. Refer to https://app.gitbook.com/@pulse-digital/s/project-polaris/getting-started/installation for instructions.
 
 Also, make sure you have the `src/backend/logs/api.log` file created prior to starting the application. This file is gitignored and also dockerignored.
 
