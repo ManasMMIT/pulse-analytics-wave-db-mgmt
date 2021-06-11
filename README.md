@@ -11,7 +11,7 @@
 
 When you first clone this repo and `cd` into the root directory in your terminal, run `yarn` to install the packages required for this script.
 
-In order for the script to connect to MongoDB, you'll also need a `.env` file. Contact the backend team to get a copy of that file.
+In order for the script to connect to MongoDB, you'll also need a `.env` or `.env.development` (Docker) file. Contact the backend team to get a copy of that file.
 
 Also, make sure you have the `src/backend/logs/api.log` file created prior to starting the application. This file is gitignored and also dockerignored.
 
@@ -55,8 +55,9 @@ yarn start
 
 # Running the application locally WITH Docker
 
-1. Change the `PROXY_URL` value in your `.env` file to `http://polaris_api:1337`
-2. Change the `VEGA_PROXY_URL` value in your `.env` file to `http://vega:8000`.
+1. Make sure you have a `.env.development` file
+1. Change the `PROXY_URL` value in your `.env.development` file to `http://polaris_api:1337`
+2. Change the `VEGA_PROXY_URL` value in your `.env.development` file to `http://vega:8000`.
 3. Make sure you have Docker installed on your computer (Refer to https://docs.docker.com/docker-for-mac/install/ for instructions).
 4. To run the containers in a single terminal window, refer to the command below:
 
