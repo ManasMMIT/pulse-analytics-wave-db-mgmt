@@ -8,7 +8,7 @@
     "transpileOnly": true,
     "transpiler": "ts-node/transpilers/swc-experimental"
   },
-  "compilerOptions": { // For Type Checking
+  "compilerOptions": {
     "module": "commonjs",
     "noImplicitAny": false,
     "skipLibCheck": true,
