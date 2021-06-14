@@ -103,7 +103,7 @@
     "test:debug": "node --inspect node_modules/.bin/jest --runInBand",
     "start:prod": "NODE_ENV=production node -r ts-node/register --max-old-space-size=6000 ./src/backend",
     "lint-staged": "lint-staged",
-    "typecheck:backend": "tsc --noEmit --project tsconfig.backend.json",
+    "typecheck:backend": "tsc --noEmit --project tsconfig.backend.json"
   },
   "eslintConfig": {
     "extends": "react-app"
