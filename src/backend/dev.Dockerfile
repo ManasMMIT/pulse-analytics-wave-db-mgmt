@@ -1,2 +1,9 @@
-FROM node:lts-alpine
-RUN apk --no-cache add git
+FROM node:lts
+
+WORKDIR /code
+
+COPY package.json .
+
+COPY .npmrc .npmrc
+
+RUN yarn

@@ -2,8 +2,10 @@
   "ts-node": {
     "compilerOptions": {
       "module": "commonjs",
-      "noImplicitAny": false,
-    }
+      "noImplicitAny": false
+    },
+    "transpileOnly": true,
+    "transpiler": "ts-node/transpilers/swc-experimental"
   },
   "compilerOptions": {
     "baseUrl": "src",

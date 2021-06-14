@@ -9,9 +9,9 @@ services:
     ports:
       - "3000:3000"
     container_name: polaris_app
-    working_dir: /root/app
     volumes:
-      - ./:/root/app:cached
+      - ./:/code:cached
+      - /code/node_modules
     env_file: .env.development
   polaris_api:
     build:
@@ -22,9 +22,9 @@ services:
       - "1337:1337"
       - "2000:2000"
     container_name: polaris_api
-    working_dir: /root/api
     volumes:
-      - ./:/root/api:cached
+      - ./:/code:cached
+      - /code/node_modules
     env_file: .env.development
 networks:
   default:
