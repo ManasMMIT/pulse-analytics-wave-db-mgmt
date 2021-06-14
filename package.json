@@ -102,7 +102,8 @@
     "integration-test": "jest .*.integration.test.js",
     "test:debug": "node --inspect node_modules/.bin/jest --runInBand",
     "start:prod": "NODE_ENV=production node -r ts-node/register --max-old-space-size=6000 ./src/backend",
-    "lint-staged": "lint-staged"
+    "lint-staged": "lint-staged",
+    "typecheck:backend": "tsc --noEmit --project tsconfig.backend.json",
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -114,7 +115,8 @@
   },
   "pre-commit": [
     "lint-staged",
-    "test"
+    "test",
+    "typecheck:backend"
   ],
   "prettier": {
     "semi": false,
@@ -134,11 +136,11 @@
     ]
   },
   "devDependencies": {
+    "@swc/core": "^1.2.60",
+    "@swc/helpers": "^0.2.12",
     "jest-environment-jsdom-sixteen": "^1.0.3",
     "lint-staged": "^10.2.11",
     "pre-commit": "^1.2.2",
-    "prettier": "2.0.5",
-    "@swc/core": "^1.2.60",
-    "@swc/helpers": "^0.2.12"
+    "prettier": "2.0.5"
   }
 }
