@@ -5,6 +5,7 @@ const updateVegaPersonTypeDefs = gql`
     id: ID!
     primary_state_id: ID
     role_id: ID
+    role_specialties_ids: [ID!]
   }
 `
 

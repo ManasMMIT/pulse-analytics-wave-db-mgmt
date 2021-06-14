@@ -377,8 +377,8 @@ export const GET_VEGA_PEOPLE_ROLES = gql`
 `
 
 export const GET_VEGA_PEOPLE_ROLES_INDICATIONS = gql`
-  query getVegaPeopleRolesIndications {
-    vegaPeopleRolesIndications {
+  query getVegaPeopleRolesIndications($roleId: ID, $personId: ID) {
+    vegaPeopleRolesIndications(roleId: $roleId, personId: $personId) {
       id
       specialty_label
       person_role

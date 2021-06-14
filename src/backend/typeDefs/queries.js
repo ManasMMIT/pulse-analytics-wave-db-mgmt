@@ -139,7 +139,10 @@ const queries = gql`
     vegaPeople: [VegaPerson!]!
 
     vegaPeopleRoles(indicationId: ID): [VegaPersonRole!]!
-    vegaPeopleRolesIndications: [VegaPersonRoleIndication!]!
+    vegaPeopleRolesIndications(
+      roleId: ID
+      personId: ID
+    ): [VegaPersonRoleIndication!]!
     vegaPeopleRolesTypes: [VegaPersonRoleType!]!
 
     DEV_pathwaysInfluencers: JSON # grabbing sheet data directly from dev. type def is in wave-api
