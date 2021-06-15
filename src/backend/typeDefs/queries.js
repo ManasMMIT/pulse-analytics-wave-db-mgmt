@@ -138,9 +138,10 @@ const queries = gql`
     people: [Person]
     vegaPeople: [VegaPerson!]!
 
-    vegaPeopleRoles(indicationId: ID): [VegaPersonRole!]!
+    vegaPeopleRoles: [VegaPersonRole!]!
     vegaPeopleRolesIndications(
       roleId: ID
+      indicationId: ID
       personId: ID
     ): [VegaPersonRoleIndication!]!
     vegaPeopleRolesTypes: [VegaPersonRoleType!]!
