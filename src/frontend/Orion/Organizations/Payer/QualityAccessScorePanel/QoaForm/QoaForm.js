@@ -73,8 +73,11 @@ const QoaForm = ({ entityId, closeModal }) => {
   const { qualityOfAccessScores } = data
 
   const handleChange = (e) => {
-    const value =
+    let value =
       e.target.type === 'number' ? parseInt(e.target.value) : e.target.value
+
+    if (e.target.name === 'color') value = value.trim()
+
     setState({ ...state, [e.target.name]: value })
   }
 
