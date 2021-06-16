@@ -2,7 +2,7 @@ import { gql } from 'apollo-server-express'
 
 const pushMarketBasketsToDevTypeDefs = gql`
   input PushMarketBasketsToDevInput {
-    marketBasketId: ID
+    marketBasketId: ID!
   }
 `
 

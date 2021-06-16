@@ -22,7 +22,6 @@ import Spacing from 'frontend/utils/spacing'
 import Color from 'frontend/utils/color'
 
 import MarketBasketForm from './MarketBasketForm'
-import PushMarketBasketsToDevButton from '../PushMarketBasketsToDevButton'
 
 const COLUMNS = [
   {
@@ -158,9 +157,6 @@ const MarketBasketList = () => {
             <Button onClick={() => setIsModalOpen(true)}>
               + Create Market Basket
             </Button>
-          </div>
-          <div style={{ marginLeft: 24 }}>
-            <PushMarketBasketsToDevButton />
           </div>
           <div style={{ marginLeft: 24 }}>
             <ExportExcelButton

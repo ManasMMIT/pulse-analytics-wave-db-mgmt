@@ -3,7 +3,7 @@ import axios from 'axios'
 const deleteMarketBasketSurvey = async (
   parent,
   { input: { id: marketBasketSurveyId } },
-  context,
+  { pulseDevDb },
   info
 ) => {
   const marketBasketSurvey = await axios.get(`market-basket-surveys/${marketBasketSurveyId}/`)
@@ -15,6 +15,8 @@ const deleteMarketBasketSurvey = async (
   await axios.delete(`market-basket-surveys/${marketBasketSurveyId}/`).catch((e) => {
     throw new Error(JSON.stringify(e.response.data))
   })
+
+  await pulseDevDb.collection('marketBasketsSurveyAnswers').deleteMany({ surveyId: marketBasketSurveyId })
 
   return marketBasketSurvey
 }

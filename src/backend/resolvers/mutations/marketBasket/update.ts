@@ -1,9 +1,11 @@
+import upsertSingleMarketBasket from './utils/upsertSingleMarketBasket'
+
 const axios = require('axios')
 
 const updateMarketBasket = async (
   parent,
   { input: { id, ...body } },
-  context,
+  { pulseDevDb },
   info
 ) => {
   await axios.patch(`market-baskets/${id}/`, body)
@@ -12,7 +14,10 @@ const updateMarketBasket = async (
       throw new Error(JSON.stringify(e.response.data))
     })
 
-  return axios.get(`hydrated-market-baskets/${id}/`).then(({ data }) => data)
+  const hydratedMarketBasket = await axios.get(`hydrated-market-baskets/${id}/`).then(({ data }) => data)
+  await upsertSingleMarketBasket(hydratedMarketBasket, pulseDevDb)
+
+  return hydratedMarketBasket
 }
 
 export default updateMarketBasket

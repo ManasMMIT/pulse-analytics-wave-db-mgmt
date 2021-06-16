@@ -21,17 +21,17 @@ const PushMarketBasketsToDevButton = () => {
     onError: alert,
   })
 
-  const buttonText = marketBasketId ? 'Stage Data' : 'Stage All Data'
-
-  if (loading)
+  if (loading) {
     return (
-      <Button style={buttonStyle} onClick={() => {}} type="ghost">
+      <Button style={buttonStyle} onClick={() => { }} type="ghost">
         <Spinner />
       </Button>
     )
+  }
+
   return (
     <Button style={buttonStyle} onClick={pushIt} type="secondary">
-      {buttonText}
+      Stage Data
     </Button>
   )
 }

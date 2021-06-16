@@ -6,7 +6,7 @@ const DEFAULT_TIMEZONE = require('../../../../utils/defaultTimeZone')
 const updateMarketBasketSurvey = async (
   parent,
   { input: { id, ...body } },
-  context,
+  { pulseDevDb },
   info
 ) => {
   const { date, ...rest } = body
@@ -16,11 +16,20 @@ const updateMarketBasketSurvey = async (
     body = { date: standardizedDate, ...rest }
   }
 
-  return await axios.patch(`market-basket-surveys/${id}/`, body)
+  const marketBasketSurvey = await axios.patch(`market-basket-surveys/${id}/`, body)
     .then(({ data }) => data)
     .catch((e) => {
       throw new Error(JSON.stringify(e.response.data))
     })
+
+  if (body.date) {
+    pulseDevDb.collection('marketBasketsSurveyAnswers').updateMany(
+      { surveyId: id },
+      { $set: { surveyDate: body.date } }
+    )
+  }
+
+  return marketBasketSurvey
 }
 
 export default updateMarketBasketSurvey
