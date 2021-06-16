@@ -121,6 +121,22 @@ export const GET_MARKET_BASKETS_SURVEYS_STAKEHOLDERS = gql`
         created_at
         updated_at
       }
+      perception_tool_provider {
+        id
+        slug
+        name
+        name_tiny
+        type
+        state {
+          id
+          full_name
+          abbreviation
+          created_at
+          updated_at
+        }
+        created_at
+        updated_at
+      }
       created_at
       updated_at
     }
@@ -853,6 +869,27 @@ export const GET_SOURCE_QUALITY_OF_ACCESS_SCORES = gql`
       sortOrder
       color
       caption
+    }
+  }
+`
+
+export const GET_VEGA_PROVIDERS = gql`
+  query getVegaProviders {
+    vegaProviders {
+      id
+      slug
+      name
+      name_tiny
+      type
+      state {
+        id
+        full_name
+        abbreviation
+        created_at
+        updated_at
+      }
+      created_at
+      updated_at
     }
   }
 `

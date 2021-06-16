@@ -6,6 +6,7 @@ import vegaPeopleRolesTypes from './peopleRolesTypes'
 import vegaProducts from './products'
 import vegaProductsRegimens from './productsRegimens'
 import vegaRegimens from './regimens'
+import vegaProviders from './providers'
 import marketBaskets from './marketBaskets'
 import marketBasketsSubscriptions from './marketBasketsSubscriptions'
 import marketBasketsCategories from './marketBasketsCategories'
@@ -25,6 +26,7 @@ export default {
   vegaProducts,
   vegaProductsRegimens,
   vegaRegimens,
+  vegaProviders,
   marketBaskets,
   marketBasketsSubscriptions,
   marketBasketsCategories,

@@ -34,6 +34,8 @@ const queries = gql`
     regimens: [Regimen]
     vegaRegimens: [VegaRegimen]
 
+    vegaProviders: [VegaProvider!]!
+
     organizationTypes: [String]
 
     providerOrganizations: [ProviderOrganization]
@@ -446,6 +448,17 @@ const queries = gql`
     updated_at: DateTime
   }
 
+  type VegaProvider {
+    id: ID!
+    slug: String
+    name: String
+    name_tiny: String
+    type: String
+    state: VegaState
+    created_at: DateTime
+    updated_at: DateTime
+  }
+
   type VegaPerson {
     id: ID!
     first_name: String
@@ -453,6 +466,7 @@ const queries = gql`
     middle_name: String
     primary_state: VegaState
     role: VegaPersonRole
+    perception_tool_provider: VegaProvider
     created_at: DateTime
     updated_at: DateTime
   }

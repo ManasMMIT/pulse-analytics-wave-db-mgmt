@@ -6,6 +6,7 @@ const updateVegaPersonTypeDefs = gql`
     primary_state_id: ID
     role_id: ID
     role_specialties_ids: [ID!]
+    perception_tool_provider_id: ID
   }
 `
 

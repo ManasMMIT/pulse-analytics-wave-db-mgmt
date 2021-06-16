@@ -6,6 +6,7 @@ import { Button } from '@pulse-analytics/pulse-design-system'
 import {
   GET_VEGA_PEOPLE_ROLES,
   GET_VEGA_PEOPLE_ROLES_INDICATIONS,
+  GET_VEGA_PROVIDERS,
   GET_VEGA_STATES,
 } from 'frontend/api/queries'
 import { UPDATE_VEGA_PERSON } from 'frontend/api/mutations'
@@ -19,6 +20,8 @@ const UpdateStakeholder = ({ stakeholder }) => {
   const [stateOptions, setStateOptions] = useState([])
   const [roleOptions, setRoleOptions] = useState([])
   const [roleSpecialtiesOptions, setRoleSpecialtiesOptions] = useState([])
+  const [providerOptions, setProviderOptions] = useState([])
+
   const [stagedPrimaryState, setStagedPrimaryState] = useState(
     stakeholder.primary_state
       ? {
@@ -27,7 +30,7 @@ const UpdateStakeholder = ({ stakeholder }) => {
         }
       : {
           label: 'Select State...',
-          value: undefined,
+          value: null,
         }
   )
   const [stagedRole, setStagedRole] = useState(
@@ -39,6 +42,17 @@ const UpdateStakeholder = ({ stakeholder }) => {
       : NO_ROLE_OPTION
   )
   const [stagedRoleSpecialties, setStagedRoleSpecialties] = useState(undefined)
+  const [stagedProvider, setStagedProvider] = useState(
+    stakeholder.perception_tool_provider
+      ? {
+          label: stakeholder.perception_tool_provider.name,
+          value: stakeholder.perception_tool_provider.id,
+        }
+      : {
+          label: 'Select Provider...',
+          value: null,
+        }
+  )
 
   const { data: statesData, loading: statesLoading } = useQuery(GET_VEGA_STATES)
 
@@ -59,6 +73,10 @@ const UpdateStakeholder = ({ stakeholder }) => {
   } = useQuery(GET_VEGA_PEOPLE_ROLES_INDICATIONS, {
     variables: { personId: stakeholder.id },
   })
+
+  const { data: providersData, loading: providersLoading } = useQuery(
+    GET_VEGA_PROVIDERS
+  )
 
   const [updatePerson] = useMutation(UPDATE_VEGA_PERSON, {
     onError: alert,
@@ -120,6 +138,21 @@ const UpdateStakeholder = ({ stakeholder }) => {
     }
   }, [personRoleSpecialtiesLoading])
 
+  /*
+    useEffect for loading provider options.
+  */
+  useEffect(() => {
+    if (!providersLoading) {
+      const newProviderOptions = providersData.vegaProviders.map(
+        ({ id, name }) => ({
+          label: name,
+          value: id,
+        })
+      )
+      setProviderOptions(newProviderOptions)
+    }
+  }, [providersLoading])
+
   const handleStateSelection = (value) => {
     setStagedPrimaryState(value)
   }
@@ -134,6 +167,10 @@ const UpdateStakeholder = ({ stakeholder }) => {
     setStagedRoleSpecialties(value)
   }
 
+  const handleProviderSelection = (value) => {
+    setStagedProvider(value)
+  }
+
   const savePerson = () => {
     const input = {
       id: stakeholder.id,
@@ -142,6 +179,7 @@ const UpdateStakeholder = ({ stakeholder }) => {
       role_specialties_ids: stagedRoleSpecialties
         ? stagedRoleSpecialties.map(({ value }) => value)
         : stagedRoleSpecialties,
+      perception_tool_provider_id: stagedProvider.value,
     }
 
     updatePerson({ variables: { input } })
@@ -173,6 +211,12 @@ const UpdateStakeholder = ({ stakeholder }) => {
           personRoleSpecialtiesLoading
         }
         placeholder={'Select Role Specialties...'}
+      />
+      <Select
+        onChange={handleProviderSelection}
+        options={providerOptions}
+        value={stagedProvider}
+        isDisabled={providersLoading}
       />
       <Button onClick={savePerson}>Save</Button>
     </div>
