@@ -31,7 +31,7 @@ const PushMarketBasketsToDevButton = () => {
 
   return (
     <Button style={buttonStyle} onClick={pushIt} type="secondary">
-      Stage Data
+      Stage Data to Dev
     </Button>
   )
 }
