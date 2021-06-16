@@ -8,7 +8,7 @@ function getUpdateSurveyDataCatCharOps(marketBasket: any, pulseDevDb: any): { up
             $set: {
               'category.name': category.name,
               'category.prompt': category.prompt,
-              'category.type': category.type,
+              'category.type': category.category_type,
             }
           })
     )
