@@ -15,7 +15,7 @@ import Input from 'frontend/components/Input'
 
 import Spacing from 'frontend/utils/spacing'
 
-import { CATEGORY_TYPE_OPTIONS, FormLabel } from './utils'
+import { FormLabel } from './utils'
 
 const MODAL_TITLE = 'Update Category'
 
@@ -34,9 +34,9 @@ const UpdateCategoryForm = ({ closeHandler }) => {
   const [formData, setFormData] = useState({
     id: categoryId,
     name: null,
-    category_type: null,
     prompt: null,
   })
+  const [categoryType, setCategoryType] = useState(null)
 
   const { data, loading } = useQuery(GET_MARKET_BASKETS_CATEGORIES, {
     variables: { marketBasketId },
@@ -51,7 +51,8 @@ const UpdateCategoryForm = ({ closeHandler }) => {
 
       if (selectedCatData) {
         const { name, category_type, prompt } = selectedCatData
-        setFormData({ id: categoryId, name, category_type, prompt })
+        setFormData({ id: categoryId, name, prompt })
+        setCategoryType(category_type)
       }
     }
   }, [categoryId, data, data.marketBaskets, loading])
@@ -75,12 +76,9 @@ const UpdateCategoryForm = ({ closeHandler }) => {
     updateMarketBasketCategory()
   }
 
-  console.log(formData)
-
-  const { category_type } = formData
   const selectedCategoryValue = {
-    label: category_type ? _.capitalize(category_type) : null,
-    value: category_type,
+    label: categoryType ? _.capitalize(categoryType) : null,
+    value: categoryType,
   }
 
   return (
@@ -105,11 +103,7 @@ const UpdateCategoryForm = ({ closeHandler }) => {
           </section>
           <section>
             <FormLabel>Category Type (required)</FormLabel>
-            <Select
-              value={selectedCategoryValue}
-              options={CATEGORY_TYPE_OPTIONS}
-              onChange={(props) => handleChange(props, 'category_type')}
-            />
+            <Select value={selectedCategoryValue} isDisabled />
           </section>
           <section>
             <FormLabel>Prompt</FormLabel>
