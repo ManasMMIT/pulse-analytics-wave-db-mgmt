@@ -95,7 +95,7 @@ const RolesTable = () => {
             onRowClickOverride={onRowClick}
             showExportButton={false}
           />
-          {selectedRowId && (
+          {selectedRoleData && (
             <EditRoleForm
               selectedRoleData={selectedRoleData}
               closeHandler={() => setSelectedRowId(null)}

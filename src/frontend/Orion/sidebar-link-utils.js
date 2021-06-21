@@ -118,10 +118,10 @@ export const SPECIALIZED_DATA_CONFIG = [
         link: '/stakeholder-roles',
         childLinks: [
           { label: 'Roles', link: '/roles' },
-          // {
-          //   label: 'Indication Role Specialties',
-          //   link: '/indication-role-specialties',
-          // },
+          {
+            label: 'Indication Role Specialties',
+            link: '/indication-role-specialties',
+          },
         ],
       },
       {
@@ -144,9 +144,6 @@ export const SPECIALIZED_DATA_CONFIG = [
         link: '/sandbox-role-specialties',
         showOnSuperUserOnly: true,
       },
-      // { label: 'Stakeholders', link: '/stakeholders' },
-      // { label: 'Stakeholders Types', link: '/stakeholders-types' },
-      // { label: 'Stakeholders Categories', link: '/stakeholders-categories' },
     ],
   },
 ]
