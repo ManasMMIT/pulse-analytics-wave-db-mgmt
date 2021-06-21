@@ -1,3 +1,5 @@
+import vegaTypeDefs from '../vega/mutations'
+
 import node from './node'
 import marketBasket from './marketBasket'
 
@@ -51,31 +53,57 @@ const mutationType = gql`
     updateListsConfig(input: UpdateListsConfigInput!): ListsConfig
     deleteListsConfig(input: DeleteListsConfigInput!): ListsConfig
 
-    pushMarketBasketsToDev(input: PushMarketBasketsToDevInput!): [DevMarketBasket!]
+    pushMarketBasketsToDev(
+      input: PushMarketBasketsToDevInput!
+    ): [DevMarketBasket!]
+
+    importMarketBasketSurvey(input: ImportMarketBasketSurveyInput!): JSON
 
     deleteMarketBasket(input: DeleteMarketBasketInput!): MarketBasket
     createMarketBasket(input: CreateMarketBasketInput!): MarketBasket
     updateMarketBasket(input: UpdateMarketBasketInput!): MarketBasket
 
-    createMarketBasketCategory(input: CreateMarketBasketCategoryInput!): MarketBasketCategory
-    updateMarketBasketCategory(input: UpdateMarketBasketCategoryInput!): MarketBasketCategory
-    deleteMarketBasketCategory(input: DeleteMarketBasketCategoryInput!): MarketBasketCategory
+    createMarketBasketCategory(
+      input: CreateMarketBasketCategoryInput!
+    ): MarketBasketCategory
+    updateMarketBasketCategory(
+      input: UpdateMarketBasketCategoryInput!
+    ): MarketBasketCategory
+    deleteMarketBasketCategory(
+      input: DeleteMarketBasketCategoryInput!
+    ): MarketBasketCategory
 
-    createMarketBasketCategoryCharacteristic(input: CreateMarketBasketCategoryCharacteristicInput!): MarketBasketCategoryCharacteristic
-    updateMarketBasketCategoryCharacteristic(input: UpdateMarketBasketCategoryCharacteristicInput!): MarketBasketCategoryCharacteristic
-    deleteMarketBasketCategoryCharacteristic(input: DeleteMarketBasketCategoryCharacteristicInput!): MarketBasketCategoryCharacteristic
+    createMarketBasketCategoryCharacteristic(
+      input: CreateMarketBasketCategoryCharacteristicInput!
+    ): MarketBasketCategoryCharacteristic
+    updateMarketBasketCategoryCharacteristic(
+      input: UpdateMarketBasketCategoryCharacteristicInput!
+    ): MarketBasketCategoryCharacteristic
+    deleteMarketBasketCategoryCharacteristic(
+      input: DeleteMarketBasketCategoryCharacteristicInput!
+    ): MarketBasketCategoryCharacteristic
 
-    createUser(input: CreateUserInput!): CreateUserPayload
-    updateUser(input: UpdateUserInput!): UpdateUserPayload
-    deleteUser(input: DeleteUserInput!): DeleteUserPayload
+    createMarketBasketSurvey(
+      input: CreateMarketBasketSurveyInput!
+    ): MarketBasketSurvey
+    updateMarketBasketSurvey(
+      input: UpdateMarketBasketSurveyInput!
+    ): MarketBasketSurvey
+    deleteMarketBasketSurvey(
+      input: DeleteMarketBasketSurveyInput!
+    ): MarketBasketSurvey
 
-    createClient(input: CreateClientInput!): CreateClientPayload
-    deleteClient(input: DeleteClientInput!): DeleteClientPayload
-    updateClient(input: UpdateClientInput!): UpdateClientPayload
+    createUser(input: CreateUserInput!): User
+    updateUser(input: UpdateUserInput!): User
+    deleteUser(input: DeleteUserInput!): User
 
-    createTeam(input: CreateTeamInput!): CreateTeamPayload
-    updateTeam(input: UpdateTeamInput!): UpdateTeamPayload
-    deleteTeam(input: DeleteTeamInput!): DeleteTeamPayload
+    createClient(input: CreateClientInput!): Client
+    deleteClient(input: DeleteClientInput!): Client
+    updateClient(input: UpdateClientInput!): Client
+
+    createTeam(input: CreateTeamInput!): Team
+    updateTeam(input: UpdateTeamInput!): Team
+    deleteTeam(input: DeleteTeamInput!): Team
 
     createNode(input: CreateNodeInput): Node
     updateNode(input: UpdateNodeInput): Node
@@ -84,7 +112,7 @@ const mutationType = gql`
     updateTdgTimestamps(input: UpdateTdgTimestampsInput!): JSON
 
     updateRoleSitemap(input: UpdateRoleSitemapInput!): UpdateRoleSitemapPayload
-    updatePermissions(input: UpdatePermissionsInput!): UpdateTeamPayload
+    updatePermissions(input: UpdatePermissionsInput!): Team
     pushSitemapToDev: String
     pushSitemapToProd: String
 
@@ -121,6 +149,22 @@ const mutationType = gql`
     deleteSourceRegimen(
       input: DeleteSourceRegimenInput!
     ): DeleteSourceRegimenPayload
+
+    updateVegaProvider(input: UpdateVegaProviderInput!): VegaProvider
+
+    createVegaInstitution(input: CreateVegaInstitutionInput!): VegaInstitution
+    updateVegaInstitution(input: UpdateVegaInstitutionInput!): VegaInstitution
+    deleteVegaInstitution(input: DeleteVegaInstitutionInput!): VegaInstitution
+
+    createVegaCommunityPracticeNetwork(
+      input: CreateVegaCommunityPracticeNetworkInput!
+    ): VegaCommunityPracticeNetwork
+    updateVegaCommunityPracticeNetwork(
+      input: UpdateVegaCommunityPracticeNetworkInput!
+    ): VegaCommunityPracticeNetwork
+    deleteVegaCommunityPracticeNetwork(
+      input: DeleteVegaCommunityPracticeNetworkInput!
+    ): VegaCommunityPracticeNetwork
 
     createProviderOrganization(
       input: CreateProviderOrganizationInput!
@@ -385,6 +429,32 @@ const mutationType = gql`
     updatePerson(input: UpdatePersonInput!): UpdatePersonPayload
     deletePerson(input: DeletePersonInput!): DeletePersonPayload
 
+    updateVegaPerson(input: UpdateVegaPersonInput!): VegaPerson!
+
+    createVegaPersonRole(input: CreateVegaPersonRoleInput!): VegaPersonRole
+    updateVegaPersonRole(input: UpdateVegaPersonRoleInput!): VegaPersonRole
+    deleteVegaPersonRole(input: DeleteVegaPersonRoleInput!): VegaPersonRole
+
+    createVegaPersonRoleIndication(
+      input: CreateVegaPersonRoleIndicationInput!
+    ): VegaPersonRoleIndication
+    updateVegaPersonRoleIndication(
+      input: UpdateVegaPersonRoleIndicationInput!
+    ): VegaPersonRoleIndication
+    deleteVegaPersonRoleIndication(
+      input: DeleteVegaPersonRoleIndicationInput!
+    ): VegaPersonRoleIndication
+
+    createVegaPersonRoleType(
+      input: CreateVegaPersonRoleTypeInput!
+    ): VegaPersonRoleType
+    updateVegaPersonRoleType(
+      input: UpdateVegaPersonRoleTypeInput!
+    ): VegaPersonRoleType
+    deleteVegaPersonRoleType(
+      input: DeleteVegaPersonRoleTypeInput!
+    ): VegaPersonRoleType
+
     updateEndUserTerms(
       input: UpdateEndUserTermsInput!
     ): UpdateEndUserTermsPayload
@@ -432,6 +502,9 @@ const mutationType = gql`
 
 module.exports = [
   mutationType,
+
+  ...vegaTypeDefs,
+
   ...client,
   ...teams,
   ...user,

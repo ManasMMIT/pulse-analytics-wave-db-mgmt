@@ -75,7 +75,7 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          S3_BUCKET_URL: s3://pulse-analytics-config/dot-env/polaris/.env.production
+          S3_BUCKET_URL: s3://pulse-analytics-config/dot-env/polaris/.env.staging
         with:
           host: ${{ secrets.DIGITAL_OCEAN_STAGING_HOST }}
           username: ${{ secrets.DIGITAL_OCEAN_USERNAME }}

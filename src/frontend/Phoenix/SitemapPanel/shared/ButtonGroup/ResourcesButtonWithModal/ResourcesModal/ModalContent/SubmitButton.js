@@ -4,7 +4,6 @@ import { useMutation } from '@apollo/react-hooks'
 import PropTypes from 'prop-types'
 import { transparentize } from 'polished'
 
-import { GET_SELECTED_TEAM } from '../../../../../../../api/queries'
 import { UPDATE_PERMISSIONS } from '../../../../../../../api/mutations/teams'
 import Spinner from 'frontend/components/Spinner'
 
@@ -24,11 +23,11 @@ const StyledSubmitButton = styled.button({
     background: transparentize(0.7, Colors.PRIMARY),
   },
   ':active': {
-    outline: 'none'
+    outline: 'none',
   },
   ':focus': {
-    outline: 'none'
-  }
+    outline: 'none',
+  },
 })
 
 const SubmitButton = ({
@@ -41,56 +40,40 @@ const SubmitButton = ({
     UPDATE_PERMISSIONS,
     {
       variables: { input: { nodeId, teamId, updatedResources } },
-      update: (cache, { data: { updatePermissions } }) => {
-        // Override __typename at this step because it comes in as `UpdatedTeamPayload`,
-        // but the selectedTeam in the cache should always be type `Team`
-        const updatedTeam = {
-          ...updatePermissions,
-          isDefault: null,
-          __typename: 'Team',
-        }
-
-        cache.writeQuery({
-          query: GET_SELECTED_TEAM,
-          data: { selectedTeam: updatedTeam },
-        })
-      },
       onCompleted: afterSubmitHook,
-    },
+    }
   )
 
-  if (loading) return (
-    <div
-      style={{
-        diplay: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-      }}
-    >
-      <Spinner />
-      <span
+  if (loading)
+    return (
+      <div
         style={{
-          color: Colors.PRIMARY,
-          fontSize: 9,
-          fontWeight: 700,
-          paddingLeft: 12,
+          diplay: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
         }}
       >
-        SAVING
-      </span>
-    </div>
-  )
+        <Spinner />
+        <span
+          style={{
+            color: Colors.PRIMARY,
+            fontSize: 9,
+            fontWeight: 700,
+            paddingLeft: 12,
+          }}
+        >
+          SAVING
+        </span>
+      </div>
+    )
   if (error) return 'Failed to save'
 
   return (
-    <StyledSubmitButton
-      onClick={updatePermissions}
-    >
+    <StyledSubmitButton onClick={updatePermissions}>
       Save + Close
     </StyledSubmitButton>
   )
 }
-
 
 SubmitButton.propTypes = {
   nodeId: PropTypes.string,

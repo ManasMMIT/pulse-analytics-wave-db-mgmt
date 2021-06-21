@@ -149,8 +149,8 @@ class UserForm extends React.Component {
       afterSubmitHook,
       additionalFormData,
       mutationDoc,
-      clientMutation,
       selectedTeamId,
+      handleClick,
     } = this.props
 
     // pick out only the checked boxes and get array of ids
@@ -276,9 +276,9 @@ class UserForm extends React.Component {
           isDisabled={isDisabled}
           mutationDoc={mutationDoc}
           afterSubmitHook={afterSubmitHook}
-          clientMutation={clientMutation}
           input={submitData}
           selectedTeamId={selectedTeamId}
+          handleClick={handleClick}
         />
         {isDisabled ? (
           <div style={{ color: Colors.RED }}>
@@ -305,7 +305,6 @@ UserForm.propTypes = {
   allTeamsUserIsOn: PropTypes.array,
   afterSubmitHook: PropTypes.func,
   additionalFormData: PropTypes.object,
-  clientMutation: PropTypes.object,
 }
 
 UserForm.defaultProps = {
@@ -317,7 +316,6 @@ UserForm.defaultProps = {
   allTeamsUserIsOn: [],
   afterSubmitHook: () => null,
   additionalFormData: {},
-  clientMutation: null,
 }
 
 export default UserForm

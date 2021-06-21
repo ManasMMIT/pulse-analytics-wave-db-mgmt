@@ -2,6 +2,9 @@ import React, { useState } from 'react'
 import { useQuery } from '@apollo/react-hooks'
 import { Link } from 'react-router-dom'
 import styled from '@emotion/styled'
+import _ from 'lodash'
+
+import { GET_MARKET_BASKETS } from 'frontend/api/queries'
 
 import Button from 'frontend/components/Button'
 import Spinner from 'frontend/components/Spinner'
@@ -14,14 +17,11 @@ import customMultiSelectFilterFn from 'frontend/components/Table/custom-filters/
 import { CONFIG_TABLE_WIDTH } from 'frontend/components/Table/tableWidths'
 import formatDataForExport from 'frontend/components/ExportExcelButton/formatDataForExport'
 
-import _ from 'lodash'
-import MarketBasketForm from './MarketBasketForm'
-import { GET_MARKET_BASKETS } from 'frontend/api/queries'
 import FontSpace from 'frontend/utils/fontspace'
 import Spacing from 'frontend/utils/spacing'
 import Color from 'frontend/utils/color'
 
-import PushMarketBasketsToDevButton from '../PushMarketBasketsToDevButton'
+import MarketBasketForm from './MarketBasketForm'
 
 const COLUMNS = [
   {
@@ -157,9 +157,6 @@ const MarketBasketList = () => {
             <Button onClick={() => setIsModalOpen(true)}>
               + Create Market Basket
             </Button>
-          </div>
-          <div style={{ marginLeft: 24 }}>
-            <PushMarketBasketsToDevButton />
           </div>
           <div style={{ marginLeft: 24 }}>
             <ExportExcelButton

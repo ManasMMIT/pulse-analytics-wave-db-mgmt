@@ -1,5 +1,11 @@
 import gql from 'graphql-tag'
 
+export const IMPORT_MARKET_BASKET_SURVEY = gql`
+  mutation ImportMarketBasketSurvey($input: ImportMarketBasketSurveyInput!) {
+    importMarketBasketSurvey(input: $input)
+  }
+`
+
 export const PUSH_MARKET_BASKETS_TO_DEV = gql`
   mutation PushMarketBasketsToDev($input: PushMarketBasketsToDevInput!) {
     pushMarketBasketsToDev(input: $input) {
@@ -143,6 +149,57 @@ export const DELETE_MARKET_BASKET_CATEGORY_CHARACTERISTIC = gql`
       id
       name
       description
+    }
+  }
+`
+
+export const CREATE_MARKET_BASKET_SURVEY = gql`
+  mutation CreateMarketBasketSurvey($input: CreateMarketBasketSurveyInput!) {
+    createMarketBasketSurvey(input: $input) {
+      id
+      market_basket
+      stakeholders
+      stakeholders_full {
+        id
+        first_name
+        last_name
+        middle_name
+      }
+      date
+    }
+  }
+`
+
+export const UPDATE_MARKET_BASKET_SURVEY = gql`
+  mutation UpdateMarketBasketSurvey($input: UpdateMarketBasketSurveyInput!) {
+    updateMarketBasketSurvey(input: $input) {
+      id
+      market_basket
+      stakeholders
+      stakeholders_full {
+        id
+        first_name
+        last_name
+        middle_name
+      }
+      date
+    }
+  }
+`
+
+export const DELETE_MARKET_BASKET_SURVEY = gql`
+  mutation DeleteMarketBasketSurvey($input: DeleteMarketBasketSurveyInput!) {
+    deleteMarketBasketSurvey(input: $input) {
+      id
+      market_basket
+      stakeholders
+      stakeholders_full {
+        id
+        first_name
+        last_name
+        middle_name
+      }
+      date
     }
   }
 `

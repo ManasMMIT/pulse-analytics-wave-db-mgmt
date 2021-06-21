@@ -112,14 +112,53 @@ export const SPECIALIZED_DATA_CONFIG = [
     link: '/orion/specialized/value-perception',
     childLinks: [
       { label: 'Market Baskets', link: '/market-baskets' },
+      { label: 'Stakeholders', link: '/stakeholders' },
+      {
+        label: 'Stakeholder Roles',
+        link: '/stakeholder-roles',
+        childLinks: [
+          { label: 'Roles', link: '/roles' },
+          {
+            label: 'Indication Role Specialties',
+            link: '/indication-role-specialties',
+          },
+        ],
+      },
       {
         label: 'SANDBOX Market Baskets',
         link: '/sandbox-market-baskets',
         showOnSuperUserOnly: true,
       },
-      // { label: 'Stakeholders', link: '/stakeholders' },
-      // { label: 'Stakeholders Types', link: '/stakeholders-types' },
-      // { label: 'Stakeholders Categories', link: '/stakeholders-categories' },
+      {
+        label: 'SANDBOX Stakeholders',
+        link: '/sandbox-stakeholders',
+        showOnSuperUserOnly: true,
+      },
+      {
+        label: 'SANDBOX Roles',
+        link: '/sandbox-roles',
+        showOnSuperUserOnly: true,
+      },
+      {
+        label: 'SANDBOX Role Specialties',
+        link: '/sandbox-role-specialties',
+        showOnSuperUserOnly: true,
+      },
+      {
+        label: 'SANDBOX Providers',
+        link: '/sandbox-providers',
+        showOnSuperUserOnly: true,
+      },
+      {
+        label: 'SANDBOX Institutions',
+        link: '/sandbox-institutions',
+        showOnSuperUserOnly: true,
+      },
+      {
+        label: 'SANDBOX Community Practice Networks',
+        link: '/sandbox-community-practice-networks',
+        showOnSuperUserOnly: true,
+      },
     ],
   },
 ]

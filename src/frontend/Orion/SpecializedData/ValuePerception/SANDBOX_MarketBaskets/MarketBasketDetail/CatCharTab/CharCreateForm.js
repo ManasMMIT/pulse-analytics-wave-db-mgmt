@@ -23,41 +23,51 @@ const formDataSchema = {
 
 const CharCreateForm = () => {
   const { marketBasketId } = useParams()
-  const [
-    formData,
-    setFormData,
-  ] = useState(formDataSchema)
+  const [formData, setFormData] = useState(formDataSchema)
 
-  const { data: marketBasketCategoryData, loading } = useQuery(GET_MARKET_BASKETS_CATEGORIES, { variables: { marketBasketId } })
+  const {
+    data: marketBasketCategoryData,
+    loading,
+  } = useQuery(GET_MARKET_BASKETS_CATEGORIES, { variables: { marketBasketId } })
 
   let exampleCategory
   if (!loading) {
-    exampleCategory = (
-      marketBasketCategoryData.marketBasketsCategories
-      && marketBasketCategoryData.marketBasketsCategories[0]
-    )
+    exampleCategory =
+      marketBasketCategoryData.marketBasketsCategories &&
+      marketBasketCategoryData.marketBasketsCategories[0]
   }
 
-  const [createMarketBasketCategoryCharacteristic] = useMutation(CREATE_MARKET_BASKET_CATEGORY_CHARACTERISTIC, {
-    update: (cache, { data: { createMarketBasketCategoryCharacteristic } }) => {
-      const clonedMarketBasketCategories = _.cloneDeep(marketBasketCategoryData.marketBasketsCategories)
-      const newCategoryCharacteristicsFull = _.orderBy([
-        ...clonedMarketBasketCategories[0].characteristics_full,
-        createMarketBasketCategoryCharacteristic,
-      ], '_order')
+  const [createMarketBasketCategoryCharacteristic] = useMutation(
+    CREATE_MARKET_BASKET_CATEGORY_CHARACTERISTIC,
+    {
+      update: (
+        cache,
+        { data: { createMarketBasketCategoryCharacteristic } }
+      ) => {
+        const clonedMarketBasketCategories = _.cloneDeep(
+          marketBasketCategoryData.marketBasketsCategories
+        )
+        const newCategoryCharacteristicsFull = _.orderBy(
+          [
+            ...clonedMarketBasketCategories[0].characteristics_full,
+            createMarketBasketCategoryCharacteristic,
+          ],
+          '_order'
+        )
 
-      clonedMarketBasketCategories[0].characteristics_full = newCategoryCharacteristicsFull
+        clonedMarketBasketCategories[0].characteristics_full = newCategoryCharacteristicsFull
 
-      cache.writeQuery({
-        query: GET_MARKET_BASKETS_CATEGORIES,
-        variables: { marketBasketId },
-        data: { marketBasketsCategories: clonedMarketBasketCategories }
-      })
-    },
-    variables: {
-      input: { category: exampleCategory.id, ...formData },
-    },
-  })
+        cache.writeQuery({
+          query: GET_MARKET_BASKETS_CATEGORIES,
+          variables: { marketBasketId },
+          data: { marketBasketsCategories: clonedMarketBasketCategories },
+        })
+      },
+      variables: {
+        input: { category: exampleCategory.id, ...formData },
+      },
+    }
+  )
 
   const handleCreate = (e) => {
     e.preventDefault()
@@ -65,21 +75,18 @@ const CharCreateForm = () => {
   }
 
   const handleNameOnChange = ({ target: { value } }) => {
-    setFormData(prevState => ({ ...prevState, name: value }))
+    setFormData((prevState) => ({ ...prevState, name: value }))
   }
 
   const handleDescriptionOnChange = ({ target: { value } }) => {
-    setFormData(prevState => ({ ...prevState, description: value }))
+    setFormData((prevState) => ({ ...prevState, description: value }))
   }
 
   return (
     <form style={FORM_STYLE} onSubmit={handleCreate}>
       <h3>{`${exampleCategory.name} / Characteristic Create Form`}</h3>
       <label>Name (required)</label>
-      <input
-        value={formData.name}
-        onChange={handleNameOnChange}
-      />
+      <input value={formData.name} onChange={handleNameOnChange} />
       <label>Description</label>
       <input
         value={formData.description}

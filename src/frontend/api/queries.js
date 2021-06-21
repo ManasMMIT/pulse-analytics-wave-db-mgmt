@@ -1,5 +1,21 @@
 import gql from 'graphql-tag'
 
+export const GET_VEGA_PEOPLE = gql`
+  query getVegaPeople {
+    vegaPeople {
+      id
+      first_name
+      last_name
+      middle_name
+      role {
+        id
+        name
+        default_specialty_label
+      }
+    }
+  }
+`
+
 export const GET_VEGA_PRODUCTS_REGIMENS = gql`
   query getVegaProductsRegimens($input: QueryVegaProdRegInput) {
     vegaProductsRegimens(input: $input) {
@@ -26,7 +42,106 @@ export const GET_VEGA_REGIMENS = gql`
     vegaRegimens {
       id
       name
-    }  }`
+    }
+  }
+`
+
+export const GET_MARKET_BASKETS_SURVEYS_QUESTIONS = gql`
+  query getMarketBasketsSurveysQuestions($surveyId: ID) {
+    marketBasketsSurveysQuestions(surveyId: $surveyId) {
+      id
+      survey
+      category {
+        id
+        name
+        prompt
+        category_type
+        _order
+      }
+      characteristic {
+        id
+        name
+        description
+      }
+      answers {
+        id
+        rating
+        stakeholder
+        stakeholder_full {
+          id
+          first_name
+          last_name
+        }
+      }
+    }
+  }
+`
+
+export const GET_MARKET_BASKETS_SURVEYS = gql`
+  query getMarketBasketsSurveys($surveyId: ID, $marketBasketId: ID) {
+    marketBasketsSurveys(surveyId: $surveyId, marketBasketId: $marketBasketId) {
+      id
+      market_basket
+      stakeholders
+      stakeholders_full {
+        id
+        first_name
+        last_name
+        middle_name
+      }
+      date
+    }
+  }
+`
+
+export const GET_MARKET_BASKETS_SURVEYS_STAKEHOLDERS = gql`
+  query getMarketBasketsSurveysStakeholders($surveyId: ID) {
+    marketBasketsSurveysStakeholders(surveyId: $surveyId) {
+      id
+      first_name
+      last_name
+      middle_name
+      primary_state {
+        id
+        full_name
+        abbreviation
+        created_at
+        updated_at
+      }
+      role {
+        id
+        name
+        default_specialty_label
+        type {
+          id
+          name
+          created_at
+          updated_at
+        }
+        created_at
+        updated_at
+      }
+      perception_tool_provider {
+        id
+        slug
+        name
+        name_tiny
+        type
+        state {
+          id
+          full_name
+          abbreviation
+          created_at
+          updated_at
+        }
+        created_at
+        updated_at
+      }
+      created_at
+      updated_at
+    }
+  }
+`
 
 export const GET_MARKET_BASKETS_CATEGORIES = gql`
   query getMarketBasketsCategorires($marketBasketId: ID) {
@@ -58,6 +173,33 @@ export const GET_MARKET_BASKETS = gql`
       products_regimens
       team_subscriptions
       categories
+    }
+  }
+`
+
+export const GET_MARKET_BASKET_SURVEY_EXPORT_DATA = gql`
+  query getMarketBasketSurveyExportData($surveyId: ID!) {
+    marketBasketSurveyExportData(surveyId: $surveyId) {
+      category_name
+      characteristic_name
+      first_name
+      last_name
+      category_type
+      regimen_name
+      product_brand_name
+      product_generic_name
+      manufacturer_name
+      rating
+      question_id
+      answer_id
+      person_id
+      category_id
+      characteristic_id
+      regimen_id
+      product_id
+      manufacturer_id
+      primary_role
+      primary_role_type
     }
   }
 `
@@ -141,6 +283,18 @@ export const GET_US_STATES = gql`
   }
 `
 
+export const GET_VEGA_STATES = gql`
+  query getVegaStates {
+    vegaStates {
+      id
+      full_name
+      abbreviation
+      created_at
+      updated_at
+    }
+  }
+`
+
 export const GET_OPEN_PAYMENTS = gql`
   query getOpenPayments($physicianProfileId: Float) {
     openPayments(physicianProfileId: $physicianProfileId) {
@@ -214,6 +368,64 @@ export const GET_PEOPLE = gql`
       externalLink
       nationalProviderIdentifier
       physicianProfileId
+    }
+  }
+`
+
+export const GET_VEGA_PEOPLE_ROLES = gql`
+  query getVegaPeopleRoles {
+    vegaPeopleRoles {
+      id
+      name
+      default_specialty_label
+      type {
+        id
+        name
+        created_at
+        updated_at
+      }
+      people
+      indication_specialties
+      created_at
+      updated_at
+    }
+  }
+`
+
+export const GET_VEGA_PEOPLE_ROLES_INDICATIONS = gql`
+  query getVegaPeopleRolesIndications(
+    $roleId: ID
+    $indicationId: ID
+    $personId: ID
+  ) {
+    vegaPeopleRolesIndications(
+      roleId: $roleId
+      indicationId: $indicationId
+      personId: $personId
+    ) {
+      id
+      specialty_label
+      person_role
+      indication {
+        id
+        name
+        regimens
+        created_at
+        updated_at
+      }
+      created_at
+      updated_at
+    }
+  }
+`
+
+export const GET_VEGA_PEOPLE_ROLES_TYPES = gql`
+  query getVegaPeopleRolesTypes {
+    vegaPeopleRolesTypes {
+      id
+      name
+      created_at
+      updated_at
     }
   }
 `
@@ -393,22 +605,34 @@ export const GET_CLIENTS = gql`
   }
 `
 
-export const GET_SELECTED_CLIENT = gql`
-  query getSelectedClient {
-    selectedClient @client {
+export const GET_USERS = gql`
+  query getUsers($teamId: String, $clientId: String, $subscriptionId: String) {
+    users(
+      teamId: $teamId
+      clientId: $clientId
+      subscriptionId: $subscriptionId
+    ) {
       _id
-      name
-      description
-      icon
+      firstName
+      lastName
+      username
+      email
+      client {
+        _id
+        name
+        description
+        icon
+      }
     }
   }
 `
 
-export const GET_CLIENT_TEAMS = gql`
-  query getTeams($clientId: String) {
-    teams(clientId: $clientId) {
+export const GET_USER_TEAMS = gql`
+  query getUserTeams($userId: String) {
+    teams(userId: $userId) {
       _id
       name
+      uuid
       description
       isDefault
       sitemap
@@ -421,83 +645,12 @@ export const GET_CLIENT_TEAMS = gql`
       resources
       defaultLandingPath
     }
-    selectedClient @client {
-      _id @export(as: "clientId")
-    }
-  }
-`
-
-export const GET_SELECTED_TEAM = gql`
-  query getSelectedTeam {
-    selectedTeam @client {
-      _id
-      name
-      description
-      isDefault
-      sitemap
-      client {
-        _id
-      }
-      resources
-      defaultLandingPath
-    }
-  }
-`
-
-export const GET_USERS = gql`
-  query getUsers($subscriptionId: String) {
-    users(subscriptionId: $subscriptionId) {
-      _id
-      firstName
-      lastName
-      username
-      email
-      client {
-        _id
-        name
-        description
-      }
-    }
-  }
-`
-
-export const GET_TEAM_USERS = gql`
-  query getTeamUsers($teamId: String) {
-    users(teamId: $teamId) {
-      _id
-      firstName
-      lastName
-      username
-      email
-      emailSubscriptions {
-        _id
-        type
-      }
-      defaultLanding {
-        locked
-        path
-      }
-    }
-    selectedTeam @client {
-      _id @export(as: "teamId")
-    }
-  }
-`
-
-export const GET_USER_TEAMS = gql`
-  query getUserTeams($userId: String) {
-    teams(userId: $userId) {
-      _id
-      name
-      description
-      isDefault
-    }
   }
 `
 
 export const GET_TEAMS = gql`
-  query getAllTeams {
-    teams {
+  query getAllTeams($clientId: String) {
+    teams(clientId: $clientId) {
       _id
       name
       uuid
@@ -508,24 +661,10 @@ export const GET_TEAMS = gql`
         _id
         name
         description
+        icon
       }
-    }
-  }
-`
-
-export const GET_SELECTED_USER = gql`
-  query getSelectedUser {
-    selectedUser @client {
-      _id
-      firstName
-      lastName
-      username
-      email
-      # Note: don't think the below is needed for this
-      # defaultLanding {
-      #   locked
-      #   path
-      # }
+      resources
+      defaultLandingPath
     }
   }
 `
@@ -563,46 +702,9 @@ export const GET_SOURCE_TOOLS = gql`
   }
 `
 
-export const GET_SELECTED_TOOL = gql`
-  query getSelectedTool {
-    selectedTool @client {
-      _id
-      name
-      type
-      componentPath
-      text
-      subtitle
-      caption
-      order
-      parentId
-      resources
-    }
-  }
-`
-
 export const GET_TOOL_DASHBOARDS = gql`
   query getToolDashboards($parentId: String) {
     nodes(type: "dashboard", parentId: $parentId) {
-      _id
-      name
-      type
-      componentPath
-      text
-      subtitle
-      caption
-      order
-      parentId
-      resources
-    }
-    selectedTool @client {
-      _id @export(as: "parentId")
-    }
-  }
-`
-
-export const GET_SELECTED_DASHBOARD = gql`
-  query getSelectedDashboard {
-    selectedDashboard @client {
       _id
       name
       type
@@ -631,52 +733,12 @@ export const GET_DASHBOARD_PAGES = gql`
       parentId
       resources
     }
-    selectedDashboard @client {
-      _id @export(as: "parentId")
-    }
-  }
-`
-
-export const GET_SELECTED_PAGE = gql`
-  query getSelectedPage {
-    selectedPage @client {
-      _id
-      name
-      type
-      componentPath
-      text
-      subtitle
-      caption
-      order
-      parentId
-      resources
-    }
   }
 `
 
 export const GET_PAGE_CARDS = gql`
   query getPageCards($parentId: String) {
     nodes(type: "card", parentId: $parentId) {
-      _id
-      name
-      type
-      componentPath
-      text
-      subtitle
-      caption
-      order
-      parentId
-      resources
-    }
-    selectedPage @client {
-      _id @export(as: "parentId")
-    }
-  }
-`
-
-export const GET_SELECTED_CARD = gql`
-  query getSelectedCard {
-    selectedCard @client {
       _id
       name
       type
@@ -710,6 +772,18 @@ export const GET_SOURCE_INDICATIONS = gql`
           tags
         }
       }
+    }
+  }
+`
+
+export const GET_VEGA_INDICATIONS = gql`
+  query getVegaIndications {
+    vegaIndications {
+      id
+      name
+      regimens
+      created_at
+      updated_at
     }
   }
 `
@@ -785,18 +859,6 @@ export const GET_SOURCE_REGIMENS = gql`
   }
 `
 
-export const GET_STAGED_SITEMAP = gql`
-  query getStagedSitemap {
-    stagedSitemap @client {
-      _id
-      tools
-      dashboards
-      pages
-      cards
-    }
-  }
-`
-
 export const GET_SOURCE_QUALITY_OF_ACCESS_SCORES = gql`
   query getQualityOfAccessScores {
     qualityOfAccessScores {
@@ -807,6 +869,61 @@ export const GET_SOURCE_QUALITY_OF_ACCESS_SCORES = gql`
       sortOrder
       color
       caption
+    }
+  }
+`
+
+export const GET_VEGA_PROVIDERS = gql`
+  query getVegaProviders {
+    vegaProviders {
+      id
+      slug
+      name
+      name_tiny
+      type
+      institutions {
+        id
+        name
+        created_at
+        updated_at
+      }
+      community_practice_network {
+        id
+        name
+        created_at
+        updated_at
+      }
+      state {
+        id
+        full_name
+        abbreviation
+        created_at
+        updated_at
+      }
+      created_at
+      updated_at
+    }
+  }
+`
+
+export const GET_INSTITUTIONS = gql`
+  query getVegaInstitutions {
+    vegaInstitutions {
+      id
+      name
+      created_at
+      updated_at
+    }
+  }
+`
+
+export const GET_COMMUNITY_PRACTICE_NETWORKS = gql`
+  query getVegaCommunityPracticeNetworks {
+    vegaCommunityPracticeNetworks {
+      id
+      name
+      created_at
+      updated_at
     }
   }
 `

@@ -9,4 +9,4 @@ echo "Setting AWS Secret Access Key"
 aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
 
 echo "Pulling .env file"
-aws s3 cp $S3_BUCKET_URL /home/deploy/.env
+aws s3 cp $S3_BUCKET_URL /home/deploy/

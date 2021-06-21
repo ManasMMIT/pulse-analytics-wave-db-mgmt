@@ -30,21 +30,19 @@ const formDataSchema = {
 const CategoryUpdateForm = () => {
   const { marketBasketId } = useParams()
 
-  const [
-    formData,
-    setFormData,
-  ] = useState(formDataSchema)
+  const [formData, setFormData] = useState(formDataSchema)
 
-  const { data, loading } = useQuery(GET_MARKET_BASKETS, { variables: { marketBasketId } })
+  const { data, loading } = useQuery(GET_MARKET_BASKETS, {
+    variables: { marketBasketId },
+  })
 
   useEffect(() => {
     if (!loading) {
       // ! HARDCODING FIRST MARKET BASKET CATEGORY FOR EXAMPLE
-      const [{ id, name, category_type, prompt }] = (
-        data.marketBaskets
-        && data.marketBaskets[0]
-        && data.marketBaskets[0].categories
-      )
+      const [{ id, name, category_type, prompt }] =
+        data.marketBaskets &&
+        data.marketBaskets[0] &&
+        data.marketBaskets[0].categories
 
       const formData = {
         id,
@@ -56,10 +54,13 @@ const CategoryUpdateForm = () => {
     }
   }, [loading])
 
-  const [updateMarketBasketCategory] = useMutation(UPDATE_MARKET_BASKET_CATEGORY, {
-    variables: { input: formData },
-    onError: alert,
-  })
+  const [updateMarketBasketCategory] = useMutation(
+    UPDATE_MARKET_BASKET_CATEGORY,
+    {
+      variables: { input: formData },
+      onError: alert,
+    }
+  )
 
   const handleUpdate = (e) => {
     e.preventDefault()
@@ -67,25 +68,22 @@ const CategoryUpdateForm = () => {
   }
 
   const handleNameOnChange = ({ target: { value } }) => {
-    setFormData(prevState => ({ ...prevState, name: value }))
+    setFormData((prevState) => ({ ...prevState, name: value }))
   }
 
   const handlePromptOnChange = ({ target: { value } }) => {
-    setFormData(prevState => ({ ...prevState, prompt: value }))
+    setFormData((prevState) => ({ ...prevState, prompt: value }))
   }
 
   const handleCategoryTypeOnChange = ({ value }) => {
-    setFormData(prevState => ({ ...prevState, category_type: value }))
+    setFormData((prevState) => ({ ...prevState, category_type: value }))
   }
 
   return (
     <form style={FORM_STYLE} onSubmit={handleUpdate}>
       <h3>Category Update Form</h3>
       <label>Name (required)</label>
-      <input
-        value={formData.name}
-        onChange={handleNameOnChange}
-      />
+      <input value={formData.name} onChange={handleNameOnChange} />
       <label>Category Type (required)</label>
       <Select
         value={{ label: formData.category_type, value: formData.category_type }}
@@ -93,10 +91,7 @@ const CategoryUpdateForm = () => {
         onChange={handleCategoryTypeOnChange}
       />
       <label>Prompt</label>
-      <input
-        value={formData.prompt}
-        onChange={handlePromptOnChange}
-      />
+      <input value={formData.prompt} onChange={handlePromptOnChange} />
       <Button>Update Category</Button>
     </form>
   )

@@ -1,20 +1,23 @@
 import React from 'react'
-import PropTypes from 'prop-types'
+import { useLocation, useParams } from 'react-router-dom'
+import queryString from 'query-string'
 import { useQuery } from '@apollo/react-hooks'
 import _ from 'lodash'
-import Spinner from 'frontend/components/Spinner'
+import PropTypes from 'prop-types'
 
-import ModalContent from './ModalContent'
+import Spinner from 'frontend/components/Spinner'
 
 import { Colors, Spacing } from 'frontend/utils/pulseStyles'
 
+import ModalContent from './ModalContent'
+
 import {
-  GET_SELECTED_TEAM,
+  GET_TEAMS,
   GET_SOURCE_INDICATIONS,
-  GET_SELECTED_TOOL,
-  GET_SELECTED_DASHBOARD,
-  GET_SELECTED_PAGE,
-  GET_SELECTED_CARD,
+  GET_SOURCE_TOOLS,
+  GET_TOOL_DASHBOARDS,
+  GET_DASHBOARD_PAGES,
+  GET_PAGE_CARDS,
 } from 'frontend/api/queries'
 
 import useMbmOrganizations from 'frontend/hooks/useMbmOrganizations'
@@ -25,62 +28,68 @@ import {
 } from './toolId-to-org-query-map'
 
 const Soil = (props) => {
-  // ! We have no clue why `notifyOnNetworkStatusChange is needed, but it fixes the following
-  /*
-    If you click directly on the modal button on an UN-selected node, the modal is behind in selection when it opens
-      for some reason, without the networkStatus option set to true, the selected nodes stay behind.
-  */
+  const location = useLocation()
   const {
-    data: selectedToolData,
-    loading: selectedToolLoading,
-    error: toolError,
-  } = useQuery(GET_SELECTED_TOOL, {
-    notifyOnNetworkStatusChange: true,
-  })
+    toolId: selectedToolId,
+    dashboardId: selectedDashboardId,
+    pageId: selectedPageId,
+    cardId: selectedCardId,
+  } = (location.search && queryString.parse(location.search)) || {}
 
   const {
-    data: selectedDashboardData,
-    loading: selectedDashboardLoading,
-    error: dashboardError,
-  } = useQuery(GET_SELECTED_DASHBOARD, {
-    notifyOnNetworkStatusChange: true,
-  })
-
+    data: toolsData,
+    loading: toolsLoading,
+    error: toolsError,
+  } = useQuery(GET_SOURCE_TOOLS)
   const {
-    data: selectedPageData,
-    loading: selectedPageLoading,
-    error: pageError,
-  } = useQuery(GET_SELECTED_PAGE, {
-    notifyOnNetworkStatusChange: true,
+    data: dashboardsData,
+    loading: dashboardsLoading,
+    error: dashboardsError,
+  } = useQuery(GET_TOOL_DASHBOARDS, {
+    variables: { parentId: selectedToolId },
   })
-
   const {
-    data: selectedCardData,
-    loading: selectedCardLoading,
-    error: cardError,
-  } = useQuery(GET_SELECTED_CARD, {
-    notifyOnNetworkStatusChange: true,
+    data: pagesData,
+    loading: pagesLoading,
+    error: pagesError,
+  } = useQuery(GET_DASHBOARD_PAGES, {
+    variables: { parentId: selectedDashboardId },
+  })
+  const {
+    data: cardsData,
+    loading: cardsLoading,
+    error: cardsError,
+  } = useQuery(GET_PAGE_CARDS, {
+    variables: { parentId: selectedPageId },
   })
 
   if (
-    selectedToolLoading ||
-    selectedDashboardLoading ||
-    selectedPageLoading ||
-    selectedCardLoading
+    toolsLoading ||
+    dashboardsLoading ||
+    (selectedDashboardId && pagesLoading) ||
+    (selectedPageId && cardsLoading)
   )
     return 'Loading...'
 
-  if (toolError || dashboardError || pageError || cardError) return 'Error!'
+  if (toolsError || dashboardsError || pagesError || cardsError) return 'Error!'
 
-  const {
-    selectedTool: { _id: selectedToolId },
-  } = selectedToolData
+  const selectedTool = toolsData.nodes.find(({ _id }) => _id === selectedToolId)
+  const selectedDashboard =
+    dashboardsData.nodes.find(({ _id }) => _id === selectedDashboardId) || null
+  const selectedPage =
+    (selectedDashboardId &&
+      pagesData.nodes.find(({ _id }) => _id === selectedPageId)) ||
+    null
+  const selectedCard =
+    (selectedPageId &&
+      cardsData.nodes.find(({ _id }) => _id === selectedCardId)) ||
+    null
 
   const flatSelectedNodes = [
-    selectedToolData && selectedToolData.selectedTool,
-    selectedDashboardData && selectedDashboardData.selectedDashboard,
-    selectedPageData && selectedPageData.selectedPage,
-    selectedCardData && selectedCardData.selectedCard,
+    selectedTool,
+    selectedDashboard,
+    selectedPage,
+    selectedCard,
   ]
 
   return (
@@ -103,11 +112,13 @@ const Crust = (props) => {
 }
 
 const Mantle1 = (props) => {
+  const { clientId, teamId } = useParams()
+
   const {
-    data: selectedTeamData,
+    data: teamsData,
     loading: teamLoading,
     error: teamError,
-  } = useQuery(GET_SELECTED_TEAM)
+  } = useQuery(GET_TEAMS, { variables: { clientId } })
 
   const { data: indData, loading: indLoading, error: indError } = useQuery(
     GET_SOURCE_INDICATIONS
@@ -118,6 +129,11 @@ const Mantle1 = (props) => {
     loading: orgLoading,
     error: orgError,
   } = useMbmOrganizations()
+
+  const selectedTeamData =
+    !teamLoading && !teamError
+      ? teamsData.teams.find(({ _id }) => _id === teamId)
+      : {}
 
   return (
     <OuterCore
@@ -136,11 +152,13 @@ const Mantle1 = (props) => {
 }
 
 const Mantle2 = (props) => {
+  const { clientId, teamId } = useParams()
+
   const {
-    data: selectedTeamData,
+    data: teamsData,
     loading: teamLoading,
     error: teamError,
-  } = useQuery(GET_SELECTED_TEAM)
+  } = useQuery(GET_TEAMS, { variables: { clientId } })
 
   const { data: indData, loading: indLoading, error: indError } = useQuery(
     GET_SOURCE_INDICATIONS
@@ -152,6 +170,11 @@ const Mantle2 = (props) => {
   const { data: orgData, loading: orgLoading, error: orgError } = useQuery(
     TOOL_ID_TO_ORG_QUERY_MAP[props.selectedToolId]
   )
+
+  const selectedTeamData =
+    !teamLoading && !teamError
+      ? teamsData.teams.find(({ _id }) => _id === teamId)
+      : {}
 
   return (
     <OuterCore
@@ -225,9 +248,7 @@ const OuterCore = ({
   // the selected team and its selected node.
   // If it doesn't exist or only partially exists, initialize it
   // and its parts as needed.
-  let {
-    selectedTeam: { _id: teamId, resources },
-  } = selectedTeamData
+  let { _id: teamId, resources } = selectedTeamData
   if (!resources) resources = []
 
   let enabledResources = resources.find(

@@ -44,20 +44,18 @@ const ListsPanelItem = ({
         <div style={listItemSubField}>{data.nodeId}</div>
         <div style={listItemSubField}>{data.listTitle}</div>
       </div>
-      {
-        <div>
-          <UpdateButton
-            data={data}
-            modalTitle="List Info"
-            style={{ fontSize: 10, padding: '4px 8px', marginRight: 8 }}
-          />
-          <DeleteButton
-            data={data}
-            modalTitle={'Delete List'}
-            modalText={getDeleteModalText(data)}
-          />
-        </div>
-      }
+      <div>
+        <UpdateButton
+          data={data}
+          modalTitle="List Info"
+          style={{ fontSize: 10, padding: '4px 8px', marginRight: 8 }}
+        />
+        <DeleteButton
+          data={data}
+          modalTitle={'Delete List'}
+          modalText={getDeleteModalText(data)}
+        />
+      </div>
     </ListItem>
   )
 }

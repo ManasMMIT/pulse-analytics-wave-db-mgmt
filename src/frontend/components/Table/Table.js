@@ -28,7 +28,7 @@ const TemplateWrapper = styled.div(
   {
     display: 'flex',
     flexDirection: 'column',
-    overflowY: 'scroll',
+    overflowY: 'auto',
   },
   ({ width, wrapperStyle }) => ({ width, ...wrapperStyle })
 )
@@ -79,6 +79,7 @@ const Table = ({
   width,
   wrapperStyle,
   showExportButton,
+  onRowClickOverride,
 }) => {
   const [modalCell, setModalCell] = useState(null)
 
@@ -172,13 +173,16 @@ const Table = ({
               prepareRow={prepareRow}
               setModalCell={setModalCell}
               modalColMap={modalColMap}
+              onRowClickOverride={onRowClickOverride}
             />
           </div>
         </div>
       </TableWrapper>
 
       {/* TODO: Decouple Modal Manager from Template Table */}
-      <ModalManager modalColMap={modalColMap} modalCell={modalCell} />
+      {!onRowClickOverride && (
+        <ModalManager modalColMap={modalColMap} modalCell={modalCell} />
+      )}
     </TemplateWrapper>
   )
 }
@@ -192,6 +196,7 @@ Table.propTypes = {
   width: PropTypes.string, // Dynamic width constants can be found in tableWidths.js
   showExportButton: PropTypes.bool,
   wrapperStyle: PropTypes.object,
+  onRowClickOverride: PropTypes.func,
 }
 
 Table.defaultProps = {
@@ -201,6 +206,7 @@ Table.defaultProps = {
   width: '100vw',
   showExportButton: true,
   wrapperStyle: {},
+  onRowClickOverride: null,
 }
 
 export default Table

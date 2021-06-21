@@ -16,6 +16,7 @@ const List = ({
   handleClick,
   placeholder,
   style,
+  searchParam,
 }) => {
   const isPlaceholderSelected = ({ key }) => selectedListItem === key
 
@@ -31,6 +32,7 @@ const List = ({
             isSelected={isSelected}
             handleClick={handleClick}
             searchParamKey={searchParamKey}
+            searchParam={searchParam}
           />
         )
       })}

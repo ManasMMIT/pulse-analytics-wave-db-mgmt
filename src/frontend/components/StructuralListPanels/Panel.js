@@ -5,6 +5,7 @@ import queryString from 'query-string'
 import PropTypes from 'prop-types'
 
 import Spinner from 'frontend/components/Spinner'
+import Color from 'frontend/utils/color'
 
 import { pushNewSearchParams } from './utils'
 
@@ -20,7 +21,9 @@ const DEFAULT_WRAPPER_STYLE = {
 const DEFAULT_LIST_WRAPPER_STYLE = {
   minHeight: '100vh',
   maxHeight: '100vh',
-  overflowY: 'scroll',
+  overflowY: 'auto',
+  borderRight: `2px solid ${Color.GRAY_LIGHT}`,
+  background: Color.WHITE,
 }
 
 const DEFAULT_SPINNER_DIV_STYLE = {
@@ -148,6 +151,7 @@ const Panel = ({
         <List
           data={data}
           searchParamKey={searchParamKey}
+          searchParam={searchParam}
           selectedListItem={selectedListItem}
           handleClick={handleClick}
           {...listConfig}

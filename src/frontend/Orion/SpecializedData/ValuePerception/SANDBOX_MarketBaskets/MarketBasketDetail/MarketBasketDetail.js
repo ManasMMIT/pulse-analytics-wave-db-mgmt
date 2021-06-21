@@ -11,6 +11,7 @@ import { GET_MARKET_BASKETS } from 'frontend/api/queries'
 
 import ProductsRegimensTab from './ProductsRegimensTab'
 import CatCharTab from './CatCharTab'
+import SurveyTab from './SurveyTab'
 
 const MarketBasketDetail = () => {
   const { marketBasketId } = useParams()
@@ -60,6 +61,7 @@ const MarketBasketDetail = () => {
       <hr />
       <ProductsRegimensTab />
       <CatCharTab />
+      <SurveyTab marketBasket={marketBasket} />
     </div>
   )
 }

@@ -7,22 +7,36 @@ const queries = gql`
     marketBaskets(marketBasketId: ID): [MarketBasket!]!
     marketBasketsSubscriptions: [MarketBasketSubscription!]!
     marketBasketsCategories(marketBasketId: ID): [MarketBasketCategory!]!
+    marketBasketsSurveysStakeholders(surveyId: ID): [VegaPerson!]!
+    marketBasketSurveyExportData(
+      surveyId: ID!
+    ): [MarketBasketSurveyExportDatum!]!
+    marketBasketsSurveys(
+      surveyId: ID
+      marketBasketId: ID
+    ): [MarketBasketSurvey!]!
+    marketBasketsSurveysQuestions(surveyId: ID): [MarketBasketSurveyQuestion!]!
 
     nodes(parentId: String, type: String): [Node]
 
-    clients(_id: String): [Client]
+    clients(_id: String): [Client!]!
 
-    teams(clientId: String, userId: String): [Team]
+    teams(clientId: String, userId: String): [Team!]!
 
-    users(teamId: String, clientId: String, subscriptionId: String): [User]
+    users(teamId: String, clientId: String, subscriptionId: String): [User!]!
 
     indications: [Indication]
+    vegaIndications: [VegaIndication!]!
     therapeuticAreas: [TherapeuticArea]
     products: [Product]
     vegaProducts: [VegaProduct]
     vegaProductsRegimens(input: QueryVegaProdRegInput): [VegaProductRegimens]
     regimens: [Regimen]
     vegaRegimens: [VegaRegimen]
+
+    vegaProviders: [VegaProvider!]!
+    vegaInstitutions: [VegaInstitution!]!
+    vegaCommunityPracticeNetworks: [VegaCommunityPracticeNetwork!]!
 
     organizationTypes: [String]
 
@@ -126,6 +140,16 @@ const queries = gql`
     cMsOrgPrimarySpecialtyCounts(orgPacId: String): JSON
 
     people: [Person]
+    vegaPeople: [VegaPerson!]!
+
+    vegaPeopleRoles: [VegaPersonRole!]!
+    vegaPeopleRolesIndications(
+      roleId: ID
+      indicationId: ID
+      personId: ID
+    ): [VegaPersonRoleIndication!]!
+    vegaPeopleRolesTypes: [VegaPersonRoleType!]!
+
     DEV_pathwaysInfluencers: JSON # grabbing sheet data directly from dev. type def is in wave-api
     DEV_providerInfluencers: JSON # grabbing sheet data directly from dev. type def is in wave-api
     physiciansCompare(npi: Float): [PhysiciansCompareDatum]
@@ -135,6 +159,7 @@ const queries = gql`
     endUserTermsUsers: [EndUserTermsUser]
 
     usStates: [UsState]
+    vegaStates: [VegaState!]!
 
     events: [Event]
   }
@@ -219,6 +244,68 @@ const queries = gql`
     description: String
   }
 
+  type MarketBasketSurveyExportDatum {
+    first_name: String
+    middle_name: String
+    last_name: String
+
+    category_name: String
+    category_type: String
+    characteristic_name: String
+
+    regimen_name: String
+    product_brand_name: String
+    product_generic_name: String
+    manufacturer_name: String
+
+    question_id: ID
+    answer_id: ID
+    rating: Int
+
+    person_id: ID
+    category_id: ID
+    characteristic_id: ID
+    regimen_id: ID
+    product_id: ID
+    manufacturer_id: ID
+    primary_role_type: String
+    primary_role: String
+  }
+
+  type MarketBasketSurvey {
+    id: ID!
+    market_basket: ID
+    stakeholders: [ID!]
+    stakeholders_full: [VegaPerson!]
+    date: DateTime
+  }
+
+  type MarketBasketSurveyHydrated {
+    id: ID!
+    date: DateTime
+  }
+
+  type MarketBasketStakeholder {
+    id: ID!
+    first_name: String
+    last_name: String
+  }
+
+  type MarketBasketSurveyQuestionAnswer {
+    id: ID!
+    rating: Int
+    stakeholder: ID
+    stakeholder_full: MarketBasketStakeholder
+  }
+
+  type MarketBasketSurveyQuestion {
+    id: ID!
+    survey: ID
+    category: MarketBasketCategory
+    characteristic: MarketBasketCategoryCharacteristic
+    answers: [MarketBasketSurveyQuestionAnswer!]
+  }
+
   type Event {
     _id: ID!
     userId: String
@@ -253,6 +340,14 @@ const queries = gql`
     lawLink: String
     bill: String
     surveyCommercialLivesPercentInsured: Float
+  }
+
+  type VegaState {
+    id: ID!
+    full_name: String
+    abbreviation: String
+    created_at: DateTime
+    updated_at: DateTime
   }
 
   type OpenPaymentDatum {
@@ -318,6 +413,80 @@ const queries = gql`
     externalLink: String
     nationalProviderIdentifier: Float
     physicianProfileId: Float
+  }
+
+  type VegaIndication {
+    id: ID!
+    name: String
+    regimens: [ID!]
+    created_at: DateTime
+    updated_at: DateTime
+  }
+
+  type VegaPersonRoleIndication {
+    id: ID!
+    specialty_label: String
+    person_role: ID
+    indication: VegaIndication
+    created_at: DateTime
+    updated_at: DateTime
+  }
+
+  type VegaPersonRoleType {
+    id: ID!
+    name: String
+    created_at: DateTime
+    updated_at: DateTime
+  }
+
+  type VegaPersonRole {
+    id: ID!
+    name: String
+    default_specialty_label: String
+    type: VegaPersonRoleType
+    people: [ID!]
+    indication_specialties: [ID!]
+    created_at: DateTime
+    updated_at: DateTime
+  }
+
+  type VegaInstitution {
+    id: ID!
+    name: String
+    created_at: DateTime
+    updated_at: DateTime
+  }
+
+  type VegaCommunityPracticeNetwork {
+    id: ID!
+    name: String
+    created_at: DateTime
+    updated_at: DateTime
+  }
+
+  type VegaProvider {
+    id: ID!
+    slug: String
+    name: String
+    name_tiny: String
+    type: String
+    institutions: [VegaInstitution]
+    community_practice_network: VegaCommunityPracticeNetwork
+    state: VegaState
+    created_at: DateTime
+    updated_at: DateTime
+  }
+
+  type VegaPerson {
+    id: ID!
+    first_name: String
+    last_name: String
+    middle_name: String
+    primary_state: VegaState
+    role: VegaPersonRole
+    perception_tool_provider: VegaProvider
+    created_at: DateTime
+    updated_at: DateTime
   }
 
   type Node {

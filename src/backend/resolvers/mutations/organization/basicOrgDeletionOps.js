@@ -1,3 +1,5 @@
+const axios = require('axios')
+
 const basicOrgDeletionOps = async (
   _id,
   { session, pulseDevDb, pulseCoreDb }
@@ -7,6 +9,13 @@ const basicOrgDeletionOps = async (
     .findOneAndDelete({ _id }, { session })
 
   const deletedOrg = value
+
+  // ! Vega Op
+  if (deletedOrg.type === 'Provider') {
+    await axios.delete(`providers/${deletedOrg.uuid}/`).catch((e) => {
+      throw new Error(JSON.stringify(e.response.data))
+    })
+  }
 
   await pulseCoreDb.collection('roles').updateMany(
     {

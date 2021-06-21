@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
-import { useMutation, useApolloClient } from '@apollo/react-hooks'
 import { transparentize, lighten } from 'polished'
 
 import Spinner from 'frontend/components/Spinner'
@@ -112,49 +111,27 @@ class TextForm extends Component {
 }
 
 const TextFormContainer = ({
-  mutationDoc,
-  clientMutation,
-  refetchQueries,
+  mutationObj: { mutationFunc, loading, error },
   ...otherProps
 }) => {
-  const client = useApolloClient()
-
-  const updateClientMutationCallback = clientMutation
-    ? (cache, { data }) => {
-        client.mutate({
-          mutation: clientMutation,
-          variables: { data },
-        })
-      }
-    : () => {}
-
-  const [handleSubmit, { loading, error }] = useMutation(mutationDoc, {
-    update: updateClientMutationCallback,
-    refetchQueries,
-  })
-
   if (loading) return <Spinner />
   if (error) return <div style={{ color: 'red' }}>Error processing request</div>
 
-  return <TextForm handleSubmit={handleSubmit} {...otherProps} />
+  return <TextForm handleSubmit={mutationFunc} {...otherProps} />
 }
 
 TextFormContainer.propTypes = {
   data: PropTypes.object,
-  mutationDoc: PropTypes.object,
+  mutationObj: PropTypes.object,
   afterMutationHook: PropTypes.func,
-  clientMutation: PropTypes.object,
   additionalFormData: PropTypes.object,
-  refetchQueries: PropTypes.array,
 }
 
 TextFormContainer.defaultProps = {
   data: { description: '' },
-  mutationDoc: {},
-  clientMutation: null,
+  mutationObj: { mutationFunc: () => null },
   afterMutationHook: () => null,
   additionalFormData: {},
-  refetchQueries: [],
 }
 
 export default TextFormContainer

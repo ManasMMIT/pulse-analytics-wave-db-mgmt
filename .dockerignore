@@ -4,5 +4,5 @@ exports-backups
 DEPRECATED_importHistoricalData
 temp-seed-scripts
 .vscode
-.env
+.env*
 src/backend/logs
