@@ -12,10 +12,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Fixed** for any bug fixes.
 - **Security** in case of vulnerabilities.
 
-## [Unreleased] - Started: 5-12-21
+## [Unreleased] - Started: 6-21-21
+
+## [5.0.0] - Started: 5-12-21
 
 ### Added
-- `Orion/Perception Tool`: Surveys Stakeholders Endpoints & People Roles CRUD [#1037](https://github.com/pulse-analytics/wave-db-mgmt/pull/1037)
+- `Orion/Perception Tool`:
+  - Views: Categories / Characteristics Tab, Surveys Tab w/ Import and Export; Stakeholders, Stakeholder Roles, and Role Specialties
+  - Aligned Data: Orion and Vega People, Providers CUD; market basket and market basket survey CUD w/ materialized collections
 
 ### Changed
 - `Phoenix`: Home and SitemapPanel refactored; frontend resolvers removed [#1015](https://github.com/pulse-analytics/wave-db-mgmt/pull/1015)
