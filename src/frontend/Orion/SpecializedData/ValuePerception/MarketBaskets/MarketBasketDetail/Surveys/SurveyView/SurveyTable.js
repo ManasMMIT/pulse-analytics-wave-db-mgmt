@@ -39,22 +39,26 @@ const SurveyTable = ({ surveyId, selectedCategory }) => {
         {
           first_name,
           last_name,
-          characteristic_name,
-          rating,
           regimen_name,
           product_brand_name,
           product_generic_name,
           manufacturer_name,
         },
       ] = arr
+
       const datum = {
         stakeholder: `${first_name} ${last_name}`,
-        [characteristic_name]: rating,
         regimen_name,
         product_brand_name,
         product_generic_name,
         manufacturer_name,
       }
+      const characteristicData = _.keyBy(arr, 'characteristic_name')
+
+      Object.values(characteristicData).forEach(
+        ({ characteristic_name, rating }) =>
+          (datum[characteristic_name] = rating)
+      )
 
       return datum
     })
