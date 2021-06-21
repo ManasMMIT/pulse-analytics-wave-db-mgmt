@@ -35,6 +35,8 @@ const queries = gql`
     vegaRegimens: [VegaRegimen]
 
     vegaProviders: [VegaProvider!]!
+    vegaInstitutions: [VegaInstitution!]!
+    vegaCommunityPracticeNetworks: [VegaCommunityPracticeNetwork!]!
 
     organizationTypes: [String]
 
@@ -448,12 +450,28 @@ const queries = gql`
     updated_at: DateTime
   }
 
+  type VegaInstitution {
+    id: ID!
+    name: String
+    created_at: DateTime
+    updated_at: DateTime
+  }
+
+  type VegaCommunityPracticeNetwork {
+    id: ID!
+    name: String
+    created_at: DateTime
+    updated_at: DateTime
+  }
+
   type VegaProvider {
     id: ID!
     slug: String
     name: String
     name_tiny: String
     type: String
+    institutions: [VegaInstitution]
+    community_practice_network: VegaCommunityPracticeNetwork
     state: VegaState
     created_at: DateTime
     updated_at: DateTime

@@ -881,6 +881,18 @@ export const GET_VEGA_PROVIDERS = gql`
       name
       name_tiny
       type
+      institutions {
+        id
+        name
+        created_at
+        updated_at
+      }
+      community_practice_network {
+        id
+        name
+        created_at
+        updated_at
+      }
       state {
         id
         full_name
@@ -888,6 +900,28 @@ export const GET_VEGA_PROVIDERS = gql`
         created_at
         updated_at
       }
+      created_at
+      updated_at
+    }
+  }
+`
+
+export const GET_INSTITUTIONS = gql`
+  query getVegaInstitutions {
+    vegaInstitutions {
+      id
+      name
+      created_at
+      updated_at
+    }
+  }
+`
+
+export const GET_COMMUNITY_PRACTICE_NETWORKS = gql`
+  query getVegaCommunityPracticeNetworks {
+    vegaCommunityPracticeNetworks {
+      id
+      name
       created_at
       updated_at
     }

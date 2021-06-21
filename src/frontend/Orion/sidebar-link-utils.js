@@ -144,6 +144,21 @@ export const SPECIALIZED_DATA_CONFIG = [
         link: '/sandbox-role-specialties',
         showOnSuperUserOnly: true,
       },
+      {
+        label: 'SANDBOX Providers',
+        link: '/sandbox-providers',
+        showOnSuperUserOnly: true,
+      },
+      {
+        label: 'SANDBOX Institutions',
+        link: '/sandbox-institutions',
+        showOnSuperUserOnly: true,
+      },
+      {
+        label: 'SANDBOX Community Practice Networks',
+        link: '/sandbox-community-practice-networks',
+        showOnSuperUserOnly: true,
+      },
     ],
   },
 ]

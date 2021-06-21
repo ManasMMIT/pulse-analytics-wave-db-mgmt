@@ -1,4 +1,6 @@
+import vegaCommunityPracticeNetworks from './communityPracticeNetworks'
 import vegaIndications from './indications'
+import vegaInstitutions from './institutions'
 import vegaPeople from './people'
 import vegaPeopleRoles from './peopleRoles'
 import vegaPeopleRolesIndications from './peopleRolesIndications'
@@ -18,7 +20,9 @@ import vegaStates from './states'
 import marketBasketSurveyExportData from './marketBasketSurveyExportData'
 
 export default {
+  vegaCommunityPracticeNetworks,
   vegaIndications,
+  vegaInstitutions,
   vegaPeople,
   vegaPeopleRoles,
   vegaPeopleRolesIndications,

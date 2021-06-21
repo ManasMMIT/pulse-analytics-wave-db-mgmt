@@ -11,6 +11,9 @@ import SANDBOX_MarketBasketDetail from './SANDBOX_MarketBaskets/MarketBasketDeta
 import SANDBOX_Stakeholders from './SANDBOX_Stakeholders'
 import SANDBOX_Roles from './SANDBOX_Roles'
 import SANDBOX_RoleSpecialties from './SANDBOX_RoleSpecialties'
+import SANDBOX_Providers from './SANDBOX_Providers'
+import SANDBOX_Institutions from './SANDBOX_Institutions'
+import SANDBOX_CommunityPracticeNetworks from './SANDBOX_CommunityPracticeNetworks'
 
 const ValuePerception = () => (
   <Switch>
@@ -57,6 +60,23 @@ const ValuePerception = () => (
       exact={true}
       path={'/orion/specialized/value-perception/sandbox-role-specialties'}
       component={SANDBOX_RoleSpecialties}
+    />
+    <Route
+      exact={true}
+      path={'/orion/specialized/value-perception/sandbox-providers'}
+      component={SANDBOX_Providers}
+    />
+    <Route
+      exact={true}
+      path={'/orion/specialized/value-perception/sandbox-institutions'}
+      component={SANDBOX_Institutions}
+    />
+    <Route
+      exact={true}
+      path={
+        '/orion/specialized/value-perception/sandbox-community-practice-networks'
+      }
+      component={SANDBOX_CommunityPracticeNetworks}
     />
     <Redirect to={'/orion/specialized/value-perception/market-baskets'} />
   </Switch>

@@ -150,6 +150,22 @@ const mutationType = gql`
       input: DeleteSourceRegimenInput!
     ): DeleteSourceRegimenPayload
 
+    updateVegaProvider(input: UpdateVegaProviderInput!): VegaProvider
+
+    createVegaInstitution(input: CreateVegaInstitutionInput!): VegaInstitution
+    updateVegaInstitution(input: UpdateVegaInstitutionInput!): VegaInstitution
+    deleteVegaInstitution(input: DeleteVegaInstitutionInput!): VegaInstitution
+
+    createVegaCommunityPracticeNetwork(
+      input: CreateVegaCommunityPracticeNetworkInput!
+    ): VegaCommunityPracticeNetwork
+    updateVegaCommunityPracticeNetwork(
+      input: UpdateVegaCommunityPracticeNetworkInput!
+    ): VegaCommunityPracticeNetwork
+    deleteVegaCommunityPracticeNetwork(
+      input: DeleteVegaCommunityPracticeNetworkInput!
+    ): VegaCommunityPracticeNetwork
+
     createProviderOrganization(
       input: CreateProviderOrganizationInput!
     ): CreateProviderOrganizationPayload
