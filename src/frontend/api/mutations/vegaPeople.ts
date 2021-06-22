@@ -27,6 +27,20 @@ export const UPDATE_VEGA_PERSON = gql`
         created_at
         updated_at
       }
+      role_specialties {
+        id
+        specialty_label
+        person_role
+        indication {
+          id
+          name
+          regimens
+          created_at
+          updated_at
+        }
+        created_at
+        updated_at
+      }
       created_at
       updated_at
     }

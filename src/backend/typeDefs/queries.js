@@ -484,6 +484,7 @@ const queries = gql`
     middle_name: String
     primary_state: VegaState
     role: VegaPersonRole
+    role_specialties: [VegaPersonRoleIndication!]
     perception_tool_provider: VegaProvider
     created_at: DateTime
     updated_at: DateTime

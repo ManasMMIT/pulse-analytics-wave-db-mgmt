@@ -121,6 +121,20 @@ export const GET_MARKET_BASKETS_SURVEYS_STAKEHOLDERS = gql`
         created_at
         updated_at
       }
+      role_specialties {
+        id
+        specialty_label
+        person_role
+        indication {
+          id
+          name
+          regimens
+          created_at
+          updated_at
+        }
+        created_at
+        updated_at
+      }
       perception_tool_provider {
         id
         slug
