@@ -77,7 +77,9 @@ const ImportSurveySection = ({ surveyId }) => {
   )
 
   if (errors) {
-    const parsedErrors = JSON.parse(errors.replace('GraphQL error: ', ''))
+    const parsedErrors = JSON.parse(
+      errors.replace('GraphQL error: Error: ', '')
+    )
 
     const errorMessages = parsedErrors.map(
       ({ rowIdx, column, error: { errorMessage, value, suggestion } }) => (
