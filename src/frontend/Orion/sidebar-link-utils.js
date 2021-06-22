@@ -124,6 +124,7 @@ export const SPECIALIZED_DATA_CONFIG = [
           },
         ],
       },
+      { label: 'Institutions', link: '/institutions' },
       {
         label: 'Community Practice Network',
         link: '/community-practice-network',
