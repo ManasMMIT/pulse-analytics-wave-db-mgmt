@@ -125,6 +125,10 @@ export const SPECIALIZED_DATA_CONFIG = [
         ],
       },
       {
+        label: 'Community Practice Network',
+        link: '/community-practice-network',
+      },
+      {
         label: 'SANDBOX Market Baskets',
         link: '/sandbox-market-baskets',
         showOnSuperUserOnly: true,
