@@ -135,6 +135,11 @@ export const SPECIALIZED_DATA_CONFIG = [
         showOnSuperUserOnly: true,
       },
       {
+        label: 'SANDBOX Products',
+        link: '/sandbox-products',
+        showOnSuperUserOnly: true,
+      },
+      {
         label: 'SANDBOX Stakeholders',
         link: '/sandbox-stakeholders',
         showOnSuperUserOnly: true,

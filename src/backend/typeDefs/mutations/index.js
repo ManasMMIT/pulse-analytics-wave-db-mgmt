@@ -142,6 +142,8 @@ const mutationType = gql`
       input: DeleteSourceProductInput!
     ): DeleteSourceProductPayload
 
+    updateVegaProduct(input: UpdateVegaProductInput!): VegaProduct
+
     createRegimen(input: CreateRegimenInput!): CreateRegimenPayload
     updateSourceRegimen(
       input: UpdateSourceRegimenInput!

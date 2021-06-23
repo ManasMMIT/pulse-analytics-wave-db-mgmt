@@ -571,6 +571,8 @@ const queries = gql`
     generic_name: String
     brand_name: String
     logo_link: String
+    color: String
+    messaging: String
     regimens: [ID!]!
   }
 
