@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { useQuery } from '@apollo/react-hooks'
 import styled from '@emotion/styled'
+import _ from 'lodash'
 
 import { GET_MARKET_BASKETS_SURVEYS_STAKEHOLDERS } from 'frontend/api/queries'
 
@@ -16,10 +17,15 @@ import Spacing from 'frontend/utils/spacing'
 import EditStakeholderForm from './EditStakeholderForm'
 
 const Container = styled.div({
-  padding: Spacing.S7,
   display: 'flex',
   flexDirection: 'column',
   width: '100%',
+})
+
+const TitleSection = styled.section({
+  display: 'flex',
+  padding: Spacing.S7,
+  alignItems: 'center',
 })
 
 const COLUMNS = [
@@ -37,9 +43,13 @@ const COLUMNS = [
     filter: customMultiSelectFilterFn,
     sortType: 'text',
   },
-  // {
-  //   Header: 'Provider'
-  // },
+  {
+    Header: 'Provider',
+    accessor: 'providerName',
+    Filter: MultiSelectColumnFilter,
+    filter: customMultiSelectFilterFn,
+    sortType: 'text',
+  },
   {
     Header: 'State',
     accessor: 'stateName',
@@ -54,16 +64,29 @@ const COLUMNS = [
     filter: customMultiSelectFilterFn,
     sortType: 'text',
   },
+  {
+    Header: 'Specialty Roles',
+    accessor: 'roleSpecialties',
+    Filter: MultiSelectColumnFilter,
+    filter: customMultiSelectFilterFn,
+    sortType: 'text',
+    Cell: ({ value }) =>
+      value.map(({ specialty_label }) => specialty_label).join(', '),
+  },
 ]
 
 const MODAL_TO_COL_MAP = {
   stateName: {},
+  providerName: {},
   roleName: {},
+  roleSpecialties: {},
 }
 
 const Stakeholders = () => {
   const [modalData, setModalData] = useState(null)
-  const { data, loading } = useQuery(GET_MARKET_BASKETS_SURVEYS_STAKEHOLDERS)
+  const { data: stakeholdersData, loading: stakeholderLoading } = useQuery(
+    GET_MARKET_BASKETS_SURVEYS_STAKEHOLDERS
+  )
 
   const onRowClick = ({ row }) => {
     const { original } = row
@@ -71,26 +94,36 @@ const Stakeholders = () => {
   }
 
   let tableData = []
+  if (!stakeholderLoading) {
+    stakeholdersData.marketBasketsSurveysStakeholders.forEach(
+      ({
+        id,
+        first_name,
+        last_name,
+        primary_state,
+        role,
+        perception_tool_provider,
+        role_specialties,
+      }) => {
+        // * insert state data if applicable
+        const stateName = primary_state ? primary_state.abbreviation : null
+        const stateId = primary_state ? primary_state.id : null
 
-  if (!loading) {
-    data.marketBasketsSurveysStakeholders.forEach(
-      ({ id, first_name, last_name, primary_state, role }) => {
-        let stateName
-        let stateId
-        let roleName
-        let roleId
+        // * insert provider data if applicable
+        const providerName = perception_tool_provider
+          ? perception_tool_provider.name
+          : null
+        const providerId = perception_tool_provider
+          ? perception_tool_provider.id
+          : null
 
-        if (primary_state) {
-          const { abbreviation, id } = primary_state
-          stateName = abbreviation
-          stateId = id
-        }
+        // * insert role data if applicable
+        const roleName = role ? role.name : null
+        const roleId = role ? role.id : null
 
-        if (role) {
-          const { name, id } = role
-          roleName = name
-          roleId = id
-        }
+        const roleSpecialties = _.isEmpty(role_specialties)
+          ? []
+          : role_specialties
 
         tableData.push({
           id,
@@ -99,6 +132,9 @@ const Stakeholders = () => {
           stateId,
           roleName,
           roleId,
+          providerName,
+          providerId,
+          roleSpecialties,
         })
       }
     )
@@ -106,12 +142,14 @@ const Stakeholders = () => {
 
   return (
     <Container>
-      <Header
-        header="Stakeholders"
-        subheader="Select a table row to view and edit a Stakeholder's state or role"
-        headerStyle={{ ...FontSpace.FS5 }}
-      />
-      {loading ? (
+      <TitleSection>
+        <Header
+          header="Stakeholders"
+          subheader="Select a table row to view and edit a Stakeholder's state or role"
+          headerStyle={{ ...FontSpace.FS5 }}
+        />
+      </TitleSection>
+      {stakeholderLoading ? (
         <Spinner />
       ) : (
         <Table
