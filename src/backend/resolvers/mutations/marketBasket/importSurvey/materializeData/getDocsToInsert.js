@@ -1,6 +1,10 @@
 const FALSEY_VALUES_MAP = require('./../utils/falsey-values-map')
 
-module.exports = ({ surveyQuestionsAndAnswers, survey }) => {
+module.exports = ({
+  surveyQuestionsAndAnswers,
+  survey,
+  stakeholderSpecialtyMap,
+}) => {
   return surveyQuestionsAndAnswers
     .filter(({ rating }) => !FALSEY_VALUES_MAP[rating])
     .map(
@@ -20,12 +24,10 @@ module.exports = ({ surveyQuestionsAndAnswers, survey }) => {
         manufacturer_id,
         manufacturer_name,
         person_id,
-        first_name,
-        middle_name,
-        last_name,
+        primary_role_id,
         primary_role,
         primary_role_type,
-        question_id,
+        primary_role_type_id,
         answer_id,
         rating,
       }) => {
@@ -76,11 +78,16 @@ module.exports = ({ surveyQuestionsAndAnswers, survey }) => {
           rating,
           stakeholder: {
             _id: person_id,
+            primaryRoleId: primary_role_id,
             primaryRole: primary_role,
             primaryRoleType: primary_role_type,
-            // firstName: first_name,
-            // middle_name: middle_name,
-            // lastName: last_name,
+            primaryRoleTypeId: primary_role_type_id,
+            roleSpecialty: stakeholderSpecialtyMap[person_id]
+              ? stakeholderSpecialtyMap[person_id].specialty_label
+              : null,
+            roleSpecialtyId: stakeholderSpecialtyMap[person_id]
+              ? stakeholderSpecialtyMap[person_id].id
+              : null,
           },
         }
       }

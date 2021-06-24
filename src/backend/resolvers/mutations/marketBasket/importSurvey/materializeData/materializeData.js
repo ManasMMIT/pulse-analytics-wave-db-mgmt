@@ -11,7 +11,32 @@ module.exports = async ({ surveyId, pulseDevDb, socket }) => {
     .get(`market-basket-surveys/${surveyId}`)
     .then(({ data }) => data)
 
-  const docsToInsert = getDocsToInsert({ surveyQuestionsAndAnswers, survey })
+  const {
+    indication: { id: marketBasketIndicationId },
+  } = await axios
+    .get(`hydrated-market-baskets/${survey.market_basket}`)
+    .then(({ data }) => data)
+
+  const stakeholderSpecialtyMap = survey.stakeholders_full.reduce(
+    (acc, { id: personId, role_specialties }) => {
+      const indicationSpecialty = role_specialties.find(
+        ({ indication: { id: localIndId } }) =>
+          localIndId === marketBasketIndicationId
+      )
+      if (indicationSpecialty) {
+        acc[personId] = indicationSpecialty
+      }
+
+      return acc
+    },
+    {}
+  )
+
+  const docsToInsert = getDocsToInsert({
+    surveyQuestionsAndAnswers,
+    survey,
+    stakeholderSpecialtyMap,
+  })
 
   console.log(
     `Removing old, materialized survey data for ${surveyId}:${survey.date}`

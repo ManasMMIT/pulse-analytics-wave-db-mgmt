@@ -3,7 +3,7 @@ import axios from 'axios'
 const deleteVegaPersonRoleIndication = async (
   parent,
   { input: { id } },
-  context,
+  { pulseDevDb },
   info
 ) => {
   const deletedVegaPersonRoleIndication = await axios.get(`people-roles-indications/${id}/`)
@@ -14,6 +14,15 @@ const deleteVegaPersonRoleIndication = async (
       throw new Error(JSON.stringify(e.response.data))
     })
 
+  await pulseDevDb.collection('marketBasketsSurveyAnswers').updateMany(
+    { 'stakeholder.roleSpecialtyId': id },
+    {
+      $set: {
+        'stakeholder.roleSpecialtyId': null,
+        'stakeholder.roleSpecialty': null,
+      }
+    }
+  )
   return deletedVegaPersonRoleIndication
 }
 

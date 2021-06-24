@@ -160,7 +160,12 @@ class Person {
       .collection(SOURCE_COLLECTION)
       .findOneAndDelete({ _id }, { session })
 
-    // Step 2: Cascade delete person if an obm or lbm influencer
+    // Step 2: Delete any market basket survey answers
+    await pulseDevDb
+      .collection('marketBasketsSurveyAnswers')
+      .deleteMany({ 'stakeholder._id': deletedPerson.uuid }, { session })
+
+    // Step 3: Cascade delete person if an obm or lbm influencer
     await pulseCoreDb
       .collection('JOIN_obms_people')
       .deleteMany({ personId: _id }, { session })
@@ -169,7 +174,7 @@ class Person {
       .collection('JOIN_lbms_people')
       .deleteMany({ personId: _id }, { session })
 
-    // Step 3: Cascade delete JOIN entries connected to person in mbmInfluencerCollections:
+    // Step 4: Cascade delete JOIN entries connected to person in mbmInfluencerCollections:
     // pulse-dev.obmsInfluencers and pulse-dev.lbmsInfluencers
     await pulseDevDb
       .collection('obmsInfluencers')
@@ -179,7 +184,7 @@ class Person {
       .collection('lbmsInfluencers')
       .deleteMany({ 'person._id': _id }, { session })
 
-    // Step 4: Delete all pathways/people connections touching that person, core and dev
+    // Step 5: Delete all pathways/people connections touching that person, core and dev
     const connectionsToDelete = await pulseCoreDb
       .collection('JOIN_pathways_people')
       .find({ personId: deletedPerson._id })

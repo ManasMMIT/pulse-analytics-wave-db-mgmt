@@ -23,11 +23,16 @@ const updateMarketBasketSurvey = async (
     })
 
   if (body.date) {
-    pulseDevDb.collection('marketBasketsSurveyAnswers').updateMany(
+    await pulseDevDb.collection('marketBasketsSurveyAnswers').updateMany(
       { surveyId: id },
       { $set: { surveyDate: body.date } }
     )
   }
+
+  await pulseDevDb.collection('marketBasketsSurveyAnswers').deleteMany({
+    surveyId: id,
+    'stakeholder._id': { $nin: marketBasketSurvey.stakeholders }
+  })
 
   return marketBasketSurvey
 }
