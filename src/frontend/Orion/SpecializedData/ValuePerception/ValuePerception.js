@@ -5,6 +5,7 @@ import MarketBaskets from './MarketBaskets'
 import MarketBasketDetail from './MarketBaskets/MarketBasketDetail'
 import Stakeholders from './Stakeholders'
 import StakeholderRoles from './StakeholderRoles'
+import Providers from './Providers'
 import Institutions from './Institutions'
 import CommunityPracticeNetworks from './CommunityPracticeNetworks'
 
@@ -38,8 +39,14 @@ const ValuePerception = () => (
       component={StakeholderRoles}
     />
     <Route
+      path={'/orion/specialized/value-perception/providers'}
+      component={Providers}
+    />
+    <Route
       path={'/orion/specialized/value-perception/institutions'}
       component={Institutions}
+    />
+    <Route
       path={'/orion/specialized/value-perception/community-practice-network'}
       component={CommunityPracticeNetworks}
     />
