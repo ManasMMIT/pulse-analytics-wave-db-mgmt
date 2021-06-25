@@ -131,8 +131,17 @@ export const SPECIALIZED_DATA_CONFIG = [
         link: '/community-practice-network',
       },
       {
+        label: 'Products',
+        link: '/products',
+      },
+      {
         label: 'SANDBOX Market Baskets',
         link: '/sandbox-market-baskets',
+        showOnSuperUserOnly: true,
+      },
+      {
+        label: 'SANDBOX Products',
+        link: '/sandbox-products',
         showOnSuperUserOnly: true,
       },
       {

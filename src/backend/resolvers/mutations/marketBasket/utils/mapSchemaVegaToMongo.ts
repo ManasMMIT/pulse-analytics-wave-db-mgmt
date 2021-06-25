@@ -16,6 +16,7 @@ const mapSchemaVegaToMongo = ({
       brandName: product.brand_name,
       genericName: product.generic_name,
       logoLink: product.logo_link,
+      color: product.color,
     },
     regimen: {
       _id: regimen.id,

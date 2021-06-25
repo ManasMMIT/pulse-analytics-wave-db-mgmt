@@ -3,6 +3,7 @@ import vegaInstitution from './institution'
 import vegaPerson from './person'
 import vegaPersonRole from './personRole'
 import vegaPersonRoleType from './personRoleType'
+import vegaProduct from './product'
 import vegaProvider from './provider'
 
 export default [
@@ -11,5 +12,6 @@ export default [
   ...vegaPerson,
   ...vegaPersonRole,
   ...vegaPersonRoleType,
+  ...vegaProduct,
   ...vegaProvider,
 ]

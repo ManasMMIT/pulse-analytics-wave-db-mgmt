@@ -32,6 +32,9 @@ export const GET_VEGA_PRODUCTS = gql`
       id
       generic_name
       brand_name
+      logo_link
+      color
+      messaging
       regimens
     }
   }

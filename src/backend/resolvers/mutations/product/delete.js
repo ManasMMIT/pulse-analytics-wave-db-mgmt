@@ -4,7 +4,7 @@ const axios = require('axios')
 const deleteSourceProduct = async (
   parent,
   { input: { _id: productId } },
-  { mongoClient, pulseCoreDb },
+  { mongoClient, pulseCoreDb, pulseDevDb },
   info
 ) => {
   const _id = ObjectId(productId)
@@ -36,6 +36,21 @@ const deleteSourceProduct = async (
         { $pull: { products: { _id } } },
         { session }
       )
+
+    // delete the product from market baskets
+    await pulseDevDb.collection('marketBaskets').updateMany(
+      { 'productsRegimens.product._id': uuid },
+      {
+        $pull: {
+          productsRegimens: { 'product._id': uuid },
+        },
+      }
+    )
+
+    // delete the products from market basket survey answers
+    await pulseDevDb
+      .collection('marketBasketsSurveyAnswers')
+      .deleteMany({ 'product._id': uuid })
   })
 
   return result.value

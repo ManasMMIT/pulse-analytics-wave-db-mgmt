@@ -78,6 +78,8 @@ import {
   DELETE_SOURCE_REGIMEN,
 } from './regimens'
 
+import { UPDATE_VEGA_PRODUCT } from './vegaProducts'
+
 import { UPDATE_VEGA_PROVIDER } from './vegaProviders'
 
 import {
@@ -323,6 +325,7 @@ export {
   CREATE_REGIMEN,
   UPDATE_SOURCE_REGIMEN,
   DELETE_SOURCE_REGIMEN,
+  UPDATE_VEGA_PRODUCT,
   UPDATE_VEGA_PROVIDER,
   CREATE_INSTITUTION,
   UPDATE_INSTITUTION,
