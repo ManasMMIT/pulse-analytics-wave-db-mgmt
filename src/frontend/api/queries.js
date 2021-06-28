@@ -189,7 +189,19 @@ export const GET_MARKET_BASKETS = gql`
       updated_at
       products_regimens
       team_subscriptions
-      categories
+      categories {
+        id
+        name
+        prompt
+        category_type
+        _order
+        characteristics
+        characteristics_full {
+          id
+          name
+          description
+        }
+      }
     }
   }
 `

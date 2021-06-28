@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `Orion/Perception Tool`:
   - Maintain materialized market basket survey stakeholder role data [#1082](https://github.com/pulse-analytics/wave-db-mgmt/pull/1082)
   - View & Materialization: Product Profile Data [#1085](https://github.com/pulse-analytics/wave-db-mgmt/pull/1085)
+  - Categories / Characteristics Tab: sorting and materialization [#1088](https://github.com/pulse-analytics/wave-db-mgmt/pull/1088)
 
 ## [5.0.0] - Started: 5-12-21
 

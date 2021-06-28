@@ -7,6 +7,7 @@ import { transparentize } from 'polished'
 
 import { Button } from '@pulse-analytics/pulse-design-system'
 
+import SortableDragHandle from 'frontend/components/SortableDragHandle'
 import Color from 'frontend/utils/color'
 
 import { ListItem } from '../../../../../Administrator/ListsConfigManagement/shared/styledComponents'
@@ -44,6 +45,7 @@ const PanelListItem = ({
 
   return (
     <ListItem onClick={onClick} style={style}>
+      <SortableDragHandle />
       {name}
       <section>
         {shouldShowEdit && (

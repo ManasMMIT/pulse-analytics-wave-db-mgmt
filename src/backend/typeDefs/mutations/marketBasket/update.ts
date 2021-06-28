@@ -7,6 +7,7 @@ const updateMarketBasketTypeDefs = gql`
     indication: ID
     description: String
     products_regimens: [ID!]
+    categories: [ID!]
   }
 `
 

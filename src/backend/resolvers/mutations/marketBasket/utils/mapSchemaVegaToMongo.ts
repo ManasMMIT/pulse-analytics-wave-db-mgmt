@@ -28,10 +28,18 @@ const mapSchemaVegaToMongo = ({
     id,
     name,
     prompt,
+    characteristics_full,
   }) => ({
     _id: id,
     name,
     prompt,
+    characteristics: characteristics_full.map(
+      ({ id, name, description }) => ({
+        _id: id,
+        name,
+        description,
+      })
+    ),
   }))
 
   return {

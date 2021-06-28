@@ -1,10 +1,14 @@
 import React, { useState } from 'react'
 import { useLocation, useParams, useHistory } from 'react-router-dom'
-import { useQuery } from '@apollo/react-hooks'
+import { useMutation, useQuery } from '@apollo/react-hooks'
 import queryString from 'query-string'
 import styled from '@emotion/styled'
 
 import { GET_MARKET_BASKETS_CATEGORIES } from 'frontend/api/queries'
+import {
+  UPDATE_MARKET_BASKET,
+  UPDATE_MARKET_BASKET_CATEGORY,
+} from 'frontend/api/mutations'
 
 import Spinner from 'frontend/components/Spinner'
 import StructuralListPanels from 'frontend/components/StructuralListPanels'
@@ -48,6 +52,25 @@ const CategoriesCharacteristics = () => {
     variables: { marketBasketId },
   })
 
+  const [updateCategoriesOrderMutation] = useMutation(UPDATE_MARKET_BASKET, {
+    update: (cache, { data: { updateMarketBasket } }) => {
+      const newCategories = updateMarketBasket.categories
+      cache.writeQuery({
+        query: GET_MARKET_BASKETS_CATEGORIES,
+        data: { marketBasketsCategories: newCategories },
+        variables: { marketBasketId },
+      })
+    },
+    onError: alert,
+  })
+
+  const [updateCharacteristicsOrderMutation] = useMutation(
+    UPDATE_MARKET_BASKET_CATEGORY,
+    {
+      onError: alert,
+    }
+  )
+
   if (loading) return <Spinner />
 
   const handleListItemSearchUpdate = (nextParam) => {
@@ -60,6 +83,28 @@ const CategoriesCharacteristics = () => {
     history.push({
       search: queryString.stringify(nextParams),
     })
+  }
+
+  const updateCategoriesOnSortEnd = (newCategories) => {
+    newCategories = newCategories.map(({ id }) => id)
+
+    const input = {
+      id: marketBasketId,
+      categories: newCategories,
+    }
+
+    updateCategoriesOrderMutation({ variables: { input } })
+  }
+
+  const updateCharacteristicsOnSortEnd = (newCharacteristics) => {
+    newCharacteristics = newCharacteristics.map(({ id }) => id)
+
+    const input = {
+      id: categoryId,
+      characteristics: newCharacteristics,
+    }
+
+    updateCharacteristicsOrderMutation({ variables: { input } })
   }
 
   const categories = data.marketBasketsCategories || []
@@ -106,6 +151,9 @@ const CategoriesCharacteristics = () => {
             shouldShowEdit
           />
         ),
+        sortableConfig: {
+          updateFunc: updateCategoriesOnSortEnd,
+        },
       },
       data: categories,
       loading,
@@ -143,6 +191,9 @@ const CategoriesCharacteristics = () => {
             }}
           />
         ),
+        sortableConfig: {
+          updateFunc: updateCharacteristicsOnSortEnd,
+        },
       },
       data: characteristics,
       loading,

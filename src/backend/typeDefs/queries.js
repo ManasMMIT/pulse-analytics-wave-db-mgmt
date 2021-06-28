@@ -206,7 +206,7 @@ const queries = gql`
     updated_at: DateTime
     products_regimens: JSON
     team_subscriptions: JSON
-    categories: JSON
+    categories: [MarketBasketCategory!]
   }
 
   type DevMarketBasket {
