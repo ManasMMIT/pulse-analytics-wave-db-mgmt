@@ -45,6 +45,18 @@ const deleteOrganization = async (
       .collection('newProviders')
       .deleteMany({ _id: { $in: connectionIdsToRemove } }, { session })
 
+    await pulseDevDb.collection('marketBasketsSurveyAnswers').updateMany(
+      { 'stakeholder.providerId': deletedOrg.uuid },
+      {
+        $set: {
+          'stakeholder.providerType': null,
+          'stakeholder.providerId': null,
+          'stakeholder.providerInstitutions': null,
+          'stakeholder.providerCommunityPracticeNetwork': null,
+        },
+      }
+    )
+
     await pulseCoreDb
       .collection('organizations.connections')
       .deleteMany({ orgs: _id }, { session })

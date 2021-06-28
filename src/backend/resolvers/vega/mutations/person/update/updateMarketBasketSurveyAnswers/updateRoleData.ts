@@ -1,12 +1,12 @@
 import axios from 'axios'
 import _ from 'lodash'
 
-async function updateMarketBasketSurveyAnswers(pulseDevDb: any, updatedPerson: any) {
+async function updateRoleData(pulseDevDb: any, updatedPerson: any) {
   await updateStakeholderRoleAndRoleType(pulseDevDb, updatedPerson)
   await updateStakeholderRoleSpecialties(updatedPerson, pulseDevDb)
 }
 
-export default updateMarketBasketSurveyAnswers
+export default updateRoleData
 
 async function updateStakeholderRoleAndRoleType(pulseDevDb: any, updatedPerson: any) {
   await pulseDevDb.collection('marketBasketsSurveyAnswers')
@@ -14,10 +14,10 @@ async function updateStakeholderRoleAndRoleType(pulseDevDb: any, updatedPerson: 
       { 'stakeholder._id': updatedPerson.id },
       {
         $set: {
-          'stakeholder.primaryRoleId': updatedPerson.role.id,
-          'stakeholder.primaryRole': updatedPerson.role.name,
-          'stakeholder.primaryRoleType': updatedPerson.role.type && updatedPerson.role.type.name,
-          'stakeholder.primaryRoleTypeId': updatedPerson.role.type && updatedPerson.role.type.id,
+          'stakeholder.primaryRoleId': updatedPerson.role && updatedPerson.role.id,
+          'stakeholder.primaryRole': updatedPerson.role && updatedPerson.role.name,
+          'stakeholder.primaryRoleType': updatedPerson.role && updatedPerson.role.type && updatedPerson.role.type.name,
+          'stakeholder.primaryRoleTypeId': updatedPerson.role && updatedPerson.role.type && updatedPerson.role.type.id,
         }
       }
     )

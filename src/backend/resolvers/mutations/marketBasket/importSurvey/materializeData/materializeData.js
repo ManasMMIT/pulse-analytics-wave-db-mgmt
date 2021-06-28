@@ -1,4 +1,5 @@
 const axios = require('axios')
+const _ = require('lodash')
 
 const getDocsToInsert = require('./getDocsToInsert')
 
@@ -31,11 +32,13 @@ module.exports = async ({ surveyId, pulseDevDb, socket }) => {
     },
     {}
   )
+  const stakeholderMap = _.keyBy(survey.stakeholders_full, 'id')
 
   const docsToInsert = getDocsToInsert({
     surveyQuestionsAndAnswers,
     survey,
     stakeholderSpecialtyMap,
+    stakeholderMap,
   })
 
   console.log(

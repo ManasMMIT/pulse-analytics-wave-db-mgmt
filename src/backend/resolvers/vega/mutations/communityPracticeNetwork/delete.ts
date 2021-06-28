@@ -3,7 +3,7 @@ import axios from 'axios'
 const deleteVegaCommunityPracticeNetwork = async (
   parent,
   { input: { id } },
-  context,
+  { pulseDevDb },
   info
 ) => {
   const deletedVegaCommunityPracticeNetwork = await axios.get(`community-practice-networks/${id}/`)
@@ -17,6 +17,11 @@ const deleteVegaCommunityPracticeNetwork = async (
       throw new Error(JSON.stringify(e.response.data))
     })
 
+  await pulseDevDb.collection('marketBasketsSurveyAnswers')
+    .updateMany(
+      { 'stakeholder.providerCommunityPracticeNetwork._id': deletedVegaCommunityPracticeNetwork.id },
+      { $set: { 'stakeholder.providerCommunityPracticeNetwork': null } },
+    )
   return deletedVegaCommunityPracticeNetwork
 }
 

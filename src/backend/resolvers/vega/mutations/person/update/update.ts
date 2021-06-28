@@ -1,5 +1,5 @@
 import axios from 'axios'
-import updateMarketBasketSurveyAnswers from './utils/updateMarketBasketSurveyAnswers'
+import updateMarketBasketSurveyAnswers from './updateMarketBasketSurveyAnswers'
 
 const updateVegaPerson = async (
   parent,

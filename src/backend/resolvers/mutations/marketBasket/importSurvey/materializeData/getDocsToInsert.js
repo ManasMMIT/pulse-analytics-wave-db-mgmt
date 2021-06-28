@@ -4,6 +4,7 @@ module.exports = ({
   surveyQuestionsAndAnswers,
   survey,
   stakeholderSpecialtyMap,
+  stakeholderMap,
 }) => {
   return surveyQuestionsAndAnswers
     .filter(({ rating }) => !FALSEY_VALUES_MAP[rating])
@@ -56,6 +57,36 @@ module.exports = ({
           }
         }
 
+        let providerDataObj = {
+          providerId: null,
+          providerType: null,
+          providerCommunityPracticeNetwork: null,
+          providerInstitutions: null,
+        }
+
+        const { perception_tool_provider } = stakeholderMap[person_id]
+        if (perception_tool_provider) {
+          let materializedCommunityPracticeNetwork
+          if (perception_tool_provider.community_practice_network) {
+            materializedCommunityPracticeNetwork = {
+              _id: perception_tool_provider.community_practice_network.id,
+              name: perception_tool_provider.community_practice_network.name,
+            }
+          }
+
+          const materializedInstitutions = perception_tool_provider.institutions.map(
+            ({ id, name }) => ({ _id: id, name })
+          )
+
+          providerDataObj = {
+            providerId: perception_tool_provider.id,
+            providerType: perception_tool_provider.type,
+            providerCommunityPracticeNetwork:
+              materializedCommunityPracticeNetwork || null,
+            providerInstitutions: materializedInstitutions,
+          }
+        }
+
         return {
           _id: answer_id,
           surveyId: survey.id,
@@ -88,6 +119,7 @@ module.exports = ({
             roleSpecialtyId: stakeholderSpecialtyMap[person_id]
               ? stakeholderSpecialtyMap[person_id].id
               : null,
+            ...providerDataObj,
           },
         }
       }
