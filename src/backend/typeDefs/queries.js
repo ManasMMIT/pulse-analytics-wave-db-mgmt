@@ -260,7 +260,7 @@ const queries = gql`
 
     question_id: ID
     answer_id: ID
-    rating: Int
+    rating: Float
 
     person_id: ID
     category_id: ID
@@ -293,7 +293,7 @@ const queries = gql`
 
   type MarketBasketSurveyQuestionAnswer {
     id: ID!
-    rating: Int
+    rating: Float
     stakeholder: ID
     stakeholder_full: MarketBasketStakeholder
   }
