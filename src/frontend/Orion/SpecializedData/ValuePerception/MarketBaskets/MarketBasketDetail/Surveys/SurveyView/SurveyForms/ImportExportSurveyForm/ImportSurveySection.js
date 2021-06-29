@@ -16,6 +16,7 @@ import FontSpace from 'frontend/utils/fontspace'
 import Spacing from 'frontend/utils/spacing'
 import Color from 'frontend/utils/color'
 
+import ErrorMessageSection from './ErrorMessageSection'
 import { InputSection, FormLabel } from '../utils'
 import { TextSection } from './ExportSurveySection'
 
@@ -23,6 +24,13 @@ const Container = styled.div({
   background: Color.GRAY_LIGHT,
   width: '50%',
   padding: Spacing.S7,
+  overflowY: 'auto',
+})
+
+const ImportSection = styled.section({
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'center',
 })
 
 const onFileAdded = (e, setData) => {
@@ -56,6 +64,7 @@ const ImportSurveySection = ({ surveyId }) => {
   const [data, setData] = useState(null)
   const [errors, setErrors] = useState(null)
   const [notification, setNotification] = useState(null)
+
   const socketEmitId = `${SOCKET_PROJECT_ID}_${surveyId}`
   socket.on(socketEmitId, setNotification)
 
@@ -71,28 +80,13 @@ const ImportSurveySection = ({ surveyId }) => {
       variables: { input },
       onError: (errorMessage) => {
         setErrors(errorMessage.message)
-        alert(errorMessage)
       },
     }
   )
 
-  if (errors) {
-    const parsedErrors = JSON.parse(
-      errors.replace('GraphQL error: Error: ', '')
-    )
-
-    const errorMessages = parsedErrors.map(
-      ({ rowIdx, column, error: { errorMessage, value, suggestion } }) => (
-        <div>{`Error ${rowIdx}${column}: ${errorMessage}. Value given was ${value}. Did you mean ${suggestion}?`}</div>
-      )
-    )
-
-    return <div>{errorMessages}</div>
-  }
-
   let importStatus = DEFAULT_NOTIFICATION
   const isImportFinished = new RegExp(SUCCESS_NOTIFICATION).test(notification)
-  if (notification && !isImportFinished) {
+  if (notification && !isImportFinished && !errors) {
     importStatus = (
       <>
         <Spinner />
@@ -101,7 +95,9 @@ const ImportSurveySection = ({ surveyId }) => {
     )
   }
 
-  // ! claire TODO: disable import button when data is not ready
+  const shouldShowImportButton =
+    !isImportingData && (!isImportFinished || !errors)
+
   return (
     <Container>
       <h3>Import Survey</h3>
@@ -118,17 +114,22 @@ const ImportSurveySection = ({ surveyId }) => {
           onChange={(e) => onFileAdded(e, setData)}
         />
       </InputSection>
-      <Button
-        onClick={importMarketBasketSurvey}
-        style={{
-          padding: `${Spacing.S2} ${Spacing.S3}`,
-          margin: `${Spacing.S4} 0`,
-          ...FontSpace.FS2,
-        }}
-      >
-        {isImportingData ? <Spinner /> : 'Import Survey'}
-      </Button>
-      <div>{importStatus}</div>
+      <ImportSection>
+        {shouldShowImportButton && (
+          <Button
+            onClick={importMarketBasketSurvey}
+            style={{
+              padding: `${Spacing.S2} ${Spacing.S3}`,
+              margin: `${Spacing.S4} 0`,
+              ...FontSpace.FS2,
+            }}
+          >
+            Import Survey
+          </Button>
+        )}
+        <div>{importStatus}</div>
+      </ImportSection>
+      {errors && <ErrorMessageSection errors={errors} />}
     </Container>
   )
 }

@@ -16,12 +16,24 @@ import ImportSurveySection from './ImportSurveySection'
 
 import { ModalHeader, BlueText } from '../utils'
 
+const Container = styled.div({
+  display: 'flex',
+  flexDirection: 'column',
+  height: '100%',
+})
+
 const HeaderSection = styled.section({
   display: 'flex',
   justifyContent: 'space-between',
   alignItems: 'center',
   padding: Spacing.S7,
   borderBottom: `1px solid ${transparentize(0.9, Color.BLACK)}`,
+})
+
+const ImportSections = styled.section({
+  display: 'flex',
+  height: '100%',
+  overflowY: 'auto',
 })
 
 const contentWrapperStyle = {
@@ -43,32 +55,34 @@ const ImportExportSurveyForm = ({
       width: '65%',
     }}
   >
-    <HeaderSection>
-      <ModalHeader>
-        Import/Export Data: <BlueText>{surveyDate} Survey</BlueText>
-      </ModalHeader>
-      <Button
-        type="ghost"
-        onClick={closeHandler}
-        style={{
-          background: transparentize(0.85, Color.GRAY_DARK),
-          color: Color.GRAY_DARK,
-          padding: `${Spacing.S2} ${Spacing.S3}`,
-          margin: `${Spacing.S4} 6px`,
-          ...FontSpace.FS2,
-        }}
-      >
-        Close X
-      </Button>
-    </HeaderSection>
-    <section style={{ display: 'flex', height: '100%' }}>
-      <ExportSurveySection
-        surveyId={surveyId}
-        marketBasketName={marketBasketName}
-        surveyDate={surveyDate}
-      />
-      <ImportSurveySection surveyId={surveyId} />
-    </section>
+    <Container>
+      <HeaderSection>
+        <ModalHeader>
+          Import/Export Data: <BlueText>{surveyDate}</BlueText> Survey
+        </ModalHeader>
+        <Button
+          type="ghost"
+          onClick={closeHandler}
+          style={{
+            background: transparentize(0.85, Color.GRAY_DARK),
+            color: Color.GRAY_DARK,
+            padding: `${Spacing.S2} ${Spacing.S3}`,
+            margin: `${Spacing.S4} 6px`,
+            ...FontSpace.FS2,
+          }}
+        >
+          Close X
+        </Button>
+      </HeaderSection>
+      <ImportSections>
+        <ExportSurveySection
+          surveyId={surveyId}
+          marketBasketName={marketBasketName}
+          surveyDate={surveyDate}
+        />
+        <ImportSurveySection surveyId={surveyId} />
+      </ImportSections>
+    </Container>
   </Dialog>
 )
 
