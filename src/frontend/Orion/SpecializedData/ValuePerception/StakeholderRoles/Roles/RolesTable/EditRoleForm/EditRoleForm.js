@@ -20,11 +20,16 @@ import {
   BlueText,
 } from '../../../../MarketBaskets/MarketBasketDetail/Surveys/SurveyView/SurveyForms/utils'
 
+const NO_TYPE_OPTION = {
+  label: 'No Type',
+  value: null,
+}
+
 const EditRoleForm = ({ selectedRoleData, closeHandler }) => {
   const { id, name, type, default_specialty_label } = selectedRoleData
   let typeDefaultObj = type
     ? { label: type.name, value: type.id }
-    : { label: null, value: null }
+    : NO_TYPE_OPTION
 
   const [inputData, setInputData] = useState({
     id,
@@ -65,12 +70,13 @@ const EditRoleForm = ({ selectedRoleData, closeHandler }) => {
 
   let roleTypeOptions = []
   if (!rolesTypesLoading) {
-    roleTypeOptions = rolesTypesData.vegaPeopleRolesTypes.map(
-      ({ id, name }) => ({
+    roleTypeOptions = [
+      NO_TYPE_OPTION,
+      ...rolesTypesData.vegaPeopleRolesTypes.map(({ id, name }) => ({
         label: name,
         value: id,
-      })
-    )
+      })),
+    ]
   }
 
   const header = (

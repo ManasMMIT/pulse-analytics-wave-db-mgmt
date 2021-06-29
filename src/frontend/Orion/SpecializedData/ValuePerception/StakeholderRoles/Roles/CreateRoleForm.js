@@ -21,11 +21,16 @@ import {
   FormLabel,
 } from '../../MarketBaskets/MarketBasketDetail/Surveys/SurveyView/SurveyForms/utils'
 
+const NO_TYPE_OPTION = {
+  label: 'No Type',
+  value: null,
+}
+
 const CreateRoleForm = ({ closeHandler }) => {
   const [inputData, setInputData] = useState({
     name: '',
     specialty: '',
-    type: { label: '', value: '' },
+    type: NO_TYPE_OPTION,
   })
 
   const { data: rolesData } = useQuery(GET_VEGA_PEOPLE_ROLES)
@@ -68,12 +73,13 @@ const CreateRoleForm = ({ closeHandler }) => {
 
   let roleTypeOptions = []
   if (!rolesTypesLoading) {
-    roleTypeOptions = rolesTypesData.vegaPeopleRolesTypes.map(
-      ({ id, name }) => ({
+    roleTypeOptions = [
+      NO_TYPE_OPTION,
+      ...rolesTypesData.vegaPeopleRolesTypes.map(({ id, name }) => ({
         label: name,
         value: id,
-      })
-    )
+      })),
+    ]
   }
 
   return (

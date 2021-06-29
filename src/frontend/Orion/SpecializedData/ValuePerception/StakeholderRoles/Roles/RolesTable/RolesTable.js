@@ -10,6 +10,8 @@ import customMultiSelectFilterFn from 'frontend/components/Table/custom-filters/
 
 import EditRoleForm from './EditRoleForm'
 
+const NO_TYPE_NAME = 'No Type'
+
 const COLUMNS = [
   {
     Header: 'ID',
@@ -63,10 +65,7 @@ const RolesTable = () => {
   if (!rolesLoading)
     tableData = rolesData.vegaPeopleRoles.map(
       ({ id, name, type, default_specialty_label }) => {
-        let typeName
-        if (type) {
-          typeName = type.name
-        }
+        const typeName = type ? type.name : NO_TYPE_NAME
 
         return {
           id,
