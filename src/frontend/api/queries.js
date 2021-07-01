@@ -17,6 +17,18 @@ export const GET_VEGA_CLIENT_TEAMS = gql`
   }
 `
 
+export const GET_VEGA_CLIENT_TEAMS_REGIONS = gql`
+  query getVegaClientTeamsRegions($clientTeamId: ID) {
+    vegaClientTeamsRegions(clientTeamId: $clientTeamId) {
+      id
+      name
+      team
+      created_at
+      updated_at
+    }
+  }
+`
+
 export const GET_VEGA_PEOPLE = gql`
   query getVegaPeople {
     vegaPeople {
