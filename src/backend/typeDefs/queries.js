@@ -38,6 +38,7 @@ const queries = gql`
     vegaInstitutions: [VegaInstitution!]!
     vegaCommunityPracticeNetworks: [VegaCommunityPracticeNetwork!]!
     vegaClientTeams(clientTeamId: ID): [VegaClientTeam!]!
+    vegaClientTeamsRegions(clientTeamId: ID): [VegaClientTeamRegion!]!
 
     organizationTypes: [String]
 
@@ -501,6 +502,14 @@ const queries = gql`
     id: ID!
     name: String
     client: VegaClient
+    created_at: DateTime
+    updated_at: DateTime
+  }
+
+  type VegaClientTeamRegion {
+    id: ID!
+    name: String
+    team: ID
     created_at: DateTime
     updated_at: DateTime
   }

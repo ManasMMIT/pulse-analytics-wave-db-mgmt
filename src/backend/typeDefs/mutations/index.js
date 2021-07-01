@@ -156,6 +156,16 @@ const mutationType = gql`
       input: DeleteSourceRegimenInput!
     ): DeleteSourceRegimenPayload
 
+    createVegaClientTeamRegion(
+      input: CreateVegaClientTeamRegionInput!
+    ): VegaClientTeamRegion
+    updateVegaClientTeamRegion(
+      input: UpdateVegaClientTeamRegionInput!
+    ): VegaClientTeamRegion
+    deleteVegaClientTeamRegion(
+      input: DeleteVegaClientTeamRegionInput!
+    ): VegaClientTeamRegion
+
     updateVegaProvider(input: UpdateVegaProviderInput!): VegaProvider
 
     createVegaInstitution(input: CreateVegaInstitutionInput!): VegaInstitution
