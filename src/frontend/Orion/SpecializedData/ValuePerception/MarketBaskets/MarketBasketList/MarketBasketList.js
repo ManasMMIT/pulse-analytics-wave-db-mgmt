@@ -85,26 +85,31 @@ const COLUMNS = [
     filter: customMultiSelectFilterFn,
     sortType: 'text',
   },
-  {
-    Header: 'Active Client Subscriptions',
-    accessor: 'team_subscriptions',
-    Filter: MultiSelectColumnFilter,
-    filter: customMultiSelectFilterFn,
-    sortType: 'text',
-    Cell: ({ value }) => {
-      const teamClientNames = value.map(
-        ({
-          team: {
-            client: { name: clientName },
-          },
-        }) => clientName
-      )
+  /*
+      ! The schema for client team subscriptions has changed on vega
+      ! Need to modify this column if still want to show all client team
+      ! subsriptions in market basket table
+  */
+  // {
+  //   Header: 'Active Client Subscriptions',
+  //   accessor: 'team_subscriptions',
+  //   Filter: MultiSelectColumnFilter,
+  //   filter: customMultiSelectFilterFn,
+  //   sortType: 'text',
+  //   Cell: ({ value }) => {
+  //     const teamClientNames = value.map(
+  //       ({
+  //         team: {
+  //           client: { name: clientName },
+  //         },
+  //       }) => clientName
+  //     )
 
-      return _.uniq(teamClientNames)
-        .sort((a, b) => a.toLowerCase() - b.toLowerCase())
-        .join(', ')
-    },
-  },
+  //     return _.uniq(teamClientNames)
+  //       .sort((a, b) => a.toLowerCase() - b.toLowerCase())
+  //       .join(', ')
+  //   },
+  // },
 ]
 
 const HeaderWrapper = styled.div({
