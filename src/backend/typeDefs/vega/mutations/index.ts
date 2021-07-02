@@ -5,6 +5,7 @@ import vegaPersonRole from './personRole'
 import vegaPersonRoleType from './personRoleType'
 import vegaProduct from './product'
 import vegaProvider from './provider'
+import vegaTeam from './team'
 
 export default [
   ...vegaCommunityPracticeNetwork,
@@ -14,4 +15,5 @@ export default [
   ...vegaPersonRoleType,
   ...vegaProduct,
   ...vegaProvider,
+  ...vegaTeam,
 ]

@@ -5,7 +5,7 @@ const queries = gql`
     listsConfig(dashboardTool: String): [ListsConfig!]!
 
     marketBaskets(marketBasketId: ID): [MarketBasket!]!
-    marketBasketsSubscriptions: [MarketBasketSubscription!]!
+    marketBasketsSubscriptions(clientTeamId: ID): [MarketBasketSubscription!]!
     marketBasketsCategories(marketBasketId: ID): [MarketBasketCategory!]!
     marketBasketsSurveysStakeholders(surveyId: ID): [VegaPerson!]!
     marketBasketSurveyExportData(
@@ -37,6 +37,7 @@ const queries = gql`
     vegaProviders: [VegaProvider!]!
     vegaInstitutions: [VegaInstitution!]!
     vegaCommunityPracticeNetworks: [VegaCommunityPracticeNetwork!]!
+    vegaClientTeams(clientTeamId: ID): [VegaClientTeam!]!
 
     organizationTypes: [String]
 
@@ -221,8 +222,6 @@ const queries = gql`
     id: ID!
     team: ID
     market_basket: ID
-    start_date: DateTime
-    end_date: DateTime
     created_at: DateTime
     updated_at: DateTime
   }
@@ -486,6 +485,22 @@ const queries = gql`
     role: VegaPersonRole
     role_specialties: [VegaPersonRoleIndication!]
     perception_tool_provider: VegaProvider
+    created_at: DateTime
+    updated_at: DateTime
+  }
+
+  type VegaClient {
+    id: ID!
+    name: String
+    icon: String
+    created_at: DateTime
+    updated_at: DateTime
+  }
+
+  type VegaClientTeam {
+    id: ID!
+    name: String
+    client: VegaClient
     created_at: DateTime
     updated_at: DateTime
   }

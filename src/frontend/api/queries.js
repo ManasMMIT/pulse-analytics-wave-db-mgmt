@@ -1,5 +1,22 @@
 import gql from 'graphql-tag'
 
+export const GET_VEGA_CLIENT_TEAMS = gql`
+  query getVegaClientTeams($clientTeamId: ID) {
+    vegaClientTeams(clientTeamId: $clientTeamId) {
+      id
+      name
+      created_at
+      updated_at
+      client {
+        id
+        name
+        created_at
+        updated_at
+      }
+    }
+  }
+`
+
 export const GET_VEGA_PEOPLE = gql`
   query getVegaPeople {
     vegaPeople {
@@ -259,13 +276,11 @@ export const GET_LISTS_CONFIG = gql`
 `
 
 export const GET_MARKET_BASKETS_SUBSCRIPTIONS = gql`
-  query getMarketsBaskets {
-    marketBasketsSubscriptions {
+  query getMarketsBaskets($clientTeamId: ID) {
+    marketBasketsSubscriptions(clientTeamId: $clientTeamId) {
       id
       team
       market_basket
-      start_date
-      end_date
       created_at
       updated_at
     }

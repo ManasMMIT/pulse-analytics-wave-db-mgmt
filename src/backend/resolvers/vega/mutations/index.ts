@@ -5,6 +5,7 @@ import vegaPersonRoleResolvers from './personRole'
 import vegaPersonRoleTypeResolvers from './personRoleType'
 import vegaProductResolvers from './product'
 import vegaProviderResolvers from './provider'
+import vegaTeamResolvers from './team'
 
 export default {
   ...vegaCommunityPracticeNetworkResolvers,
@@ -14,4 +15,5 @@ export default {
   ...vegaPersonRoleTypeResolvers,
   ...vegaProductResolvers,
   ...vegaProviderResolvers,
+  ...vegaTeamResolvers,
 }

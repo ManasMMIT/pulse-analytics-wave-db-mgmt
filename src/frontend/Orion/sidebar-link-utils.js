@@ -134,6 +134,7 @@ export const SPECIALIZED_DATA_CONFIG = [
         label: 'Products',
         link: '/products',
       },
+      { label: 'Client Teams', link: '/client-teams' },
       {
         label: 'SANDBOX Market Baskets',
         link: '/sandbox-market-baskets',

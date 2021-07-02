@@ -53,6 +53,10 @@ const mutationType = gql`
     updateListsConfig(input: UpdateListsConfigInput!): ListsConfig
     deleteListsConfig(input: DeleteListsConfigInput!): ListsConfig
 
+    pushUserMarketBasketSubsToDevAndProd(
+      input: PushUserSubsToDevAndProdInput!
+    ): String
+
     pushMarketBasketsToDev(
       input: PushMarketBasketsToDevInput!
     ): [DevMarketBasket!]
@@ -499,6 +503,13 @@ const mutationType = gql`
     deleteLbmAndPayerConnection(
       input: DeleteLbmAndPayerConnectionInput!
     ): LbmAndPayerConnection!
+
+    subscribeTeamToMarketBasket(
+      input: SubscribeTeamToMarketBasketInput!
+    ): MarketBasketSubscription!
+    unsubscribeTeamToMarketBasket(
+      input: UnsubscribeTeamToMarketBasketInput!
+    ): MarketBasketSubscription!
   }
 `
 

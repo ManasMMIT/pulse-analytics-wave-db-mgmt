@@ -16,6 +16,7 @@ import marketBasketsSurveys from './marketBasketsSurveys'
 import marketBasketsSurveysStakeholders from './marketBasketsSurveysStakeholders'
 import marketBasketsSurveysQuestions from './marketBasketsSurveysQuestions'
 import vegaStates from './states'
+import vegaClientTeams from './teams'
 
 import marketBasketSurveyExportData from './marketBasketSurveyExportData'
 
@@ -39,4 +40,5 @@ export default {
   marketBasketsSurveysStakeholders,
   marketBasketsSurveysQuestions,
   vegaStates,
+  vegaClientTeams,
 }

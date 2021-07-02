@@ -9,13 +9,10 @@ import { UnderlinedTabs } from '@pulse-analytics/pulse-design-system'
 import Spinner from 'frontend/components/Spinner'
 import Color from 'frontend/utils/color'
 
-import { GET_MARKET_BASKETS } from 'frontend/api/queries'
+import { GET_VEGA_CLIENT_TEAMS } from 'frontend/api/queries'
 
-import MarketBasketDetailHeader from './MarketBasketDetailHeader'
-import Overview from './Overview'
-import CategoriesCharacteristics from './CategoriesCharacteristics'
-import ProductsRegimens from './ProductsRegimens'
-import Surveys from './Surveys'
+import ClientTeamDetailHeader from './ClientTeamDetailHeader'
+import MarketBasketSubscription from './MarketBasketSubscriptions'
 
 const Wrapper = styled.div({
   display: 'flex',
@@ -29,24 +26,17 @@ const Body = styled.section({
 })
 
 const TABS_DATA = [
-  { label: 'Overview', value: 'overview' },
-  { label: 'Products and Regimens', value: 'product-regimens' },
-  {
-    label: 'Categories and Characteristics',
-    value: 'categories-characteristics',
-  },
-  { label: 'Surveys', value: 'surveys' },
+  { label: 'Market Basket Subscriptions', value: 'subscription' },
+  { label: 'Regions', value: 'regions' },
 ]
 
 const COMPONENT_MAP = {
-  overview: Overview,
-  'categories-characteristics': CategoriesCharacteristics,
-  'product-regimens': ProductsRegimens,
-  surveys: Surveys,
+  subscription: MarketBasketSubscription,
+  regions: () => null,
 }
 
-const MarketBasketDetail = () => {
-  const { marketBasketId } = useParams()
+const ClientTeamDetail = () => {
+  const { clientTeamId } = useParams()
   const location = useLocation()
   const history = useHistory()
 
@@ -59,8 +49,8 @@ const MarketBasketDetail = () => {
     })
   }
 
-  const { data, loading } = useQuery(GET_MARKET_BASKETS, {
-    variables: { marketBasketId },
+  const { data, loading } = useQuery(GET_VEGA_CLIENT_TEAMS, {
+    variables: { clientTeamId },
   })
 
   if (!selectedTab) {
@@ -68,19 +58,23 @@ const MarketBasketDetail = () => {
   }
 
   if (loading || !selectedTab) return <Spinner />
-  const [marketBasket] = data.marketBaskets || []
+  const [vegaClientTeam] = data.vegaClientTeams || []
 
-  // ! after deletion, market basket doesn't exist in cache before redirect
-  if (!marketBasket) return <Spinner />
+  if (!vegaClientTeam) return <Spinner />
 
-  const { name } = marketBasket
+  const {
+    name: teamName,
+    client: { name: clientName },
+  } = vegaClientTeam
+
+  const headerLabel = `${clientName} / ${teamName}`
 
   const Component = COMPONENT_MAP[selectedTab]
 
   return (
     <Wrapper>
       <section>
-        <MarketBasketDetailHeader name={name} />
+        <ClientTeamDetailHeader name={headerLabel} />
         <UnderlinedTabs
           tabsData={TABS_DATA}
           onTabClick={setTab}
@@ -92,10 +86,10 @@ const MarketBasketDetail = () => {
         />
       </section>
       <Body>
-        <Component marketBasket={marketBasket} name={name} />
+        <Component vegaClientTeam={vegaClientTeam} />
       </Body>
     </Wrapper>
   )
 }
 
-export default MarketBasketDetail
+export default ClientTeamDetail

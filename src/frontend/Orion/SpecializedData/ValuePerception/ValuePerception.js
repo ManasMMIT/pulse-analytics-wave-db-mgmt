@@ -9,6 +9,8 @@ import Providers from './Providers'
 import Institutions from './Institutions'
 import CommunityPracticeNetworks from './CommunityPracticeNetworks'
 import Products from './Products'
+import ClientTeams from './ClientTeams'
+import ClientTeamDetail from './ClientTeams/ClientTeamDetail'
 
 import SANDBOX_MarketBaskets from './SANDBOX_MarketBaskets'
 import SANDBOX_MarketBasketDetail from './SANDBOX_MarketBaskets/MarketBasketDetail'
@@ -55,6 +57,14 @@ const ValuePerception = () => (
     <Route
       path={'/orion/specialized/value-perception/products'}
       component={Products}
+    />
+    <Route
+      path={'/orion/specialized/value-perception/client-teams/:clientTeamId'}
+      component={ClientTeamDetail}
+    />
+    <Route
+      path={'/orion/specialized/value-perception/client-teams'}
+      component={ClientTeams}
     />
     <Route
       exact={true}
