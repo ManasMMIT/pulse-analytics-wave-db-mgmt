@@ -58,3 +58,10 @@ export const CardHeader = styled.div({
   fontWeight: 700,
   padding: `${Spacing.S6} ${Spacing.S7}`,
 })
+
+export const CardSubHeader = styled.div({
+  ...FontSpace.FS2,
+  fontWeight: 400,
+  padding: `0 ${Spacing.S6} ${Spacing.S7}`,
+  fontStyle: 'italic',
+})

@@ -20,6 +20,7 @@ import {
   FileInput,
   ErrorContainer,
   CardHeader,
+  CardSubHeader,
 } from './styledImportComponents'
 
 import ToolsTimestamps from './ToolsTimestamps'
@@ -162,6 +163,11 @@ const Import = () => {
 
         <div style={{ flex: 1 }}>
           <CardHeader>Tool Last Updated Dates</CardHeader>
+          <CardSubHeader>
+            IMPORTANT: When updating the Tool Last Updated Dates, you must
+            select the "Deploy Permissions" button on Phoenix for the changes to
+            take effect on the Production Client Application.
+          </CardSubHeader>
           <ToolsTimestamps />
         </div>
       </div>
