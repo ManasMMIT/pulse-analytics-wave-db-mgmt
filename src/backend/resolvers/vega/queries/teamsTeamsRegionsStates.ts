@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const teamsTeamsRegionsStates = (parent, { clientTeamId }, context, info) => {
+const vegaTeamsTeamsRegionsStates = (parent, { clientTeamId }, context, info) => {
   const queryUrl = `teams-teams-regions-states/?team=${clientTeamId || ''}`
 
   return axios.get(queryUrl)
@@ -10,4 +10,4 @@ const teamsTeamsRegionsStates = (parent, { clientTeamId }, context, info) => {
     })
 }
 
-export default teamsTeamsRegionsStates
+export default vegaTeamsTeamsRegionsStates
