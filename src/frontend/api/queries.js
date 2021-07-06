@@ -29,6 +29,25 @@ export const GET_VEGA_CLIENT_TEAMS_REGIONS = gql`
   }
 `
 
+export const GET_TEAMS_TEAMS_REGIONS_STATES = gql`
+  query getVegaTeamsTeamsRegionsStates($clientTeamId: ID) {
+    vegaTeamsTeamsRegionsStates(clientTeamId: $clientTeamId) {
+      id
+      team
+      team_region
+      state {
+        id
+        full_name
+        abbreviation
+        created_at
+        updated_at
+      }
+      created_at
+      updated_at
+    }
+  }
+`
+
 export const GET_VEGA_PEOPLE = gql`
   query getVegaPeople {
     vegaPeople {
